@@ -1,0 +1,48 @@
+Welcome to the Waterline 4.0 Guide!
+
+The main new feature of our new 4.0 Update is the inclusion of an Ocean FFT solver!
+Our FFTs are based entirely on Blueprints, have a ton of exposed and easily accessible parameters and are entirely calculated on the GPU!
+Mixed with our existin Waterline Post-Porcess and Surface Material as well as our Shallow Water Sim you now have access to a true state-of-the-art water system.
+
+Our New "Waterline Ocean" Actor has Ocean Simulation settings for:
+
+FFT Resolution: From 64 to 1024
+Simulation Scale FFT: Area of Ocean Simulated
+Wind Speed FFT: Size of Ocean Swells
+Wave Amplitude FFT: Wave height at the simulation level
+Wave Speed: Speed of the FFT Waves
+
+Wave Height FFT: Wave Height at the Material Stage
+Wave Choppyness FFT: Wave shape at the Material Stage
+Wave Tile FFT: Scale of the FFT Textures
+
+Wind Direction: Direction of the FFT Waves
+
+FFT Buoyancy Height: Manual Adjustments for the Wave height for the FFT Buoyancy.
+FFT Buoyancy: Use FFT simulation as a basis for the water level for buoyancy (Extremely Expencive to calculate, best to use in animations only)
+
+Use FFT Simulation Delay: Add a simulation lag. For example if a scene is running at 60 fps, we can run the ocean sim at 57-58 and see no visual changes while gaining performance
+FFT Simulation Delay Amount: How much should the simulation be delayed.
+
+
+Our Ocean Surface Materials have new settings for:
+
+Roughness Blend: Roughness falloff
+
+Use Small Normals: Adds a secondary normal based detail waves.
+	S Normal Tile
+	S Normal Speed
+	S Normal Strenght
+	S Normal Texture
+
+Large Normals or L Normal settings for large waves at a distance.
+	L Normal Tile
+	L Normal Power Far
+	L Normal Power Close
+	L Normal Falloff
+
+FFT Normal Power: Controls the strenght of the FFT Simulated Normals
+
+Vector Displacement Distance and Falloff: Blends between Vector Displacement and Z Displacement Near the Camera - can imporve Waterline Accuracy, but affects choppyness
+
+Horizon Controls: Affect the Ocean Visuals near the Horizon.
