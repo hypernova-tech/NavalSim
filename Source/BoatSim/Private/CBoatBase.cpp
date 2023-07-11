@@ -7,6 +7,12 @@
 #include "Engine/World.h"
 #include "DrawDebugHelpers.h"
 #include "Math.h"
+#include "Camera/CameraComponent.h"
+#include <Lib/SOA/SOAImplementor.h>
+#include <Lib/SOA/CommonSOAObservers.h>
+#include <Lib/SOACommonObserverArgs/PlatformKinematicData.h>
+#include <Lib/SystemManager/SystemManagerBase.h>
+
 // Sets default values
 ACBoatBase::ACBoatBase()
 {
@@ -19,6 +25,10 @@ ACBoatBase::ACBoatBase()
 void ACBoatBase::BeginPlay()
 {
 	Super::BeginPlay();
+	ASOAImplementor::GetInstance()->Subscribe(CommonSOAObservers::PlatformKinematicObserverId,this);
+	BoatCam = Cast<UCameraComponent>(GetComponentByClass<UCameraComponent>());
+
+
 	
 }
 
@@ -26,7 +36,7 @@ void ACBoatBase::BeginPlay()
 void ACBoatBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	TimeSec += DeltaTime;
+	//TimeSec += DeltaTime;
 	FVector forward;
 	forward = GetActorForwardVector();
 	if (IsForward) {
@@ -71,6 +81,27 @@ void ACBoatBase::Tick(float DeltaTime)
 		FRotator new_rot = forward.Rotation();
 		SetActorRotation(new_rot);
 	}
+
+#if true
+	if (BoatCam != nullptr) {
+		if (IsUp) {
+
+		   
+			FVector cam_forward = BoatCam->GetForwardVector();
+			FVector cam_pos = BoatCam->GetComponentLocation();
+
+			BoatCam->SetWorldLocation(cam_pos + cam_forward * DeltaTime * CamMovementSpeed);
+
+
+		}
+		else if (IsDown) {
+			FVector cam_forward = BoatCam->GetForwardVector();
+			FVector cam_pos = BoatCam->GetComponentLocation();
+
+			BoatCam->SetWorldLocation(cam_pos - cam_forward * DeltaTime * CamMovementSpeed);
+		}
+	}
+#endif
 
 	Oscillate();
 
@@ -122,6 +153,34 @@ void ACBoatBase::OnRightKey(bool pressed, bool released)
 	}
 }
 
+void ACBoatBase::OnUpKeyPressed(bool pressed, bool released)
+{
+	if (pressed) {
+		IsUp = true;
+	}
+	else {
+		if (released) {
+			IsUp = false;
+		}
+	}
+
+}
+
+void ACBoatBase::OnDownKeyPressed(bool pressed, bool released)
+{
+	if (pressed) {
+		IsDown = true;
+	}
+	else {
+		if (released) {
+			IsDown = false;
+		}
+	}
+
+}
+
+
+
 void ACBoatBase::StopPawn()
 {
 	UPawnMovementComponent* p_comp = GetMovementComponent();
@@ -157,6 +216,25 @@ void ACBoatBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	
+
+}
+
+void ACBoatBase::Update(UCSOAObserverArgs* p_args)
+{
+	UE_LOG(LogTemp, Warning, TEXT("observer updated"));
+
+	if (p_args->GetSubjectId() == CommonSOAObservers::PlatformKinematicObserverId) {
+		UPlatformKinematicData* p_kinematic = (UPlatformKinematicData*)p_args;
+		
+		if (p_kinematic != nullptr) {
+			
+			FVector new_pos = ASystemManagerBase::GetInstance()->GetMapOrigin()->GetGELocation(p_kinematic-> GetLocationLLH());
+			FVector euler = p_kinematic->GetEulerRPYDeg();
+
+			SetActorLocation(new_pos);
+			SetActorRotation(FRotator(euler.Y,euler.Z, euler.X));
+		}
+	}
 
 }
 

@@ -25,6 +25,9 @@
 *.a
 *.lib
 
+# bigmodels
+*.step
+
 # Executables
 *.exe
 *.out

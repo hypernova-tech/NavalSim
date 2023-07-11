@@ -4,11 +4,15 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "Lib/SOA/ISOAObserver.h"
 #include "CBoatBase.generated.h"
 
 
+
+class UCameraComponent;
+
 UCLASS()
-class BOATSIM_API ACBoatBase : public APawn
+class BOATSIM_API ACBoatBase : public APawn, public ISOAObserver
 {
 	GENERATED_BODY()
 
@@ -26,6 +30,12 @@ public:
 		void OnRightKey(bool pressed, bool released);
 
 	UFUNCTION(BlueprintCallable)
+	void OnUpKeyPressed(bool pressed, bool released);
+
+	UFUNCTION(BlueprintCallable)
+	void OnDownKeyPressed(bool pressed, bool released);
+
+	UFUNCTION(BlueprintCallable)
 		void StopPawn();
 
 
@@ -36,6 +46,11 @@ public:
 	float OscillationAmplitude = 1;
 	UPROPERTY(EditAnywhere)
 	float OscillationFreq = 1;
+
+
+	UPROPERTY(EditAnywhere)
+	float CamMovementSpeed = 100;
+	
 
 	virtual void PostInitializeComponents() override;
 
@@ -50,16 +65,21 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-
+    virtual void Update(UCSOAObserverArgs* p_args);
 private:
+	UCameraComponent* BoatCam;
 	bool IsForward;
 	bool IsBackward;
 	bool IsLeft;
 	bool IsRight;
+	bool IsUp;
+	bool IsDown;
+
 
 	float TimeSec;
 
 
 	void Oscillate();
+
 
 };
