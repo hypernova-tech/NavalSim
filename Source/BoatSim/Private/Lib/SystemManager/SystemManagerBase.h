@@ -5,7 +5,9 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include <Lib/Origin/MapOrigin.h>
+#include <Lib/SOA/SOAImplementor.h>
 #include "SystemManagerBase.generated.h"
+
 
 
 UCLASS()
@@ -26,11 +28,15 @@ protected:
 	UPROPERTY(EditAnywhere)
 		AMapOrigin* pMapOrigin;
 
+	UPROPERTY(EditAnywhere)
+		ASOAImplementor* pSoaImplementor;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	AMapOrigin* GetMapOrigin();
+	ASOAImplementor* GetSOAImplementor();
 	static  ASystemManagerBase* GetInstance();
 
 private:

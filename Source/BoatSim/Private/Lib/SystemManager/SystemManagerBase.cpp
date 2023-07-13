@@ -38,3 +38,8 @@ AMapOrigin* ASystemManagerBase::GetMapOrigin()
 	return pMapOrigin;
 }
 
+ASOAImplementor* ASystemManagerBase::GetSOAImplementor()
+{
+	return pSoaImplementor;
+}
+

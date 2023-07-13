@@ -53,29 +53,20 @@ void ASOAImplementor::Tick(float DeltaTime)
 
 }
 
-void ASOAImplementor::OnReceivedNewMessage(const TArray<uint8>& InByteArray)
+void ASOAImplementor::OnReceivedNewMessage(const TArray<uint8>& data, int32 bytes_read)
 {
 	TotalReceivedCount++;
-	int count = InByteArray.Num();
-
-
-	const SSOAMessage* MyStructArray = reinterpret_cast<const SSOAMessage*>(InByteArray.GetData());
-	UE_LOG(LogTemp, Warning, TEXT("Receved byte count: %s %s %s"), *FString::FromInt(TotalReceivedCount), *FString::FromInt(MyStructArray->MessageId), *FString::FromInt(count));
-
-
-	SPosData* p_data = (SPosData*)MyStructArray->Data;
-	UE_LOG(LogTemp, Warning, TEXT("pos data: %s %s"), *FString::SanitizeFloat(p_data->Lat), *FString::SanitizeFloat(p_data->Lon));
+	int count = bytes_read;
 
 	if (pEthernetDataProcessorBase != nullptr) {
-		pEthernetDataProcessorBase->OnReceivedData(InByteArray);
+		pEthernetDataProcessorBase->OnReceivedData(data, bytes_read);
 	}
 	else {
 		UE_LOG(LogTemp, Error, TEXT("pEthernetDataProcessorBase null"));
 	}
-	
-
-
 }
+
+
 void ASOAImplementor::Subscribe(int subject_no, ISOAObserver* p_observer)
 {
 	TSet<ISOAObserver*>& ObserverSet = ObserverDictionary.FindOrAdd(subject_no);

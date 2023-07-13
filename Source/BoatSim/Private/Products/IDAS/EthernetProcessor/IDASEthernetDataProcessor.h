@@ -16,5 +16,5 @@ class UIDASEthernetDataProcessor : public UEthernetDataProcessorBase
 	
 
 public:
-	virtual void OnReceivedData(const TArray<uint8>& received_data);
+	virtual void OnReceivedData(const TArray<uint8>& data, int32 bytes_read) override;
 };

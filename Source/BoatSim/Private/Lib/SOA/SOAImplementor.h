@@ -17,9 +17,9 @@ class ASOAImplementor : public AActor
 public:	
 	// Sets default values for this actor's properties
 	ASOAImplementor();
-	UFUNCTION(BlueprintCallable)
-		virtual void OnReceivedNewMessage(const TArray<uint8>& InByteArray);
 
+		virtual void OnReceivedNewMessage(const TArray<uint8>& data, int32 bytes_read);
+	
 
 	static ASOAImplementor* GetInstance();
 protected:

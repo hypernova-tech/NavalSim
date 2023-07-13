@@ -37,11 +37,11 @@ struct  SIdasAsToIdasGERaw
 #define BOT_EULER_ANGLE_SCALE_FACTOR		(1e-4*RADTODEG)
 #define BOT_BODY_VEL_SCALE_FACTOR			(2e-15*1e-2)
 
-void UIDASEthernetDataProcessor::OnReceivedData(const TArray<uint8>& received_data)
+void UIDASEthernetDataProcessor::OnReceivedData(const TArray<uint8>& data, int32 bytes_read)
 {
-	Super::OnReceivedData(received_data);
+	Super::OnReceivedData(data, bytes_read);
 
-	const SIdasAsToIdasGERaw* idas_raw = reinterpret_cast<const SIdasAsToIdasGERaw*>(received_data.GetData());
+	const SIdasAsToIdasGERaw* idas_raw = reinterpret_cast<const SIdasAsToIdasGERaw*>(data.GetData());
 	//UE_LOG(LogTemp, Warning, TEXT("Receved byte count: %s %s %s"), *FString::FromInt(TotalReceivedCount), *FString::FromInt(MyStructArray->MessageId), *FString::FromInt(count));
 	UPlatformKinematicData* p_kinematic_data_args = NewObject< UPlatformKinematicData>();
 

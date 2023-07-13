@@ -32,7 +32,7 @@ void UEthernetDataProcessorBase::TickComponent(float DeltaTime, ELevelTick TickT
 	// ...
 }
 
-void UEthernetDataProcessorBase::OnReceivedData(const TArray<uint8>& received_data)
+void UEthernetDataProcessorBase::OnReceivedData(const TArray<uint8>& data, int32 bytes_read)
 {
 }
 

@@ -228,7 +228,9 @@ void ACBoatBase::Update(UCSOAObserverArgs* p_args)
 		
 		if (p_kinematic != nullptr) {
 			
-			FVector new_pos = ASystemManagerBase::GetInstance()->GetMapOrigin()->GetGELocation(p_kinematic-> GetLocationLLH());
+			AMapOrigin* p_origin = ASystemManagerBase::GetInstance()->GetMapOrigin();
+			FVector llh =  p_kinematic->GetLocationLLH();
+			FVector new_pos = p_origin->GetGELocation(llh);
 			FVector euler = p_kinematic->GetEulerRPYDeg();
 
 			SetActorLocation(new_pos);

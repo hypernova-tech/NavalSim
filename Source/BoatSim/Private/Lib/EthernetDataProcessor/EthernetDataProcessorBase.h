@@ -25,6 +25,6 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 
-	virtual void OnReceivedData(const TArray<uint8>& received_data);
+	virtual void OnReceivedData(const TArray<uint8>& data, int32 bytes_read);
 		
 };
