@@ -31,7 +31,7 @@ FVector AMapOrigin::GetGELocation(FVector pos)
 
 	FVector diff_vec = pos - Center;
 
-	ret = GetActorLocation() + FVector::RightVector * diff_vec.X * 111e3 + FVector::ForwardVector* 111e3*diff_vec.Y;
+	ret = GetActorLocation() + FVector::RightVector * diff_vec.Y * 111e3*100.0 + FVector::ForwardVector* 111e3* 100.0*diff_vec.X;
 	//ret.Z += pos.Z;
 
 	return ret;

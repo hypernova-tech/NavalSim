@@ -56,9 +56,9 @@ void UIDASEthernetDataProcessor::OnReceivedData(const TArray<uint8>& received_da
 	p_kinematic_data_args->BotPosEastMeter = idas_raw->BotPosEast * BOT_POS_SCALE_FACTOR;
 	p_kinematic_data_args->BotPosDownMeter = idas_raw->BotPosDown * BOT_POS_SCALE_FACTOR;
 
-	p_kinematic_data_args->EulerPhiDeg = idas_raw->EulerPhiDeg * BOT_EULER_ANGLE_SCALE_FACTOR;
-	p_kinematic_data_args->EulerThetaDeg = idas_raw->EulerThetaDeg * BOT_EULER_ANGLE_SCALE_FACTOR;
-	p_kinematic_data_args->EulerPsiDeg = idas_raw->EulerPsiDeg * BOT_EULER_ANGLE_SCALE_FACTOR;
+	p_kinematic_data_args->EulerPhiDeg = idas_raw->EulerPhiDeg * BOT_EULER_ANGLE_SCALE_FACTOR; //roll
+	p_kinematic_data_args->EulerThetaDeg = idas_raw->EulerThetaDeg * BOT_EULER_ANGLE_SCALE_FACTOR; //pitch
+	p_kinematic_data_args->EulerPsiDeg = idas_raw->EulerPsiDeg * BOT_EULER_ANGLE_SCALE_FACTOR; //yaw
 
 	p_kinematic_data_args->BodyVelSurgeMeterPerSec	= idas_raw->BodyVelSurge * BOT_BODY_VEL_SCALE_FACTOR;
 	p_kinematic_data_args->BodyVelSwayMeterPerSec	= idas_raw->BodyVelSway * BOT_BODY_VEL_SCALE_FACTOR;

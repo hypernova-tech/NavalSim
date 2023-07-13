@@ -39,6 +39,6 @@ public:
 	}
 	FVector GetEulerRPYDeg()
 	{
-		return FVector(EulerPsiDeg,EulerPhiDeg, EulerThetaDeg);
+		return FVector(EulerPhiDeg, EulerThetaDeg,EulerPsiDeg);
 	}
 };
