@@ -12,7 +12,7 @@
 class UCameraComponent;
 
 UCLASS()
-class BOATSIM_API ACBoatBase : public APawn, public ISOAObserver
+class  ACBoatBase : public APawn, public ISOAObserver
 {
 	GENERATED_BODY()
 
@@ -65,7 +65,7 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-    virtual void Update(UCSOAObserverArgs* p_args);
+    virtual void Update(UCSOAObserverArgs* p_args) override;
 private:
 	UCameraComponent* BoatCam;
 	bool IsForward;

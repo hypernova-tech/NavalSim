@@ -10,8 +10,12 @@
  * 
  */
 UCLASS()
-class AIDASSystemManager : public ASystemManagerBase
+class  AIDASSystemManager : public ASystemManagerBase
 {
 	GENERATED_BODY()
+
+public:
+	AIDASSystemManager();
+
 	
 };

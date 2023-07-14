@@ -11,7 +11,7 @@
 
 
 UCLASS()
-class ASystemManagerBase : public AActor
+class  ASystemManagerBase : public AActor
 {
 	GENERATED_BODY()
 	

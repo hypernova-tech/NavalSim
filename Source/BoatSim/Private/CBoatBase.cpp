@@ -221,10 +221,10 @@ void ACBoatBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 
 void ACBoatBase::Update(UCSOAObserverArgs* p_args)
 {
-	UE_LOG(LogTemp, Warning, TEXT("observer updated"));
+	
 
 	if (p_args->GetSubjectId() == CommonSOAObservers::PlatformKinematicObserverId) {
-		UPlatformKinematicData* p_kinematic = (UPlatformKinematicData*)p_args;
+		UPlatformKinematicData* p_kinematic =Cast<UPlatformKinematicData>(p_args);
 		
 		if (p_kinematic != nullptr) {
 			
@@ -233,8 +233,23 @@ void ACBoatBase::Update(UCSOAObserverArgs* p_args)
 			FVector new_pos = p_origin->GetGELocation(llh);
 			FVector euler = p_kinematic->GetEulerRPYDeg();
 
-			SetActorLocation(new_pos);
-			SetActorRotation(FRotator(euler.Y,euler.Z, euler.X));
+
+			// Create a task to execute on the game thread
+			FGraphEventRef Task = FFunctionGraphTask::CreateAndDispatchWhenReady([&]()
+				{
+					
+						// Update the actor's location
+						SetActorLocation(new_pos);
+						SetActorRotation(FRotator(euler.Y, euler.Z, euler.X));
+					
+				}, TStatId(), nullptr, ENamedThreads::GameThread);
+
+			// Wait for the task to complete
+			FTaskGraphInterface::Get().WaitUntilTaskCompletes(Task);
+
+
+			//SetActorLocation(new_pos);
+			//SetActorRotation(FRotator(euler.Y,euler.Z, euler.X));
 		}
 	}
 

@@ -3,3 +3,8 @@
 
 #include "Products/IDAS/SystemManager/IDASSystemManager.h"
 
+AIDASSystemManager::AIDASSystemManager()
+{
+	
+
+}

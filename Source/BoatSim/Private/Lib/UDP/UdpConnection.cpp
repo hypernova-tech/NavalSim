@@ -84,7 +84,7 @@ uint32 UUdpConnection::Run()
 	TSharedRef<FInternetAddr> targetAddr = ISocketSubsystem::Get(PLATFORM_SOCKETSUBSYSTEM)->CreateInternetAddr();
 	uint32 Size;
 	while (!bShouldStopThread) {
-		while (Socket->HasPendingData(Size))
+		while (Socket != nullptr && Socket->HasPendingData(Size))
 		{
 		
 			int32 BytesRead = 0;
@@ -103,13 +103,16 @@ uint32 UUdpConnection::Run()
 
 void UUdpConnection::Stop()  // Clean up any memory you allocated here
 {
+	if (SocketSubsystem != nullptr) {
+		bShouldStopThread = true;
+		SocketSubsystem->DestroySocket(Socket);
+		Socket = nullptr;
+		SocketSubsystem = nullptr;
+		bRunThread = false;
+	}
 
-	SocketSubsystem->DestroySocket(Socket);
-	Socket = nullptr;
-	SocketSubsystem = nullptr;
-
-	bRunThread = false;
-	bShouldStopThread = true;
+	
+	
 }
 
 // Start the UDP thread

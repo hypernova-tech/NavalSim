@@ -8,7 +8,7 @@
 #include "UdpConnection.generated.h"
 
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS()
 class UUdpConnection : public UActorComponent,public FRunnable
 {
 	GENERATED_BODY()
