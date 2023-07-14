@@ -20,6 +20,8 @@ public:
 	// Sets default values for this pawn's properties
 	ACBoatBase();
 
+	TArray<ASensorBase> Sensors;
+
 	UFUNCTION(BlueprintCallable)
 		void OnForwardKey(bool pressed, bool released);
 	UFUNCTION(BlueprintCallable)
@@ -75,10 +77,7 @@ private:
 	bool IsUp;
 	bool IsDown;
 
-
 	float TimeSec;
-
-
 	void Oscillate();
 
 
