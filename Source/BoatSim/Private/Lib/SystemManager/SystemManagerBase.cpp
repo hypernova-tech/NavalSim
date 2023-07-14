@@ -12,6 +12,9 @@ ASystemManagerBase::ASystemManagerBase()
 	PrimaryActorTick.bCanEverTick = true;
 	pInstance = this;
 
+
+	
+
 }
 
 ASystemManagerBase* ASystemManagerBase::GetInstance()
@@ -23,8 +26,19 @@ ASystemManagerBase* ASystemManagerBase::GetInstance()
 void ASystemManagerBase::BeginPlay()
 {
 	Super::BeginPlay();
+
+	if (pConfigManagerActor != nullptr) {
+		pConfigManager = pConfigManagerActor->GetComponentByClass<UConfigManager>();
+	}
+
+	if (pConfigManager != nullptr) {
+		pConfigManager->ParseXML();
+		LoadConfig();
+	}
+	
 	
 }
+
 
 // Called every frame
 void ASystemManagerBase::Tick(float DeltaTime)
@@ -43,3 +57,13 @@ ASOAImplementor* ASystemManagerBase::GetSOAImplementor()
 	return pSoaImplementor;
 }
 
+
+void ASystemManagerBase::LoadConfig()
+{
+	TArray< UDescBase*>& all_desc = pConfigManager->GetAllDesc();
+
+	for(UDescBase *p_desc :all_desc) {
+
+	}
+
+}

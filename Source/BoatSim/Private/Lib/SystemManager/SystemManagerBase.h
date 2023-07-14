@@ -6,7 +6,9 @@
 #include "GameFramework/Actor.h"
 #include <Lib/Origin/MapOrigin.h>
 #include <Lib/SOA/SOAImplementor.h>
+#include <Lib/Config/ConfigManager.h>
 #include "SystemManagerBase.generated.h"
+
 
 
 
@@ -31,6 +33,11 @@ protected:
 	UPROPERTY(EditAnywhere)
 		ASOAImplementor* pSoaImplementor;
 
+	UPROPERTY(EditAnywhere)
+		AActor* pConfigManagerActor;
+
+	UConfigManager* pConfigManager;
+	virtual void LoadConfig();
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -38,6 +45,8 @@ public:
 	AMapOrigin* GetMapOrigin();
 	ASOAImplementor* GetSOAImplementor();
 	static  ASystemManagerBase* GetInstance();
+
+	 
 
 private:
 	static ASystemManagerBase* pInstance;

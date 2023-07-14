@@ -5,7 +5,9 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 #include "Lib/SOA/ISOAObserver.h"
+#include <Lib/Sensor/SensorBase.h>
 #include "CBoatBase.generated.h"
+
 
 
 

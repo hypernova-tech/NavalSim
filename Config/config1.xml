@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    <sensor>
+	<name>RobosenseLidar</name>
+        <type>lidar</type>
+	<blueprint>Mar.bp</blueprint>
+        <params>
+            <range>100</range>
+            <fov>20</fov>
+        </params>
+    </sensor>
+    <sensor>
+	<name>VisibleCam</name>
+        <type>camera</type>
+        <params>
+            <freq>visible</freq>
+            <resolution>1080 1920</resolution>
+            <fov>90</fov>
+        </params>
+    </sensor>
+
+    <gimbal>
+	<name>2Axis</name>
+        <params>
+            <yawlimits>-25 25</yawlimits>
+	    <pitchlimits>-35 60</pitchlimits>
+	    <rolllimits>-35 60</rolllimits>
+	    <yawrate>52</yawrate>
+            <pitchrate>52</pitchrate>
+	    <rollrate>52</rollrate>
+        </params>
+    </gimbal>
+
+    <boat>
+	<name>Mar</name>
+	<blueprint>Mar.bp</blueprint>
+	<sensor>
+		<name>RobosenseLidar</name>
+		<pose>1,0,2 0 0 0</pose>
+		<gimbal>none</gimbal>
+	</sensor>
+	<sensor>
+		<name>VisibleCam</name>
+		<pose>1,0,2 0 90 0</pose>
+		<gimbal>2Axis</gimbal>
+	</sensor>
+    </boat>
+ 
+    <scene>
+	<element>
+		<name>boat</name>
+		<pose>0 0 0 0 0 0</pose>
+	</element>
+	<element>
+		<name>boat</name>
+		<pose>0 20 0 0 0 0</pose>
+	</element>
+     </scene>
+</root>
