@@ -4,7 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "GenericCommIF/GenericCommIF.h"
+#include <Lib/PointVisualizer/PointVisualizer.h>
 #include "SensorBase.generated.h"
+
+
 
 UENUM(BlueprintType)
 enum class ESensorType
@@ -31,12 +35,24 @@ public:
 	UPROPERTY(EditAnywhere)
 		ESensorType SensorType;
 
+	UPROPERTY(EditAnywhere)
+		float UpdateFrequency;
+
+	UPROPERTY(EditAnywhere)
+		bool Point3DVisualize = false;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	virtual void Run(float delta_time_sec);
+	UGenericCommIF* pCommIF;
+	APointVisualizer* pPointVisualizer;
+
+	
 
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	virtual void Visualize(TArray<FVector> points, FVector center);
 
 };

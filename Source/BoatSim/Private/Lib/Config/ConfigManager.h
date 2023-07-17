@@ -35,7 +35,8 @@ protected:
 
     float ParseFloat(tinyxml2::XMLElement* paramsElement, FString name, float def_value = 0);
     FString ParseString(tinyxml2::XMLElement* paramsElement, FString name, FString def_value = "");
-
+    FVector2D ParseVector2D(tinyxml2::XMLElement* paramsElement, FString name, FVector2D def_value = FVector2D::ZeroVector);
+    bool ParsePose(tinyxml2::XMLElement* paramsElement, FString name, FVector& pos, FVector& rpy);
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
@@ -43,8 +44,8 @@ public:
     TArray<UDescBase*>& GetAllDesc();
 private:
    
-    bool ParsePose(const FString& Text, FVector& translation, FVector& rpy);
-    bool ParseVector2D(const FString& Text, FVector2D& ret);
+    
+
 
 };
 

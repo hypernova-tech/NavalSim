@@ -5,7 +5,7 @@
         <type>lidar</type>
 	<blueprint>Mar.bp</blueprint>
         <params>
-            <range>100</range>
+            <range>10 100</range>
             <fov>20</fov>
         </params>
     </sensor>
@@ -13,8 +13,8 @@
 	<name>VisibleCam</name>
         <type>camera</type>
         <params>
-            <freq>visible</freq>
-            <resolution>1080 1920</resolution>
+            <camsensortype>visible</camsensortype>
+            <camsensorsize>1080 1920</camsensorsize>
             <fov>90</fov>
         </params>
     </sensor>
@@ -26,8 +26,8 @@
 	    <pitchlimits>-35 60</pitchlimits>
 	    <rolllimits>-35 60</rolllimits>
 	    <yawrate>52</yawrate>
-            <pitchrate>52</pitchrate>
-	    <rollrate>52</rollrate>
+            <pitchrate>53</pitchrate>
+	    <rollrate>54</rollrate>
         </params>
     </gimbal>
 
@@ -36,12 +36,12 @@
 	<blueprint>Mar.bp</blueprint>
 	<sensor>
 		<name>RobosenseLidar</name>
-		<pose>1,0,2 0 0 0</pose>
+		<pose>1 0 2 3 4 5</pose>
 		<gimbal>none</gimbal>
 	</sensor>
 	<sensor>
 		<name>VisibleCam</name>
-		<pose>1,0,2 0 90 0</pose>
+		<pose>6 7 8 9 10 11</pose>
 		<gimbal>2Axis</gimbal>
 	</sensor>
     </boat>

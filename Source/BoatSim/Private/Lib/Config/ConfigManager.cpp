@@ -3,6 +3,7 @@
 
 #include "Lib/Config/ConfigManager.h"
 #include "Misc/CString.h"
+#include <Lib/Utils/CUtil.h>
 
 // Sets default values for this component's properties
 UConfigManager::UConfigManager()
@@ -34,52 +35,14 @@ void UConfigManager::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 }
 
 
-
-bool UConfigManager::ParsePose(const FString& Text, FVector &translation, FVector &rpy)
-{
-    FVector ParsedVector;
-    TArray<FString> VectorValues;
-    Text.ParseIntoArray(VectorValues, TEXT(" "), true);
-
-    if (VectorValues.Num() >= 6)
-    {
-        translation.X = FCString::Atof(*VectorValues[0]);
-        translation.Y = FCString::Atof(*VectorValues[1]);
-        translation.Z = FCString::Atof(*VectorValues[2]);
-
-        rpy.X = FCString::Atof(*VectorValues[3]);
-        rpy.Y = FCString::Atof(*VectorValues[4]);
-        rpy.Z = FCString::Atof(*VectorValues[5]);
-
-        return true;
-    }
-
-    return false;
-}
-
-bool UConfigManager::ParseVector2D(const FString& Text, FVector2D& ret)
-{
-    FVector ParsedVector;
-    TArray<FString> VectorValues;
-    Text.ParseIntoArray(VectorValues, TEXT(" "), true);
-
-    if (VectorValues.Num() >=2)
-    {
-        ret.X = FCString::Atof(*VectorValues[0]);
-        ret.Y = FCString::Atof(*VectorValues[1]);
-     
-
-        return true;
-    }
-
-    return false;
-}
 float UConfigManager::ParseFloat(tinyxml2::XMLElement* paramsElement, FString name, float def_value)
 {
     tinyxml2:: XMLElement* p_elm = paramsElement->FirstChildElement(TCHAR_TO_ANSI(*name));
 
     if (p_elm != nullptr) {
-        float val = FCString::Atof((const TCHAR *) p_elm->GetText());
+        const char* textValue = p_elm->GetText();
+     
+        float val = CUtil::ConvertToFloat(textValue);
         return val;
 
     }
@@ -92,13 +55,53 @@ FString UConfigManager::ParseString(tinyxml2::XMLElement* paramsElement, FString
     tinyxml2::XMLElement* p_elm = paramsElement->FirstChildElement(TCHAR_TO_ANSI(*name));
 
     if (p_elm != nullptr) {
-        FString val = FString((const TCHAR*)p_elm->GetText());
+        const char* textValue = p_elm->GetText();
+
+        // Convert the const char* to an FString
+        FString val = CUtil::ConvertToFString(textValue);
         return val;
 
     }
 
     return def_value;
 }
+
+FVector2D UConfigManager::ParseVector2D(tinyxml2::XMLElement* paramsElement, FString name, FVector2D def_value)
+{
+    tinyxml2::XMLElement* p_elm = paramsElement->FirstChildElement(TCHAR_TO_ANSI(*name));
+
+    if (p_elm != nullptr) {
+        const char* textValue = p_elm->GetText();
+        FVector2D vec;
+        bool ret = CUtil::ParseVector2D(CUtil::ConvertToFString(textValue), vec);
+        if (ret) {
+            return vec;
+        }
+        else {
+            return  def_value;
+        }
+    }
+
+    return def_value;
+}
+bool UConfigManager::ParsePose(tinyxml2::XMLElement* paramsElement, FString name, FVector& pos, FVector& rpy)
+{
+    tinyxml2::XMLElement* p_elm = paramsElement->FirstChildElement(TCHAR_TO_ANSI(*name));
+    if (p_elm != nullptr) {
+        const char* textValue = p_elm->GetText();
+        FVector2D vec;
+        bool ret = CUtil::ParsePose(CUtil::ConvertToFString(textValue), pos, rpy);
+        if (ret) {
+            return true;
+        }
+        else {
+            return  false;
+        }
+    }
+
+    return false;
+}
+
 
 void UConfigManager::ParseXML()
 {
@@ -129,18 +132,21 @@ void UConfigManager::ParseXML()
                 p_sensor_desc->Blueprint = blueprint;
 
                 tinyxml2::XMLElement* paramsElement = sensorElement->FirstChildElement("params");
-                float range = ParseFloat(paramsElement, "range");
+                FVector2D range = ParseVector2D(paramsElement, "range");
                 float fov = ParseFloat(paramsElement, "fov");
-                FString cam_sensor_size = ParseString(sensorElement, "camsensorsize"); 
-                FString cam_sensor_type = ParseString(sensorElement, "camsensortype");   
+
+                
+                FVector2D sensor_size = ParseVector2D(paramsElement, "camsensorsize");
+                FString cam_sensor_type = ParseString(paramsElement, "camsensortype");
                 // Process sensor data as needed
                 // ...
 
                 UParamDescBase* p_param_desc = NewObject< UParamDescBase>();
 
-                p_param_desc->RangeMeter = FVector2D(0, range);
+           
+                p_param_desc->RangeMeter = range;
                 p_param_desc->FovDeg = fov;
-                ParseVector2D(cam_sensor_size, p_param_desc->CameraSize);
+                p_param_desc->CameraSize = sensor_size;
                
                 p_param_desc->CameraSensorType = cam_sensor_type;
                 p_sensor_desc->AddParamDesc(p_param_desc);
@@ -161,21 +167,19 @@ void UConfigManager::ParseXML()
                 UGimbalDescBase* p_gimbal = NewObject < UGimbalDescBase>();
 
                 tinyxml2::XMLElement* paramsElement = gimbalElement->FirstChildElement("params");
-                float yawMin = FCString::Atof((const TCHAR*)paramsElement->FirstChildElement("yawlimits")->GetText());
-                float yawMax = FCString::Atof((const TCHAR*)paramsElement->FirstChildElement("yawlimits")->NextSiblingElement()->GetText());
-                float pitchMin = FCString::Atof((const TCHAR*)paramsElement->FirstChildElement("pitchlimits")->GetText());
-                float pitchMax = FCString::Atof((const TCHAR*)paramsElement->FirstChildElement("pitchlimits")->NextSiblingElement()->GetText());
-                float rollMin = FCString::Atof((const TCHAR*)paramsElement->FirstChildElement("rolllimits")->GetText());
-                float rollMax = FCString::Atof((const TCHAR*)paramsElement->FirstChildElement("rolllimits")->NextSiblingElement()->GetText());
-                float yawRate = FCString::Atof((const TCHAR*)paramsElement->FirstChildElement("yawrate")->GetText());
-                float pitchRate = FCString::Atof((const TCHAR*)paramsElement->FirstChildElement("pitchrate")->GetText());
-                float rollRate = FCString::Atof((const TCHAR*)paramsElement->FirstChildElement("rollrate")->GetText());
-
+                FVector2D yaw_limits = ParseVector2D(paramsElement, "yawlimits");
+                FVector2D pitch_limits = ParseVector2D(paramsElement, "pitchlimits"); 
+                FVector2D roll_limits = ParseVector2D(paramsElement, "rolllimits");
+                float yawRate = ParseFloat(paramsElement, "yawrate");
+                float pitchRate = ParseFloat(paramsElement, "pitchrate");
+                float rollRate = ParseFloat(paramsElement, "rollrate");
+                   
+             
                 UParamDescBase* p_param_desc = NewObject < UParamDescBase>();
 
-                p_param_desc->YawLimit = FVector2D(yawMin, yawMax);
-                p_param_desc->PitchLimit = FVector2D(pitchMin, pitchMax);
-                p_param_desc->RollLimit = FVector2D(rollMin, rollMax);
+                p_param_desc->YawLimit = yaw_limits;
+                p_param_desc->PitchLimit = pitch_limits;
+                p_param_desc->RollLimit = roll_limits;
 
                 p_param_desc->YawRateDegPerSec = yawRate;
                 p_param_desc->PitchRateDegPerSec = pitchRate;
@@ -191,7 +195,7 @@ void UConfigManager::ParseXML()
 
             // Process boat element
             tinyxml2::XMLElement* boatElement = rootElement->FirstChildElement("boat");
-            if (boatElement)
+            while (boatElement)
             {
 
                 UBoatDescBase* p_boat_desc = NewObject < UBoatDescBase>();
@@ -205,14 +209,13 @@ void UConfigManager::ParseXML()
                 while (sensorElement)
                 {
                     FString sensorName = FString(sensorElement->FirstChildElement("name")->GetText());
-                    FString pose = FString(sensorElement->FirstChildElement("pose")->GetText());
                     FString gimbal = FString(sensorElement->FirstChildElement("gimbal")->GetText());
 
                     // Process boat sensor data as needed
                     // ...
                     UParamDescBase* p_param_desc = NewObject <UParamDescBase>();
                     p_param_desc->SensorName = sensorName;
-                    ParsePose(pose, p_param_desc->PlacementPosition, p_param_desc->PlacementRotationRPY);
+                    ParsePose(sensorElement, "pose", p_param_desc->PlacementPosition, p_param_desc->PlacementRotationRPY);
                     p_param_desc->GimbalName = gimbal;
                     sensorElement = sensorElement->NextSiblingElement("sensor");
 
@@ -222,7 +225,7 @@ void UConfigManager::ParseXML()
                 }
 
                 Descs.Add(p_boat_desc);
-                
+                boatElement = boatElement->NextSiblingElement("boat");
             }
 
             // Process scene elements
@@ -241,7 +244,7 @@ void UConfigManager::ParseXML()
                    
                     UParamDescBase* p_param_desc = NewObject< UParamDescBase>();
 
-                    ParsePose(pose, p_param_desc->PlacementPosition, p_param_desc->PlacementRotationRPY);
+                    ParsePose(elementElement, "pose", p_param_desc->PlacementPosition, p_param_desc->PlacementRotationRPY);
 
                     p_scene_desc->AddParamDesc(p_param_desc);
 
