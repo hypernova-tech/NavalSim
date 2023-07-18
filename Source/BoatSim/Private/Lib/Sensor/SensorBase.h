@@ -53,6 +53,6 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	virtual void Visualize(TArray<FVector> points, FVector center);
+	virtual void Visualize(SScanResult *p_result);
 
 };

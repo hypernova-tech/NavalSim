@@ -4,9 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "ProceduralMeshComponent.h"
-#include "Components/SceneCaptureComponent2D.h"
+
+#include "Engine/TextureRenderTarget2D.h"
+#include <Lib/Utils/CScanResult.h>
 #include "PointVisualizer.generated.h"
+
 
 UCLASS()
 class APointVisualizer : public AActor
@@ -17,8 +19,8 @@ public:
 	// Sets default values for this actor's properties
 	APointVisualizer();
 
-	UPROPERTY(VisibleAnywhere)
-		UProceduralMeshComponent* ProceduralMeshComponent;
+	UPROPERTY(EditAnywhere)
+		UTextureRenderTarget2D* pRenderTarget;
 
 
 
@@ -26,9 +28,10 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	USceneCaptureComponent2D* pSceneCapture2D;
+	
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	virtual void Visualize(TArray<FVector> points);
+	virtual void Visualize(SScanResult *p_scan_result);
+	void SetPixelValue(UTextureRenderTarget2D* RenderTarget, int32 X, int32 Y, FColor Color);
 };

@@ -69,7 +69,7 @@ public:
 	double GetFovHorizontalDeg();
 
 
-	void Visualize(TArray<FVector> points, FVector center) override;
+	
 
 	
 };

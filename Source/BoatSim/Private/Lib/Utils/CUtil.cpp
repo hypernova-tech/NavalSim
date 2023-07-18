@@ -11,13 +11,15 @@ CUtil::~CUtil()
 {
 }
 
-bool CUtil::Trace(AActor * p_actor, float range_meter, float beam_width_azimuth_deg, float beam_width_elavation_deg, float azimuth_angle_step_deg, float elevation_angle_step_deg, SScanResult* pscan_result)
+bool CUtil::Trace(AActor * p_actor, float min_range_meter, float range_meter, float beam_width_azimuth_deg, float beam_width_elavation_deg, float azimuth_angle_step_deg, float elevation_angle_step_deg, SScanResult* pscan_result)
 {
 
 
 
     FVector start_pos = p_actor->GetActorLocation();
     FVector look_dir = p_actor->GetActorForwardVector();
+
+    pscan_result->ScanCenter = start_pos;
 
     FCollisionQueryParams query_params;
     query_params.AddIgnoredActor(p_actor);
@@ -38,26 +40,33 @@ bool CUtil::Trace(AActor * p_actor, float range_meter, float beam_width_azimuth_
     int success_count = 0;
 
     pscan_result->Point3DList.Reset();
+    pscan_result->Point2DScreen.Reset();
 
     for (float azimuth = azimuth_start; azimuth <= azimuth_end; azimuth += azimuth_angle_step_deg) {
         vertical_ind = 0;
         for (float elevation = elevation_start; elevation <= elevation_end; elevation += elevation_angle_step_deg) {
 
-
+            
             FRotator euler_rot(elevation, azimuth, 0);
 
             FQuat qua = euler_rot.Quaternion();
 
             FVector new_dir = qua.RotateVector(look_dir);
+            start_pos = p_actor->GetActorLocation() + new_dir * min_range_meter * 100;
             end = start_pos + new_dir * range_meter * 100;
 
             ret = p_actor->GetWorld()->LineTraceSingleByChannel(result, start_pos, end, ECollisionChannel::ECC_Visibility, query_params, FCollisionResponseParams());
             if(ret){
                 //DrawDebugLine(p_actor->GetWorld(), start_pos,start_pos + new_dir * 2000 ,FColor::Red,false, 0.2f);
                 pscan_result->Range[horizantal_ind][vertical_ind] = result.Distance;
-                FVector detection = start_pos + new_dir * result.Distance;
-                pscan_result->Point3D[horizantal_ind][vertical_ind] = detection;
-                pscan_result->Point3DList.Add(detection);
+                pscan_result->Point3D[horizantal_ind][vertical_ind] = result.Location;
+                pscan_result->Point3DList.Add(result.Location);
+
+                FVector pixel_coord = (result.Location - start_pos);
+                FVector2D screen_normalized = FVector2D( (pixel_coord.X / (range_meter*100) + 1) * 0.5f,  ((pixel_coord.Y / (range_meter*100)) + 1) * 0.5f);
+                pscan_result->Point2DScreen.Add(screen_normalized);
+
+            
                 success_count++;
             }
             vertical_ind++;

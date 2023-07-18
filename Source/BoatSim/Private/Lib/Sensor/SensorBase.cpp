@@ -51,10 +51,10 @@ void ASensorBase::Tick(float DeltaTime)
 	Run(DeltaTime);
 }
 
-void ASensorBase::Visualize(TArray<FVector> points, FVector center)
+void ASensorBase::Visualize(SScanResult *p_result)
 {
 	if (pPointVisualizer != nullptr) {
-		pPointVisualizer->Visualize(points);
+		pPointVisualizer->Visualize(p_result);
 	}
 	
 }

@@ -79,15 +79,12 @@ void ARadarBase::Run(float delta_time_sec)
 {
 	Super::Run(delta_time_sec);
 
-	bool ret = CUtil::Trace(this, RangeMeter.Y, FovHorizontalDeg, FovVerticalDeg, HorizontalScanStepAngleDeg, VerticalScanStepAngleDeg, pScanResult);
+	bool ret = CUtil::Trace(this, RangeMeter.X, RangeMeter.Y, FovHorizontalDeg, FovVerticalDeg, HorizontalScanStepAngleDeg, VerticalScanStepAngleDeg, pScanResult);
 	
 	if (pCommIF != nullptr) {
 		pCommIF->SendData(pScanResult, -1);
 	}
 
-}
-void ARadarBase::Visualize(TArray<FVector> points, FVector center)
-{
-	Super::Visualize(points, center);
+	Visualize(pScanResult);
 
 }
