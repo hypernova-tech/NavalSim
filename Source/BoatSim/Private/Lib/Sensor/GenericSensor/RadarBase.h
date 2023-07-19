@@ -46,6 +46,10 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 		float FullScanPeriodSec = 1;
+	UPROPERTY(EditAnywhere)
+		bool ShowRadarBeam = false;
+
+	
 
 	virtual void Run(float delta_time_sec) override;
 

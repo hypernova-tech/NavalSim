@@ -97,7 +97,7 @@ void ARadarBase::Run(float delta_time_sec)
 			IsFullScaned = true;
 		}
 
-		bool ret = CUtil::Trace(this, true, RangeMeter.X, RangeMeter.Y, start_azimuth, end_azimuth, 0, FovVerticalDeg, HorizontalScanStepAngleDeg, VerticalScanStepAngleDeg, pScanResult);
+		bool ret = CUtil::Trace(this, true, RangeMeter.X, RangeMeter.Y, start_azimuth, end_azimuth, 0, FovVerticalDeg, HorizontalScanStepAngleDeg, VerticalScanStepAngleDeg, ShowRadarBeam, pScanResult);
 
 		if (pCommIF != nullptr) {
 			pCommIF->SendData(pScanResult, -1);

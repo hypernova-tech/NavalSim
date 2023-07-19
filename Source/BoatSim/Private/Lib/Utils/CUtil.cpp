@@ -13,7 +13,7 @@ CUtil::~CUtil()
 
 bool CUtil::Trace(AActor * p_actor, bool is_world, float min_range_meter, float range_meter, float azimuth_start_deg, float azimuth_end_deg,
                                                                           float elevation_start_deg, float elevation_end_deg, float azimuth_angle_step_deg, float elevation_angle_step_deg,
-                                                                          SScanResult* pscan_result)
+                                                                          bool show_radar_beam, SScanResult* pscan_result)
 {
 
 
@@ -23,6 +23,8 @@ bool CUtil::Trace(AActor * p_actor, bool is_world, float min_range_meter, float 
     
     if (is_world) {
         look_dir = FVector::ForwardVector;
+        look_dir.Z = p_actor->GetActorForwardVector().Z;
+        look_dir.Normalize();
     }
     else {
         look_dir = p_actor->GetActorForwardVector();
@@ -54,12 +56,14 @@ bool CUtil::Trace(AActor * p_actor, bool is_world, float min_range_meter, float 
 
     float one_over_range_unreal = 1.0 / WORLD_TO_UNREAL(range_meter);
 
+    int sector_ind = azimuth_start_deg / (360.0 / pscan_result->SectorCount);
+    SSectorInfo* p_current_sektor = pscan_result->GetSectorContainer()->GetSector(sector_ind);
+    p_current_sektor->Reset();
+
     for (float azimuth = azimuth_start_deg; azimuth <= azimuth_end_deg; azimuth += azimuth_angle_step_deg) {
         vertical_ind = 0;
         float azimuth_rad = azimuth * DEGTORAD;
-        int sector_ind = azimuth / (360.0 / pscan_result->SectorCount);
-        SSectorInfo* p_current_sektor = pscan_result->GetSectorContainer()->GetSector(sector_ind);
-        p_current_sektor->Reset();
+   
         for (float elevation = elevation_start_deg; elevation <= elevation_end_deg; elevation += elevation_angle_step_deg) {
 
             
