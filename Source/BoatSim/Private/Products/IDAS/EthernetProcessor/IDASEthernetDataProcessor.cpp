@@ -6,6 +6,7 @@
 #include <Lib/SOACommonObserverArgs/PlatformKinematicData.h>
 #include <Lib/SOA/SOAImplementor.h>
 #include <Lib/SOA/CommonSOAObservers.h>
+#include <Lib/Utils/CUtil.h>
 #pragma pack(push, 1)
 struct  SIdasAsToIdasGERaw
 {
@@ -28,8 +29,7 @@ struct  SIdasAsToIdasGERaw
 };
 #pragma pack(pop)
 
-#define RADTODEG							57.295779513082323 
-#define DEGTORAD							0.017453292519943
+
 #define LAT_SCALE_FACTOR					1e-7
 #define LON_SCALE_FACTOR					(1e-7)
 #define NED_VELOCITY_SCALE_FACTOR			(2e-15*1e-2)

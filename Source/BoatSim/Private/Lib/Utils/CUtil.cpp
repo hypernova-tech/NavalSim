@@ -11,13 +11,25 @@ CUtil::~CUtil()
 {
 }
 
-bool CUtil::Trace(AActor * p_actor, float min_range_meter, float range_meter, float beam_width_azimuth_deg, float beam_width_elavation_deg, float azimuth_angle_step_deg, float elevation_angle_step_deg, SScanResult* pscan_result)
+bool CUtil::Trace(AActor * p_actor, bool is_world, float min_range_meter, float range_meter, float azimuth_start_deg, float azimuth_end_deg,
+                                                                          float elevation_start_deg, float elevation_end_deg, float azimuth_angle_step_deg, float elevation_angle_step_deg,
+                                                                          SScanResult* pscan_result)
 {
 
 
 
     FVector start_pos = p_actor->GetActorLocation();
-    FVector look_dir = p_actor->GetActorForwardVector();
+    FVector look_dir;
+    
+    if (is_world) {
+        look_dir = FVector::ForwardVector;
+    }
+    else {
+        look_dir = p_actor->GetActorForwardVector();
+    }
+  
+
+    look_dir.Normalize();
 
     pscan_result->ScanCenter = start_pos;
 
@@ -25,11 +37,9 @@ bool CUtil::Trace(AActor * p_actor, float min_range_meter, float range_meter, fl
     query_params.AddIgnoredActor(p_actor);
     query_params.bTraceComplex = false;
 
-    float azimuth_start = -beam_width_azimuth_deg / 2.0f;
-    float azimuth_end = beam_width_azimuth_deg / 2.0f;
 
-    float elevation_start = 0;
-    float elevation_end = beam_width_elavation_deg;
+
+
 
     FVector end;
     FHitResult result;
@@ -40,32 +50,61 @@ bool CUtil::Trace(AActor * p_actor, float min_range_meter, float range_meter, fl
     int success_count = 0;
 
     pscan_result->Point3DList.Reset();
-    pscan_result->Point2DScreen.Reset();
+    //pscan_result->Point2DScreen.Reset();
 
-    for (float azimuth = azimuth_start; azimuth <= azimuth_end; azimuth += azimuth_angle_step_deg) {
+    float one_over_range_unreal = 1.0 / WORLD_TO_UNREAL(range_meter);
+
+    for (float azimuth = azimuth_start_deg; azimuth <= azimuth_end_deg; azimuth += azimuth_angle_step_deg) {
         vertical_ind = 0;
-        for (float elevation = elevation_start; elevation <= elevation_end; elevation += elevation_angle_step_deg) {
+        float azimuth_rad = azimuth * DEGTORAD;
+        int sector_ind = azimuth / (360.0 / pscan_result->SectorCount);
+        SSectorInfo* p_current_sektor = pscan_result->GetSectorContainer()->GetSector(sector_ind);
+        p_current_sektor->Reset();
+        for (float elevation = elevation_start_deg; elevation <= elevation_end_deg; elevation += elevation_angle_step_deg) {
 
             
-            FRotator euler_rot(elevation, azimuth, 0);
+            FRotator euler_yaw(0,azimuth, 0);
+            FRotator euler_pitch(elevation, 0, 0);
+           
 
-            FQuat qua = euler_rot.Quaternion();
+            //FQuat qua = euler_rot.Quaternion();
 
-            FVector new_dir = qua.RotateVector(look_dir);
-            start_pos = p_actor->GetActorLocation() + new_dir * min_range_meter * 100;
-            end = start_pos + new_dir * range_meter * 100;
+            FVector temp_dir = euler_pitch .RotateVector(look_dir);
+            FVector new_dir = euler_yaw.RotateVector(temp_dir);
+
+ 
+          
+            start_pos = p_actor->GetActorLocation() + new_dir * WORLD_TO_UNREAL(min_range_meter);
+            end = start_pos + new_dir * WORLD_TO_UNREAL(range_meter);
+
+
+
 
             ret = p_actor->GetWorld()->LineTraceSingleByChannel(result, start_pos, end, ECollisionChannel::ECC_Visibility, query_params, FCollisionResponseParams());
+            DrawDebugLine(p_actor->GetWorld(), start_pos, end, FColor::Green, false, 0.2f);
             if(ret){
-                //DrawDebugLine(p_actor->GetWorld(), start_pos,start_pos + new_dir * 2000 ,FColor::Red,false, 0.2f);
+                //DrawDebugLine(p_actor->GetWorld(), start_pos,start_pos + new_dir * result.Distance,FColor::Red,false, 0.2f);
                 pscan_result->Range[horizantal_ind][vertical_ind] = result.Distance;
                 pscan_result->Point3D[horizantal_ind][vertical_ind] = result.Location;
-                pscan_result->Point3DList.Add(result.Location);
+                FVector manual_pos = start_pos + new_dir * result.Distance;
+                pscan_result->Point3DList.Add(manual_pos);
+               
+#if false
+                float X = FMath::Sin(azimuth_rad) * result.Distance * one_over_range_unreal;
+                float Y = FMath::Cos(azimuth_rad) * result.Distance * one_over_range_unreal;
 
-                FVector pixel_coord = (result.Location - start_pos);
-                FVector2D screen_normalized = FVector2D( (pixel_coord.X / (range_meter*100) + 1) * 0.5f,  ((pixel_coord.Y / (range_meter*100)) + 1) * 0.5f);
-                pscan_result->Point2DScreen.Add(screen_normalized);
+                // conver to local coordinate system
+                X = (1 + X) * 0.5;
+                Y = (1 - Y) * 0.5;
 
+                //FVector pixel_coord = (result.Location - start_pos);
+                //FVector2D screen_normalized = FVector2D( (pixel_coord.X / (range_meter*100) + 1) * 0.5f,  ((pixel_coord.Y / (range_meter*100)) + 1) * 0.5f);
+                //pscan_result->Point2DScreen.Add(screen_normalized);
+                pscan_result->Point2DScreen.Add(FVector2D(X, Y));
+
+#endif
+
+                p_current_sektor->Add(result.Location);
             
                 success_count++;
             }

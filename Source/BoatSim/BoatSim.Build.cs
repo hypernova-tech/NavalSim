@@ -6,6 +6,7 @@ public class BoatSim : ModuleRules
 {
 	public BoatSim(ReadOnlyTargetRules Target) : base(Target)
 	{
+		OptimizeCode = CodeOptimization.Never;
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore","Networking","Sockets","ProceduralMeshComponent" });

@@ -72,19 +72,46 @@ void ARadarBase::BeginPlay()
 	CUtil::DebugLog("ARadarBase Beginplay");
 	Super::BeginPlay();
 	pScanResult = new SScanResult();
+	pScanResult->Init(10);
 }
 
 
 void ARadarBase::Run(float delta_time_sec)
 {
 	Super::Run(delta_time_sec);
+	bool is_reset = false;
 
-	bool ret = CUtil::Trace(this, RangeMeter.X, RangeMeter.Y, FovHorizontalDeg, FovVerticalDeg, HorizontalScanStepAngleDeg, VerticalScanStepAngleDeg, pScanResult);
-	
-	if (pCommIF != nullptr) {
-		pCommIF->SendData(pScanResult, -1);
+	if (IsFullScaned) {
+		pScanResult->Reset2DPoint();
+		CurrentScanAzimuth = 0;
+		IsFullScaned = false;
 	}
 
-	Visualize(pScanResult);
+
+	if (FApp::GetCurrentTime() >= NextScanTime) {
+		float start_azimuth = CurrentScanAzimuth;
+		float end_azimuth = 36 + start_azimuth;
+
+		if (end_azimuth >= 359.99) {
+			end_azimuth = 359.99;
+			IsFullScaned = true;
+		}
+
+		bool ret = CUtil::Trace(this, true, RangeMeter.X, RangeMeter.Y, start_azimuth, end_azimuth, 0, FovVerticalDeg, HorizontalScanStepAngleDeg, VerticalScanStepAngleDeg, pScanResult);
+
+		if (pCommIF != nullptr) {
+			pCommIF->SendData(pScanResult, -1);
+		}
+
+		CurrentScanAzimuth = end_azimuth;
+
+		Visualize(pScanResult, GetActorLocation(), GetActorForwardVector(), GetActorRightVector(), RangeMeter.Y);
+
+		NextScanTime = FApp::GetCurrentTime() + 0.1;
+	
+		CUtil::DebugLog("Scanning");
+	}
+
+	
 
 }

@@ -28,6 +28,7 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 		double NoiseMean;
+
 	UPROPERTY(EditAnywhere)
 		double NoiseStdDeviation;
 
@@ -41,7 +42,10 @@ protected:
 		float HorizontalScanStepAngleDeg;
 
 	UPROPERTY(EditAnywhere)
-		float VerticalScanStepAngleDeg;
+		float VerticalScanStepAngleDeg = 36;
+
+	UPROPERTY(EditAnywhere)
+		float FullScanPeriodSec = 1;
 
 	virtual void Run(float delta_time_sec) override;
 
@@ -69,7 +73,9 @@ public:
 	double GetFovHorizontalDeg();
 
 
-	
-
+private:
+	float CurrentScanAzimuth;
+	double NextScanTime;
+	bool IsFullScaned = false;
 	
 };
