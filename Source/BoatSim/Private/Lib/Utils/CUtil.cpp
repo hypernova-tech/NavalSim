@@ -20,6 +20,7 @@ bool CUtil::Trace(AActor * p_actor, bool is_world, float min_range_meter, float 
 
     FVector start_pos = p_actor->GetActorLocation();
     FVector look_dir;
+    FVector right_vec;
     
     if (is_world) {
         look_dir = FVector::ForwardVector;
@@ -28,6 +29,11 @@ bool CUtil::Trace(AActor * p_actor, bool is_world, float min_range_meter, float 
     }
     else {
         look_dir = p_actor->GetActorForwardVector();
+        look_dir.Normalize();
+        right_vec = p_actor->GetActorRightVector();
+        right_vec.Z = 0;
+        right_vec.Normalize();
+
     }
   
 
@@ -65,27 +71,42 @@ bool CUtil::Trace(AActor * p_actor, bool is_world, float min_range_meter, float 
         float azimuth_rad = azimuth * DEGTORAD;
    
         for (float elevation = elevation_start_deg; elevation <= elevation_end_deg; elevation += elevation_angle_step_deg) {
+            FVector new_dir;
 
-            
-            FRotator euler_yaw(0,azimuth, 0);
-            FRotator euler_pitch(elevation, 0, 0);
-           
+            if (is_world) {
 
-            //FQuat qua = euler_rot.Quaternion();
+                FRotator euler_yaw(0, azimuth, 0);
+                FRotator euler_pitch(elevation, 0, 0);
 
-            FVector temp_dir = euler_pitch .RotateVector(look_dir);
-            FVector new_dir = euler_yaw.RotateVector(temp_dir);
 
- 
-          
-            start_pos = p_actor->GetActorLocation() + new_dir * WORLD_TO_UNREAL(min_range_meter);
-            end = start_pos + new_dir * WORLD_TO_UNREAL(range_meter);
+                //FQuat qua = euler_rot.Quaternion();
+
+                FVector temp_dir = euler_pitch.RotateVector(look_dir);
+                new_dir = euler_yaw.RotateVector(temp_dir);
+
+                start_pos = p_actor->GetActorLocation() + new_dir * WORLD_TO_UNREAL(min_range_meter);
+                end = start_pos + new_dir * WORLD_TO_UNREAL(range_meter);
+
+            }
+            else {
+                FQuat QuatPitch(right_vec, elevation * DEGTORAD);
+                FQuat Yaw(FVector::UpVector, azimuth * DEGTORAD);
+              
+
+                new_dir = Yaw * QuatPitch * (look_dir);
+
+                start_pos = p_actor->GetActorLocation() + new_dir * WORLD_TO_UNREAL(min_range_meter);
+                end = start_pos + new_dir * WORLD_TO_UNREAL(range_meter);
+            }
 
 
 
 
             ret = p_actor->GetWorld()->LineTraceSingleByChannel(result, start_pos, end, ECollisionChannel::ECC_Visibility, query_params, FCollisionResponseParams());
-            DrawDebugLine(p_actor->GetWorld(), start_pos, end, FColor::Green, false, 0.2f);
+            if (show_radar_beam) {
+                DrawDebugLine(p_actor->GetWorld(), start_pos, end, FColor::Green, false, 0.2f);
+            }
+            
             if(ret){
                 //DrawDebugLine(p_actor->GetWorld(), start_pos,start_pos + new_dir * result.Distance,FColor::Red,false, 0.2f);
                 pscan_result->Range[horizantal_ind][vertical_ind] = result.Distance;
@@ -260,4 +281,35 @@ void CUtil::DebugLog(FString str)
 {
     UE_LOG(LogTemp, Warning,TEXT("%s"), *str);
 
+}
+
+void CUtil::LookAt(AActor* p_actor, FVector& look_dir)
+{
+    FVector ActorLocation = p_actor->GetActorLocation();
+    FVector TargetLocation = ActorLocation + look_dir * 5;
+    FVector DirectionToTarget = (TargetLocation - ActorLocation).GetSafeNormal();
+    FRotator NewRotation = DirectionToTarget.Rotation();
+}
+
+template <typename T>
+T* CUtil::FindComponent(AActor* p_parent) 
+{
+    TArray<AActor*> child_actors;
+    T* p_ret = p_parent->FindComponentByClass<T>();
+
+    return p_ret;
+
+    for (AActor* p_child : child_actors)
+    {
+      
+        // Check if the child actor is of the desired class
+        if (p_child->IsA<T>())
+        {
+            T *ret  = Cast<T>(p_child);
+            // Perform actions with the found child actor
+            return ret;
+        }
+    }
+
+    return nullptr;
 }

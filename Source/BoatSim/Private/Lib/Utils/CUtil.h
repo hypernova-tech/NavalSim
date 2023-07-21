@@ -34,5 +34,9 @@ public:
 	static bool ParseVector3D(const FString& Text, FVector& ret);
 	static bool ParsePose(const FString& Text, FVector& translation, FVector& rpy);
 	static void DebugLog(FString str);
+	template <typename T>
+	static T* FindComponent(AActor* p_parent);
+
+	static void LookAt(AActor* p_actor, FVector& look_dir);
 };
 
