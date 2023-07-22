@@ -39,3 +39,21 @@ int AUIControllerBase::GetLidarSlotCount()
 {
 	return LidarSlots.Num();
 }
+
+
+
+
+void AUIControllerBase::SetCameraSlotImage(int no, UImage* p_image)
+{
+	CameraSlots.Add(p_image);
+}
+
+UImage* AUIControllerBase::GetCameraSlotImage(int no)
+{
+
+	return CameraSlots[no];
+}
+int AUIControllerBase::GetCameraSlotCount()
+{
+	return CameraSlots.Num();
+}

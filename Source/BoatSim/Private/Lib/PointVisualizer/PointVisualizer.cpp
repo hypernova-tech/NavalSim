@@ -205,11 +205,12 @@ void APointVisualizer::SetPixelValue(UTextureRenderTarget2D* RenderTarget, int32
 #endif
 }
 
-void APointVisualizer::CreateRenderTarget(int width, int height, UImage* p_image)
+UTextureRenderTarget2D* APointVisualizer::CreateRenderTarget(int width, int height, UImage* p_image)
 {
     pRenderTarget = NewObject<UTextureRenderTarget2D>(this);
     pRenderTarget->InitAutoFormat(width, height);
     CreateMaterialInstanceWithTexture(this, pBaseMaterial, pRenderTarget, p_image);
+    return pRenderTarget;
 }
 UMaterialInstanceDynamic* APointVisualizer::CreateMaterialInstanceWithTexture(UObject* Outer, UMaterialInterface* BaseMaterial, UTexture* Texture, UImage* p_image)
 {

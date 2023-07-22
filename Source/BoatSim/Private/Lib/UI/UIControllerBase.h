@@ -24,6 +24,10 @@ protected:
 	UPROPERTY(EditAnywhere)
 		TArray<UImage*> LidarSlots;
 
+
+	UPROPERTY(EditAnywhere)
+		TArray<UImage*> CameraSlots;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -36,4 +40,13 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		int GetLidarSlotCount();
+
+	UFUNCTION(BlueprintCallable)
+		void SetCameraSlotImage(int no, UImage* p_image);
+
+	UFUNCTION(BlueprintCallable)
+		UImage* GetCameraSlotImage(int no);
+
+	UFUNCTION(BlueprintCallable)
+		int GetCameraSlotCount();
 };
