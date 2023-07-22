@@ -3,6 +3,7 @@
 
 #include "Lib/Sensor/GenericSensor/FLS3D.h"
 #include "Lib/Utils/CUtil.h"
+#include <Lib/SystemManager/SystemManagerBase.h>
 
 AFLS3D::AFLS3D()
 {
@@ -75,14 +76,18 @@ void AFLS3D::BeginPlay()
 	CUtil::DebugLog("ARadarBase Beginplay");
 	Super::BeginPlay();
 
-	CurrentScanAzimuth = -FovHorizontalDeg * 0.5;
 
-	pScanResult = new SScanResult();
-	pScanResult->Init(1);
 
 	
 }
 
+void AFLS3D::InitSensor()
+{
+	CurrentScanAzimuth = -FovHorizontalDeg * 0.5;
+
+	pScanResult = new SScanResult();
+	pScanResult->Init(1);
+}
 
 
 
@@ -97,8 +102,8 @@ void AFLS3D::Run(float delta_time_sec)
 	if (FApp::GetCurrentTime() >= NextScanTime) {
 		float start_azimuth = -FovHorizontalDeg * 0.5;
 		float end_azimuth = FovHorizontalDeg*0.5;
-
-		bool ret = CUtil::Trace(this, false, RangeMeter.X, RangeMeter.Y, start_azimuth, end_azimuth, 0, FovVerticalDeg, HorizontalScanStepAngleDeg, VerticalScanStepAngleDeg, ShowFLSBeam, pScanResult);
+		TArray<AActor*> ignored_actor;
+		bool ret = CUtil::Trace(this, false, RangeMeter.X, RangeMeter.Y, start_azimuth, end_azimuth, 0, FovVerticalDeg, HorizontalScanStepAngleDeg, VerticalScanStepAngleDeg, ShowFLSBeam, ignored_actor,pScanResult);
 
 		if (pCommIF != nullptr) {
 			pCommIF->SendData(pScanResult, -1);
@@ -119,3 +124,4 @@ void AFLS3D::Run(float delta_time_sec)
 
 
 }
+

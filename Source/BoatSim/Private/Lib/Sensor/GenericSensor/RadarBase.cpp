@@ -3,6 +3,7 @@
 
 #include "Lib/Sensor/GenericSensor/RadarBase.h"
 #include "Lib/Utils/CUtil.h"
+#include <Lib/SystemManager/SystemManagerBase.h>
 
 
 void ARadarBase::SetFrequency(double val)
@@ -71,6 +72,11 @@ void ARadarBase::BeginPlay()
 {
 	CUtil::DebugLog("ARadarBase Beginplay");
 	Super::BeginPlay();
+
+}
+
+void ARadarBase::InitSensor()
+{
 	pScanResult = new SScanResult();
 	pScanResult->Init(10);
 }
@@ -97,7 +103,7 @@ void ARadarBase::Run(float delta_time_sec)
 			IsFullScaned = true;
 		}
 
-		bool ret = CUtil::Trace(this, true, RangeMeter.X, RangeMeter.Y, start_azimuth, end_azimuth, 0, FovVerticalDeg, HorizontalScanStepAngleDeg, VerticalScanStepAngleDeg, ShowRadarBeam, pScanResult);
+		bool ret = CUtil::Trace(this, true, RangeMeter.X, RangeMeter.Y, start_azimuth, end_azimuth, 0, FovVerticalDeg, HorizontalScanStepAngleDeg, VerticalScanStepAngleDeg, ShowRadarBeam, ASystemManagerBase::GetInstance()->GetSensorGlobalIgnoreList(), pScanResult);
 
 		if (pCommIF != nullptr) {
 			pCommIF->SendData(pScanResult, -1);

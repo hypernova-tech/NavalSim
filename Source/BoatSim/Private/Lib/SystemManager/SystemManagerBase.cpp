@@ -22,6 +22,16 @@ ASystemManagerBase* ASystemManagerBase::GetInstance()
 	return pInstance;
 }
 
+TArray<AActor*>& ASystemManagerBase::GetSensorGlobalIgnoreList()
+{
+	return SensorGlobalIgnoreList;
+}
+
+TArray<AActor*>& ASystemManagerBase::GetMoveableActorList()
+{
+	return MoveableActorList;
+}
+
 // Called when the game starts or when spawned
 void ASystemManagerBase::BeginPlay()
 {
@@ -55,6 +65,11 @@ AMapOrigin* ASystemManagerBase::GetMapOrigin()
 ASOAImplementor* ASystemManagerBase::GetSOAImplementor()
 {
 	return pSoaImplementor;
+}
+
+AUIControllerBase* ASystemManagerBase::GetUIController()
+{
+	return pUIController;
 }
 
 

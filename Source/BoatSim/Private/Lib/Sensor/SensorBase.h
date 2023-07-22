@@ -22,6 +22,14 @@ enum class ESensorType
 	CameraIR
 };
 
+enum ESensorState
+{
+	Init,
+	Running,
+	Finish,
+	
+};
+
 
 UCLASS()
 class ASensorBase : public AActor
@@ -36,7 +44,13 @@ public:
 		ESensorType SensorType;
 
 	UPROPERTY(EditAnywhere)
+		int SensorSlotIndex;
+
+	UPROPERTY(EditAnywhere)
 		float UpdateFrequency;
+
+	UPROPERTY(EditAnywhere)
+		bool Enabled = true;
 
 	UPROPERTY(EditAnywhere)
 		bool Point3DVisualize = false;
@@ -44,11 +58,15 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	virtual void Run(float delta_time_sec);
+
 	UGenericCommIF* pCommIF;
 	APointVisualizer* pPointVisualizer;
+	ESensorState SensorState = ESensorState::Init;
+	virtual void SensorStateMachine(float delta_time_sec);
 
-	
+	virtual void InitSensor();
+	virtual void Run(float delta_time_sec);
+	virtual void FinalizeSensor();
 
 public:	
 	// Called every frame

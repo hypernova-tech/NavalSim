@@ -13,7 +13,7 @@ CUtil::~CUtil()
 
 bool CUtil::Trace(AActor * p_actor, bool is_world, float min_range_meter, float range_meter, float azimuth_start_deg, float azimuth_end_deg,
                                                                           float elevation_start_deg, float elevation_end_deg, float azimuth_angle_step_deg, float elevation_angle_step_deg,
-                                                                          bool show_radar_beam, SScanResult* pscan_result)
+                                                                          bool show_radar_beam, TArray<AActor*>& ignore_list, SScanResult* pscan_result)
 {
 
 
@@ -43,6 +43,10 @@ bool CUtil::Trace(AActor * p_actor, bool is_world, float min_range_meter, float 
 
     FCollisionQueryParams query_params;
     query_params.AddIgnoredActor(p_actor);
+
+    for (AActor* p_temp : ignore_list) {
+        query_params.AddIgnoredActor(p_temp);
+    }
     query_params.bTraceComplex = false;
 
 

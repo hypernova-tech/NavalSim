@@ -4,21 +4,22 @@
 
 #include "CoreMinimal.h"
 #include "Lib/Sensor/SensorBase.h"
-#include "Lib/Utils/CScanResult.h"
-#include "RadarBase.generated.h"
+#include "LidarBase.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class ARadarBase : public ASensorBase
+class ALidarBase : public ASensorBase
 {
 	GENERATED_BODY()
-	
+
+public:
+	ALidarBase();
 
 protected:
 
-	SScanResult *pScanResult;
+	SScanResult* pScanResult;
 
 	UPROPERTY(EditAnywhere)
 		double Frequency;
@@ -47,12 +48,13 @@ protected:
 	UPROPERTY(EditAnywhere)
 		float FullScanPeriodSec = 1;
 	UPROPERTY(EditAnywhere)
-		bool ShowRadarBeam = false;
+		bool ShowFLSBeam = false;
 
-	
+
 
 	virtual void Run(float delta_time_sec) override;
 	virtual void InitSensor() override;
+
 	virtual void BeginPlay() override;
 
 public:
@@ -81,5 +83,4 @@ private:
 	float CurrentScanAzimuth;
 	double NextScanTime;
 	bool IsFullScaned = false;
-	
 };

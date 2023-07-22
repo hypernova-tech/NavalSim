@@ -7,7 +7,9 @@
 #include <Lib/Origin/MapOrigin.h>
 #include <Lib/SOA/SOAImplementor.h>
 #include <Lib/Config/ConfigManager.h>
+#include <Lib/UI/UIControllerBase.h>
 #include "SystemManagerBase.generated.h"
+
 
 
 
@@ -36,6 +38,15 @@ protected:
 	UPROPERTY(EditAnywhere)
 		AActor* pConfigManagerActor;
 
+	UPROPERTY(EditAnywhere)
+		AUIControllerBase* pUIController;
+
+	UPROPERTY(EditAnywhere)
+		TArray<AActor*> SensorGlobalIgnoreList;
+
+	UPROPERTY(EditAnywhere)
+		TArray<AActor*> MoveableActorList;
+
 	UConfigManager* pConfigManager;
 	virtual void LoadConfig();
 public:	
@@ -44,9 +55,10 @@ public:
 
 	AMapOrigin* GetMapOrigin();
 	ASOAImplementor* GetSOAImplementor();
+	AUIControllerBase* GetUIController();
 	static  ASystemManagerBase* GetInstance();
-
-	 
+	TArray<AActor*>& GetSensorGlobalIgnoreList();
+	TArray<AActor*>& GetMoveableActorList();
 
 private:
 	static ASystemManagerBase* pInstance;

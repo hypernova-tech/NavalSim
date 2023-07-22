@@ -21,6 +21,40 @@ void ASensorBase::Run(float delta_time_sec)
 {
 }
 
+void ASensorBase::SensorStateMachine(float delta_time_sec)
+{
+	ESensorState current_state = SensorState;
+	ESensorState  next_state = current_state;
+
+	switch (current_state)
+	{
+	case Init:
+		InitSensor();
+		next_state = ESensorState::Running;
+		break;
+	case Running:
+		Run(delta_time_sec);
+		break;
+	case Finish:
+		FinalizeSensor();
+		break;
+	default:
+		break;
+	}
+
+	SensorState = next_state;
+}
+
+void ASensorBase::InitSensor()
+{
+}
+
+
+
+void ASensorBase::FinalizeSensor()
+{
+}
+
 // Called when the game starts or when spawned
 void ASensorBase::BeginPlay()
 {
@@ -48,7 +82,11 @@ void ASensorBase::BeginPlay()
 void ASensorBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	Run(DeltaTime);
+	
+	if (Enabled) {
+		SensorStateMachine(DeltaTime);
+	}
+	
 }
 
 void ASensorBase::Visualize(SScanResult* p_scan_result, FVector origin, FVector current_forward, FVector current_right, float max_range_meter)

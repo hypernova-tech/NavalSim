@@ -204,3 +204,43 @@ void APointVisualizer::SetPixelValue(UTextureRenderTarget2D* RenderTarget, int32
 
 #endif
 }
+
+void APointVisualizer::CreateRenderTarget(int width, int height, UImage* p_image)
+{
+    pRenderTarget = NewObject<UTextureRenderTarget2D>(this);
+    pRenderTarget->InitAutoFormat(width, height);
+    CreateMaterialInstanceWithTexture(this, pBaseMaterial, pRenderTarget, p_image);
+}
+UMaterialInstanceDynamic* APointVisualizer::CreateMaterialInstanceWithTexture(UObject* Outer, UMaterialInterface* BaseMaterial, UTexture* Texture, UImage* p_image)
+{
+    if (!BaseMaterial)
+    {
+        // Return null if the base material is not valid
+        return nullptr;
+    }
+
+    // Create a new material instance dynamically
+    UMaterialInstanceDynamic* DynamicMaterial = UMaterialInstanceDynamic::Create(BaseMaterial, Outer);
+
+    if (!DynamicMaterial)
+    {
+        // Return null if the dynamic material creation fails
+        return nullptr;
+    }
+
+    if (!Texture)
+    {
+        // Return the dynamic material without setting the texture if the texture is not valid
+        return DynamicMaterial;
+    }
+
+    // Set the texture parameter for the dynamic material
+
+    FName TextureParameterName = "MainTexture"; // Change this to the actual name of the texture parameter in your material
+    DynamicMaterial->SetTextureParameterValue(TextureParameterName, Texture);
+
+    FSlateBrush NewBrush;
+    NewBrush.SetResourceObject(DynamicMaterial);
+    p_image->SetBrush(NewBrush);
+    return DynamicMaterial;
+}
