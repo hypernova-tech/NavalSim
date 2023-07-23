@@ -19,10 +19,10 @@ class ACameraBase : public ASensorBase
 public:
 
 	UPROPERTY(EditAnywhere)
-		int SensorWidth;
+		int SensorWidth = 1920;
 		
 	UPROPERTY(EditAnywhere)
-		int SensorHeight;
+		int SensorHeight = 1080;
 
 	UPROPERTY(EditAnywhere)
 		float FieldOfViewDeg;

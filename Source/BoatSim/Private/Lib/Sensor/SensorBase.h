@@ -55,6 +55,10 @@ public:
 	UPROPERTY(EditAnywhere)
 		bool Point3DVisualize = false;
 
+
+
+
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -72,5 +76,6 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	virtual void Visualize(SScanResult* p_scan_result, FVector origin, FVector current_forward, FVector current_right, float max_range_meter);
+
 
 };
