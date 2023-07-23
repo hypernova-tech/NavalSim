@@ -112,8 +112,8 @@ protected:
 	virtual void UpdateAxis(EGimbalAxis axis, float delta_time_sec);
 	FSGimbalAxisInfo* GetAxis(EGimbalAxis axis);
 	float GetAxisAngleDeg(EGimbalAxis axis);
-
-	void UpdateAttachedActors();
+	UFUNCTION(BlueprintCallable)
+	void UpdateAttachedActors(FVector rotation);
 
 public:	
 	// Called every frame

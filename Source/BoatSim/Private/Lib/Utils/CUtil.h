@@ -38,5 +38,6 @@ public:
 	static T* FindComponent(AActor* p_parent);
 
 	static void LookAt(AActor* p_actor, FVector& look_dir);
+	static FRotator GetActorRelativeRotation(AActor* p_actor);
 };
 

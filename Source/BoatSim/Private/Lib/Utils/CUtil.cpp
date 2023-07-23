@@ -295,6 +295,36 @@ void CUtil::LookAt(AActor* p_actor, FVector& look_dir)
     FRotator NewRotation = DirectionToTarget.Rotation();
 }
 
+FRotator CUtil::GetActorRelativeRotation(AActor* p_actor)
+{
+   
+    AActor* p_parent_actor  = p_actor->GetParentActor(); // Parent actor, if applicable
+
+    // Get the actor's transform
+    FTransform actor_transform = p_actor->GetActorTransform();
+
+    // Get the parent's transform (if applicable)
+   
+
+    // Calculate the relative rotation
+    FRotator relative_rotation;
+
+    if (p_parent_actor)
+    {
+        FTransform parent_transform = p_parent_actor->GetActorTransform();
+        // If the actor has a parent, calculate relative rotation
+        // by subtracting parent's rotation from actor's rotation
+        relative_rotation = (actor_transform.GetRotation().Inverse() * p_parent_actor->GetActorRotation().Quaternion()).Rotator();
+    }
+    else
+    {
+        // If there's no parent, the relative rotation is just the actor's rotation
+        relative_rotation = p_actor->GetActorRotation();
+    }
+    
+    return relative_rotation;
+}
+
 template <typename T>
 T* CUtil::FindComponent(AActor* p_parent) 
 {

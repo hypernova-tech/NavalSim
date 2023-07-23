@@ -2,6 +2,7 @@
 
 
 #include "Lib/Gimbal/GimbalBase.h"
+#include <Lib/Utils/CUtil.h>
 
 // Sets default values
 AGimbalBase::AGimbalBase()
@@ -33,7 +34,7 @@ void AGimbalBase::Run(float delta_time_sec)
 	UpdateAxis(EGimbalAxis::Pitch, delta_time_sec);
 	UpdateAxis(EGimbalAxis::Yaw, delta_time_sec);
 
-	UpdateAttachedActors();
+	//UpdateAttachedActors();
 }
 
 void AGimbalBase::FinalizeGimbal()
@@ -93,11 +94,24 @@ void AGimbalBase::UpdateAxis(EGimbalAxis axis, float delta_time_sec)
 	}
 }
 
-void AGimbalBase::UpdateAttachedActors()
+void AGimbalBase::UpdateAttachedActors(FVector rotation)
 {
+
+
+	UChildActorComponent* p_comp = (UChildActorComponent*)GetRootComponent();
+	//p_comp->SetRelativeRotation(FRotator(90*FMath::Sin(FApp::GetGameTime()), 90 * FMath::Sin(FApp::GetGameTime()), 90 * FMath::Sin(FApp::GetGameTime())));
+	p_comp->AddRelativeRotation(FRotator(0.90 * FMath::Sin(FApp::GetGameTime()), 0.90 * FMath::Sin(FApp::GetGameTime()), 0.90 * FMath::Sin(FApp::GetGameTime())));
+
+	return;
 	FRotator rot(GetAxisAngleDeg(EGimbalAxis::Pitch), GetAxisAngleDeg(EGimbalAxis::Yaw), GetAxisAngleDeg(EGimbalAxis::Roll));
 	FRotator rot2(90, -45, 52);
-	SetActorRelativeRotation(rot2,false,nullptr,ETeleportType::TeleportPhysics);
+	FRotator curr = CUtil::GetActorRelativeRotation(this);
+	GetRootComponent()->SetRelativeRotation(rot2);
+	//SetActorRelativeRotation(rot2.Quaternion());
+	FRotator next = CUtil::GetActorRelativeRotation(this);
+	FRotator root2 = GetRootComponent()->GetRelativeRotation();
+
+
 	
 }
 
