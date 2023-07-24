@@ -347,3 +347,24 @@ T* CUtil::FindComponent(AActor* p_parent)
 
     return nullptr;
 }
+
+template<typename T>
+T* CUtil::FindChildComponent(AActor* p_parent)
+{
+    TArray<AActor*> child_actors;
+    p_parent->GetAllChildActors(child_actors, true);
+
+    for (AActor* child : child_actors)
+    {
+       
+        // Check if the child actor is of the desired class
+        if (child->IsA<T>())
+        {
+            T *p_ret = Cast<T>(child);
+            // Perform actions with the found child actor
+            return p_ret;
+        }
+    }
+
+    return nullptr;
+}

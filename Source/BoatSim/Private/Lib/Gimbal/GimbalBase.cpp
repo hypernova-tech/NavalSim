@@ -3,12 +3,16 @@
 
 #include "Lib/Gimbal/GimbalBase.h"
 #include <Lib/Utils/CUtil.h>
-
+#include "EngineUtils.h"
+#include <Kismet/GameplayStatics.h>
+#include "CBoatBase.h"
 // Sets default values
 AGimbalBase::AGimbalBase()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	
 
 }
 
@@ -16,7 +20,34 @@ AGimbalBase::AGimbalBase()
 void AGimbalBase::BeginPlay()
 {
 	Super::BeginPlay();
+
+	GetRootComponent()->SetMobility(EComponentMobility::Movable);
+
+#if false
+	TArray<AActor*> Actors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AActor::StaticClass(), Actors);
 	
+	for (AActor* Actor : Actors) {
+		if (Actor->GetClass()->GetFName() == "CBoatBase") {
+			Actor->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform);
+			break;
+		}
+	}
+
+	for (TActorIterator<AActor> It(GetWorld()); It; ++It)
+	{
+		// It->GetClass() returns the UClass of the actor
+		if (It->GetClass()->GetName() == "ACBoatBase")
+		{
+			// You now have a pointer to the actor you were looking for
+			AActor* FoundActor = *It;
+
+			FoundActor->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform);
+			break;
+		}
+	}
+
+#endif
 }
 
 
@@ -98,9 +129,9 @@ void AGimbalBase::UpdateAttachedActors(FVector rotation)
 {
 
 
-	UChildActorComponent* p_comp = (UChildActorComponent*)GetRootComponent();
-	//p_comp->SetRelativeRotation(FRotator(90*FMath::Sin(FApp::GetGameTime()), 90 * FMath::Sin(FApp::GetGameTime()), 90 * FMath::Sin(FApp::GetGameTime())));
-	p_comp->AddRelativeRotation(FRotator(0.90 * FMath::Sin(FApp::GetGameTime()), 0.90 * FMath::Sin(FApp::GetGameTime()), 0.90 * FMath::Sin(FApp::GetGameTime())));
+	//UChildActorComponent* p_comp = (UChildActorComponent*)GetRootComponent();
+	SetActorRelativeRotation(FRotator(90*FMath::Sin(FApp::GetGameTime()), 90 * FMath::Sin(FApp::GetGameTime()), 90 * FMath::Sin(FApp::GetGameTime())));
+	
 
 	return;
 	FRotator rot(GetAxisAngleDeg(EGimbalAxis::Pitch), GetAxisAngleDeg(EGimbalAxis::Yaw), GetAxisAngleDeg(EGimbalAxis::Roll));

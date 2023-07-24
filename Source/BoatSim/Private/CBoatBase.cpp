@@ -12,6 +12,8 @@
 #include <Lib/SOA/CommonSOAObservers.h>
 #include <Lib/SOACommonObserverArgs/PlatformKinematicData.h>
 #include <Lib/SystemManager/SystemManagerBase.h>
+#include <Lib/Gimbal/GimbalBase.h>
+#include <Lib/Utils/CUtil.h>
 
 // Sets default values
 ACBoatBase::ACBoatBase()
@@ -103,6 +105,10 @@ void ACBoatBase::Tick(float DeltaTime)
 	}
 #endif
 
+	
+	AGimbalBase* ChildComponent = CUtil::FindChildComponent< AGimbalBase>(this); 
+	ChildComponent->GetRootComponent()->SetMobility(EComponentMobility::Movable);
+	ChildComponent->UpdateAttachedActors(FVector(0,0,0));
 	Oscillate();
 
 }

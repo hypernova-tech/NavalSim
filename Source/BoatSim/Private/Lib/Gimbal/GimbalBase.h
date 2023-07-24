@@ -112,12 +112,13 @@ protected:
 	virtual void UpdateAxis(EGimbalAxis axis, float delta_time_sec);
 	FSGimbalAxisInfo* GetAxis(EGimbalAxis axis);
 	float GetAxisAngleDeg(EGimbalAxis axis);
-	UFUNCTION(BlueprintCallable)
-	void UpdateAttachedActors(FVector rotation);
+	
+	
 
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	void SetCommand(float roll_angle_deg, float pitch_angle_deg, float yaw_angle_deg);
-
+	UFUNCTION(BlueprintCallable)
+	void UpdateAttachedActors(FVector rotation);
 };

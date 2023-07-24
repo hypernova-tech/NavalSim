@@ -36,6 +36,8 @@ public:
 	static void DebugLog(FString str);
 	template <typename T>
 	static T* FindComponent(AActor* p_parent);
+	template <typename T>
+	static T* FindChildComponent(AActor* p_parent);
 
 	static void LookAt(AActor* p_actor, FVector& look_dir);
 	static FRotator GetActorRelativeRotation(AActor* p_actor);

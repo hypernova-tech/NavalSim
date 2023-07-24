@@ -66,6 +66,7 @@ void USplineFollower::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 		CurrentDistance = 0;
 	}
 
+#if false
 	if (!Once) {
 		FVector prev_pos = pSplineComponent->GetLocationAtDistanceAlongSpline(0, ESplineCoordinateSpace::World);
 		for (float dist = 5; dist < len; dist += 5) {
@@ -75,6 +76,8 @@ void USplineFollower::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 		}
 		Once = true;
 	}
+
+#endif
 
 
 }

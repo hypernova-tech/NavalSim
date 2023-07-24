@@ -7,6 +7,8 @@
 
 ALidarBase::ALidarBase()
 {
+	
+	
 }
 
 void ALidarBase::SetFrequency(double val)

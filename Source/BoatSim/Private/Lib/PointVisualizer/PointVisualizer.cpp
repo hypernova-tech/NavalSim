@@ -52,10 +52,10 @@ void APointVisualizer::Visualize(SScanResult *p_scan_result, FVector origin, FVe
     FCanvas Canvas(RenderTargetResource, nullptr, 0, 0, 0, ERHIFeatureLevel::SM5);
 
     // Clear the canvas with the desired color to avoid artifacts from previous frames
-    Canvas.Clear(FColor::Black);
+   
     Canvas.SetAllowedModes(FCanvas::ECanvasAllowModes::Allow_Flush);
-
-
+    //Canvas.SetAllowedModes(FCanvas::ECanvasAllowModes::Allow_DeleteOnRender);
+    Canvas.Clear(FColor::Black);
     FIntPoint rt_size =  RenderTargetResource->GetSizeXY();
 
     SSectorContainer *p_sector_container = p_scan_result->GetSectorContainer();
