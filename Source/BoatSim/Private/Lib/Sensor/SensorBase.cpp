@@ -47,6 +47,13 @@ void ASensorBase::SensorStateMachine(float delta_time_sec)
 
 void ASensorBase::InitSensor()
 {
+	if (SimulatePhysicsEnabled) {
+
+	}
+	else {
+		this->DisableComponentsSimulatePhysics();
+
+	}
 }
 
 

@@ -108,7 +108,7 @@ void ACBoatBase::Tick(float DeltaTime)
 	
 	AGimbalBase* ChildComponent = CUtil::FindChildComponent< AGimbalBase>(this); 
 	
-	ChildComponent->UpdateAttachedActors(FVector(0,0,0));
+	//ChildComponent->UpdateAttachedActors(FVector(0,0,0));
 	Oscillate();
 
 }

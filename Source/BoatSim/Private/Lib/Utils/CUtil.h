@@ -41,5 +41,9 @@ public:
 
 	static void LookAt(AActor* p_actor, FVector& look_dir);
 	static FRotator GetActorRelativeRotation(AActor* p_actor);
+	static int StringToInt(FString& str);
+	static float StringToFloat(FString& str);
+	static double StringToFloat64(FString& str);
+	static AActor* GetTopParent(AActor *p_actor);
 };
 

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include <Lib/ActorBase/ActorBase.h>
 #include "GimbalBase.generated.h"
 
 
@@ -12,8 +13,6 @@ struct FSGimbalAxisInfo {
 	GENERATED_BODY()
 
 public:
-
-
 	UPROPERTY(EditAnywhere)
 		bool Enabled;
 
@@ -75,7 +74,7 @@ enum EGimbalAxis
 
 
 UCLASS()
-class AGimbalBase : public AActor
+class AGimbalBase : public AActorBase
 {
 	GENERATED_BODY()
 	
@@ -120,5 +119,5 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	void SetCommand(float roll_angle_deg, float pitch_angle_deg, float yaw_angle_deg);
 	UFUNCTION(BlueprintCallable)
-	void UpdateAttachedActors(FVector rotation);
+	void UpdateAttachedActors();
 };

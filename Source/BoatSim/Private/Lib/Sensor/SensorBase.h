@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "GenericCommIF/GenericCommIF.h"
 #include <Lib/PointVisualizer/PointVisualizer.h>
+#include <Lib/ActorBase/ActorBase.h>
 #include "SensorBase.generated.h"
 
 
@@ -32,7 +33,7 @@ enum ESensorState
 
 
 UCLASS()
-class ASensorBase : public AActor
+class ASensorBase : public AActorBase
 {
 	GENERATED_BODY()
 	
@@ -49,13 +50,13 @@ public:
 	UPROPERTY(EditAnywhere)
 		float UpdateFrequency;
 
-	UPROPERTY(EditAnywhere)
-		bool Enabled = true;
+
 
 	UPROPERTY(EditAnywhere)
 		bool Point3DVisualize = false;
 
-
+	UPROPERTY(EditAnywhere)
+		bool  SimulatePhysicsEnabled = false;
 
 
 

@@ -54,18 +54,19 @@ void AGimbalBase::BeginPlay()
 
 void AGimbalBase::InitGimbal()
 {
+	
 }
 
 void AGimbalBase::Run(float delta_time_sec)
 {
-	SetCommand(0, 45, 0);
+
 
 
 	UpdateAxis(EGimbalAxis::Roll, delta_time_sec);
 	UpdateAxis(EGimbalAxis::Pitch, delta_time_sec);
 	UpdateAxis(EGimbalAxis::Yaw, delta_time_sec);
 
-	//UpdateAttachedActors();
+	UpdateAttachedActors();
 }
 
 void AGimbalBase::FinalizeGimbal()
@@ -113,7 +114,7 @@ void AGimbalBase::UpdateAxis(EGimbalAxis axis, float delta_time_sec)
 		double current_angle_deg = p_axis->GetCurrentAngleDeg();
 		double error = p_axis->GetCommandAngleDeg() - current_angle_deg;
 		double kp = 1.0;
-		if (error == 0.0) {
+		if (FMath::Abs(error) < 1) {
 			kp = 0;
 		}
 		else if (error < 0) {
@@ -125,26 +126,16 @@ void AGimbalBase::UpdateAxis(EGimbalAxis axis, float delta_time_sec)
 	}
 }
 
-void AGimbalBase::UpdateAttachedActors(FVector rotation)
+void AGimbalBase::UpdateAttachedActors()
 {
-
-
-	//UChildActorComponent* p_comp = (UChildActorComponent*)GetRootComponent();
-	SetActorRelativeRotation(FRotator(90*FMath::Sin(FApp::GetGameTime()), 90 * FMath::Sin(FApp::GetGameTime()), 90 * FMath::Sin(FApp::GetGameTime())));
 	
-
-	return;
 	FRotator rot(GetAxisAngleDeg(EGimbalAxis::Pitch), GetAxisAngleDeg(EGimbalAxis::Yaw), GetAxisAngleDeg(EGimbalAxis::Roll));
-	FRotator rot2(90, -45, 52);
-	FRotator curr = CUtil::GetActorRelativeRotation(this);
-	GetRootComponent()->SetRelativeRotation(rot2);
-	//SetActorRelativeRotation(rot2.Quaternion());
-	FRotator next = CUtil::GetActorRelativeRotation(this);
-	FRotator root2 = GetRootComponent()->GetRelativeRotation();
+	SetActorRelativeRotation(rot);
 
 
 	
 }
+
 
 
 

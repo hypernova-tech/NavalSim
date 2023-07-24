@@ -8,11 +8,8 @@
 #include <Lib/SOA/SOAImplementor.h>
 #include <Lib/Config/ConfigManager.h>
 #include <Lib/UI/UIControllerBase.h>
+#include <Lib/ActorBase/ActorBase.h>
 #include "SystemManagerBase.generated.h"
-
-
-
-
 
 UCLASS()
 class  ASystemManagerBase : public AActor
@@ -57,10 +54,18 @@ public:
 	ASOAImplementor* GetSOAImplementor();
 	AUIControllerBase* GetUIController();
 	static  ASystemManagerBase* GetInstance();
+
 	TArray<AActor*>& GetSensorGlobalIgnoreList();
 	TArray<AActor*>& GetMoveableActorList();
 
-private:
-	static ASystemManagerBase* pInstance;
+	void RegisterActor(FString owner, AActorBase* p_actor);
 
+	template <typename T>
+	T* FindActor(FString owner, FString actor_name);
+
+private:
+
+	static ASystemManagerBase* pInstance;
+	TMap<FString, TMap<FString, AActorBase*>> AllActors;
+	
 };

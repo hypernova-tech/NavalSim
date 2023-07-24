@@ -325,6 +325,52 @@ FRotator CUtil::GetActorRelativeRotation(AActor* p_actor)
     return relative_rotation;
 }
 
+int CUtil::StringToInt(FString& str)
+{
+    
+    int ret = FCString::Atoi(*str);
+
+    return ret;
+}
+
+AActor* CUtil::GetTopParent(AActor *p_actor)
+{
+    AActor* p_temp = p_actor;
+    int depth = 0;
+
+    while (true) {
+        if (p_temp->GetAttachParentActor() == nullptr) {
+            if (depth == 0) {
+                return nullptr;
+            }
+            else {
+                return  p_temp;
+            }
+            
+        }
+
+        p_temp = p_temp->GetAttachParentActor();
+        depth++;
+
+   }
+
+    return nullptr;
+
+}
+
+float CUtil::StringToFloat(FString& str)
+{
+    float ret = FCString::Atof(*str);
+
+    return ret;
+}
+
+double CUtil::StringToFloat64(FString& str)
+{
+    double ret = FCString::Atod(*str);
+
+    return ret;
+}
 template <typename T>
 T* CUtil::FindComponent(AActor* p_parent) 
 {

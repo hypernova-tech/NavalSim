@@ -32,6 +32,39 @@ TArray<AActor*>& ASystemManagerBase::GetMoveableActorList()
 	return MoveableActorList;
 }
 
+
+
+
+void ASystemManagerBase::RegisterActor(FString owner, AActorBase* p_actor)
+{
+	TMap<FString, AActorBase*>& all_actors = AllActors.FindOrAdd(owner);
+	FString actor_label = p_actor->GetActorLabel();
+	all_actors.Add(actor_label, p_actor);
+}
+
+template <typename T>
+T* ASystemManagerBase::FindActor(FString owner, FString actor_name)
+{
+
+	TMap<FString, AActorBase*>* p_actors = AllActors.Find(owner);
+		
+	if (p_actors != nullptr) {
+		AActorBase** p_actor = p_actors->Find(actor_name);
+		if (p_actor != nullptr) {
+			if (p_actor[0] != nullptr) {
+				T* p_res = Cast<T>(p_actor[0]);
+				return p_res;
+			}
+			
+		}
+		
+	}
+	
+	return nullptr;
+	
+}
+
+
 // Called when the game starts or when spawned
 void ASystemManagerBase::BeginPlay()
 {
@@ -46,6 +79,7 @@ void ASystemManagerBase::BeginPlay()
 		LoadConfig();
 	}
 	
+	GEngine->GameViewport->ConsoleCommand(TEXT("YourCommand"));
 	
 }
 
