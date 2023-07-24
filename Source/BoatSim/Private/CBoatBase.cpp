@@ -107,7 +107,7 @@ void ACBoatBase::Tick(float DeltaTime)
 
 	
 	AGimbalBase* ChildComponent = CUtil::FindChildComponent< AGimbalBase>(this); 
-	ChildComponent->GetRootComponent()->SetMobility(EComponentMobility::Movable);
+	
 	ChildComponent->UpdateAttachedActors(FVector(0,0,0));
 	Oscillate();
 
@@ -263,6 +263,7 @@ void ACBoatBase::Update(UCSOAObserverArgs* p_args)
 
 void ACBoatBase::Oscillate()
 {
+	return;
 	FVector pos = GetActorLocation();
 	float oscillation = OscillationAmplitude* FMath::Sin(2 * PI * TimeSec * OscillationFreq);
 		
