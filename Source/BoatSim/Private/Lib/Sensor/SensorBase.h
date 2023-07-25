@@ -58,6 +58,8 @@ public:
 	UPROPERTY(EditAnywhere)
 		bool  SimulatePhysicsEnabled = false;
 
+	UPROPERTY(EditAnywhere)
+		bool ShowBeam = false;
 
 
 protected:

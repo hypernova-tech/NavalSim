@@ -12,3 +12,9 @@ void ACameraBase::InitSensor()
 	UTextureRenderTarget2D *p_render_target = pPointVisualizer->CreateRenderTarget(SensorWidth, SensorHeight, ASystemManagerBase::GetInstance()->GetUIController()->GetCameraSlotImage(SensorSlotIndex));
 	pSceneCapture->TextureTarget = p_render_target;
 }
+
+void ACameraBase::SetFovDeg(double fov_deg)
+{
+	FieldOfViewDeg = fov_deg;
+	pSceneCapture->FOVAngle = fov_deg;
+}

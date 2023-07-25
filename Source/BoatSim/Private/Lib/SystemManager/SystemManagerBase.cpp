@@ -2,6 +2,7 @@
 
 
 #include "Lib/SystemManager/SystemManagerBase.h"
+#include <Lib/Utils/CUtil.h>
 
 // Sets default values
 ASystemManagerBase* ASystemManagerBase::pInstance = nullptr;
@@ -40,6 +41,26 @@ void ASystemManagerBase::RegisterActor(FString owner, AActorBase* p_actor)
 	TMap<FString, AActorBase*>& all_actors = AllActors.FindOrAdd(owner);
 	FString actor_label = p_actor->GetActorLabel();
 	all_actors.Add(actor_label, p_actor);
+	ActorList.Add(p_actor);
+}
+
+void ASystemManagerBase::EnableAllActors()
+{
+
+	for (AActorBase* p_actor : ActorList) {
+		p_actor->SetEnabled(true);
+	}
+	
+	
+}
+void ASystemManagerBase::DisableAllActors()
+{
+
+	for (AActorBase* p_actor : ActorList) {
+		p_actor->SetEnabled(false);
+	}
+
+
 }
 
 template <typename T>
@@ -106,6 +127,11 @@ AUIControllerBase* ASystemManagerBase::GetUIController()
 	return pUIController;
 }
 
+ADataContainer* ASystemManagerBase::GetDataContainer()
+{
+	return pDataContainer;
+}
+
 
 void ASystemManagerBase::LoadConfig()
 {
@@ -116,3 +142,11 @@ void ASystemManagerBase::LoadConfig()
 	}
 
 }
+
+bool ASystemManagerBase::AddBoat(FString model_name, FString boat_name, FVector world_pos, FVector world_rot)
+{
+	auto info = pDataContainer->FindBlueprintInfo(model_name);
+	CUtil::SpawnObjectFromBlueprint(info.BlueprintAsset.ToSoftObjectPath().GetAssetPathString(), GetWorld(), nullptr, boat_name, world_pos, world_rot);
+	return false;
+}
+

@@ -5,7 +5,8 @@
 #include <Lib/Utils/CUtil.h>
 #include <Lib/SystemManager/SystemManagerBase.h>
 #include <Lib/Gimbal/GimbalBase.h>
-
+#include <Lib/Sensor/GenericSensor/CameraBase.h>
+#include <Lib/Sensor/GenericSensor/RadarBase.h>
 
 
 // Sets default values for this component's properties
@@ -45,31 +46,6 @@ void UConsoleBase::Command(FString command)
   
     TArray<FString> CommandTokens;
     command.ParseIntoArrayWS(CommandTokens);
-
-    if (CommandTokens.Num() < 2)
-    {
-        UE_LOG(LogTemp, Error, TEXT("Invalid command format. Expected: <cmd> <id> <param1> <param2> <param3> <param4>"));
-        return;
-    }
-
-    FString Cmd = CommandTokens[0];
-    int32 ID = FCString::Atoi(*CommandTokens[1]);
-
-    FString Param1 = CommandTokens.Num() > 2 ? CommandTokens[2] : FString();
-    FString Param2 = CommandTokens.Num() > 3 ? CommandTokens[3] : FString();
-    FString Param3 = CommandTokens.Num() > 4 ? CommandTokens[4] : FString();
-    FString Param4 = CommandTokens.Num() > 5 ? CommandTokens[5] : FString();
-    FString Param5 = CommandTokens.Num() > 6 ? CommandTokens[6] : FString();
-
-    // Now you can process the parsed command as needed.
-    // Example: You can call functions or perform actions based on the command and its parameters.
-    // For simplicity, let's just log the parsed values.
-
-    UE_LOG(LogTemp, Warning, TEXT("Parsed Command: Cmd=%s, ID=%d, Param1=%s, Param2=%s, Param3=%s, Param4=%s"),
-        *Cmd, ID, *Param1, *Param2, *Param3, *Param4);
-
-
-
     ProcessCommands(CommandTokens);
 
     
@@ -80,10 +56,11 @@ void UConsoleBase::Command(FString command)
 
 void UConsoleBase::ProcessCommands(TArray<FString> tokens)
 {
-    if (tokens.Num() < 7) {
-        return;
-    }
+  
     if (tokens[0] == "gimbal") {  
+        if (tokens.Num() < 7) {
+            return;
+        }
         FString gimbal_command = tokens[3];
         AGimbalBase* p_gimbal = ASystemManagerBase::GetInstance()->FindActor<AGimbalBase>(tokens[1], tokens[2]);
         if (p_gimbal != nullptr && gimbal_command == "angles") {
@@ -106,6 +83,63 @@ void UConsoleBase::ProcessCommands(TArray<FString> tokens)
                 p_actor->SetEnabled(false);
             }
      
+        }
+    }
+    else   if (tokens[0] == "enableall") {
+
+        ASystemManagerBase::GetInstance()->EnableAllActors();
+    }
+    else   if (tokens[0] == "disableall") {
+
+        ASystemManagerBase::GetInstance()->DisableAllActors();
+    }
+    else   if (tokens[0] == "camera") {
+
+        ACameraBase* p_camera = ASystemManagerBase::GetInstance()->FindActor<ACameraBase>(tokens[1], tokens[2]);
+
+
+        if (p_camera != nullptr && tokens[3] == "fov") {
+            float fov = CUtil::StringToFloat64(tokens[4]);
+            p_camera->SetFovDeg(fov);
+               
+        }
+    }
+    else   if (tokens[0] == "radar") {
+
+        ARadarBase* p_radar = ASystemManagerBase::GetInstance()->FindActor<ARadarBase>(tokens[1], tokens[2]);
+
+
+        if (p_radar != nullptr && tokens[3] == "range") {
+            float min_range = CUtil::StringToFloat64(tokens[4]);
+            float max_range = CUtil::StringToFloat64(tokens[5]);
+            p_radar->SetRangeMeter(FVector2d(min_range, max_range));
+
+        }
+    }
+    else   if (tokens[0] == "beam") {
+
+        ASensorBase* p_sensor = ASystemManagerBase::GetInstance()->FindActor<ASensorBase>(tokens[1], tokens[2]);
+
+
+        if (p_sensor != nullptr && tokens[3] == "enable") {
+            if (tokens[4] == "true") {
+                p_sensor->ShowBeam = true;
+            }
+            else  if (tokens[4] == "false") {
+                p_sensor->ShowBeam = false;
+            }
+
+        }
+    }
+    else if (tokens[0] == "add") { // add boat MIR name mir1 pose -80852.000000 -41044 1684 3 4 5 
+        if (tokens[1] == "boat") {
+            FString model_name = tokens[2];
+            FString boat_name = tokens[4];
+            FVector world_pos = FVector(CUtil::StringToFloat64(tokens[6]), CUtil::StringToFloat64(tokens[7]), CUtil::StringToFloat64(tokens[8]));
+            FVector world_rot = FVector(CUtil::StringToFloat64(tokens[9]), CUtil::StringToFloat64(tokens[10]), CUtil::StringToFloat64(tokens[11]));
+
+
+            ASystemManagerBase::GetInstance()->AddBoat(model_name, boat_name, world_pos, world_rot);
         }
     }
 }

@@ -9,7 +9,9 @@
 #include <Lib/Config/ConfigManager.h>
 #include <Lib/UI/UIControllerBase.h>
 #include <Lib/ActorBase/ActorBase.h>
+#include <Lib/DataContainer/DataContainer.h>
 #include "SystemManagerBase.generated.h"
+
 
 UCLASS()
 class  ASystemManagerBase : public AActor
@@ -30,6 +32,12 @@ protected:
 		AMapOrigin* pMapOrigin;
 
 	UPROPERTY(EditAnywhere)
+		ADataContainer* pDataContainer;
+
+	UPROPERTY(EditAnywhere)
+		TArray<AActor*> MoveableActorList;
+
+	UPROPERTY(EditAnywhere)
 		ASOAImplementor* pSoaImplementor;
 
 	UPROPERTY(EditAnywhere)
@@ -41,9 +49,6 @@ protected:
 	UPROPERTY(EditAnywhere)
 		TArray<AActor*> SensorGlobalIgnoreList;
 
-	UPROPERTY(EditAnywhere)
-		TArray<AActor*> MoveableActorList;
-
 	UConfigManager* pConfigManager;
 	virtual void LoadConfig();
 public:	
@@ -53,6 +58,7 @@ public:
 	AMapOrigin* GetMapOrigin();
 	ASOAImplementor* GetSOAImplementor();
 	AUIControllerBase* GetUIController();
+	ADataContainer* GetDataContainer();
 	static  ASystemManagerBase* GetInstance();
 
 	TArray<AActor*>& GetSensorGlobalIgnoreList();
@@ -63,9 +69,17 @@ public:
 	template <typename T>
 	T* FindActor(FString owner, FString actor_name);
 
+
+
+	void EnableAllActors();
+	void DisableAllActors();
+
+	bool AddBoat(FString model_name, FString boat_name,FVector world_pos, FVector world_rot);
+
 private:
 
 	static ASystemManagerBase* pInstance;
 	TMap<FString, TMap<FString, AActorBase*>> AllActors;
+	TArray<AActorBase*> ActorList;
 	
 };

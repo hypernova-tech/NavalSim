@@ -104,8 +104,6 @@ bool CUtil::Trace(AActor * p_actor, bool is_world, float min_range_meter, float 
             }
 
 
-
-
             ret = p_actor->GetWorld()->LineTraceSingleByChannel(result, start_pos, end, ECollisionChannel::ECC_Visibility, query_params, FCollisionResponseParams());
             if (show_radar_beam) {
                 DrawDebugLine(p_actor->GetWorld(), start_pos, end, FColor::Green, false, 0.2f);
@@ -117,21 +115,6 @@ bool CUtil::Trace(AActor * p_actor, bool is_world, float min_range_meter, float 
                 pscan_result->Point3D[horizantal_ind][vertical_ind] = result.Location;
                 FVector manual_pos = start_pos + new_dir * result.Distance;
                 pscan_result->Point3DList.Add(manual_pos);
-               
-#if false
-                float X = FMath::Sin(azimuth_rad) * result.Distance * one_over_range_unreal;
-                float Y = FMath::Cos(azimuth_rad) * result.Distance * one_over_range_unreal;
-
-                // conver to local coordinate system
-                X = (1 + X) * 0.5;
-                Y = (1 - Y) * 0.5;
-
-                //FVector pixel_coord = (result.Location - start_pos);
-                //FVector2D screen_normalized = FVector2D( (pixel_coord.X / (range_meter*100) + 1) * 0.5f,  ((pixel_coord.Y / (range_meter*100)) + 1) * 0.5f);
-                //pscan_result->Point2DScreen.Add(screen_normalized);
-                pscan_result->Point2DScreen.Add(FVector2D(X, Y));
-
-#endif
 
                 p_current_sektor->Add(result.Location);
             
@@ -413,4 +396,42 @@ T* CUtil::FindChildComponent(AActor* p_parent)
     }
 
     return nullptr;
+}
+
+AActor* CUtil::SpawnObjectFromBlueprint(FString blueprint_path, UWorld *p_world, AActor *p_owner, FString name, FVector pos, FVector rot_rpy)
+{
+    // The blueprint name should be the path to the blueprint asset, relative to the Content folder.
+    FString BlueprintPath = blueprint_path;
+
+    // Load the blueprint object from the specified path.
+    UBlueprint* BlueprintObject = Cast<UBlueprint>(StaticLoadObject(UBlueprint::StaticClass(), nullptr, *BlueprintPath));
+
+    if (!BlueprintObject)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("Failed to load blueprint at path: %s"), *BlueprintPath);
+        return nullptr;
+    }
+
+    // Get the world reference to spawn the object.
+    UWorld* World = p_world;
+    if (!World)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("Failed to get the world reference."));
+        return nullptr;
+    }
+
+    // Create the object from the blueprint and spawn it in the world.
+    FActorSpawnParameters SpawnParams;
+    SpawnParams.Name = FName(*name);
+    SpawnParams.Owner = p_owner; // Set the owner if required.
+    SpawnParams.Instigator = nullptr; // Set the instigator if required.
+    AActor* SpawnedActor = World->SpawnActor<AActor>(BlueprintObject->GeneratedClass, pos, FRotator(rot_rpy.Y,rot_rpy.Z, rot_rpy.X), SpawnParams);
+
+    if (!SpawnedActor)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("Failed to spawn the actor from the blueprint."));
+        return nullptr;
+    }
+
+    return SpawnedActor;
 }

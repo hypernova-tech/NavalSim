@@ -46,8 +46,7 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 		float FullScanPeriodSec = 1;
-	UPROPERTY(EditAnywhere)
-		bool ShowRadarBeam = false;
+
 
 	
 

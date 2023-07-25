@@ -35,5 +35,8 @@ protected:
 
 	USceneCaptureComponent2D* pSceneCapture;
 
+public:
+	void SetFovDeg(double fov_deg);
+
 
 };

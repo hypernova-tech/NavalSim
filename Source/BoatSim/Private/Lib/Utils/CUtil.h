@@ -45,5 +45,6 @@ public:
 	static float StringToFloat(FString& str);
 	static double StringToFloat64(FString& str);
 	static AActor* GetTopParent(AActor *p_actor);
+	static AActor* SpawnObjectFromBlueprint(FString blueprint_path, UWorld* p_world, AActor* p_owner, FString name, FVector pos, FVector rot_rpy);
 };
 

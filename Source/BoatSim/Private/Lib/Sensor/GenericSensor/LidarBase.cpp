@@ -101,7 +101,7 @@ void ALidarBase::Run(float delta_time_sec)
 		float start_azimuth = -FovHorizontalDeg * 0.5;
 		float end_azimuth = FovHorizontalDeg * 0.5;
 		
-		bool ret = CUtil::Trace(this, false, RangeMeter.X, RangeMeter.Y, start_azimuth, end_azimuth, 0, FovVerticalDeg, HorizontalScanStepAngleDeg, VerticalScanStepAngleDeg, ShowFLSBeam, ASystemManagerBase::GetInstance()->GetSensorGlobalIgnoreList(), pScanResult);
+		bool ret = CUtil::Trace(this, false, RangeMeter.X, RangeMeter.Y, start_azimuth, end_azimuth, 0, FovVerticalDeg, HorizontalScanStepAngleDeg, VerticalScanStepAngleDeg, ShowBeam, ASystemManagerBase::GetInstance()->GetSensorGlobalIgnoreList(), pScanResult);
 
 		if (pCommIF != nullptr) {
 			pCommIF->SendData(pScanResult, -1);
