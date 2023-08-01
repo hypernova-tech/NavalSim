@@ -102,7 +102,7 @@ void ARadarBase::Run(float delta_time_sec)
 			end_azimuth = 359.99;
 			IsFullScaned = true;
 		}
-
+		
 		bool ret = CUtil::Trace(this, true, RangeMeter.X, RangeMeter.Y, start_azimuth, end_azimuth, 0, FovVerticalDeg, HorizontalScanStepAngleDeg, VerticalScanStepAngleDeg, ShowBeam, ASystemManagerBase::GetInstance()->GetSensorGlobalIgnoreList(), pScanResult);
 
 		if (pCommIF != nullptr) {

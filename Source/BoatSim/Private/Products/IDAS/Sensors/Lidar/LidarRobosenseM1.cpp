@@ -3,3 +3,10 @@
 
 #include "Products/IDAS/Sensors/Lidar/LidarRobosenseM1.h"
 
+void ALidarRobosenseM1::OnScanCompleted(SScanResult* p_scan_result)
+{
+	Super::OnScanCompleted(p_scan_result);
+
+
+
+}

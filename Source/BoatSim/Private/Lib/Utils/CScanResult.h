@@ -12,6 +12,8 @@
 #define HORIZOTAL_SCAN_SIZE 1920
 #define VERTICAL_SCAN_SIZE 1080
 
+#include <Lib/Types/Primitives.h>
+
 struct SScanInfo
 {
 	
@@ -78,10 +80,14 @@ struct SScanResult
 	int HorizontalCount;
 	int VeriticalCount;
 	FVector ScanCenter;
-	float Range[HORIZOTAL_SCAN_SIZE][VERTICAL_SCAN_SIZE];
+	FLOAT32 Range[HORIZOTAL_SCAN_SIZE][VERTICAL_SCAN_SIZE];
 	FVector Point3D[HORIZOTAL_SCAN_SIZE][VERTICAL_SCAN_SIZE];
 
 	int SectorCount;
+	FLOAT32 ScanAzimuthStepDeg;
+	FLOAT32 ScanElevationStepDeg;
+	FVector2D AzimuthRange;
+	FVector2D ElevationRange;
 	
 
 
@@ -111,6 +117,18 @@ public:
 	SSectorContainer* GetSectorContainer()
 	{
 		return &SectorContainer;
+	}
+
+	void CopyFrom(SScanResult* p_src) {
+		memcpy(&Point3D, &p_src->Point3D, sizeof(p_src->Point3D));
+	}
+
+	FLOAT32 Interpolate(FLOAT32 azimuth_deg, FLOAT32 elevation_deg)
+	{
+		INT32U azimuth_ind = (azimuth_deg - AzimuthRange.X) / ScanAzimuthStepDeg;
+		INT32U elevation_ind = (elevation_deg - ElevationRange.X) / ScanElevationStepDeg;
+		return Range[azimuth_ind][elevation_ind];
+
 	}
 
 };

@@ -13,5 +13,9 @@ UCLASS()
 class ALidarRobosenseM1 : public ALidarBase
 {
 	GENERATED_BODY()
+
+
+protected:
+	virtual void OnScanCompleted(SScanResult* p_scan_result) override;
 	
 };

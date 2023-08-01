@@ -398,7 +398,7 @@ T* CUtil::FindChildComponent(AActor* p_parent)
     return nullptr;
 }
 
-AActor* CUtil::SpawnObjectFromBlueprint(FString blueprint_path, UWorld *p_world, AActor *p_owner, FString name, FVector pos, FVector rot_rpy)
+AActor* CUtil::SpawnObjectFromBlueprint(FString blueprint_path, UWorld *p_world, AActor *p_owner, FString name, FVector pos, FVector rot_rpy, FVector scale)
 {
     // The blueprint name should be the path to the blueprint asset, relative to the Content folder.
     FString BlueprintPath = blueprint_path;
@@ -425,6 +425,7 @@ AActor* CUtil::SpawnObjectFromBlueprint(FString blueprint_path, UWorld *p_world,
     SpawnParams.Name = FName(*name);
     SpawnParams.Owner = p_owner; // Set the owner if required.
     SpawnParams.Instigator = nullptr; // Set the instigator if required.
+    SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
     AActor* SpawnedActor = World->SpawnActor<AActor>(BlueprintObject->GeneratedClass, pos, FRotator(rot_rpy.Y,rot_rpy.Z, rot_rpy.X), SpawnParams);
 
     if (!SpawnedActor)
@@ -432,6 +433,6 @@ AActor* CUtil::SpawnObjectFromBlueprint(FString blueprint_path, UWorld *p_world,
         UE_LOG(LogTemp, Warning, TEXT("Failed to spawn the actor from the blueprint."));
         return nullptr;
     }
-
+    SpawnedActor->SetActorScale3D(scale);
     return SpawnedActor;
 }

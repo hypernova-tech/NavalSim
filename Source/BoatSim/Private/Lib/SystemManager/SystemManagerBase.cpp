@@ -143,10 +143,11 @@ void ASystemManagerBase::LoadConfig()
 
 }
 
-bool ASystemManagerBase::AddBoat(FString model_name, FString boat_name, FVector world_pos, FVector world_rot)
+bool ASystemManagerBase::AddBoat(FString model_name, FString boat_name, FVector world_pos, FVector world_rot, FVector scale)
 {
 	auto info = pDataContainer->FindBlueprintInfo(model_name);
-	CUtil::SpawnObjectFromBlueprint(info.BlueprintAsset.ToSoftObjectPath().GetAssetPathString(), GetWorld(), nullptr, boat_name, world_pos, world_rot);
+	
+	CUtil::SpawnObjectFromBlueprint(info.BlueprintAsset.ToSoftObjectPath().GetAssetPathString(), GetWorld(), nullptr, boat_name,world_pos, world_rot, scale);
 	return false;
 }
 

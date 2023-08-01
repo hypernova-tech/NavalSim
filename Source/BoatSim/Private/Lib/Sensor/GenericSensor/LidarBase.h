@@ -57,6 +57,9 @@ protected:
 
 	virtual void BeginPlay() override;
 
+
+	virtual void OnScanCompleted(SScanResult* p_scan_result);
+
 public:
 
 

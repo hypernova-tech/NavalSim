@@ -93,7 +93,7 @@ void UConsoleBase::ProcessCommands(TArray<FString> tokens)
 
         ASystemManagerBase::GetInstance()->DisableAllActors();
     }
-    else   if (tokens[0] == "camera") {
+    else   if (tokens[0] == "camera") {//camera sida_name sensor_name fov 5 
 
         ACameraBase* p_camera = ASystemManagerBase::GetInstance()->FindActor<ACameraBase>(tokens[1], tokens[2]);
 
@@ -104,7 +104,7 @@ void UConsoleBase::ProcessCommands(TArray<FString> tokens)
                
         }
     }
-    else   if (tokens[0] == "radar") {
+    else   if (tokens[0] == "radar") { //radar sida_name sensor_name rage 1000 
 
         ARadarBase* p_radar = ASystemManagerBase::GetInstance()->FindActor<ARadarBase>(tokens[1], tokens[2]);
 
@@ -116,7 +116,7 @@ void UConsoleBase::ProcessCommands(TArray<FString> tokens)
 
         }
     }
-    else   if (tokens[0] == "beam") {
+    else   if (tokens[0] == "beam") {// beam sida_name sensor_name enable true
 
         ASensorBase* p_sensor = ASystemManagerBase::GetInstance()->FindActor<ASensorBase>(tokens[1], tokens[2]);
 
@@ -131,15 +131,16 @@ void UConsoleBase::ProcessCommands(TArray<FString> tokens)
 
         }
     }
-    else if (tokens[0] == "add") { // add boat MIR name mir1 pose -80852.000000 -41044 1684 3 4 5 
+    else if (tokens[0] == "add") { // add boat MIR name mir1 pose 10.0 -0 0 0 0 0 0.3 0.3 0.3
         if (tokens[1] == "boat") {
             FString model_name = tokens[2];
             FString boat_name = tokens[4];
-            FVector world_pos = FVector(CUtil::StringToFloat64(tokens[6]), CUtil::StringToFloat64(tokens[7]), CUtil::StringToFloat64(tokens[8]));
+            FVector world_pos = FVector(WORLDTOUNREALUNIT * CUtil::StringToFloat64(tokens[6]), WORLDTOUNREALUNIT * CUtil::StringToFloat64(tokens[7]), WORLDTOUNREALUNIT * CUtil::StringToFloat64(tokens[8]));
             FVector world_rot = FVector(CUtil::StringToFloat64(tokens[9]), CUtil::StringToFloat64(tokens[10]), CUtil::StringToFloat64(tokens[11]));
+            FVector scale = FVector(CUtil::StringToFloat64(tokens[12]), CUtil::StringToFloat64(tokens[13]), CUtil::StringToFloat64(tokens[14]));
 
 
-            ASystemManagerBase::GetInstance()->AddBoat(model_name, boat_name, world_pos, world_rot);
+            ASystemManagerBase::GetInstance()->AddBoat(model_name, boat_name, world_pos, world_rot, scale);
         }
     }
 }

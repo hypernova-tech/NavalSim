@@ -16,6 +16,13 @@ void ALidarBase::SetFrequency(double val)
 	Frequency = val;
 }
 
+void ALidarBase::OnScanCompleted(SScanResult* p_scan_result)
+{
+	if (pCommIF != nullptr) {
+		pCommIF->SendData(pScanResult, -1);
+	}
+}
+
 double ALidarBase::GetFrequency()
 {
 	return Frequency;
@@ -101,22 +108,32 @@ void ALidarBase::Run(float delta_time_sec)
 		float start_azimuth = -FovHorizontalDeg * 0.5;
 		float end_azimuth = FovHorizontalDeg * 0.5;
 		
+		pScanResult->ElevationRange.X = -FovVerticalDeg * 0.5;
+		pScanResult->ElevationRange.Y = +FovVerticalDeg * 0.5;
+
+
+		pScanResult->AzimuthRange.X = -FovHorizontalDeg * 0.5;
+		pScanResult->AzimuthRange.Y = +FovHorizontalDeg * 0.5;
+		pScanResult->ScanAzimuthStepDeg = HorizontalScanStepAngleDeg;
+		pScanResult->ScanElevationsStepDeg = VerticalScanStepAngleDeg;
+
+
 		bool ret = CUtil::Trace(this, false, RangeMeter.X, RangeMeter.Y, start_azimuth, end_azimuth, 0, FovVerticalDeg, HorizontalScanStepAngleDeg, VerticalScanStepAngleDeg, ShowBeam, ASystemManagerBase::GetInstance()->GetSensorGlobalIgnoreList(), pScanResult);
 
-		if (pCommIF != nullptr) {
-			pCommIF->SendData(pScanResult, -1);
-		}
+	
 
 		FVector forward = GetActorForwardVector();
 		FVector right = GetActorRightVector();
-
+		OnScanCompleted(pScanResult);
 		Visualize(pScanResult, GetActorLocation(), forward, right, RangeMeter.Y);
 
 		NextScanTime = FApp::GetCurrentTime() + 0.1;
 
 		IsFullScaned = true;
 
-		CUtil::DebugLog("Scanning");
+		
+
+		
 	}
 
 
