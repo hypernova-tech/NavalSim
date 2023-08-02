@@ -75,11 +75,13 @@ public:
 	void DisableAllActors();
 
 	bool AddBoat(FString model_name, FString boat_name,FVector world_pos, FVector world_rot, FVector scale);
-
+	INT64U GetTimeStamp();
 private:
 
 	static ASystemManagerBase* pInstance;
 	TMap<FString, TMap<FString, AActorBase*>> AllActors;
 	TArray<AActorBase*> ActorList;
+
+
 	
 };

@@ -4,6 +4,7 @@
 #include "Lib/UDP/UdpConnection.h"
 #include "Networking/Public/Networking.h"
 #include <Lib/SystemManager/SystemManagerBase.h>
+#include <Lib/Types/Primitives.h>
 
 // Constructor
 UUdpConnection::UUdpConnection()
@@ -169,5 +170,10 @@ bool UUdpConnection::SendUDPData(const FString& Message)
 
 #endif
 
+	return false;
+}
+
+bool UUdpConnection::SendUDPData(const INT8U* p_bytes, INT32U count)
+{
 	return false;
 }

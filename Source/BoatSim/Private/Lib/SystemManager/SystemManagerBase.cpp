@@ -63,6 +63,14 @@ void ASystemManagerBase::DisableAllActors()
 
 }
 
+INT64U ASystemManagerBase::GetTimeStamp()
+{
+	FLOAT64 time = FApp::GetCurrentTime();
+	INT64U microsec = (time * 1e6);
+
+	return microsec;
+}
+
 template <typename T>
 T* ASystemManagerBase::FindActor(FString owner, FString actor_name)
 {

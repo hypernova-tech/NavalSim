@@ -15,6 +15,10 @@ typedef short INT16S;
 typedef unsigned int INT32U;
 typedef  int INT32S;
 
+
+typedef unsigned _int64 INT64U;
+typedef  _int64 INT64S;
+
 typedef float FLOAT32;
 typedef  double FLOAT64;
 

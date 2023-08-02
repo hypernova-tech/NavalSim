@@ -29,11 +29,6 @@ protected:
 	// Start the UDP thread
 	void StartUDPThread();
 
-
-
-	// Send UDP data
-	bool SendUDPData(const FString& Message);
-
 	bool Init() override; // Do your setup here, allocate memory, ect.
 	uint32 Run() override; // Main data processing happens here
 	void Stop() override; // Clean up any memory you allocated here
@@ -41,6 +36,10 @@ protected:
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
+	// Send UDP data
+	bool SendUDPData(const FString& Message);
+	bool SendUDPData(const INT8U* p_bytes, INT32U count);
 private:
 	// UDP thread object
 	FRunnableThread* UDPThread;

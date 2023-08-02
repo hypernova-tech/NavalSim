@@ -1,7 +1,7 @@
 #pragma once
 #include "CoreMinimal.h"
 #include <Lib/Types/Primitives.h>
-
+#define DATA_BLOCK_COUNT 25
 
 struct SHeader{
 
@@ -14,12 +14,12 @@ public:
 
 	union {
 		INT8U Bytes[2];
-		unsigned int Val;
+		INT16U Val;
 	}PaketPSN;
 
 	union {
 		INT8U Bytes[2];
-		short Val;
+		INT16U Val;
 	}ProtocolVersion;
 
 	union {
@@ -59,6 +59,7 @@ public:
 };
 struct SLidarChannelData
 {
+
 	INT8U Ch1Radius[2];
 	INT8U Ch1Elevation[2];
 	INT8U Ch1Azimuth[2];
@@ -66,6 +67,8 @@ struct SLidarChannelData
 };
 struct SLidarDataPacket
 {
+public:
+
 	INT8U TimeOffset;
 	INT8U ReturnSequence;
 	SLidarChannelData ChannelData1;
@@ -78,11 +81,46 @@ struct SLidarDataPacket
 	INT8U Reserved4[2];
 	SLidarChannelData ChannelData5;
 	INT8U Reserved5[2];
+
+
+	SLidarDataPacket()
+	{
+
+	}
 };
 
 struct SMSOPPacket
 {
+public:
+
 	SHeader Header;
-	SLidarDataPacket LidarDataPackets;
+	SLidarDataPacket LidarDataPackets[DATA_BLOCK_COUNT];
 	INT8U Tail[3];
+public:
+	SMSOPPacket() {
+
+	}
+
+	void SetTimeStamp(INT64U time_micro_sec)
+	{
+		INT64U seconds = (INT64U)(time_micro_sec *1e6);
+		INT64U microseconds = (time_micro_sec - seconds * 1e6);
+		memcpy(&Header.TimeStamps.HighTimeSec[0], &seconds, 6);
+		memcpy(&Header.TimeStamps.LowTimeSec[0], &microseconds, 4);
+	}
+
+	void Init()
+	{
+		Header.Header.Bytes[0] = 0x55;
+		Header.Header.Bytes[1] = 0xAA;
+		Header.Header.Bytes[2] = 0x5A;
+		Header.Header.Bytes[3] = 0xA5;
+
+		Header.LidarType.Val = 0x10;
+	}
+
+	void SetPacketSequenceNumber(INT32U val)
+	{
+		Header.PaketPSN.Val = val;
+	}
 };
