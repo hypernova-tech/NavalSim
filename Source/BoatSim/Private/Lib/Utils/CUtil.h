@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Lib/Types/Primitives.h"
 #include "Lib/Utils/CScanResult.h"
 
 /**
@@ -44,6 +45,9 @@ public:
 	static int StringToInt(FString& str);
 	static float StringToFloat(FString& str);
 	static double StringToFloat64(FString& str);
+	static void ByteCopy(const FString& str, INT8U* p_dest, INT32U dest_capacity);
+	static void IPAddrCopy(const FString& str, INT8U* p_dest, INT32U dest_capacity);
+	static void MacAddrCopy(const FString& str, INT8U* p_dest, INT32U dest_capacity);
 	static AActor* GetTopParent(AActor *p_actor);
 	static AActor* SpawnObjectFromBlueprint(FString blueprint_path, UWorld* p_world, AActor* p_owner, FString name, FVector pos, FVector rot_rpy, FVector scale);
 };

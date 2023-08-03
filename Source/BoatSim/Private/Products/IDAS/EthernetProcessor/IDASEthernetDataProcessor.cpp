@@ -39,6 +39,9 @@ struct  SIdasAsToIdasGERaw
 
 void UIDASEthernetDataProcessor::OnReceivedData(const TArray<uint8>& data, int32 bytes_read)
 {
+	if (bytes_read == 0) {
+		return;
+	}
 	Super::OnReceivedData(data, bytes_read);
 
 	const SIdasAsToIdasGERaw* idas_raw = reinterpret_cast<const SIdasAsToIdasGERaw*>(data.GetData());

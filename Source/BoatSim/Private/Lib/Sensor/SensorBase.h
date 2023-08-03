@@ -79,6 +79,6 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	virtual void Visualize(SScanResult* p_scan_result, FVector origin, FVector current_forward, FVector current_right, float max_range_meter);
-
+	UGenericCommIF* GetCommCommIF();
 
 };

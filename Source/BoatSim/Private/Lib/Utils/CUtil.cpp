@@ -341,6 +341,118 @@ AActor* CUtil::GetTopParent(AActor *p_actor)
 
 }
 
+void CUtil::ByteCopy(const FString& str, INT8U* p_dest, INT32U dest_capacity)
+{
+    
+    const TCHAR* chars = str.GetCharArray().GetData();
+    INT32U size = str.GetCharArray().Num();
+
+    if (size > dest_capacity) {
+        size = dest_capacity;
+    }
+
+    // Copy the characters from the FString to the BYTE array
+    for (INT32U i = 0; i < size; ++i)
+    {
+        p_dest[i] = (static_cast<INT8U>(chars[i]));
+    }
+    
+}
+/**
+     *creat ip adr from input string.
+     *
+     * ip adree is in "192.168.233.47" format
+     *
+     * @return none
+     * @see
+     */
+void CUtil::IPAddrCopy(const FString& str, INT8U* p_dest, INT32U dest_capacity)
+{
+    if (p_dest == nullptr || dest_capacity < 4)
+    {
+        // Handle invalid destination pointer or insufficient capacity.
+        // You may throw an exception, log an error, or handle it as needed.
+        return;
+    }
+
+    TArray<FString> Parts;
+    str.ParseIntoArray(Parts, TEXT("."), true);
+
+    if (Parts.Num() != 4)
+    {
+        // Handle invalid IP address format.
+        // You may throw an exception, log an error, or handle it as needed.
+        return;
+    }
+
+    // Convert each part of the IP address from FString to INT8U
+    for (INT32U i = 0; i < 4; ++i)
+    {
+        FString PartStr = Parts[i].TrimStartAndEnd();
+        INT8U PartValue = FCString::Atoi(*PartStr);
+
+        // Check if the destination buffer has enough space
+        if (i < dest_capacity)
+        {
+            p_dest[i] = PartValue;
+        }
+        else
+        {
+            // Handle insufficient capacity.
+            // You may throw an exception, log an error, or handle it as needed.
+            break;
+        }
+    }
+}
+
+/**
+     * create mac addr given str.
+     *
+     * str is in "aa:bb:cc:dd:ee:ff" hex format
+     *
+     * @return none
+     * @see 
+     */
+void CUtil::MacAddrCopy(const FString& str, INT8U* p_dest, INT32U dest_capacity)
+{
+    if (p_dest == nullptr || dest_capacity < 6)
+    {
+        // Handle invalid destination pointer or insufficient capacity.
+        // You may throw an exception, log an error, or handle it as needed.
+        return;
+    }
+
+    TArray<FString> Parts;
+    str.ParseIntoArray(Parts, TEXT(":"), true);
+
+    if (Parts.Num() != 6)
+    {
+        // Handle invalid MAC address format.
+        // You may throw an exception, log an error, or handle it as needed.
+        return;
+    }
+
+    // Convert each part of the MAC address from FString to INT8U
+    for (INT32U i = 0; i < 6; ++i)
+    {
+        FString PartStr = Parts[i].TrimStartAndEnd();
+        INT8U PartValue = FCString::Atoi(*PartStr);
+
+        // Check if the destination buffer has enough space
+        if (i < dest_capacity)
+        {
+            p_dest[i] = PartValue;
+        }
+        else
+        {
+            // Handle insufficient capacity.
+            // You may throw an exception, log an error, or handle it as needed.
+            break;
+        }
+    }
+}
+
+
 float CUtil::StringToFloat(FString& str)
 {
     float ret = FCString::Atof(*str);

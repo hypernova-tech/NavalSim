@@ -10,7 +10,7 @@ ASensorBase::ASensorBase()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	
-	pCommIF = GetComponentByClass<UGenericCommIF>();
+	
 
 	
 
@@ -47,6 +47,7 @@ void ASensorBase::SensorStateMachine(float delta_time_sec)
 
 void ASensorBase::InitSensor()
 {
+	pCommIF = GetComponentByClass<UGenericCommIF>();
 	if (SimulatePhysicsEnabled) {
 
 	}
@@ -102,5 +103,10 @@ void ASensorBase::Visualize(SScanResult* p_scan_result, FVector origin, FVector 
 		pPointVisualizer->Visualize(p_scan_result, origin, current_forward, current_right, max_range_meter);
 	}
 	
+}
+
+UGenericCommIF* ASensorBase::GetCommCommIF()
+{
+	return pCommIF;
 }
 

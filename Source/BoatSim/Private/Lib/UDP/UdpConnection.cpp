@@ -57,6 +57,8 @@ void UUdpConnection::BeginPlay()
 				.WithBroadcast();
 		}
 	}
+
+
 	StartUDPThread();
 }
 
@@ -119,61 +121,42 @@ void UUdpConnection::Stop()  // Clean up any memory you allocated here
 // Start the UDP thread
 void UUdpConnection::StartUDPThread()
 {
-
-	UDPThread = FRunnableThread::Create(this, TEXT("Give your thread a good name"));
+	if (ReceiveEnabled) {
+		UDPThread = FRunnableThread::Create(this, TEXT("udprcvthread"));
+	}
+	
 }
-
-
 
 // Send UDP data
 bool UUdpConnection::SendUDPData(const FString& Message)
 {
-
-#if false
-	FIPv4Address out_adr;
-	FIPv4Address::Parse(IPAddress, out_adr);
-	FIPv4Endpoint Endpoint(out_adr, Port);
-	TSharedRef<FInternetAddr> InternetAddr = ISocketSubsystem::Get(PLATFORM_SOCKETSUBSYSTEM)->CreateInternetAddr();
-	InternetAddr->SetIp(Endpoint.Address.Value);
-	InternetAddr->SetPort(Endpoint.Port);
-
-	// Create the UDP socket
-	FSocket* Socket = ISocketSubsystem::Get(PLATFORM_SOCKETSUBSYSTEM)->CreateSocket(NAME_DGram, TEXT("MyUDPSocket"), false);
-	Socket->SetReuseAddr();
-
-	// Connect the socket to the IP address and port
-	bool bConnectSuccessful = Socket->Connect(*InternetAddr);
-	if (!bConnectSuccessful)
-	{
-		UE_LOG(LogTemp, Error, TEXT("Failed to connect UDP socket to %s:%d"), *IPAddress, Port);
-		Socket->Close();
-		return false;
-	}
-
-	UE_LOG(LogTemp, Display, TEXT("Connected UDP socket to %s:%d"), *IPAddress, Port);
-
-	// Convert the message string to bytes
-	TCHAR_TO_UTF8(*Message);
-	int32 BytesSent = 0;
-
-	// Send the UDP data
-	bool bSendSuccessful = Socket->Send((uint8*)UTF8Chars.Get(), UTF8Chars, BytesSent);
-	if (!bSendSuccessful || BytesSent != UTF8Chars.Length())
-	{
-		UE_LOG(LogTemp, Error, TEXT("Failed to send UDP data"));
-		Socket->Close();
-		return false;
-	}
-
-	Socket->Close();
-	return true;
-
-#endif
-
 	return false;
 }
 
 bool UUdpConnection::SendUDPData(const INT8U* p_bytes, INT32U count)
 {
-	return false;
+	if (Socket == nullptr) {
+		return false;
+	}
+	INT32S bytes_sent = 0;
+	Socket->SendTo(p_bytes, count, bytes_sent, *RemoteEndpoint.ToInternetAddr());
+	bool ret =  bytes_sent == count;
+
+	return ret;
 }
+
+INT16U UUdpConnection::GetLocalPort()
+{
+	return LocalPort;
+}
+
+INT16U UUdpConnection::GetRemotePort()
+{
+	return RemotePort;
+}
+
+FString UUdpConnection::GetRemoteIP()
+{
+	return IP;
+}
+

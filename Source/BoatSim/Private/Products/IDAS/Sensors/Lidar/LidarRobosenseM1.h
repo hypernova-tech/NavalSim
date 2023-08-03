@@ -17,5 +17,5 @@ class ALidarRobosenseM1 : public ALidarBase
 
 protected:
 	virtual void OnScanCompleted(SScanResult* p_scan_result) override;
-	
+	virtual void InitSensor() override;
 };

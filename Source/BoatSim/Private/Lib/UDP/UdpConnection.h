@@ -8,7 +8,7 @@
 #include "UdpConnection.generated.h"
 
 
-UCLASS()
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class UUdpConnection : public UActorComponent,public FRunnable
 {
 	GENERATED_BODY()
@@ -40,6 +40,12 @@ public:
 	// Send UDP data
 	bool SendUDPData(const FString& Message);
 	bool SendUDPData(const INT8U* p_bytes, INT32U count);
+
+	INT16U GetLocalPort();
+	INT16U GetRemotePort();
+	FString GetRemoteIP();
+	static FString GetMacAddr();
+
 private:
 	// UDP thread object
 	FRunnableThread* UDPThread;
@@ -55,6 +61,11 @@ private:
 
 	ISocketSubsystem* SocketSubsystem;
 
+	UPROPERTY(EditAnywhere, Category = "UDP")
+		bool ReceiveEnabled = true;
+
+	UPROPERTY(EditAnywhere, Category = "UDP")
+		bool SendEnabled = true;
 
 	// Local Endpoint
 	FString SocketDescription = "UDP Listen Socket";
@@ -77,4 +88,7 @@ private:
 	int32 BufferSize;
 	UPROPERTY(EditAnywhere, Category = "UDP")
 	FString IP = "192.168.50.232";
+
+
+
 };

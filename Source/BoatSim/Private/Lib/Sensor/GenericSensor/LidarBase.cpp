@@ -92,6 +92,8 @@ void ALidarBase::BeginPlay()
 
 void ALidarBase::InitSensor()
 {
+	Super::InitSensor();
+
 	pPointVisualizer->CreateRenderTarget(512, 512, ASystemManagerBase::GetInstance()->GetUIController()->GetLidarSlotImage(SensorSlotIndex));
 	CurrentScanAzimuth = -FovHorizontalDeg * 0.5;
 

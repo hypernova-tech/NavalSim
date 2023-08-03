@@ -5,6 +5,14 @@
 #include "Products/IDAS/Sensors/Lidar/RobosenseM1/RobosenseM1Types.h"
 #include <Lib/SystemManager/SystemManagerBase.h>
 
+URobosenseM1CommIF::~URobosenseM1CommIF()
+{
+	if (SenderThread != nullptr) {
+		SenderThread->Kill();
+		delete SenderThread;
+	}
+}
+
 void URobosenseM1CommIF::SendData(void* p_data, uint32 size_in_bytes)
 {
 	HasNewData = true;
@@ -12,21 +20,27 @@ void URobosenseM1CommIF::SendData(void* p_data, uint32 size_in_bytes)
 	CurrentRequest.Add(p_in);
 
 }
+
+
 void URobosenseM1CommIF::BeginPlay()
 {
 	Super::BeginPlay();
 	MessageSequenceNumber = 0;
 	pLastScanResult = new SScanResult();
-	pUdpConnection = GetOwner()->FindComponentByClass<UUdpConnection>();
+	//pUdpConnection = GetOwner()->FindComponentByClass<UUdpConnection>();
+	//pUdpConnection = GetOwner()->CreateCh <UUdpConnection>();
 	SenderThread = FRunnableThread::Create(this, *(GetOwner()->GetName()));
 	
-
+	GetConfigurationPacket()->Reset()->SetIPAddr("127.0.0.1", pMainOutputStreamConnection->GetRemoteIP(), "00:01:00:02:00:03", pMainOutputStreamConnection->GetRemotePort(), pDIFOP->GetRemotePort());
 }
-
+void URobosenseM1CommIF::Stop()
+{ 
+	IsStoped = true;
+}
 uint32 URobosenseM1CommIF::Run()
 {
 
-	while (true) {
+	while (!IsStoped) {
 		FPlatformProcess::Sleep(0.1);
 
 		if (CurrentRequest.Num() > 0) {
@@ -36,17 +50,22 @@ uint32 URobosenseM1CommIF::Run()
 	return uint32();
 }
 
+SDIFOP* URobosenseM1CommIF::GetConfigurationPacket()
+{
+	return &DIOPPacket;
+}
+
 inline bool URobosenseM1CommIF::FillMainOutputStreamPacket(SMSOPPacket* p_pack, INT32U &block_ind, INT32U &channel_ind, FLOAT32 azimuth_deg, FLOAT32 elevation_deg, FLOAT32 intensity, FLOAT32 range_meter)
 {
 	SLidarDataPacket* p_blok = &p_pack->LidarDataPackets[block_ind];
 	SLidarChannelData* p_channel = nullptr;
 
 	switch (channel_ind) {
-	case 0: p_channel = &p_blok->ChannelData1;
-	case 1: p_channel = &p_blok->ChannelData2;
-	case 2: p_channel = &p_blok->ChannelData3;
-	case 3: p_channel = &p_blok->ChannelData4;
-	case 4: p_channel = &p_blok->ChannelData5;
+	case 0: p_channel = &p_blok->ChannelData1; break;
+	case 1: p_channel = &p_blok->ChannelData2; break;
+	case 2: p_channel = &p_blok->ChannelData3; break;
+	case 3: p_channel = &p_blok->ChannelData4; break;
+	case 4: p_channel = &p_blok->ChannelData5; break;
 	}
 
 	if (p_channel == nullptr) {
@@ -132,8 +151,8 @@ void URobosenseM1CommIF::SendMainStreamOutputPacket()
 
 inline bool URobosenseM1CommIF::SendPacket(SMSOPPacket* p_pack)
 {
-	if (pUdpConnection != nullptr) {
-		bool ret = pUdpConnection->SendUDPData((INT8U*)p_pack, sizeof(SMSOPPacket));
+	if (pMainOutputStreamConnection != nullptr) {
+		bool ret = pMainOutputStreamConnection->SendUDPData((INT8U*)p_pack, sizeof(SMSOPPacket));
 		return ret;
 	}
 	else {
@@ -141,4 +160,19 @@ inline bool URobosenseM1CommIF::SendPacket(SMSOPPacket* p_pack)
 	}
 	
 	
+}
+
+
+ void URobosenseM1CommIF::SendConfig()
+{
+	Super::SendConfig();
+
+	if (pDIFOP != nullptr) {
+		bool ret = pDIFOP->SendUDPData((INT8U*)&DIOPPacket, sizeof(DIOPPacket));
+		
+	}
+	else {
+		
+	}
+
 }

@@ -18,17 +18,17 @@ UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class URobosenseM1CommIF : public UGenericCommIF, public FRunnable
 {
 	GENERATED_BODY()
-
+		
 
 protected:
 	virtual void BeginPlay() override;
 	virtual void SendMainStreamOutputPacket();
-	UUdpConnection* pUdpConnection;
+
 
 public:
-
+	~URobosenseM1CommIF();
 	virtual void SendData(void* p_data, uint32 size_in_bytes) override;
-	
+	virtual void SendConfig() override;
 
 	// Inherited via FRunnable
 	virtual uint32 Run() override;
@@ -50,6 +50,13 @@ public:
 	const FLOAT32 OneOverAzimuthScaleFactor = 100;
 	const FLOAT32  OneIntensitiyScaleFactor = 0.003921568627451f;
 
+	UPROPERTY(BlueprintReadWrite)
+		UUdpConnection* pMainOutputStreamConnection;
+	
+	UPROPERTY(BlueprintReadWrite)
+		UUdpConnection* pDIFOP;
+
+	SDIFOP* GetConfigurationPacket();
 
 private:
 
@@ -63,5 +70,10 @@ private:
 	INT16U MessageSequenceNumber;
 
 	FRunnableThread* SenderThread;
+	bool IsStoped = false;
+
+	virtual void Stop() override;
+
+	SDIFOP DIOPPacket;
 
 };

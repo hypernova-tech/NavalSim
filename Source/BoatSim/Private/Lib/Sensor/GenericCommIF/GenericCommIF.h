@@ -26,5 +26,6 @@ public:
 
 
 	virtual void SendData(void* p_data, uint32 size_in_bytes);
+	virtual void SendConfig();
 		
 };
