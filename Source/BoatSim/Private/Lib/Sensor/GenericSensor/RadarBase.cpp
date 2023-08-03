@@ -77,6 +77,7 @@ void ARadarBase::BeginPlay()
 
 void ARadarBase::InitSensor()
 {
+	Super::InitSensor();
 	pScanResult = new SScanResult();
 	pScanResult->Init(10);
 }
