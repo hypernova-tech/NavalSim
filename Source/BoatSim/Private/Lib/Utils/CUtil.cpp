@@ -13,6 +13,7 @@ CUtil::~CUtil()
 
 bool CUtil::Trace(AActor * p_actor, bool is_world, float min_range_meter, float range_meter, float azimuth_start_deg, float azimuth_end_deg,
                                                                           float elevation_start_deg, float elevation_end_deg, float azimuth_angle_step_deg, float elevation_angle_step_deg,
+                                                                          float measurement_error_mean, float measurement_error_std,
                                                                           bool show_radar_beam, TArray<AActor*>& ignore_list, SScanResult* pscan_result)
 {
 #if true
@@ -109,15 +110,17 @@ bool CUtil::Trace(AActor * p_actor, bool is_world, float min_range_meter, float 
             
             if(ret){
                 //DrawDebugLine(p_actor->GetWorld(), start_pos,start_pos + new_dir * result.Distance,FColor::Red,false, 0.2f);
-                FLOAT32 range_meter = UNREAL_TO_WORLD(result.Distance);
-                pscan_result->RangeMeter[horizantal_ind][vertical_ind] = range_meter;
+                FLOAT32 error = measurement_error_mean + measurement_error_std * 0.33f * GetRandomRange(-1.0f, 1.0f);
+                FLOAT32 range_meter = UNREAL_TO_WORLD(result.Distance) + error;
+                pscan_result->RangeMeter[horizantal_ind][vertical_ind] = range_meter ;
                 pscan_result->NormalStrength[horizantal_ind][vertical_ind] = new_dir.Dot(-result.ImpactNormal.GetSafeNormal());
-                pscan_result->Point3D[horizantal_ind][vertical_ind] = result.Location;
-                FVector manual_pos = start_pos + new_dir * (result.Distance);
+                FVector detected_pos_error = result.Location + WORLD_TO_UNREAL(error) * new_dir;
+                pscan_result->Point3D[horizantal_ind][vertical_ind] = detected_pos_error;
+              
 
-                pscan_result->AddTrackPoint3DList(manual_pos, range_meter);
+                pscan_result->AddTrackPoint3DList(detected_pos_error, range_meter);
 
-                p_current_sektor->Add(result.Location);
+                p_current_sektor->Add(detected_pos_error);
             
                 success_count++;
             }

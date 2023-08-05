@@ -141,8 +141,8 @@ void URobosenseM1CommIF::SendMainStreamOutputPacket()
 
 			//FLOAT32 mapped_azimuth_deg =   min_azimuth_deg + i * SensorAzimuthStepAngle;
 			//FLOAT32 mapped_elevation_deg =  min_elevation_deg + j * SensorElevationStepAngle;
-			intensity = FMath::Lerp(0.0f, 1.0f, ((intensity + 1) * 0.5f)*0.75f + 0.75f*distance_meter*0.01f);
-			bool ret = FillMainOutputStreamPacket(&packet, block_ind, channel_ind, azimuth_deg, elevation_deg, intensity, distance_meter);
+			intensity = FMath::Lerp(0.0f, 1.0f, ((intensity + 1) * 0.5f)*0.75f + 0.25f*distance_meter*0.001f);
+			bool ret = FillMainOutputStreamPacket(&packet, block_ind, channel_ind, -azimuth_deg, elevation_deg, intensity, distance_meter);
 			if (ret) {
 				SendPacket(&packet);
 				MessageSequenceNumber++;

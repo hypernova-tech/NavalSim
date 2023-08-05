@@ -61,6 +61,11 @@ public:
 	UPROPERTY(EditAnywhere)
 		bool ShowBeam = false;
 
+	UPROPERTY(EditAnywhere)
+		float MeasurementErrorMean = 0.0f;
+
+	UPROPERTY(EditAnywhere)
+		float MeasurementErrorUncertainy = 0.0f;
 
 protected:
 	// Called when the game starts or when spawned
