@@ -22,54 +22,18 @@ void CBoatSimListener::ThreadFunction() {
     HANDLE hPipe;
     INT32U size = 1024 * 1024 * 4;
     INT8U *p_buffer = new INT8U[size];
-    DWORD bytesRead;
-
-    // Named Pipe oluşturma
-    std::cout << "Waiting For Pipe Connection" << std::endl;
-    while (true) {
-        hPipe = CreateFile(
-            TEXT("\\\\.\\pipe\\RadarSimPipe"),
-            GENERIC_READ | GENERIC_WRITE,
-            0,
-            NULL,
-            OPEN_EXISTING,
-            0,
-            NULL
-        );
-
-        if (hPipe == INVALID_HANDLE_VALUE) {
-            
-           
-        }
-        else {
-            std::cout << "Uygulama A: Named Pipe olusturuldu. Bekleniyor..." << std::endl;
-            break;
-        }
-    }
-
-
-    
-
-    // Uygulama B'den veri gelene kadar bekleyelim
-    ConnectNamedPipe(hPipe, NULL);
+    INT32U bytes_read = 0;
 
     while (true){
         // Veriyi okuyalım
-        ReadFile(hPipe, p_buffer, size, &bytesRead, NULL);
+        RadarChannelDataProvider[0]->ReceivedData(p_buffer, size, bytes_read);
+      
 
-        if (bytesRead > 0) {
-            ProcessData(p_buffer, size);
-            std::cout << "Data Received" <<size<< std::endl;
-
+        if (bytes_read > 0) {
+            ProcessData(p_buffer, bytes_read);
+            std::cout << "Data Received " << bytes_read << std::endl;
         }
-       
-
-    
     }
-
-
-    // Named Pipe kapatma
-    CloseHandle(hPipe);
 }
 
 void CBoatSimListener::SetDataIF(IDataIF* p_val)
@@ -88,4 +52,9 @@ void CBoatSimListener::ProcessData(INT8U* p_data, INT32U len)
         pDataIF->OnReceivedData(p_data, len);
     }
 
+}
+
+void CBoatSimListener::SetConnectionIF(INT32U ind, IConnection* p_val)
+{
+    RadarChannelDataProvider[ind] = p_val;
 }

@@ -65,7 +65,7 @@ void ASystemManagerBase::DisableAllActors()
 
 INT64U ASystemManagerBase::GetTimeStamp()
 {
-	FLOAT64 time = FApp::GetCurrentTime();
+	FLOAT64 time = FApp::GetGameTime();
 	INT64U microsec = (time * 1e6);
 
 	return microsec;

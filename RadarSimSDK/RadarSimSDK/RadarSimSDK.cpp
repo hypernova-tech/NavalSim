@@ -4,13 +4,19 @@
 #include <iostream>
 #include "CBoatSimListener.h"
 #include "CHalo24SimIF.h"
+#include "CWinUDPSocket.h"
 
 CBoatSimListener *pBoatSimListener;
 CHalo24IF* pHalo24SimSDK;
+IConnection* pRadarStreamConnection;
 int main()
 {
     pHalo24SimSDK = new CHalo24IF();
     pBoatSimListener = new CBoatSimListener();
+    
+    pRadarStreamConnection = new CWinUDPSocket();
+    SConnectionArgs args = { "127.0.0.1",1234 };
+    pRadarStreamConnection->Create(&args);
 
 
     pBoatSimListener->SetDataIF(pHalo24SimSDK);

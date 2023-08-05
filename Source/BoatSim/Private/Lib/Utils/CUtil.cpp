@@ -15,6 +15,7 @@ bool CUtil::Trace(AActor * p_actor, bool is_world, float min_range_meter, float 
                                                                           float elevation_start_deg, float elevation_end_deg, float azimuth_angle_step_deg, float elevation_angle_step_deg,
                                                                           bool show_radar_beam, TArray<AActor*>& ignore_list, SScanResult* pscan_result)
 {
+#if true
 
 
 
@@ -50,9 +51,6 @@ bool CUtil::Trace(AActor * p_actor, bool is_world, float min_range_meter, float 
     query_params.bTraceComplex = false;
 
 
-
-
-
     FVector end;
     FHitResult result;
     bool ret = false;
@@ -61,7 +59,7 @@ bool CUtil::Trace(AActor * p_actor, bool is_world, float min_range_meter, float 
 
     int success_count = 0;
 
-    pscan_result->Point3DList.Reset();
+    pscan_result->ResetTrackPoint3DList();
     //pscan_result->Point2DScreen.Reset();
 
     float one_over_range_unreal = 1.0 / WORLD_TO_UNREAL(range_meter);
@@ -73,9 +71,9 @@ bool CUtil::Trace(AActor * p_actor, bool is_world, float min_range_meter, float 
     for (float azimuth = azimuth_start_deg; azimuth <= azimuth_end_deg; azimuth += azimuth_angle_step_deg) {
         vertical_ind = 0;
         float azimuth_rad = azimuth * DEGTORAD;
-   
+        FVector new_dir;
         for (float elevation = elevation_start_deg; elevation <= elevation_end_deg; elevation += elevation_angle_step_deg) {
-            FVector new_dir;
+            
 
             if (is_world) {
 
@@ -111,10 +109,13 @@ bool CUtil::Trace(AActor * p_actor, bool is_world, float min_range_meter, float 
             
             if(ret){
                 //DrawDebugLine(p_actor->GetWorld(), start_pos,start_pos + new_dir * result.Distance,FColor::Red,false, 0.2f);
-                pscan_result->Range[horizantal_ind][vertical_ind] = result.Distance;
+                FLOAT32 range_meter = UNREAL_TO_WORLD(result.Distance);
+                pscan_result->RangeMeter[horizantal_ind][vertical_ind] = range_meter;
+                pscan_result->NormalStrength[horizantal_ind][vertical_ind] = new_dir.Dot(-result.ImpactNormal.GetSafeNormal());
                 pscan_result->Point3D[horizantal_ind][vertical_ind] = result.Location;
-                FVector manual_pos = start_pos + new_dir * result.Distance;
-                pscan_result->Point3DList.Add(manual_pos);
+                FVector manual_pos = start_pos + new_dir * (result.Distance);
+
+                pscan_result->AddTrackPoint3DList(manual_pos, range_meter);
 
                 p_current_sektor->Add(result.Location);
             
@@ -130,70 +131,10 @@ bool CUtil::Trace(AActor * p_actor, bool is_world, float min_range_meter, float 
 
 
     return success_count > 0;
-}
-
-bool CUtil::ParallelTrace(AActor* p_actor, float range_meter, float beam_width_azimuth_deg, float beam_width_elavation_deg, float azimuth_angle_step_deg, float elevation_angle_step_deg)
-{
-#if false
-    AActor* p_actor = GetOwner();
-    FVector start_pos = p_actor->GetActorLocation();
-    FVector look_dir = p_actor->GetActorForwardVector();
-
-    FCollisionQueryParams query_params;
-    query_params.AddIgnoredActor(p_actor);
-    query_params.bTraceComplex = false;
-
-    float azimuth_start = -BeamWidthAzimuthDeg / 2.0f;
-    float azimuth_end = BeamWidthAzimuthDeg / 2.0f;
-
-    float elevation_start = 0;
-    float elevation_end = BeamWidthElevationDeg;
-
-    FVector end;
-    FHitResult result;
-    bool ret = false;
-
-    // Parallelize the azimuth loop
-    FParallelForTask ParallelAzimuthTask(static_cast<int32>((azimuth_end - azimuth_start) / AzimutAngleStepDeg) + 1, [&](int32 AzimuthIndex)
-        {
-            float azimuth = azimuth_start + (AzimuthIndex * AzimutAngleStepDeg);
-
-            // Parallelize the elevation loop
-            FParallelForTask ParallelElevationTask(static_cast<int32>((elevation_end - elevation_start) / ElevationAngleStepDeg) + 1, [&](int32 ElevationIndex)
-                {
-                    float elevation = elevation_start + (ElevationIndex * ElevationAngleStepDeg);
-
-                    FRotator euler_rot(elevation, azimuth, 0);
-                    FQuat qua = euler_rot.Quaternion();
-                    FVector new_dir = qua.RotateVector(look_dir);
-                    end = start_pos + new_dir * LidarRangeMeter * 100;
-
-                    bool hit = p_actor->GetWorld()->LineTraceSingleByChannel(result, start_pos, end, ECollisionChannel::ECC_Visibility, query_params, FCollisionResponseParams());
-                    if (hit)
-                    {
-                        // DrawDebugLine(p_actor->GetWorld(), start_pos, start_pos + new_dir * 2000, FColor::Red, false, 0.2f);
-                    }
-
-                    // Set the return value to true if any trace hits
-                    if (hit)
-                    {
-                        ret = true;
-                    }
-                });
-
-            ParallelElevationTask.DoTask();
-            ParallelElevationTask.EnsureCompletion();
-        });
-
-    ParallelAzimuthTask.DoTask();
-    ParallelAzimuthTask.EnsureCompletion();
-
-    return ret;
 
 #endif
     return false;
 }
-
 float CUtil::ConvertToFloat(const char* p_str)
 {
     const char* textValue = p_str;
@@ -547,4 +488,34 @@ AActor* CUtil::SpawnObjectFromBlueprint(FString blueprint_path, UWorld *p_world,
     }
     SpawnedActor->SetActorScale3D(scale);
     return SpawnedActor;
+}
+
+FLOAT64 CUtil::GetTimeSeconds()
+{
+    return FApp::GetCurrentTime();
+}
+
+INT16U CUtil::LittleToBig(INT16U val)
+{
+    return ((val >> 8) & 0xFF) | ((val << 8) & 0xFF00);
+}
+
+INT32U CUtil::LittleToBig(INT32U value)
+{
+    return ((value << 24) & 0xFF000000) |
+        ((value << 8) & 0x00FF0000) |
+        ((value >> 8) & 0x0000FF00) |
+        ((value >> 24) & 0x000000FF);
+}
+
+inline INT32U CUtil::ReverseCopyBytes(INT8U* p_src, INT8U* p_dest, INT32U len)
+{
+    for (INT32U i = 0; i < len; i++) {
+        p_dest[i] = p_src[len - 1 - i];
+    }
+}
+
+FLOAT32 CUtil::GetRandomRange(FLOAT32 min_inclusive, FLOAT32 max_inclusive)
+{
+    return FMath::RandRange(min_inclusive, max_inclusive);
 }

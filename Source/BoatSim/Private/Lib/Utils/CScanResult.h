@@ -80,7 +80,8 @@ struct SScanResult
 	int HorizontalCount;
 	int VeriticalCount;
 	FVector ScanCenter;
-	FLOAT32 Range[HORIZOTAL_SCAN_SIZE][VERTICAL_SCAN_SIZE];
+	FLOAT32 RangeMeter[HORIZOTAL_SCAN_SIZE][VERTICAL_SCAN_SIZE]; //meter
+	FLOAT32 NormalStrength[HORIZOTAL_SCAN_SIZE][VERTICAL_SCAN_SIZE]; //meter
 	FVector Point3D[HORIZOTAL_SCAN_SIZE][VERTICAL_SCAN_SIZE];
 
 	int SectorCount;
@@ -93,9 +94,11 @@ struct SScanResult
 
 	//SScanElement ScanData[HORIZOTAL_SCAN_SIZE][VERTICAL_SCAN_SIZE];
 	
+	FVector Track3DWorld[HORIZOTAL_SCAN_SIZE * VERTICAL_SCAN_SIZE];
+	FLOAT32 TrackRangeMeter[HORIZOTAL_SCAN_SIZE * VERTICAL_SCAN_SIZE]; //meter
 
-	TArray< FVector> Point3DList;
-	TArray<FVector2D> Point2DScreen;
+	INT32U Track3DCount;
+	//TArray< FVector> Point3D;
 	SSectorContainer SectorContainer;
 
 public:
@@ -109,26 +112,40 @@ public:
 		SectorCount = sector_cnt;
 		SectorContainer.Init(SectorCount);
 	}
-	void Reset2DPoint()
-	{
-		Point2DScreen.Reset();
-	}
+
 
 	SSectorContainer* GetSectorContainer()
 	{
 		return &SectorContainer;
 	}
 
-	void CopyFrom(SScanResult* p_src) {
+	 void CopyFrom(SScanResult* p_src) {
 		memcpy(&Point3D, &p_src->Point3D, sizeof(p_src->Point3D));
 	}
 
-	FLOAT32 Interpolate(FLOAT32 azimuth_deg, FLOAT32 elevation_deg)
+	 void CopyTrackPoint3DOnly(SScanResult* p_src)
+	 {
+		 memcpy(Track3DWorld, p_src->Track3DWorld, sizeof(FVector) * Track3DCount);
+		 Track3DCount = p_src->Track3DCount;
+	 }
+
+	 FLOAT32 Interpolate(FLOAT32 azimuth_deg, FLOAT32 elevation_deg,FLOAT32 &intensity)
 	{
 		INT32U azimuth_ind = (azimuth_deg - AzimuthRange.X) / ScanAzimuthStepDeg;
 		INT32U elevation_ind = (elevation_deg - ElevationRange.X) / ScanElevationStepDeg;
-		return Range[azimuth_ind][elevation_ind];
+		intensity = NormalStrength[azimuth_ind][elevation_ind];
+		return RangeMeter[azimuth_ind][elevation_ind];
 
+	}
+     void AddTrackPoint3DList(FVector pos, FLOAT32 range_meter)
+	{
+		 Track3DWorld[Track3DCount] = pos;
+		 TrackRangeMeter[Track3DCount] = range_meter;
+		 Track3DCount++;
+	}
+	 void ResetTrackPoint3DList()
+	{
+		Track3DCount = 0;
 	}
 
 };

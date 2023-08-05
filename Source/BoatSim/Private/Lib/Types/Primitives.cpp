@@ -3,10 +3,3 @@
 
 #include "Lib/Types/Primitives.h"
 
-Primitives::Primitives()
-{
-}
-
-Primitives::~Primitives()
-{
-}

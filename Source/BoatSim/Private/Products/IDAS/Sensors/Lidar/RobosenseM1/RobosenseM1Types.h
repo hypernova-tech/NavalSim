@@ -61,10 +61,10 @@ public:
 struct SLidarChannelData
 {
 
-	INT8U Ch1Radius[2];
-	INT8U Ch1Elevation[2];
-	INT8U Ch1Azimuth[2];
-	INT8U Ch1Intensity[1];
+	INT8U ChRadius[2];
+	INT8U ChElevation[2];
+	INT8U ChAzimuth[2];
+	INT8U ChIntensity[1];
 };
 struct SLidarDataPacket
 {
@@ -109,8 +109,11 @@ public:
 	{
 		INT64U seconds = (INT64U)(time_micro_sec /1e6);
 		INT64U microseconds = (time_micro_sec - seconds * 1e6);
-		memcpy(&Header.TimeStamps.HighTimeSec[0], &seconds, 6);
-		memcpy(&Header.TimeStamps.LowTimeSec[0], &microseconds, 4);
+		CUtil::ReverseCopyBytes((INT8U*)&seconds, Header.TimeStamps.HighTimeSec, 6);
+		CUtil::ReverseCopyBytes((INT8U*)&microseconds, Header.TimeStamps.LowTimeSec, 4);
+
+		//memcpy(&Header.TimeStamps.HighTimeSec[0], &seconds, 6);
+		//memcpy(&Header.TimeStamps.LowTimeSec[0], &microseconds, 4);
 	}
 
 	void Init()
@@ -125,7 +128,12 @@ public:
 
 	void SetPacketSequenceNumber(INT32U val)
 	{
-		Header.PaketPSN.Val = val;
+		Header.PaketPSN.Val = htons((INT16U)val);
+	}
+
+	uint16_t htons(uint16_t value)
+	{
+		return ((value >> 8) & 0xFF) | ((value << 8) & 0xFF00);
 	}
 };
 #pragma pack(pop)
@@ -189,31 +197,31 @@ public:
 		CUtil::IPAddrCopy(src_ip, EthernetIPSrcAddress, sizeof(EthernetIPSrcAddress));
 		CUtil::IPAddrCopy(dest_ip, EthernetIPDestAddress, sizeof(EthernetIPDestAddress));
 		CUtil::MacAddrCopy(dest_ip, EthernetIPLocalMACAddress, sizeof(EthernetIPLocalMACAddress));
-		MSOPPortNumber = msop_port_number;
-		DIFOPPortNumber = difop_port_number;
+		MSOPPortNumber = CUtil::LittleToBig(msop_port_number);
+		DIFOPPortNumber = CUtil::LittleToBig(difop_port_number);
 
 		return this;
 	}
 
 	SDIFOP* SetHorizontalFovStartaAngle(FLOAT32 ang_deg)
 	{
-		HorizontalFOVStartAngle = ang_deg * 100;
+		HorizontalFOVStartAngle = CUtil::LittleToBig((INT16U)(ang_deg * 100));
 		return this;
 	}
 	SDIFOP* SetHorizontalFovEndAngle(FLOAT32 ang_deg)
 	{
-		HorizontalFOVEndAngle = ang_deg * 100;
+		HorizontalFOVEndAngle = CUtil::LittleToBig((INT16U)(ang_deg * 100));
 		return this;
 	}
 
 	SDIFOP* SetVerticalFovStartaAngle(FLOAT32 ang_deg)
 	{
-		VerticalFOVStartAngle = ang_deg * 100;
+		VerticalFOVStartAngle = CUtil::LittleToBig((INT16U)(ang_deg * 100));
 		return this;
 	}
 	SDIFOP* SetVerticalFovEndAngle(FLOAT32 ang_deg)
 	{
-		VerticalFOVEndAngle = ang_deg * 100;
+		VerticalFOVEndAngle = CUtil::LittleToBig((INT16U)(ang_deg * 100));
 		return this;
 	}
 

@@ -48,7 +48,7 @@ public:
 	const FLOAT32 OneOverRadiusScaleFactorMeter = 200;
 	const FLOAT32 OneOverElevationScaleFactor = 100;
 	const FLOAT32 OneOverAzimuthScaleFactor = 100;
-	const FLOAT32  OneIntensitiyScaleFactor = 0.003921568627451f;
+	const FLOAT32  OneIntensitiyScaleFactor = 255;
 
 	UPROPERTY(BlueprintReadWrite)
 		UUdpConnection* pMainOutputStreamConnection;
@@ -67,7 +67,7 @@ private:
 	inline bool FillMainOutputStreamPacket(SMSOPPacket* p_pack, INT32U& block_ind, INT32U& channel_ind, FLOAT32 azimuth_deg, FLOAT32 elevation_deg, FLOAT32 intensity, FLOAT32 range_meter);
 	inline bool SendPacket(SMSOPPacket* p_pack);
 
-	INT16U MessageSequenceNumber;
+	INT16U MessageSequenceNumber = 0;
 
 	FRunnableThread* SenderThread;
 	bool IsStoped = false;

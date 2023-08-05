@@ -2,6 +2,7 @@
 #include <thread>
 #include "Lib/Types/Primitives.h"
 #include "IDataIF.h"
+#include "IConnection.h"
 class CBoatSimListener
 {
 public:
@@ -15,7 +16,11 @@ protected:
 
 	std::thread *pPipeReadThread;
 	IDataIF* pDataIF;
+	IConnection* RadarChannelDataProvider[1];
+
+
 
 	void ProcessData(INT8U* p_data, INT32U len);
+	void SetConnectionIF(INT32U ind, IConnection* p_val);
 };
 

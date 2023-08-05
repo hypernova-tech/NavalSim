@@ -20,7 +20,9 @@ void UHalo24CommIF::SendData(void* p_data, uint32 size_in_bytes)
 {
 	HasNewData = true;
 	SScanResult* p_in = (SScanResult*)p_data;
-	CurrentRequest.Add(p_in);
+	SScanResult* p_new = new SScanResult();
+	p_new->CopyTrackPoint3DOnly(p_in);
+	CurrentRequest.Add(p_new);
 
 }
 
@@ -40,6 +42,7 @@ void UHalo24CommIF::BeginPlay()
 {
 	Super::BeginPlay();
 	
+#if false
 	FString PipeName = TEXT("\\\\.\\pipe\\RadarSimPipe");
 	pPipeInstance = new FPlatformNamedPipe();
 	if (pPipeInstance->Create(PipeName, true, false))
@@ -50,6 +53,7 @@ void UHalo24CommIF::BeginPlay()
 			UE_LOG(LogTemp, Warning, TEXT("Pipe server created and waiting for connections..."));
 		}
 	}
+#endif
 
 	SenderThread = FRunnableThread::Create(this, *(GetOwner()->GetName()));
 	
@@ -57,16 +61,24 @@ void UHalo24CommIF::BeginPlay()
 
 void UHalo24CommIF::SendRadarTrack()
 {
-	if (pPipeInstance->IsReadyForRW()) {
-		SScanResult* p_current = CurrentRequest[0];
-		CurrentRequest.RemoveAt(0);
+	SScanResult* p_current = CurrentRequest[0];
+	CurrentRequest.RemoveAt(0);
+	delete p_current;
+	return;
 
+	if (pPipeInstance->IsReadyForRW()) {
+
+		
 
 		INT8U data[] = { 0,1,2,3,4,5,6 };
-
-		bool ret = pPipeInstance->WriteBytes(sizeof(data), data);
-
-
+		INT32U fvector_size = sizeof(FVector);
+		INT32U total_size = fvector_size * p_current->Track3DCount;
+		INT32U struct_size = sizeof(p_current->Track3DWorld);
+		FLOAT64 start_time_ref = CUtil::GetTimeSeconds();
+		bool ret = pPipeInstance->WriteBytes(total_size, (INT8U*)p_current->Track3DWorld);
+		FLOAT64 diff = CUtil::GetTimeSeconds() - start_time_ref;
+		CUtil::DebugLog(FText::AsNumber(total_size).ToString());
+		delete p_current;
 	}
 
 }

@@ -27,7 +27,6 @@ public:
 
 public:
 	static bool Trace(AActor* p_actor, bool is_world, float min_range_meter, float range_meter, float azimuth_start_deg, float azimuth_end_deg, float elevation_start_deg, float elevation_end_deg, float azimuth_angle_step_deg, float elevation_angle_step_deg, bool show_radar_beam, TArray<AActor*> &ignore_list, SScanResult* pscan_result);
-	static bool ParallelTrace(AActor* p_actor, float range_meter, float beam_width_azimuth_deg, float beam_width_elavation_deg, float azimuth_angle_step_deg, float elevation_angle_step_deg);
 
 	static float ConvertToFloat(const char* p_str);
 	static FString ConvertToFString(const char* p_str);
@@ -50,5 +49,10 @@ public:
 	static void MacAddrCopy(const FString& str, INT8U* p_dest, INT32U dest_capacity);
 	static AActor* GetTopParent(AActor *p_actor);
 	static AActor* SpawnObjectFromBlueprint(FString blueprint_path, UWorld* p_world, AActor* p_owner, FString name, FVector pos, FVector rot_rpy, FVector scale);
+	static FLOAT64 GetTimeSeconds();
+	static inline INT16U LittleToBig(INT16U val);
+	static inline INT32U LittleToBig(INT32U val);
+	static inline INT32U ReverseCopyBytes(INT8U* p_src, INT8U* p_dest, INT32U len);
+	static inline FLOAT32 GetRandomRange(FLOAT32 min_inclusive, FLOAT32 max_inclusive);
 };
 

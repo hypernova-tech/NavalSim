@@ -53,7 +53,7 @@ void UUdpConnection::BeginPlay()
 				.AsReusable()
 				.BoundToEndpoint(LocalEndpoint)
 				.WithReceiveBufferSize(SendSize)
-				.WithReceiveBufferSize(BufferSize)
+				.WithSendBufferSize(BufferSize)
 				.WithBroadcast();
 		}
 	}

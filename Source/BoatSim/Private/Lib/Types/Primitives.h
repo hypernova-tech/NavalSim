@@ -22,9 +22,3 @@ typedef  _int64 INT64S;
 typedef float FLOAT32;
 typedef  double FLOAT64;
 
-class Primitives
-{
-public:
-	Primitives();
-	~Primitives();
-};

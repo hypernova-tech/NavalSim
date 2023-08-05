@@ -1,2 +1,5 @@
 ﻿  CBoatSimListener.cpp
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\CBoatSimListener.cpp(22,12): warning C4101: 'hPipe': unreferenced local variable
+  RadarSimSDK.cpp
+  Generating Code...
   RadarSimSDK.vcxproj -> C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\x64\Debug\RadarSimSDK.exe

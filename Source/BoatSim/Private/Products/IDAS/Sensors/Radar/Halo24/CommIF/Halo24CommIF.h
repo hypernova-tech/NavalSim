@@ -10,6 +10,10 @@
 #include "Halo24CommIF.generated.h"
 
 
+struct SRadarTrack3DData {
+
+};
+
 
 /**
  * 
@@ -42,6 +46,7 @@ private:
 	bool HasNewData;
 	FRunnableThread* SenderThread;
 	bool IsStoped = false;
+
 
 	virtual void Stop() override;
 

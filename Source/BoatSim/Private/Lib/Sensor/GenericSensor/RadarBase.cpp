@@ -89,7 +89,7 @@ void ARadarBase::Run(float delta_time_sec)
 	bool is_reset = false;
 
 	if (IsFullScaned) {
-		pScanResult->Reset2DPoint();
+		
 		CurrentScanAzimuth = 0;
 		IsFullScaned = false;
 	}

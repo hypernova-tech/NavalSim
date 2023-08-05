@@ -27,6 +27,12 @@
     <ClCompile Include="IDataIF.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="IConnection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CWinUDPSocket.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CHalo24SimIF.h">
@@ -39,6 +45,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="IDataIF.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IConnection.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CWinUDPSocket.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
