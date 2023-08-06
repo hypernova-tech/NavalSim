@@ -14,6 +14,7 @@
 #include <Lib/SystemManager/SystemManagerBase.h>
 #include <Lib/Gimbal/GimbalBase.h>
 #include <Lib/Utils/CUtil.h>
+#include <Lib/Math/CMath.h>
 
 // Sets default values
 ACBoatBase::ACBoatBase()
@@ -26,6 +27,7 @@ ACBoatBase::ACBoatBase()
 // Called when the game starts or when spawned
 void ACBoatBase::BeginPlay()
 {
+	CMath::UnitTestVec();
 	Super::BeginPlay();
 	ASOAImplementor::GetInstance()->Subscribe(CommonSOAObservers::PlatformKinematicObserverId,this);
 	BoatCam = Cast<UCameraComponent>(GetComponentByClass<UCameraComponent>());

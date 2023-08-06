@@ -1,7 +1,9 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "Lib/Utils/CUtil.h"
+#include <Lib/Math/CMath.h>
+
 
 CUtil::CUtil()
 {
@@ -13,7 +15,7 @@ CUtil::~CUtil()
 
 bool CUtil::Trace(AActor * p_actor, bool is_world, float min_range_meter, float range_meter, float azimuth_start_deg, float azimuth_end_deg,
                                                                           float elevation_start_deg, float elevation_end_deg, float azimuth_angle_step_deg, float elevation_angle_step_deg,
-                                                                          float measurement_error_mean, float measurement_error_std,
+                                                                          float measurement_error_mean, float measurement_error_std, const SClutterParams& clutter_params,
                                                                           bool show_radar_beam, TArray<AActor*>& ignore_list, SScanResult* pscan_result)
 {
 #if true
@@ -63,21 +65,31 @@ bool CUtil::Trace(AActor * p_actor, bool is_world, float min_range_meter, float 
     pscan_result->ResetTrackPoint3DList();
     //pscan_result->Point2DScreen.Reset();
 
-    float one_over_range_unreal = 1.0 / WORLD_TO_UNREAL(range_meter);
 
     int sector_ind = azimuth_start_deg / (360.0 / pscan_result->SectorCount);
     SSectorInfo* p_current_sektor = pscan_result->GetSectorContainer()->GetSector(sector_ind);
     p_current_sektor->Reset();
+
+    FVector start_loc = p_actor->GetActorLocation();
+   
+
+    BOOLEAN is_on_surface = false;
 
     for (float azimuth = azimuth_start_deg; azimuth <= azimuth_end_deg; azimuth += azimuth_angle_step_deg) {
         vertical_ind = 0;
         float azimuth_rad = azimuth * DEGTORAD;
         FVector new_dir;
         for (float elevation = elevation_start_deg; elevation <= elevation_end_deg; elevation += elevation_angle_step_deg) {
+            FLOAT64 filtered_range_meter = range_meter;
+            FLOAT32 error_meter = measurement_error_mean + measurement_error_std * 0.33f * GetRandomRange(-1.0f, 1.0f);
             
 
             if (is_world) {
-
+                /**
+                
+                unreal engine pitch ve roll eksenleri sol el kuralının tersine oluyor, normalde -pitch yapmamız gerekirken bu özellikden
+                dolayı pozitif pitch veriyoruz.
+                */
                 FRotator euler_yaw(0, azimuth, 0);
                 FRotator euler_pitch(elevation, 0, 0);
 
@@ -87,19 +99,36 @@ bool CUtil::Trace(AActor * p_actor, bool is_world, float min_range_meter, float 
                 FVector temp_dir = euler_pitch.RotateVector(look_dir);
                 new_dir = euler_yaw.RotateVector(temp_dir);
 
-                start_pos = p_actor->GetActorLocation() + new_dir * WORLD_TO_UNREAL(min_range_meter);
-                end = start_pos + new_dir * WORLD_TO_UNREAL(range_meter);
+              
+
+                start_pos = start_loc + new_dir * TOUE(min_range_meter);
+
+                if (!clutter_params.EnableSubsurfaceScan) {
+                    FLOAT64 visible_range_meter = CMath::GetVisibleDistanceOverSurfaceMeter(start_pos, new_dir, clutter_params.MaxSurfacePenetrationMeter);
+                    if (visible_range_meter >= 0) {
+                        filtered_range_meter = FMath::Min(visible_range_meter, filtered_range_meter);
+                    }
+                }
+                end = start_pos + new_dir * TOUE(filtered_range_meter);
 
             }
             else {
-                FQuat QuatPitch(right_vec, elevation * DEGTORAD);
+                // quat pitch etrafinda rotasyonu tamamen sol el kuralına göre, FRotatoreden farklı olarak
+                FQuat QuatPitch(right_vec, -elevation * DEGTORAD);
                 FQuat Yaw(FVector::UpVector, azimuth * DEGTORAD);
               
+                FVector temp = QuatPitch * (look_dir);
+                new_dir = Yaw * temp;
 
-                new_dir = Yaw * QuatPitch * (look_dir);
+                start_pos = start_loc + new_dir * TOUE(min_range_meter);
 
-                start_pos = p_actor->GetActorLocation() + new_dir * WORLD_TO_UNREAL(min_range_meter);
-                end = start_pos + new_dir * WORLD_TO_UNREAL(range_meter);
+                if (!clutter_params.EnableSubsurfaceScan) {
+                    float visible_range_meter = CMath::GetVisibleDistanceOverSurfaceMeter(start_pos, new_dir, clutter_params.MaxSurfacePenetrationMeter);
+                    if (visible_range_meter >= 0) {
+                        filtered_range_meter = FMath::Min(visible_range_meter, filtered_range_meter);
+                    }
+                }
+                end = start_pos + new_dir * TOUE(filtered_range_meter);
             }
 
 
@@ -110,15 +139,15 @@ bool CUtil::Trace(AActor * p_actor, bool is_world, float min_range_meter, float 
             
             if(ret){
                 //DrawDebugLine(p_actor->GetWorld(), start_pos,start_pos + new_dir * result.Distance,FColor::Red,false, 0.2f);
-                FLOAT32 error = measurement_error_mean + measurement_error_std * 0.33f * GetRandomRange(-1.0f, 1.0f);
-                FLOAT32 range_meter = UNREAL_TO_WORLD(result.Distance) + error;
-                pscan_result->RangeMeter[horizantal_ind][vertical_ind] = range_meter ;
+                
+                FLOAT32 range_errored_meter = TOW(result.Distance) + error_meter;
+                pscan_result->RangeMeter[horizantal_ind][vertical_ind] = range_errored_meter;
                 pscan_result->NormalStrength[horizantal_ind][vertical_ind] = new_dir.Dot(-result.ImpactNormal.GetSafeNormal());
-                FVector detected_pos_error = result.Location + WORLD_TO_UNREAL(error) * new_dir;
+                FVector detected_pos_error = result.Location + TOUE(error_meter) * new_dir;
                 pscan_result->Point3D[horizantal_ind][vertical_ind] = detected_pos_error;
               
 
-                pscan_result->AddTrackPoint3DList(detected_pos_error, range_meter);
+                pscan_result->AddTrackPoint3DList(detected_pos_error, range_errored_meter);
 
                 p_current_sektor->Add(detected_pos_error);
             

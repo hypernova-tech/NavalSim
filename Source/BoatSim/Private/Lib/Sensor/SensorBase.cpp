@@ -63,6 +63,18 @@ void ASensorBase::FinalizeSensor()
 {
 }
 
+SClutterParams ASensorBase::GetClutterParams()
+{
+	SClutterParams Params;
+
+	Params.EnableFoamDetect = EnableFoamDetect;
+	Params.EnableSubsurfaceScan = EnableSubsurfaceDetect;
+	Params.EnableSurfaceDetect = EnableSurfaceDetect;
+	Params.SeaSurfaceDetectionProbability = SeaSurfaceDetectionProbability;
+	Params.MaxSurfacePenetrationMeter = MaxSurfacePenetrationMeter;
+	return Params;
+}
+
 // Called when the game starts or when spawned
 void ASensorBase::BeginPlay()
 {

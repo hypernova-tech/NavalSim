@@ -7,6 +7,7 @@
 #include "GenericCommIF/GenericCommIF.h"
 #include <Lib/PointVisualizer/PointVisualizer.h>
 #include <Lib/ActorBase/ActorBase.h>
+#include "Lib/Clutter/ClutterDefs.h"
 #include "SensorBase.generated.h"
 
 
@@ -50,8 +51,6 @@ public:
 	UPROPERTY(EditAnywhere)
 		float UpdateFrequency;
 
-
-
 	UPROPERTY(EditAnywhere)
 		bool Point3DVisualize = false;
 
@@ -62,10 +61,27 @@ public:
 		bool ShowBeam = false;
 
 	UPROPERTY(EditAnywhere)
-		float MeasurementErrorMean = 0.0f;
+		double MeasurementErrorMean = 0.0f;
 
 	UPROPERTY(EditAnywhere)
-		float MeasurementErrorUncertainy = 0.0f;
+		double MeasurementErrorUncertainy = 0.0f;
+
+	// Use the UPROPERTY macro to expose properties to the Unreal Editor
+	UPROPERTY(EditAnywhere, Category = "Clutter Params")
+		bool EnableSubsurfaceDetect;
+
+	UPROPERTY(EditAnywhere, Category = "Clutter Params")
+		bool EnableSurfaceDetect;
+
+	UPROPERTY(EditAnywhere, Category = "Clutter Params")
+		bool EnableFoamDetect;
+
+	UPROPERTY(EditAnywhere, Category = "Clutter Params")
+		double SeaSurfaceDetectionProbability; // Unreal typically uses "float" rather than "FLOAT32".
+
+	UPROPERTY(EditAnywhere, Category = "Clutter Params")
+		double MaxSurfacePenetrationMeter; 
+
 
 protected:
 	// Called when the game starts or when spawned
@@ -79,6 +95,7 @@ protected:
 	virtual void InitSensor();
 	virtual void Run(float delta_time_sec);
 	virtual void FinalizeSensor();
+	SClutterParams GetClutterParams();
 
 public:	
 	// Called every frame
