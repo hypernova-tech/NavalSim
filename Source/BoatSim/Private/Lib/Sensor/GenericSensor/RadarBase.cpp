@@ -86,10 +86,20 @@ void ARadarBase::InitSensor()
 void ARadarBase::Run(float delta_time_sec)
 {
 	Super::Run(delta_time_sec);
+	RadarStateMachine();
+
+}
+
+void ARadarBase::RadarStateMachine()
+{
+	Scan();
+}
+void ARadarBase::Scan()
+{
 	bool is_reset = false;
 
 	if (IsFullScaned) {
-		
+
 		CurrentScanAzimuth = 0;
 		IsFullScaned = false;
 	}
@@ -103,7 +113,7 @@ void ARadarBase::Run(float delta_time_sec)
 			end_azimuth = 359.99;
 			IsFullScaned = true;
 		}
-		
+
 
 		bool ret = CUtil::Trace(this, true, RangeMeter.X, RangeMeter.Y, start_azimuth, end_azimuth, 0, FovVerticalDeg, HorizontalScanStepAngleDeg, VerticalScanStepAngleDeg, MeasurementErrorMean, MeasurementErrorUncertainy, GetClutterParams(), ShowBeam, ASystemManagerBase::GetInstance()->GetSensorGlobalIgnoreList(), pScanResult);
 
@@ -116,10 +126,8 @@ void ARadarBase::Run(float delta_time_sec)
 		Visualize(pScanResult, GetActorLocation(), GetActorForwardVector(), GetActorRightVector(), RangeMeter.Y);
 
 		NextScanTime = FApp::GetCurrentTime() + 0.1;
-	
+
 		CUtil::DebugLog("Scanning");
 	}
-
-	
 
 }

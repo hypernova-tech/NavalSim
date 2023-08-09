@@ -8,11 +8,22 @@
 
 #include <NavDefines.h>
 
+#define SIM_SDK_EN
+
+
 #ifndef NAVICO_SDK_EXPORT
-#  ifdef NAVICO_BUILD_SDK_LIBS
-#    define NAVICO_SDK_EXPORT NAVICO_DECL_EXPORT
-#  else
-#    define NAVICO_SDK_EXPORT NAVICO_DECL_IMPORT
-#  endif
+	#  ifdef NAVICO_BUILD_SDK_LIBS
+		#ifdef SIM_SDK_EN
+			#define define NAVICO_SDK_EXPORT 
+		#else
+			#define NAVICO_SDK_EXPORT NAVICO_DECL_EXPORT
+		#endif
+	#  else
+		#ifdef SIM_SDK_EN
+			#define NAVICO_SDK_EXPORT
+		#else
+			#define NAVICO_SDK_EXPORT NAVICO_DECL_IMPORT
+		#endif
+	#  endif
 #endif
 

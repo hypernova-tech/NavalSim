@@ -40,3 +40,7 @@ void UGenericCommIF::SendConfig()
 {
 }
 
+void UGenericCommIF::OnReceivedConnectionData(void* connection, INT8U* p_data, INT32U count)
+{
+
+}

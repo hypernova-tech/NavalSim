@@ -10,10 +10,25 @@
 
 #include <NavTypes.h>
 #include <ExportSDK.h>
+using namespace std;
+#include <list>
+
+#define MAX_NUMBER_OF_RADARS 2
+enum EMultiRadarState
+{
+    Idle,
+    Init,
+    WaitForRadars,
+    Run,
+};
+
 
 
 namespace Navico {
 namespace Protocol {
+
+
+ 
 
 //-----------------------------------------------------------------------------
 //! \ref tMultiRadarClient callback interface for observing changes to the list
@@ -86,12 +101,42 @@ public:
 #define MAX_LOCKID_SIZE       128   ///< Maximum size of a Lock-ID
 #define MAX_UNLOCKKEY_SIZE    128   ///< Maximum size of an Unlock-Key
 
+struct SRadar
+{
+
+public:
+    string Serial;
+    uint8_t UnlockKey[MAX_LOCKID_SIZE];
+    char LockId[MAX_LOCKID_SIZE];
+    int UnlockKeySize;
+
+    SRadar()
+    {
+        Serial = "";
+        UnlockKeySize = 0;
+    }
+
+    bool  SetUnlockKey(const uint8_t* p_key, int key_size)
+    {
+        if (key_size <= MAX_LOCKID_SIZE) {
+            memcpy(UnlockKey, p_key, key_size);
+            UnlockKeySize = key_size;
+            return true;
+        }
+        else {
+            return false;
+        }
+
+    }
+};
+
+
 class tMultiRadarClientImpl;
 
 //-----------------------------------------------------------------------------
 //! Class for discovering and unlocking radars attached to a network.
 //-----------------------------------------------------------------------------
-class NAVICO_SDK_EXPORT tMultiRadarClient
+class  tMultiRadarClient
 {
 public:
     ~tMultiRadarClient();
@@ -274,15 +319,45 @@ public:
     //-----------------------------------------------------------------------------------
     bool ResetDeviceIDs();
 
+
+
+
+
+
+
+/// <summary>
+/// Added by Hypernova
+/// </summary>
+  
 private:
     //-----------------------------------------------------------------------------------
-
+    static tMultiRadarClient* pInstance;
     tMultiRadarClient();   // its a singleton, don't allow anyone else to create one of these
 
     tMultiRadarClient( const tMultiRadarClient & );
     tMultiRadarClient & operator=( const tMultiRadarClient & );
 
-    tMultiRadarClientImpl *  m_pImpl;
+    ////tMultiRadarClientImpl *  m_pImpl;
+
+    list<iRadarListObserver*> RadarListObservers;
+    list<iUnlockStateObserver*> UnlockStateObserver;
+    iUnlockKeySupplier* pUnlockKeySupplier;
+
+    list<SRadar*> Radars;
+
+    
+
+
+
+    void StateMachine();
+    
+    EMultiRadarState MultiRadarState = EMultiRadarState::Idle;
+
+public:
+    void ExternalUpdate();
+    void RegisterRadar(const char *serial_number);
+    SRadar* FindRadar(const char* serial_number);
+
 };
 
 //-----------------------------------------------------------------------------

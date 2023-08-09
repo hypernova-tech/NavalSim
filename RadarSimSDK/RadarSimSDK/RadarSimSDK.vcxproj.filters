@@ -13,6 +13,15 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="RadarSDK">
+      <UniqueIdentifier>{93379e2a-5c3a-4b8b-8613-d35b04a0be40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RadarSDK\Include">
+      <UniqueIdentifier>{600e5db3-abfa-440e-9866-7350201fa294}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RadarSDK\Source">
+      <UniqueIdentifier>{372aaa5d-e55f-40ac-ab7c-efacdcda6f66}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RadarSimSDK.cpp">
@@ -33,6 +42,9 @@
     <ClCompile Include="CWinUDPSocket.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Halo24SDK\Source\MultiRadarClient.cpp">
+      <Filter>RadarSDK\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CHalo24SimIF.h">
@@ -52,6 +64,63 @@
     </ClInclude>
     <ClInclude Include="CWinUDPSocket.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Halo24SDK\include\BytePackOff.h">
+      <Filter>RadarSDK\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Halo24SDK\include\BytePackOn.h">
+      <Filter>RadarSDK\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Halo24SDK\include\ClientErrors.h">
+      <Filter>RadarSDK\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Halo24SDK\include\ExportSDK.h">
+      <Filter>RadarSDK\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Halo24SDK\include\Feature.h">
+      <Filter>RadarSDK\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Halo24SDK\include\FeatureManager.h">
+      <Filter>RadarSDK\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Halo24SDK\include\FeatureObserver.h">
+      <Filter>RadarSDK\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Halo24SDK\include\ImageClient.h">
+      <Filter>RadarSDK\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Halo24SDK\include\ImageClientObserver.h">
+      <Filter>RadarSDK\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Halo24SDK\include\MultiRadarClient.h">
+      <Filter>RadarSDK\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Halo24SDK\include\NavDefines.h">
+      <Filter>RadarSDK\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Halo24SDK\include\NavRadarProtocol.h">
+      <Filter>RadarSDK\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Halo24SDK\include\NavRadarSpoke.h">
+      <Filter>RadarSDK\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Halo24SDK\include\NavTypes.h">
+      <Filter>RadarSDK\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Halo24SDK\include\PPIController.h">
+      <Filter>RadarSDK\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Halo24SDK\include\RadarColourLookUpTable.h">
+      <Filter>RadarSDK\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Halo24SDK\include\TargetTrackingClient.h">
+      <Filter>RadarSDK\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Halo24SDK\include\TargetTrackingObserver.h">
+      <Filter>RadarSDK\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Halo24SDK\include\Version.h">
+      <Filter>RadarSDK\Include</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

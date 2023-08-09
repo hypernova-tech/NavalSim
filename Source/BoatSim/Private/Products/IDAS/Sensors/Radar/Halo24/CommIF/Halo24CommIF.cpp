@@ -38,9 +38,19 @@ uint32 UHalo24CommIF::Run()
 	return uint32();
 }
 
+void UHalo24CommIF::SetHostIF(IHalo24HostIF* p_val)
+{
+	pHostIF = p_val;
+}
+void UHalo24CommIF::SendSerial(INT8U* p_data, INT32U count)
+{
+	pUDPConnection->SendUDPData(p_data, count);
+}
+
 void UHalo24CommIF::BeginPlay()
 {
 	Super::BeginPlay();
+	
 	
 #if false
 	FString PipeName = TEXT("\\\\.\\pipe\\RadarSimPipe");
@@ -86,4 +96,16 @@ void UHalo24CommIF::SendRadarTrack()
 void UHalo24CommIF::Stop()
 {
 	IsStoped = true;
+}
+
+
+
+void UHalo24CommIF::OnReceivedConnectionData(void* connection, INT8U* p_data, INT32U count)
+{
+	Super::OnReceivedConnectionData(connection, p_data, count);
+
+	SUDPPacket* p_pack = (SUDPPacket*)p_data;
+
+
+
 }

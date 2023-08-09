@@ -7,12 +7,11 @@
 #include <Lib/Types/Primitives.h>
 #include <Networking.h>
 #include <Lib/Utils/CScanResult.h>
+#include <Lib/UDP/UdpConnection.h>
+#include <Products/IDAS/Sensors/Radar/Halo24/IHalo24HostIF.h>
 #include "Halo24CommIF.generated.h"
 
 
-struct SRadarTrack3DData {
-
-};
 
 
 /**
@@ -37,8 +36,8 @@ public:
 	virtual uint32 Run() override;
 
 
-	
-
+	void SetHostIF(IHalo24HostIF* p_val);
+	void SendSerial(INT8U* p_data, INT32U count);
 	
 
 private:
@@ -52,5 +51,16 @@ private:
 
 	TArray< SScanResult*> CurrentRequest;
 	FPlatformNamedPipe* pPipeInstance;
+
+	IHalo24HostIF* pHostIF;
+
+
+protected:
+	UPROPERTY(BlueprintReadWrite)
+		UUdpConnection* pUDPConnection;
+
+
+
+	virtual void OnReceivedConnectionData(void* connection, INT8U* p_data, INT32U count) override;
 	
 };

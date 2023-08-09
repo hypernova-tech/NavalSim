@@ -12,7 +12,7 @@ void CBoatSimListener::Init()
     pPipeReadThread =  new std::thread(&CBoatSimListener::ThreadFunction, this);
 
     // Wait for the thread to finish its execution
-    pPipeReadThread->join();
+    //pPipeReadThread->join();
 
    
 }
@@ -26,13 +26,20 @@ void CBoatSimListener::ThreadFunction() {
 
     while (true){
         // Veriyi okuyalım
-        RadarChannelDataProvider[0]->ReceivedData(p_buffer, size, bytes_read);
-      
-
-        if (bytes_read > 0) {
-            ProcessData(p_buffer, bytes_read);
-            std::cout << "Data Received " << bytes_read << std::endl;
+        if (RadarChannelDataProvider[0] == nullptr) {
+            continue;
         }
+        bytes_read = 0;
+        bool ret = RadarChannelDataProvider[0]->ReceivedData(p_buffer, size, bytes_read);
+      
+        if (ret) {
+            if (bytes_read > 0) {
+                ProcessData(p_buffer, bytes_read);
+                std::cout << "Data Received " << bytes_read << std::endl;
+            }
+        }
+
+    
     }
 }
 

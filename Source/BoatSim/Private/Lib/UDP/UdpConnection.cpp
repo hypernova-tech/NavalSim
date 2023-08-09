@@ -96,8 +96,14 @@ uint32 UUdpConnection::Run()
 			Socket->RecvFrom(ReceivedData.GetData(), ReceivedData.Num(), BytesRead, *targetAddr);
 
 	
+			if (IsPublishPacketEnabled) {
+				ASystemManagerBase::GetInstance()->GetSOAImplementor()->OnReceivedNewMessage(ReceivedData, BytesRead);
+			}
 			
-			ASystemManagerBase::GetInstance()->GetSOAImplementor()->OnReceivedNewMessage(ReceivedData, BytesRead);
+
+			for (auto connection : ConnectionDataReceivers) {
+				connection->OnReceivedConnectionData(this, ReceivedData.GetData(), ReceivedData.Num());
+			}
 		}
 	}
 	
@@ -145,6 +151,23 @@ bool UUdpConnection::SendUDPData(const INT8U* p_bytes, INT32U count)
 	return ret;
 }
 
+bool UUdpConnection::SendUDPData(const INT8U* p_bytes, INT32U count, INT32U port)
+{
+	FIPv4Endpoint end_point;
+
+	end_point = FIPv4Endpoint(RemoteAddress, port);
+
+	if (Socket == nullptr) {
+		return false;
+	}
+	INT32S bytes_sent = 0;
+	Socket->SendTo(p_bytes, count, bytes_sent, *end_point.ToInternetAddr());
+	bool ret = bytes_sent == count;
+
+	return ret;
+
+}
+
 INT16U UUdpConnection::GetLocalPort()
 {
 	return LocalPort;
@@ -159,4 +182,5 @@ FString UUdpConnection::GetRemoteIP()
 {
 	return IP;
 }
+
 

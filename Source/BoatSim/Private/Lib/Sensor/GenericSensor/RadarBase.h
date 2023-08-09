@@ -48,12 +48,22 @@ protected:
 		float FullScanPeriodSec = 1;
 
 
+	UPROPERTY(EditAnywhere)
+		FString RadarSerial = "";
+
+	UPROPERTY(EditAnywhere)
+		FString RadarUnlockKey = "";
 	
+	UPROPERTY(EditAnywhere)
+		int  ImageStreamCount = 2;
+
 
 	virtual void Run(float delta_time_sec) override;
 	virtual void InitSensor() override;
 	virtual void BeginPlay() override;
 
+	virtual void Scan();
+	virtual void RadarStateMachine();
 public:
 
 
@@ -74,6 +84,8 @@ public:
 
 	void SetFovHorizontalDeg(double val);
 	double GetFovHorizontalDeg();
+
+	
 
 
 private:

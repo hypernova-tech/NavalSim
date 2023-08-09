@@ -11,7 +11,7 @@ public:
 
 	void SetDataIF(IDataIF* p_val);
 	IDataIF* GetDataIF();
-
+	void SetConnectionIF(INT32U ind, IConnection* p_val);
 protected:
 
 	std::thread *pPipeReadThread;
@@ -21,6 +21,6 @@ protected:
 
 
 	void ProcessData(INT8U* p_data, INT32U len);
-	void SetConnectionIF(INT32U ind, IConnection* p_val);
+	
 };
 

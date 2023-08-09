@@ -1,4 +1,10 @@
 #include "CHalo24SimIF.h"
+using namespace Navico::Protocol;
+
+void CHalo24IF::InitSDK()
+{
+	pMultiRadarClient = tMultiRadarClient::GetInstance();
+}
 
 void CHalo24IF::RadarStart()
 {

@@ -2,16 +2,24 @@
 #include "Lib/Types/Primitives.h"
 #include "IDataIF.h"
 
+#include "Halo24SDK/include/MultiRadarClient.h"
+#include <MultiRadarClient.h>
+using namespace Navico::Protocol;
+
 class CHalo24IF:public IDataIF
 {
 
 public:
-
+	void InitSDK();
 	void RadarStart();
 	void RadarStop();
 	void AdjustRange(FLOAT32 range_meter);
 
 	virtual void OnReceivedData(INT8U* p_data, INT32U len) override;
+
+ 
+
+	tMultiRadarClient* pMultiRadarClient;
 
 };
 

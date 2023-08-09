@@ -5,7 +5,14 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Networking.h"
+#include "Lib/Types/Primitives.h"
+#include "Lib/UDP/IConnectionDataReceiver.h"
 #include "UdpConnection.generated.h"
+
+struct SUDPPacket {
+	INT32U Id;
+	INT32U Data[1024];
+};
 
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
@@ -17,6 +24,10 @@ public:
 	// Sets default values for this component's properties
 	UUdpConnection();
 	virtual ~UUdpConnection()  override;
+
+
+
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -33,18 +44,11 @@ protected:
 	uint32 Run() override; // Main data processing happens here
 	void Stop() override; // Clean up any memory you allocated here
 
-public:	
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	// Send UDP data
-	bool SendUDPData(const FString& Message);
-	bool SendUDPData(const INT8U* p_bytes, INT32U count);
+	TArray< IConnectionDataReceiver*> ConnectionDataReceivers;
 
-	INT16U GetLocalPort();
-	INT16U GetRemotePort();
-	FString GetRemoteIP();
-	static FString GetMacAddr();
+
+
 
 private:
 	// UDP thread object
@@ -60,6 +64,11 @@ private:
 	bool bRunThread;
 
 	ISocketSubsystem* SocketSubsystem;
+
+	
+
+	UPROPERTY(EditAnywhere, Category = "UDP")
+		bool IsPublishPacketEnabled = false;
 
 	UPROPERTY(EditAnywhere, Category = "UDP")
 		bool ReceiveEnabled = true;
@@ -88,6 +97,22 @@ private:
 	int32 BufferSize;
 	UPROPERTY(EditAnywhere, Category = "UDP")
 	FString IP = "192.168.50.232";
+
+	// Delegate to be called when data is received
+
+public:
+	// Called every frame
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
+	// Send UDP data
+	bool SendUDPData(const FString& Message);
+	bool SendUDPData(const INT8U* p_bytes, INT32U count);
+	bool SendUDPData(const INT8U* p_bytes, INT32U count, INT32U port);
+
+	INT16U GetLocalPort();
+	INT16U GetRemotePort();
+	FString GetRemoteIP();
+	static FString GetMacAddr();
 
 
 
