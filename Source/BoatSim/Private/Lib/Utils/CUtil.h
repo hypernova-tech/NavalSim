@@ -44,6 +44,8 @@ public:
 	static int StringToInt(FString& str);
 	static float StringToFloat(FString& str);
 	static double StringToFloat64(FString& str);
+	static FString CharToFString(const char* p_char);
+	static void FStringToAsciiChar(const FString& str, char* p_dest, INT32U dest_len);
 	static void ByteCopy(const FString& str, INT8U* p_dest, INT32U dest_capacity);
 	static void IPAddrCopy(const FString& str, INT8U* p_dest, INT32U dest_capacity);
 	static void MacAddrCopy(const FString& str, INT8U* p_dest, INT32U dest_capacity);
@@ -55,6 +57,5 @@ public:
 	static inline INT32U ReverseCopyBytes(INT8U* p_src, INT8U* p_dest, INT32U len);
 	static inline FLOAT32 GetRandomRange(FLOAT32 min_inclusive, FLOAT32 max_inclusive);
 
-	
 };
 

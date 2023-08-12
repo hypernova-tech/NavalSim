@@ -183,4 +183,9 @@ FString UUdpConnection::GetRemoteIP()
 	return IP;
 }
 
+void UUdpConnection::AddConnectionDataReceiver(IConnectionDataReceiver* p_rcv)
+{
+	ConnectionDataReceivers.Add(p_rcv);
+}
+
 

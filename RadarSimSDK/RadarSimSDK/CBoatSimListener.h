@@ -20,7 +20,7 @@ protected:
 
 
 
-	void ProcessData(INT8U* p_data, INT32U len);
+	void ProcessData(IConnection* p_if, INT8U* p_data, INT32U len);
 	
 };
 

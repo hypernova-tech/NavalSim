@@ -132,6 +132,7 @@
   <ItemGroup>
     <ClCompile Include="CBoatSimListener.cpp" />
     <ClCompile Include="CHalo24SimIF.cpp" />
+    <ClCompile Include="CHost.cpp" />
     <ClCompile Include="CWinUDPSocket.cpp" />
     <ClCompile Include="Halo24SDK\Source\MultiRadarClient.cpp" />
     <ClCompile Include="IConnection.cpp" />
@@ -141,6 +142,7 @@
   <ItemGroup>
     <ClInclude Include="CBoatSimListener.h" />
     <ClInclude Include="CHalo24SimIF.h" />
+    <ClInclude Include="CHost.h" />
     <ClInclude Include="CWinUDPSocket.h" />
     <ClInclude Include="Halo24SDK\include\BytePackOff.h" />
     <ClInclude Include="Halo24SDK\include\BytePackOn.h" />
@@ -163,6 +165,7 @@
     <ClInclude Include="Halo24SDK\include\Version.h" />
     <ClInclude Include="IConnection.h" />
     <ClInclude Include="IDataIF.h" />
+    <ClInclude Include="Lib\Types\Halo24Types.h" />
     <ClInclude Include="Lib\Types\Primitives.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

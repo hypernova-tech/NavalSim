@@ -2,6 +2,7 @@
 
 bool IConnection::Create(SConnectionArgs* p_args)
 {
+	Args = *p_args;
 	return false;
 }
 

@@ -23,8 +23,8 @@ enum EHalo24StateMachineStates
 	UnlockStart,
 	WaitUnlock,
 	Unlocked,
-	PoweredOn,
-	ScanedOn,
+	WaitPoweredOn,
+	WaitScanedOn,
 
 
 };
@@ -39,17 +39,30 @@ class AHalo24Radar : public ARadarBase, public IHalo24HostIF
 	
 
 protected:
+	bool IsKeysVerified = false;
+
+
 	virtual void BeginPlay() override;
 	EHalo24StateMachineStates Halo24StateMachine;
 	EHalo24States Halo24State;
 
 
 	virtual void RadarStateMachine() override;
-	virtual void OnRecievedCommand(SSIMSDKCommands* p_commands) override;
+	
 
 	void SendSerial();
 	UHalo24CommIF* pHalo24CommIF;
 
 	virtual void InitSensor() override;
+
+
+	void ValidateKeys(INT8U *p_keys, INT8U key_count);
+
+public :
+
+	virtual void OnRecievedMessage(SRadarSimSDKPacket* p_commands) override;
+	
+
+	
 	
 };

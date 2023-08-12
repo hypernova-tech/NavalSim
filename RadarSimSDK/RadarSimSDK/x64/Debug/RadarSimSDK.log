@@ -1,3 +1,4 @@
-﻿  CWinUDPSocket.cpp
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\CWinUDPSocket.cpp(71,17): warning C4305: 'return': truncation from 'int' to 'bool'
+﻿  CHost.cpp
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\CHost.cpp(65,24): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\CHost.cpp(69,143): warning C4267: 'argument': conversion from 'size_t' to 'unsigned int', possible loss of data
   RadarSimSDK.vcxproj -> C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\x64\Debug\RadarSimSDK.exe

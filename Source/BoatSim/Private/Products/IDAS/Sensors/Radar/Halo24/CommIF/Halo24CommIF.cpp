@@ -44,26 +44,23 @@ void UHalo24CommIF::SetHostIF(IHalo24HostIF* p_val)
 }
 void UHalo24CommIF::SendSerial(INT8U* p_data, INT32U count)
 {
-	pUDPConnection->SendUDPData(p_data, count);
+	auto pack = GetPacket();
+	pack->SetPayload(ESimSDKDataIDS::Serials, p_data, count);
+
+	pUDPConnection->SendUDPData((INT8U*)pack, pack->GetTransmitSize());
+	
+	RestorePacket(pack);
 }
 
 void UHalo24CommIF::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	
-#if false
-	FString PipeName = TEXT("\\\\.\\pipe\\RadarSimPipe");
-	pPipeInstance = new FPlatformNamedPipe();
-	if (pPipeInstance->Create(PipeName, true, false))
-	{
-		
-		bool ret = pPipeInstance->OpenConnection();
-		if (ret) {
-			UE_LOG(LogTemp, Warning, TEXT("Pipe server created and waiting for connections..."));
-		}
+	pUDPConnection->AddConnectionDataReceiver(this);
+	for (int i = 0; i < 16; i++) {
+		Packets.Add(new SRadarSimSDKPacket());
 	}
-#endif
+	
+
 
 	SenderThread = FRunnableThread::Create(this, *(GetOwner()->GetName()));
 	
@@ -98,14 +95,31 @@ void UHalo24CommIF::Stop()
 	IsStoped = true;
 }
 
+SRadarSimSDKPacket* UHalo24CommIF::UHalo24CommIF::GetPacket()
+{
+	SRadarSimSDKPacket* p_pack = Packets[0];
+	Packets.RemoveAt(0);
 
+	return p_pack;
+
+}
+void UHalo24CommIF::SendResponseAckNack(ESimSDKDataIDS id, bool is_ack)
+{
+	SRadarSimSDKPacket pack;
+	pack.SetResponse(id, is_ack);
+	pUDPConnection->SendUDPData((const INT8U*) & pack, pack.GetTransmitSize());
+}
+void UHalo24CommIF::RestorePacket(SRadarSimSDKPacket* p_pack)
+{
+	Packets.Add(p_pack);
+}
 
 void UHalo24CommIF::OnReceivedConnectionData(void* connection, INT8U* p_data, INT32U count)
 {
 	Super::OnReceivedConnectionData(connection, p_data, count);
-
-	SUDPPacket* p_pack = (SUDPPacket*)p_data;
-
+	SRadarSimSDKPacket* p_pack = (SRadarSimSDKPacket*)p_data;
+	p_pack->Init();
+	pHostIF->OnRecievedMessage(p_pack);
 
 
 }

@@ -38,7 +38,8 @@ public:
 
 	void SetHostIF(IHalo24HostIF* p_val);
 	void SendSerial(INT8U* p_data, INT32U count);
-	
+	SRadarSimSDKPacket* GetPacket();
+	void SendResponseAckNack(ESimSDKDataIDS id, bool is_ack);
 
 private:
 
@@ -62,5 +63,10 @@ protected:
 
 
 	virtual void OnReceivedConnectionData(void* connection, INT8U* p_data, INT32U count) override;
+
+	TArray<SRadarSimSDKPacket*> Packets;
+
+	
+	void RestorePacket(SRadarSimSDKPacket* p_pack);
 	
 };

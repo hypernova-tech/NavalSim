@@ -4,23 +4,38 @@
 
 #include "Halo24SDK/include/MultiRadarClient.h"
 #include <MultiRadarClient.h>
+#include "IConnection.h"
+#include <list>
+
 using namespace Navico::Protocol;
+
+struct SHaloEntry{
+	IConnection* pConnection;
+
+	
+};
 
 class CHalo24IF:public IDataIF
 {
 
+	
+
 public:
-	void InitSDK();
+	CHalo24IF();
+	void AddSDK(IConnection *p_conn);
 	void RadarStart();
 	void RadarStop();
 	void AdjustRange(FLOAT32 range_meter);
 
-	virtual void OnReceivedData(INT8U* p_data, INT32U len) override;
+	virtual void OnReceivedData(void* p_if, INT8U* p_data, INT32U len) override;
 
  
-
+private:
+	list<SHaloEntry*> Entries;
 	tMultiRadarClient* pMultiRadarClient;
-
+	
+	SHaloEntry* FindEntry(IConnection* p_con);
+	SRadarSimSDKPacket* pRes;
 };
 
 /*

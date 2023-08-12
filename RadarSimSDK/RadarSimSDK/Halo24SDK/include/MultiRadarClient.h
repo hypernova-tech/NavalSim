@@ -11,8 +11,10 @@
 #include <NavTypes.h>
 #include <ExportSDK.h>
 using namespace std;
+#include <vector>
 #include <list>
-
+#include "../../IConnection.h"
+#include "../../Lib/Types/Halo24Types.h"
 #define MAX_NUMBER_OF_RADARS 2
 enum EMultiRadarState
 {
@@ -104,15 +106,22 @@ public:
 struct SRadar
 {
 
+private:
+    bool IsUnlocked;
+
 public:
     string Serial;
     uint8_t UnlockKey[MAX_LOCKID_SIZE];
     char LockId[MAX_LOCKID_SIZE];
     int UnlockKeySize;
+    IConnection* pConnection;
+    INT16U DestPort;
+
 
     SRadar()
     {
         Serial = "";
+        IsUnlocked = false;
         UnlockKeySize = 0;
     }
 
@@ -127,6 +136,15 @@ public:
             return false;
         }
 
+    }
+
+    void SetIsUnlocked(bool val)
+    {
+        IsUnlocked = val;
+    }
+    bool GetIsUnlocked()
+    {
+        return IsUnlocked;
     }
 };
 
@@ -343,10 +361,7 @@ private:
     list<iUnlockStateObserver*> UnlockStateObserver;
     iUnlockKeySupplier* pUnlockKeySupplier;
 
-    list<SRadar*> Radars;
-
-    
-
+    vector<SRadar*> Radars;
 
 
     void StateMachine();
@@ -355,8 +370,14 @@ private:
 
 public:
     void ExternalUpdate();
-    void RegisterRadar(const char *serial_number);
+    void RegisterRadar(IConnection* p_conn, const char *serial_number);
     SRadar* FindRadar(const char* serial_number);
+    SRadar* GetRadar(INT32U ind);
+    SRadar* FindRadarFromConnection(IConnection* p_conn);
+    void HandleReponse(IConnection* p_conn, SCommandAckNackResponse* p_res);
+    
+
+    
 
 };
 

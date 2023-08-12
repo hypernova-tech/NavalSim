@@ -114,6 +114,8 @@ public:
 	FString GetRemoteIP();
 	static FString GetMacAddr();
 
+	void AddConnectionDataReceiver(IConnectionDataReceiver* p_rcv);
+
 
 
 };

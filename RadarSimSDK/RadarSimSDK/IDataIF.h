@@ -4,6 +4,6 @@ class IDataIF
 {
 
 public:
-	virtual void OnReceivedData(INT8U* p_data, INT32U len);
+	virtual void OnReceivedData(void *p_if, INT8U* p_data, INT32U len);
 };
 

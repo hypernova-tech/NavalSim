@@ -439,6 +439,9 @@ double CUtil::StringToFloat64(FString& str)
 
     return ret;
 }
+
+
+
 template <typename T>
 T* CUtil::FindComponent(AActor* p_parent) 
 {
@@ -550,4 +553,18 @@ inline INT32U CUtil::ReverseCopyBytes(INT8U* p_src, INT8U* p_dest, INT32U len)
 FLOAT32 CUtil::GetRandomRange(FLOAT32 min_inclusive, FLOAT32 max_inclusive)
 {
     return FMath::RandRange(min_inclusive, max_inclusive);
+}
+
+FString CUtil::CharToFString(const char* p_char)
+{
+    FString str = FString( p_char);
+    return str;
+}
+
+void CUtil::FStringToAsciiChar(const FString& str, char *p_dest, INT32U dest_len)
+{
+    const char* p_char_arr = TCHAR_TO_ANSI(*str);
+    INT32U len = dest_len <= strlen(p_char_arr) ? dest_len : strlen(p_char_arr);
+    memcpy(p_dest, p_char_arr, len);
+
 }

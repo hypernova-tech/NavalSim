@@ -34,12 +34,11 @@ void CBoatSimListener::ThreadFunction() {
       
         if (ret) {
             if (bytes_read > 0) {
-                ProcessData(p_buffer, bytes_read);
+                ProcessData(RadarChannelDataProvider[0], p_buffer, bytes_read);
                 std::cout << "Data Received " << bytes_read << std::endl;
             }
         }
 
-    
     }
 }
 
@@ -53,10 +52,10 @@ IDataIF* CBoatSimListener::GetDataIF()
     return pDataIF;
 }
 
-void CBoatSimListener::ProcessData(INT8U* p_data, INT32U len)
+void CBoatSimListener::ProcessData(IConnection *p_if, INT8U* p_data, INT32U len)
 {
     if (pDataIF != nullptr) {
-        pDataIF->OnReceivedData(p_data, len);
+        pDataIF->OnReceivedData(p_if, p_data, len);
     }
 
 }

@@ -2,32 +2,19 @@
 //
 
 #include <iostream>
-#include "CBoatSimListener.h"
-#include "CHalo24SimIF.h"
-#include "CWinUDPSocket.h"
-#include "Halo24SDK/include/MultiRadarClient.h"
+#include "CHost.h"
 
-CBoatSimListener *pBoatSimListener;
-CHalo24IF* pHalo24SimSDK;
-IConnection* pRadarStreamConnection;
-
-
+CHost* pHost;
 
 int main()
 {
-    pHalo24SimSDK = new CHalo24IF();
-    pBoatSimListener = new CBoatSimListener();
-    
-    pRadarStreamConnection = new CWinUDPSocket();
-    SConnectionArgs args = { "127.0.0.1",4143 };
-    pRadarStreamConnection->Create(&args);
+
+    pHost = new CHost();
+    pHost->Init();
 
 
-    pBoatSimListener->SetDataIF(pHalo24SimSDK);
-    pBoatSimListener->SetConnectionIF(0, pRadarStreamConnection);
-    pBoatSimListener->Init();
 
-    tMultiRadarClient::GetInstance(); //initilizate Multiradar
+   
 
     
     while (true) {

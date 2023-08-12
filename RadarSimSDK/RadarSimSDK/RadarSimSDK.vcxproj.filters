@@ -45,6 +45,9 @@
     <ClCompile Include="Halo24SDK\Source\MultiRadarClient.cpp">
       <Filter>RadarSDK\Source</Filter>
     </ClCompile>
+    <ClCompile Include="CHost.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CHalo24SimIF.h">
@@ -121,6 +124,12 @@
     </ClInclude>
     <ClInclude Include="Halo24SDK\include\Version.h">
       <Filter>RadarSDK\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\Types\Halo24Types.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CHost.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

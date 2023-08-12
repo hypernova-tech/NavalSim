@@ -9,6 +9,8 @@
 CWinUDPSocket::CWinUDPSocket() : m_socket(INVALID_SOCKET) {}
 
 bool CWinUDPSocket::Create(SConnectionArgs* p_args) {
+
+    IConnection::Create(p_args);
     SConnectionArgs* connArgs = p_args;
 
   
@@ -57,12 +59,14 @@ bool CWinUDPSocket::SendData(INT8U* p_data, INT32U count, INT16U remote_port) {
     dest_address.sin_port = htons(remote_port);
     dest_address.sin_addr = m_address.sin_addr; // Use the same IP as before.
 
+#if false
     int sendResult = sendto(m_socket, reinterpret_cast<const char*>(p_data), count, 0,
         (struct sockaddr*)&dest_address, sizeof(dest_address));
     if (sendResult == SOCKET_ERROR) {
         std::cerr << "Data send failed: " << WSAGetLastError() << std::endl;
         return false;
     }
+#endif
 
     // send the message
     if (sendto(m_socket, (const char*)p_data, count, 0, (sockaddr*)&dest_address, sizeof(sockaddr_in)) == SOCKET_ERROR)
@@ -88,6 +92,7 @@ bool CWinUDPSocket::ReceivedData(INT8U* p_dest, INT32U dest_size, INT32U& read_c
         return false;
     }
     else {
+        read_count = recv_len;
         std::cout << (char*)p_dest;
     }
     return true;
