@@ -1,6 +1,7 @@
 #include "CHost.h"
 #include <iostream>
 
+CHost* CHost::pInstance = nullptr;
 
 void CHost::Init()
 {
@@ -22,10 +23,13 @@ void CHost::Init()
 
 	pHalo24SimSDK->AddSDK(pRadarStreamConnection);
 
+	
+
 
 
 
 }
+
 
 void CHost::ThreadFunction()
 {
@@ -44,6 +48,8 @@ void CHost::ThreadFunction()
 	
 
 	int RadarCount = 0;
+
+	tMultiRadarClient::GetInstance()->Connect();
 
 	while (true) {
 

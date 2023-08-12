@@ -17,11 +17,15 @@ class CHost:public iRadarListObserver, public iUnlockStateObserver
 {
 
 private:
+	CHost()
+	{
+	}
 	void ThreadFunction();
 	CBoatSimListener* pBoatSimListener;
 	CHalo24IF* pHalo24SimSDK;
 	IConnection* pRadarStreamConnection;
-	CHost* pHost;
+	static CHost* pInstance;
+
 public:
 	std::thread* pHostThread;
 
@@ -35,5 +39,14 @@ public:
 
 
 	void StateMachine();
+
+	static CHost* GetInstance()
+	{
+		if (pInstance == nullptr)
+			pInstance = new CHost();
+		}
+
+		return pInstance;
+	}
 };
 

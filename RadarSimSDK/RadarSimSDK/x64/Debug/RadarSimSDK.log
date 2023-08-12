@@ -1,4 +1,11 @@
 ﻿  CHost.cpp
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\CHost.cpp(65,24): warning C4018: '<': signed/unsigned mismatch
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\CHost.cpp(69,143): warning C4267: 'argument': conversion from 'size_t' to 'unsigned int', possible loss of data
-  RadarSimSDK.vcxproj -> C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\x64\Debug\RadarSimSDK.exe
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\CHost.cpp(75,24): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\CHost.cpp(79,143): warning C4267: 'argument': conversion from 'size_t' to 'unsigned int', possible loss of data
+  MultiRadarClient.cpp
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\Halo24SDK\Source\MultiRadarClient.cpp(112,53): warning C4267: '=': conversion from 'size_t' to 'INT8U', possible loss of data
+  RadarSimSDK.cpp
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\RadarSimSDK.cpp(12,24): error C2248: 'CHost::CHost': cannot access private member declared in class 'CHost'
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\CHost.h(20,2): message : see declaration of 'CHost::CHost'
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\CHost.h(16,7): message : see declaration of 'CHost'
+  Generating Code...
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\Halo24SDK\Source\MultiRadarClient.cpp(81): warning C4715: 'Navico::Protocol::tMultiRadarClient::SetUnlockKey': not all control paths return a value

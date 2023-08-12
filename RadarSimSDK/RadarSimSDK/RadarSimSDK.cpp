@@ -9,8 +9,8 @@ CHost* pHost;
 int main()
 {
 
-    pHost = new CHost();
-    pHost->Init();
+    tMultiRadarClient::GetInstance()->Connect();
+  
 
 
 

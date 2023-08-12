@@ -1,6 +1,7 @@
 #include "MultiRadarClient.h"
 #include "../../Lib/Types/Halo24Types.h"
 #include <thread>
+#include "../../CHost.h"
 
 using namespace Navico::Protocol;
 
@@ -22,7 +23,8 @@ tMultiRadarClient* tMultiRadarClient::GetInstance()
 
 int tMultiRadarClient::Connect()
 {
-    return 0;
+    CHost::GetInstance()->Init();
+    return 1;
 }
 
 bool tMultiRadarClient::Disconnect()
