@@ -33,8 +33,10 @@ void AHalo24Radar::RadarStateMachine()
 		}
 		break;
 	case Unlocked:
-		pHalo24CommIF->SendResponseAckNack(ESimSDKDataIDS::UnlockKeys, true);
-		next_state = EHalo24StateMachineStates::WaitPoweredOn;
+		pHalo24CommIF->SendResponseAckNack(ESimSDKDataIDS::UnlockKeys, Serial, true);
+		next_state = EHalo24StateMachineStates::WaitImageStreamConnect;
+		break;
+	case WaitImageStreamConnect:
 		break;
 	case WaitPoweredOn:
 		break;
@@ -53,6 +55,36 @@ void AHalo24Radar::OnRecievedMessage(SRadarSimSDKPacket* p_pack)
 		ValidateKeys(p_keys->UnlockKey, p_keys->UnlockKeyLen);
 	}
 
+	if (p_pack->Header.PacketType == ESimSDKDataIDS::ConnectRadar) {
+		SConnectRadar* p_connect_args = (SConnectRadar*)p_pack->Payload;
+		if (strcmp((char*)p_connect_args->SerialData.SerialKey, Serial) == 0) {
+			IsImageStreamConnected[p_connect_args->ImageStreamNo] = true;
+			pHalo24CommIF->SendResponseAckNack(ESimSDKDataIDS::ConnectRadar, Serial, true, p_connect_args->ImageStreamNo);
+		}
+	}
+
+	if (p_pack->Header.PacketType == ESimSDKDataIDS::DisconnectRadar) {
+		SConnectRadar* p_connect_args = (SConnectRadar*)p_pack->Payload;
+		if (strcmp((char*)p_connect_args->SerialData.SerialKey, Serial) == 0) {
+			IsImageStreamConnected[p_connect_args->ImageStreamNo] = false;
+			pHalo24CommIF->SendResponseAckNack(ESimSDKDataIDS::DisconnectRadar, Serial, true);
+		}
+	}
+
+	if (p_pack->Header.PacketType == ESimSDKDataIDS::PowerControl) {
+		SPowerControl* p_connect_args = (SPowerControl*)p_pack->Payload;
+		if (strcmp((char*)p_connect_args->SerialData.SerialKey, Serial) == 0) {
+
+			if (p_connect_args->PowerOn) {
+				IsPoweredOn = true;
+			}
+			else {
+				IsPoweredOn = false;
+			}
+
+			pHalo24CommIF->SendResponseAckNack(ESimSDKDataIDS::PowerControl, Serial, true);
+		}
+	}
 }
 
 void AHalo24Radar::SendSerial()

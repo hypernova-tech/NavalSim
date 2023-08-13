@@ -48,6 +48,12 @@
     <ClCompile Include="CHost.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Halo24SDK\include\ImageClient.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Halo24SDK\Source\ImageClient.cpp">
+      <Filter>RadarSDK\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CHalo24SimIF.h">

@@ -1,7 +1,14 @@
 #include "CHost.h"
 #include <iostream>
 
+
+#include "Halo24SDK/include/ImageClient.h"
+using namespace Navico::Protocol::NRP;
+
+
 CHost* CHost::pInstance = nullptr;
+
+
 
 void CHost::Init()
 {
@@ -23,6 +30,8 @@ void CHost::Init()
 
 	pHalo24SimSDK->AddSDK(pRadarStreamConnection);
 
+
+
 	
 
 
@@ -39,47 +48,143 @@ void CHost::ThreadFunction()
 	char radars[2][MAX_SERIALNUMBER_SIZE];
 	char radars_unlockkey[2][MAX_UNLOCKKEY_SIZE];
 
+	
+
+
 	memset(radars_unlockkey, 0, sizeof(radars_unlockkey));
 
 	strcpy(radars_unlockkey[0], "123456789");
 	strcpy(radars_unlockkey[1], "987654321");
 
 
+#if true
+
+	tImageClient* ImageClients[2];
+
+
+#endif
+
 	
 
 	int RadarCount = 0;
 
-	tMultiRadarClient::GetInstance()->Connect();
+	EHostState HostState = EHostState::GetRadars;
 
 	while (true) {
 
 		std::this_thread::sleep_for(std::chrono::milliseconds(10));
 		tMultiRadarClient::GetInstance()->ExternalUpdate();
-		StateMachine();
+		
 
-	
-		while (true) {
-			std::this_thread::sleep_for(std::chrono::milliseconds(10));
 
-			RadarCount = tMultiRadarClient::GetInstance()->GetRadars(radars, 2);
+		auto curr_state = HostState;
+		auto next_state = curr_state;
 
-			if (RadarCount >= 1) {
-				break;
-			}
-		}
+		switch (HostState) {
+			case EHostState::GetRadars:
+				{
+					RadarCount = tMultiRadarClient::GetInstance()->GetRadars(radars, 2);
 
-		for (INT32U i = 0; i < RadarCount; i++) {
-			auto *p_radar = tMultiRadarClient::GetInstance()->FindRadar(radars[i]);
-			
-			if (p_radar && !p_radar->GetIsUnlocked()) {
-				auto ret = tMultiRadarClient::GetInstance()->UnlockRadar(radars[i], (const uint8_t * )radars_unlockkey[i], strlen(radars_unlockkey[i]), 50);
-				if (ret) {
-					cout << "Radar Unclocked " << string(radars[i]) << endl;
+					if (RadarCount >= 1) {
+						next_state = EHostState::UnlockRadars;
+						break;
+					}
 				}
 
-			}
-			
+				break;
+
+			case EHostState::UnlockRadars:
+
+				{
+					bool is_all_unlocked = true;
+
+					for (INT32U i = 0; i < RadarCount; i++) {
+				
+						auto* p_radar = tMultiRadarClient::GetInstance()->FindRadar(radars[i]);
+
+						if (p_radar && !p_radar->GetIsUnlocked()) {
+							auto ret = tMultiRadarClient::GetInstance()->UnlockRadar(radars[i], (const uint8_t*)radars_unlockkey[i], strlen(radars_unlockkey[i]), 50);
+							if (ret) {
+								cout << "Radar Unclocked " << string(radars[i]) << endl;
+							}
+							else {
+								is_all_unlocked = false;
+							}
+
+						}
+
+					}
+
+					if (is_all_unlocked) {
+						next_state = EHostState::InitImageClients;
+					}
+				}
+			case EHostState::InitImageClients:
+				{
+					for (int i = 0; i < 2; i++) {
+						ImageClients[i] = new tImageClient();
+						auto* p_radar = tMultiRadarClient::GetInstance()->FindRadar(radars[i]);
+						if (p_radar != nullptr) {
+							p_radar->pImageClient = ImageClients[i];
+						}
+					}
+
+					next_state = EHostState::ConnectRadars;
+				}
+				break;
+			case EHostState::ConnectRadars:
+				{
+					
+					for (INT32U i = 0; i < RadarCount; i++) {
+						auto* p_radar = tMultiRadarClient::GetInstance()->FindRadar(radars[i]);
+
+						for (int stream = 0; stream < 2; stream++) {
+							if (p_radar && !p_radar->GetIsImageStreamConnected(stream)) {
+								auto ret = p_radar->pImageClient->Connect(p_radar->Serial.c_str(), stream);
+								if (ret == 0) {
+									cout << "connected to stream sent " << string(radars[i]) <<"stream"<< stream<< endl;
+								}
+								std::this_thread::sleep_for(std::chrono::milliseconds(10));
+								
+
+							}
+						}
+
+					}
+
+
+					bool is_all_radars_connected = true;
+					int success_cnt = 0;
+
+					for (INT32U i = 0; i < RadarCount; i++) {
+						auto* p_radar = tMultiRadarClient::GetInstance()->FindRadar(radars[i]);
+
+						for (int stream = 0; stream < 2; stream++) {
+							if (p_radar){
+								if (p_radar->GetIsImageStreamConnected(stream)) {
+									success_cnt++;
+								}
+								else {
+									is_all_radars_connected = false;
+								}
+							}
+						}
+					}
+
+					if (is_all_radars_connected && success_cnt > 0) {
+						cout << "All Stream Connected " << endl;
+						next_state = EHostState::PeriodicUpdate;
+					}
+				}
+				break;
+
+
+			case EHostState::PeriodicUpdate:
+				break;
 		}
+
+		HostState = next_state;
+	
 
 	}
 }
@@ -95,5 +200,16 @@ void CHost::UpdateUnlockState(const char* pSerialNumber, int lockState)
 
 void CHost::StateMachine()
 {
+
+}
+
+CHost* CHost::GetInstance()
+{
+	
+	if (pInstance == nullptr) {
+		pInstance = new CHost();
+	}
+
+	return pInstance;
 
 }

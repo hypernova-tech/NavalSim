@@ -16,6 +16,8 @@ using namespace std;
 #include "../../IConnection.h"
 #include "../../Lib/Types/Halo24Types.h"
 #define MAX_NUMBER_OF_RADARS 2
+#include "ImageClient.h"
+using namespace Navico::Protocol::NRP;
 enum EMultiRadarState
 {
     Idle,
@@ -115,8 +117,8 @@ public:
     char LockId[MAX_LOCKID_SIZE];
     int UnlockKeySize;
     IConnection* pConnection;
-    INT16U DestPort;
-
+ 
+    tImageClient* pImageClient;
 
     SRadar()
     {
@@ -146,6 +148,30 @@ public:
     {
         return IsUnlocked;
     }
+
+    bool GetIsImageStreamConnected(int stream_no);
+
+    template<typename T>
+    void SendPacket(ESimSDKDataIDS id, T* p_data) {
+        SRadarSimSDKPacket pack;
+        pack.PrepareMessage<T>(id, p_data);
+        pConnection->SendData((INT8U*)&pack, pack.GetTransmitSize(), pConnection->GetRemotePort());
+    }
+
+    template<typename T>
+    void SendPacket(ESimSDKDataIDS id, char*p_serial, T* p_data) {
+        SRadarSimSDKPacket pack;
+        SSerialData* p_serial_data = (SSerialData*)p_data;
+
+        strcpy((char*)p_serial_data->SerialKey, p_serial);
+        p_serial_data->SerialLen = strlen(p_serial);
+
+        pack.PrepareMessage<T>(id, p_data);
+        pConnection->SendData((INT8U*)&pack, pack.GetTransmitSize(), pConnection->GetRemotePort());
+    }
+
+
+   
 };
 
 

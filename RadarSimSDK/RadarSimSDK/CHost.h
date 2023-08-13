@@ -12,6 +12,15 @@
 
 using namespace  Navico::Protocol;
 
+enum EHostState
+{
+	GetRadars,
+	UnlockRadars,
+	InitImageClients,
+	ConnectRadars,
+	PeriodicUpdate,
+};
+
 
 class CHost:public iRadarListObserver, public iUnlockStateObserver
 {
@@ -40,13 +49,7 @@ public:
 
 	void StateMachine();
 
-	static CHost* GetInstance()
-	{
-		if (pInstance == nullptr)
-			pInstance = new CHost();
-		}
-
-		return pInstance;
-	}
+	static CHost* GetInstance();
+	
 };
 

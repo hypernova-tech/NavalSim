@@ -2,7 +2,9 @@
 #include "../../Lib/Types/Halo24Types.h"
 #include <thread>
 #include "../../CHost.h"
-
+#include "ImageClient.h"
+#include "ClientErrors.h"
+using namespace Navico::Protocol::NRP;
 using namespace Navico::Protocol;
 
 tMultiRadarClient* tMultiRadarClient::pInstance = nullptr;
@@ -72,9 +74,11 @@ int tMultiRadarClient::SetUnlockKey(const char* pSerialNumber, const uint8_t* pU
         for (auto unlock_state_observer : UnlockStateObserver) {
             unlock_state_observer->UpdateUnlockState(p_radar->Serial.c_str(), 1); //todo fixme
         }
+
+        return 0;
     }
     else {
-        return -1;
+        return eErrors::ETimedOut;
     }
   
    
@@ -259,6 +263,9 @@ void Navico::Protocol::tMultiRadarClient::HandleReponse(IConnection* p_conn, SCo
             p_radar->SetIsUnlocked(false);
         }
         break;
+    case ESimSDKDataIDS::ConnectRadar:
+        p_radar->pImageClient->SetIsStreamConnected(p_res->StreamNo, true);
+        break;
     default:
         break;
     }
@@ -291,4 +298,11 @@ void Navico::Protocol::tMultiRadarClient::StateMachine()
     }
 
     MultiRadarState = curr_state;
+}
+
+bool Navico::Protocol::SRadar::GetIsImageStreamConnected(int stream_no)
+{
+    tImageClient* p_client = (tImageClient*)pImageClient;
+    
+    return p_client->GetIsStreamConnected(stream_no);
 }

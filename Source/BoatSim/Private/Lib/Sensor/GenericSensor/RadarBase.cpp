@@ -72,7 +72,8 @@ void ARadarBase::BeginPlay()
 {
 	CUtil::DebugLog("ARadarBase Beginplay");
 	Super::BeginPlay();
-
+	
+	CUtil::FStringToAsciiChar(RadarSerial, Serial, sizeof(Serial));
 }
 
 void ARadarBase::InitSensor()

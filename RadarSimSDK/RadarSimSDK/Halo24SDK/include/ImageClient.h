@@ -13,6 +13,8 @@
 #include "ExportSDK.h"
 
 #include <memory>
+using namespace std;
+#include <list>
 
 
 namespace Navico {
@@ -22,6 +24,8 @@ namespace NRP {
 class tImageClientImpl;
 class tFeatureManager;
 class iFeatureObserver;
+
+
 
 //-----------------------------------------------------------------------------
 //! Class for controlling the state of the radar plus receiving spokes and state
@@ -611,6 +615,34 @@ private:
 
     tFeatureManager*   m_pFeatureManager;
     tImageClientImpl*  m_pImpl;
+    
+
+
+
+
+
+
+
+
+    /////////////////////////////////////////////////////////////////
+    //////////////// HYPERNOVA METHODS //////////////////////////////
+
+    char ConnectedSerialNumber[128];
+    
+
+
+    
+    list<iImageClientStateObserver*> ClientStateObserver;
+    list<iImageClientSpokeObserver*> CientSpokeObservers;
+    list<iFeatureObserver*>          ClientFeatureObservers;
+
+
+    bool IsImageStreamConnected[2] = { false, false };
+
+
+public:
+    bool GetIsStreamConnected(int stream_no);
+    void SetIsStreamConnected(int stream_no, bool val);
 };
 
 //-----------------------------------------------------------------------------

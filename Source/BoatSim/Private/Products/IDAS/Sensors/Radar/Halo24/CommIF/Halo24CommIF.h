@@ -39,7 +39,7 @@ public:
 	void SetHostIF(IHalo24HostIF* p_val);
 	void SendSerial(INT8U* p_data, INT32U count);
 	SRadarSimSDKPacket* GetPacket();
-	void SendResponseAckNack(ESimSDKDataIDS id, bool is_ack);
+	void SendResponseAckNack(ESimSDKDataIDS id, char *p_serial, bool is_ack, INT8U stream_no = 0);
 
 private:
 

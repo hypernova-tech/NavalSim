@@ -51,6 +51,9 @@ protected:
 	UPROPERTY(EditAnywhere)
 		FString RadarSerial = "";
 
+	char  Serial[128];
+	
+
 	UPROPERTY(EditAnywhere)
 		FString RadarUnlockKey = "";
 	

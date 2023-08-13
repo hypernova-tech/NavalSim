@@ -103,10 +103,11 @@ SRadarSimSDKPacket* UHalo24CommIF::UHalo24CommIF::GetPacket()
 	return p_pack;
 
 }
-void UHalo24CommIF::SendResponseAckNack(ESimSDKDataIDS id, bool is_ack)
+void UHalo24CommIF::SendResponseAckNack(ESimSDKDataIDS id, char* p_serial, bool is_ack, INT8U stream_no)
 {
 	SRadarSimSDKPacket pack;
-	pack.SetResponse(id, is_ack);
+	pack.SetResponse(id, p_serial, is_ack, stream_no);
+
 	pUDPConnection->SendUDPData((const INT8U*) & pack, pack.GetTransmitSize());
 }
 void UHalo24CommIF::RestorePacket(SRadarSimSDKPacket* p_pack)

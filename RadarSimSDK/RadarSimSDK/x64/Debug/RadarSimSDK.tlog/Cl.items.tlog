@@ -2,6 +2,8 @@ C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\CBoatSimLi
 C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\CHalo24SimIF.cpp;C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\x64\Debug\CHalo24SimIF.obj
 C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\CHost.cpp;C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\x64\Debug\CHost.obj
 C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\CWinUDPSocket.cpp;C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\x64\Debug\CWinUDPSocket.obj
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\Halo24SDK\include\ImageClient.cpp;C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\x64\Debug\ImageClient.obj
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\Halo24SDK\Source\ImageClient.cpp;C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\x64\Debug\ImageClient.obj
 C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\Halo24SDK\Source\MultiRadarClient.cpp;C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\x64\Debug\MultiRadarClient.obj
 C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\IConnection.cpp;C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\x64\Debug\IConnection.obj
 C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\IDataIF.cpp;C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\x64\Debug\IDataIF.obj

@@ -134,6 +134,8 @@
     <ClCompile Include="CHalo24SimIF.cpp" />
     <ClCompile Include="CHost.cpp" />
     <ClCompile Include="CWinUDPSocket.cpp" />
+    <ClCompile Include="Halo24SDK\include\ImageClient.cpp" />
+    <ClCompile Include="Halo24SDK\Source\ImageClient.cpp" />
     <ClCompile Include="Halo24SDK\Source\MultiRadarClient.cpp" />
     <ClCompile Include="IConnection.cpp" />
     <ClCompile Include="IDataIF.cpp" />
