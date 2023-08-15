@@ -42,7 +42,7 @@ void CHost::Init()
 
 void CHost::ThreadFunction()
 {
-
+	double time = 0;
 	tMultiRadarClient::GetInstance()->AddRadarListObserver(this);
 	tMultiRadarClient::GetInstance()->AddUnlockStateObserver(this);
 	char radars[2][MAX_SERIALNUMBER_SIZE];
@@ -55,6 +55,8 @@ void CHost::ThreadFunction()
 
 	strcpy(radars_unlockkey[0], "123456789");
 	strcpy(radars_unlockkey[1], "987654321");
+
+
 
 
 #if true
@@ -74,7 +76,7 @@ void CHost::ThreadFunction()
 
 		std::this_thread::sleep_for(std::chrono::milliseconds(10));
 		tMultiRadarClient::GetInstance()->ExternalUpdate();
-		
+		time += 10e-3;
 
 
 		auto curr_state = HostState;
@@ -173,13 +175,119 @@ void CHost::ThreadFunction()
 
 					if (is_all_radars_connected && success_cnt > 0) {
 						cout << "All Stream Connected " << endl;
-						next_state = EHostState::PeriodicUpdate;
+						next_state = EHostState::SetFastScanMode;
 					}
 				}
 				break;
+			case EHostState::SetFastScanMode:
+			{
+				for (INT32U i = 0; i < RadarCount; i++) {
+					auto* p_radar = tMultiRadarClient::GetInstance()->FindRadar(radars[i]);
+					p_radar->pImageClient->SetFastScanMode(21);
+				}
 
+				next_state = EHostState::SetScanerRPM;
+				std::this_thread::sleep_for(std::chrono::milliseconds(10));
+			}
+			break;
+			case EHostState::SetScanerRPM:
+			{
+				for (INT32U i = 0; i < RadarCount; i++) {
+					auto* p_radar = tMultiRadarClient::GetInstance()->FindRadar(radars[i]);
+					p_radar->pImageClient->SetScannerRPM(601);
+				}
+
+				next_state = EHostState::PowerOn;
+				std::this_thread::sleep_for(std::chrono::milliseconds(10));
+			}
+			break;
+			case EHostState::PowerOn:
+			{
+				for (INT32U i = 0; i < RadarCount; i++) {
+					auto* p_radar = tMultiRadarClient::GetInstance()->FindRadar(radars[i]);
+					p_radar->pImageClient->SetPower(true);
+				}
+
+				next_state = EHostState::TransmitOn;
+				std::this_thread::sleep_for(std::chrono::milliseconds(10));
+			}
+			break;
+
+			case EHostState::TransmitOn:
+			{
+				for (INT32U i = 0; i < RadarCount; i++) {
+					auto* p_radar = tMultiRadarClient::GetInstance()->FindRadar(radars[i]);
+					p_radar->pImageClient->SetTransmit(true);
+				}
+
+				next_state = EHostState::SetGain;
+				std::this_thread::sleep_for(std::chrono::milliseconds(10));
+			}
+			break;
+
+			case EHostState::SetGain:
+			{
+				for (INT32U i = 0; i < RadarCount; i++) {
+					auto* p_radar = tMultiRadarClient::GetInstance()->FindRadar(radars[i]);
+					p_radar->pImageClient->SetGain(eUserGainManualAuto::eUserGainAuto, 5);
+				}
+
+				next_state = EHostState::SetRange;
+				std::this_thread::sleep_for(std::chrono::milliseconds(10));
+			}
+			break;
+
+			case EHostState::SetRange:
+			{
+				for (INT32U i = 0; i < RadarCount; i++) {
+					auto* p_radar = tMultiRadarClient::GetInstance()->FindRadar(radars[i]);
+					p_radar->pImageClient->SetRange(8500);
+				}
+
+				next_state = EHostState::SetSeaClutter;
+				std::this_thread::sleep_for(std::chrono::milliseconds(10));
+			}
+			break;
+
+			case EHostState::SetSeaClutter:
+			{
+				for (INT32U i = 0; i < RadarCount; i++) {
+					auto* p_radar = tMultiRadarClient::GetInstance()->FindRadar(radars[i]);
+					p_radar->pImageClient->SetSeaClutter(eUserGainManualAuto::eUserGainAutoOffshore, 25);
+				}
+
+				next_state = EHostState::SetRain;
+				std::this_thread::sleep_for(std::chrono::milliseconds(10));
+			}
+			break;
+
+			case EHostState::SetRain:
+			{
+				for (INT32U i = 0; i < RadarCount; i++) {
+					auto* p_radar = tMultiRadarClient::GetInstance()->FindRadar(radars[i]);
+					p_radar->pImageClient->SetRain(41);
+				}
+
+				next_state = EHostState::PeriodicUpdate;
+				std::this_thread::sleep_for(std::chrono::milliseconds(10));
+			}
+			break;
+
+
+			
+			
+			
 
 			case EHostState::PeriodicUpdate:
+
+				for (INT32U i = 0; i < RadarCount; i++) {
+					auto* p_radar = tMultiRadarClient::GetInstance()->FindRadar(radars[i]);
+					p_radar->pImageClient->SetRange(5000 + 1000*sin(2*3.14* 0.2f * time));
+				}
+
+				
+
+
 				break;
 		}
 

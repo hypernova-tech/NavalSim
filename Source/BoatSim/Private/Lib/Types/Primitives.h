@@ -6,6 +6,17 @@
  * 
  */
 
+#if defined(_MSC_VER)  // MSVC compiler
+#define BYTE_ALIGNED_BEGIN  __pragma(pack(push, 1))
+#define BYTE_ALIGNED_END    __pragma(pack(pop))
+#elif defined(__GNUC__)  // GCC compiler
+#define BYTE_ALIGNED_BEGIN
+#define BYTE_ALIGNED_END    __attribute__((aligned(1)))
+#else
+#error "Unsupported compiler"
+#endif
+
+
 typedef bool BOOLEAN;
 
 typedef char INT8S;

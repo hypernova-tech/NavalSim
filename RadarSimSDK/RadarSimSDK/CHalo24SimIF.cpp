@@ -56,6 +56,15 @@ void CHalo24IF::OnReceivedData(void* p_if, INT8U* p_data, INT32U len)
 		}
 	
 		break;
+
+	case ESimSDKDataIDS::RadarState:
+		pMultiRadarClient->HandleRadarState(p_conn, (SRadarState*)p_pack->Payload);
+		break;
+
+	case ESimSDKDataIDS::RadarSetup:
+		pMultiRadarClient->HandleRadarSetup(p_conn, (SRadarSetupPayload*)p_pack->Payload);
+		break;
+
 	default:
 		break;
 	}

@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Lib/Sensor/GenericSensor/RadarBase.h"
 #include "CommIF/Halo24CommIF.h"
+#include "Halo24Types.h"
 #include "Halo24Radar.generated.h"
 
 enum EHalo24States
@@ -25,7 +26,8 @@ enum EHalo24StateMachineStates
 	Unlocked,
 	WaitImageStreamConnect,
 	WaitPoweredOn,
-	WaitScanedOn,
+	WaitTransmit,
+	Transmitting,
 
 
 };
@@ -58,10 +60,23 @@ protected:
 
 
 	void ValidateKeys(INT8U *p_keys, INT8U key_count);
-
+	bool CanUpdateState = false;
+	FLOAT32 StateUpdatePeriodSec = 0.1f;
+	FLOAT32 LastStateSendTimeSec = 0;
+	void UpdateState();
 	bool IsKeysVerified = false;
 	bool IsImageStreamConnected[2] = { false };
 	bool IsPoweredOn = false;
+	bool IsTransmitOn = false;
+
+	ERadarState RadarState = ERadarState::eOff;
+	SRadarSetupData RadarSetupData;
+
+	void SetRadarState(ERadarState val);
+	void UpdateSetupData();
+
+
+
 public :
 
 	virtual void OnRecievedMessage(SRadarSimSDKPacket* p_commands) override;

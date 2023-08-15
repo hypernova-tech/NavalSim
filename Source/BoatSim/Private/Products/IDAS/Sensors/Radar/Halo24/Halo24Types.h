@@ -1,7 +1,6 @@
 #pragma once
 #include "Lib/Types/Primitives.h"
 
-
 #define MAX_PAYLOAD_BYTE_SIZE 1550
 
 enum ESimSDKDataIDS :INT32U  // if PacketType is command
@@ -24,12 +23,24 @@ enum ESimSDKDataIDS :INT32U  // if PacketType is command
 	GuardZoneAlarmControl,
 	FastScanMode,
 	ScannerRPM,
+	RadarState,
+	RadarSetup,
 };
 
 struct SSerialData
 {
+public:
 	INT8U SerialLen;
 	INT8U SerialKey[17];
+
+	void SetSerial(char* p_serial, INT32U len)
+	{
+		for (INT32U i = 0; i < len; i++) {
+			SerialKey[i] = p_serial[i];
+		}
+		SerialLen = len;
+		
+	}
 };
 
 struct SSIMSDKCommands
@@ -53,6 +64,105 @@ struct SCommandAckNackResponse
 	INT8U StreamNo;
 	SSerialData SerialData;
 };
+
+enum ERadarState :INT8U
+{
+	eOff = 0,
+	eStandby = 1,
+	eTransmit = 2,
+	eWarming = 3,
+	eNoScanner = 4,
+	eDetectingScanner = 5,
+
+};
+
+struct SRadarState
+{
+	SSerialData SerialData;
+	ERadarState State;
+
+};
+
+BYTE_ALIGNED_BEGIN
+struct SGainControl                       ///  Structure for conveying gain-control mode and level information
+{                                         /// 
+	INT32U      type;                   ///< One of eUserGainManualAuto enum values
+	INT8U       value;                  ///< Manual gain settings (valid only if \c type is eUserGainManual)
+} BYTE_ALIGNED_END;
+
+BYTE_ALIGNED_BEGIN
+struct SFTCControl                        ///  Structure for conveying FTC control information
+{                                         /// 
+	INT32U      type;                   ///< unused
+	INT8U       value;                  ///< FTC level (0-255)
+} BYTE_ALIGNED_END;
+
+BYTE_ALIGNED_BEGIN
+struct SGuardZone                         ///  Structure for conveying GuardZone zone setup information
+{                                         /// 
+	uint32_t      orientation;            ///< Relative to vessel (0) or north/absolute (1)
+	uint32_t      rangeStart_m;           ///< Close range from boat (metres)
+	uint32_t      rangeEnd_m;             ///< Far range from boat (metres)
+	uint16_t      azimuth_ddeg;           ///< Starting angle (10ths of a degree relative to \c orientation reference)
+	uint16_t      width_ddeg;             ///< Width angle (10ths of a degree - deci degrees)
+} BYTE_ALIGNED_END;
+
+BYTE_ALIGNED_BEGIN
+struct SGuardZoneAlarmSetup               ///  Structure for conveying GuardZone alarm setup information
+{                                         ///
+	INT32U alarmType;        ///< Alarm types
+	uint8_t       enabled;                ///< Alarm enabled state
+}BYTE_ALIGNED_END;
+
+BYTE_ALIGNED_BEGIN
+struct SGuardZones                        ///  Structure for conveying all GuardZone setup information
+{                                         ///
+	uint8_t       sensitivity;            ///< Sensitivity (low 0-255 high)
+	uint8_t       active[2]; ///< true if the corresponding guard-zone is enabled
+	SGuardZone    zone[2];
+	SGuardZoneAlarmSetup alarmType[2];
+} BYTE_ALIGNED_END;
+
+BYTE_ALIGNED_BEGIN
+struct SRadarSetupData {
+
+public:
+
+	INT32U      range_dm;               ///< Currently selected range (in 10ths of a metre)
+	INT8U       reserved;               ///< unused
+	INT8U       useMode;                ///< Use mode
+	SGainControl gain[3];
+	SFTCControl   ftc;                    ///< Fast-Time-Constant level
+	INT32U      tuneType;               ///< Pulse radar only
+	INT8U       coarseTune;             ///< Pulse radar only
+	INT8U       fineTune;               ///< Pulse radar only
+	INT32U      interferenceReject;     ///< Interference-Reject level (off 0-3 high)
+	INT32U      targetStretch;          ///< Target-Stretch level 
+	INT32U      targetBoost;            ///< Target-Boost, AKA target-emphasis (off 0-2 high)
+	INT32U		pwType;					///< Pulse width length type enumeration
+	INT32U      pwLength_ns;            ///< Pulse width length in nanoseconds
+	SGuardZones   guardzones;             ///< Guard-Zone setup
+	
+	SRadarSetupData()
+	{
+		memset(this, 0, sizeof(SRadarSetupData));
+			
+	}
+
+}BYTE_ALIGNED_END;
+
+BYTE_ALIGNED_BEGIN
+struct SRadarSetupPayload {
+public:
+	SSerialData SerialData;
+	SRadarSetupData RadarSetupData;
+
+	SRadarSetupPayload()
+	{
+		memset(this, 0, sizeof(SRadarSetupPayload));
+
+	}
+}BYTE_ALIGNED_END;
 
 
 struct SConnectRadar {
@@ -81,26 +191,32 @@ struct SRangeControl {
 };
 
 struct SGainMode {
+	SSerialData SerialData;
 	INT8U Type;
 	INT8U Level;
 };
 
 struct SSeaClutter {
+	SSerialData SerialData;
 	INT8U SeaClutterType;
 	INT8U SeaClutterLevel;
 	INT8U SeaClutterAutoOffset;
 	INT8U	UserGainValid;
 };
 
+
 struct SRainClutter {
+	SSerialData SerialData;
 	INT8U Level;
 };
 
 struct SFastScanMode {
+	SSerialData SerialData;
 	INT8U Level;
 };
 
 struct SScanerRPM {
+	SSerialData SerialData;
 	INT32U Rpm;
 };
 
@@ -193,4 +309,3 @@ public:
 		Payload[sizeof(T)] = 0;
 	}
 };
-

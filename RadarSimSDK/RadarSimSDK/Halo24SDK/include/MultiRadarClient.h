@@ -401,7 +401,8 @@ public:
     SRadar* GetRadar(INT32U ind);
     SRadar* FindRadarFromConnection(IConnection* p_conn);
     void HandleReponse(IConnection* p_conn, SCommandAckNackResponse* p_res);
-    
+    void HandleRadarState(IConnection* p_conn, SRadarState* p_res);
+    void HandleRadarSetup(IConnection* p_conn, SRadarSetupPayload* p_res);
 
     
 

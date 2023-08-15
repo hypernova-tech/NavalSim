@@ -40,6 +40,8 @@ public:
 	void SendSerial(INT8U* p_data, INT32U count);
 	SRadarSimSDKPacket* GetPacket();
 	void SendResponseAckNack(ESimSDKDataIDS id, char *p_serial, bool is_ack, INT8U stream_no = 0);
+	void SendRadarState(ERadarState radar_state, char* p_serial);
+	void SendRadarSetup(const SRadarSetupData& setup, char* p_serial);
 
 private:
 

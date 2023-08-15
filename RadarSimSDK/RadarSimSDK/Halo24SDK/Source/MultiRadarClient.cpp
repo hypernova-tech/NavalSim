@@ -266,11 +266,31 @@ void Navico::Protocol::tMultiRadarClient::HandleReponse(IConnection* p_conn, SCo
     case ESimSDKDataIDS::ConnectRadar:
         p_radar->pImageClient->SetIsStreamConnected(p_res->StreamNo, true);
         break;
+
     default:
         break;
     }
 }
 
+void Navico::Protocol::tMultiRadarClient::HandleRadarState(IConnection* p_conn, SRadarState* p_res)
+{
+    auto* p_radar = FindRadarFromConnection(p_conn);
+    if (p_radar == nullptr) {
+        return;
+    }
+
+    p_radar->pImageClient->OnReceivedRadarState(p_res);
+}
+
+void Navico::Protocol::tMultiRadarClient::HandleRadarSetup(IConnection* p_conn, SRadarSetupPayload* p_setup)
+{
+    auto* p_radar = FindRadarFromConnection(p_conn);
+    if (p_radar == nullptr) {
+        return;
+    }
+
+    p_radar->pImageClient->OnReceivedRadarSetup(p_setup);
+}
 void Navico::Protocol::tMultiRadarClient::StateMachine()
 {
     auto curr_state = MultiRadarState;

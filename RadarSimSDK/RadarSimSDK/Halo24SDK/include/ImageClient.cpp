@@ -162,8 +162,9 @@ bool Navico::Protocol::NRP::tImageClient::SetSeaClutter(eUserGainManualAuto type
     }
 
     SSeaClutter mes;
-    mes.SeaClutterLevel = type;
+    mes.SeaClutterType = type;
     mes.SeaClutterLevel = level;
+    mes.SeaClutterAutoOffset = 0;
 
     p_radar->SendPacket<SSeaClutter>(ESimSDKDataIDS::SeaClutterControl, (char*)ConnectedSerialNumber, &mes);
 
@@ -477,5 +478,23 @@ bool Navico::Protocol::NRP::tImageClient::GetIsStreamConnected(int stream_no)
 void Navico::Protocol::NRP::tImageClient::SetIsStreamConnected(int stream_no, bool val)
 {
     IsImageStreamConnected[stream_no] = val;
+}
+void Navico::Protocol::NRP::tImageClient::OnReceivedRadarState(const SRadarState* p_state)
+{
+    Mode.state = p_state->State;
+
+    for (auto* p_obs : ClientStateObserver) {
+        
+        p_obs->UpdateMode(&Mode);
+    }
+}
+void Navico::Protocol::NRP::tImageClient::OnReceivedRadarSetup(const SRadarSetupPayload* p_state)
+{
+
+    memcpy(&Setup, &p_state->RadarSetupData, sizeof(Setup));
+    for (auto* p_obs : ClientStateObserver) {
+
+        p_obs->UpdateSetup(&Setup);
+    }
 }
 #endif

@@ -110,6 +110,27 @@ void UHalo24CommIF::SendResponseAckNack(ESimSDKDataIDS id, char* p_serial, bool 
 
 	pUDPConnection->SendUDPData((const INT8U*) & pack, pack.GetTransmitSize());
 }
+void UHalo24CommIF::SendRadarState(ERadarState radar_state, char* p_serial)
+{
+	SRadarState state;
+
+	memset(&state, 0, sizeof(state));
+	state.SerialData.SetSerial(p_serial, strlen(p_serial));
+	SRadarSimSDKPacket pack;
+	pack.SetPayload(ESimSDKDataIDS::RadarState, (INT8U*)&state, sizeof(SRadarState));
+	pUDPConnection->SendUDPData((const INT8U*)&pack, pack.GetTransmitSize());
+
+}
+void UHalo24CommIF::SendRadarSetup(const SRadarSetupData& setup, char *p_serial)
+{
+
+	SRadarSimSDKPacket pack;
+	SRadarSetupPayload payload;
+	memcpy(&payload.RadarSetupData, &setup, sizeof(SRadarSetupData));
+	payload.SerialData.SetSerial(p_serial, strlen(p_serial));
+	pack.SetPayload(ESimSDKDataIDS::RadarSetup, (INT8U*)&payload, sizeof(SRadarSetupPayload));
+	pUDPConnection->SendUDPData((const INT8U*)&pack, pack.GetTransmitSize());
+}
 void UHalo24CommIF::RestorePacket(SRadarSimSDKPacket* p_pack)
 {
 	Packets.Add(p_pack);

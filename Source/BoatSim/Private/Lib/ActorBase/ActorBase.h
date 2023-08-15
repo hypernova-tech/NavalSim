@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Lib/Types/Primitives.h"
 #include "ActorBase.generated.h"
 
 UCLASS()

@@ -15,6 +15,7 @@
 #include <memory>
 using namespace std;
 #include <list>
+#include "../../Lib/Types/Halo24Types.h"
 
 
 namespace Navico {
@@ -640,9 +641,15 @@ private:
     bool IsImageStreamConnected[2] = { false, false };
 
 
+    tMode Mode;
+    tSetup Setup;
+
 public:
     bool GetIsStreamConnected(int stream_no);
     void SetIsStreamConnected(int stream_no, bool val);
+
+    void OnReceivedRadarState(const SRadarState* p_state);
+    void OnReceivedRadarSetup(const SRadarSetupPayload* p_state);
 };
 
 //-----------------------------------------------------------------------------

@@ -18,6 +18,14 @@ enum EHostState
 	UnlockRadars,
 	InitImageClients,
 	ConnectRadars,
+	SetFastScanMode,
+	SetScanerRPM,
+	PowerOn,
+	TransmitOn,
+	SetGain,
+	SetRange,
+	SetSeaClutter,
+	SetRain,
 	PeriodicUpdate,
 };
 

@@ -21,6 +21,18 @@ protected:
 	SScanResult *pScanResult;
 
 	UPROPERTY(EditAnywhere)
+		FString RadarSerial = "";
+
+	char  Serial[128];
+
+
+	UPROPERTY(EditAnywhere)
+		FString RadarUnlockKey = "";
+
+	UPROPERTY(EditAnywhere)
+		int  ImageStreamCount = 2;
+
+	UPROPERTY(EditAnywhere)
 		double Frequency;
 
 	UPROPERTY(EditAnywhere)
@@ -47,18 +59,31 @@ protected:
 	UPROPERTY(EditAnywhere)
 		float FullScanPeriodSec = 1;
 
+	UPROPERTY(EditAnywhere, Category = "Scan")
+		uint8 FastScanLevel;
 
-	UPROPERTY(EditAnywhere)
-		FString RadarSerial = "";
+	UPROPERTY(EditAnywhere, Category = "Scan")
+		uint32 ScannerRPMValue;
 
-	char  Serial[128];
+	UPROPERTY(EditAnywhere, Category = "Gain")
+		uint32 GainType = 2;
+
+	UPROPERTY(EditAnywhere, Category = "Gain")
+		uint32 GainLevel = 1;
+
+	UPROPERTY(EditAnywhere, Category ="SeaClutter")
+		uint8 SeaClutterType;
+
+	UPROPERTY(EditAnywhere, Category = "SeaClutter")
+		uint8 SeaClutterLevel;
+
+	UPROPERTY(EditAnywhere, Category = "SeaClutter")
+		uint8 SeaClutterAutoOffset;
+
+	UPROPERTY(EditAnywhere, Category = "RainClutter")
+		uint8 RainClutterLevel;
 	
 
-	UPROPERTY(EditAnywhere)
-		FString RadarUnlockKey = "";
-	
-	UPROPERTY(EditAnywhere)
-		int  ImageStreamCount = 2;
 
 
 	virtual void Run(float delta_time_sec) override;
