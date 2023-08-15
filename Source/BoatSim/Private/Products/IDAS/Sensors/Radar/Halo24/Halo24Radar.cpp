@@ -216,6 +216,14 @@ void AHalo24Radar::OnRecievedMessage(SRadarSimSDKPacket* p_pack)
 			pHalo24CommIF->SendResponseAckNack(ESimSDKDataIDS::ScannerRPM, Serial, true);
 		}
 	}
+	else	if (p_pack->Header.PacketType == ESimSDKDataIDS::GuardZoneControl) {
+		SGuardZonePayload* p_args = (SGuardZonePayload*)p_pack->Payload;
+		if (strcmp((char*)p_args->SerialData.SerialKey, Serial) == 0) {
+
+			memcpy(&GuardZoneData, &p_args->GuardZoneData, sizeof(SGuardZoneData));
+			pHalo24CommIF->SendResponseAckNack(ESimSDKDataIDS::GuardZoneControl, Serial, true);
+		}
+	}
 }
 
 void AHalo24Radar::SendSerial()

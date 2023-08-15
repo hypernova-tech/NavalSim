@@ -5,7 +5,12 @@
 #include "CoreMinimal.h"
 #include "Lib/Sensor/SensorBase.h"
 #include "Lib/Utils/CScanResult.h"
+#include <Lib/Zone/ZoneContainer.h>
 #include "RadarBase.generated.h"
+
+
+
+
 
 /**
  * 
@@ -83,7 +88,8 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "RainClutter")
 		uint8 RainClutterLevel;
 	
-
+	CZoneContainer GuardZone;
+	CZoneContainer BlankingZone;
 
 
 	virtual void Run(float delta_time_sec) override;

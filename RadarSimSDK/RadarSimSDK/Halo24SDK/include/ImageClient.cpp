@@ -344,12 +344,32 @@ bool Navico::Protocol::NRP::tImageClient::SetRainSTCRate(float level_dBpDec)
 
 bool Navico::Protocol::NRP::tImageClient::SetSectorBlanking(uint32_t sectorID, bool state)
 {
-    return false;
+    auto* p_radar = tMultiRadarClient::GetInstance()->FindRadar(ConnectedSerialNumber);
+    if (p_radar == nullptr) {
+        return 0;
+    }
+
+    SSectorBlankingPayload mes;
+    mes.SetSectorControl(true, sectorID, state);
+
+
+    p_radar->SendPacket<SSectorBlankingPayload>(ESimSDKDataIDS::SectorBlanking, (char*)ConnectedSerialNumber, &mes);
+
+    return true;
 }
 
 bool Navico::Protocol::NRP::tImageClient::SetSectorBlankingSetup(uint32_t sectorID, bool state, uint16_t startBearing_degrees, uint16_t endBearing_degrees)
 {
-    return false;
+    auto* p_radar = tMultiRadarClient::GetInstance()->FindRadar(ConnectedSerialNumber);
+    if (p_radar == nullptr) {
+        return 0;
+    }
+
+    SSectorBlankingPayload mes;
+    mes.SetSectorSetup(true, sectorID, state, startBearing_degrees, endBearing_degrees);
+    p_radar->SendPacket<SSectorBlankingPayload>(ESimSDKDataIDS::SectorBlanking, (char*)ConnectedSerialNumber, &mes);
+
+    return true;
 }
 
 bool Navico::Protocol::NRP::tImageClient::SetMainBangSuppression(bool state)
@@ -444,32 +464,92 @@ bool Navico::Protocol::NRP::tImageClient::SetToFactoryDefaults()
 
 bool Navico::Protocol::NRP::tImageClient::SetGuardZoneEnable(uint8_t zone, bool state)
 {
-    return false;
+    auto* p_radar = tMultiRadarClient::GetInstance()->FindRadar(ConnectedSerialNumber);
+    if (p_radar == nullptr) {
+        return 0;
+    }
+
+    SGuardZonePayload mes;
+    mes.SetZoneControl(true, zone, state);
+
+    p_radar->SendPacket<SGuardZonePayload>(ESimSDKDataIDS::GuardZoneControl, (char*)ConnectedSerialNumber, &mes);
+
+    return true;
 }
 
 bool Navico::Protocol::NRP::tImageClient::SetGuardZoneSetup(uint8_t zone, uint32_t startRange_m, uint32_t endRange_m, uint16_t bearing_deg, uint16_t width_deg)
 {
-    return false;
+    auto* p_radar = tMultiRadarClient::GetInstance()->FindRadar(ConnectedSerialNumber);
+    if (p_radar == nullptr) {
+        return 0;
+    }
+
+    SGuardZonePayload mes;
+    mes.SetZoneSetup(true, zone, startRange_m, endRange_m, bearing_deg, width_deg);
+
+    p_radar->SendPacket<SGuardZonePayload>(ESimSDKDataIDS::GuardZoneControl, (char*)ConnectedSerialNumber, &mes);
+
+    return true;
 }
 
 bool Navico::Protocol::NRP::tImageClient::SetGuardZoneAlarmSetup(uint8_t zone, eGuardZoneAlarmType type)
 {
-    return false;
+    auto* p_radar = tMultiRadarClient::GetInstance()->FindRadar(ConnectedSerialNumber);
+    if (p_radar == nullptr) {
+        return 0;
+    }
+
+    SGuardZonePayload mes;
+    mes.SetZoneAlarmSetup(true, zone, type);
+
+    p_radar->SendPacket<SGuardZonePayload>(ESimSDKDataIDS::GuardZoneControl, (char*)ConnectedSerialNumber, &mes);
+
+    return true;
 }
 
 bool Navico::Protocol::NRP::tImageClient::SetGuardZoneAlarmSuppress(uint8_t zone, bool state)
 {
-    return false;
+    auto* p_radar = tMultiRadarClient::GetInstance()->FindRadar(ConnectedSerialNumber);
+    if (p_radar == nullptr) {
+        return 0;
+    }
+
+    SGuardZonePayload mes;
+    mes.SetZoneAlarmSuppress(true, zone, state);
+
+    p_radar->SendPacket<SGuardZonePayload>(ESimSDKDataIDS::GuardZoneControl, (char*)ConnectedSerialNumber, &mes);
+
+    return true;
 }
 
 bool Navico::Protocol::NRP::tImageClient::SetGuardZoneAlarmCancel(uint8_t zone, eGuardZoneAlarmType type)
 {
-    return false;
+    auto* p_radar = tMultiRadarClient::GetInstance()->FindRadar(ConnectedSerialNumber);
+    if (p_radar == nullptr) {
+        return 0;
+    }
+
+    SGuardZonePayload mes;
+    mes.SetZoneAlarmCancel(true, zone, type);
+
+    p_radar->SendPacket<SGuardZonePayload>(ESimSDKDataIDS::GuardZoneControl, (char*)ConnectedSerialNumber, &mes);
+
+    return true;
 }
 
 bool Navico::Protocol::NRP::tImageClient::SetGuardZoneSensitivity(uint8_t level)
 {
-    return false;
+    auto* p_radar = tMultiRadarClient::GetInstance()->FindRadar(ConnectedSerialNumber);
+    if (p_radar == nullptr) {
+        return 0;
+    }
+
+    SGuardZonePayload mes;
+    mes.SetAlarmSensitivty(true, level);
+
+    p_radar->SendPacket<SGuardZonePayload>(ESimSDKDataIDS::GuardZoneControl, (char*)ConnectedSerialNumber, &mes);
+
+    return true;
 }
 bool Navico::Protocol::NRP::tImageClient::GetIsStreamConnected(int stream_no)
 {

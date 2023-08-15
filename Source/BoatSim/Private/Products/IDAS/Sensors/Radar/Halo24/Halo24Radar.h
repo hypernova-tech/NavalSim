@@ -32,6 +32,8 @@ enum EHalo24StateMachineStates
 
 };
 
+
+
 /**
  * 
  */
@@ -71,6 +73,7 @@ protected:
 
 	ERadarState RadarState = ERadarState::eOff;
 	SRadarSetupData RadarSetupData;
+	SGuardZoneData GuardZoneData;
 
 	void SetRadarState(ERadarState val);
 	void UpdateSetupData();

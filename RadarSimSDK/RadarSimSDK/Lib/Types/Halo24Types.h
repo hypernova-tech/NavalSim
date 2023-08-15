@@ -2,6 +2,7 @@
 #include "Primitives.h"
 
 
+
 #define MAX_PAYLOAD_BYTE_SIZE 1550
 
 enum ESimSDKDataIDS :INT32U  // if PacketType is command
@@ -20,8 +21,7 @@ enum ESimSDKDataIDS :INT32U  // if PacketType is command
 	RainClutterControl,
 	SectorBlanking,
 	RadarDirection,
-	GuardZoneSettings,
-	GuardZoneAlarmControl,
+	GuardZoneControl,
 	FastScanMode,
 	ScannerRPM,
 	RadarState,
@@ -220,6 +220,182 @@ struct SScanerRPM {
 	SSerialData SerialData;
 	INT32U Rpm;
 };
+
+BYTE_ALIGNED_BEGIN
+struct SGuardZoneData {
+
+public:
+
+	SGuardZoneData()
+	{
+		memset(this, 0, sizeof(SGuardZoneData));
+	}
+
+
+
+	enum EGuardZoneAlarmType
+	{
+		eGZAlarmEntry = 0x0,
+		eGZAlarmExit = 0x1,
+		eGZAlarmBoth = 0x2,
+
+		eTotalGuardZoneAlarmTypes
+	};
+
+
+
+	struct {
+		INT8U IsValid;
+		INT8U Zone;
+		INT8U State;
+	}ZoneControl;
+
+	struct {
+		INT8U IsValid;
+		INT8U Zone;
+		INT32U StartRangeMeter;
+		INT32U EndRangeMeter;
+		INT16U BearingDeg;
+		INT16U BeaeingWidthDeg;
+
+	}ZoneSetup;
+
+	struct {
+		INT8U IsValid;
+		INT8U Zone;
+		INT8U ZoneAlarmType; //eGuardZoneAlarmType
+	}ZoneAlarmSetup;
+
+	struct {
+		INT8U IsValid;
+		INT8U Zone;
+		INT8U SuppressAlarm; //0 suppress
+	}ZoneAlarmSuppress;
+
+	struct {
+		INT8U IsValid;
+		INT8U Zone;
+		INT8U ZoneAlarmType; //eGuardZoneAlarmType
+	}ZoneAlarmCancel;
+
+	struct {
+		INT8U IsValid;
+		INT8U Level;
+	}AlarmSensitivty;
+
+
+
+}BYTE_ALIGNED_END;
+
+BYTE_ALIGNED_BEGIN
+struct SGuardZonePayload {
+
+public:
+
+	SGuardZonePayload()
+	{
+		memset(this, 0, sizeof(SGuardZonePayload));
+	}
+	SSerialData SerialData;
+	SGuardZoneData GuardZoneData;
+
+	void SetZoneControl(bool is_valid, INT8U zone, bool state)
+	{
+		GuardZoneData.ZoneControl.IsValid = is_valid;
+		GuardZoneData.ZoneControl.Zone = zone;
+		GuardZoneData.ZoneControl.State = state ? 1 : 0;
+	}
+
+	void SetZoneSetup(bool is_valid, INT8U zone, INT32U start_range_meter, INT32U end_range_meter, INT16U bearing_deg, INT16U bearing_width_deg)
+	{
+		GuardZoneData.ZoneSetup.IsValid = is_valid;
+		GuardZoneData.ZoneSetup.Zone = zone;
+		GuardZoneData.ZoneSetup.StartRangeMeter = start_range_meter;
+		GuardZoneData.ZoneSetup.EndRangeMeter = end_range_meter;
+		GuardZoneData.ZoneSetup.BearingDeg = bearing_deg;
+		GuardZoneData.ZoneSetup.BeaeingWidthDeg = bearing_width_deg;
+	}
+
+	void SetZoneAlarmSetup(bool is_valid, INT8U zone, INT8U alarm_type)
+	{
+		GuardZoneData.ZoneAlarmSetup.IsValid = is_valid;
+		GuardZoneData.ZoneAlarmSetup.Zone = zone;
+		GuardZoneData.ZoneAlarmSetup.ZoneAlarmType = alarm_type;
+	}
+
+	void SetZoneAlarmSuppress(bool is_valid, INT8U zone, bool state)
+	{
+		GuardZoneData.ZoneAlarmSuppress.IsValid = is_valid;
+		GuardZoneData.ZoneAlarmSuppress.Zone = zone;
+		GuardZoneData.ZoneAlarmSuppress.SuppressAlarm = state ? 0 : 1;
+	}
+
+	void SetZoneAlarmCancel(bool is_valid, INT8U zone, INT8U alarm_type)
+	{
+		GuardZoneData.ZoneAlarmCancel.IsValid = is_valid;
+		GuardZoneData.ZoneAlarmCancel.Zone = zone;
+		GuardZoneData.ZoneAlarmCancel.ZoneAlarmType = alarm_type;
+	}
+	void SetAlarmSensitivty(bool is_valid, INT8U level)
+	{
+		GuardZoneData.AlarmSensitivty.IsValid = is_valid;
+		GuardZoneData.AlarmSensitivty.Level = level;
+
+	}
+
+}BYTE_ALIGNED_END;
+
+BYTE_ALIGNED_BEGIN
+struct SSectorBlankingData
+{
+	struct {
+		INT8U IsValid;
+		INT8U SectorId;
+		INT8U State;
+	}SectorControl;
+
+	struct {
+		INT8U IsValid;
+		INT8U SectorId;
+		INT8U State;
+		INT16U StartBearingDeg;
+		INT16U EndBearingDeg;
+	}SectorSetup;
+
+}BYTE_ALIGNED_END;
+
+
+struct SSectorBlankingPayload
+{
+public:
+
+	SSectorBlankingPayload()
+	{
+		memset(this, 0, sizeof(SGuardZonePayload));
+	}
+
+
+	SSerialData Serial;
+	SSectorBlankingData BlankingData;
+
+
+	void SetSectorControl(bool is_valid, INT8U sector_id, bool state)
+	{
+		BlankingData.SectorControl.IsValid = is_valid;
+		BlankingData.SectorControl.SectorId = sector_id;
+		BlankingData.SectorControl.State = state;
+	}
+
+	void SetSectorSetup(bool is_valid, INT8U sector_id, bool state, INT16U start_bearing_deg, INT16U end_bearing_deg)
+	{
+		BlankingData.SectorSetup.IsValid = is_valid;
+		BlankingData.SectorSetup.SectorId = sector_id;
+		BlankingData.SectorSetup.State = state;
+		BlankingData.SectorSetup.StartBearingDeg = start_bearing_deg;
+		BlankingData.SectorSetup.EndBearingDeg = end_bearing_deg;
+	}
+};
+
 
 
 struct SRadarSimSDKPacket
