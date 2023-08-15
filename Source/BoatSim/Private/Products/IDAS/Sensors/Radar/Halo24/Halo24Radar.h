@@ -77,8 +77,8 @@ protected:
 
 	void SetRadarState(ERadarState val);
 	void UpdateSetupData();
-
-
+	void HandleGuardZoneControl(SGuardZoneData* p_data);
+	void HandleSectorBlankingData(SSectorBlankingData* p_data);
 
 public :
 

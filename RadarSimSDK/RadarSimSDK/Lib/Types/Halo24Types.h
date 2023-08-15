@@ -3,6 +3,7 @@
 
 
 
+
 #define MAX_PAYLOAD_BYTE_SIZE 1550
 
 enum ESimSDKDataIDS :INT32U  // if PacketType is command
@@ -375,7 +376,7 @@ public:
 	}
 
 
-	SSerialData Serial;
+	SSerialData SerialData;
 	SSectorBlankingData BlankingData;
 
 

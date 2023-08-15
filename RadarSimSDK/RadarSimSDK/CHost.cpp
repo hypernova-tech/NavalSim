@@ -268,13 +268,24 @@ void CHost::ThreadFunction()
 					p_radar->pImageClient->SetRain(41);
 				}
 
-				next_state = EHostState::PeriodicUpdate;
+				next_state = EHostState::SetSectorBlanking;
 				std::this_thread::sleep_for(std::chrono::milliseconds(10));
 			}
 			break;
 
 
-			
+			case EHostState::SetSectorBlanking:
+			{
+				for (INT32U i = 0; i < RadarCount; i++) {
+					auto* p_radar = tMultiRadarClient::GetInstance()->FindRadar(radars[i]);
+					p_radar->pImageClient->SetSectorBlanking(0, true);
+					p_radar->pImageClient->SetSectorBlanking(2, true);
+				}
+
+				next_state = EHostState::PeriodicUpdate;
+				std::this_thread::sleep_for(std::chrono::milliseconds(10));
+			}
+			break;
 			
 			
 

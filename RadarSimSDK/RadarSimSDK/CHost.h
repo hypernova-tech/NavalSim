@@ -26,6 +26,7 @@ enum EHostState
 	SetRange,
 	SetSeaClutter,
 	SetRain,
+	SetSectorBlanking,
 	PeriodicUpdate,
 };
 

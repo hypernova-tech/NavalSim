@@ -375,7 +375,7 @@ public:
 	}
 
 
-	SSerialData Serial;
+	SSerialData SerialData;
 	SSectorBlankingData BlankingData;
 
 

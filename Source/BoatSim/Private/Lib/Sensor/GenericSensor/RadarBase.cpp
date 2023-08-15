@@ -81,6 +81,13 @@ void ARadarBase::InitSensor()
 	Super::InitSensor();
 	pScanResult = new SScanResult();
 	pScanResult->Init(10);
+	GuardZone.Init(MaxGuardZoneCount);
+	BlankingZone.Init(MaxSectorBlankingZoneCount);
+
+	BlankingZone.SetArea(0, 0, 90);
+	BlankingZone.SetArea(1, 90, 180);
+	BlankingZone.SetArea(2, 180, 270);
+	BlankingZone.SetArea(3, 270, 360);
 }
 
 
@@ -115,20 +122,32 @@ void ARadarBase::Scan()
 			IsFullScaned = true;
 		}
 
+		if (!BlankingZone.CheckAnyActiveZone(start_azimuth, end_azimuth)) {
+			bool ret = CUtil::Trace(this, true, RangeMeter.X, RangeMeter.Y, start_azimuth, end_azimuth, 0, FovVerticalDeg, HorizontalScanStepAngleDeg, VerticalScanStepAngleDeg, MeasurementErrorMean, MeasurementErrorUncertainy, GetClutterParams(), ShowBeam, ASystemManagerBase::GetInstance()->GetSensorGlobalIgnoreList(), pScanResult);
 
-		bool ret = CUtil::Trace(this, true, RangeMeter.X, RangeMeter.Y, start_azimuth, end_azimuth, 0, FovVerticalDeg, HorizontalScanStepAngleDeg, VerticalScanStepAngleDeg, MeasurementErrorMean, MeasurementErrorUncertainy, GetClutterParams(), ShowBeam, ASystemManagerBase::GetInstance()->GetSensorGlobalIgnoreList(), pScanResult);
+			if (pCommIF != nullptr) {
+				pCommIF->SendData(pScanResult, -1);
+			}
 
-		if (pCommIF != nullptr) {
-			pCommIF->SendData(pScanResult, -1);
+			CurrentScanAzimuth = end_azimuth;
+
+			Visualize(pScanResult, GetActorLocation(), GetActorForwardVector(), GetActorRightVector(), RangeMeter.Y);
+
+			NextScanTime = FApp::GetCurrentTime() + 0.1;
+
+			CUtil::DebugLog("Scanning");
+		}
+		else {
+
+			int sector_ind = start_azimuth / (360.0 / pScanResult->SectorCount);
+			SSectorInfo* p_current_sektor = pScanResult->GetSectorContainer()->GetSector(sector_ind);
+			p_current_sektor->Reset();
+
+			CurrentScanAzimuth = end_azimuth;
+			NextScanTime = FApp::GetCurrentTime() + 0.1;
 		}
 
-		CurrentScanAzimuth = end_azimuth;
-
-		Visualize(pScanResult, GetActorLocation(), GetActorForwardVector(), GetActorRightVector(), RangeMeter.Y);
-
-		NextScanTime = FApp::GetCurrentTime() + 0.1;
-
-		CUtil::DebugLog("Scanning");
+	
 	}
 
 }

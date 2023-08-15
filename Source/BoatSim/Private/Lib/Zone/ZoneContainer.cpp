@@ -5,7 +5,10 @@
 
 
 void CZoneContainer::Init(INT32S count) {
-	Zones.Add(new SZoneInfo());
+	for (int i = 0; i < count; i++) {
+		Zones.Add(new SZoneInfo());
+	}
+	
 }
 
 
@@ -38,7 +41,19 @@ bool CZoneContainer::SetZoneAlarm(INT32S id, EZoneAlarm alarm)
 	}
 
 	auto* p_zone = Zones[id];
+	p_zone->IsZoneAlarmEnabled = true;
 	p_zone->ZoneAlarm = alarm;
+	return true;
+}
+bool CZoneContainer::CancelZoneAlarm(INT32S id)
+{
+	if (id >= Zones.Num()) {
+		return false;
+	}
+
+	auto* p_zone = Zones[id];
+	p_zone->IsZoneAlarmEnabled = false;
+
 	return true;
 }
 /// <summary>
@@ -47,13 +62,27 @@ bool CZoneContainer::SetZoneAlarm(INT32S id, EZoneAlarm alarm)
 /// <param name="id"></param>
 /// <param name="sensisitivty">0:min 1:max</param>
 /// <returns></returns>
-bool CZoneContainer::SetZoneSensitivity(INT32S id, FLOAT32 sensisitivty)
+bool CZoneContainer::SetZoneSensitivity(FLOAT32 sensisitivty)
 {
-	if (id >= Zones.Num()) {
-		return false;
+	for (auto* p_zone : Zones) {
+		p_zone->ZoneSensitivity = (sensisitivty);
 	}
 
-	auto* p_zone = Zones[id];
-	p_zone->ZoneSensitivity = sensisitivty;
+	Sensitivity = sensisitivty;
+
 	return true;
+}
+
+bool CZoneContainer::CheckAnyActiveZone(FLOAT32 start_bearing_deg, FLOAT32 end_bearing_deg)
+{
+	for (auto* p_zone : Zones) {
+		if (!p_zone->ZoneState == EZoneState::Active) {
+			continue;
+		}
+		if (p_zone->ZoneStartBearingDeg <= start_bearing_deg && p_zone->ZoneEndBearingDeg >= end_bearing_deg) {
+			return true;
+		}
+	}
+
+	return false;
 }

@@ -114,6 +114,43 @@ void AHalo24Radar::UpdateSetupData()
 #endif
 
 }
+void AHalo24Radar::HandleGuardZoneControl(SGuardZoneData* p_data)
+{
+	if (p_data->ZoneControl.IsValid) {
+		GuardZone.SetZoneState(p_data->ZoneControl.Zone, p_data->ZoneControl.State ? EZoneState::Active : EZoneState::Inactive);
+	}
+
+	if (p_data->ZoneSetup.IsValid) {
+		GuardZone.SetArea(p_data->ZoneSetup.Zone, p_data->ZoneSetup.BearingDeg, p_data->ZoneSetup.BearingDeg + p_data->ZoneSetup.BeaeingWidthDeg);
+	}
+
+	if (p_data->ZoneAlarmSetup.IsValid) {
+		GuardZone.SetZoneAlarm(p_data->ZoneAlarmSetup.Zone, (EZoneAlarm)p_data->ZoneAlarmSetup.ZoneAlarmType);
+	}
+	if (p_data->ZoneAlarmCancel.IsValid) {
+		GuardZone.CancelZoneAlarm(p_data->ZoneAlarmSetup.Zone);
+	}
+
+	if (p_data->ZoneAlarmSuppress.IsValid) {
+		GuardZone.CancelZoneAlarm(p_data->ZoneAlarmSetup.Zone);
+	}
+
+	if (p_data->AlarmSensitivty.IsValid) {
+		GuardZone.SetZoneSensitivity(p_data->AlarmSensitivty.Level / 255.0f);
+	}
+}
+
+void AHalo24Radar::HandleSectorBlankingData(SSectorBlankingData* p_data)
+{
+	if (p_data->SectorControl.IsValid) {
+		BlankingZone.SetZoneState(p_data->SectorControl.SectorId, p_data->SectorControl.State ? EZoneState::Active : EZoneState::Inactive);
+	}
+
+	if (p_data->SectorSetup.IsValid) {
+		BlankingZone.SetArea(p_data->SectorSetup.SectorId, p_data->SectorSetup.StartBearingDeg, p_data->SectorSetup.EndBearingDeg);
+	}
+}
+
 void AHalo24Radar::OnRecievedMessage(SRadarSimSDKPacket* p_pack)
 {
 	if (p_pack->Header.PacketType == ESimSDKDataIDS::UnlockKeys) {
@@ -221,7 +258,15 @@ void AHalo24Radar::OnRecievedMessage(SRadarSimSDKPacket* p_pack)
 		if (strcmp((char*)p_args->SerialData.SerialKey, Serial) == 0) {
 
 			memcpy(&GuardZoneData, &p_args->GuardZoneData, sizeof(SGuardZoneData));
+			HandleGuardZoneControl(&p_args->GuardZoneData);
 			pHalo24CommIF->SendResponseAckNack(ESimSDKDataIDS::GuardZoneControl, Serial, true);
+		}
+	}
+	else	if (p_pack->Header.PacketType == ESimSDKDataIDS::SectorBlanking) {
+		SSectorBlankingPayload* p_args = (SSectorBlankingPayload*)p_pack->Payload;
+		if (strcmp((char*)p_args->SerialData.SerialKey, Serial) == 0) {
+			HandleSectorBlankingData(&p_args->BlankingData);
+			pHalo24CommIF->SendResponseAckNack(ESimSDKDataIDS::SectorBlanking, Serial, true);
 		}
 	}
 }

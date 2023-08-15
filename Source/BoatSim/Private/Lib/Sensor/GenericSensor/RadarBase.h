@@ -87,6 +87,12 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = "RainClutter")
 		uint8 RainClutterLevel;
+
+	UPROPERTY(EditAnywhere, Category = "Guardzone")
+		uint8 MaxGuardZoneCount = 2;
+	
+	UPROPERTY(EditAnywhere, Category = "SectorBlanking")
+		uint8 MaxSectorBlankingZoneCount = 4;
 	
 	CZoneContainer GuardZone;
 	CZoneContainer BlankingZone;
