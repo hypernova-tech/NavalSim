@@ -22,30 +22,99 @@ struct SScanInfo
 
 struct SSectorInfo
 {
+	FLOAT64 StartAzimuthDeg;
+	FLOAT64 EndAzimuthDeg;
+	FLOAT64 AzimuthStepDeg;
+	INT32S ScanLineCount;
 	TArray<FVector> SectorData;
+	TArray<TArray<FVector>*> ScanLines;
 
 public:
+
+	void Init(INT32S scan_line_count, FLOAT64 start_azimuth_deg, FLOAT64 end_azimuth_deg)
+	{
+		ScanLineCount = scan_line_count;
+		StartAzimuthDeg = start_azimuth_deg;
+		EndAzimuthDeg = end_azimuth_deg;
+		AzimuthStepDeg = (EndAzimuthDeg - StartAzimuthDeg)/(scan_line_count-1);
+		for (INT32S i = 0; i < scan_line_count; i++) {
+			ScanLines.Add(new TArray<FVector>());
+		}
+	}
 	void Reset() {
 		SectorData.Reset();
+
+		for (INT32S i = 0; i < ScanLines.Num(); i++) {
+			delete ScanLines[i];
+		}
+		ScanLines.Reset();
 	}
 
 	void Add(FVector& vec)
 	{
 		SectorData.Add(vec);
+	
 	}
+	void Add(FVector& vec, INT32S azimuth_scan_ind)
+	{
+		SectorData.Add(vec);
+		if (azimuth_scan_ind < ScanLines.Num()) {
+			ScanLines[azimuth_scan_ind]->Add(vec);
+		}
+	}
+
+
+	void MapSpoke4Bits(FVector own_ship_pos, FLOAT32 azimuth_deg, FLOAT32 cell_size_meter, INT8U *p_out)
+	{
+		INT32S ind = (azimuth_deg - StartAzimuthDeg) / AzimuthStepDeg;
+		TArray<FVector>* p_data = ScanLines[ind];
+
+	
+		for (INT32S i = 0; i < p_data->Num(); i++) {
+			FVector pos = (*p_data)[i];
+
+			FLOAT32 dist = FVector::DistSquaredXY(pos, own_ship_pos);
+			INT32S sample_ind = dist / cell_size_meter;
+
+			INT32S byte_ind = sample_ind / 2;
+			INT32S order = byte_ind & 0x1;
+
+			if (order) {
+				p_out[byte_ind] = 0xF;
+			}
+			else {
+				p_out[byte_ind] = 0xF<<4;
+			}
+			
+
+		}
+	}
+
 };
 
 struct SSectorContainer
 {
 	SSectorInfo* pSectors;
 	int SectorCount;
+	FLOAT64 AzimuthResolutionDeg;
+
 
 
 public:
-	void Init(int count)
+	void Init(int count, FLOAT64 azimuth_resolution_deg)
 	{
+		FLOAT64 each_sector_width_deg = 360.0 / count;
+
 		pSectors = new SSectorInfo[count];
 		SectorCount = count;
+		AzimuthResolutionDeg = azimuth_resolution_deg;
+		INT32S total_scan_line_per_sector = (INT32S) (each_sector_width_deg/ azimuth_resolution_deg + 0.5);
+		
+		for (int i = 0; i < count; i++) {
+			FLOAT64 start_azimuth_deg = (each_sector_width_deg) * i;
+			FLOAT64 end_azimuth_deg = start_azimuth_deg + each_sector_width_deg;
+			pSectors[i].Init(total_scan_line_per_sector, start_azimuth_deg, end_azimuth_deg);
+		}
 	}
 
 	SSectorInfo* GetSector(int no)
@@ -80,6 +149,7 @@ struct SScanResult
 	int HorizontalCount;
 	int VeriticalCount;
 	FVector ScanCenter;
+	FLOAT32 ScanOwnshipHeadingTrueNorth;
 	FLOAT32 RangeMeter[HORIZOTAL_SCAN_SIZE][VERTICAL_SCAN_SIZE]; //meter
 	FLOAT32 NormalStrength[HORIZOTAL_SCAN_SIZE][VERTICAL_SCAN_SIZE]; //meter
 	FVector Point3D[HORIZOTAL_SCAN_SIZE][VERTICAL_SCAN_SIZE];
@@ -92,14 +162,16 @@ struct SScanResult
 	
 
 
-	//SScanElement ScanData[HORIZOTAL_SCAN_SIZE][VERTICAL_SCAN_SIZE];
-	
+		
 	FVector Track3DWorld[HORIZOTAL_SCAN_SIZE * VERTICAL_SCAN_SIZE];
 	FLOAT32 TrackRangeMeter[HORIZOTAL_SCAN_SIZE * VERTICAL_SCAN_SIZE]; //meter
 
 	INT32U Track3DCount;
-	//TArray< FVector> Point3D;
+
 	SSectorContainer SectorContainer;
+	int CurrentSector = 0;
+	
+	FLOAT32 ScanRangeMeter;
 
 public:
 
@@ -107,10 +179,10 @@ public:
 
 	}
 
-	void Init(int sector_cnt)
+	void Init(int sector_cnt, FLOAT64 azimuth_resolution = 0.087890625)
 	{
 		SectorCount = sector_cnt;
-		SectorContainer.Init(SectorCount);
+		SectorContainer.Init(SectorCount, azimuth_resolution);
 	}
 
 
@@ -150,6 +222,37 @@ public:
 
 };
 
+
+class CScanResultContainer
+{
+	TArray<SScanResult*> ScanResults;
+	INT32U CircularAccessInd = 0;
+
+
+public:
+	void Init(INT32S cnt, INT32U sector_cnt, FLOAT64 azimuth_res = 0.087890625)
+	{
+
+		for (INT32S i = 0; i < cnt; i++) {
+			SScanResult* p_res = new SScanResult();
+			p_res->Init(sector_cnt, azimuth_res);
+			ScanResults.Add(p_res);
+		}
+
+		
+	}
+
+	SScanResult* GetCircular()
+	{
+		auto p_res = ScanResults[CircularAccessInd];
+
+		CircularAccessInd++;
+		CircularAccessInd %= ScanResults.Num();
+
+		return p_res;
+	}
+
+};
 class CScanResult
 {
 public:

@@ -577,4 +577,11 @@ void Navico::Protocol::NRP::tImageClient::OnReceivedRadarSetup(const SRadarSetup
         p_obs->UpdateSetup(&Setup);
     }
 }
+void Navico::Protocol::NRP::tImageClient::OnReceivedRadarSpoke(const SHalo24SpokePayload* p_spoke)
+{
+    for (auto* p_obs : CientSpokeObservers) {
+
+        p_obs->UpdateSpoke((Spoke::tSpokeV9174*)&p_spoke->SpokeData);
+    }
+}
 #endif

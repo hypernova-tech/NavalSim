@@ -79,8 +79,10 @@ void ARadarBase::BeginPlay()
 void ARadarBase::InitSensor()
 {
 	Super::InitSensor();
-	pScanResult = new SScanResult();
+	ScanResultContainer.Init(16, 10);
+	pScanResult = ScanResultContainer.GetCircular();
 	pScanResult->Init(10);
+	BeamWidthDeg = 360.0 / pScanResult->SectorCount;
 	GuardZone.Init(MaxGuardZoneCount);
 	BlankingZone.Init(MaxSectorBlankingZoneCount);
 
@@ -110,26 +112,29 @@ void ARadarBase::Scan()
 
 		CurrentScanAzimuth = 0;
 		IsFullScaned = false;
+		pScanResult = ScanResultContainer.GetCircular();
 	}
 
 
 	if (FApp::GetCurrentTime() >= NextScanTime) {
 		float start_azimuth = CurrentScanAzimuth;
-		float end_azimuth = 36 + start_azimuth;
+		float end_azimuth = BeamWidthDeg + start_azimuth;
 
 		if (end_azimuth >= 359.99) {
 			end_azimuth = 359.99;
 			IsFullScaned = true;
 		}
 
+
+
 		if (!BlankingZone.CheckAnyActiveZone(start_azimuth, end_azimuth)) {
-			bool ret = CUtil::Trace(this, true, RangeMeter.X, RangeMeter.Y, start_azimuth, end_azimuth, 0, FovVerticalDeg, HorizontalScanStepAngleDeg, VerticalScanStepAngleDeg, MeasurementErrorMean, MeasurementErrorUncertainy, GetClutterParams(), ShowBeam, ASystemManagerBase::GetInstance()->GetSensorGlobalIgnoreList(), pScanResult);
+			bool ret = CUtil::Trace(this, true, RangeMeter.X, RangeMeter.Y, start_azimuth, end_azimuth, 0, FovVerticalDeg, HorizontalScanStepAngleDeg, VerticalScanStepAngleDeg, MeasurementErrorMean, MeasurementErrorUncertainy, GetClutterParams(), ShowBeam, ASystemManagerBase::GetInstance()->GetSensorGlobalIgnoreList(), true, pScanResult);
 
 			if (pCommIF != nullptr) {
 				pCommIF->SendData(pScanResult, -1);
 			}
 
-			CurrentScanAzimuth = end_azimuth;
+			CurrentScanAzimuth = end_azimuth + HorizontalScanStepAngleDeg;
 
 			Visualize(pScanResult, GetActorLocation(), GetActorForwardVector(), GetActorRightVector(), RangeMeter.Y);
 

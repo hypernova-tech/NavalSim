@@ -650,6 +650,7 @@ public:
 
     void OnReceivedRadarState(const SRadarState* p_state);
     void OnReceivedRadarSetup(const SRadarSetupPayload* p_state);
+    void OnReceivedRadarSpoke(const SHalo24SpokePayload* p_spoke);
 };
 
 //-----------------------------------------------------------------------------

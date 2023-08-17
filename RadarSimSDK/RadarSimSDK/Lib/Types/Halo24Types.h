@@ -1,9 +1,6 @@
 #pragma once
 #include "Primitives.h"
 
-
-
-
 #define MAX_PAYLOAD_BYTE_SIZE 1550
 
 enum ESimSDKDataIDS :INT32U  // if PacketType is command
@@ -27,6 +24,7 @@ enum ESimSDKDataIDS :INT32U  // if PacketType is command
 	ScannerRPM,
 	RadarState,
 	RadarSetup,
+	SpokeData,
 };
 
 struct SSerialData
@@ -398,6 +396,64 @@ public:
 };
 
 
+
+//------------------------------------------------------------------------------
+//! Structure for conveying radar image data header information
+//------------------------------------------------------------------------------
+BYTE_ALIGNED_BEGIN
+struct S9174SpokeHeader
+{
+	INT32U spokeLength_bytes : 12;   //!< Length of the whole spoke in bytes
+	INT32U : 4;                      //!< reserved
+	INT32U sequenceNumber : 12;      //!< Spoke sequence number
+	INT32U sampleEncoding : 2;       ///< How the samples should be interpreted (see eSampleEncoding enum)
+	INT32U : 2;                      ///< reserved
+
+	INT32U nOfSamples : 12;          //!< Number of samples present in the spoke
+	INT32U bitsPerSample : 4;         //!< Number of bits per sample, normally is set to 4
+	INT32U rangeCellSize_mm : 16;    //!< Distance represented by each range-cell. sample size is computed as: rangeCellSize_mm * 2*rangeCellsDiv2 / nOfSamples;
+
+	INT32U spokeAzimuth : 13;         //!< Azimuth of the spoke in the range 0-4095. Values greater than 4095 must be mapped to 4095. This represents a full circle 0-360 degrees
+	INT32U : 1;                      //!< reserved
+	INT32U bearingZeroError : 1;      //!< Set if there is malfunctioning bearing zero
+	INT32U : 1;                      //!< reserved
+	INT32U spokeCompass : 14;         //!< Heading of the boat when this spoke was sampled. It is represented in the 0-4095 range for 0-360degrees of heading
+	INT32U trueNorth : 1;            //!< The connected heading sensor is reporting true north (1) or magnetic north (0)
+	INT32U compassInvalid : 1;       //!< If this bit is 1, the compass information are invalid
+
+	INT32U rangeCellsDiv2 : 16;      //!< Number of range-cells represented by the data in this spoke, divided by 2
+	INT32U : 16;                     //!< reserved
+
+	INT32U : 16;                     //!< reserved
+	INT32U : 16;                     //!< reserved
+	INT32U : 16;                     //!< reserved
+	INT32U : 16;                     //!< reserved
+} BYTE_ALIGNED_END;
+
+//------------------------------------------------------------------------------
+//! Structure for conveying radar image data & header information (ie. spokes)
+//------------------------------------------------------------------------------
+#define SAMPLE_COUNT_PER_SPOKE 1024
+BYTE_ALIGNED_BEGIN
+struct S9174SpokeData
+{
+	S9174SpokeHeader Header;
+	INT8U Data[SAMPLE_COUNT_PER_SPOKE / 2];
+} BYTE_ALIGNED_END;
+
+
+struct SHalo24SpokePayload
+{
+public:
+
+
+
+
+	SSerialData SerialData;
+	S9174SpokeData SpokeData;
+
+
+};
 
 struct SRadarSimSDKPacket
 {

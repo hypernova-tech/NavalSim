@@ -16,7 +16,8 @@ CUtil::~CUtil()
 bool CUtil::Trace(AActor * p_actor, bool is_world, float min_range_meter, float range_meter, float azimuth_start_deg, float azimuth_end_deg,
                                                                           float elevation_start_deg, float elevation_end_deg, float azimuth_angle_step_deg, float elevation_angle_step_deg,
                                                                           float measurement_error_mean, float measurement_error_std, const SClutterParams& clutter_params,
-                                                                          bool show_radar_beam, TArray<AActor*>& ignore_list, SScanResult* pscan_result)
+                                                                          bool show_radar_beam, TArray<AActor*>& ignore_list, bool create_scan_line, 
+                                                                          SScanResult* pscan_result)
 {
 #if true
 
@@ -25,6 +26,14 @@ bool CUtil::Trace(AActor * p_actor, bool is_world, float min_range_meter, float 
     FVector start_pos = p_actor->GetActorLocation();
     FVector look_dir;
     FVector right_vec;
+
+    FVector end;
+    FHitResult result;
+    bool ret = false;
+    int horizantal_ind = 0;
+    int vertical_ind = 0;
+
+    int success_count = 0;
     
     if (is_world) {
         look_dir = FVector::ForwardVector;
@@ -54,28 +63,20 @@ bool CUtil::Trace(AActor * p_actor, bool is_world, float min_range_meter, float 
     query_params.bTraceComplex = false;
 
 
-    FVector end;
-    FHitResult result;
-    bool ret = false;
-    int horizantal_ind = 0;
-    int vertical_ind = 0;
 
-    int success_count = 0;
 
     pscan_result->ResetTrackPoint3DList();
-    //pscan_result->Point2DScreen.Reset();
-
-
+  
     int sector_ind = azimuth_start_deg / (360.0 / pscan_result->SectorCount);
     SSectorInfo* p_current_sektor = pscan_result->GetSectorContainer()->GetSector(sector_ind);
     p_current_sektor->Reset();
+    pscan_result->CurrentSector = sector_ind;
 
     FVector start_loc = p_actor->GetActorLocation();
-   
-
+  
     BOOLEAN is_on_surface = false;
 
-    for (float azimuth = azimuth_start_deg; azimuth <= azimuth_end_deg; azimuth += azimuth_angle_step_deg) {
+    for (float azimuth = azimuth_start_deg; azimuth < azimuth_end_deg; azimuth += azimuth_angle_step_deg) {
         vertical_ind = 0;
         float azimuth_rad = azimuth * DEGTORAD;
         FVector new_dir;
@@ -93,13 +94,8 @@ bool CUtil::Trace(AActor * p_actor, bool is_world, float min_range_meter, float 
                 FRotator euler_yaw(0, azimuth, 0);
                 FRotator euler_pitch(elevation, 0, 0);
 
-
-                //FQuat qua = euler_rot.Quaternion();
-
                 FVector temp_dir = euler_pitch.RotateVector(look_dir);
                 new_dir = euler_yaw.RotateVector(temp_dir);
-
-              
 
                 start_pos = start_loc + new_dir * TOUE(min_range_meter);
 
@@ -149,7 +145,14 @@ bool CUtil::Trace(AActor * p_actor, bool is_world, float min_range_meter, float 
 
                 pscan_result->AddTrackPoint3DList(detected_pos_error, range_errored_meter);
 
-                p_current_sektor->Add(detected_pos_error);
+                
+                if (create_scan_line) {
+                    p_current_sektor->Add(detected_pos_error, horizantal_ind);
+                }
+                else {
+                    p_current_sektor->Add(detected_pos_error);
+                }
+                
             
                 success_count++;
             }

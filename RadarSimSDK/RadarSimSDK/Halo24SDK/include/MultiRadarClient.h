@@ -403,7 +403,7 @@ public:
     void HandleReponse(IConnection* p_conn, SCommandAckNackResponse* p_res);
     void HandleRadarState(IConnection* p_conn, SRadarState* p_res);
     void HandleRadarSetup(IConnection* p_conn, SRadarSetupPayload* p_res);
-
+    void HandleSpoke(IConnection* p_conn, SHalo24SpokePayload* p_res);
     
 
 };

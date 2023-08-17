@@ -291,6 +291,16 @@ void Navico::Protocol::tMultiRadarClient::HandleRadarSetup(IConnection* p_conn, 
 
     p_radar->pImageClient->OnReceivedRadarSetup(p_setup);
 }
+
+void Navico::Protocol::tMultiRadarClient::HandleSpoke(IConnection* p_conn, SHalo24SpokePayload* p_res)
+{
+    auto* p_radar = FindRadarFromConnection(p_conn);
+    if (p_radar == nullptr) {
+        return;
+    }
+
+    p_radar->pImageClient->OnReceivedRadarSpoke(p_res);
+}
 void Navico::Protocol::tMultiRadarClient::StateMachine()
 {
     auto curr_state = MultiRadarState;

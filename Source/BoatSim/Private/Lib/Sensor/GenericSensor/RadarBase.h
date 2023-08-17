@@ -22,7 +22,7 @@ class ARadarBase : public ASensorBase
 	
 
 protected:
-
+	CScanResultContainer ScanResultContainer;
 	SScanResult *pScanResult;
 
 	UPROPERTY(EditAnywhere)
@@ -96,6 +96,8 @@ protected:
 	
 	CZoneContainer GuardZone;
 	CZoneContainer BlankingZone;
+
+	FLOAT64 BeamWidthDeg;
 
 
 	virtual void Run(float delta_time_sec) override;

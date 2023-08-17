@@ -101,7 +101,7 @@ void AFLS3D::Run(float delta_time_sec)
 		float end_azimuth = FovHorizontalDeg*0.5;
 		TArray<AActor*> ignored_actor;
 
-		bool ret = CUtil::Trace(this, false, RangeMeter.X, RangeMeter.Y, start_azimuth, end_azimuth, -FovVerticalDeg, 0, HorizontalScanStepAngleDeg, VerticalScanStepAngleDeg, MeasurementErrorMean, MeasurementErrorUncertainy, GetClutterParams(), ShowBeam, ignored_actor,pScanResult);
+		bool ret = CUtil::Trace(this, false, RangeMeter.X, RangeMeter.Y, start_azimuth, end_azimuth, -FovVerticalDeg, 0, HorizontalScanStepAngleDeg, VerticalScanStepAngleDeg, MeasurementErrorMean, MeasurementErrorUncertainy, GetClutterParams(), ShowBeam, ignored_actor,false, pScanResult);
 
 		if (pCommIF != nullptr) {
 			pCommIF->SendData(pScanResult, -1);
