@@ -12,8 +12,13 @@
 #include "Lib/Tracker/TrackerBase.h"
 #include "Halo24CommIF.generated.h"
 
+struct STargetTrackStatusData{
+	TArray< STrackedObjectInfo*>* Tracks;
+	FLOAT64 ClosestPointOfApproachMeters;
+	FLOAT64 TimeToClosestPointOfApproachSec;
+	BOOLEAN TowardsCPA //(0 target moving away from CPA, 1 towards CPA)
 
-
+};
 
 /**
  * 
@@ -43,7 +48,7 @@ public:
 	void SendResponseAckNack(ESimSDKDataIDS id, char *p_serial, bool is_ack, INT8U stream_no = 0);
 	void SendRadarState(ERadarState radar_state, char* p_serial);
 	void SendRadarSetup(const SRadarSetupData& setup, char* p_serial);
-	void SendTrackedObjects(TArray< STrackedObjectInfo*> *p_info, char* p_serial);
+	void SendTrackedObjects(const STargetTrackStatusData &info, char* p_serial);
 
 private:
 

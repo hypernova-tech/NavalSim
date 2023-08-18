@@ -71,6 +71,33 @@ INT64U ASystemManagerBase::GetTimeStamp()
 	return microsec;
 }
 
+AActor* ASystemManagerBase::GetVisibleActorAt(AActor *p_owner, FVector from, FVector to, FLOAT64 dist_meter)
+{
+	FCollisionQueryParams query_params;
+	query_params.AddIgnoredActor(p_owner);
+	FHitResult result;
+
+#if false
+	for (AActor* p_temp : *args.p_ignore_list) {
+		query_params.AddIgnoredActor(p_temp);
+	}
+#endif
+	query_params.bTraceComplex = false;
+
+	bool ret = p_owner->GetWorld()->LineTraceSingleByChannel(result, from, to, ECollisionChannel::ECC_Visibility, query_params, FCollisionResponseParams());
+	if (ret) {
+		FLOAT64 dist_meter = TOW((result.Location - to).Length());
+		
+		if (dist_meter <= dist_meter) {
+			return result.GetActor();
+		}
+	}
+
+
+	return nullptr;
+
+}
+
 template <typename T>
 T* ASystemManagerBase::FindActor(FString owner, FString actor_name)
 {

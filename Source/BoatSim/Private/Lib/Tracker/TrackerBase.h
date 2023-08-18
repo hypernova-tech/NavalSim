@@ -7,17 +7,35 @@
 
 /**
  * 
+ *     eAcquiringTarget = 0,      ///< Attempting to acquire target
+    eSafeTarget      = 1,      ///< Target acquired and not on a collision course
+    eDangerousTarget = 2,      ///< Target acquired and may be on a collision course
+    eLostTarget      = 3,      ///< Target has been lost and needs to be cancelled an reacquired
+    eAcquireFailure  = 4,      ///< Failed to acquire a target
+    eOutOfRange      = 5,      ///< Target is now out of range
+    eLostOutOfRange  = 6,      ///< Target lost due to staying out of range
+
+    eFailAcquireMax  = 0x10,   ///< Acquire failed because no target IDs were free
+    eFailAcquirePos  = 0x11,
  */
 enum EObjectTrackState
 {
+	JustCreated,
 	Acquiring,
-	Acquired,
-	Lost,
+	AcquiredAndSafe,
+	AcquiredAndDangerous,
+	LostTarget,
+	AcquireFailure,
+	OutOfRange,
+	LostOutOfRange,
+	AquireFailedTargetTrackCapacityFull,
 };
 struct STrackedObjectInfo
 {
+public:
+
 	EObjectTrackState TrackState;
-	INT32U ClinetId;
+	INT32U ClientId;
 	INT32U TrackerId;
 	AActor* pActor;
 	FLOAT64 AbsoluteDistanceMeter;
@@ -29,14 +47,49 @@ struct STrackedObjectInfo
 	FLOAT64 RelativeBearingDeg;
 	FLOAT64 RelativeTargetSpeedMetersPerSec;
 	FLOAT64 RelativeTargetCourseDeg;
+
+
+	FLOAT64 AcquireStartTimeRefSec;
+	FVector TrackLocationWhenCreated;
+	
+	STrackedObjectInfo()
+	{
+		TrackState = EObjectTrackState::JustCreated;
+	}
+	bool IsAcquireTimeout(FLOAT64 timeout_sec)
+	{
+		return (FApp::GetCurrentTime() - AcquireStartTimeRefSec) > timeout_sec;
+	}
+
 	
 };
+
+
 class CTrackerBase
 {
 
 protected:
 
 	TArray< STrackedObjectInfo*> TrackedObjects;
+	TMap<int, STrackedObjectInfo> TrackClientIdMap;
+
+	STrackedObjectInfo ClosestTrack;
+	FLOAT64 CPAMeters;
+	FLOAT64 CPATimeSec;
+	FLOAT64 IsTowardsCPA;
+	FVector OwnShipLocation;
+	FVector OwnShipRPY;
+	AActor* pOwnShip;
+
+
+
+
+protected:
+	STrackedObjectInfo* FindTrackByClientId(INT32S client_track_id);
+	void AddTrack(STrackedObjectInfo* p_track);
+	void UpdateTrackState(STrackedObjectInfo *p_track);
+	bool CTrackerBase::TryAcquire(STrackedObjectInfo* p_track, bool &is_safe_target);
+
 public:
 	CTrackerBase();
 	~CTrackerBase();
@@ -46,5 +99,9 @@ public:
 	virtual bool CancelAll();
 	virtual bool CancelTrack(INT32U id);
 	virtual void Update();
-	virtual TArray< STrackedObjectInfo*> GetTrackedObjects();
+	virtual TArray< STrackedObjectInfo*>* GetTrackedObjects();
+	virtual FLOAT64 GetCPAMeters();
+	virtual FLOAT64 GetCPATimeSec();
+	virtual BOOLEAN GetIsTowardsCPA();
+
 };

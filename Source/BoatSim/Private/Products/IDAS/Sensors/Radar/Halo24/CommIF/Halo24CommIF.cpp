@@ -168,9 +168,9 @@ void UHalo24CommIF::SendRadarSetup(const SRadarSetupData& setup, char *p_serial)
 	pUDPConnection->SendUDPData((const INT8U*)&pack, pack.GetTransmitSize());
 }
 
-void UHalo24CommIF::SendTrackedObjects(TArray< STrackedObjectInfo*>* p_info_all, char* p_serial)
+void UHalo24CommIF::SendTrackedObjects(const STargetTrackStatusData& info, char* p_serial)
 {
-	for (auto p_info : *p_info_all) {
+	for (auto p_info : *(info.Tracks)) {
 		STrackingTargetStatusPayload payload;
 		SRadarSimSDKPacket pack;
 		
@@ -188,7 +188,38 @@ void UHalo24CommIF::SendTrackedObjects(TArray< STrackedObjectInfo*>* p_info_all,
 		payload.TargetData.infoRelative.speed_dmps = p_info->RelativeTargetSpeedMetersPerSec * 10; // ship coordinate system
 		payload.TargetData.infoRelative.course_ddeg = (360 - p_info->RelativeTargetCourseDeg) * 10;
 
-		payload.TargetData.targetState = 
+		payload.TargetData.infoAbsoluteValid = 1;
+
+		switch (p_info->TrackState) {
+		case 	EObjectTrackState::Acquiring:
+			payload.TargetData.targetState = eTargetState::eAcquiringTarget;
+			break;
+		case EObjectTrackState::AcquiredAndSafe:
+			payload.TargetData.targetState = eTargetState::eSafeTarget;
+			break;
+		case EObjectTrackState::AcquiredAndDangerous:
+			payload.TargetData.targetState = eTargetState::eDangerousTarget;
+			break;
+		case EObjectTrackState::LostTarget:
+			payload.TargetData.targetState = eTargetState::eLostTarget;
+			break;
+		case EObjectTrackState::AcquireFailure:
+			payload.TargetData.targetState = eTargetState::eAcquireFailure;
+			break;
+		case EObjectTrackState::OutOfRange:
+			payload.TargetData.targetState = eTargetState::eOutOfRange;
+			break;
+		case EObjectTrackState::LostOutOfRange:
+			payload.TargetData.targetState = eTargetState::eLostOutOfRange;
+			break;
+		case EObjectTrackState::AquireFailedTargetTrackCapacityFull:
+			break;
+	
+		}
+		
+		payload.TargetData.CPA_m = info.ClosestPointOfApproachMeters;
+		payload.TargetData.TCPA_sec = info.TimeToClosestPointOfApproachSec;
+		payload.TargetData.towardsCPA = info.TowardsCPA;
 
 		payload.SerialData.SetSerial(p_serial, strlen(p_serial));
 		pack.SetID(ESimSDKDataIDS::TrackingStatus);

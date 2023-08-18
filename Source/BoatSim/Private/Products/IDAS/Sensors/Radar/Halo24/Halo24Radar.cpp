@@ -166,7 +166,13 @@ bool AHalo24Radar::VerifySerial(char* p_inp)
 void AHalo24Radar::UpdateTracker()
 {
 	Super::UpdateTracker();
-	auto p_tracked_objects = pTracker->GetTrackedObjects();
+	STargetTrackStatusData track_status;
+
+
+	track_status.Tracks = pTracker->GetTrackedObjects();
+	track_status.ClosestPointOfApproachMeters = pTracker->GetCPAMeters();
+	track_status.TimeToClosestPointOfApproachSec = pTracker->GetCPATimeSec();
+	track_status.TowardsCPA = pTracker->GetIsTowardsCPA();
 
 	pHalo24CommIF->SendTrackedObjects(p_tracked_objects);
 
