@@ -4,10 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "Lib/ActorBase/ActorBase.h"
 #include "Agent.generated.h"
 
 UCLASS()
-class AAgent : public APawn
+class AAgent : public AActorBase
 {
 	GENERATED_BODY()
 
@@ -23,7 +24,6 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
 
 };

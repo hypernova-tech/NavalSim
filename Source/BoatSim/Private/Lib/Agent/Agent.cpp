@@ -25,10 +25,4 @@ void AAgent::Tick(float DeltaTime)
 
 }
 
-// Called to bind functionality to input
-void AAgent::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
-}
 

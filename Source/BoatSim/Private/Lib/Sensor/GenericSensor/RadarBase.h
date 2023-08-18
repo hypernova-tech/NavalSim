@@ -27,6 +27,8 @@ protected:
 
 	char  Serial[128];
 
+	UPROPERTY(EditAnywhere)
+		bool UseSimulationDataAsOwnShip = true;
 
 	UPROPERTY(EditAnywhere)
 		FString RadarUnlockKey = "";
@@ -93,7 +95,6 @@ protected:
 	
 	CZoneContainer GuardZone;
 	CZoneContainer BlankingZone;
-
 	FLOAT64 BeamWidthDeg;
 
 

@@ -77,6 +77,7 @@ public:
 	static inline INT32U LittleToBig(INT32U val);
 	static inline INT32U ReverseCopyBytes(INT8U* p_src, INT8U* p_dest, INT32U len);
 	static inline FLOAT32 GetRandomRange(FLOAT32 min_inclusive, FLOAT32 max_inclusive);
+	static FVector GetActorRPY(AActor* p_actor);
 
 };
 

@@ -735,6 +735,12 @@ FLOAT32 CUtil::GetRandomRange(FLOAT32 min_inclusive, FLOAT32 max_inclusive)
     return FMath::RandRange(min_inclusive, max_inclusive);
 }
 
+FVector CUtil::GetActorRPY(AActor* p_actor)
+{
+    auto rot = p_actor->GetActorRotation();
+    return FVector(rot.Roll, -rot.Pitch, -rot.Yaw);
+}
+
 FString CUtil::CharToFString(const char* p_char)
 {
     FString str = FString( p_char);

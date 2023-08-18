@@ -137,6 +137,10 @@ void ARadarBase::InitTracker()
 void ARadarBase::UpdateTracker()
 {
 	if (IsTrackerEnabled) {
+		if (UseSimulationDataAsOwnShip) {
+			pTracker->SetOwnshipData(GetActorLocation(), CUtil::GetActorRPY(this), GetVelocity(), RangeMeter, NoiseMean, NoiseStdDeviation);
+		}
+		
 		pTracker->Update();
 	}
 	

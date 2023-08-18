@@ -16,7 +16,7 @@ struct STargetTrackStatusData{
 	TArray< STrackedObjectInfo*>* Tracks;
 	FLOAT64 ClosestPointOfApproachMeters;
 	FLOAT64 TimeToClosestPointOfApproachSec;
-	BOOLEAN TowardsCPA //(0 target moving away from CPA, 1 towards CPA)
+	BOOLEAN TowardsCPA; //(0 target moving away from CPA, 1 towards CPA)
 
 };
 

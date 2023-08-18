@@ -20,15 +20,18 @@
  */
 enum EObjectTrackState
 {
-	JustCreated,
+	JustCreated = 0,
 	Acquiring,
 	AcquiredAndSafe,
 	AcquiredAndDangerous,
+	AcquiredSafeAndTemprorayLoss,
+	AcquiredDangerousAndTemprorayLoss,
 	LostTarget,
 	AcquireFailure,
 	OutOfRange,
 	LostOutOfRange,
 	AquireFailedTargetTrackCapacityFull,
+	StateCount
 };
 struct STrackedObjectInfo
 {
@@ -50,7 +53,13 @@ public:
 
 
 	FLOAT64 AcquireStartTimeRefSec;
+	FLOAT64 TargetLossTimeRefSec;
 	FVector TrackLocationWhenCreated;
+	BOOLEAN IsOutOfRange;
+
+	FLOAT64 StateEnterTimeSec[EObjectTrackState::StateCount];
+	FLOAT64 StateStayDurationSec[EObjectTrackState::StateCount];
+
 	
 	STrackedObjectInfo()
 	{
@@ -60,8 +69,48 @@ public:
 	{
 		return (FApp::GetCurrentTime() - AcquireStartTimeRefSec) > timeout_sec;
 	}
+	void HandleTemporayTargetLoss(FLOAT64 timeout_sec, bool &is_permanant_loss)
+	{
+		if (TargetLossTimeRefSec < 0) {
+			TargetLossTimeRefSec = FApp::GetCurrentTime();
+		}
+		if ((FApp::GetCurrentTime() - TargetLossTimeRefSec) > timeout_sec) {
+			is_permanant_loss = true;
+		}
+		else {
+			is_permanant_loss = false;
+		}
+	}
 
-	
+	void SetState(EObjectTrackState state)
+	{
+		if (TrackState != state) {
+			StateEnterTimeSec[state] = FApp::GetCurrentTime();
+			StateStayDurationSec[state] = 0;
+		}
+		else {
+			StateStayDurationSec[state] = FApp::GetCurrentTime() - StateEnterTimeSec[state];
+		}
+		TrackState = state;
+	}
+
+	FLOAT64 GetStateStayDurationSec(EObjectTrackState state)
+	{
+		return StateStayDurationSec[state];
+	}
+	FLOAT64 GetCurrentStateStayDuration()
+	{
+		return StateStayDurationSec[TrackState];
+	}
+
+	BOOLEAN IsAcquired()
+	{
+		return	TrackState == EObjectTrackState::AcquiredAndSafe ||
+			TrackState == EObjectTrackState::AcquiredAndDangerous ||
+			TrackState == EObjectTrackState::AcquiredSafeAndTemprorayLoss ||
+			TrackState == EObjectTrackState::AcquiredDangerousAndTemprorayLoss;
+
+	}
 };
 
 
@@ -71,30 +120,36 @@ class CTrackerBase
 protected:
 
 	TArray< STrackedObjectInfo*> TrackedObjects;
-	TMap<int, STrackedObjectInfo> TrackClientIdMap;
+	TMap<int, STrackedObjectInfo*> TrackClientIdMap;
 
 	STrackedObjectInfo ClosestTrack;
 	FLOAT64 CPAMeters;
 	FLOAT64 CPATimeSec;
-	FLOAT64 IsTowardsCPA;
+	BOOLEAN IsTowardsCPA;
 	FVector OwnShipLocation;
+	FVector OwnShipVelocity;
 	FVector OwnShipRPY;
 	AActor* pOwnShip;
-
-
-
-
+	FLOAT64 BearingToTargetDegTrueNorth;
+	FVector2D RadarRangeMeter;
+	FLOAT64 RadarRangeMeanErrorMeter;
+	FLOAT64 RadarRangeErrorStdDevMeter;
+	INT32S MaxTrackCount = 10;
+	FLOAT64 TargetAquireTimeOutSec = 5.0f;
+	FLOAT64 OutOfRangeToLostTimeoutSec = 1.0f;
+	FLOAT64 TemprorayAcquireToLostTimeoutSec = 1.0f;
 protected:
 	STrackedObjectInfo* FindTrackByClientId(INT32S client_track_id);
 	void AddTrack(STrackedObjectInfo* p_track);
 	void UpdateTrackState(STrackedObjectInfo *p_track);
-	bool CTrackerBase::TryAcquire(STrackedObjectInfo* p_track, bool &is_safe_target);
+	bool TryAcquire(STrackedObjectInfo* p_track, bool &is_safe_target);
+	bool CheckStillAquired(STrackedObjectInfo* p_track, bool& is_safe_target);
+	bool IsTargetOutofRange(STrackedObjectInfo* p_track);
 
 public:
 	CTrackerBase();
 	~CTrackerBase();
-
-
+	virtual void SetOwnshipData(FVector own_ship_location, FVector rpy_deg, FVector own_ship_vel, FVector2D radar_range_meter, FLOAT64 error_mean_meter, FLOAT64 error_mean_std);
 	virtual bool TryTrack(INT32U client_id, FVector pos, FLOAT64 bearing_true_north_deg, FLOAT64 distance_meter);
 	virtual bool CancelAll();
 	virtual bool CancelTrack(INT32U id);

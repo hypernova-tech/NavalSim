@@ -165,8 +165,14 @@ bool AHalo24Radar::VerifySerial(char* p_inp)
 
 void AHalo24Radar::UpdateTracker()
 {
+	if (!UseSimulationDataAsOwnShip) {
+		FRotator rot(0, -(360 - (INT32S)LastOwnshipData.DirectionDeg), 0);
+		FVector vel = rot.RotateVector(FVector::ForwardVector) * LastOwnshipData.SpeedMetersPerSec;
+		pTracker->SetOwnshipData(GetActorLocation(), CUtil::GetActorRPY(this), vel, RangeMeter, NoiseMean, NoiseStdDeviation);
+	}
+	
 	Super::UpdateTracker();
-	STargetTrackStatusData track_status;
+	STargetTrackStatusData track_status = { 0 };
 
 
 	track_status.Tracks = pTracker->GetTrackedObjects();
@@ -174,7 +180,7 @@ void AHalo24Radar::UpdateTracker()
 	track_status.TimeToClosestPointOfApproachSec = pTracker->GetCPATimeSec();
 	track_status.TowardsCPA = pTracker->GetIsTowardsCPA();
 
-	pHalo24CommIF->SendTrackedObjects(p_tracked_objects);
+	pHalo24CommIF->SendTrackedObjects(track_status,Serial);
 
 	
 }
