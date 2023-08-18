@@ -11,7 +11,30 @@
  */
 
 
+struct STraceArgs
+{
+	AActor* p_actor;
+	FVector scan_center;
+	FVector scan_rpy_world_deg;
+	bool is_world;
+	float min_range_meter;
+	float range_meter;
+	float azimuth_start_deg;
+	float azimuth_end_deg;
 
+	float elevation_start_deg;
+	float elevation_end_deg;
+	float azimuth_angle_step_deg;
+	float elevation_angle_step_deg;
+	float measurement_error_mean;
+	float measurement_error_std;
+    SClutterParams clutter_params;
+
+	bool show_radar_beam;
+	TArray<AActor*> *p_ignore_list;
+	bool create_scan_line;
+
+};
 
 class CUtil
 {
@@ -24,6 +47,7 @@ public:
 	static bool Trace(AActor* p_actor, bool is_world, float min_range_meter, float range_meter, float azimuth_start_deg, float azimuth_end_deg, float elevation_start_deg, float elevation_end_deg, float azimuth_angle_step_deg, float elevation_angle_step_deg, 
 						float measurement_error_mean, float measurement_error_std, const SClutterParams& clutter_params,
 						bool show_radar_beam, TArray<AActor*> &ignore_list, bool create_scan_line,  SScanResult* pscan_result);
+	static bool Trace(const STraceArgs &args, SScanResult* pscan_result);
 
 	static float ConvertToFloat(const char* p_str);
 	static FString ConvertToFString(const char* p_str);

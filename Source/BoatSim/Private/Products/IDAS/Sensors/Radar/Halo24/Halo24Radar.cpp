@@ -4,7 +4,8 @@
 #include "Products/IDAS/Sensors/Radar/Halo24/Halo24Radar.h"
 #include "Products/IDAS/Sensors/Radar/Halo24/CommIF/Halo24CommIF.h"
 #include <Lib/Utils/CUtil.h>
-#
+#include <Products/IDAS/Sensors/Radar/Halo24/Tracker/Halo24RadarTracker.h>
+
 void AHalo24Radar::BeginPlay()
 {
 	Super::BeginPlay();
@@ -44,6 +45,7 @@ void AHalo24Radar::RadarStateMachine()
 		}
 		break;
 	case EHalo24StateMachineStates::WaitPoweredOn:
+		SetScanEnabled(false);
 		if (IsPoweredOn) {
 			next_state = EHalo24StateMachineStates::WaitTransmit;
 			SetRadarState(ERadarState::eStandby);
@@ -57,12 +59,17 @@ void AHalo24Radar::RadarStateMachine()
 		break;
 	case EHalo24StateMachineStates::Transmitting:
 		if (IsTransmitOn) {
+			SetScanEnabled(true);
 			next_state = EHalo24StateMachineStates::WaitTransmit;
 		}
 		if (IsPoweredOn) {
 			next_state = EHalo24StateMachineStates::WaitPoweredOn;
 		}
 		break;
+
+
+
+
 	default:
 		break;
 	}
@@ -151,6 +158,26 @@ void AHalo24Radar::HandleSectorBlankingData(SSectorBlankingData* p_data)
 	}
 }
 
+bool AHalo24Radar::VerifySerial(char* p_inp)
+{
+	return strcmp(p_inp, Serial) == 0;
+}
+
+void AHalo24Radar::UpdateTracker()
+{
+	Super::UpdateTracker();
+	auto p_tracked_objects = pTracker->GetTrackedObjects();
+
+	pHalo24CommIF->SendTrackedObjects(p_tracked_objects);
+
+	
+}
+
+
+char* AHalo24Radar::GetSerial()
+{
+	return Serial;
+}
 void AHalo24Radar::OnRecievedMessage(SRadarSimSDKPacket* p_pack)
 {
 	if (p_pack->Header.PacketType == ESimSDKDataIDS::UnlockKeys) {
@@ -158,7 +185,7 @@ void AHalo24Radar::OnRecievedMessage(SRadarSimSDKPacket* p_pack)
 		ValidateKeys(p_keys->UnlockKey, p_keys->UnlockKeyLen);
 	}
 
-	if (p_pack->Header.PacketType == ESimSDKDataIDS::ConnectRadar) {
+	else if (p_pack->Header.PacketType == ESimSDKDataIDS::ConnectRadar) {
 		SConnectRadar* p_connect_args = (SConnectRadar*)p_pack->Payload;
 		if (strcmp((char*)p_connect_args->SerialData.SerialKey, Serial) == 0) {
 			IsImageStreamConnected[p_connect_args->ImageStreamNo] = true;
@@ -166,7 +193,7 @@ void AHalo24Radar::OnRecievedMessage(SRadarSimSDKPacket* p_pack)
 		}
 	}
 
-	if (p_pack->Header.PacketType == ESimSDKDataIDS::DisconnectRadar) {
+	else if (p_pack->Header.PacketType == ESimSDKDataIDS::DisconnectRadar) {
 		SConnectRadar* p_connect_args = (SConnectRadar*)p_pack->Payload;
 		if (strcmp((char*)p_connect_args->SerialData.SerialKey, Serial) == 0) {
 			IsImageStreamConnected[p_connect_args->ImageStreamNo] = false;
@@ -174,7 +201,7 @@ void AHalo24Radar::OnRecievedMessage(SRadarSimSDKPacket* p_pack)
 		}
 	}
 
-	if (p_pack->Header.PacketType == ESimSDKDataIDS::PowerControl) {
+	else if (p_pack->Header.PacketType == ESimSDKDataIDS::PowerControl) {
 		SPowerControl* p_connect_args = (SPowerControl*)p_pack->Payload;
 		if (strcmp((char*)p_connect_args->SerialData.SerialKey, Serial) == 0) {
 
@@ -189,7 +216,7 @@ void AHalo24Radar::OnRecievedMessage(SRadarSimSDKPacket* p_pack)
 		}
 	}
 
-	if (p_pack->Header.PacketType == ESimSDKDataIDS::TransmitControl) {
+	else if (p_pack->Header.PacketType == ESimSDKDataIDS::TransmitControl) {
 		STransmitControl* p_connect_args = (STransmitControl*)p_pack->Payload;
 		if (strcmp((char*)p_connect_args->SerialData.SerialKey, Serial) == 0) {
 			if (p_connect_args->TransmitOn) {
@@ -269,6 +296,43 @@ void AHalo24Radar::OnRecievedMessage(SRadarSimSDKPacket* p_pack)
 			pHalo24CommIF->SendResponseAckNack(ESimSDKDataIDS::SectorBlanking, Serial, true);
 		}
 	}
+	else	if (p_pack->Header.PacketType == ESimSDKDataIDS::ConnectTrackingClient) {
+		SConnectTrackingClientPayload* p_args = (SConnectTrackingClientPayload*)p_pack->Payload;
+		if (strcmp((char*)p_args->SerialData.SerialKey, Serial) == 0) {
+			IsTrackingClientStreamConnected[p_args->ImageStreamNo] = true;
+			pHalo24CommIF->SendResponseAckNack(ESimSDKDataIDS::ConnectTrackingClient, Serial, true, p_args->ImageStreamNo);
+		}
+	}
+	else	if (p_pack->Header.PacketType == ESimSDKDataIDS::TrackingAcquire) {
+		STrackingAcquireTarget* p_args = (STrackingAcquireTarget*)p_pack->Payload;
+		if (strcmp((char*)p_args->SerialData.SerialKey, Serial) == 0) {
+			bool ret = pTracker->TryTrack(p_args->Id, GetActorLocation(), 360-(INT32S)p_args->BearingDeg, p_args->RangeMeter);
+			pHalo24CommIF->SendResponseAckNack(ESimSDKDataIDS::TrackingAcquire, Serial, ret);
+		}
+	}
+	else	if (p_pack->Header.PacketType == ESimSDKDataIDS::TrackingCancel) {
+		STrackingCancelTarget* p_args = (STrackingCancelTarget*)p_pack->Payload;
+		if (VerifySerial((char*)p_args->SerialData.SerialKey)) {
+			bool ret = false;
+
+			if (p_args->CancelAll) {
+				ret = pTracker->CancelAll();
+			}
+			else {
+					ret = pTracker->CancelTrack(p_args->Id);
+			}
+			
+			pHalo24CommIF->SendResponseAckNack(ESimSDKDataIDS::TrackingCancel, Serial, ret);
+		}
+	}
+	else if (p_pack->Header.PacketType == ESimSDKDataIDS::TrackingOwnshipData) {
+		STrackingOwnShipNavigation* p_args = (STrackingOwnShipNavigation*)p_pack->Payload;
+		if (VerifySerial((char*)p_args->SerialData.SerialKey)) {
+			memcpy(&LastOwnshipData, p_args, sizeof(LastOwnshipData));
+			pHalo24CommIF->SendResponseAckNack(ESimSDKDataIDS::TrackingOwnshipData, Serial, true);
+		}
+
+	}
 }
 
 void AHalo24Radar::SendSerial()
@@ -283,6 +347,13 @@ void AHalo24Radar::InitSensor()
 	Super::InitSensor();
 	pHalo24CommIF = (UHalo24CommIF*)pCommIF;
 	pHalo24CommIF->SetHostIF(this);
+}
+
+void AHalo24Radar::InitTracker()
+{
+
+	pTracker = new CHalo24RadarTracker();
+
 }
 
 void AHalo24Radar::ValidateKeys(INT8U* p_keys, INT8U key_count)

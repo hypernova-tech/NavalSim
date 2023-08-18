@@ -18,15 +18,17 @@ void UHalo24CommIF::SendData(void* p_data, uint32 size_in_bytes)
 	HasNewData = true;
 	SScanResult* p_in = (SScanResult*)p_data;
 	SScanResult* p_new = p_in;
-	
+
 	CurrentRequest.Add(p_new);
 
 }
 
+
+
 uint32 UHalo24CommIF::Run()
 {
 	while (!IsStoped) {
-		FPlatformProcess::Sleep(0.1);
+		FPlatformProcess::Sleep(0.02);
 
 		if (CurrentRequest.Num() > 0) {
 			SendRadarTrack();
@@ -56,8 +58,6 @@ void UHalo24CommIF::BeginPlay()
 	for (int i = 0; i < 16; i++) {
 		Packets.Add(new SRadarSimSDKPacket());
 	}
-	
-
 
 	SenderThread = FRunnableThread::Create(this, *(GetOwner()->GetName()));
 	
@@ -66,20 +66,23 @@ void UHalo24CommIF::BeginPlay()
 void UHalo24CommIF::SendRadarTrack()
 {
 	SScanResult* p_current = CurrentRequest[0];
-	FLOAT32 each_spoke_step = 1.0f / 4096;
+	FLOAT32 each_spoke_step = 360.0f / 4096;
 	FLOAT32 each_cell_size = p_current->ScanRangeMeter / 1024.0f;
 	CurrentRequest.RemoveAt(0);
 
 	
 	auto* p_current_sector = p_current->GetSectorContainer()->GetSector(p_current->CurrentSector);
 
-	int SpokeSequanceNumber = 0;
-	int SpokeCountPerSector = 4096 * FMath::Abs(p_current_sector->EndAzimuthDeg - p_current_sector->StartAzimuthDeg) / 360.0;
+	
+	int SpokeCountPerSector = 4096 / p_current->SectorCount;
 
+	if (p_current->CurrentSector == 0 && SpokeSequanceNumber != 0) {
+		SpokeSequanceNumber = 0;
+	}
 
 	
 
-	for (INT32S i = 0; i < SpokeCountPerSector; i++) {
+	for (int i = 0; i < SpokeCountPerSector; i++) {
 
 		SRadarSimSDKPacket pack;
 		memset(&pack, 0, sizeof(SRadarSimSDKPacket));
@@ -95,18 +98,29 @@ void UHalo24CommIF::SendRadarTrack()
 		p_hdr->rangeCellSize_mm = (each_cell_size)*1000;
 		p_hdr->spokeAzimuth = p_current->AzimuthRange.X;
 		p_hdr->bearingZeroError = 0;
-		p_hdr->spokeCompass = p_current->ScanOwnshipHeadingTrueNorth / 4096.0f;
+		p_hdr->spokeCompass = p_current->ScanRPYWorld.Z / 4096.0f;
 		p_hdr->trueNorth = 1;
 		p_hdr->rangeCellsDiv2 = p_current->ScanRangeMeter / (each_cell_size) * 0.5f;
 
-		p_current_sector->MapSpoke4Bits(p_current->ScanCenter, p_current->AzimuthRange.X + i * each_spoke_step, each_cell_size, p_spoke_payload->SpokeData.Data);
+		bool ret = p_current_sector->MapSpoke4Bits(p_current->ScanCenter,p_current_sector->StartAzimuthDeg +  i * each_spoke_step, each_cell_size, p_spoke_payload->SpokeData.Data);
 
-		pack.SetID(ESimSDKDataIDS::SpokeData);
-		pack.SetPayloadSize(sizeof(SHalo24SpokePayload));
-		pUDPConnection->SendUDPData((const INT8U*)&pack, pack.GetTransmitSize());
+		if (ret) {
+			pack.SetID(ESimSDKDataIDS::SpokeData);
+			p_spoke_payload->SerialData.SetSerial(pHostIF->GetSerial(), strlen(pHostIF->GetSerial()));
+			pack.SetPayloadSize(sizeof(SHalo24SpokePayload));
+			pUDPConnection->SendUDPData((const INT8U*)&pack, pack.GetTransmitSize());
+		}
+		else {
+			break;
+		}
+
 
 		SpokeSequanceNumber++;
-		SpokeSequanceNumber %= 4096;
+
+		if (SpokeSequanceNumber >= 4096) {
+			SpokeSequanceNumber = 0;
+		}
+		
 
 	}
 
@@ -152,6 +166,39 @@ void UHalo24CommIF::SendRadarSetup(const SRadarSetupData& setup, char *p_serial)
 	payload.SerialData.SetSerial(p_serial, strlen(p_serial));
 	pack.SetPayload(ESimSDKDataIDS::RadarSetup, (INT8U*)&payload, sizeof(SRadarSetupPayload));
 	pUDPConnection->SendUDPData((const INT8U*)&pack, pack.GetTransmitSize());
+}
+
+void UHalo24CommIF::SendTrackedObjects(TArray< STrackedObjectInfo*>* p_info_all, char* p_serial)
+{
+	for (auto p_info : *p_info_all) {
+		STrackingTargetStatusPayload payload;
+		SRadarSimSDKPacket pack;
+		
+
+		payload.TargetData.targetID = p_info->ClinetId;
+		payload.TargetData.serverTargetID = p_info->TrackerId;
+			 
+		payload.TargetData.infoAbsolute.distance_m = p_info->AbsoluteDistanceMeter;
+		payload.TargetData.infoAbsolute.bearing_ddeg = (360 - p_info->AbsoluteBearingDeg)*10; // ship coordinate system
+		payload.TargetData.infoAbsolute.speed_dmps = p_info->AbsoulteTargetSpeedMetersPerSec * 10; // ship coordinate system
+		payload.TargetData.infoAbsolute.course_ddeg = (360 - p_info->AbsoulteTargetCourseDeg) * 10;
+			 
+		payload.TargetData.infoRelative.distance_m = p_info->RelativeDistanceMeter;
+		payload.TargetData.infoRelative.bearing_ddeg = (360 - p_info->RelativeBearingDeg) * 10; // ship coordinate system
+		payload.TargetData.infoRelative.speed_dmps = p_info->RelativeTargetSpeedMetersPerSec * 10; // ship coordinate system
+		payload.TargetData.infoRelative.course_ddeg = (360 - p_info->RelativeTargetCourseDeg) * 10;
+
+		payload.TargetData.targetState = 
+
+		payload.SerialData.SetSerial(p_serial, strlen(p_serial));
+		pack.SetID(ESimSDKDataIDS::TrackingStatus);
+		pack.SetPayload((INT8U*) & payload, sizeof(STrackingTargetStatusPayload));
+
+
+		pUDPConnection->SendUDPData((const INT8U*)&pack, pack.GetTransmitSize());
+
+
+	}
 }
 void UHalo24CommIF::RestorePacket(SRadarSimSDKPacket* p_pack)
 {

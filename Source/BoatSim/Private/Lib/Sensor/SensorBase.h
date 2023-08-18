@@ -96,6 +96,7 @@ protected:
 	virtual void Run(float delta_time_sec);
 	virtual void FinalizeSensor();
 	SClutterParams GetClutterParams();
+	virtual void OnDataReady();
 
 public:	
 	// Called every frame

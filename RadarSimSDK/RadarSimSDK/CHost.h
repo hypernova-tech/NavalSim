@@ -27,6 +27,12 @@ enum EHostState
 	SetSeaClutter,
 	SetRain,
 	SetSectorBlanking,
+	TrackingInitTrackers,
+	ConnectTrackers,
+	AcquireTrack,
+	CancelTrack,
+	CancalAll,
+	OwnShipNavigationData,
 	PeriodicUpdate,
 };
 

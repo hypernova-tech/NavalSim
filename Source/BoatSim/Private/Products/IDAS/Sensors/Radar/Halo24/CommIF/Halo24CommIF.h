@@ -9,6 +9,7 @@
 #include <Lib/Utils/CScanResult.h>
 #include <Lib/UDP/UdpConnection.h>
 #include <Products/IDAS/Sensors/Radar/Halo24/IHalo24HostIF.h>
+#include "Lib/Tracker/TrackerBase.h"
 #include "Halo24CommIF.generated.h"
 
 
@@ -42,6 +43,7 @@ public:
 	void SendResponseAckNack(ESimSDKDataIDS id, char *p_serial, bool is_ack, INT8U stream_no = 0);
 	void SendRadarState(ERadarState radar_state, char* p_serial);
 	void SendRadarSetup(const SRadarSetupData& setup, char* p_serial);
+	void SendTrackedObjects(TArray< STrackedObjectInfo*> *p_info, char* p_serial);
 
 private:
 
@@ -53,7 +55,6 @@ private:
 	virtual void Stop() override;
 
 	TArray< SScanResult*> CurrentRequest;
-	FPlatformNamedPipe* pPipeInstance;
 
 	IHalo24HostIF* pHostIF;
 
@@ -70,5 +71,7 @@ protected:
 
 	
 	void RestorePacket(SRadarSimSDKPacket* p_pack);
+	int SpokeSequanceNumber = 0;
+	char SerialKey[32];
 	
 };

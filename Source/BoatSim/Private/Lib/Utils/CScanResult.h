@@ -14,6 +14,7 @@
 
 #include <Lib/Types/Primitives.h>
 
+
 struct SScanInfo
 {
 	
@@ -29,6 +30,7 @@ struct SSectorInfo
 	TArray<FVector> SectorData;
 	TArray<TArray<FVector>*> ScanLines;
 
+
 public:
 
 	void Init(INT32S scan_line_count, FLOAT64 start_azimuth_deg, FLOAT64 end_azimuth_deg)
@@ -36,7 +38,7 @@ public:
 		ScanLineCount = scan_line_count;
 		StartAzimuthDeg = start_azimuth_deg;
 		EndAzimuthDeg = end_azimuth_deg;
-		AzimuthStepDeg = (EndAzimuthDeg - StartAzimuthDeg)/(scan_line_count-1);
+		AzimuthStepDeg = (EndAzimuthDeg - StartAzimuthDeg)/(scan_line_count);
 		for (INT32S i = 0; i < scan_line_count; i++) {
 			ScanLines.Add(new TArray<FVector>());
 		}
@@ -45,9 +47,9 @@ public:
 		SectorData.Reset();
 
 		for (INT32S i = 0; i < ScanLines.Num(); i++) {
-			delete ScanLines[i];
+			ScanLines[i]->Reset();
 		}
-		ScanLines.Reset();
+	
 	}
 
 	void Add(FVector& vec)
@@ -64,16 +66,25 @@ public:
 	}
 
 
-	void MapSpoke4Bits(FVector own_ship_pos, FLOAT32 azimuth_deg, FLOAT32 cell_size_meter, INT8U *p_out)
+	bool MapSpoke4Bits(FVector own_ship_pos, FLOAT32 azimuth_deg, FLOAT32 cell_size_meter, INT8U *p_out)
 	{
+		if (azimuth_deg >= EndAzimuthDeg) {
+			return false;
+		}
+
 		INT32S ind = (azimuth_deg - StartAzimuthDeg) / AzimuthStepDeg;
+
+		if (ind >= ScanLines.Num()) {
+			return false;
+		}
+
 		TArray<FVector>* p_data = ScanLines[ind];
 
 	
 		for (INT32S i = 0; i < p_data->Num(); i++) {
 			FVector pos = (*p_data)[i];
 
-			FLOAT32 dist = FVector::DistSquaredXY(pos, own_ship_pos);
+			FLOAT32 dist = TOW( FVector::DistXY(pos, own_ship_pos));
 			INT32S sample_ind = dist / cell_size_meter;
 
 			INT32S byte_ind = sample_ind / 2;
@@ -88,6 +99,8 @@ public:
 			
 
 		}
+
+		return true;
 	}
 
 };
@@ -149,7 +162,7 @@ struct SScanResult
 	int HorizontalCount;
 	int VeriticalCount;
 	FVector ScanCenter;
-	FLOAT32 ScanOwnshipHeadingTrueNorth;
+	FVector ScanRPYWorld;
 	FLOAT32 RangeMeter[HORIZOTAL_SCAN_SIZE][VERTICAL_SCAN_SIZE]; //meter
 	FLOAT32 NormalStrength[HORIZOTAL_SCAN_SIZE][VERTICAL_SCAN_SIZE]; //meter
 	FVector Point3D[HORIZOTAL_SCAN_SIZE][VERTICAL_SCAN_SIZE];
@@ -205,6 +218,12 @@ public:
 	{
 		INT32U azimuth_ind = (azimuth_deg - AzimuthRange.X) / ScanAzimuthStepDeg;
 		INT32U elevation_ind = (elevation_deg - ElevationRange.X) / ScanElevationStepDeg;
+
+		if (azimuth_ind < 0 || elevation_ind> 0) {
+			intensity = 0;
+			////todo fixme
+			return 0;
+		}
 		intensity = NormalStrength[azimuth_ind][elevation_ind];
 		return RangeMeter[azimuth_ind][elevation_ind];
 

@@ -6,11 +6,8 @@
 #include "Lib/Sensor/SensorBase.h"
 #include "Lib/Utils/CScanResult.h"
 #include <Lib/Zone/ZoneContainer.h>
+#include <Lib/Tracker/TrackerBase.h>
 #include "RadarBase.generated.h"
-
-
-
-
 
 /**
  * 
@@ -100,12 +97,17 @@ protected:
 	FLOAT64 BeamWidthDeg;
 
 
+	CTrackerBase* pTracker = nullptr;
+
 	virtual void Run(float delta_time_sec) override;
 	virtual void InitSensor() override;
 	virtual void BeginPlay() override;
 
 	virtual void Scan();
 	virtual void RadarStateMachine();
+	virtual void OnDataReady() override;
+	virtual void InitTracker();
+	virtual void UpdateTracker();
 public:
 
 
@@ -127,12 +129,17 @@ public:
 	void SetFovHorizontalDeg(double val);
 	double GetFovHorizontalDeg();
 
-	
+	void SetTrackerEnabled(bool val);
+	bool GetTrackerEnabled();
 
+	void SetScanEnabled(bool val);
+	bool GetScanEnabled();
 
 private:
 	float CurrentScanAzimuth;
 	double NextScanTime;
 	bool IsFullScaned = false;
+	bool IsScanEnabled = false;
+	bool IsTrackerEnabled = false;
 	
 };

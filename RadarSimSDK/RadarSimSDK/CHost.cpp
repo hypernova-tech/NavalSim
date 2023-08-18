@@ -3,6 +3,7 @@
 
 
 #include "Halo24SDK/include/ImageClient.h"
+#include <TargetTrackingClient.h>
 using namespace Navico::Protocol::NRP;
 
 
@@ -62,6 +63,7 @@ void CHost::ThreadFunction()
 #if true
 
 	tImageClient* ImageClients[2];
+	tTargetTrackingClient* TargetTrackingClients[2];
 
 
 #endif
@@ -279,16 +281,108 @@ void CHost::ThreadFunction()
 				for (INT32U i = 0; i < RadarCount; i++) {
 					auto* p_radar = tMultiRadarClient::GetInstance()->FindRadar(radars[i]);
 					p_radar->pImageClient->SetSectorBlanking(0, true);
+					std::this_thread::sleep_for(std::chrono::milliseconds(100));
 					p_radar->pImageClient->SetSectorBlanking(2, true);
 				}
 
-				next_state = EHostState::PeriodicUpdate;
+				next_state = EHostState::TrackingInitTrackers;
 				std::this_thread::sleep_for(std::chrono::milliseconds(10));
 			}
 			break;
 			
-			
+			case EHostState::TrackingInitTrackers:
+			{
 
+				// create Target Trackers
+				for (int i = 0; i < 2; i++) {
+					TargetTrackingClients[i] = new tTargetTrackingClient();
+					
+				}
+
+				next_state = EHostState::ConnectTrackers;
+				std::this_thread::sleep_for(std::chrono::milliseconds(10));
+			}
+			break;
+			
+				
+			case EHostState::ConnectTrackers:
+			{
+
+				for (INT32U i = 0; i < RadarCount; i++) {
+					for (INT32S stream = 0; stream < 2; stream++) {
+						auto ret = TargetTrackingClients[i]->Connect(radars[i], i);
+						if (ret == 0) {
+							cout << "connected to stream sent " << string(radars[i]) << "stream" << stream << endl;
+						}
+						std::this_thread::sleep_for(std::chrono::milliseconds(10));
+					}
+				
+				}
+
+				next_state = EHostState::AcquireTrack;
+			}
+			break;
+		
+			case EHostState::AcquireTrack:
+			{
+
+				for (INT32U i = 0; i < RadarCount; i++) {
+
+					auto ret = TargetTrackingClients[i]->Acquire(0, 500, 50, eBearingType::eAbsolute);
+					if (ret == 0) {
+						cout << "Acquired Track " << endl;
+					}
+					std::this_thread::sleep_for(std::chrono::milliseconds(10));
+				}
+
+				next_state = EHostState::CancelTrack;
+			}
+			break;
+			case EHostState::CancelTrack:
+			{
+
+				for (INT32U i = 0; i < RadarCount; i++) {
+
+					auto ret = TargetTrackingClients[i]->Cancel(1);
+					if (ret == 0) {
+						cout << "CancelTrack Track " << endl;
+					}
+					std::this_thread::sleep_for(std::chrono::milliseconds(10));
+				}
+
+				next_state = EHostState::CancalAll;
+			}
+			break;
+			case EHostState::CancalAll:
+			{
+
+				for (INT32U i = 0; i < RadarCount; i++) {
+
+					auto ret = TargetTrackingClients[i]->CancelAll();
+					if (ret == 0) {
+						cout << "Cancel All Track " << endl;
+					}
+					std::this_thread::sleep_for(std::chrono::milliseconds(10));
+				}
+
+				next_state = EHostState::OwnShipNavigationData;
+			}
+			break;
+			case EHostState::OwnShipNavigationData:
+			{
+
+				for (INT32U i = 0; i < RadarCount; i++) {
+
+					auto ret = TargetTrackingClients[i]->SetOwnVesselNavigation(eSpeedType::eSpeedOverGround, 50, eDirectionType::eHeadingTrue, 600, eMagVarType::eNoMagVar, 30);
+					if (ret == 0) {
+						cout << "OwnShipNavigationData" << endl;
+					}
+					std::this_thread::sleep_for(std::chrono::milliseconds(10));
+				}
+
+				next_state = EHostState::PeriodicUpdate;
+			}
+			break;
 			case EHostState::PeriodicUpdate:
 
 				for (INT32U i = 0; i < RadarCount; i++) {

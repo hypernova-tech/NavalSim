@@ -1,5 +1,7 @@
 #pragma once
 #include "Lib/Types/Primitives.h"
+#include "SDKTypes/NavRadarProtocol.h"
+using namespace Navico::Protocol::NRP;
 
 
 
@@ -27,6 +29,11 @@ enum ESimSDKDataIDS :INT32U  // if PacketType is command
 	RadarState,
 	RadarSetup,
 	SpokeData,
+	ConnectTrackingClient,
+	TrackingAcquire,
+	TrackingCancel,
+	TrackingOwnshipData,
+	TrackingStatus
 };
 
 struct SSerialData
@@ -456,6 +463,120 @@ public:
 
 
 };
+
+
+/// Tracking Client
+BYTE_ALIGNED_BEGIN
+struct SConnectTrackingClientPayload {
+	SSerialData SerialData;
+	INT8U ImageStreamNo;
+
+public:
+	SConnectTrackingClientPayload()
+	{
+		memset(this, 0, sizeof(SConnectTrackingClientPayload));
+	}
+}BYTE_ALIGNED_END;
+
+
+
+
+BYTE_ALIGNED_BEGIN
+struct STrackingAcquireTarget {
+	SSerialData SerialData;
+	INT32U Id;
+	INT32U RangeMeter;
+	INT32U BearingDeg;
+	INT8U BearingType;  //0: relative; 1 absulute true north
+
+public:
+	STrackingAcquireTarget()
+	{
+		memset(this, 0, sizeof(SConnectTrackingClientPayload));
+	}
+}BYTE_ALIGNED_END;
+
+BYTE_ALIGNED_BEGIN
+struct STrackingCancelTarget {
+	SSerialData SerialData;
+	INT32U Id;
+	INT8U CancelAll;
+
+
+public:
+	STrackingCancelTarget()
+	{
+		memset(this, 0, sizeof(SConnectTrackingClientPayload));
+	}
+}BYTE_ALIGNED_END;
+
+BYTE_ALIGNED_BEGIN
+struct STrackingOwnShipNavigation {
+
+	enum ESpeedType :INT8U
+	{
+		ENoSpeed = 0,    ///< Unused
+		ESpeedOverGround = 1,    ///< Speed Over Ground (SOG), eg. from GPS
+		EWaterSpeed = 2,    ///< Speed relative to the Water
+
+		ETotalSpeedTypes
+	};
+
+	enum EDirectionType :INT8U
+	{
+		ENoDirection = 0,   ///< Unused
+		ECourseOverGround = 1,   ///< Course-Over-Ground (COG), eg. from GPS
+		EHeadingMagnetic = 2,   ///< Heading is relative to magnetic-north
+		EHeadingTrue = 3,   ///< Heading is relative to true-north
+
+		ETotalDirectionTypes
+	};
+
+	enum EMagVarType
+	{
+		ENoMagVar = 0,   ///< Unused
+		EValidMagVar = 1,   ///< Magnetic Variation is present, eg. from true north
+
+		ETotalMagVarTypes
+	};
+
+	SSerialData SerialData;
+	ESpeedType SpeedType;
+	INT32U SpeedMetersPerSec;
+	EDirectionType DirectionType;
+	INT32U DirectionDeg;
+	EMagVarType MagVarType;
+	INT32S MagVarDeg;
+
+
+
+
+public:
+	STrackingOwnShipNavigation()
+	{
+		memset(this, 0, sizeof(STrackingOwnShipNavigation));
+	}
+}BYTE_ALIGNED_END;
+
+
+
+BYTE_ALIGNED_BEGIN
+struct STrackingTargetStatusPayload{
+	SSerialData SerialData;
+	tTrackedTarget TargetData;
+
+
+public:
+	STrackingTargetStatusPayload()
+	{
+		memset(this, 0, sizeof(SConnectTrackingClientPayload));
+	}
+}BYTE_ALIGNED_END;
+
+
+
+
+
 
 struct SRadarSimSDKPacket
 {

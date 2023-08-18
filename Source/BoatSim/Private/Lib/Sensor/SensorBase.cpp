@@ -55,6 +55,7 @@ void ASensorBase::InitSensor()
 		this->DisableComponentsSimulatePhysics();
 
 	}
+
 }
 
 
@@ -122,3 +123,7 @@ UGenericCommIF* ASensorBase::GetCommCommIF()
 	return pCommIF;
 }
 
+void ASensorBase::OnDataReady()
+{
+
+}

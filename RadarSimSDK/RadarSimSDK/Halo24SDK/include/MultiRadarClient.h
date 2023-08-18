@@ -17,6 +17,7 @@ using namespace std;
 #include "../../Lib/Types/Halo24Types.h"
 #define MAX_NUMBER_OF_RADARS 2
 #include "ImageClient.h"
+#include <TargetTrackingClient.h>
 using namespace Navico::Protocol::NRP;
 enum EMultiRadarState
 {
@@ -118,7 +119,8 @@ public:
     int UnlockKeySize;
     IConnection* pConnection;
  
-    tImageClient* pImageClient;
+    tImageClient* pImageClient = nullptr;
+    tTargetTrackingClient* pTargetTrackingClient = nullptr;
 
     SRadar()
     {

@@ -1,7 +1,8 @@
 #if true
-#include "ImageClient.h"
-#include "MultiRadarClient.h"
+#include "../include/ImageClient.h"
+#include "../include/MultiRadarClient.h"
 #include "../../Lib/Types/Halo24Types.h"
+
 using namespace Navico::Protocol::NRP;
 
 Navico::Protocol::NRP::tImageClient::tImageClient()
@@ -34,7 +35,7 @@ bool Navico::Protocol::NRP::tImageClient::Disconnect()
         return 0;
     }
     SConnectRadar connect_radar_payload;
-    p_radar->SendPacket< SConnectRadar>(ESimSDKDataIDS::ConnectRadar, (char*)ConnectedSerialNumber, &connect_radar_payload);
+    p_radar->SendPacket< SConnectRadar>(ESimSDKDataIDS::DisconnectRadar, (char*)ConnectedSerialNumber, &connect_radar_payload);
 
     return true;
 }

@@ -4,6 +4,7 @@
 #include "Lib/Sensor/GenericSensor/RadarBase.h"
 #include "Lib/Utils/CUtil.h"
 #include <Lib/SystemManager/SystemManagerBase.h>
+#include "Lib/Tracker/RadarBasedTracker/RadarBasedTracker.h"
 
 
 void ARadarBase::SetFrequency(double val)
@@ -66,7 +67,23 @@ double ARadarBase::GetFovHorizontalDeg()
 	return FovHorizontalDeg;
 }
 
+void ARadarBase::SetTrackerEnabled(bool val)
+{
+	IsTrackerEnabled = val;
+}
+bool ARadarBase::GetTrackerEnabled()
+{
+	return IsTrackerEnabled;
+}
 
+void ARadarBase::SetScanEnabled(bool val)
+{
+	IsScanEnabled = val;
+}
+bool ARadarBase::GetScanEnabled()
+{
+	return IsScanEnabled;
+}
 
 void ARadarBase::BeginPlay()
 {
@@ -79,9 +96,9 @@ void ARadarBase::BeginPlay()
 void ARadarBase::InitSensor()
 {
 	Super::InitSensor();
-	ScanResultContainer.Init(16, 10);
+
+	ScanResultContainer.Init(1, 8);
 	pScanResult = ScanResultContainer.GetCircular();
-	pScanResult->Init(10);
 	BeamWidthDeg = 360.0 / pScanResult->SectorCount;
 	GuardZone.Init(MaxGuardZoneCount);
 	BlankingZone.Init(MaxSectorBlankingZoneCount);
@@ -90,6 +107,8 @@ void ARadarBase::InitSensor()
 	BlankingZone.SetArea(1, 90, 180);
 	BlankingZone.SetArea(2, 180, 270);
 	BlankingZone.SetArea(3, 270, 360);
+
+	InitTracker();
 }
 
 
@@ -103,9 +122,30 @@ void ARadarBase::Run(float delta_time_sec)
 void ARadarBase::RadarStateMachine()
 {
 	Scan();
+	UpdateTracker();
+}
+void ARadarBase::OnDataReady()
+{
+	if (pCommIF != nullptr) {
+		pCommIF->SendData(pScanResult, -1);
+	}
+}
+void ARadarBase::InitTracker()
+{
+	pTracker = new CRadarBasedTracker();
+}
+void ARadarBase::UpdateTracker()
+{
+	if (IsTrackerEnabled) {
+		pTracker->Update();
+	}
+	
 }
 void ARadarBase::Scan()
 {
+	if (!IsScanEnabled) {
+		return;
+	}
 	bool is_reset = false;
 
 	if (IsFullScaned) {
@@ -125,14 +165,40 @@ void ARadarBase::Scan()
 			IsFullScaned = true;
 		}
 
+		STraceArgs args;
+
+		args.p_actor = this;
+		args.is_world = true;
+		args.range_meter = RangeMeter.Y;
+		args.min_range_meter = RangeMeter.X;
+		args.azimuth_start_deg = start_azimuth;
+		args.azimuth_end_deg = end_azimuth;
+		args.elevation_start_deg = 0;
+		args.elevation_end_deg = FovVerticalDeg;
+		args.azimuth_angle_step_deg = HorizontalScanStepAngleDeg;
+		args.elevation_angle_step_deg = VerticalScanStepAngleDeg;
+		args.measurement_error_mean = MeasurementErrorMean;
+		args.measurement_error_std = MeasurementErrorUncertainy;
+		args.clutter_params = GetClutterParams();
+		args.show_radar_beam = ShowBeam;
+		args.p_ignore_list = &(ASystemManagerBase::GetInstance()->GetSensorGlobalIgnoreList());
+		args.create_scan_line = true;
+		args.scan_center = GetActorLocation();
+		auto rotator = GetActorRotation();
+		args.scan_rpy_world_deg = FVector(rotator.Roll, -rotator.Pitch, -rotator.Yaw);
 
 
 		if (!BlankingZone.CheckAnyActiveZone(start_azimuth, end_azimuth)) {
-			bool ret = CUtil::Trace(this, true, RangeMeter.X, RangeMeter.Y, start_azimuth, end_azimuth, 0, FovVerticalDeg, HorizontalScanStepAngleDeg, VerticalScanStepAngleDeg, MeasurementErrorMean, MeasurementErrorUncertainy, GetClutterParams(), ShowBeam, ASystemManagerBase::GetInstance()->GetSensorGlobalIgnoreList(), true, pScanResult);
+			//bool ret = CUtil::Trace(this, true, RangeMeter.X, RangeMeter.Y, start_azimuth, end_azimuth, 0, FovVerticalDeg, HorizontalScanStepAngleDeg, VerticalScanStepAngleDeg, 
+			//						MeasurementErrorMean, MeasurementErrorUncertainy, GetClutterParams(), ShowBeam, 
+			//						ASystemManagerBase::GetInstance()->GetSensorGlobalIgnoreList(), true, pScanResult);
 
-			if (pCommIF != nullptr) {
-				pCommIF->SendData(pScanResult, -1);
-			}
+			bool ret = CUtil::Trace(args, pScanResult);
+
+			
+
+			OnDataReady();
+	
 
 			CurrentScanAzimuth = end_azimuth + HorizontalScanStepAngleDeg;
 

@@ -59,7 +59,7 @@ protected:
 	UHalo24CommIF* pHalo24CommIF;
 
 	virtual void InitSensor() override;
-
+	virtual void InitTracker() override;
 
 	void ValidateKeys(INT8U *p_keys, INT8U key_count);
 	bool CanUpdateState = false;
@@ -70,20 +70,24 @@ protected:
 	bool IsImageStreamConnected[2] = { false };
 	bool IsPoweredOn = false;
 	bool IsTransmitOn = false;
-
+	bool IsTrackingClientStreamConnected[2] = { false };
 	ERadarState RadarState = ERadarState::eOff;
 	SRadarSetupData RadarSetupData;
 	SGuardZoneData GuardZoneData;
+	STrackingOwnShipNavigation LastOwnshipData;
 
 	void SetRadarState(ERadarState val);
 	void UpdateSetupData();
 	void HandleGuardZoneControl(SGuardZoneData* p_data);
 	void HandleSectorBlankingData(SSectorBlankingData* p_data);
+	bool VerifySerial(char* p_inp);
+	virtual void UpdateTracker() override;
+
 
 public :
 
 	virtual void OnRecievedMessage(SRadarSimSDKPacket* p_commands) override;
-	
+	virtual char* GetSerial() override;
 
 	
 	

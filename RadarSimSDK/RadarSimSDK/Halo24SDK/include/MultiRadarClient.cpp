@@ -279,6 +279,10 @@ void Navico::Protocol::tMultiRadarClient::HandleRadarState(IConnection* p_conn, 
         return;
     }
 
+    if (p_radar->pImageClient == nullptr) {
+        return;
+    }
+
     p_radar->pImageClient->OnReceivedRadarState(p_res);
 }
 

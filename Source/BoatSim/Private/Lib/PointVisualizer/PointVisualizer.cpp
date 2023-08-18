@@ -35,80 +35,88 @@ void APointVisualizer::Visualize(SScanResult *p_scan_result, FVector origin, FVe
 {
     //SetPixelValue(pRenderTarget, 50, 50, FColor::Green);
 
-
-    if (!pRenderTarget)
-    {
-        UE_LOG(LogTemp, Error, TEXT("Invalid render target."));
-        return;
-    }
+    try {
 
 
 
-    FRenderTarget* RenderTargetResource = pRenderTarget->GameThread_GetRenderTargetResource();
-
-
-    double one_over_max_range = 1.0 / WORLD_TO_UNREAL(max_range_meter);
-
-    FCanvas Canvas(RenderTargetResource, nullptr, 0, 0, 0, ERHIFeatureLevel::SM5);
-
-    // Clear the canvas with the desired color to avoid artifacts from previous frames
-   
-    Canvas.SetAllowedModes(FCanvas::ECanvasAllowModes::Allow_Flush);
-    //Canvas.SetAllowedModes(FCanvas::ECanvasAllowModes::Allow_DeleteOnRender);
-    Canvas.Clear(FColor::Black);
-    FIntPoint rt_size =  RenderTargetResource->GetSizeXY();
-
-    SSectorContainer *p_sector_container = p_scan_result->GetSectorContainer();
-
-    current_forward.Z = 0;
-    current_forward.Normalize();
-
-    current_right.Z = 0;
-    current_right.Normalize();
-
-    for (int sector = 0; sector < p_scan_result->SectorCount; sector++) {
-        SSectorInfo* p_sector_info = p_sector_container->GetSector(sector);
-     
-        for (FVector pos : p_sector_info->SectorData) {
-            FVector diff = pos - origin;
-            float local_forward = FVector::DotProduct(diff, current_forward);
-            float local_right = FVector::DotProduct(diff, current_right);
-
-            local_forward *= one_over_max_range;
-            local_right *= one_over_max_range;
-
-            float X = (1 + local_right) * 0.5;
-            float Y = (1 - local_forward) * 0.5;
-
-            FVector2D size(20, 20);
-            FCanvasTileItem TileItem(FVector2D(X * rt_size.X - size.X*0.5, Y * rt_size.Y - size.Y * 0.5), size, FLinearColor::Red);
-
-        TileItem.BlendMode = SE_BLEND_Opaque;
-        Canvas.DrawItem(TileItem);
+        if (!pRenderTarget)
+        {
+            UE_LOG(LogTemp, Error, TEXT("Invalid render target."));
+            return;
         }
 
 
-    }
 
-   
+        FRenderTarget* RenderTargetResource = pRenderTarget->GameThread_GetRenderTargetResource();
+
+
+        double one_over_max_range = 1.0 / WORLD_TO_UNREAL(max_range_meter);
+
+        FCanvas Canvas(RenderTargetResource, nullptr, 0, 0, 0, ERHIFeatureLevel::SM5);
+
+        // Clear the canvas with the desired color to avoid artifacts from previous frames
+
+        Canvas.SetAllowedModes(FCanvas::ECanvasAllowModes::Allow_Flush);
+        //Canvas.SetAllowedModes(FCanvas::ECanvasAllowModes::Allow_DeleteOnRender);
+        Canvas.Clear(FColor::Black);
+        FIntPoint rt_size = RenderTargetResource->GetSizeXY();
+
+        SSectorContainer* p_sector_container = p_scan_result->GetSectorContainer();
+
+        current_forward.Z = 0;
+        current_forward.Normalize();
+
+        current_right.Z = 0;
+        current_right.Normalize();
+
+        for (int sector = 0; sector < p_scan_result->SectorCount; sector++) {
+            SSectorInfo* p_sector_info = p_sector_container->GetSector(sector);
+
+            for (FVector pos : p_sector_info->SectorData) {
+                FVector diff = pos - origin;
+                float local_forward = FVector::DotProduct(diff, current_forward);
+                float local_right = FVector::DotProduct(diff, current_right);
+
+                local_forward *= one_over_max_range;
+                local_right *= one_over_max_range;
+
+                float X = (1 + local_right) * 0.5;
+                float Y = (1 - local_forward) * 0.5;
+
+                FVector2D size(20, 20);
+                FCanvasTileItem TileItem(FVector2D(X * rt_size.X - size.X * 0.5, Y * rt_size.Y - size.Y * 0.5), size, FLinearColor::Red);
+
+                TileItem.BlendMode = SE_BLEND_Opaque;
+                Canvas.DrawItem(TileItem);
+            }
+
+
+        }
+
+
 
 #if false
-    for (FVector2D vec : p_scan_result->Point2DScreen) {
-        
-        // Draw a single pixel at the specified location with the desired color
-               
-        FVector2D size(20, 20);
-        FCanvasTileItem TileItem(FVector2D(vec.X * rt_size.X - size.X*0.5, vec.Y * rt_size.Y - size.Y * 0.5), size, FLinearColor::Red);
+        for (FVector2D vec : p_scan_result->Point2DScreen) {
 
-        TileItem.BlendMode = SE_BLEND_Opaque;
-        Canvas.DrawItem(TileItem);
+            // Draw a single pixel at the specified location with the desired color
 
-            
-        
-    }
+            FVector2D size(20, 20);
+            FCanvasTileItem TileItem(FVector2D(vec.X * rt_size.X - size.X * 0.5, vec.Y * rt_size.Y - size.Y * 0.5), size, FLinearColor::Red);
+
+            TileItem.BlendMode = SE_BLEND_Opaque;
+            Canvas.DrawItem(TileItem);
+
+
+
+        }
 #endif
 
-    Canvas.Flush_GameThread();
+        Canvas.Flush_GameThread();
+
+    }
+    catch (...) {
+        CUtil::DebugLog("Exception caught");
+    }
 
 }
 
