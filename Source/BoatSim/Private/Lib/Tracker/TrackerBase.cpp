@@ -146,7 +146,7 @@ bool CTrackerBase::TryAcquire(STrackedObjectInfo* p_track, bool& is_safe_target)
     
     CUtil::GetOwnAndParents(pOwnShip, ignore_list);
 
-    auto actor = ASystemManagerBase::GetInstance()->GetVisibleActorAt(ignore_list, OwnShipLocation + dir * TOUE(RadarRangeMeter.X), target_pos, 5);
+    auto actor = ASystemManagerBase::GetInstance()->GetVisibleActorAt(ignore_list, OwnShipLocation + dir * TOUE(RadarRangeMeter.X), target_pos, TrackerDistanceToleranceMeter);
     if (actor != nullptr) {
         is_safe_target = true;
         p_track->pActor = actor;
@@ -160,7 +160,7 @@ bool CTrackerBase::CheckStillAquired(STrackedObjectInfo* p_track, bool& is_safe_
     TArray<AActor*> ignore_list;
     CUtil::GetOwnAndParents(pOwnShip, ignore_list);
 
-    auto actor = ASystemManagerBase::GetInstance()->GetVisibleActorAt(ignore_list, OwnShipLocation, p_track->pActor->GetActorLocation(), 5);
+    auto actor = ASystemManagerBase::GetInstance()->GetVisibleActorAt(ignore_list, OwnShipLocation, p_track->pActor->GetActorLocation(), TrackerDistanceToleranceMeter);
     if (actor != nullptr) {
         if (actor == p_track->pActor) {
             return true;

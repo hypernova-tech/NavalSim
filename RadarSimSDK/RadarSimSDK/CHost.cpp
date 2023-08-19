@@ -412,7 +412,7 @@ void CHost::ThreadFunction()
 
 				for (INT32U i = 0; i < RadarCount; i++) {
 
-					auto ret = TargetTrackingClients[i]->Acquire(1, 100, 180, eBearingType::eAbsolute);
+					auto ret = TargetTrackingClients[i]->Acquire(1, 1000, 180, eBearingType::eAbsolute);
 					if (ret == 0) {
 						cout << "Acquired Track " << endl;
 					}
