@@ -138,22 +138,28 @@ protected:
 	FLOAT64 TargetAquireTimeOutSec = 5.0f;
 	FLOAT64 OutOfRangeToLostTimeoutSec = 1.0f;
 	FLOAT64 TemprorayAcquireToLostTimeoutSec = 1.0f;
+	TArray<INT32S> CancalTrackRequest;
+	bool IsCancelAllTrack = false;
+	INT32S TrackerId = 0;
 protected:
 	STrackedObjectInfo* FindTrackByClientId(INT32S client_track_id);
 	void AddTrack(STrackedObjectInfo* p_track);
+	void RemoveTrack(STrackedObjectInfo* p_track);
 	void UpdateTrackState(STrackedObjectInfo *p_track);
 	bool TryAcquire(STrackedObjectInfo* p_track, bool &is_safe_target);
 	bool CheckStillAquired(STrackedObjectInfo* p_track, bool& is_safe_target);
 	bool IsTargetOutofRange(STrackedObjectInfo* p_track);
+	void ProcessCancelTrackRequests();
 
 public:
 	CTrackerBase();
 	~CTrackerBase();
-	virtual void SetOwnshipData(FVector own_ship_location, FVector rpy_deg, FVector own_ship_vel, FVector2D radar_range_meter, FLOAT64 error_mean_meter, FLOAT64 error_mean_std);
+	virtual void SetOwnshipData(AActor *p_owner, FVector own_ship_location, FVector rpy_deg, FVector own_ship_vel, FVector2D radar_range_meter, FLOAT64 error_mean_meter, FLOAT64 error_mean_std);
 	virtual bool TryTrack(INT32U client_id, FVector pos, FLOAT64 bearing_true_north_deg, FLOAT64 distance_meter);
 	virtual bool CancelAll();
 	virtual bool CancelTrack(INT32U id);
 	virtual void Update();
+	virtual void UpdateCPA();
 	virtual TArray< STrackedObjectInfo*>* GetTrackedObjects();
 	virtual FLOAT64 GetCPAMeters();
 	virtual FLOAT64 GetCPATimeSec();

@@ -741,6 +741,42 @@ FVector CUtil::GetActorRPY(AActor* p_actor)
     return FVector(rot.Roll, -rot.Pitch, -rot.Yaw);
 }
 
+AActor* CUtil::GetParentActor(AActor* p_child)
+{
+
+    if (!p_child) return nullptr;
+
+    // Get the root component of the actor
+    USceneComponent* p_root_comp = p_child->GetRootComponent();
+    if (!p_root_comp) return nullptr;
+
+    // Get the parent component (the component to which this actor's root is attached)
+    USceneComponent* p_parent_comp = p_root_comp->GetAttachParent();
+    if (!p_parent_comp) return nullptr;
+
+    // Finally, get the actor associated with that parent component
+    return p_parent_comp->GetOwner();
+
+}
+
+void  CUtil::GetOwnAndParents(AActor* p_child, TArray<AActor*>& ret)
+{
+    if (p_child != nullptr) {
+        ret.Add(p_child);
+
+        AActor* p_curr = p_child;
+
+        while (p_curr != nullptr) {
+            p_curr = GetParentActor(p_curr);
+            if (p_curr != nullptr) {
+                ret.Add(p_curr);
+            }
+        }
+    }
+   
+
+}
+
 FString CUtil::CharToFString(const char* p_char)
 {
     FString str = FString( p_char);

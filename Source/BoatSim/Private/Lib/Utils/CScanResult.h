@@ -186,6 +186,8 @@ struct SScanResult
 	
 	FLOAT32 ScanRangeMeter;
 
+
+
 public:
 
 	SScanResult() {

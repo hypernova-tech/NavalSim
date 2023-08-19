@@ -67,6 +67,10 @@ void CHalo24IF::OnReceivedData(void* p_if, INT8U* p_data, INT32U len)
 	case ESimSDKDataIDS::SpokeData:
 		pMultiRadarClient->HandleSpoke(p_conn, (SHalo24SpokePayload*)p_pack->Payload);
 		break;
+
+	case ESimSDKDataIDS::TrackingStatus:
+		pMultiRadarClient->HandleTrackingStatus(p_conn, (STrackingTargetStatusPayload*)p_pack->Payload);
+		break;
 	default:
 		break;
 	}

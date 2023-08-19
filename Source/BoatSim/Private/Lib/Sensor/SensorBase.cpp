@@ -110,10 +110,11 @@ void ASensorBase::Tick(float DeltaTime)
 	
 }
 
-void ASensorBase::Visualize(SScanResult* p_scan_result, FVector origin, FVector current_forward, FVector current_right, float max_range_meter)
+void ASensorBase::Visualize(SScanResult* p_scan_result, FVector origin, FVector current_forward, FVector current_right, float max_range_meter, void* p_tracker)
 {
 	if (pPointVisualizer != nullptr) {
-		pPointVisualizer->Visualize(p_scan_result, origin, current_forward, current_right, max_range_meter);
+
+		pPointVisualizer->Visualize(p_scan_result, origin, current_forward, current_right, max_range_meter, p_tracker);
 	}
 	
 }

@@ -585,4 +585,6 @@ void Navico::Protocol::NRP::tImageClient::OnReceivedRadarSpoke(const SHalo24Spok
         p_obs->UpdateSpoke((Spoke::tSpokeV9174*)&p_spoke->SpokeData);
     }
 }
+
+
 #endif

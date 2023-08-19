@@ -76,7 +76,7 @@ public:
 
 	bool AddBoat(FString model_name, FString boat_name,FVector world_pos, FVector world_rot, FVector scale);
 	INT64U GetTimeStamp();
-	AActor* GetVisibleActorAt(AActor* p_owner, FVector from, FVector to, FLOAT64 tolerance_meter);
+	AActor* GetVisibleActorAt(const TArray<AActor*>& ignore_list, FVector from, FVector to, FLOAT64 tolerance_meter);
 private:
 
 	static ASystemManagerBase* pInstance;

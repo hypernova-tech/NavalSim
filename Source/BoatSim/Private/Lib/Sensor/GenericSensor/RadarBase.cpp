@@ -121,8 +121,9 @@ void ARadarBase::Run(float delta_time_sec)
 
 void ARadarBase::RadarStateMachine()
 {
-	Scan();
 	UpdateTracker();
+	Scan();
+	
 }
 void ARadarBase::OnDataReady()
 {
@@ -138,7 +139,7 @@ void ARadarBase::UpdateTracker()
 {
 	if (IsTrackerEnabled) {
 		if (UseSimulationDataAsOwnShip) {
-			pTracker->SetOwnshipData(GetActorLocation(), CUtil::GetActorRPY(this), GetVelocity(), RangeMeter, NoiseMean, NoiseStdDeviation);
+			pTracker->SetOwnshipData(this, GetActorLocation(), CUtil::GetActorRPY(this), GetVelocity(), RangeMeter, NoiseMean, NoiseStdDeviation);
 		}
 		
 		pTracker->Update();
@@ -190,7 +191,11 @@ void ARadarBase::Scan()
 		args.scan_center = GetActorLocation();
 		auto rotator = GetActorRotation();
 		args.scan_rpy_world_deg = FVector(rotator.Roll, -rotator.Pitch, -rotator.Yaw);
-
+		auto* p_parent = CUtil::GetParentActor(this);
+		if (p_parent != nullptr) {
+			args.additional_ignore_list.Add(p_parent);
+		}
+		
 
 		if (!BlankingZone.CheckAnyActiveZone(start_azimuth, end_azimuth)) {
 			//bool ret = CUtil::Trace(this, true, RangeMeter.X, RangeMeter.Y, start_azimuth, end_azimuth, 0, FovVerticalDeg, HorizontalScanStepAngleDeg, VerticalScanStepAngleDeg, 
@@ -206,7 +211,7 @@ void ARadarBase::Scan()
 
 			CurrentScanAzimuth = end_azimuth + HorizontalScanStepAngleDeg;
 
-			Visualize(pScanResult, GetActorLocation(), GetActorForwardVector(), GetActorRightVector(), RangeMeter.Y);
+			Visualize(pScanResult, GetActorLocation(), GetActorForwardVector(), GetActorRightVector(), RangeMeter.Y, (void*)pTracker);
 
 			NextScanTime = FApp::GetCurrentTime() + 0.1;
 

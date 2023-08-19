@@ -14,8 +14,50 @@ CTrackerBase::~CTrackerBase()
 {
 }
 
-void CTrackerBase::SetOwnshipData(FVector own_ship_location, FVector rpy_deg, FVector own_ship_vel, FVector2D radar_range_meter, FLOAT64 error_mean_meter, FLOAT64 error_mean_std)
+TArray<STrackedObjectInfo*>* CTrackerBase::GetTrackedObjects()
 {
+    return &TrackedObjects;
+}
+
+FLOAT64 CTrackerBase::GetCPAMeters()
+{
+    return CPAMeters;
+}
+
+FLOAT64 CTrackerBase::GetCPATimeSec()
+{
+    return CPATimeSec;
+}
+BOOLEAN CTrackerBase::GetIsTowardsCPA()
+{
+    return IsTowardsCPA;
+}
+STrackedObjectInfo* CTrackerBase::FindTrackByClientId(INT32S client_track_id)
+{
+    STrackedObjectInfo** ret = TrackClientIdMap.Find(client_track_id);
+    if (ret == nullptr) {
+        return nullptr;
+    }
+    return *ret;
+}
+
+void CTrackerBase::AddTrack(STrackedObjectInfo* p_track)
+{
+    TrackedObjects.Add(p_track);
+    TrackClientIdMap.Add(p_track->ClientId, p_track);
+}
+
+void CTrackerBase::RemoveTrack(STrackedObjectInfo* p_track)
+{
+    TrackedObjects.Remove(p_track);
+    TrackClientIdMap.Remove(p_track->ClientId);
+
+    delete p_track;
+
+}
+void CTrackerBase::SetOwnshipData(AActor *p_owner, FVector own_ship_location, FVector rpy_deg, FVector own_ship_vel, FVector2D radar_range_meter, FLOAT64 error_mean_meter, FLOAT64 error_mean_std)
+{
+    pOwnShip = p_owner;
     OwnShipLocation = own_ship_location;
     OwnShipRPY = rpy_deg;
     OwnShipVelocity = own_ship_vel;
@@ -37,8 +79,13 @@ bool CTrackerBase::TryTrack(INT32U client_id, FVector pos, FLOAT64 bearing_true_
     }
    
     STrackedObjectInfo* p_track = new STrackedObjectInfo();
-    FVector dir = FRotator(0, -bearing_true_north_deg, 0).RotateVector(FVector::ForwardVector);
-    FVector target_pos = OwnShipLocation + dir * TOUE(distance_meter);
+    p_track->ClientId = client_id;
+    p_track->TrackerId = TrackerId++;
+
+    FQuat quat(FVector::UpVector, bearing_true_north_deg * DEGTORAD);
+
+    FVector dir = quat * FVector::ForwardVector;
+    FVector target_pos = pos + dir * TOUE(distance_meter); //// todo fix me on ship or current position
     p_track->TrackLocationWhenCreated = target_pos;
 
     AddTrack(p_track);
@@ -48,18 +95,58 @@ bool CTrackerBase::TryTrack(INT32U client_id, FVector pos, FLOAT64 bearing_true_
 
 bool CTrackerBase::CancelAll()
 {
-    return false;
+    IsCancelAllTrack = true;
+    return true;
 }
 
 bool CTrackerBase::CancelTrack(INT32U id)
 {
+    auto p_track = CTrackerBase::FindTrackByClientId((INT32S)id);
+
+    if (p_track != nullptr) {
+        CancalTrackRequest.Add(id);
+        return true;
+    }
     return false;
 }
+void CTrackerBase::ProcessCancelTrackRequests()
+{
+    if (IsCancelAllTrack) {
+        while (TrackedObjects.Num() > 0) {
+            RemoveTrack(TrackedObjects[0]);
+        }
+        IsCancelAllTrack = false;
+    }
+    else {
+        for (INT32S i : CancalTrackRequest) {
+            auto p_track = CTrackerBase::FindTrackByClientId((INT32S)i);
+            if (p_track != nullptr) {
+                RemoveTrack(p_track);
+            }
+        }
+    }
 
+    CancalTrackRequest.Reset();
+    
+}
 bool CTrackerBase::TryAcquire(STrackedObjectInfo* p_track, bool& is_safe_target)
 {
+
     FVector target_pos = p_track->TrackLocationWhenCreated;
-    auto actor = ASystemManagerBase::GetInstance()->GetVisibleActorAt(pOwnShip, OwnShipLocation, target_pos, 5);
+
+    FLOAT64  dist = (target_pos - OwnShipLocation).Length();
+    FVector dir = (target_pos - OwnShipLocation);
+    dir.Normalize();
+
+    if (dist <= RadarRangeMeter.X) {
+        return false;
+    }
+
+    TArray<AActor*> ignore_list;
+    
+    CUtil::GetOwnAndParents(pOwnShip, ignore_list);
+
+    auto actor = ASystemManagerBase::GetInstance()->GetVisibleActorAt(ignore_list, OwnShipLocation + dir * TOUE(RadarRangeMeter.X), target_pos, 5);
     if (actor != nullptr) {
         is_safe_target = true;
         p_track->pActor = actor;
@@ -70,7 +157,10 @@ bool CTrackerBase::TryAcquire(STrackedObjectInfo* p_track, bool& is_safe_target)
 
 bool CTrackerBase::CheckStillAquired(STrackedObjectInfo* p_track, bool& is_safe_target)
 {
-    auto actor = ASystemManagerBase::GetInstance()->GetVisibleActorAt(pOwnShip, OwnShipLocation, p_track->pActor->GetActorLocation(), 5);
+    TArray<AActor*> ignore_list;
+    CUtil::GetOwnAndParents(pOwnShip, ignore_list);
+
+    auto actor = ASystemManagerBase::GetInstance()->GetVisibleActorAt(ignore_list, OwnShipLocation, p_track->pActor->GetActorLocation(), 5);
     if (actor != nullptr) {
         if (actor == p_track->pActor) {
             return true;
@@ -208,26 +298,25 @@ void CTrackerBase::UpdateTrackState(STrackedObjectInfo* p_track)
 
     p_track->SetState(next_state);
 }
-
-void CTrackerBase::Update()
+void CTrackerBase::UpdateCPA()
 {
     FLOAT64 closest_track_dist = MAX_FLT;
     FLOAT64 closest_track_bearing_true_north;
     AActor* p_closest_actor = nullptr;
 
     for (auto p_track : TrackedObjects) {
-        UpdateTrackState(p_track);
 
         if (p_track->IsAcquired()) {
             auto target_vec = p_track->pActor->GetTargetLocation() - OwnShipLocation;
 
             auto dist = (target_vec).Length();
 
-            if (dist > closest_track_dist) {
+            if (dist < closest_track_dist) {
                 dist = closest_track_dist;
                 target_vec.Normalize();
-                closest_track_bearing_true_north = FMath::Atan2(target_vec.X, target_vec.Y) * RADTODEG;
+                closest_track_bearing_true_north = FMath::Atan2(target_vec.Y, target_vec.X) * RADTODEG;
                 p_closest_actor = p_track->pActor;
+                closest_track_dist = dist;
             }
         }
     }
@@ -265,33 +354,14 @@ void CTrackerBase::Update()
         }
     }
 }
+void CTrackerBase::Update()
+{
 
-TArray<STrackedObjectInfo*>* CTrackerBase::GetTrackedObjects()
-{
-    return &TrackedObjects;
-}
+    ProcessCancelTrackRequests();
 
-FLOAT64 CTrackerBase::GetCPAMeters()
-{
-    return CPAMeters;
-}
-
-FLOAT64 CTrackerBase::GetCPATimeSec()
-{
-    return CPATimeSec;
-}
-BOOLEAN CTrackerBase::GetIsTowardsCPA()
-{
-    return IsTowardsCPA;
-}
-STrackedObjectInfo* CTrackerBase::FindTrackByClientId(INT32S client_track_id)
-{
-    STrackedObjectInfo** ret =  TrackClientIdMap.Find(client_track_id);
-    return *ret;
-}
-
-void CTrackerBase::AddTrack(STrackedObjectInfo* p_track)
-{
-    TrackedObjects.Add(p_track);
-    TrackClientIdMap.Add(p_track->ClientId, p_track);
+    for (auto p_track : TrackedObjects) {
+        UpdateTrackState(p_track);
+    }
+    UpdateCPA();
+    
 }

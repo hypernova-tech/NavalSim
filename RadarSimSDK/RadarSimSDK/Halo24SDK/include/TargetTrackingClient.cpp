@@ -92,6 +92,7 @@ bool Navico::Protocol::NRP::tTargetTrackingClient::Cancel(uint32_t serverID)
 	STrackingCancelTarget payload;
 
 	payload.Id = serverID;
+	payload.CancelAll = 0;
 
 
 	p_radar->SendPacket< STrackingCancelTarget>(ESimSDKDataIDS::TrackingCancel, (char*)ConnectedSerialNumber, &payload);
@@ -169,4 +170,11 @@ bool Navico::Protocol::NRP::tTargetTrackingClient::SetDangerDistance(uint32_t ra
 bool Navico::Protocol::NRP::tTargetTrackingClient::SetDangerTime(uint32_t time_sec)
 {
 	return false;
+}
+
+void Navico::Protocol::NRP::tTargetTrackingClient::OnReceivedTrackingStatus(const STrackingTargetStatusPayload* p_status)
+{
+	for (auto p_observer : TrackingObservers) {
+		p_observer->UpdateTarget((const tTrackedTarget * )&p_status->TargetData);
+	}
 }

@@ -5,6 +5,7 @@
 #include <Kismet/GameplayStatics.h>
 #include <CanvasItem.h>
 #include <Lib/Utils/CUtil.h>
+#include <Lib/Tracker/TrackerBase.h>
 
 
 // Sets default values
@@ -31,13 +32,11 @@ void APointVisualizer::Tick(float DeltaTime)
 
 }
 
-void APointVisualizer::Visualize(SScanResult *p_scan_result, FVector origin, FVector current_forward, FVector current_right, float max_range_meter)
+void APointVisualizer::Visualize(SScanResult *p_scan_result, FVector origin, FVector current_forward, FVector current_right, float max_range_meter, void *p_tracker)
 {
     //SetPixelValue(pRenderTarget, 50, 50, FColor::Green);
 
     try {
-
-
 
         if (!pRenderTarget)
         {
@@ -46,16 +45,13 @@ void APointVisualizer::Visualize(SScanResult *p_scan_result, FVector origin, FVe
         }
 
 
-
         FRenderTarget* RenderTargetResource = pRenderTarget->GameThread_GetRenderTargetResource();
 
 
         double one_over_max_range = 1.0 / WORLD_TO_UNREAL(max_range_meter);
-
         FCanvas Canvas(RenderTargetResource, nullptr, 0, 0, 0, ERHIFeatureLevel::SM5);
 
         // Clear the canvas with the desired color to avoid artifacts from previous frames
-
         Canvas.SetAllowedModes(FCanvas::ECanvasAllowModes::Allow_Flush);
         //Canvas.SetAllowedModes(FCanvas::ECanvasAllowModes::Allow_DeleteOnRender);
         Canvas.Clear(FColor::Black);
@@ -94,22 +90,36 @@ void APointVisualizer::Visualize(SScanResult *p_scan_result, FVector origin, FVe
         }
 
 
+        if (p_tracker != nullptr) {
+            TArray< STrackedObjectInfo*>* p_track = ((CTrackerBase*)p_tracker)->GetTrackedObjects();
 
-#if false
-        for (FVector2D vec : p_scan_result->Point2DScreen) {
+            for (auto p_tracked_object : *(p_track)) {
+                if (p_tracked_object->pActor == nullptr) {
+                    continue;
+                }
 
-            // Draw a single pixel at the specified location with the desired color
+                if (!p_tracked_object->IsAcquired()) {
+                    continue;
+                }
 
-            FVector2D size(20, 20);
-            FCanvasTileItem TileItem(FVector2D(vec.X * rt_size.X - size.X * 0.5, vec.Y * rt_size.Y - size.Y * 0.5), size, FLinearColor::Red);
+                FVector diff = p_tracked_object->pActor->GetActorLocation() - origin;
+                float local_forward = FVector::DotProduct(diff, current_forward);
+                float local_right = FVector::DotProduct(diff, current_right);
 
-            TileItem.BlendMode = SE_BLEND_Opaque;
-            Canvas.DrawItem(TileItem);
+                local_forward *= one_over_max_range;
+                local_right *= one_over_max_range;
 
+                float X = (1 + local_right) * 0.5;
+                float Y = (1 - local_forward) * 0.5;
 
+                FVector2D size(20, 20);
+               
+                FCanvasTileItem TileItem(FVector2D(X * rt_size.X - size.X * 0.5, Y * rt_size.Y - size.Y * 0.5), size, FLinearColor::Green);
 
+                TileItem.BlendMode = SE_BLEND_Opaque;
+                Canvas.DrawItem(TileItem);
+            }
         }
-#endif
 
         Canvas.Flush_GameThread();
 

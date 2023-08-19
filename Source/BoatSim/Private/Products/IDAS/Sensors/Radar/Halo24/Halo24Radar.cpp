@@ -38,6 +38,7 @@ void AHalo24Radar::RadarStateMachine()
 		pHalo24CommIF->SendResponseAckNack(ESimSDKDataIDS::UnlockKeys, Serial, true);
 		next_state = EHalo24StateMachineStates::WaitImageStreamConnect;
 		CanUpdateState = true;
+		LastStateSendTimeSec = FApp::GetCurrentTime() + 0.2f;
 		break;
 	case EHalo24StateMachineStates::WaitImageStreamConnect:
 		if (IsImageStreamConnected[0] || IsImageStreamConnected[1]) {
@@ -168,7 +169,7 @@ void AHalo24Radar::UpdateTracker()
 	if (!UseSimulationDataAsOwnShip) {
 		FRotator rot(0, -(360 - (INT32S)LastOwnshipData.DirectionDeg), 0);
 		FVector vel = rot.RotateVector(FVector::ForwardVector) * LastOwnshipData.SpeedMetersPerSec;
-		pTracker->SetOwnshipData(GetActorLocation(), CUtil::GetActorRPY(this), vel, RangeMeter, NoiseMean, NoiseStdDeviation);
+		pTracker->SetOwnshipData(this, GetActorLocation(), CUtil::GetActorRPY(this), vel, RangeMeter, NoiseMean, NoiseStdDeviation);
 	}
 	
 	Super::UpdateTracker();
@@ -342,6 +343,7 @@ void AHalo24Radar::OnRecievedMessage(SRadarSimSDKPacket* p_pack)
 		if (VerifySerial((char*)p_args->SerialData.SerialKey)) {
 			memcpy(&LastOwnshipData, p_args, sizeof(LastOwnshipData));
 			pHalo24CommIF->SendResponseAckNack(ESimSDKDataIDS::TrackingOwnshipData, Serial, true);
+			SetTrackerEnabled(true);
 		}
 
 	}

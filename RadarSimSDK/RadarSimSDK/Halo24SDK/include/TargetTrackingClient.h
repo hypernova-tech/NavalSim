@@ -15,7 +15,7 @@
 
 using namespace std;
 #include <list>
-
+#include "../../Lib/Types/Halo24Types.h"
 namespace Navico {
 namespace Protocol {
 namespace NRP {
@@ -209,7 +209,8 @@ private:
     list< iTargetTrackingStateObserver*> StateObservers;
     list< iTargetTrackingObserver*> TrackingObservers;
 
-
+   public:
+       void OnReceivedTrackingStatus(const  STrackingTargetStatusPayload* p_status);
 
 
 

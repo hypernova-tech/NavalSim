@@ -71,10 +71,12 @@ INT64U ASystemManagerBase::GetTimeStamp()
 	return microsec;
 }
 
-AActor* ASystemManagerBase::GetVisibleActorAt(AActor *p_owner, FVector from, FVector to, FLOAT64 dist_meter)
+AActor* ASystemManagerBase::GetVisibleActorAt(const TArray<AActor *> & ignore_list, FVector from, FVector to, FLOAT64 dist_meter)
 {
 	FCollisionQueryParams query_params;
-	query_params.AddIgnoredActor(p_owner);
+	for (auto pactor : ignore_list) {
+		query_params.AddIgnoredActor(pactor);
+	}
 	FHitResult result;
 
 #if false
@@ -84,12 +86,13 @@ AActor* ASystemManagerBase::GetVisibleActorAt(AActor *p_owner, FVector from, FVe
 #endif
 	query_params.bTraceComplex = false;
 
-	bool ret = p_owner->GetWorld()->LineTraceSingleByChannel(result, from, to, ECollisionChannel::ECC_Visibility, query_params, FCollisionResponseParams());
+	bool ret = GetWorld()->LineTraceSingleByChannel(result, from, to, ECollisionChannel::ECC_Visibility, query_params, FCollisionResponseParams());
 	if (ret) {
-		FLOAT64 dist_meter = TOW((result.Location - to).Length());
+		FLOAT64 object_dist_meter = TOW((result.Location - to).Length());
 		
-		if (dist_meter <= dist_meter) {
-			return result.GetActor();
+		if ((to - result.Location).Length() <= TOUE(dist_meter)) {
+			auto hit =  result.GetActor();
+			return hit;
 		}
 	}
 

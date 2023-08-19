@@ -32,6 +32,7 @@ struct STraceArgs
 
 	bool show_radar_beam;
 	TArray<AActor*> *p_ignore_list;
+	TArray<AActor*> additional_ignore_list;
 	bool create_scan_line;
 
 };
@@ -78,6 +79,8 @@ public:
 	static inline INT32U ReverseCopyBytes(INT8U* p_src, INT8U* p_dest, INT32U len);
 	static inline FLOAT32 GetRandomRange(FLOAT32 min_inclusive, FLOAT32 max_inclusive);
 	static FVector GetActorRPY(AActor* p_actor);
+	static AActor* GetParentActor(AActor *p_child);
+	static void GetOwnAndParents(AActor* p_child, TArray<AActor*> &ret);
 
 };
 

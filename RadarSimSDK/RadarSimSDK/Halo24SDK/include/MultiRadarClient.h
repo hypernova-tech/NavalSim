@@ -406,7 +406,7 @@ public:
     void HandleRadarState(IConnection* p_conn, SRadarState* p_res);
     void HandleRadarSetup(IConnection* p_conn, SRadarSetupPayload* p_res);
     void HandleSpoke(IConnection* p_conn, SHalo24SpokePayload* p_res);
-    
+    void HandleTrackingStatus(IConnection* p_conn, STrackingTargetStatusPayload* p_res);
 
 };
 

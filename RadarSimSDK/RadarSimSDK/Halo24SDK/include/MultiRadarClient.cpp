@@ -264,6 +264,9 @@ void Navico::Protocol::tMultiRadarClient::HandleReponse(IConnection* p_conn, SCo
         }
         break;
     case ESimSDKDataIDS::ConnectRadar:
+        if (p_radar->pImageClient == nullptr) {
+            return;
+        }
         p_radar->pImageClient->SetIsStreamConnected(p_res->StreamNo, true);
         break;
 
@@ -292,6 +295,9 @@ void Navico::Protocol::tMultiRadarClient::HandleRadarSetup(IConnection* p_conn, 
     if (p_radar == nullptr) {
         return;
     }
+    if (p_radar->pImageClient == nullptr) {
+        return;
+    }
 
     p_radar->pImageClient->OnReceivedRadarSetup(p_setup);
 }
@@ -302,9 +308,23 @@ void Navico::Protocol::tMultiRadarClient::HandleSpoke(IConnection* p_conn, SHalo
     if (p_radar == nullptr) {
         return;
     }
-
+    if (p_radar->pImageClient == nullptr) {
+        return;
+    }
     p_radar->pImageClient->OnReceivedRadarSpoke(p_res);
 }
+void Navico::Protocol::tMultiRadarClient::HandleTrackingStatus(IConnection* p_conn, STrackingTargetStatusPayload* p_res)
+{
+    auto* p_radar = FindRadarFromConnection(p_conn);
+    if (p_radar == nullptr) {
+        return;
+    }
+    if (p_radar->pTargetTrackingClient == nullptr) {
+        return;
+    }
+    p_radar->pTargetTrackingClient->OnReceivedTrackingStatus(p_res);
+}
+
 void Navico::Protocol::tMultiRadarClient::StateMachine()
 {
     auto curr_state = MultiRadarState;
@@ -337,6 +357,8 @@ void Navico::Protocol::tMultiRadarClient::StateMachine()
 bool Navico::Protocol::SRadar::GetIsImageStreamConnected(int stream_no)
 {
     tImageClient* p_client = (tImageClient*)pImageClient;
-    
+    if (p_client == nullptr) {
+        return false;
+    }
     return p_client->GetIsStreamConnected(stream_no);
 }
