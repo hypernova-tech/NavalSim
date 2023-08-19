@@ -35,7 +35,7 @@ enum ESimSDKDataIDS :INT32U  // if PacketType is command
 	TrackingOwnshipData,
 	TrackingStatus
 };
-
+BYTE_ALIGNED_BEGIN
 struct SSerialData
 {
 public:
@@ -50,13 +50,15 @@ public:
 		SerialLen = len;
 
 	}
-};
-
+}BYTE_ALIGNED_END;
+BYTE_ALIGNED_BEGIN
 struct SSIMSDKCommands
 {
 	ESimSDKDataIDS DataID;
 
-};
+}BYTE_ALIGNED_END;
+
+BYTE_ALIGNED_BEGIN
 struct SUnlockKeysPayload
 {
 	INT8U SerialKey[128];
@@ -64,15 +66,17 @@ struct SUnlockKeysPayload
 
 	INT8U UnlockKey[128];
 	INT8U UnlockKeyLen;
-};
+}BYTE_ALIGNED_END;
 
+
+BYTE_ALIGNED_BEGIN
 struct SCommandAckNackResponse
 {
 	ESimSDKDataIDS Id;
 	INT8U Result; //0: failed, 1:ok
 	INT8U StreamNo;
 	SSerialData SerialData;
-};
+}BYTE_ALIGNED_END;
 
 enum ERadarState :INT8U
 {
@@ -85,12 +89,13 @@ enum ERadarState :INT8U
 
 };
 
+BYTE_ALIGNED_BEGIN
 struct SRadarState
 {
 	SSerialData SerialData;
 	ERadarState State;
 
-};
+}BYTE_ALIGNED_END;
 
 BYTE_ALIGNED_BEGIN
 struct SGainControl                       ///  Structure for conveying gain-control mode and level information
@@ -372,16 +377,19 @@ struct SSectorBlankingData
 
 }BYTE_ALIGNED_END;
 
-
+BYTE_ALIGNED_BEGIN
 struct SSectorBlankingPayload
 {
 public:
 
 	SSectorBlankingPayload()
 	{
-		memset(this, 0, sizeof(SGuardZonePayload));
+		memset(this, 0, sizeof(SSectorBlankingPayload));
 	}
+	~SSectorBlankingPayload()
+	{
 
+	}
 
 	SSerialData SerialData;
 	SSectorBlankingData BlankingData;
@@ -402,7 +410,7 @@ public:
 		BlankingData.SectorSetup.StartBearingDeg = start_bearing_deg;
 		BlankingData.SectorSetup.EndBearingDeg = end_bearing_deg;
 	}
-};
+}BYTE_ALIGNED_END;
 
 
 

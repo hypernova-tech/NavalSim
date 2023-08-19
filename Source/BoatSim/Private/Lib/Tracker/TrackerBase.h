@@ -136,7 +136,7 @@ protected:
 	FLOAT64 RadarRangeErrorStdDevMeter;
 	FLOAT64 TrackerDistanceToleranceMeter = 10.0;
 	INT32S MaxTrackCount = 10;
-	FLOAT64 TargetAquireTimeOutSec = 5.0f;
+	FLOAT64 TargetAquireTimeOutSec = 5.0;
 	FLOAT64 OutOfRangeToLostTimeoutSec = 1.0f;
 	FLOAT64 TemprorayAcquireToLostTimeoutSec = 1.0f;
 	TArray<INT32S> CancalTrackRequest;

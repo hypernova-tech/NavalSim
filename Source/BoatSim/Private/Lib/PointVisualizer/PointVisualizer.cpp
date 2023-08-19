@@ -52,7 +52,7 @@ void APointVisualizer::Visualize(SScanResult *p_scan_result, FVector origin, FVe
         FCanvas Canvas(RenderTargetResource, nullptr, 0, 0, 0, ERHIFeatureLevel::SM5);
 
         // Clear the canvas with the desired color to avoid artifacts from previous frames
-        Canvas.SetAllowedModes(FCanvas::ECanvasAllowModes::Allow_Flush);
+        //Canvas.SetAllowedModes(FCanvas::ECanvasAllowModes::Allow_Flush);
         //Canvas.SetAllowedModes(FCanvas::ECanvasAllowModes::Allow_DeleteOnRender);
         Canvas.Clear(FColor::Black);
         FIntPoint rt_size = RenderTargetResource->GetSizeXY();
@@ -121,8 +121,11 @@ void APointVisualizer::Visualize(SScanResult *p_scan_result, FVector origin, FVe
             }
         }
 
-        Canvas.Flush_GameThread();
-
+        if (RenderCount > 0) {
+            Canvas.Flush_GameThread();
+        }
+       
+        RenderCount++;
     }
     catch (...) {
         CUtil::DebugLog("Exception caught");

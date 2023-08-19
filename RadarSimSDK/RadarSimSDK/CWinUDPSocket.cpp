@@ -68,6 +68,7 @@ bool CWinUDPSocket::SendData(INT8U* p_data, INT32U count, INT16U remote_port) {
     }
 #endif
 
+
     // send the message
     if (sendto(m_socket, (const char*)p_data, count, 0, (sockaddr*)&dest_address, sizeof(sockaddr_in)) == SOCKET_ERROR)
     {

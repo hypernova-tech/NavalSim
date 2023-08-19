@@ -33,7 +33,7 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
+	int RenderCount = 0;
 	
 public:	
 	// Called every frame
