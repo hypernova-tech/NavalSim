@@ -253,7 +253,7 @@ void ARadarBase::Scan()
 			p_current_sektor->Reset();
 
 			CurrentScanAzimuth = end_azimuth;
-			NextScanTime = FApp::GetCurrentTime() + 0.1;
+			NextScanTime = FApp::GetCurrentTime() + 0.125;
 		}
 
 	

@@ -163,7 +163,7 @@ void AFLS3D::Run(float delta_time_sec)
 	
 		Visualize(pScanResult, GetActorLocation(), forward, right, RangeMeter.Y);
 
-		NextScanTime = FApp::GetCurrentTime() + 0.1;
+		NextScanTime = FApp::GetCurrentTime() + 0.2;
 
 		IsFullScaned = true;
 

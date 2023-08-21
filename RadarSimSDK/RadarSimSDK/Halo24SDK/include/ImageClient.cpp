@@ -19,6 +19,7 @@ int Navico::Protocol::NRP::tImageClient::Connect(const char* pSerialNumber, unsi
     if (p_radar == nullptr) {
         return -1;
     }
+    p_radar->pImageClient = this;
     SConnectRadar connect_radar_payload;
     connect_radar_payload.ImageStreamNo = imageStream;
     p_radar->SendPacket< SConnectRadar>(ESimSDKDataIDS::ConnectRadar, (char*)pSerialNumber, &connect_radar_payload);

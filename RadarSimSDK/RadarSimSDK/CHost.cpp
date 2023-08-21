@@ -4,8 +4,10 @@
 
 #include "Halo24SDK/include/ImageClient.h"
 #include "Halo24SDK/include/TargetTrackingClient.h"
+
 using namespace Navico::Protocol::NRP;
 
+#define DEBUG_HOST
 
 CHost* CHost::pInstance = nullptr;
 
@@ -125,20 +127,67 @@ void CHost::ThreadFunction()
 				}
 			case EHostState::InitImageClients:
 				{
+#ifdef HOST_DEBUG
 					for (int i = 0; i < 1; i++) {
 						ImageClients[i] = new tImageClient();
+						
+
 						auto* p_radar = tMultiRadarClient::GetInstance()->FindRadar(radars[i]);
 						if (p_radar != nullptr) {
 							p_radar->pImageClient = ImageClients[i];
 						}
+
 					}
+#endif
+
+					ImageClients[0] = new tImageClient();
 
 					next_state = EHostState::ConnectRadars;
 				}
 				break;
 			case EHostState::ConnectRadars:
 				{
+					for (INT32U i = 0; i < RadarCount; i++) {
+						auto* p_radar = tMultiRadarClient::GetInstance()->FindRadar(radars[i]);
+
+						for (int stream = 0; stream < 2; stream++) {
+							
+							auto ret = ImageClients[i]->Connect(p_radar->Serial.c_str(), stream);
+							if (ret == 0) {
+								cout << "connected to stream sent " << string(radars[i]) << "stream" << stream << endl;
+							}
+							std::this_thread::sleep_for(std::chrono::milliseconds(10));
+
+						}
+					}
+
 					
+
+					bool is_all_radars_connected = true;
+					int success_cnt = 0;
+
+					for (INT32U i = 0; i < RadarCount; i++) {
+						auto* p_radar = tMultiRadarClient::GetInstance()->FindRadar(radars[i]);
+
+						for (int stream = 0; stream < 2; stream++) {
+							if (p_radar) {
+								if (p_radar->GetIsImageStreamConnected(stream)) {
+									success_cnt++;
+								}
+								else {
+									is_all_radars_connected = false;
+								}
+							}
+						}
+					}
+
+					if (is_all_radars_connected && success_cnt > 0) {
+						cout << "All Stream Connected " << endl;
+						next_state = EHostState::SetFastScanMode;
+					}
+				}
+
+#ifdef HOST_DEBUG
 					for (INT32U i = 0; i < RadarCount; i++) {
 						auto* p_radar = tMultiRadarClient::GetInstance()->FindRadar(radars[i]);
 
@@ -180,6 +229,7 @@ void CHost::ThreadFunction()
 						next_state = EHostState::SetFastScanMode;
 					}
 				}
+#endif
 				break;
 			case EHostState::SetFastScanMode:
 			{

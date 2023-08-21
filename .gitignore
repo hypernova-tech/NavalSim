@@ -52,6 +52,9 @@ SourceArt/**/*.tga
 Binaries/*
 Plugins/*/Binaries/*
 
+# Packages
+package/*
+
 # Builds
 Build/*
 
