@@ -95,8 +95,25 @@ void ASensorBase::BeginPlay()
 			// Perform actions with the found child actor
 			break;
 		}
+
+
+
 	}
 
+	for (AActor* ChildActor : child_actors)
+	{
+		CUtil::DebugLog("ChildActor");
+		// Check if the child actor is of the desired class
+		if (ChildActor->IsA<ASceneCapturer>())
+		{
+			pSceneCapturer = Cast<ASceneCapturer>(ChildActor);
+			// Perform actions with the found child actor
+			break;
+		}
+
+
+
+	}
 }
 
 // Called every frame
@@ -122,6 +139,10 @@ void ASensorBase::Visualize(SScanResult* p_scan_result, FVector origin, FVector 
 UGenericCommIF* ASensorBase::GetCommCommIF()
 {
 	return pCommIF;
+}
+
+void ASensorBase::OnCaptureReady(void* p_data)
+{
 }
 
 void ASensorBase::OnDataReady()

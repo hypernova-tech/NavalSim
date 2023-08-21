@@ -85,6 +85,8 @@ bool ARadarBase::GetScanEnabled()
 	return IsScanEnabled;
 }
 
+
+
 void ARadarBase::BeginPlay()
 {
 	CUtil::DebugLog("ARadarBase Beginplay");
@@ -109,6 +111,8 @@ void ARadarBase::InitSensor()
 	BlankingZone.SetArea(3, 270, 360);
 
 	InitTracker();
+
+	pSceneCapturer->CreateRenderTexture(this, DepthRenderTargetWidthPx, DepthRenderTargetHeightPx, EPixelFormat::PF_B8G8R8A8);
 }
 
 
@@ -146,6 +150,15 @@ void ARadarBase::UpdateTracker()
 	}
 	
 }
+
+
+void ARadarBase::OnCaptureReady(void* p_data)
+{
+	
+	auto read_pixed_elp_sec = CUtil::Tock(CaptureStartTimeRef);
+	CUtil::DebugLog(FString::Printf(TEXT("radar capture duration(ms): %f"), 1000 * read_pixed_elp_sec));
+}
+
 void ARadarBase::Scan()
 {
 	if (!IsScanEnabled) {
@@ -195,15 +208,31 @@ void ARadarBase::Scan()
 		if (p_parent != nullptr) {
 			args.additional_ignore_list.Add(p_parent);
 		}
-		
+		args.use_render_target = UseRenderTargetForDepthCalculation;
 
 		if (!BlankingZone.CheckAnyActiveZone(start_azimuth, end_azimuth)) {
 			//bool ret = CUtil::Trace(this, true, RangeMeter.X, RangeMeter.Y, start_azimuth, end_azimuth, 0, FovVerticalDeg, HorizontalScanStepAngleDeg, VerticalScanStepAngleDeg, 
 			//						MeasurementErrorMean, MeasurementErrorUncertainy, GetClutterParams(), ShowBeam, 
 			//						ASystemManagerBase::GetInstance()->GetSensorGlobalIgnoreList(), true, pScanResult);
 
-			bool ret = CUtil::Trace(args, pScanResult);
+			if (args.use_render_target) {
+				auto capture_start_sec = CUtil::Tick();
+				pSceneCapturer->Capture();
+				auto capture_elp_sec = CUtil::Tock(capture_start_sec);
 
+				CaptureStartTimeRef = CUtil::Tick();
+				pSceneCapturer->ReadPixels();
+			}
+	
+
+		
+			
+
+			auto trace_start_sec = CUtil::Tick();
+			bool ret = CUtil::Trace(args, pScanResult);
+			auto trace_elp_sec = CUtil::Tock(trace_start_sec);
+
+			
 			
 
 			OnDataReady();

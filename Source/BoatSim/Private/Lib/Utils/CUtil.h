@@ -34,6 +34,7 @@ struct STraceArgs
 	TArray<AActor*> *p_ignore_list;
 	TArray<AActor*> additional_ignore_list;
 	bool create_scan_line;
+	bool use_render_target = false;
 
 };
 
@@ -81,6 +82,8 @@ public:
 	static FVector GetActorRPY(AActor* p_actor);
 	static AActor* GetParentActor(AActor *p_child);
 	static void GetOwnAndParents(AActor* p_child, TArray<AActor*> &ret);
+	static FLOAT64 Tick();
+	static FLOAT64 Tock(FLOAT64 start_time_sec);
 
 };
 

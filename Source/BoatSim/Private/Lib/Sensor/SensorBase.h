@@ -8,7 +8,9 @@
 #include <Lib/PointVisualizer/PointVisualizer.h>
 #include <Lib/ActorBase/ActorBase.h>
 #include "Lib/Clutter/ClutterDefs.h"
+#include <Lib/ScreenDepth/SceneCapturer.h>
 #include "SensorBase.generated.h"
+
 
 
 
@@ -44,6 +46,14 @@ public:
 
 	UPROPERTY(EditAnywhere)
 		ESensorType SensorType;
+	UPROPERTY(EditAnywhere)
+		bool UseRenderTargetForDepthCalculation = false;
+
+	UPROPERTY(EditAnywhere)
+		int DepthRenderTargetWidthPx = 960;
+	
+	UPROPERTY(EditAnywhere)
+		int DepthRenderTargetHeightPx = 540;
 
 	UPROPERTY(EditAnywhere)
 		int SensorSlotIndex;
@@ -89,19 +99,22 @@ protected:
 
 	UGenericCommIF* pCommIF;
 	APointVisualizer* pPointVisualizer;
+	ASceneCapturer* pSceneCapturer;
 	ESensorState SensorState = ESensorState::Init;
 	virtual void SensorStateMachine(float delta_time_sec);
-
+	virtual void OnDataReady();
 	virtual void InitSensor();
 	virtual void Run(float delta_time_sec);
 	virtual void FinalizeSensor();
 	SClutterParams GetClutterParams();
-	virtual void OnDataReady();
+	FLOAT64 CaptureStartTimeRef;
 
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	virtual void Visualize(SScanResult* p_scan_result, FVector origin, FVector current_forward, FVector current_right, float max_range_meter, void *p_tracker = nullptr);
 	UGenericCommIF* GetCommCommIF();
+	
 
+	virtual void OnCaptureReady(void *p_data);
 };

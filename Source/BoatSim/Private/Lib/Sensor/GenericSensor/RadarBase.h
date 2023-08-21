@@ -136,11 +136,13 @@ public:
 	void SetScanEnabled(bool val);
 	bool GetScanEnabled();
 
+	virtual void OnCaptureReady(void* p_data) override;
+
 private:
 	float CurrentScanAzimuth;
 	double NextScanTime;
 	bool IsFullScaned = false;
 	bool IsScanEnabled = false;
 	bool IsTrackerEnabled = false;
-	
+
 };

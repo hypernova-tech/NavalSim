@@ -32,6 +32,9 @@ protected:
 		AMapOrigin* pMapOrigin;
 
 	UPROPERTY(EditAnywhere)
+		AActor* pFloor;
+
+	UPROPERTY(EditAnywhere)
 		ADataContainer* pDataContainer;
 
 	UPROPERTY(EditAnywhere)
@@ -62,6 +65,7 @@ public:
 	static  ASystemManagerBase* GetInstance();
 
 	TArray<AActor*>& GetSensorGlobalIgnoreList();
+	AActor* GetFloor();
 	TArray<AActor*>& GetMoveableActorList();
 
 	void RegisterActor(FString owner, AActorBase* p_actor);

@@ -28,6 +28,13 @@ TArray<AActor*>& ASystemManagerBase::GetSensorGlobalIgnoreList()
 	return SensorGlobalIgnoreList;
 }
 
+AActor* ASystemManagerBase::GetFloor()
+{
+
+	return pFloor;
+}
+
+
 TArray<AActor*>& ASystemManagerBase::GetMoveableActorList()
 {
 	return MoveableActorList;
@@ -39,7 +46,7 @@ TArray<AActor*>& ASystemManagerBase::GetMoveableActorList()
 void ASystemManagerBase::RegisterActor(FString owner, AActorBase* p_actor)
 {
 	TMap<FString, AActorBase*>& all_actors = AllActors.FindOrAdd(owner);
-	FString actor_label = p_actor->GetActorLabel();
+	FString actor_label = "";// p_actor->GetActorLabel(); todo fixme
 	all_actors.Add(actor_label, p_actor);
 	ActorList.Add(p_actor);
 }

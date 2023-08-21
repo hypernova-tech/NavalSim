@@ -81,6 +81,7 @@ public:
 	void SetFovHorizontalDeg(double val);
 	double GetFovHorizontalDeg();
 
+	virtual void OnCaptureReady(void* p_data) override;
 
 private:
 	float CurrentScanAzimuth;

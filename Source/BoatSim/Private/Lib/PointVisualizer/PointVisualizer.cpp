@@ -36,7 +36,7 @@ void APointVisualizer::Visualize(SScanResult *p_scan_result, FVector origin, FVe
 {
     //SetPixelValue(pRenderTarget, 50, 50, FColor::Green);
 
-    try {
+ 
 
         if (!pRenderTarget)
         {
@@ -126,10 +126,7 @@ void APointVisualizer::Visualize(SScanResult *p_scan_result, FVector origin, FVe
         }
        
         RenderCount++;
-    }
-    catch (...) {
-        CUtil::DebugLog("Exception caught");
-    }
+ 
 
 }
 

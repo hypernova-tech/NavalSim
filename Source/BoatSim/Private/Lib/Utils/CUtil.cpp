@@ -136,9 +136,24 @@ bool CUtil::Trace(const STraceArgs& args, SScanResult* pscan_result)
                 end = start_pos + new_dir * TOUE(filtered_range_meter);
             }
 
+            if (args.use_render_target) {
+                if (CUtil::GetRandomRange(0.0f, 1.0f) > 0.8) {
+                    ret = true;
+                    result.Distance = (start_pos - end).Length();
+                    result.Location = end;
+                    result.ImpactNormal = FVector::ForwardVector;
+                }
+                else {
+                    ret = false;
+                }
+                
+               
+            }
+            else {
+                ret = args.p_actor->GetWorld()->LineTraceSingleByChannel(result, start_pos, end, ECollisionChannel::ECC_Visibility, query_params, FCollisionResponseParams());
 
-            ret = args.p_actor->GetWorld()->LineTraceSingleByChannel(result, start_pos, end, ECollisionChannel::ECC_Visibility, query_params, FCollisionResponseParams());
-            if (args.show_radar_beam) {
+            }
+           if (args.show_radar_beam) {
                 DrawDebugLine(args.p_actor->GetWorld(), start_pos, end, FColor::Green, false, 0.2f);
             }
 
@@ -775,6 +790,18 @@ void  CUtil::GetOwnAndParents(AActor* p_child, TArray<AActor*>& ret)
     }
    
 
+}
+
+FLOAT64 CUtil::Tick()
+{
+    FLOAT64 ref  = FPlatformTime::Seconds();
+    return ref;
+}
+
+
+FLOAT64 CUtil::Tock(FLOAT64 ref)
+{
+    return FPlatformTime::Seconds() - ref;
 }
 
 FString CUtil::CharToFString(const char* p_char)
