@@ -3,6 +3,7 @@
 
 #include "Lib/SystemManager/SystemManagerBase.h"
 #include <Lib/Utils/CUtil.h>
+#include <CBoatBase.h>
 
 // Sets default values
 ASystemManagerBase* ASystemManagerBase::pInstance = nullptr;
@@ -43,19 +44,32 @@ TArray<AActor*>& ASystemManagerBase::GetMoveableActorList()
 
 
 
-void ASystemManagerBase::RegisterActor(FString owner, AActorBase* p_actor)
+void ASystemManagerBase::RegisterActor(FString owner, AActor* p_actor)
 {
-	TMap<FString, AActorBase*>& all_actors = AllActors.FindOrAdd(owner);
-	FString actor_label = "";// p_actor->GetActorLabel(); todo fixme
+	TMap<FString, AActor*>& all_actors = AllActors.FindOrAdd(owner);
+	FString actor_label =  p_actor->GetName(); 
 	all_actors.Add(actor_label, p_actor);
 	ActorList.Add(p_actor);
+}
+
+AActorBase* ASystemManagerBase::ToActorBase(AActor* p_actor)
+{
+	if (p_actor->IsA<AActorBase>()) {
+		return (AActorBase*)p_actor;
+	}
+
+	return nullptr;
 }
 
 void ASystemManagerBase::EnableAllActors()
 {
 
-	for (AActorBase* p_actor : ActorList) {
-		p_actor->SetEnabled(true);
+	for (AActor* p_actor : ActorList) {
+		auto ret = ToActorBase(p_actor);
+
+		if (ret) {
+			ret->SetEnabled(true);
+		}
 	}
 	
 	
@@ -63,8 +77,12 @@ void ASystemManagerBase::EnableAllActors()
 void ASystemManagerBase::DisableAllActors()
 {
 
-	for (AActorBase* p_actor : ActorList) {
-		p_actor->SetEnabled(false);
+	for (AActor* p_actor : ActorList) {
+		auto ret = ToActorBase(p_actor);
+
+		if (ret) {
+			ret->SetEnabled(true);
+		}
 	}
 
 
@@ -108,6 +126,44 @@ AActor* ASystemManagerBase::GetVisibleActorAt(const TArray<AActor *> & ignore_li
 
 }
 
+void ASystemManagerBase::SetCanLoadConfig(bool val)
+{
+	CanLoadConfig = val;
+}
+
+bool ASystemManagerBase::GetCanLoadConfig()
+{
+	return CanLoadConfig;
+}
+
+AActor* ASystemManagerBase::FindActor(TArray<FString> relative_name) 
+{
+	FString owner = "world";
+	FString actor_name = relative_name[0];
+
+	if (relative_name.Num() > 1) {
+		owner = relative_name[0];
+		actor_name = relative_name[1];
+		
+	}
+
+	TMap<FString, AActor*>* p_actors = AllActors.Find(owner);
+
+	if (p_actors != nullptr) {
+		AActor** p_actor = p_actors->Find(actor_name);
+		if (p_actor != nullptr) {
+			if (p_actor[0] != nullptr) {
+				
+				return p_actor[0];
+			}
+
+		}
+
+	}
+
+	return nullptr;
+}
+
 template <typename T>
 T* ASystemManagerBase::FindActor(FString owner, FString actor_name)
 {
@@ -140,10 +196,6 @@ void ASystemManagerBase::BeginPlay()
 		pConfigManager = pConfigManagerActor->GetComponentByClass<UConfigManager>();
 	}
 
-	if (pConfigManager != nullptr) {
-		pConfigManager->ParseXML();
-		LoadConfig();
-	}
 	
 	GEngine->GameViewport->ConsoleCommand(TEXT("YourCommand"));
 	
@@ -154,7 +206,7 @@ void ASystemManagerBase::BeginPlay()
 void ASystemManagerBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	StateMachine();
 }
 
 AMapOrigin* ASystemManagerBase::GetMapOrigin()
@@ -178,21 +230,91 @@ ADataContainer* ASystemManagerBase::GetDataContainer()
 }
 
 
-void ASystemManagerBase::LoadConfig()
+bool ASystemManagerBase::LoadConfig()
 {
-	TArray< UDescBase*>& all_desc = pConfigManager->GetAllDesc();
+#if false
+	ACBoatBase* p_boat_base;
 
-	for(UDescBase *p_desc :all_desc) {
+	if (pConfigManager != nullptr) {
+		pConfigManager->ParseXML();
 
+		TArray<USceneElementDescBase*>& scene_descs = pConfigManager->GetSceneElementDescs();
+
+		for (auto p_scene_element_desc : scene_descs) {
+			if (pConfigManager->IsPlatform(p_scene_element_desc->Owner)) {
+				p_boat_base = NewObject< ACBoatBase>();
+				p_boat_base->SetActorLocation(p_scene_element_desc->InstanceSubobjectTemplates);
+
+			}
+			auto pltform_desc = pConfigManager->GetPlatformDesc(p_scene_element_desc->Owner);
+			for (auto param : pltform_desc->GetParams()) {
+				
+			}
+		}
+
+		return true;
 	}
+	else {
+
+		return false;
+	}
+#endif
+
+	return false;
+
+
 
 }
 
-bool ASystemManagerBase::AddBoat(FString model_name, FString boat_name, FVector world_pos, FVector world_rot, FVector scale)
+
+AActor* ASystemManagerBase::CreateActor(FString model_name, FString boat_name, FVector world_pos, FVector world_rot, FVector scale)
 {
 	auto info = pDataContainer->FindBlueprintInfo(model_name);
 	
-	CUtil::SpawnObjectFromBlueprint(info.BlueprintAsset.ToSoftObjectPath().GetAssetPathString(), GetWorld(), nullptr, boat_name,world_pos, world_rot, scale);
-	return false;
+	auto ret = CUtil::SpawnObjectFromBlueprint(info.BlueprintAsset.ToSoftObjectPath().GetAssetPathString(), GetWorld(), nullptr, boat_name,world_pos, world_rot, scale);
+	
+	if (ret != nullptr) {
+		RegisterActor("world", ret);
+		
+	}
+
+	return ret;
 }
 
+void ASystemManagerBase::StateMachine()
+{
+
+	auto curr_state = SystemState;
+	auto next_state = curr_state;
+
+	switch (curr_state)
+	{
+	case SystemStateWaitConfigLoad:
+		if (CanLoadConfig || true) {
+			next_state = SystemStateLoadingConfig;
+
+		}
+		break;
+	case SystemStateLoadingConfig:
+		LoadConfig();
+		next_state = SystemStateConfigLoaded;
+		break;
+	case SystemStateConfigLoaded:
+		break;
+	case SystemStateWaitingRun:
+		break;
+	case SystemStateRunning:
+		break;
+	case SystemStatePaused:
+		break;
+	case SystemStateResumed:
+		break;
+	case SystemStateConfigLoadError:
+		break;
+	default:
+		break;
+	}
+
+
+	SystemState = next_state;
+}

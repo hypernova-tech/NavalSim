@@ -1,59 +1,91 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <root>
-    <sensor>
-	<name>RobosenseLidar</name>
-        <type>lidar</type>
-	<blueprint>Mar.bp</blueprint>
-        <params>
-            <range>10 100</range>
-            <fov>20</fov>
-        </params>
-    </sensor>
-    <sensor>
-	<name>VisibleCam</name>
-        <type>camera</type>
-        <params>
-            <camsensortype>visible</camsensortype>
-            <camsensorsize>1080 1920</camsensorsize>
-            <fov>90</fov>
-        </params>
-    </sensor>
+  <entitydef>
+	<params>
+		<class>mesh</class>
+		<type>model</type>
+		<name>boat1mesh</name>
+		<path>mt.fbx</name>
+		<blueprint>Mar.bp</blueprint>      
+	</params>
+  </entitydef>
 
-    <gimbal>
-	<name>2Axis</name>
-        <params>
-            <yawlimits>-25 25</yawlimits>
-	    <pitchlimits>-35 60</pitchlimits>
-	    <rolllimits>-35 60</rolllimits>
-	    <yawrate>52</yawrate>
-            <pitchrate>53</pitchrate>
-	    <rollrate>54</rollrate>
-        </params>
-    </gimbal>
-
-    <boat>
-	<name>Mar</name>
-	<blueprint>Mar.bp</blueprint>
-	<sensor>
+  <entitydef>
+	<params>
+		<class>sensor</class>
+		<type>lidar</type>
 		<name>RobosenseLidar</name>
-		<pose>1 0 2 3 4 5</pose>
-		<gimbal>none</gimbal>
-	</sensor>
-	<sensor>
-		<name>VisibleCam</name>
-		<pose>6 7 8 9 10 11</pose>
-		<gimbal>2Axis</gimbal>
-	</sensor>
-    </boat>
- 
-    <scene>
-	<element>
-		<name>boat</name>
-		<pose>0 0 0 0 0 0</pose>
-	</element>
-	<element>
-		<name>boat</name>
-		<pose>0 20 0 0 0 0</pose>
-	</element>
-     </scene>
+		<blueprint>Mar.bp</blueprint>      
+		<range>10 100</range>
+     		<fov>20</fov>
+	</params>
+  </entitydef>
+
+  <entitydef>
+<params>
+	<class>sensor</class>
+	<type>camera</type>
+	<name>VisibleCam</name>
+     <camsensortype>visible</camsensortype>
+     <camsensorsize>1080 1920</camsensorsize>
+     <fov>90</fov>
+</params>
+   </entitydef>
+
+  <entitydef>
+<params>
+
+		<class>control</class>
+		<type>gimbal</type>
+		<name>2Axis</name> 
+      	<yawlimits>-25 25</yawlimits>
+	 	<pitchlimits>-35 60</pitchlimits>
+	 	<rolllimits>-35 60</rolllimits>
+	 	<yawrate>52</yawrate>
+      	<pitchrate>53</pitchrate>
+	 	<rollrate>54</rollrate>
+	</params>
+  </entitydef>
+
+  <composite>
+		<params>
+			<name>Mar</name>
+			<blueprint>Mar.bp</blueprint>
+			<class>platform</class>
+			<type>boat</type>
+		</params>
+		<gameobject>
+				<ref>boat1mesh</ref>
+				<pose>0 0 0 0 0 0</pose>
+
+			<gameobject>
+				<ref>boat1mesh</ref>
+				<pose>0 0 0 0 0 0</pose>
+			</gameobject>
+
+			<gameobject>
+				<ref>RobosenseLidar</ref>
+				<pose>1 0 2 3 4 5</pose>
+				<gimbal>none</gimbal>
+			</gameobject>
+			<gameobject>
+				<ref>VisibleCam</ref>
+				<pose>6 7 8 9 10 11</pose>
+				<gimbal>2Axis</gimbal>
+			</gameobject>
+		</gameobject>
+   </composite>
+
+	<scene>
+		<entities>
+			<entity>
+				<ref>Mar</ref>
+				<pose>0 0 0 0 0 0</pose>
+			</entity>
+			<entity>
+				<ref>Mar</ref>
+				<pose>0 20 0 0 0 0</pose>
+			</entity>
+		</entities>
+  </scene>
 </root>

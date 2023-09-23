@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "CCLICommandManager.h"
 #include "ConsoleBase.generated.h"
 
 
@@ -20,13 +21,16 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-	virtual void ProcessCommands(TArray<FString> tokens);
-
+	
+	bool ParseCommandLine(TCHAR* CommandLine, FString& Outcommand, TMap<FString, FString>& OutOptions, FString& OutErrorMessage);
+	bool ProcessCommands(FString command, TMap<FString, FString>& options, FString &error_message);
+	CCLICommandManager CommandManager;
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual void Command(FString command);
+	
 		
 };

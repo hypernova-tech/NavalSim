@@ -22,7 +22,7 @@ public:
 	// Sets default values for this pawn's properties
 	ACBoatBase();
 
-	TArray<ASensorBase> Sensors;
+	///TArray<ASensorBase> Sensors;
 
 	UFUNCTION(BlueprintCallable)
 		void OnForwardKey(bool pressed, bool released);

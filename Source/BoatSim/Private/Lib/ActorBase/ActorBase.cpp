@@ -24,9 +24,9 @@ void AActorBase::BeginPlay()
 		ASystemManagerBase::GetInstance()->RegisterActor("world", this);
 	}
 	else {
-#ifdef WITH_EDITOR 
-		///ASystemManagerBase::GetInstance()->RegisterActor(p_owner->GetActorLabel(), this); //todo fixme
-#endif
+
+		ASystemManagerBase::GetInstance()->RegisterActor(p_owner->GetActorLabel(), this); //todo fixme
+
 	}
 	
 }

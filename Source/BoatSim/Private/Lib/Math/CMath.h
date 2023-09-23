@@ -10,4 +10,6 @@ public:
 	static FLOAT64 GetVisibleDistanceOverSurfaceMeter(const FVector& pos, const FVector& dir, FLOAT64 max_surface_penetration_meter);
 
 	static void UnitTestVec();
-};
+	static void SetActorRotation(AActor* p_actor, FVector rpy_deg);
+	static void SetActorRelativeRotation(AActor* p_actor, FVector rpy_deg);
+}; 

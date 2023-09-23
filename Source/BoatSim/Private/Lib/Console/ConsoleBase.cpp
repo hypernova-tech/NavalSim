@@ -7,6 +7,7 @@
 #include <Lib/Gimbal/GimbalBase.h>
 #include <Lib/Sensor/GenericSensor/CameraBase.h>
 #include <Lib/Sensor/GenericSensor/RadarBase.h>
+#include <Lib/Math/CMath.h>
 
 
 // Sets default values for this component's properties
@@ -45,15 +46,115 @@ void UConsoleBase::Command(FString command)
 
   
     TArray<FString> CommandTokens;
-    command.ParseIntoArrayWS(CommandTokens);
-    ProcessCommands(CommandTokens);
 
+    TMap<FString, FString> outopt;
+    FString outcommand;
+    FString out_error_message;
+
+    bool ret = ParseCommandLine(command.GetCharArray().GetData(), outcommand, outopt, out_error_message);
+
+    if (ret) {
+        FString command_process_error_message = "";
+        auto command_ret = ProcessCommands(outcommand, outopt, command_process_error_message);
+    }
+    else {
+        CUtil::DebugLog(out_error_message);
+    }
     
 }
 
+bool UConsoleBase::ParseCommandLine(TCHAR* CommandLine, FString& OutCommand, TMap<FString, FString>& OutOptions,FString& OutErrorMessage)
+{
+    FString CmdLineStr(CommandLine);
+    TArray<FString> Tokens;
+    FString CurrentToken;
+    bool bInsideQuotes = false;
+
+    for (TCHAR Char : CmdLineStr)
+    {
+        if (Char == '"')
+        {
+            bInsideQuotes = !bInsideQuotes;
+            continue;
+        }
+
+        if (Char == ' ' && !bInsideQuotes)
+        {
+            if (!CurrentToken.IsEmpty())
+            {
+                Tokens.Add(CurrentToken);
+                CurrentToken.Empty();
+            }
+        }
+        else
+        {
+            CurrentToken += Char;
+        }
+    }
+
+    // Error: Unmatched quotes
+    if (bInsideQuotes)
+    {
+        OutErrorMessage = TEXT("Error: Unmatched quotes in command line.");
+        return false;
+    }
+
+    // Add the last token
+    if (!CurrentToken.IsEmpty())
+    {
+        Tokens.Add(CurrentToken);
+    }
+
+    // Error: Empty command line
+    if (Tokens.Num() == 0)
+    {
+        OutErrorMessage = TEXT("Error: Empty command line.");
+        return false;
+    }
+
+    // The first token is usually the command
+    OutCommand = Tokens[0];
+    Tokens.RemoveAt(0);
+
+    // Error: Empty command
+    if (OutCommand.IsEmpty())
+    {
+        OutErrorMessage = TEXT("Error: Empty command.");
+        return false;
+    }
+
+    for (int32 Index = 0; Index < Tokens.Num(); ++Index)
+    {
+        if (Tokens[Index].StartsWith("--"))
+        {
+            FString Key = Tokens[Index].Mid(2);
+            FString Value;
+
+            // Error: Empty key
+            if (Key.IsEmpty())
+            {
+                OutErrorMessage = TEXT("Error: Empty key.");
+                return false;
+            }
+
+            if (Index + 1 < Tokens.Num() && !Tokens[Index + 1].StartsWith("--"))
+            {
+                Value = Tokens[++Index];
+            }
+
+            OutOptions.Add(Key, Value);
+        }
+    }
+
+    return true;
+}
+
+
+
+
 //cmd enable <vehiclename> <actorname> <true|false>
 //gimbal <vehiclename> <actorname> angles <x y z>
-
+#if false
 void UConsoleBase::ProcessCommands(TArray<FString> tokens)
 {
   
@@ -143,4 +244,76 @@ void UConsoleBase::ProcessCommands(TArray<FString> tokens)
             ASystemManagerBase::GetInstance()->AddBoat(model_name, boat_name, world_pos, world_rot, scale);
         }
     }
+}
+#endif
+bool UConsoleBase::ProcessCommands(FString command, TMap<FString, FString>& options, FString& error_message)
+{
+    error_message = "";
+    CommandManager.SetCommandInfo(&options);
+    if (command == "create") {
+        auto name = CommandManager.GetName();
+        if (name != "") {
+            
+        }
+        else {
+            error_message += "empty name value";
+            return false;
+        }
+
+        auto bp = CommandManager.GetBP();
+        if (bp != "") {
+            auto ret = ASystemManagerBase::GetInstance()->CreateActor(bp, name, FVector::ZeroVector, FVector::ZeroVector, FVector::OneVector);
+            if (ret ==nullptr) {
+                error_message = "object cannot created";
+            }
+            return false;
+        }
+
+        auto model = CommandManager.GetModel();
+        if (model != "") {
+
+        }
+    }else if (command == "set") {
+
+        auto name = CommandManager.GetRelativeName();
+        if (name[0] != "") {
+
+        }
+        else {
+            error_message += "empty name value";
+            return false;
+        }
+        
+        AActor *p_actor = ASystemManagerBase::GetInstance()->FindActor(name);
+        FVector vec;
+
+        if (p_actor == nullptr) {
+            error_message += (("cannot find actor "));
+            return false;
+        }
+
+        bool ret = CommandManager.GetPosition(vec);
+        if (ret) {
+            p_actor->SetActorLocation(vec);
+        }
+
+        ret = CommandManager.GetRelPosition(vec);
+        if (ret) {
+            p_actor->SetActorRelativeLocation(vec);
+        }
+
+        ret = CommandManager.GetRotation(vec);
+        if (ret) {
+            CMath::SetActorRotation(p_actor, vec);
+        }
+        ret = CommandManager.GetRelRotation(vec);
+        if (ret) {
+            CMath::SetActorRelativeRotation(p_actor, vec);
+        }
+    }
+
+
+
+    return true;
+
 }

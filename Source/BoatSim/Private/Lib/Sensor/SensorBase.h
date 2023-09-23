@@ -3,12 +3,15 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Async/AsyncWork.h"
+#include "Async/TaskGraphInterfaces.h"
 #include "GameFramework/Actor.h"
 #include "GenericCommIF/GenericCommIF.h"
 #include <Lib/PointVisualizer/PointVisualizer.h>
 #include <Lib/ActorBase/ActorBase.h>
 #include "Lib/Clutter/ClutterDefs.h"
 #include <Lib/ScreenDepth/SceneCapturer.h>
+
 #include "SensorBase.generated.h"
 
 
@@ -33,38 +36,6 @@ enum ESensorState
 	Finish,
 	
 };
-
-class FRaycastSensorTask
-{
-	ASensorBase* SensorInstance;
-	FLOAT32 DeltaTimeSec;
-
-public:
-	FRaycastSensorTask(ASensorBase* InSensorInstance, FLOAT32 delta_time_sec)
-		: SensorInstance(InSensorInstance)
-	{
-		DeltaTimeSec = delta_time_sec;
-	}
-
-	static FORCEINLINE TStatId GetStatId()
-	{
-		RETURN_QUICK_DECLARE_CYCLE_STAT(FRaycastSensorTask, STATGROUP_TaskGraphTasks);
-	}
-
-	static FORCEINLINE ENamedThreads::Type GetDesiredThread()
-	{
-		return ENamedThreads::AnyThread;
-	}
-
-	void DoTask(ENamedThreads::Type CurrentThread, const FGraphEventRef& MyCompletionGraphEvent)
-	{
-		if (SensorInstance)
-		{
-			SensorInstance->SensorStateMachine(DeltaTimeSec);
-		}
-	}
-};
-
 
 UCLASS()
 class ASensorBase : public AActorBase
@@ -145,7 +116,6 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	virtual void Visualize(SScanResult* p_scan_result, FVector origin, FVector current_forward, FVector current_right, float max_range_meter, void *p_tracker = nullptr);
 	UGenericCommIF* GetCommCommIF();
-	
-	virtual void SensorStateMachine(float delta_time_sec);
+	void SensorStateMachine(float delta_time_sec);
 	virtual void OnCaptureReady(void *p_data);
 };

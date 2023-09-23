@@ -18,6 +18,7 @@ CUtil::~CUtil()
 bool CUtil::Trace(const STraceArgs& args, SScanResult* pscan_result)
 {
 #if true
+    auto trace_start_sec = CUtil::Tick();
 
     FVector start_pos = args.p_actor->GetActorLocation();
     FVector look_dir;
@@ -188,6 +189,8 @@ bool CUtil::Trace(const STraceArgs& args, SScanResult* pscan_result)
     pscan_result->HorizontalCount = horizantal_ind;
     pscan_result->VeriticalCount = vertical_ind;
 
+    auto trace_elp_sec = CUtil::Tock(trace_start_sec);
+    CUtil::DebugLog(FString::Printf(TEXT("scan(ms) %s %f"), *args.p_actor->GetName(), trace_elp_sec * 1000));
 
     return success_count > 0;
 

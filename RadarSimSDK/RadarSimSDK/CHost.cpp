@@ -161,8 +161,6 @@ void CHost::ThreadFunction()
 						}
 					}
 
-					
-
 					bool is_all_radars_connected = true;
 					int success_cnt = 0;
 

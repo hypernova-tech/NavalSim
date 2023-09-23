@@ -62,3 +62,17 @@ void CMath::UnitTestVec()
         new_dir = new_dir;
     }
 }
+
+void CMath::SetActorRotation(AActor* p_actor, FVector rpy_deg)
+{
+    FQuat Quat = FQuat::MakeFromEuler(rpy_deg);
+
+    // Set the actor's rotation
+    p_actor->SetActorRotation(Quat);
+}
+
+void CMath::SetActorRelativeRotation(AActor* p_actor, FVector rpy_deg)
+{
+    FQuat Quat = FQuat::MakeFromEuler(rpy_deg);
+    p_actor->SetActorRelativeRotation(Quat);
+}

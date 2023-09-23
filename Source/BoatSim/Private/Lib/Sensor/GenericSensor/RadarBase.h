@@ -104,14 +104,16 @@ protected:
 	virtual void InitSensor() override;
 	virtual void BeginPlay() override;
 
-	virtual void Scan();
+	
 	virtual void RadarStateMachine();
 	virtual void OnDataReady() override;
 	virtual void InitTracker();
 	virtual void UpdateTracker();
+
+	FGraphEventRef RaycastTaskComplete;
 public:
 
-
+	virtual void Scan();
 	void SetFrequency(double val);
 	double GetFrequency();
 
@@ -137,6 +139,8 @@ public:
 	bool GetScanEnabled();
 
 	virtual void OnCaptureReady(void* p_data) override;
+
+	void OnAsynTaskComplete();
 
 private:
 	float CurrentScanAzimuth;

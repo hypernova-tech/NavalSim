@@ -7,6 +7,57 @@
 #include "Lib/Tracker/RadarBasedTracker/RadarBasedTracker.h"
 
 
+class FRaycastSensorTask
+{
+	ARadarBase* SensorInstance;
+	FLOAT32 DeltaTimeSec;
+
+public:
+
+	static const TCHAR* GetTaskName()
+	{
+		return TEXT("FRaycastSensorTask");
+	}
+
+
+	FRaycastSensorTask(ARadarBase* InSensorInstance, FLOAT32 delta_time_sec)
+		: SensorInstance(InSensorInstance)
+	{
+		DeltaTimeSec = delta_time_sec;
+	}
+
+	static FORCEINLINE TStatId GetStatId()
+	{
+		RETURN_QUICK_DECLARE_CYCLE_STAT(FRaycastSensorTask, STATGROUP_TaskGraphTasks);
+
+	}
+
+	static  ENamedThreads::Type GetDesiredThread()
+	{
+		return ENamedThreads::AnyThread;
+	}
+	static ESubsequentsMode::Type GetSubsequentsMode()
+	{
+		return ESubsequentsMode::TrackSubsequents;
+	}
+
+	void DoTask(ENamedThreads::Type CurrentThread, const FGraphEventRef& MyCompletionGraphEvent)
+	{
+		if (SensorInstance)
+		{
+			SensorInstance->Scan();
+			FFunctionGraphTask::CreateAndDispatchWhenReady(
+				[this]()
+				{
+					SensorInstance->OnAsynTaskComplete();
+				},
+				TStatId(), MyCompletionGraphEvent, ENamedThreads::GameThread
+			);
+		}
+	}
+};
+
+
 void ARadarBase::SetFrequency(double val)
 {
 	Frequency = val;
@@ -123,11 +174,26 @@ void ARadarBase::Run(float delta_time_sec)
 
 }
 
+
 void ARadarBase::RadarStateMachine()
 {
 	UpdateTracker();
+
+	/*
+	if (RaycastTaskComplete.IsValid()) {
+		Visualize(pScanResult, GetActorLocation(), GetActorForwardVector(), GetActorRightVector(), RangeMeter.Y, (void*)pTracker);
+	}
+	*/
+	
+	 //RaycastTaskComplete = TGraphTask<FRaycastSensorTask>::CreateTask().ConstructAndDispatchWhenReady(this, 0);
+	
 	Scan();
 	
+}
+
+void ARadarBase::OnAsynTaskComplete()
+{
+	Visualize(pScanResult, GetActorLocation(), GetActorForwardVector(), GetActorRightVector(), RangeMeter.Y, (void*)pTracker);
 }
 void ARadarBase::OnDataReady()
 {
@@ -158,6 +224,8 @@ void ARadarBase::OnCaptureReady(void* p_data)
 	auto read_pixed_elp_sec = CUtil::Tock(CaptureStartTimeRef);
 	CUtil::DebugLog(FString::Printf(TEXT("radar capture duration(ms): %f"), 1000 * read_pixed_elp_sec));
 }
+
+
 
 void ARadarBase::Scan()
 {

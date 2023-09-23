@@ -12,6 +12,19 @@
 #include <Lib/DataContainer/DataContainer.h>
 #include "SystemManagerBase.generated.h"
 
+enum ESystemState
+{
+	SystemStateWaitConfigLoad,
+	SystemStateLoadingConfig,
+	SystemStateConfigLoaded,
+	SystemStateWaitingRun,
+	SystemStateRunning,
+	SystemStatePaused,
+	SystemStateResumed,
+	SystemStateConfigLoadError,
+
+};
+
 
 UCLASS()
 class  ASystemManagerBase : public AActor
@@ -53,7 +66,16 @@ protected:
 		TArray<AActor*> SensorGlobalIgnoreList;
 
 	UConfigManager* pConfigManager;
-	virtual void LoadConfig();
+	virtual bool LoadConfig();
+
+
+	virtual void StateMachine();
+
+	ESystemState SystemState = ESystemState::SystemStateWaitConfigLoad;
+	bool CanLoadConfig = false;
+
+
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -68,24 +90,31 @@ public:
 	AActor* GetFloor();
 	TArray<AActor*>& GetMoveableActorList();
 
-	void RegisterActor(FString owner, AActorBase* p_actor);
+	void RegisterActor(FString owner, AActor* p_actor);
 
 	template <typename T>
 	T* FindActor(FString owner, FString actor_name);
 
 
+	AActor* FindActor(TArray<FString> relative_name);
 
+	AActorBase* ToActorBase(AActor* p_actor);
 	void EnableAllActors();
 	void DisableAllActors();
 
-	bool AddBoat(FString model_name, FString boat_name,FVector world_pos, FVector world_rot, FVector scale);
+	AActor* CreateActor(FString model_name, FString boat_name,FVector world_pos, FVector world_rot, FVector scale);
 	INT64U GetTimeStamp();
 	AActor* GetVisibleActorAt(const TArray<AActor*>& ignore_list, FVector from, FVector to, FLOAT64 tolerance_meter);
+
+
+
+	void SetCanLoadConfig(bool val);
+	bool GetCanLoadConfig();
 private:
 
 	static ASystemManagerBase* pInstance;
-	TMap<FString, TMap<FString, AActorBase*>> AllActors;
-	TArray<AActorBase*> ActorList;
+	TMap<FString, TMap<FString, AActor*>> AllActors;
+	TArray<AActor*> ActorList;
 
 
 	

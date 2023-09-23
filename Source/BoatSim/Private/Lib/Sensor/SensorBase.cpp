@@ -4,6 +4,9 @@
 #include "Lib/Sensor/SensorBase.h"
 #include <Lib/Utils/CUtil.h>
 
+
+
+
 // Sets default values
 ASensorBase::ASensorBase()
 {
@@ -122,17 +125,23 @@ void ASensorBase::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	
 	if (Enabled) {
+
 		SensorStateMachine(DeltaTime);
+		
 	}
 	
 }
 
 void ASensorBase::Visualize(SScanResult* p_scan_result, FVector origin, FVector current_forward, FVector current_right, float max_range_meter, void* p_tracker)
 {
+	auto vis_stat_sec = CUtil::Tick();
 	if (pPointVisualizer != nullptr) {
 
 		pPointVisualizer->Visualize(p_scan_result, origin, current_forward, current_right, max_range_meter, p_tracker);
 	}
+
+	auto elp_sec = CUtil::Tock(vis_stat_sec);
+	CUtil::DebugLog(FString::Printf(TEXT("vis(ms) : %f"), elp_sec * 1000));
 	
 }
 

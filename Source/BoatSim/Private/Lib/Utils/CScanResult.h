@@ -159,30 +159,27 @@ public:
 
 struct SScanResult
 {
-	int HorizontalCount;
-	int VeriticalCount;
+	INT32S HorizontalCount;
+	INT32S VeriticalCount;
 	FVector ScanCenter;
 	FVector ScanRPYWorld;
-	FLOAT32 RangeMeter[HORIZOTAL_SCAN_SIZE][VERTICAL_SCAN_SIZE]; //meter
-	FLOAT32 NormalStrength[HORIZOTAL_SCAN_SIZE][VERTICAL_SCAN_SIZE]; //meter
+	FLOAT32 RangeMeter[HORIZOTAL_SCAN_SIZE][VERTICAL_SCAN_SIZE]; 
+	FLOAT32 NormalStrength[HORIZOTAL_SCAN_SIZE][VERTICAL_SCAN_SIZE]; 
 	FVector Point3D[HORIZOTAL_SCAN_SIZE][VERTICAL_SCAN_SIZE];
 
-	int SectorCount;
+	INT32S SectorCount;
 	FLOAT32 ScanAzimuthStepDeg;
 	FLOAT32 ScanElevationStepDeg;
 	FVector2D AzimuthRange;
 	FVector2D ElevationRange;
-	
-
-
 		
 	FVector Track3DWorld[HORIZOTAL_SCAN_SIZE * VERTICAL_SCAN_SIZE];
-	FLOAT32 TrackRangeMeter[HORIZOTAL_SCAN_SIZE * VERTICAL_SCAN_SIZE]; //meter
+	FLOAT32 TrackRangeMeter[HORIZOTAL_SCAN_SIZE * VERTICAL_SCAN_SIZE]; 
 
 	INT32U Track3DCount;
 
 	SSectorContainer SectorContainer;
-	int CurrentSector = 0;
+	INT32S CurrentSector = 0;
 	
 	FLOAT32 ScanRangeMeter;
 

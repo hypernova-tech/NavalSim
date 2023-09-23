@@ -148,9 +148,9 @@ void AFLS3D::Run(float delta_time_sec)
 
 		bool ret = false;
 
-		auto trace_start_sec = CUtil::Tick();
+		
 		ret = CUtil::Trace(args, pScanResult);
-		auto trace_elp_sec = CUtil::Tock(trace_start_sec);
+		
 
 		//ret = CUtil::Trace(this, false, RangeMeter.X, RangeMeter.Y, start_azimuth, end_azimuth, -FovVerticalDeg, 0, HorizontalScanStepAngleDeg, VerticalScanStepAngleDeg, MeasurementErrorMean, MeasurementErrorUncertainy, GetClutterParams(), ShowBeam, ignored_actor,false, pScanResult);
 
