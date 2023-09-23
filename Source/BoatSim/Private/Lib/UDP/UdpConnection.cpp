@@ -5,6 +5,7 @@
 #include "Networking/Public/Networking.h"
 #include <Lib/SystemManager/SystemManagerBase.h>
 #include <Lib/Types/Primitives.h>
+#include <Lib/Utils/CUtil.h>
 
 // Constructor
 UUdpConnection::UUdpConnection()
@@ -136,7 +137,11 @@ void UUdpConnection::StartUDPThread()
 // Send UDP data
 bool UUdpConnection::SendUDPData(const FString& Message)
 {
-	return false;
+	char dest[2048];
+
+	CUtil::FStringToAsciiChar(Message, dest, sizeof(dest));
+	auto ret = SendUDPData((const INT8U*)dest, Message.Len());
+	return ret;
 }
 
 bool UUdpConnection::SendUDPData(const INT8U* p_bytes, INT32U count)

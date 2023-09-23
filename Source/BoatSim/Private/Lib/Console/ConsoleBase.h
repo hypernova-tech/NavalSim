@@ -5,11 +5,13 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "CCLICommandManager.h"
+#include <Lib/UDP/UdpConnection.h>
 #include "ConsoleBase.generated.h"
 
 
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class UConsoleBase : public UActorComponent
+class UConsoleBase : public UActorComponent,public IConnectionDataReceiver
 {
 	GENERATED_BODY()
 
@@ -20,6 +22,7 @@ public:
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
+	UUdpConnection* pUDPConnection;
 
 	
 	bool ParseCommandLine(TCHAR* CommandLine, FString& Outcommand, TMap<FString, FString>& OutOptions, FString& OutErrorMessage);
@@ -31,6 +34,6 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	virtual void Command(FString command);
-	
+	virtual void OnReceivedConnectionData(void* connection, INT8U* p_data, INT32U count);
 		
 };

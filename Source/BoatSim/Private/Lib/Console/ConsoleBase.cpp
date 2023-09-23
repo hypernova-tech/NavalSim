@@ -26,6 +26,9 @@ void UConsoleBase::BeginPlay()
 {
 	Super::BeginPlay();
 
+    pUDPConnection = GetOwner()->GetComponentByClass<UUdpConnection>();
+    pUDPConnection->AddConnectionDataReceiver(this);
+
 	// ...
 	
 }
@@ -56,11 +59,39 @@ void UConsoleBase::Command(FString command)
     if (ret) {
         FString command_process_error_message = "";
         auto command_ret = ProcessCommands(outcommand, outopt, command_process_error_message);
+
+        if (pUDPConnection != nullptr) {
+            if (command_ret) {
+                pUDPConnection->SendUDPData(TEXT("OK"));
+            }
+            else {
+                pUDPConnection->SendUDPData(TEXT("FAILED") + command_process_error_message);
+            }
+        }
     }
     else {
+        pUDPConnection->SendUDPData(TEXT("FAILED") + out_error_message);
         CUtil::DebugLog(out_error_message);
     }
     
+}
+
+void UConsoleBase::OnReceivedConnectionData(void* connection, INT8U* p_data, INT32U count)
+{
+    // Create a task to execute on the game thread
+    FGraphEventRef Task = FFunctionGraphTask::CreateAndDispatchWhenReady([&]()
+        {
+
+            // Update the actor's location
+            auto cmd = CUtil::CharToFString((char*)p_data);
+            Command(cmd);
+
+        }, TStatId(), nullptr, ENamedThreads::GameThread);
+
+    // Wait for the task to complete
+    FTaskGraphInterface::Get().WaitUntilTaskCompletes(Task);
+   
+
 }
 
 bool UConsoleBase::ParseCommandLine(TCHAR* CommandLine, FString& OutCommand, TMap<FString, FString>& OutOptions,FString& OutErrorMessage)
@@ -265,8 +296,9 @@ bool UConsoleBase::ProcessCommands(FString command, TMap<FString, FString>& opti
             auto ret = ASystemManagerBase::GetInstance()->CreateActor(bp, name, FVector::ZeroVector, FVector::ZeroVector, FVector::OneVector);
             if (ret ==nullptr) {
                 error_message = "object cannot created";
+                return false;
             }
-            return false;
+            
         }
 
         auto model = CommandManager.GetModel();
@@ -292,14 +324,14 @@ bool UConsoleBase::ProcessCommands(FString command, TMap<FString, FString>& opti
             return false;
         }
 
-        bool ret = CommandManager.GetPosition(vec);
+        bool ret = CommandManager.GetPosition(vec );
         if (ret) {
-            p_actor->SetActorLocation(vec);
+            p_actor->SetActorLocation(vec * WORLDTOUNREALUNIT);
         }
 
         ret = CommandManager.GetRelPosition(vec);
         if (ret) {
-            p_actor->SetActorRelativeLocation(vec);
+            p_actor->SetActorRelativeLocation(vec*WORLDTOUNREALUNIT);
         }
 
         ret = CommandManager.GetRotation(vec);
@@ -309,6 +341,11 @@ bool UConsoleBase::ProcessCommands(FString command, TMap<FString, FString>& opti
         ret = CommandManager.GetRelRotation(vec);
         if (ret) {
             CMath::SetActorRelativeRotation(p_actor, vec);
+        }
+
+        ret = CommandManager.GetScale(vec);
+        if (ret) {
+            p_actor->SetActorScale3D(vec);
         }
     }
 

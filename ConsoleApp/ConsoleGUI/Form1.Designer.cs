@@ -29,18 +29,11 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            treeView1 = new TreeView();
             openFileDialog1 = new OpenFileDialog();
             contextMenuStrip1 = new ContextMenuStrip(components);
+            textBox1 = new TextBox();
+            listBox1 = new ListBox();
             SuspendLayout();
-            // 
-            // treeView1
-            // 
-            treeView1.Location = new Point(12, 12);
-            treeView1.Name = "treeView1";
-            treeView1.Size = new Size(280, 520);
-            treeView1.TabIndex = 0;
-            treeView1.AfterSelect += treeView1_AfterSelect;
             // 
             // openFileDialog1
             // 
@@ -52,21 +45,41 @@
             contextMenuStrip1.Name = "contextMenuStrip1";
             contextMenuStrip1.Size = new Size(61, 4);
             // 
+            // textBox1
+            // 
+            textBox1.Location = new Point(11, 548);
+            textBox1.Name = "textBox1";
+            textBox1.Size = new Size(728, 23);
+            textBox1.TabIndex = 1;
+            textBox1.TextChanged += textBox1_TextChanged;
+            textBox1.KeyDown += textBox1_KeyDown;
+            // 
+            // listBox1
+            // 
+            listBox1.FormattingEnabled = true;
+            listBox1.ItemHeight = 15;
+            listBox1.Location = new Point(11, 12);
+            listBox1.Name = "listBox1";
+            listBox1.Size = new Size(728, 529);
+            listBox1.TabIndex = 2;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(751, 612);
-            Controls.Add(treeView1);
+            ClientSize = new Size(751, 587);
+            Controls.Add(listBox1);
+            Controls.Add(textBox1);
             Name = "Form1";
             Text = "Form1";
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
-
-        private TreeView treeView1;
         private OpenFileDialog openFileDialog1;
         private ContextMenuStrip contextMenuStrip1;
+        private TextBox textBox1;
+        private ListBox listBox1;
     }
 }
