@@ -441,6 +441,11 @@ void CUtil::DebugLog(FString str)
 
 }
 
+void CUtil::DebugLogScreen(FString str, FLOAT32 duration_sec, FColor col)
+{
+    GEngine->AddOnScreenDebugMessage(-1, duration_sec, col, str);
+}
+
 void CUtil::LookAt(AActor* p_actor, FVector& look_dir)
 {
     FVector ActorLocation = p_actor->GetActorLocation();
@@ -684,7 +689,7 @@ T* CUtil::FindChildComponent(AActor* p_parent)
     return nullptr;
 }
 
-AActor* CUtil::SpawnObjectFromBlueprint(FString blueprint_path, UWorld *p_world, AActor *p_owner, FString name, FVector pos, FVector rot_rpy, FVector scale)
+AActor* CUtil::SpawnObjectFromBlueprint(AActor *p_template, FString blueprint_path, UWorld *p_world, AActor *p_owner, FString name, FVector pos, FVector rot_rpy, FVector scale)
 {
     // The blueprint name should be the path to the blueprint asset, relative to the Content folder.
     FString BlueprintPath = blueprint_path;
@@ -709,6 +714,7 @@ AActor* CUtil::SpawnObjectFromBlueprint(FString blueprint_path, UWorld *p_world,
     // Create the object from the blueprint and spawn it in the world.
     FActorSpawnParameters SpawnParams;
     SpawnParams.Name = FName(*name);
+    SpawnParams.Template = p_template;
     SpawnParams.Owner = p_owner; // Set the owner if required.
     SpawnParams.Instigator = nullptr; // Set the instigator if required.
     SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
@@ -716,10 +722,15 @@ AActor* CUtil::SpawnObjectFromBlueprint(FString blueprint_path, UWorld *p_world,
     //SpawnedActor = World->SpawnActor<AActor>(BlueprintObject->GeneratedClass, pos, FRotator(rot_rpy.Y,rot_rpy.Z, rot_rpy.X), SpawnParams);
 
 
-    UClass* MyActorClass = StaticLoadClass(AActor::StaticClass(), nullptr, (*blueprint_path));
-    if (MyActorClass)
+ 
+    // Yüklemek için kullan
+    UClass* BlueprintClass = StaticLoadClass(AActor::StaticClass(), nullptr, *BlueprintPath.Append("_C"));
+
+
+   // UClass* MyActorClass = StaticLoadClass(AActor::StaticClass(), nullptr, (*blueprint_path));
+    if (BlueprintClass)
     {
-        SpawnedActor = World->SpawnActor<AActor>(MyActorClass, pos, FRotator(rot_rpy.Y, rot_rpy.Z, rot_rpy.X));
+        SpawnedActor = World->SpawnActor<AActor>(BlueprintClass,pos, FRotator(rot_rpy.Y, rot_rpy.Z, rot_rpy.X), SpawnParams);
     }
 
 

@@ -57,6 +57,7 @@ public:
 	static bool ParseVector3D(const FString& Text, FVector& ret);
 	static bool ParsePose(const FString& Text, FVector& translation, FVector& rpy);
 	static void DebugLog(FString str);
+	static void DebugLogScreen(FString str, FLOAT32 duration_sec = 5, FColor col = FColor::Red);
 	template <typename T>
 	static T* FindComponent(AActor* p_parent);
 	template <typename T>
@@ -73,7 +74,7 @@ public:
 	static void IPAddrCopy(const FString& str, INT8U* p_dest, INT32U dest_capacity);
 	static void MacAddrCopy(const FString& str, INT8U* p_dest, INT32U dest_capacity);
 	static AActor* GetTopParent(AActor *p_actor);
-	static AActor* SpawnObjectFromBlueprint(FString blueprint_path, UWorld* p_world, AActor* p_owner, FString name, FVector pos, FVector rot_rpy, FVector scale);
+	static AActor* SpawnObjectFromBlueprint(AActor* p_template, FString blueprint_path, UWorld* p_world, AActor* p_owner, FString name, FVector pos, FVector rot_rpy, FVector scale);
 	static FLOAT64 GetTimeSeconds();
 	static inline INT16U LittleToBig(INT16U val);
 	static inline INT32U LittleToBig(INT32U val);
@@ -84,6 +85,7 @@ public:
 	static void GetOwnAndParents(AActor* p_child, TArray<AActor*> &ret);
 	static FLOAT64 Tick();
 	static FLOAT64 Tock(FLOAT64 start_time_sec);
+	
 
 };
 

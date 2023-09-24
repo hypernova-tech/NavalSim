@@ -196,6 +196,16 @@ void ASystemManagerBase::BeginPlay()
 		pConfigManager = pConfigManagerActor->GetComponentByClass<UConfigManager>();
 	}
 
+	FString Value;
+	if (FParse::Value(FCommandLine::Get(), TEXT("instance="), Value))
+	{
+		// Do something with Value
+		UE_LOG(LogTemp, Warning, TEXT("MyOption value: %s"), *Value);
+		CUtil::DebugLogScreen("Instance: " + Value,60);
+	}
+	else {
+		CUtil::DebugLogScreen("Instance: " + FString("null"), 60);
+	}
 	
 	GEngine->GameViewport->ConsoleCommand(TEXT("YourCommand"));
 	
@@ -274,7 +284,11 @@ AActor* ASystemManagerBase::CreateActor(FString model_name, FString boat_name, F
 	auto path = info.BlueprintAsset.ToSoftObjectPath().GetAssetPathString();
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, path);
 	CUtil::DebugLog("blueprint path: " + path);
-	auto ret = CUtil::SpawnObjectFromBlueprint(path, GetWorld(), nullptr, boat_name,world_pos, world_rot, scale);
+
+
+
+
+    auto ret = CUtil::SpawnObjectFromBlueprint(info.ActorToSpawn, path, GetWorld(), nullptr, boat_name,world_pos, world_rot, scale);
 	
 	if (ret != nullptr) {
 		RegisterActor("world", ret);

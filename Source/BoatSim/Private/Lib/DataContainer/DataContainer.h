@@ -17,6 +17,9 @@ public:
 		FString BlueprintPath;
 	UPROPERTY(EditAnywhere)
 		TAssetPtr<UBlueprint> BlueprintAsset;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Spawning")
+		AActor *ActorToSpawn;
 };
 
 

@@ -4,6 +4,7 @@ using System.Text;
 using System.Net;
 using System.Net.Sockets;
 using System.Windows.Forms;
+using System.Diagnostics;
 
 namespace ConsoleGUI
 {
@@ -36,7 +37,18 @@ namespace ConsoleGUI
         {
             if (e.KeyCode == Keys.Enter)
             {
-                SendData(textBox1.Text);
+                var cmd = textBox1.Text;
+                if (cmd.Contains("run")){
+                    var args = cmd.Split(" ");
+                    int instance_count = int.Parse(args[1]);
+                    Run(instance_count);
+                }
+                else
+                {
+                    SendData(cmd);
+                }
+                    
+                
 
             }
         }
@@ -99,6 +111,39 @@ namespace ConsoleGUI
         {
             var item = listBox1.Items[listBox1.SelectedIndex];
             textBox1.Text = item.ToString();
+        }
+
+        void Run(int instance_count)
+        {
+            for(int i = 0; i< instance_count; i++)
+            {
+                // Define the path to the UE4 executable
+                string unrealExecutablePath = @"C:\Users\Pc\Documents\Unreal Projects\BoatSim\package\Windows\BoatSim.exe";
+
+                // Define any command-line arguments you want to pass
+                string unrealArgs = "-instance=" + i.ToString();
+
+                // Set up the process start info
+                ProcessStartInfo startInfo = new ProcessStartInfo(unrealExecutablePath, unrealArgs)
+                {
+                    RedirectStandardOutput = true,
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                };
+
+                // Start the process
+                using (Process process = new Process { StartInfo = startInfo })
+                {
+                    process.Start();
+
+                    // Read the output (optional)
+                    //string output = process.StandardOutput.ReadToEnd();
+
+                    // Wait for the process to exit
+                    //process.WaitForExit();
+                }
+            }
+       
         }
     }
 }
