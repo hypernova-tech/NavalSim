@@ -271,10 +271,24 @@ AActor* ASystemManagerBase::CreateActor(FString model_name, FString boat_name, F
 {
 	auto info = pDataContainer->FindBlueprintInfo(model_name);
 	
-	auto ret = CUtil::SpawnObjectFromBlueprint(info.BlueprintAsset.ToSoftObjectPath().GetAssetPathString(), GetWorld(), nullptr, boat_name,world_pos, world_rot, scale);
+	auto path = info.BlueprintAsset.ToSoftObjectPath().GetAssetPathString();
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, path);
+	CUtil::DebugLog("blueprint path: " + path);
+	auto ret = CUtil::SpawnObjectFromBlueprint(path, GetWorld(), nullptr, boat_name,world_pos, world_rot, scale);
 	
 	if (ret != nullptr) {
 		RegisterActor("world", ret);
+
+		/*
+		APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
+		if (PlayerController && PlayerController->GetPawn())
+		{
+			PlayerController->UnPossess();
+			PlayerController->Possess((APawn*)ret);
+		}
+		
+		*/
+		
 		
 	}
 

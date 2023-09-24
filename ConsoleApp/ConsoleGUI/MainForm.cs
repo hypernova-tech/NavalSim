@@ -7,11 +7,11 @@ using System.Windows.Forms;
 
 namespace ConsoleGUI
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
         UdpClient UdpClient;
         IPEndPoint EndPoint;
-        public Form1()
+        public MainForm()
         {
             InitializeComponent();
             InitUDPConnection();
@@ -85,7 +85,20 @@ namespace ConsoleGUI
             byte[] data = Encoding.ASCII.GetBytes(cmd);
             listBox1.Items.Add(cmd);
             UdpClient.Send(data, data.Length, EndPoint);
-           
+
+        }
+
+        private void listBox1_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            var item = listBox1.Items[listBox1.SelectedIndex];
+            textBox1.Text = item.ToString();
+            SendData(textBox1.Text);
+        }
+
+        private void listBox1_MouseClick(object sender, MouseEventArgs e)
+        {
+            var item = listBox1.Items[listBox1.SelectedIndex];
+            textBox1.Text = item.ToString();
         }
     }
 }

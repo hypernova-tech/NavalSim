@@ -695,7 +695,7 @@ AActor* CUtil::SpawnObjectFromBlueprint(FString blueprint_path, UWorld *p_world,
     if (!BlueprintObject)
     {
         UE_LOG(LogTemp, Warning, TEXT("Failed to load blueprint at path: %s"), *BlueprintPath);
-        return nullptr;
+        //return nullptr;
     }
 
     // Get the world reference to spawn the object.
@@ -712,7 +712,16 @@ AActor* CUtil::SpawnObjectFromBlueprint(FString blueprint_path, UWorld *p_world,
     SpawnParams.Owner = p_owner; // Set the owner if required.
     SpawnParams.Instigator = nullptr; // Set the instigator if required.
     SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-    AActor* SpawnedActor = World->SpawnActor<AActor>(BlueprintObject->GeneratedClass, pos, FRotator(rot_rpy.Y,rot_rpy.Z, rot_rpy.X), SpawnParams);
+    AActor* SpawnedActor = nullptr;
+    //SpawnedActor = World->SpawnActor<AActor>(BlueprintObject->GeneratedClass, pos, FRotator(rot_rpy.Y,rot_rpy.Z, rot_rpy.X), SpawnParams);
+
+
+    UClass* MyActorClass = StaticLoadClass(AActor::StaticClass(), nullptr, (*blueprint_path));
+    if (MyActorClass)
+    {
+        SpawnedActor = World->SpawnActor<AActor>(MyActorClass, pos, FRotator(rot_rpy.Y, rot_rpy.Z, rot_rpy.X));
+    }
+
 
     if (!SpawnedActor)
     {

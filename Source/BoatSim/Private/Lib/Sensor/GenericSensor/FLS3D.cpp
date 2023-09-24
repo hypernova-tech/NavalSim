@@ -167,7 +167,7 @@ void AFLS3D::Run(float delta_time_sec)
 
 		IsFullScaned = true;
 
-		CUtil::DebugLog("Scanning");
+		//CUtil::DebugLog("Scanning");
 	}
 
 

@@ -1,6 +1,6 @@
 ﻿namespace ConsoleGUI
 {
-    partial class Form1
+    partial class MainForm
     {
         /// <summary>
         ///  Required designer variable.
@@ -62,15 +62,17 @@
             listBox1.Name = "listBox1";
             listBox1.Size = new Size(728, 529);
             listBox1.TabIndex = 2;
+            listBox1.MouseClick += listBox1_MouseClick;
+            listBox1.MouseDoubleClick += listBox1_MouseDoubleClick;
             // 
-            // Form1
+            // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(751, 587);
             Controls.Add(listBox1);
             Controls.Add(textBox1);
-            Name = "Form1";
+            Name = "MainForm";
             Text = "Form1";
             ResumeLayout(false);
             PerformLayout();

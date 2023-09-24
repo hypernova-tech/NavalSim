@@ -141,7 +141,7 @@ void ASensorBase::Visualize(SScanResult* p_scan_result, FVector origin, FVector 
 	}
 
 	auto elp_sec = CUtil::Tock(vis_stat_sec);
-	CUtil::DebugLog(FString::Printf(TEXT("vis(ms) : %f"), elp_sec * 1000));
+	//CUtil::DebugLog(FString::Printf(TEXT("vis(ms) : %f"), elp_sec * 1000));
 	
 }
 

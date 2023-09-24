@@ -25,7 +25,7 @@ void AActorBase::BeginPlay()
 	}
 	else {
 
-		ASystemManagerBase::GetInstance()->RegisterActor(p_owner->GetActorLabel(), this); //todo fixme
+		ASystemManagerBase::GetInstance()->RegisterActor(p_owner->GetName(), this); //todo fixme
 
 	}
 	

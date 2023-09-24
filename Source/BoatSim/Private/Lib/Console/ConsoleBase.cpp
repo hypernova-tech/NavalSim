@@ -293,6 +293,7 @@ bool UConsoleBase::ProcessCommands(FString command, TMap<FString, FString>& opti
 
         auto bp = CommandManager.GetBP();
         if (bp != "") {
+            bp = "MIR";
             auto ret = ASystemManagerBase::GetInstance()->CreateActor(bp, name, FVector::ZeroVector, FVector::ZeroVector, FVector::OneVector);
             if (ret ==nullptr) {
                 error_message = "object cannot created";
