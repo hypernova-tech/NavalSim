@@ -7,6 +7,9 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using System.ComponentModel;
 using ConsoleGUI;
+using System;
+using System.Collections.Generic;
+
 namespace ConsoleGUI
 {
     public partial class MainForm : Form
@@ -44,29 +47,30 @@ namespace ConsoleGUI
 
                 if (ret)
                 {
-                    if(outcommand == "run")
+                    if(outcommand == "process")
                     {
 
-                        if(outoptions.TryGetValue("count", out string value))
+                        if(outoptions.TryGetValue("run", out string value))
                         {
                             Run(int.Parse(value));
                             AddCommandToList(cmd);
                         }
-                    }
-                    if (outcommand == "kill")
-                    {
-
-                        if (outoptions.TryGetValue("instance", out string instance_to_kill))
+                        else if (outoptions.TryGetValue("kill", out string instance_to_kill))
                         {
-                            Kill(int.Parse(instance_to_kill));
-                            AddCommandToList(cmd);
+                            //Kill(int.Parse(instance_to_kill));
+                            //AddCommandToList(cmd);
+                            SendData(cmd);
+                            ProcessList.Remove(int.Parse(instance_to_kill));
                         }
                     }
+                    else
+                    {
+                        SendData(cmd);
+                    }
+                   
+                    
                 }
-                else
-                {
-                    SendData(cmd);
-                }
+            
                     
                 
 
@@ -149,8 +153,14 @@ namespace ConsoleGUI
         {
             if(ProcessList.TryGetValue(instance_no, out var process))
             {
-                process.Dispose();
-                ProcessList.Remove(instance_no);
+                try {
+                    process.Kill();
+                    process.WaitForExit();
+                    process.Dispose();
+                    ProcessList.Remove(instance_no);
+                }catch(Exception ex) { 
+                }
+       
             }
 
 
@@ -165,7 +175,7 @@ namespace ConsoleGUI
                 string unrealExecutablePath = @"C:\Users\Pc\Documents\Unreal Projects\BoatSim\package\Windows\BoatSim.exe";
 
                 // Define any command-line arguments you want to pass
-                string unrealArgs = "-instance=" + i.ToString();
+                string unrealArgs = "-windowed  -instance=" + i.ToString();
 
                 // Set up the process start info
                 ProcessStartInfo startInfo = new ProcessStartInfo(unrealExecutablePath, unrealArgs)
@@ -173,6 +183,7 @@ namespace ConsoleGUI
                     RedirectStandardOutput = true,
                     UseShellExecute = false,
                     CreateNoWindow = true,
+                    
                 };
                 Process process = new Process();
                 process.StartInfo = startInfo;

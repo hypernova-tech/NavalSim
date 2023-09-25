@@ -114,6 +114,7 @@ public:
 	bool GetCanLoadConfig();
 
 	INT32S GetInstanceNo();
+	void ForceExit();
 private:
 
 	static ASystemManagerBase* pInstance;

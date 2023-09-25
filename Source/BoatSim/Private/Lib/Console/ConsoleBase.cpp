@@ -280,8 +280,54 @@ void UConsoleBase::ProcessCommands(TArray<FString> tokens)
 bool UConsoleBase::ProcessCommands(FString command, TMap<FString, FString>& options, FString& error_message)
 {
     error_message = "";
-    CommandManager.SetCommandInfo(&options);
-    if (command == "create") {
+    CommandManager.SetCommandOptions(&options);
+
+    if (command == "help") {
+        auto cmd_info = CommandManager.GetCommandInfo();
+
+
+        for (auto It = (*cmd_info).CreateConstIterator(); It; ++It)
+        {
+            FString Key = It->Key;
+            TArray<SCommandOptionInfo> ValueArray = It->Value;
+
+            // Iterate over the TArray
+            FString ret = "";
+            pUDPConnection->SendUDPData(Key);
+            for (SCommandOptionInfo& Option : ValueArray)
+            {
+                ret = Option.Option + " " + "["+Option.Description+"]";
+
+                if (pUDPConnection != nullptr) {
+                    pUDPConnection->SendUDPData(ret);
+                }
+                
+            }
+        }
+        pUDPConnection->SendUDPData("\n");
+        return true;
+
+    }
+
+    else if (command == "process") {
+        auto instance  = CommandManager.GetProcessKillInstanceCount();
+      
+        if (ASystemManagerBase::GetInstance()->GetInstanceNo() == instance) {
+            
+            ASystemManagerBase::GetInstance()->ForceExit();
+            return true;
+        }
+
+     
+        else {
+            error_message += "empty name value";
+            return false;
+        }
+
+      
+    }
+
+    else if (command == "create") {
         auto name = CommandManager.GetName();
         if (name != "") {
             
@@ -352,6 +398,6 @@ bool UConsoleBase::ProcessCommands(FString command, TMap<FString, FString>& opti
 
 
 
-    return true;
+    return false;
 
 }

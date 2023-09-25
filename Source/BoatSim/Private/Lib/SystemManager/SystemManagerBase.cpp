@@ -141,6 +141,11 @@ INT32S ASystemManagerBase::GetInstanceNo()
 	return InstanceNo;
 }
 
+void ASystemManagerBase::ForceExit()
+{
+	FGenericPlatformMisc::RequestExit(true);
+}
+
 AActor* ASystemManagerBase::FindActor(TArray<FString> relative_name) 
 {
 	FString owner = "world";
@@ -216,7 +221,21 @@ void ASystemManagerBase::BeginPlay()
 		pConfigManager = pConfigManagerActor->GetComponentByClass<UConfigManager>();
 	}
 
+	APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
 
+	if (PlayerController)
+	{
+		PlayerController->bShowMouseCursor = true;
+		
+		PlayerController->bEnableClickEvents = true;
+		PlayerController->bEnableMouseOverEvents = true;
+
+		FInputModeGameAndUI InputMode;
+		InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
+		PlayerController->SetInputMode(InputMode);
+	}
+
+	
 	
 	GEngine->GameViewport->ConsoleCommand(TEXT("YourCommand"));
 	
@@ -329,6 +348,7 @@ void ASystemManagerBase::StateMachine()
 	switch (curr_state)
 	{
 	case ESystemState::SystemStateJustLaunched:
+
 		next_state = ESystemState::SystemStateDetectInstance;
 		break;
 	case ESystemState::SystemStateDetectInstance:

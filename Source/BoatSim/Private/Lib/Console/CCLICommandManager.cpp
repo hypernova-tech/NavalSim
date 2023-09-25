@@ -7,12 +7,18 @@
 CCLICommandManager::CCLICommandManager()
 {
 	PrepareCreateCommandInfo();
+	PrepareProcessCommandInfo();
 }
 
 
-void CCLICommandManager::SetCommandInfo(TMap<FString, FString>* p_opt)
+void CCLICommandManager::SetCommandOptions(TMap<FString, FString>* p_opt)
 {
 	pOptions = p_opt;
+}
+
+TMap<FString, TArray<SCommandOptionInfo>>* CCLICommandManager::GetCommandInfo()
+{
+	return &CommandInfo;
 }
 
 void CCLICommandManager::PrepareCreateCommandInfo()
@@ -20,6 +26,7 @@ void CCLICommandManager::PrepareCreateCommandInfo()
 	TArray<SCommandOptionInfo> options;
 	// create command
 	SCommandOptionInfo info;
+
 	info.Option = "--name";
 	info.Description = "sets the name of actor tobe created";
 	options.Add(info);
@@ -32,9 +39,36 @@ void CCLICommandManager::PrepareCreateCommandInfo()
 	info.Description = "sets the 3d model of the object";
 	options.Add(info);
 
-	CommandInfo.Add("create", options);
+	CommandInfo.Add(CreateCommand, options);
 }
 
+void CCLICommandManager::PrepareProcessCommandInfo()
+{
+	TArray<SCommandOptionInfo> options;
+	// create command
+	SCommandOptionInfo info;
+	info.Option = "--kill";
+	info.Description = "kills specified instance id";
+	options.Add(info);
+
+	
+
+	CommandInfo.Add(ProcessCommand, options);
+}
+
+void CCLICommandManager::PrepareSetCommandInfo()
+{
+	TArray<SCommandOptionInfo> options;
+	// create command
+	SCommandOptionInfo info;
+	info.Option = "--name";
+	info.Description = "sets the name of object";
+	options.Add(info);
+
+
+
+	CommandInfo.Add(SetCommand, options);
+}
 bool CCLICommandManager::HasName()
 {
 	auto ret = pOptions->Find(Name);
@@ -54,6 +88,16 @@ FString CCLICommandManager::GetName()
 	}
 
 	return "";
+}
+int CCLICommandManager::GetProcessKillInstanceCount()
+{
+	auto arg = pOptions->Find(ProcessKill);
+	if (arg != nullptr) {
+		INT32S ret = CUtil::StringToInt(*arg);
+		return ret;
+	}
+
+	return -1;
 }
 TArray<FString> CCLICommandManager::GetRelativeName()
 {

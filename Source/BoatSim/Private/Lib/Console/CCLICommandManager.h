@@ -10,6 +10,7 @@
 
 struct SCommandOptionInfo
 {
+
 	FString Option;
 	FString Description;
 
@@ -24,10 +25,15 @@ class CCLICommandManager
 private:
 	TMap<FString, FString>* pOptions;
 
+	FString ProcessCommand = "process";
+	FString ProcessKill = "kill";
+
+	FString CreateCommand = "create";
 	FString Name = "name";
 	FString Bp = "bp";
 	FString Model = "model";
 
+	FString SetCommand = "set";
 	FString Position = "position";
 	FString RelPosition = "relposition";
 	FString Rotation = "rotation";
@@ -41,9 +47,15 @@ private:
 public:
 	CCLICommandManager();
 
-	void SetCommandInfo(TMap<FString, FString>* p_opt);
+	void SetCommandOptions(TMap<FString, FString>* p_opt);
+	TMap<FString, TArray<SCommandOptionInfo>>* GetCommandInfo();
+
 
 	void PrepareCreateCommandInfo();
+	void PrepareProcessCommandInfo();
+	void PrepareSetCommandInfo();
+
+	int GetProcessKillInstanceCount();
 
 	bool HasName();
 

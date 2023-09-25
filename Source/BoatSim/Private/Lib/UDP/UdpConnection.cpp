@@ -103,7 +103,9 @@ uint32 UUdpConnection::Run()
 			
 
 			for (auto connection : ConnectionDataReceivers) {
-				connection->OnReceivedConnectionData(this, ReceivedData.GetData(), ReceivedData.Num());
+				auto pdata = ReceivedData.GetData();
+				pdata[BytesRead] = 0;
+				connection->OnReceivedConnectionData(this, pdata, BytesRead);
 			}
 		}
 	}
