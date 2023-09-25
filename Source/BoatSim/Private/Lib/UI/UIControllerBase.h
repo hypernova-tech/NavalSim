@@ -5,7 +5,9 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include <Components/Image.h>
+#include <Components/TextBlock.h>
 #include "UIControllerBase.generated.h"
+
 
 
 UCLASS()
@@ -20,6 +22,12 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+
+	UPROPERTY(EditAnywhere)
+		UTextBlock* ConsoleText;
+
+
 
 	UPROPERTY(EditAnywhere)
 		TArray<UImage*> LidarSlots;
@@ -49,4 +57,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		int GetCameraSlotCount();
+
+	UFUNCTION(BlueprintCallable)
+		void SetConsoleOutputTextWidget(UTextBlock* pwidget);
+
+	void SetConsoleOutputText(FString text);
 };

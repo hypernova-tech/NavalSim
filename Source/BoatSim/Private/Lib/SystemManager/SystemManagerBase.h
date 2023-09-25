@@ -14,6 +14,8 @@
 
 enum ESystemState
 {
+	SystemStateJustLaunched,
+	SystemStateDetectInstance,
 	SystemStateWaitConfigLoad,
 	SystemStateLoadingConfig,
 	SystemStateConfigLoaded,
@@ -39,7 +41,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	
+	void DetectInstance();
 
 	UPROPERTY(EditAnywhere)
 		AMapOrigin* pMapOrigin;
@@ -71,10 +73,10 @@ protected:
 
 	virtual void StateMachine();
 
-	ESystemState SystemState = ESystemState::SystemStateWaitConfigLoad;
+	ESystemState SystemState = ESystemState::SystemStateJustLaunched;
 	bool CanLoadConfig = false;
 
-
+	INT32S InstanceNo;
 
 public:	
 	// Called every frame
@@ -110,6 +112,8 @@ public:
 
 	void SetCanLoadConfig(bool val);
 	bool GetCanLoadConfig();
+
+	INT32S GetInstanceNo();
 private:
 
 	static ASystemManagerBase* pInstance;

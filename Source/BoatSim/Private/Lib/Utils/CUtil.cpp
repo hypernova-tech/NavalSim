@@ -3,6 +3,7 @@
 
 #include "Lib/Utils/CUtil.h"
 #include <Lib/Math/CMath.h>
+#include <Lib/SystemManager/SystemManagerBase.h>
 
 
 
@@ -443,7 +444,14 @@ void CUtil::DebugLog(FString str)
 
 void CUtil::DebugLogScreen(FString str, FLOAT32 duration_sec, FColor col)
 {
+
+
+    // Code that should only run in Development builds
     GEngine->AddOnScreenDebugMessage(-1, duration_sec, col, str);
+    ASystemManagerBase::GetInstance()->GetUIController()->SetConsoleOutputText(str);
+   
+
+    
 }
 
 void CUtil::LookAt(AActor* p_actor, FVector& look_dir)

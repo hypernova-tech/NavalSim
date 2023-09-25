@@ -57,3 +57,16 @@ int AUIControllerBase::GetCameraSlotCount()
 {
 	return CameraSlots.Num();
 }
+
+void AUIControllerBase::SetConsoleOutputTextWidget(UTextBlock* pwidget)
+{
+	ConsoleText = pwidget;
+}
+
+void AUIControllerBase::SetConsoleOutputText(FString text)
+{
+	if (ConsoleText) {
+		ConsoleText->SetText(FText::FromString(text));
+	}
+	
+}

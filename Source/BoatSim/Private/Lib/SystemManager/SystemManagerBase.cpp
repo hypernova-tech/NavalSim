@@ -136,6 +136,11 @@ bool ASystemManagerBase::GetCanLoadConfig()
 	return CanLoadConfig;
 }
 
+INT32S ASystemManagerBase::GetInstanceNo()
+{
+	return InstanceNo;
+}
+
 AActor* ASystemManagerBase::FindActor(TArray<FString> relative_name) 
 {
 	FString owner = "world";
@@ -186,7 +191,22 @@ T* ASystemManagerBase::FindActor(FString owner, FString actor_name)
 	
 }
 
+void ASystemManagerBase::DetectInstance()
+{
+	FString Value;
+	InstanceNo = -1;
+	if (FParse::Value(FCommandLine::Get(), TEXT("instance="), Value))
+	{
+		// Do something with Value
+		UE_LOG(LogTemp, Warning, TEXT("MyOption value: %s"), *Value);
+		CUtil::DebugLogScreen("Instance: " + Value, 10);
+		InstanceNo = CUtil::StringToInt(Value);
 
+	}
+	else {
+		CUtil::DebugLogScreen("Instance: " + FString("null"), 60);
+	}
+}
 // Called when the game starts or when spawned
 void ASystemManagerBase::BeginPlay()
 {
@@ -196,16 +216,7 @@ void ASystemManagerBase::BeginPlay()
 		pConfigManager = pConfigManagerActor->GetComponentByClass<UConfigManager>();
 	}
 
-	FString Value;
-	if (FParse::Value(FCommandLine::Get(), TEXT("instance="), Value))
-	{
-		// Do something with Value
-		UE_LOG(LogTemp, Warning, TEXT("MyOption value: %s"), *Value);
-		CUtil::DebugLogScreen("Instance: " + Value,60);
-	}
-	else {
-		CUtil::DebugLogScreen("Instance: " + FString("null"), 60);
-	}
+
 	
 	GEngine->GameViewport->ConsoleCommand(TEXT("YourCommand"));
 	
@@ -317,27 +328,34 @@ void ASystemManagerBase::StateMachine()
 
 	switch (curr_state)
 	{
-	case SystemStateWaitConfigLoad:
+	case ESystemState::SystemStateJustLaunched:
+		next_state = ESystemState::SystemStateDetectInstance;
+		break;
+	case ESystemState::SystemStateDetectInstance:
+		DetectInstance();
+		next_state = ESystemState::SystemStateWaitConfigLoad;
+		break;
+	case ESystemState::SystemStateWaitConfigLoad:
 		if (CanLoadConfig || true) {
-			next_state = SystemStateLoadingConfig;
+			next_state = ESystemState::SystemStateLoadingConfig;
 
 		}
 		break;
-	case SystemStateLoadingConfig:
+	case ESystemState::SystemStateLoadingConfig:
 		LoadConfig();
-		next_state = SystemStateConfigLoaded;
+		next_state = ESystemState::SystemStateConfigLoaded;
 		break;
-	case SystemStateConfigLoaded:
+	case ESystemState::SystemStateConfigLoaded:
 		break;
-	case SystemStateWaitingRun:
+	case ESystemState::SystemStateWaitingRun:
 		break;
-	case SystemStateRunning:
+	case ESystemState::SystemStateRunning:
 		break;
-	case SystemStatePaused:
+	case ESystemState::SystemStatePaused:
 		break;
-	case SystemStateResumed:
+	case ESystemState::SystemStateResumed:
 		break;
-	case SystemStateConfigLoadError:
+	case ESystemState::SystemStateConfigLoadError:
 		break;
 	default:
 		break;

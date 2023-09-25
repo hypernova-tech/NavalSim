@@ -5,13 +5,15 @@ using System.Net;
 using System.Net.Sockets;
 using System.Windows.Forms;
 using System.Diagnostics;
-
+using System.ComponentModel;
+using ConsoleGUI;
 namespace ConsoleGUI
 {
     public partial class MainForm : Form
     {
         UdpClient UdpClient;
         IPEndPoint EndPoint;
+        CCommandParser Parser = new CCommandParser();
         public MainForm()
         {
             InitializeComponent();
@@ -38,10 +40,28 @@ namespace ConsoleGUI
             if (e.KeyCode == Keys.Enter)
             {
                 var cmd = textBox1.Text;
-                if (cmd.Contains("run")){
-                    var args = cmd.Split(" ");
-                    int instance_count = int.Parse(args[1]);
-                    Run(instance_count);
+                bool ret = Parser.TryParseCommandLine(cmd, out string outcommand, out Dictionary<string, string> outoptions, out string error_message);
+
+                if (ret)
+                {
+                    if(outcommand == "run")
+                    {
+
+                        if(outoptions.TryGetValue("count", out string value))
+                        {
+                            Run(int.Parse(value));
+                            AddCommandToList(cmd);
+                        }
+                    }
+                    if (outcommand == "kill")
+                    {
+
+                        if (outoptions.TryGetValue("instance", out string instance_to_kill))
+                        {
+                            Kill(int.Parse(instance_to_kill));
+                            AddCommandToList(cmd);
+                        }
+                    }
                 }
                 else
                 {
@@ -94,12 +114,20 @@ namespace ConsoleGUI
 
         void SendData(string cmd)
         {
+            if(cmd == "")
+            {
+                return;
+            }
             byte[] data = Encoding.ASCII.GetBytes(cmd);
-            listBox1.Items.Add(cmd);
+            AddCommandToList(cmd);
             UdpClient.Send(data, data.Length, EndPoint);
 
         }
 
+        void AddCommandToList(string cmd)
+        {
+            listBox1.Items.Add(cmd);
+        }
         private void listBox1_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             var item = listBox1.Items[listBox1.SelectedIndex];
@@ -109,10 +137,26 @@ namespace ConsoleGUI
 
         private void listBox1_MouseClick(object sender, MouseEventArgs e)
         {
+            if(listBox1.SelectedIndex < 0){
+                return;
+            }
             var item = listBox1.Items[listBox1.SelectedIndex];
             textBox1.Text = item.ToString();
         }
 
+
+        void Kill(int instance_no)
+        {
+            if(ProcessList.TryGetValue(instance_no, out var process))
+            {
+                process.Dispose();
+                ProcessList.Remove(instance_no);
+            }
+
+
+        }
+
+        Dictionary<int, Process> ProcessList = new Dictionary<int, Process>();
         void Run(int instance_count)
         {
             for(int i = 0; i< instance_count; i++)
@@ -130,18 +174,12 @@ namespace ConsoleGUI
                     UseShellExecute = false,
                     CreateNoWindow = true,
                 };
-
+                Process process = new Process();
+                process.StartInfo = startInfo;
+                process.Start();
+                ProcessList.Add(i, process);
                 // Start the process
-                using (Process process = new Process { StartInfo = startInfo })
-                {
-                    process.Start();
-
-                    // Read the output (optional)
-                    //string output = process.StandardOutput.ReadToEnd();
-
-                    // Wait for the process to exit
-                    //process.WaitForExit();
-                }
+         
             }
        
         }
