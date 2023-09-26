@@ -6,6 +6,7 @@
 #include "GameFramework/Pawn.h"
 #include "Lib/SOA/ISOAObserver.h"
 #include <Lib/Sensor/SensorBase.h>
+#include <Lib/Platform/IPlatform.h>
 #include "CBoatBase.generated.h"
 
 
@@ -14,7 +15,7 @@
 class UCameraComponent;
 
 UCLASS()
-class  ACBoatBase : public APawn, public ISOAObserver
+class  ACBoatBase : public APawn, public ISOAObserver, public IPlatform
 {
 	GENERATED_BODY()
 
@@ -70,6 +71,7 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
     virtual void Update(UCSOAObserverArgs* p_args) override;
+	virtual void OnControllerChanged();
 private:
 	UCameraComponent* BoatCam;
 	bool IsForward;
@@ -83,4 +85,12 @@ private:
 	void Oscillate();
 
 
+
+	// Inherited via IPlatform
+	virtual void SetMaxSpeedMeterPerSec(FLOAT32 speed) override;
+
+	virtual FLOAT32 GetMaxSpeedMeterPerSec() override;
+
 };
+
+typedef ACBoatBase APlatformBase;

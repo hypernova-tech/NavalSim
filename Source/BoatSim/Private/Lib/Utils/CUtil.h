@@ -86,7 +86,7 @@ public:
 	static FLOAT64 Tick();
 	static FLOAT64 Tock(FLOAT64 start_time_sec);
 	static void SetParent(AActor* p_child, AActor* p_parent);
-	
+	static void SetActorActive(AActor* p_actor, bool is_active);
 
 };
 

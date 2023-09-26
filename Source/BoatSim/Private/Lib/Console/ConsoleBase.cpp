@@ -94,6 +94,14 @@ void UConsoleBase::OnReceivedConnectionData(void* connection, INT8U* p_data, INT
 
 }
 
+void UConsoleBase::SendToConsole(FString val)
+{
+    if (pUDPConnection != nullptr) {
+        pUDPConnection->SendUDPData(val);
+    }
+   
+}
+
 bool UConsoleBase::ParseCommandLine(TCHAR* CommandLine, FString& OutCommand, TMap<FString, FString>& OutOptions,FString& OutErrorMessage)
 {
     FString CmdLineStr(CommandLine);
@@ -453,6 +461,14 @@ bool UConsoleBase::ProcessCommands(FString command, TMap<FString, FString>& opti
             return false;
         }
 
+        bool is_active;
+        ret = CommandManager.GetActive(is_active);
+        if (ret) {
+            CUtil::SetActorActive(p_actor, is_active);
+            return true;
+
+        }
+
         ret = CommandManager.GetPosition(vec );
         if (ret) {
             p_actor->SetActorLocation(vec * WORLDTOUNREALUNIT);
@@ -528,6 +544,8 @@ bool UConsoleBase::ProcessCommands(FString command, TMap<FString, FString>& opti
             error_message += (("cannot find actor "));
             return false;
         }
+
+   
 
         ret = CommandManager.HasPosition();
         if (ret) {

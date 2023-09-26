@@ -49,16 +49,8 @@ void ACBoatBase::Tick(float DeltaTime)
 
 		pos += forward * DeltaTime * MovementSpeedUnitPerSec;
 		SetActorLocation(pos);
-		//DoTrace();
-#if false
-		if (LidarComp) {
-			if (GetWorld()->TimeSeconds >= NextLidarTimeSec) {
-				LidarComp->Trace();
-				NextLidarTimeSec = GetWorld()->TimeSeconds + 0.1f;
-			}
+	
 
-		}
-#endif
 	}
 	else if (IsBackward) {
 
@@ -263,6 +255,11 @@ void ACBoatBase::Update(UCSOAObserverArgs* p_args)
 
 }
 
+void ACBoatBase::OnControllerChanged()
+{
+	BoatCam = Cast<UCameraComponent>(GetComponentByClass<UCameraComponent>());
+}
+
 void ACBoatBase::Oscillate()
 {
 	return;
@@ -271,5 +268,15 @@ void ACBoatBase::Oscillate()
 		
 	pos += FVector::UpVector * oscillation;
 	SetActorLocation(pos);
+}
+
+void ACBoatBase::SetMaxSpeedMeterPerSec(FLOAT32 speed)
+{
+	MovementSpeedUnitPerSec = TOUE( speed) ;
+}
+
+FLOAT32 ACBoatBase::GetMaxSpeedMeterPerSec()
+{
+	return TOW(MovementSpeedUnitPerSec);
 }
 

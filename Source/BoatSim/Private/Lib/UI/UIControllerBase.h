@@ -6,7 +6,9 @@
 #include "GameFramework/Actor.h"
 #include <Components/Image.h>
 #include <Components/TextBlock.h>
+#include <Lib/Types/Primitives.h>
 #include "UIControllerBase.generated.h"
+
 
 
 
@@ -60,6 +62,15 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		void SetConsoleOutputTextWidget(UTextBlock* pwidget);
+
+	UFUNCTION(BlueprintCallable)
+		void OnMouseLeftButtonDown(int locationX, int locationY);
+
+	UFUNCTION(BlueprintCallable)
+		void OnMouseLeftButtonUp(int locationX, int locationY);
+
+
+	void FindActorAtClickPosition(int locationX, int locationY);
 
 	void SetConsoleOutputText(FString text);
 };

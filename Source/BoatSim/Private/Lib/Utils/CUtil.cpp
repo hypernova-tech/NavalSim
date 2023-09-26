@@ -849,6 +849,13 @@ void CUtil::SetParent(AActor* p_child, AActor* p_parent)
     }
 }
 
+void CUtil::SetActorActive(AActor* p_actor, bool is_active)
+{
+    p_actor->SetActorTickEnabled(is_active);
+    p_actor->SetActorHiddenInGame(!is_active);
+    p_actor->SetActorEnableCollision(is_active);
+}
+
 FString CUtil::CharToFString(const char* p_char)
 {
     FString str = FString( p_char);

@@ -43,6 +43,7 @@ private:
 	FString Scale = "scale";
 	FString Parent = "parent";
 	FString Controller = "controller";
+	FString Active = "Active";
 
 	FString GetCommand = "get";
 
@@ -97,6 +98,8 @@ public:
 	bool GetRelRotation(FVector& vec);
 
 	bool GetScale(FVector& vec);
+
+	bool GetActive(bool& val);
 
 	bool HasPosition();
 	bool HasScale();

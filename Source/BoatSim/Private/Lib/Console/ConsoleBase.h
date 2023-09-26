@@ -35,5 +35,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void Command(FString command);
 	virtual void OnReceivedConnectionData(void* connection, INT8U* p_data, INT32U count);
+	void SendToConsole(FString val);
 		
 };

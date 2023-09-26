@@ -2,6 +2,8 @@
 
 
 #include "Lib/UI/UIControllerBase.h"
+#include <Lib/SystemManager/SystemManagerBase.h>
+#include <Lib/Utils/CUtil.h>
 
 // Sets default values
 AUIControllerBase::AUIControllerBase()
@@ -61,6 +63,62 @@ int AUIControllerBase::GetCameraSlotCount()
 void AUIControllerBase::SetConsoleOutputTextWidget(UTextBlock* pwidget)
 {
 	ConsoleText = pwidget;
+}
+
+void AUIControllerBase::OnMouseLeftButtonDown(int locationX, int locationY)
+{
+
+	CUtil::DebugLog("OnMouseLeftButtonDown");
+	FindActorAtClickPosition(locationX, locationY);
+}
+
+void AUIControllerBase::OnMouseLeftButtonUp(int locationX, int locationY)
+{
+	CUtil::DebugLog("OnMouseLeftButtonUp");
+}
+
+void AUIControllerBase::FindActorAtClickPosition(int locationX, int locationY)
+{
+	APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
+
+	FVector WorldLocation;
+	FVector WorldDirection;
+
+	if (PlayerController)
+	{
+		PlayerController->DeprojectScreenPositionToWorld(
+			locationX, locationY,
+			WorldLocation,
+			WorldDirection
+		);
+	}
+
+	FHitResult HitResult;
+
+	// Define start and end points of the ray
+	FVector Start = WorldLocation;
+	FVector End = Start + (WorldDirection * TOUE(1000));  // MaxTraceDistance is up to you, e.g., 10000.0f
+
+	// Perform the line trace
+	// The ECC_Visibility channel will typically work, but you can change this if necessary
+	bool bHit = GetWorld()->LineTraceSingleByChannel(
+		HitResult,
+		Start,
+		End,
+		ECC_Visibility
+	);
+
+	if (bHit)
+	{
+		// HitResult now contains information about what was hit
+		AActor* ClickedActor = HitResult.GetActor();
+		if (ClickedActor)
+		{
+			CUtil::DebugLogScreen(ClickedActor->GetName());
+			ASystemManagerBase::GetInstance()->GetConsole()->SendToConsole("clicked: "+ ClickedActor->GetName());
+			
+		}
+	}
 }
 
 void AUIControllerBase::SetConsoleOutputText(FString text)

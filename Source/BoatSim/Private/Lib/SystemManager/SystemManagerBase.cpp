@@ -250,6 +250,10 @@ void ASystemManagerBase::BeginPlay()
 		FInputModeGameAndUI InputMode;
 		InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
 		PlayerController->SetInputMode(InputMode);
+		APlatformBase* p_platform = (APlatformBase* )(PlayerController->GetPawn());
+		if (p_platform) {
+			SetPlatform(p_platform);
+		}
 	}
 
 	
@@ -285,7 +289,14 @@ ADataContainer* ASystemManagerBase::GetDataContainer()
 {
 	return pDataContainer;
 }
-
+UConsoleBase* ASystemManagerBase::GetConsole()
+{
+	if (pConsole == nullptr) {
+		
+		pConsole = pConsoleActor->FindComponentByClass<UConsoleBase>();
+	}
+	return pConsole;
+}
 
 bool ASystemManagerBase::LoadConfig()
 {
@@ -358,6 +369,14 @@ bool ASystemManagerBase::SetMainPlayerController(FString name)
 		auto pactor = FindActor(name);
 		if (pactor->IsA<APawn>()) {
 			PlayerController->Possess((APawn*)pactor);
+
+			
+			
+			PlayerController->SetViewTargetWithBlend(pactor, 0.1f);
+			APlatformBase* p_platform = (APlatformBase*)(PlayerController->GetPawn());
+			if (p_platform) {
+				SetPlatform(p_platform);
+			}
 			return true;
 		}
 		
@@ -372,6 +391,16 @@ AActor* ASystemManagerBase::GetMainPlayerController()
 {
 	APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
 	return PlayerController->GetPawn();
+}
+ACBoatBase* ASystemManagerBase::GetPlatform()
+{
+	return pPlatform;
+}
+void ASystemManagerBase::SetPlatform(ACBoatBase* p_platform)
+{
+	pPlatform = p_platform;
+	pPlatform->OnControllerChanged();
+
 }
 void ASystemManagerBase::StartSimulation()
 {

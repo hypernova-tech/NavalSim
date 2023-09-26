@@ -10,7 +10,10 @@
 #include <Lib/UI/UIControllerBase.h>
 #include <Lib/ActorBase/ActorBase.h>
 #include <Lib/DataContainer/DataContainer.h>
+#include "CBoatBase.h"
+#include <Lib/Console/ConsoleBase.h>
 #include "SystemManagerBase.generated.h"
+
 
 enum ESystemState
 {
@@ -65,7 +68,16 @@ protected:
 		AActor* pConfigManagerActor;
 
 	UPROPERTY(EditAnywhere)
+		AActor* pConsoleActor;
+
+
+		UConsoleBase* pConsole = nullptr;
+		
+
+	UPROPERTY(EditAnywhere)
 		AUIControllerBase* pUIController;
+
+
 
 	UPROPERTY(EditAnywhere)
 		TArray<AActor*> SensorGlobalIgnoreList;
@@ -92,10 +104,21 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION(BlueprintCallable)
 	AMapOrigin* GetMapOrigin();
+
+	UFUNCTION(BlueprintCallable)
 	ASOAImplementor* GetSOAImplementor();
+
+	UFUNCTION(BlueprintCallable)
 	AUIControllerBase* GetUIController();
+
+	UFUNCTION(BlueprintCallable)
 	ADataContainer* GetDataContainer();
+
+	UFUNCTION(BlueprintCallable)
+		UConsoleBase* GetConsole();
+
 	static  ASystemManagerBase* GetInstance();
 
 	TArray<AActor*>& GetSensorGlobalIgnoreList();
@@ -131,6 +154,13 @@ public:
 	virtual  bool  SetMainPlayerController(FString name);
 	virtual AActor* GetMainPlayerController();
 
+	UFUNCTION(BlueprintCallable)
+	ACBoatBase* GetPlatform();
+
+	UFUNCTION(BlueprintCallable)
+	void SetPlatform(ACBoatBase*p_platform);
+	
+
 	virtual void StartSimulation();
 	virtual void ResumeSimulation();
 	virtual void PauseSimulation();
@@ -142,6 +172,7 @@ private:
 	bool IsStartReceived = false;
 	bool IsResumeReceived = false;
 	bool IsPauseReceived = false;
+	APlatformBase* pPlatform;
 
 	
 };

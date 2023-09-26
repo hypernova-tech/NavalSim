@@ -136,6 +136,10 @@ void CCLICommandManager::PrepareSetCommandInfo()
 	info.Description = "sets the scale of object of name";
 	options.Add(info);
 
+	info.Option = "--active";
+	info.Description = "sets the activity of object of name, 0: pasive, 1:active";
+	options.Add(info);
+
 	info.Option = "--position";
 	info.Description = "sets the position of object of name";
 	options.Add(info);
@@ -176,6 +180,10 @@ void CCLICommandManager::PrepareGetCommandInfo()
 
 	info.Option = "--parent";
 	info.Description = "gets the scale of object of name";
+	options.Add(info);
+
+	info.Option = "--active";
+	info.Description = "gets the activity of object of name, 0: pasive, 1:active";
 	options.Add(info);
 
 	info.Option = "--position";
@@ -403,7 +411,24 @@ bool CCLICommandManager::GetScale(FVector& vec)
 
 	return false;
 }
+bool CCLICommandManager::GetActive(bool& val)
+{
+	bool ret = false;
+	auto pstr = pOptions->Find(Active);
+	if (pstr != nullptr) {
 
+		if (*pstr == "1") {
+			val = true;
+		}
+		else {
+			val = false;
+		}
+		return true;
+	}
+
+
+	return false;
+}
 
 bool CCLICommandManager::GetStart(bool& is_start)
 {
