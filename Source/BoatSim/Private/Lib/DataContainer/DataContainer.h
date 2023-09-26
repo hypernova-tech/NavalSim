@@ -48,4 +48,7 @@ public:
 
 	FBlueprintPathEntry FindBlueprintInfo(FString name);
 
+
+	TArray<FBlueprintPathEntry>* GetBlueprintInfo();
+
 };

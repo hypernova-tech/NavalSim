@@ -31,7 +31,7 @@
             components = new System.ComponentModel.Container();
             openFileDialog1 = new OpenFileDialog();
             contextMenuStrip1 = new ContextMenuStrip(components);
-            textBox1 = new TextBox();
+            CommandTextBox = new TextBox();
             listBox1 = new ListBox();
             button1 = new Button();
             SuspendLayout();
@@ -46,14 +46,14 @@
             contextMenuStrip1.Name = "contextMenuStrip1";
             contextMenuStrip1.Size = new Size(61, 4);
             // 
-            // textBox1
+            // CommandTextBox
             // 
-            textBox1.Location = new Point(11, 548);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(728, 23);
-            textBox1.TabIndex = 1;
-            textBox1.TextChanged += textBox1_TextChanged;
-            textBox1.KeyDown += textBox1_KeyDown;
+            CommandTextBox.Location = new Point(11, 548);
+            CommandTextBox.Name = "CommandTextBox";
+            CommandTextBox.Size = new Size(728, 23);
+            CommandTextBox.TabIndex = 1;
+            CommandTextBox.TextChanged += textBox1_TextChanged;
+            CommandTextBox.KeyDown += textBox1_KeyDown;
             // 
             // listBox1
             // 
@@ -82,9 +82,9 @@
             ClientSize = new Size(751, 587);
             Controls.Add(button1);
             Controls.Add(listBox1);
-            Controls.Add(textBox1);
+            Controls.Add(CommandTextBox);
             Name = "MainForm";
-            Text = "Form1";
+            Text = "Sim Console";
             ResumeLayout(false);
             PerformLayout();
         }
@@ -92,7 +92,7 @@
         #endregion
         private OpenFileDialog openFileDialog1;
         private ContextMenuStrip contextMenuStrip1;
-        private TextBox textBox1;
+        private TextBox CommandTextBox;
         private ListBox listBox1;
         private Button button1;
     }

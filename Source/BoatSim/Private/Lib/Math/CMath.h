@@ -12,4 +12,7 @@ public:
 	static void UnitTestVec();
 	static void SetActorRotation(AActor* p_actor, FVector rpy_deg);
 	static void SetActorRelativeRotation(AActor* p_actor, FVector rpy_deg);
+
+	static FVector GetActorEulerAnglesRPY(AActor* p_actor);
+	static FVector GetActorReleativeEulerAnglesRPY(AActor* p_actor);
 }; 

@@ -21,11 +21,11 @@ void AActorBase::BeginPlay()
 	AActor *p_owner = CUtil::GetTopParent(this);
 
 	if (p_owner == nullptr) {
-		ASystemManagerBase::GetInstance()->RegisterActor("world", this);
+		ASystemManagerBase::GetInstance()->RegisterActor(this);
 	}
 	else {
 
-		ASystemManagerBase::GetInstance()->RegisterActor(p_owner->GetName(), this); //todo fixme
+		ASystemManagerBase::GetInstance()->RegisterActor(this); //todo fixme
 
 	}
 	

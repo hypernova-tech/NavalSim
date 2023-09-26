@@ -308,7 +308,7 @@ bool UConsoleBase::ProcessCommands(FString command, TMap<FString, FString>& opti
         return true;
 
     }
-
+  
     else if (command == "process") {
         auto instance  = CommandManager.GetProcessKillInstanceCount();
       
@@ -326,7 +326,61 @@ bool UConsoleBase::ProcessCommands(FString command, TMap<FString, FString>& opti
 
       
     }
+    else if (command == "print") { 
+        auto bp = CommandManager.HasBP();
+        if (bp) {
+            auto bp_info = ASystemManagerBase::GetInstance()->GetDataContainer()->GetBlueprintInfo();
+            for (auto entry : *bp_info) {
+                pUDPConnection->SendUDPData("BP: "+ entry.Name);
+            }
 
+            return true;
+        }
+        auto print_actors = CommandManager.HasActors();
+        if (print_actors) {
+            auto all_actors = ASystemManagerBase::GetInstance()->GetAllActorInWorld();
+            for (auto p_actor : all_actors)
+            {
+
+                pUDPConnection->SendUDPData(p_actor->GetName());
+            }
+            return true;
+        }
+
+        return false;
+        
+    }
+    else if (command == "sim") {
+        bool val = false;
+        bool ret = CommandManager.GetStart(val);
+        if (ret) {
+           if (val) {
+                ASystemManagerBase::GetInstance()->StartSimulation();
+           }
+
+            return true;
+        }
+        ret = CommandManager.GetPause(val);
+        if (ret) {
+            if (val) {
+                ASystemManagerBase::GetInstance()->PauseSimulation();
+            }
+
+            return true;
+        }
+
+        ret = CommandManager.GetResume(val);
+        if (ret) {
+            if (val) {
+                ASystemManagerBase::GetInstance()->ResumeSimulation();
+            }
+
+            return true;
+        }
+
+        return false;
+
+    }
     else if (command == "create") {
         auto name = CommandManager.GetName();
         if (name != "") {
@@ -339,7 +393,7 @@ bool UConsoleBase::ProcessCommands(FString command, TMap<FString, FString>& opti
 
         auto bp = CommandManager.GetBP();
         if (bp != "") {
-            bp = "MIR";
+           
             auto ret = ASystemManagerBase::GetInstance()->CreateActor(bp, name, FVector::ZeroVector, FVector::ZeroVector, FVector::OneVector);
             if (ret ==nullptr) {
                 error_message = "object cannot created";
@@ -352,10 +406,38 @@ bool UConsoleBase::ProcessCommands(FString command, TMap<FString, FString>& opti
         if (model != "") {
 
         }
-    }else if (command == "set") {
+    }
+    else if (command == "destroy") {
+        auto name = CommandManager.GetName();
+        if (name != "") {
+            if (ASystemManagerBase::GetInstance()->DestroyActor(name)) {
+                return true;
+            }
+            else {
 
-        auto name = CommandManager.GetRelativeName();
-        if (name[0] != "") {
+            }
+
+        }
+        else {
+            error_message += "empty name value";
+            return false;
+        }
+
+
+    }
+    else if (command == "set") {
+
+
+        FString controller;
+        bool ret = CommandManager.GetContoroller(controller);
+
+        if (ret) {
+            bool ctrl_ret = ASystemManagerBase::GetInstance()->SetMainPlayerController(controller);
+            return ctrl_ret;
+        }
+
+        auto name = CommandManager.GetName();
+        if (name != "") {
 
         }
         else {
@@ -371,7 +453,7 @@ bool UConsoleBase::ProcessCommands(FString command, TMap<FString, FString>& opti
             return false;
         }
 
-        bool ret = CommandManager.GetPosition(vec );
+        ret = CommandManager.GetPosition(vec );
         if (ret) {
             p_actor->SetActorLocation(vec * WORLDTOUNREALUNIT);
         }
@@ -394,6 +476,109 @@ bool UConsoleBase::ProcessCommands(FString command, TMap<FString, FString>& opti
         if (ret) {
             p_actor->SetActorScale3D(vec);
         }
+        FString parent;
+        ret = CommandManager.GetParent(parent);
+        if (ret) {
+           AActor* p_parent = ASystemManagerBase::GetInstance()->FindActor(parent);
+           CUtil::SetParent(p_actor, p_parent);
+        }
+
+  
+    }
+    else if (command == "get") {
+
+
+        bool ret = CommandManager.HasController();
+        if (ret) {
+            auto player_controller = ASystemManagerBase::GetInstance()->GetMainPlayerController();
+            if (player_controller != nullptr) {
+                pUDPConnection->SendUDPData("Possed: " + player_controller->GetName());
+            }
+            else {
+                pUDPConnection->SendUDPData("possed: nullptr (world)");
+            }
+
+            return true;
+        }
+
+
+        auto name = CommandManager.GetName();
+        if (name != "") {
+
+        }
+        else {
+            error_message += "empty name value";
+            return false;
+        }
+
+        if (name == "*") {
+            auto all_actors =  ASystemManagerBase::GetInstance()->GetAllActorInWorld();
+            for (auto p_actor: all_actors)
+            {
+          
+                pUDPConnection->SendUDPData("Actor: "+ p_actor->GetName());
+            }
+            return true;
+        }
+
+        AActor* p_actor = ASystemManagerBase::GetInstance()->FindActor(name);
+        FVector vec;
+
+        if (p_actor == nullptr) {
+            error_message += (("cannot find actor "));
+            return false;
+        }
+
+        ret = CommandManager.HasPosition();
+        if (ret) {
+            pUDPConnection->SendUDPData("Pos: " + p_actor->GetActorLocation().ToString());
+            return true;
+            
+        }
+
+        ret = CommandManager.HasRelposition();
+        if (ret) {
+            pUDPConnection->SendUDPData("Relpos: " + p_actor->GetActorLocation().ToString());
+            return true;
+          
+        }
+
+        ret = CommandManager.HasRotation();
+        if (ret) {
+            
+            vec = CMath::GetActorEulerAnglesRPY(p_actor);
+            pUDPConnection->SendUDPData("Rot: " + vec.ToString());
+            return true;
+        }
+        ret = CommandManager.HasRelrotation();
+        if (ret) {
+            vec = CMath::GetActorReleativeEulerAnglesRPY(p_actor);
+            pUDPConnection->SendUDPData("Relrot: " + vec.ToString());
+            return true;
+        }
+
+        ret = CommandManager.HasScale();
+        if (ret) {
+            vec = p_actor->GetActorScale();;
+            pUDPConnection->SendUDPData("Scale: " + vec.ToString());
+            return true;
+        }
+
+        ret = CommandManager.HasParent();
+        if (ret) {
+            auto parent = CUtil::GetParentActor(p_actor);
+            if (parent != nullptr) {
+                pUDPConnection->SendUDPData("Parent: " + parent->GetName());
+            }
+            else {
+                pUDPConnection->SendUDPData("Parent: nullptr (world)");
+            }
+           
+            return true;
+        }
+
+     
+      
     }
 
 

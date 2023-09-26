@@ -17,6 +17,8 @@ namespace ConsoleGUI
         UdpClient UdpClient;
         IPEndPoint EndPoint;
         CCommandParser Parser = new CCommandParser();
+        int CommandPointerInd;
+        List<string> CommandHist = new List<string>();
         public MainForm()
         {
             InitializeComponent();
@@ -38,42 +40,74 @@ namespace ConsoleGUI
 
         }
 
+        void ClearCommandList()
+        {
+            listBox1.Items.Clear();
+        }
+
         private void textBox1_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
-                var cmd = textBox1.Text;
+                var cmd = CommandTextBox.Text;
                 bool ret = Parser.TryParseCommandLine(cmd, out string outcommand, out Dictionary<string, string> outoptions, out string error_message);
 
                 if (ret)
                 {
-                    if(outcommand == "process")
+                    if (outcommand == "process")
                     {
 
-                        if(outoptions.TryGetValue("run", out string value))
+                        if (outoptions.TryGetValue("run", out string value))
                         {
                             Run(int.Parse(value));
                             AddCommandToList(cmd);
+
                         }
                         else if (outoptions.TryGetValue("kill", out string instance_to_kill))
                         {
-                            //Kill(int.Parse(instance_to_kill));
-                            //AddCommandToList(cmd);
+
                             SendData(cmd);
                             ProcessList.Remove(int.Parse(instance_to_kill));
                         }
+                    }
+                    else if (outcommand == "clear")
+                    {
+                        ClearCommandList();
+                        CommandTextBox.Text = "";
                     }
                     else
                     {
                         SendData(cmd);
                     }
-                   
-                    
-                }
-            
-                    
-                
 
+
+                }
+
+
+
+
+            }
+            else if (e.KeyCode == Keys.Up)
+            {
+                
+             
+                CommandTextBox.Text = CommandHist[CommandPointerInd];
+                CommandPointerInd--;
+                if (CommandPointerInd < 0)
+                {
+                    CommandPointerInd = 0;
+                }
+            }
+            else if (e.KeyCode == Keys.Down)
+            {
+               
+          
+                CommandTextBox.Text = CommandHist[CommandPointerInd];
+                CommandPointerInd++;
+                if (CommandPointerInd >= CommandHist.Count - 1)
+                {
+                    CommandPointerInd = CommandHist.Count - 1;
+                }
             }
         }
 
@@ -90,17 +124,24 @@ namespace ConsoleGUI
 
 
         }
-
+        private void UpdateListBoxDataThreadSafe(string item)
+        {
+            listBox1.Items.Add(item);
+            listBox1.SelectedIndex = listBox1.Items.Count - 1;
+            listBox1.ClearSelected();
+        }
         private void UpdateListBox(string item)
         {
             if (listBox1.InvokeRequired)
             {
-                listBox1.Invoke(new Action<string>(UpdateListBox), item);
+                listBox1.Invoke(new Action<string>(UpdateListBoxDataThreadSafe), item);
+
             }
             else
             {
                 listBox1.Items.Add(item);
             }
+
         }
 
         void UDPListener()
@@ -118,7 +159,7 @@ namespace ConsoleGUI
 
         void SendData(string cmd)
         {
-            if(cmd == "")
+            if (cmd == "")
             {
                 return;
             }
@@ -130,37 +171,45 @@ namespace ConsoleGUI
 
         void AddCommandToList(string cmd)
         {
-            listBox1.Items.Add(cmd);
+
+            listBox1.SelectedIndex = listBox1.Items.Count - 1;
+            CommandHist.Add(cmd);
+            CommandPointerInd = CommandHist.Count - 1;
+            CommandTextBox.Text = "";
         }
         private void listBox1_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             var item = listBox1.Items[listBox1.SelectedIndex];
-            textBox1.Text = item.ToString();
-            SendData(textBox1.Text);
+            CommandTextBox.Text = item.ToString();
+            SendData(CommandTextBox.Text);
         }
 
         private void listBox1_MouseClick(object sender, MouseEventArgs e)
         {
-            if(listBox1.SelectedIndex < 0){
+            if (listBox1.SelectedIndex < 0)
+            {
                 return;
             }
             var item = listBox1.Items[listBox1.SelectedIndex];
-            textBox1.Text = item.ToString();
+            CommandTextBox.Text = item.ToString();
         }
 
 
         void Kill(int instance_no)
         {
-            if(ProcessList.TryGetValue(instance_no, out var process))
+            if (ProcessList.TryGetValue(instance_no, out var process))
             {
-                try {
+                try
+                {
                     process.Kill();
                     process.WaitForExit();
                     process.Dispose();
                     ProcessList.Remove(instance_no);
-                }catch(Exception ex) { 
                 }
-       
+                catch (Exception ex)
+                {
+                }
+
             }
 
 
@@ -169,7 +218,7 @@ namespace ConsoleGUI
         Dictionary<int, Process> ProcessList = new Dictionary<int, Process>();
         void Run(int instance_count)
         {
-            for(int i = 0; i< instance_count; i++)
+            for (int i = 0; i < instance_count; i++)
             {
                 // Define the path to the UE4 executable
                 string unrealExecutablePath = @"C:\Users\Pc\Documents\Unreal Projects\BoatSim\package\Windows\BoatSim.exe";
@@ -183,16 +232,16 @@ namespace ConsoleGUI
                     RedirectStandardOutput = true,
                     UseShellExecute = false,
                     CreateNoWindow = true,
-                    
+
                 };
                 Process process = new Process();
                 process.StartInfo = startInfo;
                 process.Start();
                 ProcessList.Add(i, process);
                 // Start the process
-         
+
             }
-       
+
         }
     }
 }

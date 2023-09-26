@@ -835,6 +835,20 @@ FLOAT64 CUtil::Tock(FLOAT64 ref)
     return FPlatformTime::Seconds() - ref;
 }
 
+void CUtil::SetParent(AActor* p_child, AActor* p_parent)
+{
+    if (p_child && p_parent)
+    {
+        USceneComponent* p_parent_root = p_parent->GetRootComponent();
+        USceneComponent* p_child_root = p_child->GetRootComponent();
+
+        if (p_parent_root && p_child_root)
+        {
+            p_child_root->AttachToComponent(p_parent_root, FAttachmentTransformRules::KeepWorldTransform);
+        }
+    }
+}
+
 FString CUtil::CharToFString(const char* p_char)
 {
     FString str = FString( p_char);

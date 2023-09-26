@@ -33,12 +33,27 @@ private:
 	FString Bp = "bp";
 	FString Model = "model";
 
+	FString DestroyCommand = "destroy";
+
 	FString SetCommand = "set";
 	FString Position = "position";
 	FString RelPosition = "relposition";
 	FString Rotation = "rotation";
 	FString RelRotation = "relrotation";
 	FString Scale = "scale";
+	FString Parent = "parent";
+	FString Controller = "controller";
+
+	FString GetCommand = "get";
+
+	FString PrintCommand = "print";
+	FString Actors = "actors";
+
+	FString SimCommand = "sim";
+	FString Start = "start";
+	FString Pause = "pause";
+	FString Resume = "resume";
+
 
 	TMap<FString, TArray<SCommandOptionInfo>> CommandInfo;
 
@@ -52,12 +67,20 @@ public:
 
 
 	void PrepareCreateCommandInfo();
+	void PrepareDestroyCommandInfo();
 	void PrepareProcessCommandInfo();
 	void PrepareSetCommandInfo();
+	void PrepareGetCommandInfo();
+	void PreparePrintCommandInfo();
+	void PrepareSimCommandInfo();
+
+
 
 	int GetProcessKillInstanceCount();
 
 	bool HasName();
+	bool HasBP();
+	bool HasActors();
 
 	FString GetName();
 	TArray<FString> GetRelativeName();
@@ -74,5 +97,21 @@ public:
 	bool GetRelRotation(FVector& vec);
 
 	bool GetScale(FVector& vec);
+
+	bool HasPosition();
+	bool HasScale();
+	bool HasRelposition();
+	bool HasRotation();
+	bool HasRelrotation();
+	bool HasParent();
+	bool HasController();
+
+
+	bool GetStart(bool& is_start);
+	bool GetPause(bool& is_pause);
+	bool GetResume(bool& is_resume);
+
+	bool GetParent(FString& val);
+	bool GetContoroller(FString& val);
 };
 

@@ -20,8 +20,11 @@ enum ESystemState
 	SystemStateLoadingConfig,
 	SystemStateConfigLoaded,
 	SystemStateWaitingRun,
+	SystemStateRunSimulation,
 	SystemStateRunning,
+	SystemStatePauseSimulation,
 	SystemStatePaused,
+	SystemStateResumeSimulation,
 	SystemStateResumed,
 	SystemStateConfigLoadError,
 
@@ -78,6 +81,13 @@ protected:
 
 	INT32S InstanceNo;
 
+	virtual void HandleSimulationStart();
+	virtual void HandleSimulationPause();
+	virtual void HandleSimulationResume();
+
+
+	bool RemoveActor(AActor*p_actor);
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -92,13 +102,15 @@ public:
 	AActor* GetFloor();
 	TArray<AActor*>& GetMoveableActorList();
 
-	void RegisterActor(FString owner, AActor* p_actor);
+	void RegisterActor(AActor* p_actor);
+	TArray<AActor*> GetRegisteredActors();
+	TArray<AActor*> GetAllActorInWorld();
+	
+	AActor* FindActor(FString actor_name);
 
-	template <typename T>
-	T* FindActor(FString owner, FString actor_name);
 
 
-	AActor* FindActor(TArray<FString> relative_name);
+	bool DestroyActor(FString name);
 
 	AActorBase* ToActorBase(AActor* p_actor);
 	void EnableAllActors();
@@ -115,12 +127,21 @@ public:
 
 	INT32S GetInstanceNo();
 	void ForceExit();
+
+	virtual  bool  SetMainPlayerController(FString name);
+	virtual AActor* GetMainPlayerController();
+
+	virtual void StartSimulation();
+	virtual void ResumeSimulation();
+	virtual void PauseSimulation();
 private:
 
 	static ASystemManagerBase* pInstance;
-	TMap<FString, TMap<FString, AActor*>> AllActors;
+	TMap<FString,  AActor*> AllActors;
 	TArray<AActor*> ActorList;
-
+	bool IsStartReceived = false;
+	bool IsResumeReceived = false;
+	bool IsPauseReceived = false;
 
 	
 };

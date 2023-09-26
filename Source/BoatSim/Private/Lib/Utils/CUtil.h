@@ -85,6 +85,7 @@ public:
 	static void GetOwnAndParents(AActor* p_child, TArray<AActor*> &ret);
 	static FLOAT64 Tick();
 	static FLOAT64 Tock(FLOAT64 start_time_sec);
+	static void SetParent(AActor* p_child, AActor* p_parent);
 	
 
 };

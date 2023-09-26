@@ -24,7 +24,7 @@ protected:
 		int ActorId;
 
 	UPROPERTY(EditAnywhere)
-		bool Enabled = true;
+		bool Enabled = false;
 
 public:	
 	// Called every frame

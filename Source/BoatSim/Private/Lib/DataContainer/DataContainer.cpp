@@ -36,3 +36,8 @@ FBlueprintPathEntry ADataContainer::FindBlueprintInfo(FString name)
 	return FBlueprintPathEntry();
 }
 
+TArray<FBlueprintPathEntry>* ADataContainer::GetBlueprintInfo()
+{
+	return &BlueprintInfo;
+}
+

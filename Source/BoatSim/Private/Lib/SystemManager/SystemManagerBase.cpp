@@ -44,12 +44,26 @@ TArray<AActor*>& ASystemManagerBase::GetMoveableActorList()
 
 
 
-void ASystemManagerBase::RegisterActor(FString owner, AActor* p_actor)
+void ASystemManagerBase::RegisterActor(AActor* p_actor)
 {
-	TMap<FString, AActor*>& all_actors = AllActors.FindOrAdd(owner);
-	FString actor_label =  p_actor->GetName(); 
-	all_actors.Add(actor_label, p_actor);
+	AllActors.FindOrAdd(p_actor->GetName(),p_actor);
 	ActorList.Add(p_actor);
+}
+
+TArray<AActor*> ASystemManagerBase::GetRegisteredActors()
+{
+	return ActorList;
+}
+TArray<AActor*> ASystemManagerBase::GetAllActorInWorld()
+{
+	TArray<AActor*> ret;
+
+	for (TActorIterator<AActor> It(GetWorld()); It; ++It)
+	{
+		ret.Add(*It);
+	}
+
+	return ret;
 }
 
 AActorBase* ASystemManagerBase::ToActorBase(AActor* p_actor)
@@ -81,7 +95,7 @@ void ASystemManagerBase::DisableAllActors()
 		auto ret = ToActorBase(p_actor);
 
 		if (ret) {
-			ret->SetEnabled(true);
+			ret->SetEnabled(false);
 		}
 	}
 
@@ -146,54 +160,57 @@ void ASystemManagerBase::ForceExit()
 	FGenericPlatformMisc::RequestExit(true);
 }
 
-AActor* ASystemManagerBase::FindActor(TArray<FString> relative_name) 
+
+
+
+bool ASystemManagerBase::DestroyActor(FString name)
 {
-	FString owner = "world";
-	FString actor_name = relative_name[0];
-
-	if (relative_name.Num() > 1) {
-		owner = relative_name[0];
-		actor_name = relative_name[1];
-		
+	auto p_actor = FindActor(name);
+	if (p_actor) {
+		p_actor->Destroy();
+		RemoveActor(p_actor);
+		return true;
 	}
-
-	TMap<FString, AActor*>* p_actors = AllActors.Find(owner);
-
-	if (p_actors != nullptr) {
-		AActor** p_actor = p_actors->Find(actor_name);
-		if (p_actor != nullptr) {
-			if (p_actor[0] != nullptr) {
-				
-				return p_actor[0];
-			}
-
-		}
-
+	else {
+		return false;
 	}
-
-	return nullptr;
 }
 
-template <typename T>
-T* ASystemManagerBase::FindActor(FString owner, FString actor_name)
+
+AActor* ASystemManagerBase::FindActor(FString actor_name)
 {
 
-	TMap<FString, AActorBase*>* p_actors = AllActors.Find(owner);
-		
-	if (p_actors != nullptr) {
-		AActorBase** p_actor = p_actors->Find(actor_name);
-		if (p_actor != nullptr) {
-			if (p_actor[0] != nullptr) {
-				T* p_res = Cast<T>(p_actor[0]);
-				return p_res;
+	auto p_actor = AllActors.Find(actor_name);
+
+	if (p_actor == nullptr) {
+		FString ActorNameToFind = actor_name;
+		for (TActorIterator<AActor> It(GetWorld()); It; ++It)
+		{
+			if (It->GetName() == ActorNameToFind)
+			{
+				AActor* FoundActor = *It;
+				// Do something with FoundActor
+				return FoundActor;
 			}
-			
 		}
-		
 	}
-	
+	else {
+		return *p_actor;
+	}
+
 	return nullptr;
+		
 	
+	
+}
+
+
+bool ASystemManagerBase::RemoveActor(AActor *p_actor)
+{
+	AllActors.Remove(p_actor->GetName());
+	ActorList.Remove(p_actor);
+	return true;
+
 }
 
 void ASystemManagerBase::DetectInstance()
@@ -321,17 +338,9 @@ AActor* ASystemManagerBase::CreateActor(FString model_name, FString boat_name, F
     auto ret = CUtil::SpawnObjectFromBlueprint(info.ActorToSpawn, path, GetWorld(), nullptr, boat_name,world_pos, world_rot, scale);
 	
 	if (ret != nullptr) {
-		RegisterActor("world", ret);
+		RegisterActor(ret);
 
-		/*
-		APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
-		if (PlayerController && PlayerController->GetPawn())
-		{
-			PlayerController->UnPossess();
-			PlayerController->Possess((APawn*)ret);
-		}
-		
-		*/
+	
 		
 		
 	}
@@ -339,6 +348,56 @@ AActor* ASystemManagerBase::CreateActor(FString model_name, FString boat_name, F
 	return ret;
 }
 
+bool ASystemManagerBase::SetMainPlayerController(FString name)
+{
+
+	APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
+	if (PlayerController && PlayerController->GetPawn())
+	{
+		PlayerController->UnPossess();
+		auto pactor = FindActor(name);
+		if (pactor->IsA<APawn>()) {
+			PlayerController->Possess((APawn*)pactor);
+			return true;
+		}
+		
+	}
+
+
+	return false;
+
+}
+
+AActor* ASystemManagerBase::GetMainPlayerController()
+{
+	APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
+	return PlayerController->GetPawn();
+}
+void ASystemManagerBase::StartSimulation()
+{
+	IsStartReceived = true;
+}
+void ASystemManagerBase::PauseSimulation()
+{
+	IsPauseReceived = true;
+}
+void ASystemManagerBase::ResumeSimulation()
+{
+	IsResumeReceived = true;
+}
+
+void ASystemManagerBase::HandleSimulationStart()
+{
+	ASystemManagerBase::GetInstance()->EnableAllActors();
+}
+void ASystemManagerBase::HandleSimulationPause()
+{
+	ASystemManagerBase::GetInstance()->DisableAllActors();
+}
+void ASystemManagerBase::HandleSimulationResume()
+{
+	ASystemManagerBase::GetInstance()->EnableAllActors();
+}
 void ASystemManagerBase::StateMachine()
 {
 
@@ -366,14 +425,42 @@ void ASystemManagerBase::StateMachine()
 		next_state = ESystemState::SystemStateConfigLoaded;
 		break;
 	case ESystemState::SystemStateConfigLoaded:
+		next_state = ESystemState::SystemStateWaitingRun;
 		break;
 	case ESystemState::SystemStateWaitingRun:
+		if (IsStartReceived) {
+			next_state = ESystemState::SystemStateRunSimulation;
+			IsStartReceived = false;
+		}
+		break;
+	case ESystemState::SystemStateRunSimulation:
+		HandleSimulationStart();
+		next_state = ESystemState::SystemStateRunning;
 		break;
 	case ESystemState::SystemStateRunning:
+		if (IsPauseReceived) {
+			next_state = ESystemState::SystemStatePauseSimulation;
+			IsPauseReceived = false;
+		}
+		break;
+
+	case ESystemState::SystemStatePauseSimulation:
+		HandleSimulationPause();
+		next_state = ESystemState::SystemStatePaused;
 		break;
 	case ESystemState::SystemStatePaused:
+		if (IsResumeReceived) {
+			next_state = ESystemState::SystemStateResumeSimulation;
+			IsResumeReceived = false;
+		}
+		break;
+	case ESystemState::SystemStateResumeSimulation:
+		HandleSimulationResume();
+		next_state = ESystemState::SystemStateResumed;
+
 		break;
 	case ESystemState::SystemStateResumed:
+		next_state = ESystemState::SystemStateRunning;
 		break;
 	case ESystemState::SystemStateConfigLoadError:
 		break;

@@ -76,3 +76,33 @@ void CMath::SetActorRelativeRotation(AActor* p_actor, FVector rpy_deg)
     FQuat Quat = FQuat::MakeFromEuler(rpy_deg);
     p_actor->SetActorRelativeRotation(Quat);
 }
+
+FVector CMath::GetActorEulerAnglesRPY(AActor* p_actor)
+{
+    
+    FRotator ActorRotation = p_actor->GetActorRotation();
+
+    FLOAT64 Roll = ActorRotation.Roll;
+    FLOAT64 Pitch = ActorRotation.Pitch;
+    FLOAT64 Yaw = ActorRotation.Yaw;
+
+
+    return FVector(-Roll, -Pitch, Yaw);
+}
+FVector CMath::GetActorReleativeEulerAnglesRPY(AActor* p_actor)
+{
+   
+    if (p_actor && p_actor->GetRootComponent() && p_actor->GetRootComponent()->GetAttachParent())
+    {
+        FRotator RelativeRotation = p_actor->GetRootComponent()->GetRelativeRotation();
+
+        FLOAT64 Roll = RelativeRotation.Roll;
+        FLOAT64 Pitch = RelativeRotation.Pitch;
+        FLOAT64 Yaw = RelativeRotation.Yaw;
+        return FVector(-Roll, -Pitch, Yaw);
+       
+    }
+    else {
+        return CMath::GetActorEulerAnglesRPY(p_actor);
+    }
+}
