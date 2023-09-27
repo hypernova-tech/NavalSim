@@ -48,6 +48,14 @@ bool AActorBase::CheckAffinity()
 	return false;
 }
 
+void AActorBase::OnActorDisabled()
+{
+}
+
+void AActorBase::OnActorEnabled()
+{
+}
+
 // Called every frame
 void AActorBase::Tick(float DeltaTime)
 {
@@ -64,6 +72,11 @@ void AActorBase::Tick(float DeltaTime)
 void AActorBase::SetEnabled(bool val)
 {
 	Enabled = val;
+	if (val) {
+		OnActorEnabled();
+	}else {
+		OnActorDisabled();
+	}
 }
 bool AActorBase::GetEnabled()
 {

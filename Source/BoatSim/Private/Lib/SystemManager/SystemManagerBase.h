@@ -98,10 +98,9 @@ protected:
 	virtual void HandleSimulationStart();
 	virtual void HandleSimulationPause();
 	virtual void HandleSimulationResume();
-
-
-	
 	void ComputeFPS(float DeltaTime);
+	void StartStartupConnections();
+	void StartRuntimeConnections();
 
 public:	
 	// Called every frame
@@ -139,6 +138,8 @@ private:
 	bool IsPauseReceived = false;
 	APlatformBase* pPlatform;
 	UUdpConnection* pConsoleConnection;
+
+	TArray< UConnectionBase*> Connections;
 
 	/// <summary>
 	///  system API
@@ -200,4 +201,6 @@ public:
 	virtual TArray<ESensorType> GetAllSensorTypes();
 	virtual TArray<ASensorBase*> GetAllSensors() ;
 	virtual TArray<ASensorBase*> GetSensorsOfType(ESensorType sensor_type);
+
+	virtual void RegisterConnection(UConnectionBase* p_connection);
 };

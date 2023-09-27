@@ -470,6 +470,23 @@ void ASystemManagerBase::HandleSimulationResume()
 	ASystemManagerBase::GetInstance()->EnableAllActors();
 }
 
+void ASystemManagerBase::StartStartupConnections()
+{
+	for (auto p_con : Connections) {
+		if (p_con->IsActiveAtStartup && !p_con->GetIsRunning()) {
+			p_con->InitConnection();
+		}
+	}
+}
+void ASystemManagerBase::StartRuntimeConnections()
+{
+	for (auto p_con : Connections) {
+		if (!p_con->IsActiveAtStartup && !p_con->GetIsRunning()) {
+			p_con->InitConnection();
+		}
+	}
+}
+
 void ASystemManagerBase::UpdateActors(float deltatime)
 {
 	for (auto* p_actor : ActorList) {
@@ -493,6 +510,7 @@ void ASystemManagerBase::StateMachine(float deltatime)
 		break;
 	case ESystemState::SystemStateDetectInstance:
 		DetectInstance();
+		StartStartupConnections();
 		next_state = ESystemState::SystemStateWaitConfigLoad;
 		break;
 	case ESystemState::SystemStateWaitConfigLoad:
@@ -512,6 +530,7 @@ void ASystemManagerBase::StateMachine(float deltatime)
 		if (IsStartReceived) {
 			next_state = ESystemState::SystemStateRunSimulation;
 			IsStartReceived = false;
+			StartRuntimeConnections();
 		}
 		break;
 	case ESystemState::SystemStateRunSimulation:
@@ -665,6 +684,11 @@ TArray<ESensorType> ASystemManagerBase::GetAllSensorTypes()
 TArray<ASensorBase*> ASystemManagerBase::GetAllSensors()
 {
 	return Sensors;
+}
+
+void ASystemManagerBase::RegisterConnection(UConnectionBase* p_connection)
+{
+	Connections.Add(p_connection);
 }
 
 TArray<ASensorBase*> ASystemManagerBase::GetSensorsOfType(ESensorType sensor_type)

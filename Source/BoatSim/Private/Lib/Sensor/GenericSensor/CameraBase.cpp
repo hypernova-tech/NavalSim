@@ -13,6 +13,23 @@ void ACameraBase::InitSensor()
 	pSceneCapture->TextureTarget = p_render_target;
 }
 
+void ACameraBase::OnActorEnabled()
+{
+	Super::OnActorEnabled();
+	if (pSceneCapture != nullptr) {
+		pSceneCapture->Activate();
+	}
+	
+}
+
+void ACameraBase::OnActorDisabled()
+{
+	Super::OnActorDisabled();
+	if (pSceneCapture != nullptr) {
+		pSceneCapture->Deactivate();
+	}
+}
+
 void ACameraBase::SetFovDeg(double fov_deg)
 {
 	FieldOfViewDeg = fov_deg;

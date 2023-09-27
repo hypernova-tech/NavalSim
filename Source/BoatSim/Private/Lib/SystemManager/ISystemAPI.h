@@ -64,4 +64,6 @@ public:
 	virtual TArray<ESensorType> GetAllSensorTypes() = 0;
 	virtual TArray<ASensorBase*> GetAllSensors() = 0;
 	virtual TArray<ASensorBase*> GetSensorsOfType(ESensorType sensor_type) = 0;
+
+	virtual void RegisterConnection(UConnectionBase* p_connection) = 0;
 };

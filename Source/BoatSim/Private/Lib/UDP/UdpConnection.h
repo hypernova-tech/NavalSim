@@ -7,6 +7,7 @@
 #include "Networking.h"
 #include "Lib/Types/Primitives.h"
 #include "Lib/UDP/IConnectionDataReceiver.h"
+#include "Lib/Connection/ConnectionBase.h"
 #include "UdpConnection.generated.h"
 
 struct SUDPPacket {
@@ -16,7 +17,7 @@ struct SUDPPacket {
 
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
-class UUdpConnection : public UActorComponent,public FRunnable
+class UUdpConnection : public UConnectionBase,public FRunnable
 {
 	GENERATED_BODY()
 
@@ -45,7 +46,7 @@ protected:
 	void Stop() override; // Clean up any memory you allocated here
 
 
-	TArray< IConnectionDataReceiver*> ConnectionDataReceivers;
+
 
 
 
@@ -114,8 +115,8 @@ public:
 	FString GetRemoteIP();
 	static FString GetMacAddr();
 
-	void AddConnectionDataReceiver(IConnectionDataReceiver* p_rcv);
-
+	
+	virtual void InitConnection() override;
 
 
 };

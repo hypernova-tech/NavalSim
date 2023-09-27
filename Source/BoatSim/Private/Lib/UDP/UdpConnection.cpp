@@ -28,8 +28,15 @@ UUdpConnection::~UUdpConnection()
 void UUdpConnection::BeginPlay()
 {
 	Super::BeginPlay();
+	ASystemManagerBase::GetInstance()->GetSystemAPI()->RegisterConnection(this);
 
+	
+}
 
+void UUdpConnection::InitConnection()
+{
+	Super::InitConnection();
+	
 	SocketSubsystem = nullptr;
 	if (SocketSubsystem == nullptr) {
 		SocketSubsystem = ISocketSubsystem::Get(PLATFORM_SOCKETSUBSYSTEM);
@@ -190,9 +197,6 @@ FString UUdpConnection::GetRemoteIP()
 	return IP;
 }
 
-void UUdpConnection::AddConnectionDataReceiver(IConnectionDataReceiver* p_rcv)
-{
-	ConnectionDataReceivers.Add(p_rcv);
-}
+
 
 

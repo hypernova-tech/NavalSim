@@ -36,6 +36,9 @@ protected:
 	 virtual void OnStep(float DeltaTime);
 	 bool CheckAffinity();
 
+	 virtual void OnActorDisabled();
+	 virtual void OnActorEnabled();
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -44,4 +47,6 @@ public:
 	void ExternalUpdate(float DeltaTime);
 	void SetAffinityInstanceId(int val);
 	int GetAffinityInstanceId();
+
+	
 };
