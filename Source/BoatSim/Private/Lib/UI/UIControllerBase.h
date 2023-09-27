@@ -38,6 +38,8 @@ protected:
 	UPROPERTY(EditAnywhere)
 		TArray<UImage*> CameraSlots;
 
+	virtual void ComputeFPS(float DeltaTime);
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -69,8 +71,16 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void OnMouseLeftButtonUp(int locationX, int locationY);
 
+	UFUNCTION(BlueprintCallable)
+		float GetAverageFPS();
+
 
 	void FindActorAtClickPosition(int locationX, int locationY);
 
 	void SetConsoleOutputText(FString text);
+
+private:
+
+	FLOAT32 AverageFPS;
+	TArray< FLOAT32> FPSMeasurments;
 };

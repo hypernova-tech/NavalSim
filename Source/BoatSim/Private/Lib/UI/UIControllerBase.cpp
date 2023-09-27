@@ -24,6 +24,7 @@ void AUIControllerBase::BeginPlay()
 void AUIControllerBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	ComputeFPS(DeltaTime);
 
 }
 
@@ -127,4 +128,23 @@ void AUIControllerBase::SetConsoleOutputText(FString text)
 		ConsoleText->SetText(FText::FromString(text));
 	}
 	
+}
+float AUIControllerBase::GetAverageFPS()
+{
+	return AverageFPS;
+}
+
+void AUIControllerBase::ComputeFPS(float DeltaTime)
+{
+	FPSMeasurments.Add(DeltaTime);
+
+	if (FPSMeasurments.Num() > 10) {
+		FPSMeasurments.RemoveAt(0);
+	}
+	FLOAT32 total_fps = 0;
+	for (int i = 0; i < FPSMeasurments.Num(); i++) {
+		total_fps += 1/FPSMeasurments[i];
+	}
+
+	AverageFPS = total_fps / FPSMeasurments.Num();
 }

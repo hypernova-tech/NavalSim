@@ -51,8 +51,7 @@ public:
 						bool show_radar_beam, TArray<AActor*> &ignore_list, bool create_scan_line,  SScanResult* pscan_result);
 	static bool Trace(const STraceArgs &args, SScanResult* pscan_result);
 
-	static float ConvertToFloat(const char* p_str);
-	static FString ConvertToFString(const char* p_str);
+
 	static bool ParseVector2D(const FString& Text, FVector2D& ret);
 	static bool ParseVector3D(const FString& Text, FVector& ret);
 	static bool ParsePose(const FString& Text, FVector& translation, FVector& rpy);
@@ -65,11 +64,26 @@ public:
 
 	static void LookAt(AActor* p_actor, FVector& look_dir);
 	static FRotator GetActorRelativeRotation(AActor* p_actor);
+	/// <summary>
+	/// String conversions
+	/// </summary>
+	/// <param name="p_str"></param>
+	/// <returns></returns>
+	static float ConvertToFloat(const char* p_str);
+	static FString ConvertToFString(const char* p_str);
 	static int StringToInt(FString& str);
+	static FString IntToString(INT32S val);
 	static float StringToFloat(FString& str);
 	static double StringToFloat64(FString& str);
 	static FString CharToFString(const char* p_char);
 	static void FStringToAsciiChar(const FString& str, char* p_dest, INT32U dest_len);
+
+	/// <summary>
+	/// Byte operations
+	/// </summary>
+	/// <param name="str"></param>
+	/// <param name="p_dest"></param>
+	/// <param name="dest_capacity"></param>
 	static void ByteCopy(const FString& str, INT8U* p_dest, INT32U dest_capacity);
 	static void IPAddrCopy(const FString& str, INT8U* p_dest, INT32U dest_capacity);
 	static void MacAddrCopy(const FString& str, INT8U* p_dest, INT32U dest_capacity);

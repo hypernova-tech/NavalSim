@@ -6,7 +6,9 @@
 #include "Components/ActorComponent.h"
 #include "CCLICommandManager.h"
 #include <Lib/UDP/UdpConnection.h>
+#include <Lib/SystemManager/ISystemAPI.h>
 #include "ConsoleBase.generated.h"
+
 
 
 
@@ -28,6 +30,8 @@ protected:
 	bool ParseCommandLine(TCHAR* CommandLine, FString& Outcommand, TMap<FString, FString>& OutOptions, FString& OutErrorMessage);
 	bool ProcessCommands(FString command, TMap<FString, FString>& options, FString &error_message);
 	CCLICommandManager CommandManager;
+	ISystemAPI* pSystemAPI;
+
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;

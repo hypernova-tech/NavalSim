@@ -36,6 +36,8 @@ private:
 	FString DestroyCommand = "destroy";
 
 	FString SetCommand = "set";
+	FString Active = "active";
+	FString Instance = "instance";
 	FString Position = "position";
 	FString RelPosition = "relposition";
 	FString Rotation = "rotation";
@@ -43,12 +45,15 @@ private:
 	FString Scale = "scale";
 	FString Parent = "parent";
 	FString Controller = "controller";
-	FString Active = "Active";
+
 
 	FString GetCommand = "get";
 
-	FString PrintCommand = "print";
-	FString Actors = "actors";
+	FString PrintCommand	= "print";
+	FString Actors			= "actors";
+	FString Sensors			= "sensors";
+	FString SensorType		= "sensortype";
+	FString SensorTypes		= "sensortypes";
 
 	FString SimCommand = "sim";
 	FString Start = "start";
@@ -82,6 +87,7 @@ public:
 	bool HasName();
 	bool HasBP();
 	bool HasActors();
+	bool HasSensors();
 
 	FString GetName();
 	TArray<FString> GetRelativeName();
@@ -101,6 +107,9 @@ public:
 
 	bool GetActive(bool& val);
 
+	bool GetInstance(int& val);
+	bool GetSensorType(FString& val);
+	bool HasSensorTypes();
 	bool HasPosition();
 	bool HasScale();
 	bool HasRelposition();

@@ -173,12 +173,18 @@ namespace ConsoleGUI
         {
 
             listBox1.SelectedIndex = listBox1.Items.Count - 1;
+            listBox1.Items.Add(cmd);
             CommandHist.Add(cmd);
             CommandPointerInd = CommandHist.Count - 1;
             CommandTextBox.Text = "";
         }
         private void listBox1_MouseDoubleClick(object sender, MouseEventArgs e)
         {
+            if(listBox1.SelectedIndex < 0)
+            {
+                return;
+            }
+
             var item = listBox1.Items[listBox1.SelectedIndex];
             CommandTextBox.Text = item.ToString();
             SendData(CommandTextBox.Text);

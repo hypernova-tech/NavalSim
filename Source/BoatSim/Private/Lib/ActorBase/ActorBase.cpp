@@ -31,11 +31,34 @@ void AActorBase::BeginPlay()
 	
 }
 
+void AActorBase::OnStep(float DeltaTime)
+{
+
+}
+
+bool AActorBase::CheckAffinity()
+{
+	if (AffinityInstanceId == -1) {
+		return true;
+	}
+	else {
+		return ASystemManagerBase::GetInstance()->GetInstanceNo() == AffinityInstanceId;
+	}
+
+	return false;
+}
+
 // Called every frame
 void AActorBase::Tick(float DeltaTime)
 {
-	Super::Tick(DeltaTime);
 
+	Super::Tick(DeltaTime);
+	if (!IsExternalUpdate) {
+		if (CheckAffinity()) {
+			OnStep(DeltaTime);
+		}
+	}
+	
 }
 
 void AActorBase::SetEnabled(bool val)
@@ -45,4 +68,22 @@ void AActorBase::SetEnabled(bool val)
 bool AActorBase::GetEnabled()
 {
 	return Enabled;
+}
+
+void AActorBase::ExternalUpdate(float DeltaTime)
+{
+	if (CheckAffinity()) {
+		OnStep(DeltaTime);
+	}
+	
+}
+
+void AActorBase::SetAffinityInstanceId(int val)
+{
+	AffinityInstanceId = val;
+}
+
+int AActorBase::GetAffinityInstanceId()
+{
+	return AffinityInstanceId;
 }

@@ -48,7 +48,45 @@ void ASystemManagerBase::RegisterActor(AActor* p_actor)
 {
 	AllActors.FindOrAdd(p_actor->GetName(),p_actor);
 	ActorList.Add(p_actor);
+	if (p_actor->IsA<ASensorBase>()) {
+		auto p_sensor = (ASensorBase*)p_actor;
+		Sensors.Add((ASensorBase*)p_actor);
+
+		auto ret = SensorsOfType.Find(p_sensor->SensorType);
+		if (ret){
+			ret->Add(p_sensor);
+		}else{
+			TArray<ASensorBase*> new_data;
+			new_data.Add(p_sensor);
+			SensorsOfType.Add(p_sensor->SensorType, new_data);
+
+		}
+		
+		
+
+		
+	}
+	
 }
+
+bool ASystemManagerBase::RemoveActor(AActor* p_actor)
+{
+	AllActors.Remove(p_actor->GetName());
+	ActorList.Remove(p_actor);
+	if (p_actor->IsA<ASensorBase>()) {
+		auto* p_sensor = ToSensorBase(p_actor);
+		Sensors.Remove(p_sensor);
+		auto ret = SensorsOfType.Find(p_sensor->SensorType);
+
+		if (ret != nullptr) {
+			ret->Remove(p_sensor);
+		}
+		
+	}
+	return true;
+
+}
+
 
 TArray<AActor*> ASystemManagerBase::GetRegisteredActors()
 {
@@ -70,6 +108,15 @@ AActorBase* ASystemManagerBase::ToActorBase(AActor* p_actor)
 {
 	if (p_actor->IsA<AActorBase>()) {
 		return (AActorBase*)p_actor;
+	}
+
+	return nullptr;
+}
+
+ASensorBase* ASystemManagerBase::ToSensorBase(AActor* p_actor)
+{
+	if (p_actor->IsA<ASensorBase>()) {
+		return (ASensorBase*)p_actor;
 	}
 
 	return nullptr;
@@ -205,13 +252,6 @@ AActor* ASystemManagerBase::FindActor(FString actor_name)
 }
 
 
-bool ASystemManagerBase::RemoveActor(AActor *p_actor)
-{
-	AllActors.Remove(p_actor->GetName());
-	ActorList.Remove(p_actor);
-	return true;
-
-}
 
 void ASystemManagerBase::DetectInstance()
 {
@@ -267,7 +307,7 @@ void ASystemManagerBase::BeginPlay()
 void ASystemManagerBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	StateMachine();
+	StateMachine(DeltaTime);
 }
 
 AMapOrigin* ASystemManagerBase::GetMapOrigin()
@@ -396,6 +436,8 @@ ACBoatBase* ASystemManagerBase::GetPlatform()
 {
 	return pPlatform;
 }
+
+
 void ASystemManagerBase::SetPlatform(ACBoatBase* p_platform)
 {
 	pPlatform = p_platform;
@@ -427,7 +469,17 @@ void ASystemManagerBase::HandleSimulationResume()
 {
 	ASystemManagerBase::GetInstance()->EnableAllActors();
 }
-void ASystemManagerBase::StateMachine()
+
+void ASystemManagerBase::UpdateActors(float deltatime)
+{
+	for (auto* p_actor : ActorList) {
+		if (p_actor->IsA<AActorBase>()) {
+			AActorBase* p_base = (AActorBase*) (p_actor);
+			p_base->ExternalUpdate(deltatime);
+		}
+	}
+}
+void ASystemManagerBase::StateMachine(float deltatime)
 {
 
 	auto curr_state = SystemState;
@@ -471,6 +523,7 @@ void ASystemManagerBase::StateMachine()
 			next_state = ESystemState::SystemStatePauseSimulation;
 			IsPauseReceived = false;
 		}
+		UpdateActors(deltatime);
 		break;
 
 	case ESystemState::SystemStatePauseSimulation:
@@ -490,6 +543,7 @@ void ASystemManagerBase::StateMachine()
 		break;
 	case ESystemState::SystemStateResumed:
 		next_state = ESystemState::SystemStateRunning;
+		
 		break;
 	case ESystemState::SystemStateConfigLoadError:
 		break;
@@ -499,4 +553,129 @@ void ASystemManagerBase::StateMachine()
 
 
 	SystemState = next_state;
+}
+
+////
+////
+/// System API
+
+ISystemAPI* ASystemManagerBase::GetSystemAPI()
+{
+	return this;
+}
+
+bool ASystemManagerBase::SetActorInstanceNo(AActor* p_actor, INT32S instance_no)
+{
+	auto* p_base = ToActorBase(p_actor);
+	if (p_base) {
+		p_base->SetAffinityInstanceId(instance_no);
+		return true;
+	}
+
+	return false;
+}
+
+int ASystemManagerBase::GetActorInstanceNo(AActor* p_actor)
+{
+	auto* p_base = ToActorBase(p_actor);
+	if (p_base) {
+		return p_base->GetAffinityInstanceId();
+	}
+
+	return -1;
+}
+
+void ASystemManagerBase::SetConsoleConnection(void* p_connection)
+{
+	pConsoleConnection = (UUdpConnection*)p_connection;
+}
+void ASystemManagerBase::SendConsoleResponse(const FString& str)
+{
+	if (pConsoleConnection != nullptr) {
+		pConsoleConnection->SendUDPData(str);
+	}
+}
+
+ESensorType ASystemManagerBase::StringToSensor(const FString& str)
+{
+	if (str == "lidar") {
+		return ESensorType::Lidar;
+	}
+	if (str == "radar") {
+		return ESensorType::Radar;
+	}
+	if (str == "fls3d") {
+		return ESensorType::FLS3D;
+	}
+	if (str == "camerair") {
+		return ESensorType::CameraIR;
+	}
+	if (str == "cameravisible") {
+		return ESensorType::CameraVisible;
+	}
+	if (str == "ais") {
+		return ESensorType::AIS;
+	}
+
+	return ESensorType::Unknown;
+}
+
+FString ASystemManagerBase::SensorToString(ESensorType sensor_type)
+{
+	if (sensor_type == ESensorType::Lidar) {
+		return "lidar" ;
+	}
+	if (sensor_type == ESensorType::Radar ) {
+		return "radar";
+	}
+	if (sensor_type == ESensorType::FLS3D ) {
+		return "fls3d";
+	}
+	if (sensor_type == ESensorType::CameraIR ) {
+		return "camerair";
+	}
+	if (sensor_type == ESensorType::CameraVisible ) {
+		return "cameravisible";
+	}
+	if (sensor_type == ESensorType::AIS ) {
+		return "ais";
+	}	
+	
+	if (sensor_type == ESensorType::Unknown) {
+		return "unknown";
+	}
+
+	return "";
+
+}
+
+TArray<ESensorType> ASystemManagerBase::GetAllSensorTypes()
+{
+	TArray<ESensorType> ret;
+	ret.Add(ESensorType::Lidar);
+	ret.Add(ESensorType::Radar);
+	ret.Add(ESensorType::FLS3D);
+	ret.Add(ESensorType::CameraIR);
+	ret.Add(ESensorType::CameraVisible);
+	ret.Add(ESensorType::AIS);
+
+	return ret;
+}
+
+TArray<ASensorBase*> ASystemManagerBase::GetAllSensors()
+{
+	return Sensors;
+}
+
+TArray<ASensorBase*> ASystemManagerBase::GetSensorsOfType(ESensorType sensor_type)
+{
+	TArray<ASensorBase*> *ret;
+	ret = SensorsOfType.Find(sensor_type);
+	if (ret != nullptr) {
+		return *ret;
+	}
+	
+	return TArray<ASensorBase*>();
+
+
 }

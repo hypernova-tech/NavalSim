@@ -111,9 +111,12 @@ protected:
 	SClutterParams GetClutterParams();
 	FLOAT64 CaptureStartTimeRef;
 
+	virtual void OnStep(float DeltaTime) override;
+
 public:	
 	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+
+
 	virtual void Visualize(SScanResult* p_scan_result, FVector origin, FVector current_forward, FVector current_right, float max_range_meter, void *p_tracker = nullptr);
 	UGenericCommIF* GetCommCommIF();
 	void SensorStateMachine(float delta_time_sec);

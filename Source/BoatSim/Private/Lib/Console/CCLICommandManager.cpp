@@ -94,8 +94,20 @@ void CCLICommandManager::PreparePrintCommandInfo()
 	info.Description = "prints all actors";
 	options.Add(info);
 
+	info.Option = "--sensors";
+	info.Description = "prints all sensors";
+	options.Add(info);
+
 	info.Option = "--name";
 	info.Description = "prints actor or component with given name";
+	options.Add(info);
+
+	info.Option = "--sensortypes";
+	info.Description = "prints available sensors types";
+	options.Add(info);
+
+	info.Option = "--sensortype";
+	info.Description = "prints all sensors with given type";
 	options.Add(info);
 
 	CommandInfo.Add(PrintCommand, options);
@@ -132,12 +144,17 @@ void CCLICommandManager::PrepareSetCommandInfo()
 	info.Description = "sets the name of object";
 	options.Add(info);
 
+
 	info.Option = "--parent";
 	info.Description = "sets the scale of object of name";
 	options.Add(info);
 
 	info.Option = "--active";
 	info.Description = "sets the activity of object of name, 0: pasive, 1:active";
+	options.Add(info);
+
+	info.Option = "--instance";
+	info.Description = "sets the instance of  the process that actor will run";
 	options.Add(info);
 
 	info.Option = "--position";
@@ -184,6 +201,10 @@ void CCLICommandManager::PrepareGetCommandInfo()
 
 	info.Option = "--active";
 	info.Description = "gets the activity of object of name, 0: pasive, 1:active";
+	options.Add(info);
+
+	info.Option = "--instance";
+	info.Description = "gets the instance of  the process that actor will run";
 	options.Add(info);
 
 	info.Option = "--position";
@@ -240,6 +261,16 @@ bool CCLICommandManager::HasBP()
 bool CCLICommandManager::HasActors()
 {
 	auto ret = pOptions->Find(Actors);
+	if (ret != nullptr) {
+
+		return true;
+	}
+
+	return false;
+}
+bool CCLICommandManager::HasSensors()
+{
+	auto ret = pOptions->Find(Sensors);
 	if (ret != nullptr) {
 
 		return true;
@@ -429,6 +460,46 @@ bool CCLICommandManager::GetActive(bool& val)
 
 	return false;
 }
+bool CCLICommandManager::GetInstance(int& val)
+{
+	bool ret = false;
+	auto pstr = pOptions->Find(Instance);
+	if (pstr != nullptr) {
+
+		val = CUtil::StringToInt(*pstr);
+		return true;
+	}
+
+
+	return false;
+}
+
+bool CCLICommandManager::GetSensorType(FString& val)
+{
+	bool ret = false;
+	auto pstr = pOptions->Find(SensorType);
+	if (pstr != nullptr) {
+
+		val = (*pstr);
+		return true;
+	}
+
+
+	return false;
+}
+bool CCLICommandManager::HasSensorTypes()
+{
+	bool ret = false;
+	auto pstr = pOptions->Find(SensorTypes);
+	if (pstr != nullptr) {
+
+		return true;
+	}
+
+
+	return false;
+}
+
 
 bool CCLICommandManager::GetStart(bool& is_start)
 {

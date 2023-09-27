@@ -373,6 +373,7 @@ float CUtil::ConvertToFloat(const char* p_str)
     float val = FCString::Atof(*text_val);
     return val;
 }
+
 FString CUtil::ConvertToFString(const char* p_str)
 {
     
@@ -635,7 +636,12 @@ void CUtil::MacAddrCopy(const FString& str, INT8U* p_dest, INT32U dest_capacity)
         }
     }
 }
+FString CUtil::IntToString(INT32S val)
+{
 
+    FString str = FString::Printf(TEXT("%d"), val);
+    return str;
+}
 
 float CUtil::StringToFloat(FString& str)
 {

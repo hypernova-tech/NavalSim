@@ -119,18 +119,16 @@ void ASensorBase::BeginPlay()
 	}
 }
 
-// Called every frame
-void ASensorBase::Tick(float DeltaTime)
+void ASensorBase::OnStep(float DeltaTime)
 {
-	Super::Tick(DeltaTime);
-	
+	Super::OnStep(DeltaTime);
 	if (Enabled) {
 
 		SensorStateMachine(DeltaTime);
-		
+
 	}
-	
 }
+
 
 void ASensorBase::Visualize(SScanResult* p_scan_result, FVector origin, FVector current_forward, FVector current_right, float max_range_meter, void* p_tracker)
 {

@@ -28,7 +28,8 @@ void UConsoleBase::BeginPlay()
 
     pUDPConnection = GetOwner()->GetComponentByClass<UUdpConnection>();
     pUDPConnection->AddConnectionDataReceiver(this);
-
+    ASystemManagerBase::GetInstance()->SetConsoleConnection(pUDPConnection);
+    pSystemAPI = ASystemManagerBase::GetInstance()->GetSystemAPI();
 	// ...
 	
 }
@@ -62,19 +63,21 @@ void UConsoleBase::Command(FString command)
 
         if (pUDPConnection != nullptr) {
             if (command_ret) {
-                pUDPConnection->SendUDPData(TEXT("OK"));
+                pSystemAPI->SendConsoleResponse(TEXT("OK"));
             }
             else {
-                pUDPConnection->SendUDPData(TEXT("FAILED") + command_process_error_message);
+                pSystemAPI->SendConsoleResponse(TEXT("FAILED") + command_process_error_message);
             }
         }
     }
     else {
-        pUDPConnection->SendUDPData(TEXT("FAILED") + out_error_message);
+        pSystemAPI->SendConsoleResponse(TEXT("FAILED") + out_error_message);
         CUtil::DebugLog(out_error_message);
     }
     
 }
+
+
 
 void UConsoleBase::OnReceivedConnectionData(void* connection, INT8U* p_data, INT32U count)
 {
@@ -301,18 +304,18 @@ bool UConsoleBase::ProcessCommands(FString command, TMap<FString, FString>& opti
 
             // Iterate over the TArray
             FString ret = "";
-            pUDPConnection->SendUDPData(Key);
+            pSystemAPI->SendConsoleResponse(Key);
             for (SCommandOptionInfo& Option : ValueArray)
             {
                 ret = Option.Option + " " + "["+Option.Description+"]";
 
                 if (pUDPConnection != nullptr) {
-                    pUDPConnection->SendUDPData(ret);
+                    pSystemAPI->SendConsoleResponse(ret);
                 }
                 
             }
         }
-        pUDPConnection->SendUDPData("\n");
+        pSystemAPI->SendConsoleResponse("\n");
         return true;
 
     }
@@ -339,7 +342,8 @@ bool UConsoleBase::ProcessCommands(FString command, TMap<FString, FString>& opti
         if (bp) {
             auto bp_info = ASystemManagerBase::GetInstance()->GetDataContainer()->GetBlueprintInfo();
             for (auto entry : *bp_info) {
-                pUDPConnection->SendUDPData("BP: "+ entry.Name);
+               
+                pSystemAPI->SendConsoleResponse("BP: "+ entry.Name);
             }
 
             return true;
@@ -350,7 +354,40 @@ bool UConsoleBase::ProcessCommands(FString command, TMap<FString, FString>& opti
             for (auto p_actor : all_actors)
             {
 
-                pUDPConnection->SendUDPData(p_actor->GetName());
+                pSystemAPI->SendConsoleResponse(p_actor->GetName());
+            }
+            return true;
+        }
+
+        auto has_sensors = CommandManager.HasSensors();
+        if (has_sensors) {
+            auto all_sensors = pSystemAPI->GetAllSensors();
+            for (auto p_sensor : all_sensors)
+            {
+                pSystemAPI->SendConsoleResponse(p_sensor->GetName());
+            }
+            return true;
+        }
+
+
+        FString sensor_type;
+        auto has_sensor = CommandManager.GetSensorType(sensor_type);
+        if (has_sensor) {
+            auto all_sensors_of_type = pSystemAPI->GetSensorsOfType(pSystemAPI->StringToSensor(sensor_type));
+            for (auto p_sensor : all_sensors_of_type)
+            {
+                pSystemAPI->SendConsoleResponse(p_sensor->GetName());
+            }
+            return true;
+        }
+
+      
+        auto has_sensors_types = CommandManager.HasSensorTypes();
+        if (has_sensors_types) {
+            auto types = pSystemAPI->GetAllSensorTypes();
+            for (auto stype : types)
+            {
+                pSystemAPI->SendConsoleResponse(pSystemAPI->SensorToString(stype));
             }
             return true;
         }
@@ -469,6 +506,14 @@ bool UConsoleBase::ProcessCommands(FString command, TMap<FString, FString>& opti
 
         }
 
+        int  instance_no = -1;
+        ret = CommandManager.GetInstance(instance_no);
+        if (ret) {
+            pSystemAPI->SetActorInstanceNo(p_actor, instance_no);
+            return true;
+
+        }
+
         ret = CommandManager.GetPosition(vec );
         if (ret) {
             p_actor->SetActorLocation(vec * WORLDTOUNREALUNIT);
@@ -508,10 +553,10 @@ bool UConsoleBase::ProcessCommands(FString command, TMap<FString, FString>& opti
         if (ret) {
             auto player_controller = ASystemManagerBase::GetInstance()->GetMainPlayerController();
             if (player_controller != nullptr) {
-                pUDPConnection->SendUDPData("Possed: " + player_controller->GetName());
+                pSystemAPI->SendConsoleResponse("Possed: " + player_controller->GetName());
             }
             else {
-                pUDPConnection->SendUDPData("possed: nullptr (world)");
+                pSystemAPI->SendConsoleResponse("possed: nullptr (world)");
             }
 
             return true;
@@ -532,7 +577,7 @@ bool UConsoleBase::ProcessCommands(FString command, TMap<FString, FString>& opti
             for (auto p_actor: all_actors)
             {
           
-                pUDPConnection->SendUDPData("Actor: "+ p_actor->GetName());
+                pSystemAPI->SendConsoleResponse("Actor: "+ p_actor->GetName());
             }
             return true;
         }
@@ -545,18 +590,24 @@ bool UConsoleBase::ProcessCommands(FString command, TMap<FString, FString>& opti
             return false;
         }
 
-   
+        int  instance_no = -1;
+        ret = CommandManager.GetInstance(instance_no);
+        if (ret) {
+            pSystemAPI->SendConsoleResponse("Instance: " + CUtil::IntToString(instance_no));
+            return true;
+
+        }
 
         ret = CommandManager.HasPosition();
         if (ret) {
-            pUDPConnection->SendUDPData("Pos: " + p_actor->GetActorLocation().ToString());
+            pSystemAPI->SendConsoleResponse("Pos: " + p_actor->GetActorLocation().ToString());
             return true;
             
         }
 
         ret = CommandManager.HasRelposition();
         if (ret) {
-            pUDPConnection->SendUDPData("Relpos: " + p_actor->GetActorLocation().ToString());
+            pSystemAPI->SendConsoleResponse("Relpos: " + p_actor->GetActorLocation().ToString());
             return true;
           
         }
@@ -565,20 +616,20 @@ bool UConsoleBase::ProcessCommands(FString command, TMap<FString, FString>& opti
         if (ret) {
             
             vec = CMath::GetActorEulerAnglesRPY(p_actor);
-            pUDPConnection->SendUDPData("Rot: " + vec.ToString());
+            pSystemAPI->SendConsoleResponse("Rot: " + vec.ToString());
             return true;
         }
         ret = CommandManager.HasRelrotation();
         if (ret) {
             vec = CMath::GetActorReleativeEulerAnglesRPY(p_actor);
-            pUDPConnection->SendUDPData("Relrot: " + vec.ToString());
+            pSystemAPI->SendConsoleResponse("Relrot: " + vec.ToString());
             return true;
         }
 
         ret = CommandManager.HasScale();
         if (ret) {
             vec = p_actor->GetActorScale();;
-            pUDPConnection->SendUDPData("Scale: " + vec.ToString());
+            pSystemAPI->SendConsoleResponse("Scale: " + vec.ToString());
             return true;
         }
 
@@ -586,10 +637,10 @@ bool UConsoleBase::ProcessCommands(FString command, TMap<FString, FString>& opti
         if (ret) {
             auto parent = CUtil::GetParentActor(p_actor);
             if (parent != nullptr) {
-                pUDPConnection->SendUDPData("Parent: " + parent->GetName());
+                pSystemAPI->SendConsoleResponse("Parent: " + parent->GetName());
             }
             else {
-                pUDPConnection->SendUDPData("Parent: nullptr (world)");
+                pSystemAPI->SendConsoleResponse("Parent: nullptr (world)");
             }
            
             return true;

@@ -24,11 +24,24 @@ protected:
 		int ActorId;
 
 	UPROPERTY(EditAnywhere)
+		bool IsExternalUpdate = true;
+
+	UPROPERTY(EditAnywhere)
 		bool Enabled = false;
+
+
+	UPROPERTY(EditAnywhere)
+		int AffinityInstanceId = -1;
+
+	 virtual void OnStep(float DeltaTime);
+	 bool CheckAffinity();
 
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	void SetEnabled(bool val);
 	bool GetEnabled();
+	void ExternalUpdate(float DeltaTime);
+	void SetAffinityInstanceId(int val);
+	int GetAffinityInstanceId();
 };

@@ -34,8 +34,10 @@ enum ESystemState
 };
 
 
+
+
 UCLASS()
-class  ASystemManagerBase : public AActor
+class  ASystemManagerBase : public AActor, public ISystemAPI
 {
 	GENERATED_BODY()
 	
@@ -85,8 +87,8 @@ protected:
 	UConfigManager* pConfigManager;
 	virtual bool LoadConfig();
 
-
-	virtual void StateMachine();
+	virtual void UpdateActors(float deltatime);
+	virtual void StateMachine(float deltatime);
 
 	ESystemState SystemState = ESystemState::SystemStateJustLaunched;
 	bool CanLoadConfig = false;
@@ -98,7 +100,8 @@ protected:
 	virtual void HandleSimulationResume();
 
 
-	bool RemoveActor(AActor*p_actor);
+	
+	void ComputeFPS(float DeltaTime);
 
 public:	
 	// Called every frame
@@ -119,60 +122,82 @@ public:
 	UFUNCTION(BlueprintCallable)
 		UConsoleBase* GetConsole();
 
+
+
 	static  ASystemManagerBase* GetInstance();
 
-	TArray<AActor*>& GetSensorGlobalIgnoreList();
-	AActor* GetFloor();
-	TArray<AActor*>& GetMoveableActorList();
-
-	void RegisterActor(AActor* p_actor);
-	TArray<AActor*> GetRegisteredActors();
-	TArray<AActor*> GetAllActorInWorld();
 	
-	AActor* FindActor(FString actor_name);
-
-
-
-	bool DestroyActor(FString name);
-
-	AActorBase* ToActorBase(AActor* p_actor);
-	void EnableAllActors();
-	void DisableAllActors();
-
-	AActor* CreateActor(FString model_name, FString boat_name,FVector world_pos, FVector world_rot, FVector scale);
-	INT64U GetTimeStamp();
-	AActor* GetVisibleActorAt(const TArray<AActor*>& ignore_list, FVector from, FVector to, FLOAT64 tolerance_meter);
-
-
-
-	void SetCanLoadConfig(bool val);
-	bool GetCanLoadConfig();
-
-	INT32S GetInstanceNo();
-	void ForceExit();
-
-	virtual  bool  SetMainPlayerController(FString name);
-	virtual AActor* GetMainPlayerController();
-
-	UFUNCTION(BlueprintCallable)
-	ACBoatBase* GetPlatform();
-
-	UFUNCTION(BlueprintCallable)
-	void SetPlatform(ACBoatBase*p_platform);
-	
-
-	virtual void StartSimulation();
-	virtual void ResumeSimulation();
-	virtual void PauseSimulation();
 private:
 
 	static ASystemManagerBase* pInstance;
 	TMap<FString,  AActor*> AllActors;
 	TArray<AActor*> ActorList;
+	TArray<ASensorBase*> Sensors;
+	TMap<ESensorType, TArray<ASensorBase*> > SensorsOfType;
 	bool IsStartReceived = false;
 	bool IsResumeReceived = false;
 	bool IsPauseReceived = false;
 	APlatformBase* pPlatform;
+	UUdpConnection* pConsoleConnection;
 
-	
+	/// <summary>
+	///  system API
+	/// </summary>
+public:
+	virtual ISystemAPI* GetSystemAPI();
+
+
+	virtual TArray<AActor*>& GetSensorGlobalIgnoreList();
+	virtual AActor* GetFloor();
+	virtual TArray<AActor*>& GetMoveableActorList();
+
+	virtual AActor* CreateActor(FString model_name, FString boat_name, FVector world_pos, FVector world_rot, FVector scale);
+	virtual void RegisterActor(AActor* p_actor);
+	virtual bool RemoveActor(AActor* p_actor);
+	virtual TArray<AActor*> GetRegisteredActors();
+	virtual TArray<AActor*> GetAllActorInWorld();
+	virtual AActor* FindActor(FString actor_name);
+	virtual bool DestroyActor(FString name);
+	virtual AActorBase* ToActorBase(AActor* p_actor);
+	virtual ASensorBase* ToSensorBase(AActor* p_actor);
+	virtual void EnableAllActors();
+	virtual void DisableAllActors();
+
+
+	virtual INT64U GetTimeStamp();
+	virtual AActor* GetVisibleActorAt(const TArray<AActor*>& ignore_list, FVector from, FVector to, FLOAT64 tolerance_meter);
+
+
+
+	virtual void SetCanLoadConfig(bool val);
+	virtual bool GetCanLoadConfig();
+
+	virtual INT32S GetInstanceNo();
+	virtual void ForceExit();
+
+	virtual  bool  SetMainPlayerController(FString name);
+	virtual AActor* GetMainPlayerController();
+
+	UFUNCTION(BlueprintCallable)
+	virtual ACBoatBase* GetPlatform();
+
+	UFUNCTION(BlueprintCallable)
+	virtual void SetPlatform(ACBoatBase* p_platform);
+
+
+	virtual void StartSimulation();
+	virtual void ResumeSimulation();
+	virtual void PauseSimulation();
+
+
+	virtual bool SetActorInstanceNo(AActor *p_actor, INT32S instance_no);
+	virtual int GetActorInstanceNo(AActor* p_actor);
+
+	virtual void SetConsoleConnection(void* p_connection);
+	virtual void SendConsoleResponse(const FString& str);
+	virtual ESensorType StringToSensor(const FString& str);
+	virtual FString SensorToString(ESensorType sensor_type);
+	virtual TArray<ESensorType> GetAllSensorTypes();
+	virtual TArray<ASensorBase*> GetAllSensors() ;
+	virtual TArray<ASensorBase*> GetSensorsOfType(ESensorType sensor_type);
 };
