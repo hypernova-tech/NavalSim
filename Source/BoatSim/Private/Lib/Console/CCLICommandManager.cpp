@@ -153,6 +153,10 @@ void CCLICommandManager::PrepareSetCommandInfo()
 	info.Description = "sets the activity of object of name, 0: pasive, 1:active";
 	options.Add(info);
 
+	info.Option = "--enabled";
+	info.Description = "get the set enable object of name, 0: pasive, 1:active";
+	options.Add(info);
+
 	info.Option = "--instance";
 	info.Description = "sets the instance of  the process that actor will run";
 	options.Add(info);
@@ -201,6 +205,10 @@ void CCLICommandManager::PrepareGetCommandInfo()
 
 	info.Option = "--active";
 	info.Description = "gets the activity of object of name, 0: pasive, 1:active";
+	options.Add(info);
+
+	info.Option = "--enabled";
+	info.Description = "get the  object of name enabled or disabled, 0: disabled, 1:enabled";
 	options.Add(info);
 
 	info.Option = "--instance";
@@ -421,6 +429,13 @@ bool CCLICommandManager::HasScale()
 	auto pstr = pOptions->Find(Scale);
 	return  (pstr != nullptr);
 }
+bool CCLICommandManager::HasEnabled()
+{
+	bool ret = false;
+	auto pstr = pOptions->Find(Scale);
+	return  (pstr != nullptr);
+}
+
 
 
 bool CCLICommandManager::HasController()
@@ -460,6 +475,26 @@ bool CCLICommandManager::GetActive(bool& val)
 
 	return false;
 }
+bool CCLICommandManager::GetEnabled(bool& val)
+{
+	bool ret = false;
+	auto pstr = pOptions->Find(Enabled);
+	if (pstr != nullptr) {
+
+		if (*pstr == "1") {
+			val = true;
+		}
+		else {
+			val = false;
+		}
+		return true;
+	}
+
+
+	return false;
+}
+
+
 bool CCLICommandManager::GetInstance(int& val)
 {
 	bool ret = false;

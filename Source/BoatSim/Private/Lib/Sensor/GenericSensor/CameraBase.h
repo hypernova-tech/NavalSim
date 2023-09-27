@@ -35,8 +35,8 @@ protected:
 
 	USceneCaptureComponent2D* pSceneCapture;
 
-	void OnActorEnabled() override ;
-	void OnActorDisabled() override;
+	void PauseSensor() override ;
+	void ResumeSensor() override;
 
 public:
 	void SetFovDeg(double fov_deg);

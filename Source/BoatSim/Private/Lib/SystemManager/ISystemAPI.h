@@ -28,6 +28,8 @@ public:
 	virtual bool DestroyActor(FString name) = 0;
 	virtual AActorBase* ToActorBase(AActor* p_actor) = 0;
 	virtual ASensorBase* ToSensorBase(AActor* p_actor) = 0;
+	virtual bool SetActorEnabled(AActor* p_actor, bool val) = 0;
+	virtual bool GetActorEnabled(AActor* p_actor) = 0;
 	virtual void EnableAllActors() = 0;
 	virtual void DisableAllActors() = 0;
 
@@ -66,4 +68,5 @@ public:
 	virtual TArray<ASensorBase*> GetSensorsOfType(ESensorType sensor_type) = 0;
 
 	virtual void RegisterConnection(UConnectionBase* p_connection) = 0;
+	virtual INT32U ConvertToInstancedLocalPort(INT32 port_no) = 0;
 };

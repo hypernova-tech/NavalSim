@@ -13,18 +13,18 @@ void ACameraBase::InitSensor()
 	pSceneCapture->TextureTarget = p_render_target;
 }
 
-void ACameraBase::OnActorEnabled()
+void ACameraBase::ResumeSensor()
 {
-	Super::OnActorEnabled();
+	Super::ResumeSensor();
 	if (pSceneCapture != nullptr) {
 		pSceneCapture->Activate();
 	}
 	
 }
 
-void ACameraBase::OnActorDisabled()
+void ACameraBase::PauseSensor()
 {
-	Super::OnActorDisabled();
+	Super::PauseSensor();
 	if (pSceneCapture != nullptr) {
 		pSceneCapture->Deactivate();
 	}

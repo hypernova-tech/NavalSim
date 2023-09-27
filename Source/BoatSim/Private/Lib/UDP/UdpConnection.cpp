@@ -45,7 +45,7 @@ void UUdpConnection::InitConnection()
 	SendSize = 2 * 1024 * 1024;
 	BufferSize = 2 * 1024 * 1024;
 
-	LocalEndpoint = FIPv4Endpoint(FIPv4Address::Any, LocalPort);
+	LocalEndpoint = FIPv4Endpoint(FIPv4Address::Any, ASystemManagerBase::GetInstance()->GetSystemAPI()->ConvertToInstancedLocalPort(LocalPort));
 
 	FIPv4Address::Parse(IP, RemoteAddress);
 	RemoteEndpoint = FIPv4Endpoint(RemoteAddress, RemotePort);

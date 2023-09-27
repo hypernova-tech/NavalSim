@@ -37,6 +37,7 @@ private:
 
 	FString SetCommand = "set";
 	FString Active = "active";
+	FString Enabled = "enabled";
 	FString Instance = "instance";
 	FString Position = "position";
 	FString RelPosition = "relposition";
@@ -106,12 +107,14 @@ public:
 	bool GetScale(FVector& vec);
 
 	bool GetActive(bool& val);
+	bool GetEnabled(bool& val);
 
 	bool GetInstance(int& val);
 	bool GetSensorType(FString& val);
 	bool HasSensorTypes();
 	bool HasPosition();
 	bool HasScale();
+	bool HasEnabled();
 	bool HasRelposition();
 	bool HasRotation();
 	bool HasRelrotation();

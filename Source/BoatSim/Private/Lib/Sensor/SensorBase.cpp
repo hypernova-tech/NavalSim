@@ -31,12 +31,27 @@ void ASensorBase::SensorStateMachine(float delta_time_sec)
 
 	switch (current_state)
 	{
+	case Idle:
+		if (Enabled) {
+			next_state = Init;
+		}
+		break;
 	case Init:
 		InitSensor();
 		next_state = ESensorState::Running;
 		break;
 	case Running:
 		Run(delta_time_sec);
+		if (!Enabled) {
+			next_state = ESensorState::Paused;
+			PauseSensor();
+		}
+		break;
+	case Paused:
+		if (Enabled) {
+			next_state = ESensorState::Running;
+			ResumeSensor();
+		}
 		break;
 	case Finish:
 		FinalizeSensor();
@@ -122,7 +137,7 @@ void ASensorBase::BeginPlay()
 void ASensorBase::OnStep(float DeltaTime)
 {
 	Super::OnStep(DeltaTime);
-	if (Enabled) {
+	if (Enabled || true) {
 
 		SensorStateMachine(DeltaTime);
 
@@ -149,6 +164,15 @@ UGenericCommIF* ASensorBase::GetCommCommIF()
 }
 
 void ASensorBase::OnCaptureReady(void* p_data)
+{
+}
+
+
+void ASensorBase::ResumeSensor()
+{
+}
+
+void ASensorBase::PauseSensor()
 {
 }
 

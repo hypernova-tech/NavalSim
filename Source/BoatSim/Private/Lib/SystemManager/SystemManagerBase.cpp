@@ -113,6 +113,28 @@ AActorBase* ASystemManagerBase::ToActorBase(AActor* p_actor)
 	return nullptr;
 }
 
+bool ASystemManagerBase::SetActorEnabled(AActor* p_actor, bool val)
+{
+	auto p_base = ToActorBase(p_actor);
+	if (p_base) {
+		p_base->SetEnabled(val);
+		return true;
+	}
+
+	return false;
+}
+
+bool ASystemManagerBase::GetActorEnabled(AActor* p_actor)
+{
+	auto p_base = ToActorBase(p_actor);
+	if (p_base) {
+		p_base->GetEnabled();
+		return true;
+	}
+
+	return false;
+}
+
 ASensorBase* ASystemManagerBase::ToSensorBase(AActor* p_actor)
 {
 	if (p_actor->IsA<ASensorBase>()) {
@@ -534,6 +556,7 @@ void ASystemManagerBase::StateMachine(float deltatime)
 		}
 		break;
 	case ESystemState::SystemStateRunSimulation:
+
 		HandleSimulationStart();
 		next_state = ESystemState::SystemStateRunning;
 		break;
@@ -546,7 +569,9 @@ void ASystemManagerBase::StateMachine(float deltatime)
 		break;
 
 	case ESystemState::SystemStatePauseSimulation:
+
 		HandleSimulationPause();
+		UpdateActors(deltatime);
 		next_state = ESystemState::SystemStatePaused;
 		break;
 	case ESystemState::SystemStatePaused:
@@ -557,6 +582,7 @@ void ASystemManagerBase::StateMachine(float deltatime)
 		break;
 	case ESystemState::SystemStateResumeSimulation:
 		HandleSimulationResume();
+		UpdateActors(deltatime);
 		next_state = ESystemState::SystemStateResumed;
 
 		break;
@@ -689,6 +715,16 @@ TArray<ASensorBase*> ASystemManagerBase::GetAllSensors()
 void ASystemManagerBase::RegisterConnection(UConnectionBase* p_connection)
 {
 	Connections.Add(p_connection);
+}
+
+INT32U ASystemManagerBase::ConvertToInstancedLocalPort(INT32 port_no)
+{
+	if (InstanceNo < 0) {
+		return port_no;
+	}
+	else {
+		return port_no + InstanceNo;
+	}
 }
 
 TArray<ASensorBase*> ASystemManagerBase::GetSensorsOfType(ESensorType sensor_type)

@@ -163,7 +163,8 @@ public:
 	virtual ASensorBase* ToSensorBase(AActor* p_actor);
 	virtual void EnableAllActors();
 	virtual void DisableAllActors();
-
+	virtual bool SetActorEnabled(AActor* p_actor, bool val);
+	virtual bool GetActorEnabled(AActor* p_actor);
 
 	virtual INT64U GetTimeStamp();
 	virtual AActor* GetVisibleActorAt(const TArray<AActor*>& ignore_list, FVector from, FVector to, FLOAT64 tolerance_meter);
@@ -203,4 +204,6 @@ public:
 	virtual TArray<ASensorBase*> GetSensorsOfType(ESensorType sensor_type);
 
 	virtual void RegisterConnection(UConnectionBase* p_connection);
+
+	virtual INT32U ConvertToInstancedLocalPort(INT32 port_no);
 };

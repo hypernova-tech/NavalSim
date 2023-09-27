@@ -31,8 +31,10 @@ enum class ESensorType
 
 enum ESensorState
 {
+	Idle,
 	Init,
 	Running,
+	Paused,
 	Finish,
 	
 };
@@ -108,6 +110,8 @@ protected:
 	virtual void InitSensor();
 	virtual void Run(float delta_time_sec);
 	virtual void FinalizeSensor();
+	virtual void PauseSensor();
+	virtual void ResumeSensor();
 	SClutterParams GetClutterParams();
 	FLOAT64 CaptureStartTimeRef;
 

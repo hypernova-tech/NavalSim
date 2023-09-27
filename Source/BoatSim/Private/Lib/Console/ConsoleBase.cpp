@@ -354,7 +354,7 @@ bool UConsoleBase::ProcessCommands(FString command, TMap<FString, FString>& opti
             for (auto p_actor : all_actors)
             {
 
-                pSystemAPI->SendConsoleResponse(p_actor->GetName());
+                pSystemAPI->SendConsoleResponse("<actor>"+p_actor->GetName());
             }
             return true;
         }
@@ -364,7 +364,7 @@ bool UConsoleBase::ProcessCommands(FString command, TMap<FString, FString>& opti
             auto all_sensors = pSystemAPI->GetAllSensors();
             for (auto p_sensor : all_sensors)
             {
-                pSystemAPI->SendConsoleResponse(p_sensor->GetName());
+                pSystemAPI->SendConsoleResponse("<sensor>"+p_sensor->GetName());
             }
             return true;
         }
@@ -506,6 +506,14 @@ bool UConsoleBase::ProcessCommands(FString command, TMap<FString, FString>& opti
 
         }
 
+        bool is_enabled;
+        ret = CommandManager.GetEnabled(is_enabled);
+        if (ret) {
+            pSystemAPI->SetActorEnabled(p_actor, is_enabled);
+            return true;
+
+        }
+
         int  instance_no = -1;
         ret = CommandManager.GetInstance(instance_no);
         if (ret) {
@@ -630,6 +638,14 @@ bool UConsoleBase::ProcessCommands(FString command, TMap<FString, FString>& opti
         if (ret) {
             vec = p_actor->GetActorScale();;
             pSystemAPI->SendConsoleResponse("Scale: " + vec.ToString());
+            return true;
+        }
+
+        ret = CommandManager.HasEnabled();
+        if (ret) {
+            auto is_enabled = pSystemAPI->GetActorEnabled(p_actor);
+            FString str = is_enabled ? "1" : "0";
+            pSystemAPI->SendConsoleResponse("Enabled: " + is_enabled);
             return true;
         }
 
