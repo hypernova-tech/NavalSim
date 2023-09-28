@@ -230,9 +230,6 @@ void ASystemManagerBase::ForceExit()
 	FGenericPlatformMisc::RequestExit(true);
 }
 
-
-
-
 bool ASystemManagerBase::DestroyActor(FString name)
 {
 	auto p_actor = FindActor(name);
@@ -283,14 +280,28 @@ void ASystemManagerBase::DetectInstance()
 	if (FParse::Value(FCommandLine::Get(), TEXT("instance="), Value))
 	{
 		// Do something with Value
-		UE_LOG(LogTemp, Warning, TEXT("MyOption value: %s"), *Value);
-		CUtil::DebugLogScreen("Instance: " + Value, 10);
+		
 		InstanceNo = CUtil::StringToInt(Value);
 
 	}
 	else {
-		CUtil::DebugLogScreen("Instance: " + FString("null"), 60);
+		
 	}
+
+	if (FParse::Value(FCommandLine::Get(), TEXT("instancestotal="), Value))
+	{
+		// Do something with Value
+		TotalInstanceCount = CUtil::StringToInt(Value);
+
+	}
+	else {
+		
+	}
+
+
+	CUtil::DebugLogScreen("Instance:" + CUtil::IntToString(InstanceNo) +"/"+ CUtil::IntToString(TotalInstanceCount), 10);
+
+	
 }
 // Called when the game starts or when spawned
 void ASystemManagerBase::BeginPlay()

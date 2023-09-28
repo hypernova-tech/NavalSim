@@ -192,7 +192,7 @@ namespace ConsoleGUI
                 string unrealExecutablePath = ExecutablePath;
 
                 // Define any command-line arguments you want to pass
-                string unrealArgs = "-windowed  -instance=" + i.ToString();
+                string unrealArgs = "-windowed  -instance=" + i.ToString()+" -instancestotal="+ instance_count.ToString();
 
                 // Set up the process start info
                 ProcessStartInfo startInfo = new ProcessStartInfo(unrealExecutablePath, unrealArgs)

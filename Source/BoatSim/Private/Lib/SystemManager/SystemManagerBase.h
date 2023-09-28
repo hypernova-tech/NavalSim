@@ -94,6 +94,7 @@ protected:
 	bool CanLoadConfig = false;
 
 	INT32S InstanceNo = -1;
+	INT32S TotalInstanceCount = 1;
 
 	virtual void HandleSimulationStart();
 	virtual void HandleSimulationPause();

@@ -201,23 +201,80 @@ void ACBoatBase::StopPawn()
 void ACBoatBase::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
-#if false
-	LidarComp = (UCLidarComp*)GetComponentByClass(UCLidarComp::StaticClass());
-	if (LidarComp)
-	{
 
+}
+void ACBoatBase::BindedMoveForward(float val)
+{
+
+}
+void ACBoatBase::BindedMoveRight(float val)
+{
+
+}
+void ACBoatBase::BindedRotationX(float val)
+{
+
+	if (BoatCam && bIsRightMousePressed)
+	{
+		// Get the current rotation
+		FRotator NewRotation = BoatCam->GetRelativeRotation();
+
+		// Adjust the yaw based on the rate of mouse movement
+		NewRotation.Yaw += val;
+
+		// Set the updated rotation to the camera
+		BoatCam->SetRelativeRotation(NewRotation);
 	}
-#endif
 }
 
+void ACBoatBase::BindedRotationY(float val)
+{
+
+	if (BoatCam && bIsRightMousePressed)
+	{
+		// Get the current rotation
+		FRotator NewRotation = BoatCam->GetRelativeRotation();
+
+		// Adjust the yaw based on the rate of mouse movement
+		NewRotation.Pitch += -val;
+
+		// Set the updated rotation to the camera
+		BoatCam->SetRelativeRotation(NewRotation);
+	}
+}
+
+void ACBoatBase::OnRightMousePressed()
+{
+	bIsRightMousePressed = true;
+}
+
+void ACBoatBase::OnRightMouseReleased()
+{
+	bIsRightMousePressed = false;
+}
+void ACBoatBase::AdjustCameraDistance(float val)
+{
+	FVector cam_forward = BoatCam->GetForwardVector();
+	FVector cam_pos = BoatCam->GetComponentLocation();
+
+	BoatCam->SetWorldLocation(cam_pos + cam_forward * val * CamMovementSpeed);
+}
 
 // Called to bind functionality to input
 void ACBoatBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-	
 
+	PlayerInputComponent->BindAxis("MoveForward", this, &ACBoatBase::BindedMoveForward);
+	PlayerInputComponent->BindAxis("MoveRight", this, &ACBoatBase::BindedMoveRight);
+	PlayerInputComponent->BindAxis("RotationX", this, &ACBoatBase::BindedRotationX);
+	PlayerInputComponent->BindAxis("RotationY", this, &ACBoatBase::BindedRotationY);
+	PlayerInputComponent->BindAction("RightMouseButtonClick", IE_Pressed, this, &ACBoatBase::OnRightMousePressed);
+	PlayerInputComponent->BindAction("RightMouseButtonClick", IE_Released, this, &ACBoatBase::OnRightMouseReleased);
+	PlayerInputComponent->BindAxis("Zoom", this, &ACBoatBase::AdjustCameraDistance);
 }
+
+
 
 void ACBoatBase::Update(UCSOAObserverArgs* p_args)
 {

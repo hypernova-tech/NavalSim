@@ -63,6 +63,15 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	void BindedMoveForward(float val);
+	void BindedMoveRight(float val);
+	void BindedRotationX(float val);
+	void BindedRotationY(float val);
+	void OnRightMousePressed();
+
+	void OnRightMouseReleased();
+	void AdjustCameraDistance(float val);
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -80,7 +89,7 @@ private:
 	bool IsRight;
 	bool IsUp;
 	bool IsDown;
-
+	bool bIsRightMousePressed;
 	float TimeSec;
 	void Oscillate();
 
