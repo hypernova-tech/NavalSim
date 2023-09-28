@@ -71,6 +71,8 @@ protected:
 
 	void OnRightMouseReleased();
 	void AdjustCameraDistance(float val);
+	void OnFocusEnter();
+	void FocusCamera(AActor *p_actor);
 
 public:	
 	// Called every frame

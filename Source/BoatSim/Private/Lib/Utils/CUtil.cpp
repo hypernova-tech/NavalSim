@@ -455,13 +455,41 @@ void CUtil::DebugLogScreen(FString str, FLOAT32 duration_sec, FColor col)
     
 }
 
-void CUtil::LookAt(AActor* p_actor, FVector& look_dir)
+void CUtil::LookAt(AActor* p_actor, FVector& look_dir, FLOAT32 distance )
 {
     FVector ActorLocation = p_actor->GetActorLocation();
-    FVector TargetLocation = ActorLocation + look_dir * 5;
+    FVector TargetLocation = ActorLocation + look_dir * distance;
     FVector DirectionToTarget = (TargetLocation - ActorLocation).GetSafeNormal();
     FRotator NewRotation = DirectionToTarget.Rotation();
+    p_actor->SetActorRotation(NewRotation);
 }
+
+void  CUtil::CameraLookAt(UCameraComponent* p_looker, AActor* p_target, FLOAT32 distance)
+{
+    if (!p_looker || !p_target)
+    {
+        return;
+    }
+
+    // Get the direction from the target actor to the camera
+    FVector Direction = (p_looker->GetComponentLocation() - p_target->GetActorLocation()).GetSafeNormal();
+
+    // Calculate the new camera position: target position + direction * desired distance
+    FVector NewCameraLocation = p_target->GetActorLocation() + Direction * distance;
+
+    // Set the camera's new position
+    p_looker->SetWorldLocation(NewCameraLocation);
+
+    // Get the direction from the camera to the target actor (opposite of previous direction)
+    FVector LookAtDirection = (p_target->GetActorLocation() - NewCameraLocation).GetSafeNormal();
+
+    // Compute the rotation so the camera faces the target
+    FRotator NewRotation = LookAtDirection.Rotation();
+
+    // Set the camera's rotation
+    p_looker->SetWorldRotation(NewRotation);
+
+ }
 
 FRotator CUtil::GetActorRelativeRotation(AActor* p_actor)
 {

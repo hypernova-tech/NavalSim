@@ -79,8 +79,11 @@ public:
 
 	void SetConsoleOutputText(FString text);
 
+
+
 private:
 
 	FLOAT32 AverageFPS;
 	TArray< FLOAT32> FPSMeasurments;
+	AActor* pSelectedActor;
 };

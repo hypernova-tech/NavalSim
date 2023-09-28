@@ -62,7 +62,8 @@ public:
 	template <typename T>
 	static T* FindChildComponent(AActor* p_parent);
 
-	static void LookAt(AActor* p_actor, FVector& look_dir);
+	static void LookAt(AActor* p_actor, FVector& look_dir, FLOAT32 distance = 5);
+	static void CameraLookAt(UCameraComponent *p_looker, AActor* p_target, FLOAT32 distance);
 	static FRotator GetActorRelativeRotation(AActor* p_actor);
 	/// <summary>
 	/// String conversions

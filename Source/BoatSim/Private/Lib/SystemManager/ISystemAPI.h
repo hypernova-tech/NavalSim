@@ -32,6 +32,8 @@ public:
 	virtual bool GetActorEnabled(AActor* p_actor) = 0;
 	virtual void EnableAllActors() = 0;
 	virtual void DisableAllActors() = 0;
+	virtual void SetSelectedActor(AActor *p_actor) = 0;
+	virtual AActor* GetSelectedActor() = 0 ;
 
 
 	virtual INT64U GetTimeStamp() = 0;
@@ -61,11 +63,7 @@ public:
 	virtual void SendConsoleResponse(const FString& str) = 0;
 	virtual bool SetActorInstanceNo(AActor* p_actor, INT32S instance_no) = 0;
 	virtual int GetActorInstanceNo(AActor* p_actor) = 0;
-	virtual ESensorType StringToSensor(const FString& str)=0;
-	virtual FString SensorToString(ESensorType sensor_type) = 0;
-	virtual TArray<ESensorType> GetAllSensorTypes() = 0;
-	virtual TArray<ASensorBase*> GetAllSensors() = 0;
-	virtual TArray<ASensorBase*> GetSensorsOfType(ESensorType sensor_type) = 0;
+
 
 	virtual void RegisterConnection(UConnectionBase* p_connection) = 0;
 	virtual INT32U ConvertToInstancedLocalPort(INT32 port_no) = 0;
@@ -79,4 +77,9 @@ public:
 	/// <returns></returns>
 	virtual bool GetSensorScanStepAngleDeg(AActor* p_actor, FVector2D& ret) = 0;
 	virtual bool SetSensorScanStepAngleDeg(AActor* p_actor, FVector2D ang) = 0;
+	virtual ESensorType StringToSensor(const FString& str) = 0;
+	virtual FString SensorToString(ESensorType sensor_type) = 0;
+	virtual TArray<ESensorType> GetAllSensorTypes() = 0;
+	virtual TArray<ASensorBase*> GetAllSensors() = 0;
+	virtual TArray<ASensorBase*> GetSensorsOfType(ESensorType sensor_type) = 0;
 };

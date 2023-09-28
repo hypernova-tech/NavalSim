@@ -260,6 +260,19 @@ void ACBoatBase::AdjustCameraDistance(float val)
 	BoatCam->SetWorldLocation(cam_pos + cam_forward * val * CamMovementSpeed);
 }
 
+void ACBoatBase::OnFocusEnter()
+{
+	auto p_selected = ASystemManagerBase::GetInstance()->GetSelectedActor();
+
+	if (p_selected) {
+		FocusCamera(p_selected);
+	}
+}
+void ACBoatBase::FocusCamera(AActor* p_actor)
+{
+	CUtil::CameraLookAt(BoatCam, p_actor,  TOUE(10));
+
+}
 // Called to bind functionality to input
 void ACBoatBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -271,6 +284,7 @@ void ACBoatBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 	PlayerInputComponent->BindAxis("RotationY", this, &ACBoatBase::BindedRotationY);
 	PlayerInputComponent->BindAction("RightMouseButtonClick", IE_Pressed, this, &ACBoatBase::OnRightMousePressed);
 	PlayerInputComponent->BindAction("RightMouseButtonClick", IE_Released, this, &ACBoatBase::OnRightMouseReleased);
+	PlayerInputComponent->BindAction("Focus", IE_Pressed, this, &ACBoatBase::OnFocusEnter);
 	PlayerInputComponent->BindAxis("Zoom", this, &ACBoatBase::AdjustCameraDistance);
 }
 

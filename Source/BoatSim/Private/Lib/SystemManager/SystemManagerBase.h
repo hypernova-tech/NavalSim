@@ -141,6 +141,7 @@ private:
 	UUdpConnection* pConsoleConnection;
 
 	TArray< UConnectionBase*> Connections;
+	AActor* pSelectedActor;
 
 	/// <summary>
 	///  system API
@@ -166,7 +167,8 @@ public:
 	virtual void DisableAllActors();
 	virtual bool SetActorEnabled(AActor* p_actor, bool val);
 	virtual bool GetActorEnabled(AActor* p_actor);
-
+	virtual void SetSelectedActor(AActor* p_actor) ;
+	virtual AActor* GetSelectedActor();
 	virtual INT64U GetTimeStamp();
 	virtual AActor* GetVisibleActorAt(const TArray<AActor*>& ignore_list, FVector from, FVector to, FLOAT64 tolerance_meter);
 

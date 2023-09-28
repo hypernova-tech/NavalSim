@@ -135,6 +135,14 @@ bool ASystemManagerBase::GetActorEnabled(AActor* p_actor)
 
 	return false;
 }
+void ASystemManagerBase::SetSelectedActor(AActor *p_actor)
+{
+	pSelectedActor = p_actor;
+}
+AActor* ASystemManagerBase::GetSelectedActor()
+{
+	return pSelectedActor;
+}
 
 ASensorBase* ASystemManagerBase::ToSensorBase(AActor* p_actor)
 {

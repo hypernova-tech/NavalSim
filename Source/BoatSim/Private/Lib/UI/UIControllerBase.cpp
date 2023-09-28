@@ -117,8 +117,14 @@ void AUIControllerBase::FindActorAtClickPosition(int locationX, int locationY)
 		{
 			CUtil::DebugLogScreen(ClickedActor->GetName());
 			ASystemManagerBase::GetInstance()->GetConsole()->SendToConsole("clicked: "+ ClickedActor->GetName());
+			pSelectedActor = ClickedActor;
+			ASystemManagerBase::GetInstance()->SetSelectedActor(pSelectedActor);
 			
 		}
+	}
+	else {
+		pSelectedActor = nullptr;
+		ASystemManagerBase::GetInstance()->SetSelectedActor(nullptr);
 	}
 }
 
