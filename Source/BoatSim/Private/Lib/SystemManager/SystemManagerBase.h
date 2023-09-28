@@ -93,7 +93,7 @@ protected:
 	ESystemState SystemState = ESystemState::SystemStateJustLaunched;
 	bool CanLoadConfig = false;
 
-	INT32S InstanceNo;
+	INT32S InstanceNo = -1;
 
 	virtual void HandleSimulationStart();
 	virtual void HandleSimulationPause();
@@ -206,4 +206,7 @@ public:
 	virtual void RegisterConnection(UConnectionBase* p_connection);
 
 	virtual INT32U ConvertToInstancedLocalPort(INT32 port_no);
+
+	virtual bool GetSensorScanStepAngleDeg(AActor* p_actor, FVector2D& ret);
+	virtual bool SetSensorScanStepAngleDeg(AActor* p_actor, FVector2D ang);
 };

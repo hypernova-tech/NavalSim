@@ -25,6 +25,7 @@ class CCLICommandManager
 private:
 	TMap<FString, FString>* pOptions;
 
+public:
 	FString ProcessCommand = "process";
 	FString ProcessKill = "kill";
 
@@ -46,6 +47,11 @@ private:
 	FString Scale = "scale";
 	FString Parent = "parent";
 	FString Controller = "controller";
+	FString SensorSlotIndex = "slotindex";
+	FString Beam = "beam";
+	FString Range = "range";
+	FString Fov = "fov";
+	FString ScanStep = "scanstepangle";
 
 
 	FString GetCommand = "get";
@@ -84,7 +90,7 @@ public:
 
 
 	int GetProcessKillInstanceCount();
-
+	bool HasA(FString str);
 	bool HasName();
 	bool HasBP();
 	bool HasActors();
@@ -120,6 +126,9 @@ public:
 	bool HasRelrotation();
 	bool HasParent();
 	bool HasController();
+	bool HasScanStep();
+
+	bool GetScanStepAngle(FVector2D& vec);
 
 
 	bool GetStart(bool& is_start);

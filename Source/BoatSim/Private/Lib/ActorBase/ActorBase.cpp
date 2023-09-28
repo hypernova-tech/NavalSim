@@ -38,14 +38,11 @@ void AActorBase::OnStep(float DeltaTime)
 
 bool AActorBase::CheckAffinity()
 {
-	if (AffinityInstanceId == -1) {
-		return true;
-	}
-	else {
-		return ASystemManagerBase::GetInstance()->GetInstanceNo() == AffinityInstanceId;
-	}
 
-	return false;
+	return ASystemManagerBase::GetInstance()->GetInstanceNo() == AffinityInstanceId;
+	
+
+
 }
 
 void AActorBase::OnActorDisabled()

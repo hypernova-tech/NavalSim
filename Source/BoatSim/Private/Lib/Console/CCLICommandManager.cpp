@@ -185,6 +185,10 @@ void CCLICommandManager::PrepareSetCommandInfo()
 	info.Description = "sets the possesed pawn";
 	options.Add(info);
 
+	info.Option = "--scanstepangle";
+	info.Description = "sets the scan step angle in degrees (horizontal step angle, vertical step angle)";
+	options.Add(info);
+
 	CommandInfo.Add(SetCommand, options);
 }
 
@@ -242,6 +246,12 @@ void CCLICommandManager::PrepareGetCommandInfo()
 	info.Option = "--controller";
 	info.Description = "gets the possesed pawn";
 	options.Add(info);
+
+	info.Option = "--scanstepangle";
+	info.Description = "gets the scan step angle";
+	options.Add(info);
+
+
 
 	CommandInfo.Add(GetCommand, options);
 }
@@ -444,6 +454,13 @@ bool CCLICommandManager::HasController()
 	auto pstr = pOptions->Find(Controller);
 	return  (pstr != nullptr);
 }
+
+bool CCLICommandManager::HasA(FString str) {
+	bool ret = false;
+	auto pstr = pOptions->Find(str);
+	return  (pstr != nullptr);
+}
+
 bool CCLICommandManager::GetScale(FVector& vec)
 {
 	bool ret = false;
@@ -451,6 +468,20 @@ bool CCLICommandManager::GetScale(FVector& vec)
 	if (pstr != nullptr) {
 
 		ret = CUtil::ParseVector3D(*pstr, vec);
+		return ret;
+	}
+
+
+	return false;
+}
+
+bool CCLICommandManager::GetScanStepAngle(FVector2D& vec)
+{
+	bool ret = false;
+	auto pstr = pOptions->Find(ScanStep);
+	if (pstr != nullptr) {
+
+		ret = CUtil::ParseVector2D(*pstr, vec);
 		return ret;
 	}
 

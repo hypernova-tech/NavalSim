@@ -4,6 +4,7 @@
 #include "Lib/SystemManager/SystemManagerBase.h"
 #include <Lib/Utils/CUtil.h>
 #include <CBoatBase.h>
+#include <Lib/Sensor/GenericSensor/LidarBase.h>
 
 // Sets default values
 ASystemManagerBase* ASystemManagerBase::pInstance = nullptr;
@@ -724,6 +725,35 @@ INT32U ASystemManagerBase::ConvertToInstancedLocalPort(INT32 port_no)
 	}
 	else {
 		return port_no + InstanceNo;
+	}
+}
+
+
+
+bool ASystemManagerBase::GetSensorScanStepAngleDeg(AActor* p_actor, FVector2D& ret)
+{
+	auto p_sensor = ToSensorBase(p_actor);
+	if (p_sensor) {
+		ret.X = p_sensor->GetHorizontalScanStepAngleDeg();
+		ret.Y = p_sensor->GetVerticalScanStepAngleDeg();
+		return true;
+	}
+	else {
+
+		return false;
+	}
+}
+bool ASystemManagerBase::SetSensorScanStepAngleDeg(AActor* p_actor, FVector2D ang)
+{
+	auto p_sensor = ToSensorBase(p_actor);
+	if (p_sensor) {
+		p_sensor->SetHorizontalScanStepAngleDeg(ang.X);
+		p_sensor->SetVerticalScanStepAngleDeg(ang.Y);
+		return true;
+	}
+	else {
+
+		return false;
 	}
 }
 

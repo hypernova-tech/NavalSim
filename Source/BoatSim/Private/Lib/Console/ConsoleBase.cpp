@@ -288,382 +288,495 @@ void UConsoleBase::ProcessCommands(TArray<FString> tokens)
     }
 }
 #endif
-bool UConsoleBase::ProcessCommands(FString command, TMap<FString, FString>& options, FString& error_message)
+
+
+
+bool UConsoleBase::ProcessHelpCommand(TMap<FString, FString>& options, FString& error_message)
+{
+
+    error_message = "";
+    FString sret;
+
+
+
+
+    auto cmd_info = CommandManager.GetCommandInfo();
+
+
+    for (auto It = (*cmd_info).CreateConstIterator(); It; ++It)
+    {
+        FString Key = It->Key;
+        TArray<SCommandOptionInfo> ValueArray = It->Value;
+
+        // Iterate over the TArray
+        sret = "";
+        pSystemAPI->SendConsoleResponse(Key);
+        for (SCommandOptionInfo& Option : ValueArray)
+        {
+            sret = Option.Option + " " + "[" + Option.Description + "]";
+
+            if (pUDPConnection != nullptr) {
+                pSystemAPI->SendConsoleResponse(sret);
+            }
+
+        }
+    }
+    pSystemAPI->SendConsoleResponse("\n");
+    return true;
+}
+bool UConsoleBase::ProcessProcessCommand(TMap<FString, FString>& options, FString& error_message)
+{
+
+    error_message = "";
+    auto instance = CommandManager.GetProcessKillInstanceCount();
+
+    if (ASystemManagerBase::GetInstance()->GetInstanceNo() == instance) {
+
+        ASystemManagerBase::GetInstance()->ForceExit();
+        return true;
+    }
+
+
+    else {
+        error_message += "empty name value";
+        return false;
+    }
+}
+
+bool UConsoleBase::ProcessPrintCommand(TMap<FString, FString>& options, FString& error_message)
+{
+
+    error_message = "";
+
+
+    auto bp = CommandManager.HasBP();
+    if (bp) {
+        auto bp_info = ASystemManagerBase::GetInstance()->GetDataContainer()->GetBlueprintInfo();
+        for (auto entry : *bp_info) {
+
+            pSystemAPI->SendConsoleResponse("BP: " + entry.Name);
+        }
+
+        return true;
+    }
+    auto print_actors = CommandManager.HasActors();
+    if (print_actors) {
+        auto all_actors = ASystemManagerBase::GetInstance()->GetAllActorInWorld();
+        for (auto p_act : all_actors)
+        {
+
+            pSystemAPI->SendConsoleResponse("<actor>" + p_act->GetName());
+        }
+        return true;
+    }
+
+    auto has_sensors = CommandManager.HasSensors();
+    if (has_sensors) {
+        auto all_sensors = pSystemAPI->GetAllSensors();
+        for (auto p_sensor : all_sensors)
+        {
+            pSystemAPI->SendConsoleResponse("<sensor>" + p_sensor->GetName());
+        }
+        return true;
+    }
+
+
+    FString sensor_type;
+    auto has_sensor = CommandManager.GetSensorType(sensor_type);
+    if (has_sensor) {
+        auto all_sensors_of_type = pSystemAPI->GetSensorsOfType(pSystemAPI->StringToSensor(sensor_type));
+        for (auto p_sensor : all_sensors_of_type)
+        {
+            pSystemAPI->SendConsoleResponse(p_sensor->GetName());
+        }
+        return true;
+    }
+
+
+    auto has_sensors_types = CommandManager.HasSensorTypes();
+    if (has_sensors_types) {
+        auto types = pSystemAPI->GetAllSensorTypes();
+        for (auto stype : types)
+        {
+            pSystemAPI->SendConsoleResponse(pSystemAPI->SensorToString(stype));
+        }
+        return true;
+    }
+
+    return false;
+}
+bool UConsoleBase::ProcessSimCommand(TMap<FString, FString>& options, FString& error_message)
 {
     error_message = "";
-    CommandManager.SetCommandOptions(&options);
-
-    if (command == "help") {
-        auto cmd_info = CommandManager.GetCommandInfo();
+    FVector2D vec2d;
+    bool ret;
 
 
-        for (auto It = (*cmd_info).CreateConstIterator(); It; ++It)
-        {
-            FString Key = It->Key;
-            TArray<SCommandOptionInfo> ValueArray = It->Value;
-
-            // Iterate over the TArray
-            FString ret = "";
-            pSystemAPI->SendConsoleResponse(Key);
-            for (SCommandOptionInfo& Option : ValueArray)
-            {
-                ret = Option.Option + " " + "["+Option.Description+"]";
-
-                if (pUDPConnection != nullptr) {
-                    pSystemAPI->SendConsoleResponse(ret);
-                }
-                
-            }
+    bool val = false;
+    ret = CommandManager.GetStart(val);
+    if (ret) {
+        if (val) {
+            ASystemManagerBase::GetInstance()->StartSimulation();
         }
-        pSystemAPI->SendConsoleResponse("\n");
+
+        return true;
+    }
+    ret = CommandManager.GetPause(val);
+    if (ret) {
+        if (val) {
+            ASystemManagerBase::GetInstance()->PauseSimulation();
+        }
+
+        return true;
+    }
+
+    ret = CommandManager.GetResume(val);
+    if (ret) {
+        if (val) {
+            ASystemManagerBase::GetInstance()->ResumeSimulation();
+        }
+
+        return true;
+    }
+
+    return false;
+}
+
+bool UConsoleBase::ProcessCreateCommand(TMap<FString, FString>& options, FString& error_message)
+{
+    error_message = "";
+    FString name;
+
+
+    name = CommandManager.GetName();
+    if (name != "") {
+
+    }
+    else {
+        error_message += "empty name value";
+        return false;
+    }
+
+    auto bp = CommandManager.GetBP();
+    if (bp != "") {
+
+        auto actor_created = ASystemManagerBase::GetInstance()->CreateActor(bp, name, FVector::ZeroVector, FVector::ZeroVector, FVector::OneVector);
+        if (actor_created == nullptr) {
+            error_message = "object cannot created";
+            return false;
+        }
+
+    }
+
+    auto model = CommandManager.GetModel();
+    if (model != "") {
+
+    }
+
+    return true;
+}
+
+bool UConsoleBase::ProcessDestroyCommand(TMap<FString, FString>& options, FString& error_message)
+{
+    error_message = "";
+    FString name;
+
+
+    name = CommandManager.GetName();
+    if (name != "") {
+        if (ASystemManagerBase::GetInstance()->DestroyActor(name)) {
+            return true;
+        }
+        else {
+
+        }
+
+    }
+    else {
+        error_message += "empty name value";
+        return false;
+    }
+
+    return false;
+}
+
+bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& error_message)
+{
+    error_message = "";
+    FVector2D vec2d;
+    bool ret;
+    FString sret;
+    FString name;
+    AActor* p_actor;
+    FVector vec;
+    bool is_enabled;
+    bool is_active;
+
+    FString controller;
+    ret = CommandManager.GetContoroller(controller);
+
+    if (ret) {
+        bool ctrl_ret = ASystemManagerBase::GetInstance()->SetMainPlayerController(controller);
+        return ctrl_ret;
+    }
+
+    name = CommandManager.GetName();
+    if (name != "") {
+
+    }
+    else {
+        error_message += "empty name value";
+        return false;
+    }
+
+    p_actor = ASystemManagerBase::GetInstance()->FindActor(name);
+
+
+    if (p_actor == nullptr) {
+        error_message += (("cannot find actor "));
+        return false;
+    }
+
+
+    ret = CommandManager.GetActive(is_active);
+    if (ret) {
+        CUtil::SetActorActive(p_actor, is_active);
         return true;
 
     }
-  
-    else if (command == "process") {
-        auto instance  = CommandManager.GetProcessKillInstanceCount();
-      
-        if (ASystemManagerBase::GetInstance()->GetInstanceNo() == instance) {
-            
-            ASystemManagerBase::GetInstance()->ForceExit();
+
+
+    ret = CommandManager.GetEnabled(is_enabled);
+    if (ret) {
+        pSystemAPI->SetActorEnabled(p_actor, is_enabled);
+        return true;
+
+    }
+
+    int  instance_no = -1;
+    ret = CommandManager.GetInstance(instance_no);
+    if (ret) {
+        pSystemAPI->SetActorInstanceNo(p_actor, instance_no);
+        return true;
+
+    }
+
+    ret = CommandManager.GetPosition(vec);
+    if (ret) {
+        p_actor->SetActorLocation(vec * WORLDTOUNREALUNIT);
+    }
+
+    ret = CommandManager.GetRelPosition(vec);
+    if (ret) {
+        p_actor->SetActorRelativeLocation(vec * WORLDTOUNREALUNIT);
+    }
+
+    ret = CommandManager.GetRotation(vec);
+    if (ret) {
+        CMath::SetActorRotation(p_actor, vec);
+    }
+    ret = CommandManager.GetRelRotation(vec);
+    if (ret) {
+        CMath::SetActorRelativeRotation(p_actor, vec);
+    }
+
+    ret = CommandManager.GetScale(vec);
+    if (ret) {
+        p_actor->SetActorScale3D(vec);
+    }
+    FString parent;
+    ret = CommandManager.GetParent(parent);
+    if (ret) {
+        AActor* p_parent = ASystemManagerBase::GetInstance()->FindActor(parent);
+        CUtil::SetParent(p_actor, p_parent);
+    }
+
+    ret = CommandManager.GetScanStepAngle(vec2d);
+    if (ret) {
+
+
+        if (pSystemAPI->SetSensorScanStepAngleDeg(p_actor, vec2d)) {
             return true;
         }
-
-     
         else {
-            error_message += "empty name value";
             return false;
         }
 
+        return true;
+    }
+
+    return true;
+}
+bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& error_message)
+{
+
+    error_message = "";
+    FVector2D vec2d;
+    bool ret;
+    FString sret;
+    FString name;
+    AActor* p_actor;
+    FVector vec;
+    bool is_enabled;
+
+
+
+    ret = CommandManager.HasController();
+    if (ret) {
+        auto player_controller = ASystemManagerBase::GetInstance()->GetMainPlayerController();
+        if (player_controller != nullptr) {
+            pSystemAPI->SendConsoleResponse("Possed: " + player_controller->GetName());
+        }
+        else {
+            pSystemAPI->SendConsoleResponse("possed: nullptr (world)");
+        }
+
+        return true;
+    }
+
+
+    name = CommandManager.GetName();
+    if (name != "") {
+
+    }
+    else {
+        error_message += "empty name value";
+        return false;
+    }
+
+    if (name == "*") {
+        auto all_actors = ASystemManagerBase::GetInstance()->GetAllActorInWorld();
+        for (auto p_act : all_actors)
+        {
+
+            pSystemAPI->SendConsoleResponse("Actor: " + p_act->GetName());
+        }
+        return true;
+    }
+
+    p_actor = ASystemManagerBase::GetInstance()->FindActor(name);
+
+
+    if (p_actor == nullptr) {
+        error_message += (("cannot find actor "));
+        return false;
+    }
+
+    int instance_no = -1;
+    ret = CommandManager.GetInstance(instance_no);
+    if (ret) {
+        pSystemAPI->SendConsoleResponse("Instance: " + CUtil::IntToString(instance_no));
+        return true;
+
+    }
+
+    ret = CommandManager.HasPosition();
+    if (ret) {
+        pSystemAPI->SendConsoleResponse("Pos: " + p_actor->GetActorLocation().ToString());
+        return true;
+
+    }
+
+    ret = CommandManager.HasRelposition();
+    if (ret) {
+        pSystemAPI->SendConsoleResponse("Relpos: " + p_actor->GetActorLocation().ToString());
+        return true;
+
+    }
+
+    ret = CommandManager.HasRotation();
+    if (ret) {
+
+        vec = CMath::GetActorEulerAnglesRPY(p_actor);
+        pSystemAPI->SendConsoleResponse("Rot: " + vec.ToString());
+        return true;
+    }
+    ret = CommandManager.HasRelrotation();
+    if (ret) {
+        vec = CMath::GetActorReleativeEulerAnglesRPY(p_actor);
+        pSystemAPI->SendConsoleResponse("Relrot: " + vec.ToString());
+        return true;
+    }
+
+    ret = CommandManager.HasScale();
+    if (ret) {
+        vec = p_actor->GetActorScale();;
+        pSystemAPI->SendConsoleResponse("Scale: " + vec.ToString());
+        return true;
+    }
+
+    ret = CommandManager.HasEnabled();
+    if (ret) {
+        is_enabled = pSystemAPI->GetActorEnabled(p_actor);
+        FString str = is_enabled ? "1" : "0";
+        pSystemAPI->SendConsoleResponse("Enabled: " + is_enabled);
+        return true;
+    }
+
+    ret = CommandManager.HasParent();
+    if (ret) {
+        auto parent = CUtil::GetParentActor(p_actor);
+        if (parent != nullptr) {
+            pSystemAPI->SendConsoleResponse("Parent: " + parent->GetName());
+        }
+        else {
+            pSystemAPI->SendConsoleResponse("Parent: nullptr (world)");
+        }
+
+        return true;
+    }
+
+    ret = CommandManager.HasA(CommandManager.ScanStep);
+    if (ret) {
+
+
+        if (pSystemAPI->GetSensorScanStepAngleDeg(p_actor, vec2d)) {
+            pSystemAPI->SendConsoleResponse("Scale: " + vec2d.ToString());
+        }
+        else {
+            return false;
+        }
+
+        return true;
+    }
+
+    return true;
+}
+bool UConsoleBase::ProcessCommands(FString command, TMap<FString, FString>& options, FString& error_message)
+{
+
+   
+
+    CommandManager.SetCommandOptions(&options);
+
+    if (command == "help") {
+        return ProcessHelpCommand(options, error_message);
+    }
+  
+    else if (command == "process") {
+        
+        return ProcessProcessCommand(options, error_message);
       
     }
     else if (command == "print") { 
-        auto bp = CommandManager.HasBP();
-        if (bp) {
-            auto bp_info = ASystemManagerBase::GetInstance()->GetDataContainer()->GetBlueprintInfo();
-            for (auto entry : *bp_info) {
-               
-                pSystemAPI->SendConsoleResponse("BP: "+ entry.Name);
-            }
-
-            return true;
-        }
-        auto print_actors = CommandManager.HasActors();
-        if (print_actors) {
-            auto all_actors = ASystemManagerBase::GetInstance()->GetAllActorInWorld();
-            for (auto p_actor : all_actors)
-            {
-
-                pSystemAPI->SendConsoleResponse("<actor>"+p_actor->GetName());
-            }
-            return true;
-        }
-
-        auto has_sensors = CommandManager.HasSensors();
-        if (has_sensors) {
-            auto all_sensors = pSystemAPI->GetAllSensors();
-            for (auto p_sensor : all_sensors)
-            {
-                pSystemAPI->SendConsoleResponse("<sensor>"+p_sensor->GetName());
-            }
-            return true;
-        }
-
-
-        FString sensor_type;
-        auto has_sensor = CommandManager.GetSensorType(sensor_type);
-        if (has_sensor) {
-            auto all_sensors_of_type = pSystemAPI->GetSensorsOfType(pSystemAPI->StringToSensor(sensor_type));
-            for (auto p_sensor : all_sensors_of_type)
-            {
-                pSystemAPI->SendConsoleResponse(p_sensor->GetName());
-            }
-            return true;
-        }
-
-      
-        auto has_sensors_types = CommandManager.HasSensorTypes();
-        if (has_sensors_types) {
-            auto types = pSystemAPI->GetAllSensorTypes();
-            for (auto stype : types)
-            {
-                pSystemAPI->SendConsoleResponse(pSystemAPI->SensorToString(stype));
-            }
-            return true;
-        }
-
-        return false;
         
+        return ProcessPrintCommand(options, error_message);
     }
     else if (command == "sim") {
-        bool val = false;
-        bool ret = CommandManager.GetStart(val);
-        if (ret) {
-           if (val) {
-                ASystemManagerBase::GetInstance()->StartSimulation();
-           }
-
-            return true;
-        }
-        ret = CommandManager.GetPause(val);
-        if (ret) {
-            if (val) {
-                ASystemManagerBase::GetInstance()->PauseSimulation();
-            }
-
-            return true;
-        }
-
-        ret = CommandManager.GetResume(val);
-        if (ret) {
-            if (val) {
-                ASystemManagerBase::GetInstance()->ResumeSimulation();
-            }
-
-            return true;
-        }
-
-        return false;
+        return ProcessSimCommand(options, error_message);
 
     }
     else if (command == "create") {
-        auto name = CommandManager.GetName();
-        if (name != "") {
-            
-        }
-        else {
-            error_message += "empty name value";
-            return false;
-        }
-
-        auto bp = CommandManager.GetBP();
-        if (bp != "") {
-           
-            auto ret = ASystemManagerBase::GetInstance()->CreateActor(bp, name, FVector::ZeroVector, FVector::ZeroVector, FVector::OneVector);
-            if (ret ==nullptr) {
-                error_message = "object cannot created";
-                return false;
-            }
-            
-        }
-
-        auto model = CommandManager.GetModel();
-        if (model != "") {
-
-        }
+        return  ProcessCreateCommand(options, error_message);
     }
     else if (command == "destroy") {
-        auto name = CommandManager.GetName();
-        if (name != "") {
-            if (ASystemManagerBase::GetInstance()->DestroyActor(name)) {
-                return true;
-            }
-            else {
-
-            }
-
-        }
-        else {
-            error_message += "empty name value";
-            return false;
-        }
-
-
+       return ProcessDestroyCommand(options, error_message);
     }
     else if (command == "set") {
-
-
-        FString controller;
-        bool ret = CommandManager.GetContoroller(controller);
-
-        if (ret) {
-            bool ctrl_ret = ASystemManagerBase::GetInstance()->SetMainPlayerController(controller);
-            return ctrl_ret;
-        }
-
-        auto name = CommandManager.GetName();
-        if (name != "") {
-
-        }
-        else {
-            error_message += "empty name value";
-            return false;
-        }
-        
-        AActor *p_actor = ASystemManagerBase::GetInstance()->FindActor(name);
-        FVector vec;
-
-        if (p_actor == nullptr) {
-            error_message += (("cannot find actor "));
-            return false;
-        }
-
-        bool is_active;
-        ret = CommandManager.GetActive(is_active);
-        if (ret) {
-            CUtil::SetActorActive(p_actor, is_active);
-            return true;
-
-        }
-
-        bool is_enabled;
-        ret = CommandManager.GetEnabled(is_enabled);
-        if (ret) {
-            pSystemAPI->SetActorEnabled(p_actor, is_enabled);
-            return true;
-
-        }
-
-        int  instance_no = -1;
-        ret = CommandManager.GetInstance(instance_no);
-        if (ret) {
-            pSystemAPI->SetActorInstanceNo(p_actor, instance_no);
-            return true;
-
-        }
-
-        ret = CommandManager.GetPosition(vec );
-        if (ret) {
-            p_actor->SetActorLocation(vec * WORLDTOUNREALUNIT);
-        }
-
-        ret = CommandManager.GetRelPosition(vec);
-        if (ret) {
-            p_actor->SetActorRelativeLocation(vec*WORLDTOUNREALUNIT);
-        }
-
-        ret = CommandManager.GetRotation(vec);
-        if (ret) {
-            CMath::SetActorRotation(p_actor, vec);
-        }
-        ret = CommandManager.GetRelRotation(vec);
-        if (ret) {
-            CMath::SetActorRelativeRotation(p_actor, vec);
-        }
-
-        ret = CommandManager.GetScale(vec);
-        if (ret) {
-            p_actor->SetActorScale3D(vec);
-        }
-        FString parent;
-        ret = CommandManager.GetParent(parent);
-        if (ret) {
-           AActor* p_parent = ASystemManagerBase::GetInstance()->FindActor(parent);
-           CUtil::SetParent(p_actor, p_parent);
-        }
-
-  
+        return ProcessSetCommand(options, error_message);
     }
     else if (command == "get") {
-
-
-        bool ret = CommandManager.HasController();
-        if (ret) {
-            auto player_controller = ASystemManagerBase::GetInstance()->GetMainPlayerController();
-            if (player_controller != nullptr) {
-                pSystemAPI->SendConsoleResponse("Possed: " + player_controller->GetName());
-            }
-            else {
-                pSystemAPI->SendConsoleResponse("possed: nullptr (world)");
-            }
-
-            return true;
-        }
-
-
-        auto name = CommandManager.GetName();
-        if (name != "") {
-
-        }
-        else {
-            error_message += "empty name value";
-            return false;
-        }
-
-        if (name == "*") {
-            auto all_actors =  ASystemManagerBase::GetInstance()->GetAllActorInWorld();
-            for (auto p_actor: all_actors)
-            {
-          
-                pSystemAPI->SendConsoleResponse("Actor: "+ p_actor->GetName());
-            }
-            return true;
-        }
-
-        AActor* p_actor = ASystemManagerBase::GetInstance()->FindActor(name);
-        FVector vec;
-
-        if (p_actor == nullptr) {
-            error_message += (("cannot find actor "));
-            return false;
-        }
-
-        int  instance_no = -1;
-        ret = CommandManager.GetInstance(instance_no);
-        if (ret) {
-            pSystemAPI->SendConsoleResponse("Instance: " + CUtil::IntToString(instance_no));
-            return true;
-
-        }
-
-        ret = CommandManager.HasPosition();
-        if (ret) {
-            pSystemAPI->SendConsoleResponse("Pos: " + p_actor->GetActorLocation().ToString());
-            return true;
-            
-        }
-
-        ret = CommandManager.HasRelposition();
-        if (ret) {
-            pSystemAPI->SendConsoleResponse("Relpos: " + p_actor->GetActorLocation().ToString());
-            return true;
-          
-        }
-
-        ret = CommandManager.HasRotation();
-        if (ret) {
-            
-            vec = CMath::GetActorEulerAnglesRPY(p_actor);
-            pSystemAPI->SendConsoleResponse("Rot: " + vec.ToString());
-            return true;
-        }
-        ret = CommandManager.HasRelrotation();
-        if (ret) {
-            vec = CMath::GetActorReleativeEulerAnglesRPY(p_actor);
-            pSystemAPI->SendConsoleResponse("Relrot: " + vec.ToString());
-            return true;
-        }
-
-        ret = CommandManager.HasScale();
-        if (ret) {
-            vec = p_actor->GetActorScale();;
-            pSystemAPI->SendConsoleResponse("Scale: " + vec.ToString());
-            return true;
-        }
-
-        ret = CommandManager.HasEnabled();
-        if (ret) {
-            auto is_enabled = pSystemAPI->GetActorEnabled(p_actor);
-            FString str = is_enabled ? "1" : "0";
-            pSystemAPI->SendConsoleResponse("Enabled: " + is_enabled);
-            return true;
-        }
-
-        ret = CommandManager.HasParent();
-        if (ret) {
-            auto parent = CUtil::GetParentActor(p_actor);
-            if (parent != nullptr) {
-                pSystemAPI->SendConsoleResponse("Parent: " + parent->GetName());
-            }
-            else {
-                pSystemAPI->SendConsoleResponse("Parent: nullptr (world)");
-            }
-           
-            return true;
-        }
-
-     
-      
+        return ProcessGetCommand(options, error_message);
     }
 
 

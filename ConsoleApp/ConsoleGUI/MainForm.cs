@@ -92,6 +92,7 @@ namespace ConsoleGUI
                 if (!SensorsReceived.Contains(item_striped))
                 {
                     SensorListBox.Items.Add(item_striped);
+                    SensorsReceived.Add(item_striped);
                 }
 
             }

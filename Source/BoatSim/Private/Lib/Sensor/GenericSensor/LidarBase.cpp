@@ -11,73 +11,6 @@ ALidarBase::ALidarBase()
 	
 }
 
-void ALidarBase::SetFrequency(double val)
-{
-	Frequency = val;
-}
-
-void ALidarBase::OnScanCompleted(SScanResult* p_scan_result)
-{
-	if (pCommIF != nullptr) {
-		pCommIF->SendData(pScanResult, -1);
-	}
-}
-
-double ALidarBase::GetFrequency()
-{
-	return Frequency;
-}
-
-void ALidarBase::SetRangeMeter(FVector2D val)
-{
-	RangeMeter = val;
-}
-
-FVector2D ALidarBase::GetRangeMeter()
-{
-	return RangeMeter;
-}
-
-void ALidarBase::SetNoiseMean(double val)
-{
-	NoiseMean = val;
-}
-
-double ALidarBase::GetNoiseMean()
-{
-	return NoiseMean;
-}
-
-void ALidarBase::SetNoiseStdDeviation(double val)
-{
-	NoiseStdDeviation = val;
-}
-
-double ALidarBase::GetNoiseStdDeviation()
-{
-	return NoiseStdDeviation;
-}
-
-void ALidarBase::SetFovVerticalDeg(double val)
-{
-	FovVerticalDeg = val;
-}
-
-double ALidarBase::GetFovVerticalDeg()
-{
-	return FovVerticalDeg;
-}
-
-void ALidarBase::SetFovHorizontalDeg(double val)
-{
-	FovHorizontalDeg = val;
-}
-
-double ALidarBase::GetFovHorizontalDeg()
-{
-	return FovHorizontalDeg;
-}
-
 
 
 void ALidarBase::BeginPlay()
@@ -89,6 +22,7 @@ void ALidarBase::BeginPlay()
 
 
 }
+
 
 void ALidarBase::InitSensor()
 {
@@ -107,6 +41,13 @@ void ALidarBase::OnCaptureReady(void* p_data)
 
 	auto read_pixed_elp_sec = CUtil::Tock(CaptureStartTimeRef);
 	CUtil::DebugLog(FString::Printf(TEXT("lidar capture duration(ms): %f"), 1000 * read_pixed_elp_sec));
+}
+
+void ALidarBase::OnScanCompleted(SScanResult* p_scan_result)
+{
+	if (pCommIF != nullptr) {
+		pCommIF->SendData(pScanResult, -1);
+	}
 }
 void ALidarBase::Run(float delta_time_sec)
 {

@@ -32,6 +32,15 @@ protected:
 	CCLICommandManager CommandManager;
 	ISystemAPI* pSystemAPI;
 
+	bool ProcessHelpCommand(TMap<FString, FString>& options, FString& error_message);
+	bool ProcessProcessCommand(TMap<FString, FString>& options, FString& error_message);
+	bool ProcessPrintCommand(TMap<FString, FString>& options, FString& error_message);
+	bool ProcessSimCommand(TMap<FString, FString>& options, FString& error_message);
+	bool ProcessCreateCommand(TMap<FString, FString>& options, FString& error_message);
+	bool ProcessDestroyCommand(TMap<FString, FString>& options, FString& error_message);
+	bool ProcessSetCommand(TMap<FString, FString>& options, FString& error_message);
+	bool ProcessGetCommand(TMap<FString, FString>& options, FString& error_message);
+
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;

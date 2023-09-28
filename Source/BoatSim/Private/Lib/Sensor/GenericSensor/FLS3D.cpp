@@ -9,65 +9,7 @@ AFLS3D::AFLS3D()
 {
 }
 
-void AFLS3D::SetFrequency(double val)
-{
-	Frequency = val;
-}
 
-double AFLS3D::GetFrequency()
-{
-	return Frequency;
-}
-
-void AFLS3D::SetRangeMeter(FVector2D val)
-{
-	RangeMeter = val;
-}
-
-FVector2D AFLS3D::GetRangeMeter()
-{
-	return RangeMeter;
-}
-
-void AFLS3D::SetNoiseMean(double val)
-{
-	NoiseMean = val;
-}
-
-double AFLS3D::GetNoiseMean()
-{
-	return NoiseMean;
-}
-
-void AFLS3D::SetNoiseStdDeviation(double val)
-{
-	NoiseStdDeviation = val;
-}
-
-double AFLS3D::GetNoiseStdDeviation()
-{
-	return NoiseStdDeviation;
-}
-
-void AFLS3D::SetFovVerticalDeg(double val)
-{
-	FovVerticalDeg = val;
-}
-
-double AFLS3D::GetFovVerticalDeg()
-{
-	return FovVerticalDeg;
-}
-
-void AFLS3D::SetFovHorizontalDeg(double val)
-{
-	FovHorizontalDeg = val;
-}
-
-double AFLS3D::GetFovHorizontalDeg()
-{
-	return FovHorizontalDeg;
-}
 
 
 

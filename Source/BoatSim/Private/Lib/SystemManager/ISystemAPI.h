@@ -69,4 +69,14 @@ public:
 
 	virtual void RegisterConnection(UConnectionBase* p_connection) = 0;
 	virtual INT32U ConvertToInstancedLocalPort(INT32 port_no) = 0;
+
+
+	/// <summary>
+	/// sensor API
+	/// </summary>
+	/// <param name="p_actor"></param>
+	/// <param name="ret"></param>
+	/// <returns></returns>
+	virtual bool GetSensorScanStepAngleDeg(AActor* p_actor, FVector2D& ret) = 0;
+	virtual bool SetSensorScanStepAngleDeg(AActor* p_actor, FVector2D ang) = 0;
 };

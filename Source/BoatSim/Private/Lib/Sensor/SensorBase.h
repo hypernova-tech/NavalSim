@@ -75,6 +75,34 @@ public:
 		bool ShowBeam = false;
 
 	UPROPERTY(EditAnywhere)
+		double Frequency;
+
+	UPROPERTY(EditAnywhere)
+		FVector2D RangeMeter;
+
+	UPROPERTY(EditAnywhere)
+		double NoiseMean;
+
+	UPROPERTY(EditAnywhere)
+		double NoiseStdDeviation;
+
+	UPROPERTY(EditAnywhere)
+		double FovVerticalDeg;
+
+	UPROPERTY(EditAnywhere)
+		double FovHorizontalDeg;
+
+	UPROPERTY(EditAnywhere)
+		float HorizontalScanStepAngleDeg;
+
+	UPROPERTY(EditAnywhere)
+		float VerticalScanStepAngleDeg = 36;
+
+	UPROPERTY(EditAnywhere)
+		float FullScanPeriodSec = 1;
+
+
+	UPROPERTY(EditAnywhere)
 		double MeasurementErrorMean = 0.0f;
 
 	UPROPERTY(EditAnywhere)
@@ -125,4 +153,31 @@ public:
 	UGenericCommIF* GetCommCommIF();
 	void SensorStateMachine(float delta_time_sec);
 	virtual void OnCaptureReady(void *p_data);
+
+
+	void SetFrequency(double val);
+	double GetFrequency();
+
+	void SetRangeMeter(FVector2D val);
+	FVector2D GetRangeMeter();
+
+	void SetNoiseMean(double val);
+	double GetNoiseMean();
+
+	void SetNoiseStdDeviation(double val);
+	double GetNoiseStdDeviation();
+
+	void SetFovVerticalDeg(double val);
+	double GetFovVerticalDeg();
+
+	void SetFovHorizontalDeg(double val);
+	double GetFovHorizontalDeg();
+
+
+
+	float GetHorizontalScanStepAngleDeg();
+	void SetHorizontalScanStepAngleDeg(float val);
+
+	float GetVerticalScanStepAngleDeg();
+	void SetVerticalScanStepAngleDeg(float val);
 };

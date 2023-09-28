@@ -58,66 +58,6 @@ public:
 };
 
 
-void ARadarBase::SetFrequency(double val)
-{
-	Frequency = val;
-}
-
-double ARadarBase::GetFrequency()
-{
-	return Frequency;
-}
-
-void ARadarBase::SetRangeMeter(FVector2D val)
-{
-	RangeMeter = val;
-}
-
-FVector2D ARadarBase::GetRangeMeter()
-{
-	return RangeMeter;
-}
-
-void ARadarBase::SetNoiseMean(double val)
-{
-	NoiseMean = val;
-}
-
-double ARadarBase::GetNoiseMean()
-{
-	return NoiseMean;
-}
-
-void ARadarBase::SetNoiseStdDeviation(double val)
-{
-	NoiseStdDeviation = val;
-}
-
-double ARadarBase::GetNoiseStdDeviation()
-{
-	return NoiseStdDeviation;
-}
-
-void ARadarBase::SetFovVerticalDeg(double val)
-{
-	FovVerticalDeg = val;
-}
-
-double ARadarBase::GetFovVerticalDeg()
-{
-	return FovVerticalDeg;
-}
-
-void ARadarBase::SetFovHorizontalDeg(double val)
-{
-	FovHorizontalDeg = val;
-}
-
-double ARadarBase::GetFovHorizontalDeg()
-{
-	return FovHorizontalDeg;
-}
-
 void ARadarBase::SetTrackerEnabled(bool val)
 {
 	IsTrackerEnabled = val;

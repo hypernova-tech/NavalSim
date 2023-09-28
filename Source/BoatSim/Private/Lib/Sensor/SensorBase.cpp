@@ -180,3 +180,85 @@ void ASensorBase::OnDataReady()
 {
 
 }
+
+
+void ASensorBase::SetFrequency(double val)
+{
+	Frequency = val;
+}
+
+
+
+double ASensorBase::GetFrequency()
+{
+	return Frequency;
+}
+
+void ASensorBase::SetRangeMeter(FVector2D val)
+{
+	RangeMeter = val;
+}
+
+FVector2D ASensorBase::GetRangeMeter()
+{
+	return RangeMeter;
+}
+
+void ASensorBase::SetNoiseMean(double val)
+{
+	NoiseMean = val;
+}
+
+double ASensorBase::GetNoiseMean()
+{
+	return NoiseMean;
+}
+
+void ASensorBase::SetNoiseStdDeviation(double val)
+{
+	NoiseStdDeviation = val;
+}
+
+double ASensorBase::GetNoiseStdDeviation()
+{
+	return NoiseStdDeviation;
+}
+
+void ASensorBase::SetFovVerticalDeg(double val)
+{
+	FovVerticalDeg = val;
+}
+
+double ASensorBase::GetFovVerticalDeg()
+{
+	return FovVerticalDeg;
+}
+
+void ASensorBase::SetFovHorizontalDeg(double val)
+{
+	FovHorizontalDeg = val;
+}
+
+double ASensorBase::GetFovHorizontalDeg()
+{
+	return FovHorizontalDeg;
+}
+
+float  ASensorBase::GetHorizontalScanStepAngleDeg()
+{
+	return HorizontalScanStepAngleDeg;
+
+}
+void  ASensorBase::SetHorizontalScanStepAngleDeg(float val)
+{
+	HorizontalScanStepAngleDeg = val;
+}
+
+float  ASensorBase::GetVerticalScanStepAngleDeg()
+{
+	return VerticalScanStepAngleDeg;
+}
+void  ASensorBase::SetVerticalScanStepAngleDeg(float val)
+{
+	VerticalScanStepAngleDeg = val;
+}

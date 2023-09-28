@@ -36,32 +36,8 @@ protected:
 	UPROPERTY(EditAnywhere)
 		int  ImageStreamCount = 2;
 
-	UPROPERTY(EditAnywhere)
-		double Frequency;
 
-	UPROPERTY(EditAnywhere)
-		FVector2D RangeMeter;
 
-	UPROPERTY(EditAnywhere)
-		double NoiseMean;
-
-	UPROPERTY(EditAnywhere)
-		double NoiseStdDeviation;
-
-	UPROPERTY(EditAnywhere)
-		double FovVerticalDeg;
-
-	UPROPERTY(EditAnywhere)
-		double FovHorizontalDeg;
-
-	UPROPERTY(EditAnywhere)
-		float HorizontalScanStepAngleDeg;
-
-	UPROPERTY(EditAnywhere)
-		float VerticalScanStepAngleDeg = 36;
-
-	UPROPERTY(EditAnywhere)
-		float FullScanPeriodSec = 1;
 
 	UPROPERTY(EditAnywhere, Category = "Scan")
 		uint8 FastScanLevel;
@@ -114,23 +90,7 @@ protected:
 public:
 
 	virtual void Scan();
-	void SetFrequency(double val);
-	double GetFrequency();
-
-	void SetRangeMeter(FVector2D val);
-	FVector2D GetRangeMeter();
-
-	void SetNoiseMean(double val);
-	double GetNoiseMean();
-
-	void SetNoiseStdDeviation(double val);
-	double GetNoiseStdDeviation();
-
-	void SetFovVerticalDeg(double val);
-	double GetFovVerticalDeg();
-
-	void SetFovHorizontalDeg(double val);
-	double GetFovHorizontalDeg();
+	
 
 	void SetTrackerEnabled(bool val);
 	bool GetTrackerEnabled();
