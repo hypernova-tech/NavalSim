@@ -381,6 +381,23 @@ FString CUtil::ConvertToFString(const char* p_str)
    
     return text_val;
 }
+void CUtil::DrawDebugRay(UWorld* p_world, const FVector& Start, const FVector& End, FColor Color, float Duration, float Thickness)
+{
+    if( p_world)
+    {
+        DrawDebugLine(
+            p_world,
+            Start,
+            End,
+            Color,
+            false,  // Persistent (i.e., won't disappear)
+            Duration  // Time to disappear
+            // Line thickness
+        );
+     }
+}
+
+
 bool CUtil::ParseVector2D(const FString& Text, FVector2D& ret)
 {
     FVector ParsedVector;

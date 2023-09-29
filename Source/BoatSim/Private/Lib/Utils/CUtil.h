@@ -52,6 +52,8 @@ public:
 	static bool Trace(const STraceArgs &args, SScanResult* pscan_result);
 
 
+	static void DrawDebugRay(UWorld* p_world, const FVector& Start, const FVector& End, FColor Color, float Duration, float Thickness);
+
 	static bool ParseVector2D(const FString& Text, FVector2D& ret);
 	static bool ParseVector3D(const FString& Text, FVector& ret);
 	static bool ParsePose(const FString& Text, FVector& translation, FVector& rpy);

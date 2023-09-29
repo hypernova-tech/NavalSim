@@ -99,7 +99,9 @@ void AUIControllerBase::FindGizmoAtClickPosition(int locationX, int locationY)
 
 	// Define start and end points of the ray
 	FVector Start = WorldLocation;
-	FVector End = Start + (WorldDirection * TOUE(10000));  // MaxTraceDistance is up to you, e.g., 10000.0f
+	FVector End = Start + (WorldDirection * TOUE(1000));  // MaxTraceDistance is up to you, e.g., 10000.0f
+	
+	CUtil::DrawDebugRay(GetWorld(), Start, End, FColor::Red, 10, 0.75);
 
 	// Perform the line trace
 	// The ECC_Visibility channel will typically work, but you can change this if necessary
@@ -114,9 +116,10 @@ void AUIControllerBase::FindGizmoAtClickPosition(int locationX, int locationY)
 	{
 		// HitResult now contains information about what was hit
 		AActor* ClickedActor = HitResult.GetActor();
+		
 		if (ClickedActor)
 		{
-
+			CUtil::DebugLogScreen(ClickedActor->GetName());
 			
 
 		}
@@ -163,7 +166,7 @@ void AUIControllerBase::FindActorAtClickPosition(int locationX, int locationY)
 		AActor* ClickedActor = HitResult.GetActor();
 		if (ClickedActor)
 		{
-			CUtil::DebugLogScreen(ClickedActor->GetName());
+			CUtil::DebugLogScreen(ClickedActor->GetActorLabel()/*ClickedActor->GetName()*/);
 			ASystemManagerBase::GetInstance()->GetConsole()->SendToConsole("clicked: "+ ClickedActor->GetName());
 			pSelectedActor = ClickedActor;
 			ASystemManagerBase::GetInstance()->SetSelectedActor(pSelectedActor);
