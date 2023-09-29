@@ -29,7 +29,8 @@ protected:
 	UPROPERTY(EditAnywhere)
 		UTextBlock* ConsoleText;
 
-
+	UPROPERTY(EditAnywhere)
+		AActor* GizmoActor;
 
 	UPROPERTY(EditAnywhere)
 		TArray<UImage*> LidarSlots;
@@ -76,6 +77,7 @@ public:
 
 
 	void FindActorAtClickPosition(int locationX, int locationY);
+	void FindGizmoAtClickPosition(int locationX, int locationY);
 
 	void SetConsoleOutputText(FString text);
 

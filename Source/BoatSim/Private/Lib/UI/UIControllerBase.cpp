@@ -70,12 +70,60 @@ void AUIControllerBase::OnMouseLeftButtonDown(int locationX, int locationY)
 {
 
 	CUtil::DebugLog("OnMouseLeftButtonDown");
+	FindGizmoAtClickPosition( locationX,  locationY);
 	FindActorAtClickPosition(locationX, locationY);
 }
 
 void AUIControllerBase::OnMouseLeftButtonUp(int locationX, int locationY)
 {
 	CUtil::DebugLog("OnMouseLeftButtonUp");
+}
+
+void AUIControllerBase::FindGizmoAtClickPosition(int locationX, int locationY)
+{
+	APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
+
+	FVector WorldLocation;
+	FVector WorldDirection;
+
+	if (PlayerController)
+	{
+		PlayerController->DeprojectScreenPositionToWorld(
+			locationX, locationY,
+			WorldLocation,
+			WorldDirection
+		);
+	}
+
+	FHitResult HitResult;
+
+	// Define start and end points of the ray
+	FVector Start = WorldLocation;
+	FVector End = Start + (WorldDirection * TOUE(10000));  // MaxTraceDistance is up to you, e.g., 10000.0f
+
+	// Perform the line trace
+	// The ECC_Visibility channel will typically work, but you can change this if necessary
+	bool bHit = GetWorld()->LineTraceSingleByChannel(
+		HitResult,
+		Start,
+		End,
+		ECC_GameTraceChannel1
+	);
+
+	if (bHit)
+	{
+		// HitResult now contains information about what was hit
+		AActor* ClickedActor = HitResult.GetActor();
+		if (ClickedActor)
+		{
+
+			
+
+		}
+	}
+	else {
+	
+	}
 }
 
 void AUIControllerBase::FindActorAtClickPosition(int locationX, int locationY)
@@ -98,7 +146,7 @@ void AUIControllerBase::FindActorAtClickPosition(int locationX, int locationY)
 
 	// Define start and end points of the ray
 	FVector Start = WorldLocation;
-	FVector End = Start + (WorldDirection * TOUE(1000));  // MaxTraceDistance is up to you, e.g., 10000.0f
+	FVector End = Start + (WorldDirection * TOUE(10000));  // MaxTraceDistance is up to you, e.g., 10000.0f
 
 	// Perform the line trace
 	// The ECC_Visibility channel will typically work, but you can change this if necessary
@@ -119,6 +167,8 @@ void AUIControllerBase::FindActorAtClickPosition(int locationX, int locationY)
 			ASystemManagerBase::GetInstance()->GetConsole()->SendToConsole("clicked: "+ ClickedActor->GetName());
 			pSelectedActor = ClickedActor;
 			ASystemManagerBase::GetInstance()->SetSelectedActor(pSelectedActor);
+			GizmoActor->SetActorLocation(pSelectedActor->GetActorLocation());
+			GizmoActor->SetActorRotation(pSelectedActor->GetActorRotation());
 			
 		}
 	}
