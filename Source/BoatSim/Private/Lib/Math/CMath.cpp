@@ -106,3 +106,17 @@ FVector CMath::GetActorReleativeEulerAnglesRPY(AActor* p_actor)
         return CMath::GetActorEulerAnglesRPY(p_actor);
     }
 }
+
+FVector CMath::CoordAxisToEUAxis(ECoordAxis axis)
+{
+    switch (axis) {
+    case CoordAxisX:
+        return FVector::ForwardVector;
+    case CoordAxisY:
+        return FVector::RightVector;
+    case CoordAxisZ:
+        return FVector::UpVector;
+    }
+
+    return FVector::ZeroVector;
+}

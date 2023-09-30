@@ -7,7 +7,9 @@
 #include <Components/Image.h>
 #include <Components/TextBlock.h>
 #include <Lib/Types/Primitives.h>
+#include "GizmoUIController.h"
 #include "UIControllerBase.generated.h"
+
 
 
 
@@ -40,6 +42,8 @@ protected:
 		TArray<UImage*> CameraSlots;
 
 	virtual void ComputeFPS(float DeltaTime);
+
+	UGizmoUIController* pGizmoUIController;
 
 public:	
 	// Called every frame
@@ -77,7 +81,7 @@ public:
 
 
 	void FindActorAtClickPosition(int locationX, int locationY);
-	void FindGizmoAtClickPosition(int locationX, int locationY);
+
 
 	void SetConsoleOutputText(FString text);
 

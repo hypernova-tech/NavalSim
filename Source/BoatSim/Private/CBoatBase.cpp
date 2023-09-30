@@ -277,13 +277,16 @@ void ACBoatBase::FocusCamera(AActor* p_actor)
 void ACBoatBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	FInputAxisBinding axis_binding;
 
-	PlayerInputComponent->BindAxis("MoveForward", this, &ACBoatBase::BindedMoveForward);
-	PlayerInputComponent->BindAxis("MoveRight", this, &ACBoatBase::BindedMoveRight);
-	PlayerInputComponent->BindAxis("RotationX", this, &ACBoatBase::BindedRotationX);
-	PlayerInputComponent->BindAxis("RotationY", this, &ACBoatBase::BindedRotationY);
-	PlayerInputComponent->BindAction("RightMouseButtonClick", IE_Pressed, this, &ACBoatBase::OnRightMousePressed);
-	PlayerInputComponent->BindAction("RightMouseButtonClick", IE_Released, this, &ACBoatBase::OnRightMouseReleased);
+
+
+	PlayerInputComponent->BindAxis("MoveForward", this, &ACBoatBase::BindedMoveForward).bConsumeInput = false;
+	PlayerInputComponent->BindAxis("MoveRight", this, &ACBoatBase::BindedMoveRight).bConsumeInput = false;
+	PlayerInputComponent->BindAxis("RotationX", this, &ACBoatBase::BindedRotationX).bConsumeInput = false;
+	PlayerInputComponent->BindAxis("RotationY", this, &ACBoatBase::BindedRotationY).bConsumeInput = false;
+	PlayerInputComponent->BindAction("RightMouseButtonClick", IE_Pressed, this, &ACBoatBase::OnRightMousePressed).bConsumeInput = false;
+	PlayerInputComponent->BindAction("RightMouseButtonClick", IE_Released, this, &ACBoatBase::OnRightMouseReleased).bConsumeInput = false;
 	PlayerInputComponent->BindAction("Focus", IE_Pressed, this, &ACBoatBase::OnFocusEnter);
 	PlayerInputComponent->BindAxis("Zoom", this, &ACBoatBase::AdjustCameraDistance);
 }

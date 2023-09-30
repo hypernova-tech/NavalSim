@@ -15,4 +15,6 @@ public:
 
 	static FVector GetActorEulerAnglesRPY(AActor* p_actor);
 	static FVector GetActorReleativeEulerAnglesRPY(AActor* p_actor);
+
+	static FVector CoordAxisToEUAxis(ECoordAxis axis);
 }; 

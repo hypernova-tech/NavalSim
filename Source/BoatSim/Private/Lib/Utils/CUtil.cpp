@@ -687,7 +687,11 @@ FString CUtil::IntToString(INT32S val)
     FString str = FString::Printf(TEXT("%d"), val);
     return str;
 }
-
+ FString CUtil::FloatToString(FLOAT32 val)
+{
+    FString str = FString::Printf(TEXT("%f"), val);
+    return str;
+}
 float CUtil::StringToFloat(FString& str)
 {
     float ret = FCString::Atof(*str);
@@ -907,6 +911,10 @@ void CUtil::SetActorActive(AActor* p_actor, bool is_active)
     p_actor->SetActorEnableCollision(is_active);
 }
 
+bool CUtil::GetIsActorVisible(AActor* p_actor)
+{
+    return !p_actor->IsHidden();
+}
 FString CUtil::CharToFString(const char* p_char)
 {
     FString str = FString( p_char);

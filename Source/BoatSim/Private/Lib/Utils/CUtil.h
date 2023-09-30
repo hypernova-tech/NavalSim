@@ -76,6 +76,7 @@ public:
 	static FString ConvertToFString(const char* p_str);
 	static int StringToInt(FString& str);
 	static FString IntToString(INT32S val);
+	static FString FloatToString(FLOAT32 val);
 	static float StringToFloat(FString& str);
 	static double StringToFloat64(FString& str);
 	static FString CharToFString(const char* p_char);
@@ -104,6 +105,6 @@ public:
 	static FLOAT64 Tock(FLOAT64 start_time_sec);
 	static void SetParent(AActor* p_child, AActor* p_parent);
 	static void SetActorActive(AActor* p_actor, bool is_active);
-
+	static bool GetIsActorVisible(AActor* p_actor);
 };
 

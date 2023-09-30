@@ -47,3 +47,13 @@ typedef  double FLOAT64;
 
 #define TOW(val) UNREAL_TO_WORLD(val)
 #define TOUE(val) WORLD_TO_UNREAL(val)
+
+
+enum ECoordAxis
+{
+	CoordAxisUndef,
+	CoordAxisX,
+	CoordAxisY,
+	CoordAxisZ,
+	
+};
