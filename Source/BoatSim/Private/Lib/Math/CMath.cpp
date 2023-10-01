@@ -131,3 +131,40 @@ FLOAT64 CMath::Remap(FLOAT64 x, FLOAT64 x1, FLOAT64 x2, FLOAT64 y1, FLOAT64 y2)
     // Clamp the remapped value to the range [y1, y2]
     return FMath::Clamp(remappedValue, y1, y2);
 }
+
+FVector CMath::ProjectWorldDirectionToScreenSpace(APlayerController* PC, const FVector& world_dir)
+{
+    FVector CameraLocation;
+    FRotator CameraRotation;
+    PC->GetPlayerViewPoint(CameraLocation, CameraRotation);
+
+    FVector ViewDirection = CameraRotation.Vector();
+    FVector pos = CameraLocation + ViewDirection * 10;
+    FVector end = pos + world_dir * 10;
+
+    FVector2D start_pos_screen;
+    FVector2D end_pos_screen;
+
+    PC->ProjectWorldLocationToScreen(pos, start_pos_screen);
+    PC->ProjectWorldLocationToScreen(end, end_pos_screen);
+
+    FVector ret;
+    FVector2D diff_2d = end_pos_screen - start_pos_screen;
+    ret.X = diff_2d.X;
+    ret.Y = diff_2d.Y;
+    ret.Z = 0;
+
+    return ret;
+
+}
+
+FVector CMath::ToVec3(const FVector2D& vec2d)
+{
+    FVector ret;
+
+    ret.X = vec2d.X;
+    ret.Y = vec2d.Y;
+    ret.Z = 0;
+
+    return ret;
+}

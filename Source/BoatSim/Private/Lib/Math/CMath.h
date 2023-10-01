@@ -18,4 +18,6 @@ public:
 
 	static FVector CoordAxisToEUAxis(ECoordAxis axis);
 	static FLOAT64 Remap(FLOAT64 x, FLOAT64 x1, FLOAT64 x2, FLOAT64 y1, FLOAT64 y2);
+	static FVector ProjectWorldDirectionToScreenSpace(APlayerController* PC, const FVector& world_dir);
+	static FVector ToVec3(const FVector2D& vec2d);
 }; 
