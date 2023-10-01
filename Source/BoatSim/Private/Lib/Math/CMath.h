@@ -17,4 +17,5 @@ public:
 	static FVector GetActorReleativeEulerAnglesRPY(AActor* p_actor);
 
 	static FVector CoordAxisToEUAxis(ECoordAxis axis);
+	static FLOAT64 Remap(FLOAT64 x, FLOAT64 x1, FLOAT64 x2, FLOAT64 y1, FLOAT64 y2);
 }; 

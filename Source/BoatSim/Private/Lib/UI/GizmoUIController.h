@@ -89,11 +89,16 @@ private:
 	FLOAT32 LastMouseDeltaX ;
 	FLOAT32 LastMouseDeltaY;
 
-	void HandleLeftClick();
+	int MousePosXWhenClicked;
+	int MousePosYWhenClicked;
+
+
 	void HandleMouseX(float Value);
 	void HandleMouseY(float Value);
 
 	void HandleMove();
 	void HandleScale();
 	void HandleRotate();
+
+	FVector TrackedActorIntitialScale;
 };

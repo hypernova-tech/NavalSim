@@ -5,6 +5,7 @@
 #include <Lib/Types/Primitives.h>
 #include <Lib/Utils/CUtil.h>
 #include <Lib/Math/CMath.h>
+#include <Lib/InputManager/InputManagerBase.h>
 
 // Sets default values for this component's properties
 UGizmoUIController::UGizmoUIController()
@@ -21,11 +22,10 @@ UGizmoUIController::UGizmoUIController()
 void UGizmoUIController::BeginPlay()
 {
 	Super::BeginPlay();
-
+	AInputManagerBase::GetInstance()->ShowInputInterest(this);
 
 	if (APlayerController* PC = GetWorld()->GetFirstPlayerController())
 	{
-		PC->InputComponent->BindAction("LeftMouseButtonClick", IE_Pressed, this, &UGizmoUIController::HandleLeftClick);
 
 		PC->InputComponent->BindAxis("RotationX", this, &UGizmoUIController::HandleMouseX).bConsumeInput = false;
 	
@@ -55,10 +55,7 @@ void UGizmoUIController::HandleRotate()
 	GizmoMode = EGizmoMode::GizmoModeRotate ;
 }
 
-void UGizmoUIController::HandleLeftClick()
-{
-	// Handle left click action here
-}
+
 
 void UGizmoUIController::HandleMouseX(float val)
 {
@@ -171,8 +168,15 @@ void UGizmoUIController::OnCursorMove()
 		}
 	}
 	else if (GizmoMode == EGizmoMode::GizmoModeScale) {
-		auto scale = CMath::CoordAxisToEUAxis(CurrAxis) *LastMouseDeltaX * 1;
-		pTrackedActor->SetActorScale3D(scale);
+		auto drag = AInputManagerBase::GetInstance()->GetLeftButtonDrag();
+		auto tf = drag.X / 512.0;
+		CUtil::DebugLog("Drag: " + CUtil::FloatToString(tf));
+
+
+		auto scale = tf;
+
+		
+		pTrackedActor->SetActorScale3D((1+scale) * TrackedActorIntitialScale);
 
 	}
 
@@ -259,6 +263,7 @@ void UGizmoUIController::SetTrackedActor(AActor *p_tracked)
 	pTrackedActor = p_tracked;
 	pGizmoActor->SetActorLocation(pTrackedActor->GetActorLocation());
 	pGizmoActor->SetActorRotation(pTrackedActor->GetActorRotation());
+	TrackedActorIntitialScale = pTrackedActor->GetActorScale3D();
 }
 void UGizmoUIController::StateMachine()
 {

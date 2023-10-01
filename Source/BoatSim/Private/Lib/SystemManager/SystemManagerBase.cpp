@@ -331,6 +331,7 @@ void ASystemManagerBase::BeginPlay()
 
 		FInputModeGameAndUI InputMode;
 		InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
+		InputMode.SetHideCursorDuringCapture(false);
 		PlayerController->SetInputMode(InputMode);
 		APlatformBase* p_platform = (APlatformBase* )(PlayerController->GetPawn());
 		if (p_platform) {
