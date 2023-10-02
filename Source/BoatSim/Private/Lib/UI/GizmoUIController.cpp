@@ -77,7 +77,19 @@ void UGizmoUIController::TickComponent(float DeltaTime, ELevelTick TickType, FAc
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	StateMachine();
+	UpdateGizmoPose();
+
 	// ...
+}
+
+
+void UGizmoUIController::UpdateGizmoPose()
+{
+	if (pTrackedActor != nullptr) {
+		pGizmoActor->SetActorLocation(pTrackedActor->GetActorLocation());
+		pGizmoActor->SetActorRotation(pTrackedActor->GetActorRotation());
+	}
+	
 }
 
 void UGizmoUIController::OnMouseLeftButtonDown(int locationX, int locationY)
@@ -87,6 +99,11 @@ void UGizmoUIController::OnMouseLeftButtonDown(int locationX, int locationY)
 
 	MouseLeftButtonDownLocationX = locationX;
 	MouseLeftButtonDownLocationY = locationY;
+
+	if (pTrackedActor != nullptr) {
+		TrackedActorIntitialScale = pTrackedActor->GetActorScale3D();
+	}
+	
 
 }
 
@@ -104,6 +121,43 @@ void UGizmoUIController::SetGizmoActor(AActor* p_actor)
 	pGizmoActor = (AAxisGizmo*)p_actor;
 }
 
+FLOAT32 UGizmoUIController::ComputeAxisMovement(ECoordAxis curr_axis, FVector2D mouse_drag_2d, FLOAT32 disp, FLOAT32 move_strength, FVector& dir)
+{
+	auto curr_loc = pTrackedActor->GetActorLocation();
+	
+	FVector mouse_drag = CMath::ToVec3(mouse_drag_2d);
+	mouse_drag.Normalize();
+	auto pc = GetWorld()->GetFirstPlayerController();
+	
+	FLOAT32 delta = 0;
+	
+	FVector screen_space_dir;
+	switch (curr_axis) {
+	case ECoordAxis::CoordAxisX:
+		screen_space_dir = CMath::ProjectWorldDirectionToScreenSpace(pc, pTrackedActor->GetActorForwardVector());
+		screen_space_dir.Normalize();
+		delta = screen_space_dir.Dot(mouse_drag * disp * move_strength);
+		dir = pTrackedActor->GetActorForwardVector();
+		break;
+
+	case ECoordAxis::CoordAxisY:
+		screen_space_dir = CMath::ProjectWorldDirectionToScreenSpace(pc, pTrackedActor->GetActorRightVector());
+		screen_space_dir.Normalize();
+		delta = screen_space_dir.Dot(mouse_drag * disp * move_strength);
+		dir =  pTrackedActor->GetActorRightVector();
+		break;
+
+	case ECoordAxis::CoordAxisZ:
+		screen_space_dir = CMath::ProjectWorldDirectionToScreenSpace(pc, pTrackedActor->GetActorUpVector());
+		screen_space_dir.Normalize();
+		delta = screen_space_dir.Dot(mouse_drag * disp * move_strength);
+		dir = pTrackedActor->GetActorUpVector();
+		break;
+	}
+
+	return delta;
+}
+
 void UGizmoUIController::OnCursorMove()
 {
 	if (pTrackedActor == nullptr) {
@@ -116,39 +170,28 @@ void UGizmoUIController::OnCursorMove()
 	mouse_drag.Normalize();
 	auto pc = GetWorld()->GetFirstPlayerController();
 	FVector screen_space_dir;
+	FVector move_dir;
+	
+	FLOAT32 disp = 0;
+	FLOAT32 delta = 0;
+
+
 	if (GizmoMode == EGizmoMode::GizmoModeMove) {
-		FLOAT32 move_strength = 250;
-		FLOAT32 delta;
-		FLOAT32 disp = FVector2D(LastMouseDeltaX, LastMouseDeltaY).Length();
-		switch (CurrAxis) {
-		case ECoordAxis::CoordAxisX:
-			screen_space_dir = CMath::ProjectWorldDirectionToScreenSpace(pc, pTrackedActor->GetActorForwardVector());
-			screen_space_dir.Normalize();
-			delta = screen_space_dir.Dot(mouse_drag * disp * move_strength);
-			pTrackedActor->SetActorLocation(curr_loc + pTrackedActor->GetActorForwardVector()* delta);
-			break;
 
-		case ECoordAxis::CoordAxisY:
-			screen_space_dir = CMath::ProjectWorldDirectionToScreenSpace(pc, pTrackedActor->GetActorRightVector());
-			screen_space_dir.Normalize();
-			delta = screen_space_dir.Dot(mouse_drag * disp * move_strength);
-			pTrackedActor->SetActorLocation(curr_loc + pTrackedActor->GetActorRightVector() * delta);
-			break;
-
-		case ECoordAxis::CoordAxisZ:
-			screen_space_dir = CMath::ProjectWorldDirectionToScreenSpace(pc, pTrackedActor->GetActorUpVector());
-			screen_space_dir.Normalize();
-			delta = screen_space_dir.Dot(mouse_drag * disp * move_strength);
-			pTrackedActor->SetActorLocation(curr_loc + pTrackedActor->GetActorUpVector() * delta);
-
-			break;
-		}
+	    mouse_drag_2d = FVector2D(LastMouseDeltaX, LastMouseDeltaY);
+		disp = FVector2D(LastMouseDeltaX, LastMouseDeltaY).Length();
+		delta = ComputeAxisMovement(CurrAxis, mouse_drag_2d, disp, 250, move_dir);
+		CUtil::DebugLog("GizmoModeMove: " + move_dir.ToString() + " delta: " + CUtil::FloatToString(delta));
+		pTrackedActor->SetActorLocation(curr_loc + move_dir * delta);
 
 	}
 	else if (GizmoMode == EGizmoMode::GizmoModeRotate) {
 	  
-		FLOAT32 delta = LastMouseDeltaX;
-		FLOAT32 val = LastMouseDeltaX * 4;
+		mouse_drag_2d = FVector2D(LastMouseDeltaX, LastMouseDeltaY);
+		disp = FVector2D(LastMouseDeltaX, LastMouseDeltaY).Length();
+		delta = ComputeAxisMovement(CurrAxis, mouse_drag_2d, disp,250, move_dir);
+
+		FLOAT32 val = delta / 75;// LastMouseDeltaX * 4;
 		
 
 		switch (CurrAxis) {
@@ -181,25 +224,44 @@ void UGizmoUIController::OnCursorMove()
 		}
 	}
 	else if (GizmoMode == EGizmoMode::GizmoModeScale) {
+
 		auto drag = AInputManagerBase::GetInstance()->GetLeftButtonDrag();
-		auto tf = drag.X / 512.0;
-		CUtil::DebugLog("Drag: " + CUtil::FloatToString(tf));
+		mouse_drag_2d = drag;
+		disp = drag.Length();
+		delta = ComputeAxisMovement(CurrAxis, mouse_drag_2d, disp, 1, move_dir);
+	
+		CUtil::DebugLog("delta: " + CUtil::FloatToString(delta));
 
+		auto scale = CMath::Remap(delta, -512, 512, -5, 5);
+		auto curr_scale = (1 + scale) * TrackedActorIntitialScale;
 
-		auto scale = tf;
+		switch (CurrAxis) {
+		case ECoordAxis::CoordAxisX:
+			curr_scale.Y = TrackedActorIntitialScale.Y;
+			curr_scale.Z = TrackedActorIntitialScale.Z;
 
+			break;
+
+		case ECoordAxis::CoordAxisY:
+			curr_scale.X = TrackedActorIntitialScale.X;
+			curr_scale.Z = TrackedActorIntitialScale.Z;
 		
-		pTrackedActor->SetActorScale3D((1+scale) * TrackedActorIntitialScale);
+			break;
+
+		case ECoordAxis::CoordAxisZ:
+
+			curr_scale.X = TrackedActorIntitialScale.X;
+			curr_scale.Y = TrackedActorIntitialScale.Y;
+		
+
+			break;
+		}
+
+		pTrackedActor->SetActorScale3D(curr_scale);
 
 	}
 
-		
 	pTrackedActor->SetActorRotation(rot);
-	pGizmoActor->SetActorLocation(pTrackedActor->GetActorLocation());
-	pGizmoActor->SetActorRotation(pTrackedActor->GetActorRotation());
-	
-
-
 }
 
 void UGizmoUIController::ShowGizmoActor(bool val)

@@ -80,7 +80,6 @@ FVector2D AInputManagerBase::GetLeftButtonDrag()
 {
 	auto curr_pos = GetMousePosition();
 	FVector2D ret =  FVector2D(curr_pos.X - MousePosLeftDown.X, curr_pos.Y - MousePosLeftDown.Y);
-	CUtil::DebugLog(" Drag GetLeftButtonDrag: curr: " + curr_pos.ToFVector2D().ToString() + " diff " + ret.ToString());
 	return ret;
 }
 

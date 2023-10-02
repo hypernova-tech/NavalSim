@@ -100,5 +100,8 @@ private:
 	void HandleScale();
 	void HandleRotate();
 
+	void UpdateGizmoPose();
+	FLOAT32 ComputeAxisMovement(ECoordAxis curr_axis, FVector2D mouse_drag_2d, FLOAT32 disp, FLOAT32 move_strength, FVector &dir);
+
 	FVector TrackedActorIntitialScale;
 };
