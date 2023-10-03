@@ -8,6 +8,7 @@
 CCLICommandManager::CCLICommandManager()
 {
 	PrepareProcessCommandInfo();
+	PrepareWorkspaceCommandInfo();
 	PrepareSimCommandInfo();
 	PrepareCreateCommandInfo();
 	PrepareDestroyCommandInfo();
@@ -26,7 +27,26 @@ TMap<FString, TArray<SCommandOptionInfo>>* CCLICommandManager::GetCommandInfo()
 {
 	return &CommandInfo;
 }
+void CCLICommandManager::PrepareWorkspaceCommandInfo()
+{
+	TArray<SCommandOptionInfo> options;
+	// create command
+	SCommandOptionInfo info;
 
+	info.Option = "--load";
+	info.Description = "loads workspace from the given file";
+	info.OptionType = EOptionType::TypeString;
+	options.Add(info);
+
+	info.Option = "--save";
+	info.Description = "saves the workspace to given file";
+	info.OptionType = EOptionType::TypeString;
+	options.Add(info);
+
+
+
+	CommandInfo.Add(CreateCommand, options);
+}
 void CCLICommandManager::PrepareCreateCommandInfo()
 {
 	TArray<SCommandOptionInfo> options;
@@ -413,6 +433,10 @@ bool CCLICommandManager::HasRelrotation()
 	auto pstr = pOptions->Find(RelRotation);
 	return  (pstr != nullptr);
 }
+SCommandOptionInfo* CCLICommandManager::FindCommandOptionInfo(FString option)
+{
+	return nullptr;
+}
 bool CCLICommandManager::HasParent()
 {
 	bool ret = false;
@@ -456,10 +480,75 @@ bool CCLICommandManager::HasController()
 }
 
 bool CCLICommandManager::HasA(FString str) {
-	bool ret = false;
+
 	auto pstr = pOptions->Find(str);
-	return  (pstr != nullptr);
+	
+	if (pstr != nullptr) {
+		return true;
+	}
+	else {
+		return false;
+	}
 }
+
+bool CCLICommandManager::GetValue(FString &name, FVector& vec)
+{
+	bool ret = false;
+	auto pstr = pOptions->Find(name);
+	if (pstr != nullptr) {
+
+		ret = CUtil::ParseVector3D(*pstr, vec);
+		return ret;
+	}
+	return false;
+}
+
+bool CCLICommandManager::GetValue(FString& name, FVector2D& val)
+{
+	bool ret = false;
+	auto pstr = pOptions->Find(name);
+	if (pstr != nullptr) {
+
+		ret = CUtil::ParseVector2D(*pstr, val);
+		return ret;
+	}
+	return false;
+}
+bool CCLICommandManager::GetValue(FString& name, FLOAT64& val)
+{
+	bool ret = false;
+	auto pstr = pOptions->Find(name);
+	if (pstr != nullptr) {
+
+		val = CUtil::StringToFloat64(*pstr);
+		return true;
+	}
+	return false;
+}
+bool CCLICommandManager::GetValue(FString& name, INT32S& val)
+{
+	bool ret = false;
+	auto pstr = pOptions->Find(name);
+	if (pstr != nullptr) {
+
+		val = CUtil::StringToInt32S(*pstr);
+		return true;
+	}
+	return false;
+}
+
+bool CCLICommandManager::GetValue(FString& name, FString& val)
+{
+	bool ret = false;
+	auto pstr = pOptions->Find(name);
+	if (pstr != nullptr) {
+
+		val = (*pstr);
+		return true;
+	}
+	return false;
+}
+
 
 bool CCLICommandManager::GetScale(FVector& vec)
 {

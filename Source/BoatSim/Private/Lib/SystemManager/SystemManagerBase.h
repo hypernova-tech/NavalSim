@@ -12,7 +12,9 @@
 #include <Lib/DataContainer/DataContainer.h>
 #include "CBoatBase.h"
 #include <Lib/Console/ConsoleBase.h>
+#include <Lib/SaveLoad/SaverLoaderBase.h>
 #include "SystemManagerBase.generated.h"
+
 
 
 enum ESystemState
@@ -119,8 +121,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	ADataContainer* GetDataContainer();
 
-	UFUNCTION(BlueprintCallable)
-		UConsoleBase* GetConsole();
+
 
 
 
@@ -142,6 +143,7 @@ private:
 
 	TArray< UConnectionBase*> Connections;
 	AActor* pSelectedActor;
+	USaverLoaderBase* pSaverLoader;
 
 	/// <summary>
 	///  system API
@@ -149,6 +151,8 @@ private:
 public:
 	virtual ISystemAPI* GetSystemAPI();
 
+	UFUNCTION(BlueprintCallable)
+	virtual	UConsoleBase* GetConsole();
 
 	virtual TArray<AActor*>& GetSensorGlobalIgnoreList();
 	virtual AActor* GetFloor();
@@ -212,4 +216,7 @@ public:
 
 	virtual bool GetSensorScanStepAngleDeg(AActor* p_actor, FVector2D& ret);
 	virtual bool SetSensorScanStepAngleDeg(AActor* p_actor, FVector2D ang);
+
+	virtual bool Save(FString fname);
+	virtual bool Load(FString fname);
 };

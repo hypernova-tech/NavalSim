@@ -45,6 +45,11 @@ void UConsoleBase::TickComponent(float DeltaTime, ELevelTick TickType, FActorCom
 	// ...
 }
 
+CCLICommandManager* UConsoleBase::GetCommandManager()
+{
+    return &CommandManager;
+}
+
 void UConsoleBase::Command(FString command)
 {
 
@@ -324,6 +329,8 @@ bool UConsoleBase::ProcessHelpCommand(TMap<FString, FString>& options, FString& 
     pSystemAPI->SendConsoleResponse("\n");
     return true;
 }
+
+
 bool UConsoleBase::ProcessProcessCommand(TMap<FString, FString>& options, FString& error_message)
 {
 
@@ -742,40 +749,77 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
 
     return true;
 }
+
+bool UConsoleBase::ProcessWorkspaceCommand(TMap<FString, FString>& options, FString& error_message)
+{
+    bool ret;
+
+    CommandManager.SetCommandOptions(&options);
+    FString path;
+
+    ret = CommandManager.GetValue(CommandManager.LoadFile, path);
+    if (ret) {
+        if (pSystemAPI->Load(path)) {
+            return true;
+        }
+    }
+    else {
+        
+    }
+
+    ret = CommandManager.GetValue(CommandManager.SaveFile, path);
+    if (ret) {
+        if (pSystemAPI->Save(path)) {
+            return true;
+        }
+    }
+    else {
+        
+    }
+
+
+    return false;
+
+}
+
 bool UConsoleBase::ProcessCommands(FString command, TMap<FString, FString>& options, FString& error_message)
 {
 
-   
+
 
     CommandManager.SetCommandOptions(&options);
 
     if (command == "help") {
         return ProcessHelpCommand(options, error_message);
     }
-  
-    else if (command == "process") {
-        
-        return ProcessProcessCommand(options, error_message);
-      
+    else if (command == CommandManager.WorkspaceCommand) {
+
+        return ProcessWorkspaceCommand(options, error_message);
+
     }
-    else if (command == "print") { 
-        
+    else if (command == CommandManager.ProcessCommand) {
+
+        return ProcessProcessCommand(options, error_message);
+
+    }
+    else if (command == CommandManager.PrintCommand) {
+
         return ProcessPrintCommand(options, error_message);
     }
-    else if (command == "sim") {
+    else if (command == CommandManager.SimCommand) {
         return ProcessSimCommand(options, error_message);
 
     }
-    else if (command == "create") {
+    else if (command == CommandManager.CreateCommand) {
         return  ProcessCreateCommand(options, error_message);
     }
-    else if (command == "destroy") {
-       return ProcessDestroyCommand(options, error_message);
+    else if (command == CommandManager.DestroyCommand) {
+        return ProcessDestroyCommand(options, error_message);
     }
-    else if (command == "set") {
+    else if (command == CommandManager.SetCommand) {
         return ProcessSetCommand(options, error_message);
     }
-    else if (command == "get") {
+    else if (command == CommandManager.GetCommand) {
         return ProcessGetCommand(options, error_message);
     }
 

@@ -97,3 +97,12 @@ int AActorBase::GetAffinityInstanceId()
 {
 	return AffinityInstanceId;
 }
+
+FString AActorBase::GetBlueprintName()
+{
+	return BlueprintName;
+}
+
+void AActorBase::Save()
+{
+}

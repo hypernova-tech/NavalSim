@@ -76,11 +76,30 @@ public:
 	static FString ConvertToFString(const char* p_str);
 	static int StringToInt(FString& str);
 	static FString IntToString(INT32S val);
+	static FString IntToString(INT32U val);
+	static FString IntToString(INT64S val);
+	static FString IntToString(INT64U val);
 	static FString FloatToString(FLOAT32 val);
-	static float StringToFloat(FString& str);
-	static double StringToFloat64(FString& str);
+	static FString FloatToString(FLOAT64 val);
+
 	static FString CharToFString(const char* p_char);
 	static void FStringToAsciiChar(const FString& str, char* p_dest, INT32U dest_len);
+
+
+	static BOOLEAN StringToBool(FString& value) ;
+	static INT8S StringToInt8(FString& value) ;
+	static INT8U StringToInt8U(FString& value) ;
+	static INT32U StringToInt32U(FString& value) ;
+	static INT32S StringToInt32S(FString& value) ;
+	static FLOAT32 StringToFloat(FString& str);
+	static FLOAT64 StringToFloat64(FString& str);
+	static FLOAT64 StringToDouble(FString& value);
+	static FVector2D StringToFVector2D(FString& value) ;
+	static FVector StringToFVector(FString& value) ;
+
+
+
+
 
 	/// <summary>
 	/// Byte operations

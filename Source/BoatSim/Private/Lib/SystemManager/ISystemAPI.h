@@ -4,16 +4,23 @@
 
 #include "CoreMinimal.h"
 #include <Lib/Types/Primitives.h>
+#include <Lib/Console/ConsoleBase.h>
 
 /**
  * 
  */
+class UConsoleBase;
 class ISystemAPI
 {
 public:
 	ISystemAPI();
 	~ISystemAPI();
 	virtual ISystemAPI* GetSystemAPI() = 0;
+
+	virtual bool Save(FString fname) = 0;
+	virtual bool Load(FString fname) = 0;
+
+	virtual  UConsoleBase* GetConsole() = 0;
 
 	virtual TArray<AActor*>& GetSensorGlobalIgnoreList() = 0;
 	virtual AActor* GetFloor() = 0;

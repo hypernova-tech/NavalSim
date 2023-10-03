@@ -43,6 +43,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void StopPawn();
 
+	UPROPERTY(EditAnywhere)
+		FString BlueprintName = "";
 
 	UPROPERTY(BlueprintReadWrite)
 	float MovementSpeedUnitPerSec = 500;

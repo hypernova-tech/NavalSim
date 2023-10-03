@@ -33,6 +33,7 @@ protected:
 	ISystemAPI* pSystemAPI;
 
 	bool ProcessHelpCommand(TMap<FString, FString>& options, FString& error_message);
+	bool ProcessWorkspaceCommand(TMap<FString, FString>& options, FString& error_message);
 	bool ProcessProcessCommand(TMap<FString, FString>& options, FString& error_message);
 	bool ProcessPrintCommand(TMap<FString, FString>& options, FString& error_message);
 	bool ProcessSimCommand(TMap<FString, FString>& options, FString& error_message);
@@ -49,5 +50,6 @@ public:
 	virtual void Command(FString command);
 	virtual void OnReceivedConnectionData(void* connection, INT8U* p_data, INT32U count);
 	void SendToConsole(FString val);
+	CCLICommandManager* GetCommandManager();
 		
 };

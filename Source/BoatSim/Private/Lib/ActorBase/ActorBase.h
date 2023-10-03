@@ -7,6 +7,8 @@
 #include "Lib/Types/Primitives.h"
 #include "ActorBase.generated.h"
 
+
+
 UCLASS()
 class AActorBase : public AActor
 {
@@ -20,7 +22,12 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+
 	UPROPERTY(EditAnywhere)
+		FString BlueprintName = "";
+
+
+	UPROPERTY(EditAnywhere, meta = (SaveData = "true",CLI = "id"))
 		int ActorId;
 
 	UPROPERTY(EditAnywhere)
@@ -47,6 +54,8 @@ public:
 	void ExternalUpdate(float DeltaTime);
 	void SetAffinityInstanceId(int val);
 	int GetAffinityInstanceId();
+	FString GetBlueprintName();
+	virtual void Save();
 
 	
 };

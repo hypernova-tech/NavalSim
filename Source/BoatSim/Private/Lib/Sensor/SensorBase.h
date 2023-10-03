@@ -59,7 +59,7 @@ public:
 	UPROPERTY(EditAnywhere)
 		int DepthRenderTargetHeightPx = 540;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, meta = (SaveData = "true", CLI = "slotindex"))
 		int SensorSlotIndex;
 
 	UPROPERTY(EditAnywhere)
@@ -77,7 +77,7 @@ public:
 	UPROPERTY(EditAnywhere)
 		double Frequency;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, meta = (SaveData = "true", CLI = "range"))
 		FVector2D RangeMeter;
 
 	UPROPERTY(EditAnywhere)

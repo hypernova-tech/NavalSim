@@ -687,23 +687,101 @@ FString CUtil::IntToString(INT32S val)
     FString str = FString::Printf(TEXT("%d"), val);
     return str;
 }
+FString CUtil::IntToString(INT32U val)
+{
+
+    FString str = FString::Printf(TEXT("%u"), val);
+    return str;
+}
+
+FString CUtil::IntToString(INT64S val)
+{
+    return FString::Printf(TEXT("%lld"), val);
+}
+FString CUtil::IntToString(INT64U val)
+{
+    return FString::Printf(TEXT("%llu"), val);
+}
+
  FString CUtil::FloatToString(FLOAT32 val)
 {
     FString str = FString::Printf(TEXT("%f"), val);
     return str;
 }
-float CUtil::StringToFloat(FString& str)
-{
-    float ret = FCString::Atof(*str);
+ FString CUtil::FloatToString(FLOAT64 val)
+ {
+     FString str = FString::Printf(TEXT("%lf"), val);
+     return str;
+ }
 
-    return ret;
-}
 
-double CUtil::StringToFloat64(FString& str)
+FLOAT64 CUtil::StringToFloat64(FString& str)
 {
     double ret = FCString::Atod(*str);
 
     return ret;
+}
+
+BOOLEAN CUtil::StringToBool(FString& value) 
+{
+    return value.ToBool();
+}
+
+INT8S CUtil::StringToInt8(FString& value) 
+{
+    return FCString::Atoi(*value);
+}
+
+INT8U CUtil::StringToInt8U(FString& value) 
+{
+    return FCString::Atoi(*value);  // Beware of negative values!
+}
+
+INT32S CUtil::StringToInt32S(FString& value)
+{
+
+    return FCString::Atoi(*value);
+}
+
+INT32U CUtil::StringToInt32U(FString& value)
+{
+
+    return FCString::Atoi(*value);  // Beware of negative values!
+}
+
+FLOAT32 CUtil::StringToFloat(FString& value) 
+{
+
+    return FCString::Atof(*value);
+}
+
+FLOAT64 CUtil::StringToDouble(FString& value) 
+{
+
+    return FCString::Atod(*value);
+}
+
+
+FVector2D CUtil::StringToFVector2D(FString& value) 
+{
+
+    FVector2D vec;
+    if (CUtil::ParseVector2D(value, vec)) {
+        return vec;
+    }
+
+    return FVector2D::ZeroVector;
+
+}
+
+FVector CUtil::StringToFVector(FString& value) 
+{
+    FVector vec;
+    if (CUtil::ParseVector3D(value, vec)) {
+        return vec;
+    }
+
+    return FVector::ZeroVector;
 }
 
 

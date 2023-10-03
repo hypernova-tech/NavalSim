@@ -14,7 +14,7 @@ ASystemManagerBase::ASystemManagerBase()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	pInstance = this;
-
+	
 
 	
 
@@ -315,7 +315,7 @@ void ASystemManagerBase::DetectInstance()
 void ASystemManagerBase::BeginPlay()
 {
 	Super::BeginPlay();
-
+	pSaverLoader = GetComponentByClass<USaverLoaderBase>();
 	if (pConfigManagerActor != nullptr) {
 		pConfigManager = pConfigManagerActor->GetComponentByClass<UConfigManager>();
 	}
@@ -788,4 +788,14 @@ TArray<ASensorBase*> ASystemManagerBase::GetSensorsOfType(ESensorType sensor_typ
 	return TArray<ASensorBase*>();
 
 
+}
+bool ASystemManagerBase::Save(FString fname)
+{
+	return pSaverLoader->Save(this, fname);
+
+
+}
+bool ASystemManagerBase::Load(FString fname)
+{
+	return pSaverLoader->Load(this, fname);
 }

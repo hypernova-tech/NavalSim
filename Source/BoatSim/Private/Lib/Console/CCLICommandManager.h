@@ -8,15 +8,39 @@
  * 
  */
 
+
+enum  EOptionType
+{
+	TypeBool,
+	TypeInt8,
+	TypeInt8U,
+	TypeInt32,
+	TypeInt32U,
+	TypeFloat,
+	TypeDouble,
+	TypeString,
+	TypeDoublFVector2D,
+	TypeDoublFVector,
+};
+
 struct SCommandOptionInfo
 {
 
 	FString Option;
 	FString Description;
-
+	EOptionType OptionType;
 };
 
+struct SParsedOption
+{
+	BOOLEAN Ret;
+	BOOLEAN BoolVal;
+	INT32S IntVal;
+	INT64S Int64Val;
+	FLOAT64 DoubleVal;
 
+
+};
 
 
 class CCLICommandManager
@@ -26,6 +50,11 @@ private:
 	TMap<FString, FString>* pOptions;
 
 public:
+
+	FString WorkspaceCommand = "ws";
+	FString SaveFile = "save";
+	FString LoadFile = "load";
+
 	FString ProcessCommand = "process";
 	FString ProcessKill = "kill";
 
@@ -67,6 +96,7 @@ public:
 	FString Pause = "pause";
 	FString Resume = "resume";
 
+	SCommandOptionInfo* FindCommandOptionInfo(FString option);
 
 	TMap<FString, TArray<SCommandOptionInfo>> CommandInfo;
 
@@ -78,7 +108,7 @@ public:
 	void SetCommandOptions(TMap<FString, FString>* p_opt);
 	TMap<FString, TArray<SCommandOptionInfo>>* GetCommandInfo();
 
-
+	void PrepareWorkspaceCommandInfo();
 	void PrepareCreateCommandInfo();
 	void PrepareDestroyCommandInfo();
 	void PrepareProcessCommandInfo();
@@ -90,7 +120,16 @@ public:
 
 
 	int GetProcessKillInstanceCount();
+
+
 	bool HasA(FString str);
+
+	bool GetValue(FString& name, FVector& val);
+	bool GetValue(FString& name, FVector2D& val);
+	bool GetValue(FString& name, FLOAT64& val);
+	bool GetValue(FString& name, INT32S& val);
+	bool GetValue(FString& name, FString& val);
+	
 	bool HasName();
 	bool HasBP();
 	bool HasActors();
