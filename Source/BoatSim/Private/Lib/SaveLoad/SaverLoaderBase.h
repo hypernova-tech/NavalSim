@@ -51,6 +51,10 @@ public:
 	virtual bool Save(ISystemAPI *p_api, FString file_name);
 	virtual bool Load(ISystemAPI* p_api, FString file_name);
 
+
+	UPROPERTY(EditAnywhere)
+		int RemoveThisField;
+
 	
 
 private:
