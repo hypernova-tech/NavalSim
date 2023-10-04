@@ -27,7 +27,7 @@ protected:
 		FString BlueprintName = "";
 
 
-	UPROPERTY(EditAnywhere, meta = (SaveData = "true",CLI = "id"))
+	UPROPERTY(EditAnywhere)
 		int ActorId;
 
 	UPROPERTY(EditAnywhere)

@@ -48,9 +48,9 @@ public:
 	// Sets default values for this actor's properties
 	ASensorBase();
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, meta = (SaveData = "true", cli = "sensortype"))
 		ESensorType SensorType;
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, meta = (SaveData = "true", cli = "depthcalc"))
 		bool UseRenderTargetForDepthCalculation = false;
 
 	UPROPERTY(EditAnywhere)
@@ -59,7 +59,7 @@ public:
 	UPROPERTY(EditAnywhere)
 		int DepthRenderTargetHeightPx = 540;
 
-	UPROPERTY(EditAnywhere, meta = (SaveData = "true", CLI = "slotindex"))
+	UPROPERTY(EditAnywhere)
 		int SensorSlotIndex;
 
 	UPROPERTY(EditAnywhere)
@@ -77,8 +77,7 @@ public:
 	UPROPERTY(EditAnywhere)
 		double Frequency;
 
-	UPROPERTY(EditAnywhere, meta = (SaveData = "true", CLI = "range"))
-		FVector2D RangeMeter;
+	UPROPERTY(EditAnywhere) FVector2D RangeMeter;
 
 	UPROPERTY(EditAnywhere)
 		double NoiseMean;

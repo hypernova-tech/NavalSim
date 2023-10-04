@@ -8,6 +8,7 @@
 #include "UObject/UObjectBaseUtility.h"
 #include "UObject/UnrealType.h"
 #include <UObject/UnrealTypePrivate.h>
+#include <Lib/Sensor/SensorBase.h>
 
 // Sets default values for this component's properties
 USaverLoaderBase::USaverLoaderBase()
@@ -151,32 +152,137 @@ void USaverLoaderBase::SaveSensor(ASensorBase* p_sensor, TArray<FString>& cli)
 	AppendOption(line, pCLI->Scale, p_sensor->GetActorScale3D());
 	
 	FString cli_value;
-
-	UClass* CurrentClass = p_sensor->GetClass();
-
-#if false
-	while (CurrentClass && CurrentClass->HasAnyClassFlags(CLASS_CompiledFromBlueprint))
+	FProperty* Prop = p_sensor->GetClass()->FindPropertyByName(FName("SensorType"));
+	if (Prop->HasAnyPropertyFlags(CPF_None))
 	{
-		CurrentClass = CurrentClass->GetSuperClass();
+		// The property has a UPROPERTY declaration.
 	}
+	
+	auto ret = Prop->FindMetaData("SaveData");
 
-	if (CurrentClass)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Base C++ Class: %s"), *CurrentClass->GetName());
-	}
-#endif
-
-	for (TFieldIterator<UProperty> PropIt(GetClass(), EFieldIteratorFlags::IncludeSuper, EFieldIteratorFlags::IncludeDeprecated, EFieldIteratorFlags::IncludeInterfaces); PropIt; ++PropIt)
-	{
-		UProperty* Property = *PropIt;
-
-	}
+	auto flags = Prop->GetPropertyFlags();
+	auto wrappers = Prop->GetUPropertyWrapper();
 
 	//while (CurrentClass) {
-		auto cls = CurrentClass;
-		for (TFieldIterator<UProperty> PropIt(cls, EFieldIteratorFlags::IncludeSuper, EFieldIteratorFlags::IncludeDeprecated, EFieldIteratorFlags::IncludeInterfaces); PropIt; ++PropIt)
+
+
+	for (TFieldIterator<FProperty> PropertyIt(p_sensor->GetClass(), EFieldIteratorFlags::IncludeSuper); PropertyIt; ++PropertyIt)
+	{
+		FProperty* Property = *PropertyIt;
+		auto pro_class = Property->GetClass();
+		
+
+		if (Property->GetBoolMetaData(TEXT("SaveData"))) {
+			const FString& SaveDataValue = Property->GetMetaData(TEXT("SaveData"));
+			if (SaveDataValue.Equals(TEXT("true")))
+			{
+
+			}
+			else {
+				continue;
+			}
+		}
+		else {
+			continue;
+		}
+
+		if (Property->HasMetaData(TEXT("cli"))) {
+			const FString& cli_data = Property->GetMetaData(TEXT("cli"));
+			if (!cli_data.Equals(TEXT("")))
+			{
+				cli_value = cli_data;
+			}
+			else {
+				continue;
+			}
+		}
+		else {
+			continue;
+		}
+
+		// Get Property Name
+		FString PropertyName = Property->GetName();
+
+		// Log Property Name
+		UE_LOG(LogTemp, Warning, TEXT("Property Name: %s"), *PropertyName);
+
+		if (FFloatProperty* FloatProperty = CastField<FFloatProperty>(Property))
 		{
-			UProperty* Property = *PropIt;
+			float Value = *FloatProperty->ContainerPtrToValuePtr<float>(p_sensor);
+			AppendOption(line, cli_value, Value);
+		}
+		else if (FDoubleProperty* DoubleProperty = CastField<FDoubleProperty>(Property))
+		{
+			double Value = *DoubleProperty->ContainerPtrToValuePtr<double>(p_sensor);
+			AppendOption(line, cli_value, Value);
+		}
+		else if (FBoolProperty* BoolProperty = CastField<FBoolProperty>(Property))
+		{
+			bool bValue = *BoolProperty->ContainerPtrToValuePtr<bool>(p_sensor);
+			AppendOption(line, cli_value, bValue);
+		}
+		else if (FStructProperty* StructProperty = CastField<FStructProperty>(Property))
+		{
+			if (StructProperty->Struct->GetFName() == NAME_Vector)
+			{
+				FVector Value = *StructProperty->ContainerPtrToValuePtr<FVector>(p_sensor);
+				AppendOption(line, cli_value, Value);
+			}
+			else if (StructProperty->Struct->GetFName() == NAME_Vector2D)
+			{
+				FVector2D Value = *StructProperty->ContainerPtrToValuePtr<FVector2D>(p_sensor);
+				AppendOption(line, cli_value, Value);
+			}
+		}
+		else if (FEnumProperty* EnumProperty = CastField<FEnumProperty>(Property))
+		{
+			int32 Value = *EnumProperty->ContainerPtrToValuePtr<int32>(p_sensor);
+			AppendOption(line, cli_value, Value);
+		}
+		else if (FIntProperty* Int32Property = CastField<FIntProperty>(Property))
+		{
+			int32 Value = *Int32Property->ContainerPtrToValuePtr<int32>(p_sensor);
+			AppendOption(line, cli_value, Value);
+		}
+		else if (FByteProperty* ByteProperty = CastField<FByteProperty>(Property))
+		{
+
+			uint8 Value = *ByteProperty->ContainerPtrToValuePtr<uint8>(p_sensor);
+			AppendOption(line, cli_value, Value);
+
+		}
+		else if (FInt16Property* Int16Property = CastField<FInt16Property>(Property))
+		{
+			int16 Value = *Int16Property->ContainerPtrToValuePtr<int16>(p_sensor);
+			AppendOption(line, cli_value, Value);
+		}
+		else if (FUInt16Property* UInt16Property = CastField<FUInt16Property>(Property))
+		{
+			uint16 Value = *UInt16Property->ContainerPtrToValuePtr<uint16>(p_sensor);
+			AppendOption(line, cli_value, Value);
+		}
+		else if (FUInt32Property* UInt32Property = CastField<FUInt32Property>(Property))
+		{
+			uint32 Value = *UInt32Property->ContainerPtrToValuePtr<uint32>(p_sensor);
+			AppendOption(line, cli_value, Value);
+		}
+		else if (FInt64Property* Int64Property = CastField<FInt64Property>(Property))
+		{
+			int64 Value = *Int64Property->ContainerPtrToValuePtr<int64>(p_sensor);
+			AppendOption(line, cli_value, Value);
+		}
+		else if (FUInt64Property* UInt64Property = CastField<FUInt64Property>(Property))
+		{
+			uint64 Value = *UInt64Property->ContainerPtrToValuePtr<uint64>(p_sensor);
+			AppendOption(line, cli_value, Value);
+		}
+
+
+	}
+#if false
+		for (TFieldIterator<UProperty> PropertyIt(p_sensor->GetClass(), EFieldIteratorFlags::IncludeSuper); PropertyIt; ++PropertyIt)
+		{
+			UProperty* Property = *PropertyIt;
 
 
 			if (Property->GetBoolMetaData(TEXT("SaveData"))) {
@@ -270,7 +376,9 @@ void USaverLoaderBase::SaveSensor(ASensorBase* p_sensor, TArray<FString>& cli)
 			}
 
 
+
 		}
+#endif
 		//CurrentClass = Cast<UClass>(CurrentClass->GetSuperStruct());
 	//}
 

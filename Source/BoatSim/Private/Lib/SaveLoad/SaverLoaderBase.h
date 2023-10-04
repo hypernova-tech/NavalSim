@@ -13,7 +13,7 @@
 
 
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(meta=(BlueprintSpawnableComponent) )
 class USaverLoaderBase : public UActorComponent
 {
 	GENERATED_BODY()
