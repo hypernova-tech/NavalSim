@@ -57,6 +57,8 @@ void ALidarBase::Run(float delta_time_sec)
 	if (FApp::GetCurrentTime() >= NextScanTime) {
 		float start_azimuth = -FovHorizontalDeg * 0.5;
 		float end_azimuth = FovHorizontalDeg * 0.5;
+
+		pScanResult->ResetBuffers();
 		
 		pScanResult->ElevationRange.X = -FovVerticalDeg * 0.5;
 		pScanResult->ElevationRange.Y = +FovVerticalDeg * 0.5;
@@ -75,8 +77,8 @@ void ALidarBase::Run(float delta_time_sec)
 		args.min_range_meter = RangeMeter.X;
 		args.azimuth_start_deg = start_azimuth;
 		args.azimuth_end_deg = end_azimuth;
-		args.elevation_start_deg = 0;
-		args.elevation_end_deg = FovVerticalDeg;
+		args.elevation_start_deg = pScanResult->ElevationRange.X;
+		args.elevation_end_deg = pScanResult->ElevationRange.Y;
 		args.azimuth_angle_step_deg = HorizontalScanStepAngleDeg;
 		args.elevation_angle_step_deg = VerticalScanStepAngleDeg;
 		args.measurement_error_mean = MeasurementErrorMean;

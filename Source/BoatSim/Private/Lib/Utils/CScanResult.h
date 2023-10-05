@@ -218,11 +218,7 @@ public:
 		INT32U azimuth_ind = (azimuth_deg - AzimuthRange.X) / ScanAzimuthStepDeg;
 		INT32U elevation_ind = (elevation_deg - ElevationRange.X) / ScanElevationStepDeg;
 
-		if (azimuth_ind < 0 || elevation_ind> 0) {
-			intensity = 0;
-			////todo fixme
-			return 0;
-		}
+	
 		intensity = NormalStrength[azimuth_ind][elevation_ind];
 		return RangeMeter[azimuth_ind][elevation_ind];
 
@@ -237,6 +233,16 @@ public:
 	{
 		Track3DCount = 0;
 	}
+
+
+	 void ResetBuffers()
+	 {
+		 memset(RangeMeter, 0, sizeof(RangeMeter));
+		 memset(NormalStrength, 0, sizeof(NormalStrength));
+		 memset(Point3D, 0, sizeof(Point3D));
+		 memset(Track3DWorld, 0, sizeof(Track3DWorld));
+		 memset(TrackRangeMeter, 0, sizeof(TrackRangeMeter));
+	 }
 
 };
 

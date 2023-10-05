@@ -79,7 +79,7 @@ inline bool URobosenseM1CommIF::FillMainOutputStreamPacket(SMSOPPacket* p_pack, 
 	p_channel->ChAzimuth[0] = azimuth_raw >> 8 ;
 	p_channel->ChAzimuth[1] = azimuth_raw & 0xFF;
 
-	INT16S elevation_row = (elevation_deg * OneOverRadiusScaleFactorMeter + 0x8000);
+	INT16S elevation_row = (elevation_deg * OneOverElevationScaleFactor + 0x8000);
 	p_channel->ChElevation[0] = elevation_row >> 8;
 	p_channel->ChElevation[1] = elevation_row & 0xFF ;
 
@@ -135,17 +135,29 @@ void URobosenseM1CommIF::SendMainStreamOutputPacket()
 			FLOAT32 intensity = 0;
 			FLOAT32 distance_meter = p_current->Interpolate(azimuth_deg, elevation_deg, intensity);
 
+
+			//azimuth_deg = -135;
+			//elevation_deg = 0;
+
+			//azimuth_deg += FMath::Abs(p_current->AzimuthRange.X);
+
 			if (distance_meter == 0) {
-				continue;
+				//continue;
 			}
+			else {
+				distance_meter = distance_meter;
+			}
+
+			//distance_meter = 5;
 
 			//FLOAT32 mapped_azimuth_deg =   min_azimuth_deg + i * SensorAzimuthStepAngle;
 			//FLOAT32 mapped_elevation_deg =  min_elevation_deg + j * SensorElevationStepAngle;
 			intensity = FMath::Lerp(0.0f, 1.0f, ((intensity + 1) * 0.5f)*0.75f + 0.25f*distance_meter*0.001f);
-			bool ret = FillMainOutputStreamPacket(&packet, block_ind, channel_ind, -azimuth_deg, elevation_deg, intensity, distance_meter);
+			bool ret = FillMainOutputStreamPacket(&packet, block_ind, channel_ind, azimuth_deg, -elevation_deg, intensity, distance_meter);
 			if (ret) {
 				SendPacket(&packet);
 				MessageSequenceNumber++;
+				packet.ZeroizePayload();
 
 			}
 

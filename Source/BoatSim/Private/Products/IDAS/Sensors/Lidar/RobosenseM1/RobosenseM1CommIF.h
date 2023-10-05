@@ -36,8 +36,8 @@ public:
 
 	SScanResult* pLastScanResult;
 
-	const FLOAT32 SensorAzimuthStepAngle = 0.01f;
-	const FLOAT32 SensorElevationStepAngle = 0.01f;
+	const FLOAT32 SensorAzimuthStepAngle = 0.2f;
+	const FLOAT32 SensorElevationStepAngle = 0.2f;
 
 
 	const FLOAT32 RadiusScaleFactorMete = 5e-3f;

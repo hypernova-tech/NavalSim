@@ -135,6 +135,11 @@ public:
 	{
 		return ((value >> 8) & 0xFF) | ((value << 8) & 0xFF00);
 	}
+
+	void ZeroizePayload()
+	{
+		memset(LidarDataPackets, 0, sizeof(LidarDataPackets));
+	}
 };
 #pragma pack(pop)
 

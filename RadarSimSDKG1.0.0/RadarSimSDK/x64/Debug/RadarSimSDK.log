@@ -1,0 +1,26 @@
+﻿  CHost.cpp
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\Lib\Types\Halo24Types.h(661,1): warning C4267: '=': conversion from 'size_t' to 'INT8U', possible loss of data
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\CHost.cpp(107,27): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\CHost.cpp(112,144): warning C4267: 'argument': conversion from 'size_t' to 'unsigned int', possible loss of data
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\CHost.cpp(150,27): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\CHost.cpp(167,27): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\CHost.cpp(234,26): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\CHost.cpp(245,26): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\CHost.cpp(256,26): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\CHost.cpp(268,26): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\CHost.cpp(280,26): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\CHost.cpp(292,26): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\CHost.cpp(304,26): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\CHost.cpp(316,26): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\CHost.cpp(329,26): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\CHost.cpp(359,26): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\CHost.cpp(377,26): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\CHost.cpp(393,26): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\CHost.cpp(414,26): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\CHost.cpp(442,26): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\CHost.cpp(451,26): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\CHost.cpp(461,26): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\CHost.cpp(476,26): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\CHost.cpp(478,44): warning C4244: 'argument': conversion from 'double' to 'uint32_t', possible loss of data
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\CHost.cpp(481,26): warning C4018: '<': signed/unsigned mismatch
+  RadarSimSDK.vcxproj -> C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\x64\Debug\RadarSimSDK.exe

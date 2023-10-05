@@ -103,7 +103,7 @@ bool CUtil::Trace(const STraceArgs& args, SScanResult* pscan_result)
                 dolayı pozitif pitch veriyoruz.
                 */
                 FRotator euler_yaw(0, azimuth, 0);
-                FRotator euler_pitch(elevation, 0, 0);
+                FRotator euler_pitch(-elevation, 0, 0);
 
                 FVector temp_dir = euler_pitch.RotateVector(look_dir);
                 new_dir = euler_yaw.RotateVector(temp_dir);
@@ -121,7 +121,7 @@ bool CUtil::Trace(const STraceArgs& args, SScanResult* pscan_result)
             }
             else {
                 // quat pitch etrafinda rotasyonu tamamen sol el kuralına göre, FRotatoreden farklı olarak
-                FQuat QuatPitch(right_vec, -elevation * DEGTORAD);
+                FQuat QuatPitch(right_vec,   elevation * DEGTORAD);
                 FQuat Yaw(FVector::UpVector, azimuth * DEGTORAD);
 
                 FVector temp = QuatPitch * (look_dir);
