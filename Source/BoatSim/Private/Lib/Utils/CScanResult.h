@@ -223,6 +223,19 @@ public:
 		return RangeMeter[azimuth_ind][elevation_ind];
 
 	}
+	 FLOAT32 GetElevIntensityAndReset(INT32S azimuth_ind, INT32S elevation_ind, FLOAT32& intensity)
+	 {
+		
+
+		 intensity = NormalStrength[azimuth_ind][elevation_ind];
+		 FLOAT32 range =  RangeMeter[azimuth_ind][elevation_ind];
+
+		 NormalStrength[azimuth_ind][elevation_ind] = 0;
+		 RangeMeter[azimuth_ind][elevation_ind] = 0;
+
+		 return range;
+
+	 }
      void AddTrackPoint3DList(FVector pos, FLOAT32 range_meter)
 	{
 		 Track3DWorld[Track3DCount] = pos;

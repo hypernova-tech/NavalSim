@@ -63,7 +63,7 @@ void UGizmoUIController::HandleMouseX(float val)
 		val = val;
 	}
 	LastMouseDeltaX = val;
-	CUtil::DebugLog("LastMouseDeltaX " + CUtil::FloatToString(val));
+	//CUtil::DebugLog("LastMouseDeltaX " + CUtil::FloatToString(val));
 }
 
 void UGizmoUIController::HandleMouseY(float val)
@@ -181,7 +181,7 @@ void UGizmoUIController::OnCursorMove()
 	    mouse_drag_2d = FVector2D(LastMouseDeltaX, LastMouseDeltaY);
 		disp = FVector2D(LastMouseDeltaX, LastMouseDeltaY).Length();
 		delta = ComputeAxisMovement(CurrAxis, mouse_drag_2d, disp, 250, move_dir);
-		CUtil::DebugLog("GizmoModeMove: " + move_dir.ToString() + " delta: " + CUtil::FloatToString(delta));
+		//CUtil::DebugLog("GizmoModeMove: " + move_dir.ToString() + " delta: " + CUtil::FloatToString(delta));
 		pTrackedActor->SetActorLocation(curr_loc + move_dir * delta);
 
 	}

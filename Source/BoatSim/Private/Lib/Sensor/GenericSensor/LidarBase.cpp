@@ -57,8 +57,10 @@ void ALidarBase::Run(float delta_time_sec)
 	if (FApp::GetCurrentTime() >= NextScanTime) {
 		float start_azimuth = -FovHorizontalDeg * 0.5;
 		float end_azimuth = FovHorizontalDeg * 0.5;
-
-		pScanResult->ResetBuffers();
+		auto reset_start_sec = CUtil::Tick();
+		//pScanResult->ResetBuffers();
+		auto reset_end_sec = CUtil::Tick();
+		CUtil::DebugLog("ALidarBase: ResetBuffers " + CUtil::FloatToString((reset_end_sec-reset_start_sec) * 1000));
 		
 		pScanResult->ElevationRange.X = -FovVerticalDeg * 0.5;
 		pScanResult->ElevationRange.Y = +FovVerticalDeg * 0.5;
