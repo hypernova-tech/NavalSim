@@ -82,6 +82,7 @@ public:
 	static FString Beam;
 	static FString Range;
 	static FString Fov;
+	static FString Selected;
 
 
 	static FString VericalFov;
@@ -123,6 +124,8 @@ public:
 	static FString Start;
 	static FString Pause;
 	static FString Resume;
+
+
 
 	SCommandOptionInfo* FindCommandOptionInfo(FString option);
 

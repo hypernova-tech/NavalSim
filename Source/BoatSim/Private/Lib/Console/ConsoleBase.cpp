@@ -317,6 +317,11 @@ void UConsoleBase::SendConsoleResponse(FString option, FVector ret)
     pSystemAPI->SendConsoleResponse(option + " :" + ret.ToString());
 }
 
+void UConsoleBase::SendConsoleResponse(FString option, FString ret)
+{
+    pSystemAPI->SendConsoleResponse(option + " :" + ret);
+}
+
 bool UConsoleBase::ProcessHelpCommand(TMap<FString, FString>& options, FString& error_message)
 {
 
@@ -549,6 +554,24 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
     if (ret) {
         bool ctrl_ret = ASystemManagerBase::GetInstance()->SetMainPlayerController(controller);
         return ctrl_ret;
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::Selected, sret);
+    if (ret) {
+        auto selected = pSystemAPI->FindActor(sret);
+
+        if (selected) {
+            pSystemAPI->SetSelectedActor(selected);
+            pSystemAPI->SetGizmoTrackedActor(selected);
+            return true;
+        }
+        else {
+            error_message += (("cannot find actor "));
+            return false;
+        }
+    }
+    else {
+
     }
 
     name = CommandManager.GetName();
@@ -875,6 +898,24 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
         return true;
     }
 
+
+    ret = CommandManager.GetValue(CCLICommandManager::Selected, sret);
+    if (ret) {
+        auto selected = pSystemAPI->GetSelectedActor();
+
+        if (selected) {
+            SendConsoleResponse(CCLICommandManager::Selected, selected->GetName());
+            return true;
+        }
+        else {
+            SendConsoleResponse(CCLICommandManager::Selected, FString("none"));
+            return true;
+        }
+    }
+    else {
+        
+       
+    }
 
     name = CommandManager.GetName();
     if (name != "") {
@@ -1212,6 +1253,8 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
     else {
 
     }
+
+ 
 
     return true;
 }

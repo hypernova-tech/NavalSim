@@ -84,6 +84,9 @@ public:
 
 
 	void SetConsoleOutputText(FString text);
+	void SelectActor(AActor* p_actor);
+
+	UGizmoUIController* GetGizmoController();
 
 
 

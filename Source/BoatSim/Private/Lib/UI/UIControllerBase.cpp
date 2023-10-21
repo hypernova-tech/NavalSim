@@ -124,12 +124,14 @@ void AUIControllerBase::FindActorAtClickPosition(int locationX, int locationY)
 		AActor* ClickedActor = HitResult.GetActor();
 		if (ClickedActor)
 		{
+			SelectActor(ClickedActor);
+#if 0
 			CUtil::DebugLogScreen(ClickedActor->GetName());
 			ASystemManagerBase::GetInstance()->GetConsole()->SendToConsole("clicked: "+ ClickedActor->GetName());
 			pSelectedActor = ClickedActor;
 			ASystemManagerBase::GetInstance()->SetSelectedActor(pSelectedActor);
 			pGizmoUIController->SetTrackedActor(pSelectedActor);
-			
+#endif
 			
 		}
 	}
@@ -145,6 +147,19 @@ void AUIControllerBase::SetConsoleOutputText(FString text)
 		ConsoleText->SetText(FText::FromString(text));
 	}
 	
+}
+void AUIControllerBase::SelectActor(AActor* p_actor)
+{
+	CUtil::DebugLogScreen(p_actor->GetName());
+	ASystemManagerBase::GetInstance()->GetConsole()->SendToConsole("clicked: " + p_actor->GetName());
+	pSelectedActor = p_actor;
+	ASystemManagerBase::GetInstance()->SetSelectedActor(pSelectedActor);
+	pGizmoUIController->SetTrackedActor(pSelectedActor);
+}
+
+UGizmoUIController* AUIControllerBase::GetGizmoController()
+{
+	return pGizmoUIController;
 }
 float AUIControllerBase::GetAverageFPS()
 {

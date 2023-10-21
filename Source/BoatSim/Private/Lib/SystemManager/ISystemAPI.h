@@ -9,6 +9,12 @@
 /**
  * 
  */
+
+enum EActorQueryArgs
+{
+	ActorBasesExceptSensors,
+
+};
 class UConsoleBase;
 class ISystemAPI
 {
@@ -39,6 +45,8 @@ public:
 	virtual bool RemoveActor(AActor* p_actor) = 0;
 	virtual TArray<AActor*> GetRegisteredActors() = 0;
 	virtual TArray<AActor*> GetAllActorInWorld() = 0;
+
+	virtual TArray<AActor*> QueryActors(EActorQueryArgs args) = 0;
 	virtual AActor* FindActor(FString actor_name) = 0;
 	virtual bool DestroyActor(FString name) = 0;
 	virtual AActorBase* ToActorBase(AActor* p_actor) = 0;
@@ -50,7 +58,7 @@ public:
 	virtual void DisableAllActors() = 0;
 	virtual void SetSelectedActor(AActor *p_actor) = 0;
 	virtual AActor* GetSelectedActor() = 0 ;
-
+	virtual void SetGizmoTrackedActor(AActor* p_actor) = 0;
 
 	virtual INT64U GetTimeStamp() = 0;
 	virtual AActor* GetVisibleActorAt(const TArray<AActor*>& ignore_list, FVector from, FVector to, FLOAT64 tolerance_meter) = 0;

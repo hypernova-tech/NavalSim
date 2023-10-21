@@ -1,27 +1,29 @@
 create --name sidamir --bp MIR
-set --controller sidamir  
+set --controller sidamir
 set --name sidamir --position "0.000000 0.000000 0.000000" --rotation "0.000000 0.000000 0.000000" --scale "0.300000 0.300000 0.300000"
 
 create --name gimbal1 --bp GIMBAL2DOF
-set --name gimbal1 --parent sidamir
+set --name gimbal1 --parent sidamir --position "0.000000 0.000000 0.000000" --rotation "0.000000 45.000000 0.000000" --scale "1.000000 1.000000 1.000000"
+set --name gimbal1 --instance -1
 
 create --name gimbal2 --bp GIMBAL2DOF
-set --name gimbal2 --parent sidamir
+set --name gimbal2 --parent sidamir --position "0.000000 0.000000 0.000000" --rotation "0.000000 45.000000 0.000000" --scale "1.000000 1.000000 1.000000"
+set --name gimbal2 --instance -1
 
 create --name viscam1 --bp CAMVIS
-set --name viscam1 --parent gimbal1 --position "-0.000000 -0.000000 0.000000" --rotation "0.000000 45.000000 0.000000" --scale "1.000000 1.000000 1.000000"
+set --name viscam1 --parent gimbal1 --position "0.000000 0.000000 0.000000" --rotation "180.000000 90.000000 180.000000" --scale "1.000000 1.000000 1.000000"
 set --name viscam1 --instance -1
 set --name viscam1 --slotindex 2 --vfov 0.000000 --hfov 0.000000 --hscanstepang 0.000000 --vscanstepang 36.000000 --merrormean 0.000000 --merrorstd 0.000000 --surfacedetecten 0 --subsurfacedetecten 0 --foamen 0 --seasurfdetectprob 0.000000 --maxsurfpenet 0.000000
 
 create --name viscam2 --bp CAMVIS
-set --name viscam2 --parent gimbal2 --position "0.000000 0.000000 6.000000" --rotation "0.000000 0.000000 0.000000" --scale "0.300000 0.300000 0.300000"
+set --name viscam2 --parent gimbal2 --position "-4.242641 0.000000 4.242641" --rotation "0.000000 45.000000 0.000000" --scale "0.300000 0.300000 0.300000"
 set --name viscam2 --instance -1
 set --name viscam2 --slotindex 2 --vfov 0.000000 --hfov 0.000000 --hscanstepang 0.000000 --vscanstepang 36.000000 --merrormean 0.000000 --merrorstd 0.000000 --surfacedetecten 0 --subsurfacedetecten 0 --foamen 0 --seasurfdetectprob 0.000000 --maxsurfpenet 0.000000
 
 create --name fls1 --bp FLSFARSOUNDER
 set --name fls1 --parent sidamir --position "0.942287 0.000000 -4.334591" --rotation "-0.000000 -30.000000 0.000000" --scale "0.300000 0.300000 0.300000"
 set --name fls1 --instance -1
-set --name fls1 --slotindex 0 --vfov 45.000000 --hfov 45.000000 --hscanstepang 1.000000 --vscanstepang 1.000000 --merrormean 5.000000 --merrorstd 3.000000 --surfacedetecten 0 --subsurfacedetecten 1 --foamen 1 --seasurfdetectprob 0.001000 --maxsurfpenet 0.000000
+set --name fls1 --slotindex 0 --vfov 45.000000 --hfov 45.000000 --hscanstepang 0.500000 --vscanstepang 0.500000 --merrormean 5.000000 --merrorstd 3.000000 --surfacedetecten 0 --subsurfacedetecten 1 --foamen 1 --seasurfdetectprob 0.001000 --maxsurfpenet 0.000000
 
 create --name haloradar1 --bp RADARHALO24
 set --name haloradar1 --parent sidamir --position "0.000000 0.000000 0.000000" --rotation "0.000000 0.000000 0.000000" --scale "0.300000 0.300000 0.300000"
@@ -32,7 +34,7 @@ set --name haloradar1 --radscanlevel 0 --radscanrpm 0 --radgaintype 2 --radgainl
 create --name m1lidar1 --bp LIDARM1
 set --name m1lidar1 --parent sidamir --position "0.000000 0.000000 0.000000" --rotation "-0.000000 -10.000000 0.000000" --scale "0.300000 0.300000 0.300000"
 set --name m1lidar1 --instance -1
-set --name m1lidar1 --slotindex 0 --vfov 25.000000 --hfov 120.000000 --hscanstepang 0.200000 --vscanstepang 0.200000 --merrormean 3.000000 --merrorstd 1.000000 --surfacedetecten 1 --subsurfacedetecten 0 --foamen 1 --seasurfdetectprob 0.050000 --maxsurfpenet 1.000000
+set --name m1lidar1 --slotindex 0 --vfov 10.000000 --hfov 120.000000 --hscanstepang 0.200000 --vscanstepang 0.200000 --merrormean 3.000000 --merrorstd 1.000000 --surfacedetecten 1 --subsurfacedetecten 0 --foamen 1 --seasurfdetectprob 0.050000 --maxsurfpenet 1.000000
 
 create --name viscam3 --bp CAMVIS
 set --name viscam3 --parent sidamir --position "0.000000 0.000000 0.000000" --rotation "0.000000 0.000000 0.000000" --scale "0.300000 0.300000 0.300000"
@@ -40,6 +42,6 @@ set --name viscam3 --instance -1
 set --name viscam3 --slotindex 0 --vfov 0.000000 --hfov 0.000000 --hscanstepang 0.000000 --vscanstepang 36.000000 --merrormean 0.000000 --merrorstd 0.000000 --surfacedetecten 0 --subsurfacedetecten 0 --foamen 0 --seasurfdetectprob 0.000000 --maxsurfpenet 0.000000
 
 create --name ircam1 --bp CAMIR
-set --name ircam1 --parent sidamir --position "-0.000000 0.000000 0.000000" --rotation "-0.000000 0.000000 180.000000" --scale "0.300000 0.300000 0.300000"
+set --name ircam1 --parent sidamir --position "0.000000 0.000000 0.000000" --rotation "-0.000000 0.000000 180.000000" --scale "0.300000 0.300000 0.300000"
 set --name ircam1 --instance -1
 set --name ircam1 --slotindex 1 --vfov 0.000000 --hfov 0.000000 --hscanstepang 0.000000 --vscanstepang 36.000000 --merrormean 0.000000 --merrorstd 0.000000 --surfacedetecten 0 --subsurfacedetecten 0 --foamen 0 --seasurfdetectprob 0.000000 --maxsurfpenet 0.000000

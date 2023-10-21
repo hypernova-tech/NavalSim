@@ -164,6 +164,7 @@ public:
 	virtual bool RemoveActor(AActor* p_actor);
 	virtual TArray<AActor*> GetRegisteredActors();
 	virtual TArray<AActor*> GetAllActorInWorld();
+	virtual TArray<AActor*> QueryActors(EActorQueryArgs args);
 	virtual AActor* FindActor(FString actor_name);
 	virtual bool DestroyActor(FString name);
 	virtual AActorBase* ToActorBase(AActor* p_actor);
@@ -174,6 +175,7 @@ public:
 	virtual bool GetActorEnabled(AActor* p_actor);
 	virtual void SetSelectedActor(AActor* p_actor) ;
 	virtual AActor* GetSelectedActor();
+	virtual void SetGizmoTrackedActor(AActor* p_actor);
 	virtual INT64U GetTimeStamp();
 	virtual AActor* GetVisibleActorAt(const TArray<AActor*>& ignore_list, FVector from, FVector to, FLOAT64 tolerance_meter);
 

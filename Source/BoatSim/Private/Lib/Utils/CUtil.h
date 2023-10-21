@@ -140,5 +140,7 @@ public:
 	static void SetParent(AActor* p_child, AActor* p_parent);
 	static void SetActorActive(AActor* p_actor, bool is_active);
 	static bool GetIsActorVisible(AActor* p_actor);
+
+	static bool IsPossedByPlayerController(UWorld *p_world, APawn *p_pawn);
 };
 

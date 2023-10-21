@@ -133,6 +133,14 @@ void USaverLoaderBase::SavePlatform(ACBoatBase* p_platform, TArray<FString>& cli
 	AppendOption(line, pCLI->Bp, p_platform->BlueprintName);
 	AddLine(line);
 
+	line = CreateCommand(pCLI->SetCommand);
+
+	if (CUtil::IsPossedByPlayerController(GetWorld(), p_platform)) {
+		AppendOption(line, pCLI->Controller, p_platform->GetName());
+		AddLine(line);
+	}
+	
+	
 
 	line = CreateCommandWithName(pCLI->SetCommand, p_platform->GetName());
 	auto parent = CUtil::GetParentActor(p_platform);
@@ -163,262 +171,39 @@ void USaverLoaderBase::SaveSensor(ASensorBase* p_sensor, TArray<FString>& cli)
 		AppendOption(line, pCLI->Parent, parent->GetName());
 	}
 	
-	AppendOption(line, pCLI->Position, p_sensor->GetActorLocation());
+	AppendOption(line, pCLI->Position, TOW(p_sensor->GetActorLocation()));
 	AppendOption(line, pCLI->Rotation, p_sensor->GetActorRotation().Euler());
 	AppendOption(line, pCLI->Scale, p_sensor->GetActorScale3D());
 	AddLine(line);
 
 	p_sensor->Save(this);
 
-#if false
-	
-	FString cli_value;
-	FProperty* Prop = p_sensor->GetClass()->FindPropertyByName(FName("SensorType"));
-	if (Prop->HasAnyPropertyFlags(CPF_None))
-	{
-		// The property has a UPROPERTY declaration.
-	}
-	
-	//auto ret = Prop->FindMetaData("SaveData");
-
-	auto flags = Prop->GetPropertyFlags();
-	//auto wrappers = Prop->GetUPropertyWrapper();
-
-	//while (CurrentClass) {
-
-
-	for (TFieldIterator<FProperty> PropertyIt(p_sensor->GetClass(), EFieldIteratorFlags::IncludeSuper); PropertyIt; ++PropertyIt)
-	{
-		FProperty* Property = *PropertyIt;
-		auto pro_class = Property->GetClass();
-		auto prop_name = Property->GetName();
-
-		
-#if false
-		if (Property->GetBoolMetaData(TEXT("SaveData"))) {
-			const FString& SaveDataValue = Property->GetMetaData(TEXT("SaveData"));
-			if (SaveDataValue.Equals(TEXT("true")))
-			{
-
-			}
-			else {
-				continue;
-			}
-		}
-		else {
-			continue;
-		}
-
-		if (Property->HasMetaData(TEXT("cli"))) {
-			const FString& cli_data = Property->GetMetaData(TEXT("cli"));
-			if (!cli_data.Equals(TEXT("")))
-			{
-				cli_value = cli_data;
-			}
-			else {
-				continue;
-			}
-		}
-		else {
-			continue;
-		}
-
-#endif
-
-		// Get Property Name
-		FString PropertyName = Property->GetName();
-
-		// Log Property Name
-		UE_LOG(LogTemp, Warning, TEXT("Property Name: %s"), *PropertyName);
-
-		if (FFloatProperty* FloatProperty = CastField<FFloatProperty>(Property))
-		{
-			float Value = *FloatProperty->ContainerPtrToValuePtr<float>(p_sensor);
-			AppendOption(line, cli_value, Value);
-		}
-		else if (FDoubleProperty* DoubleProperty = CastField<FDoubleProperty>(Property))
-		{
-			double Value = *DoubleProperty->ContainerPtrToValuePtr<double>(p_sensor);
-			AppendOption(line, cli_value, Value);
-		}
-		else if (FBoolProperty* BoolProperty = CastField<FBoolProperty>(Property))
-		{
-			bool bValue = *BoolProperty->ContainerPtrToValuePtr<bool>(p_sensor);
-			AppendOption(line, cli_value, bValue);
-		}
-		else if (FStructProperty* StructProperty = CastField<FStructProperty>(Property))
-		{
-			if (StructProperty->Struct->GetFName() == NAME_Vector)
-			{
-				FVector Value = *StructProperty->ContainerPtrToValuePtr<FVector>(p_sensor);
-				AppendOption(line, cli_value, Value);
-			}
-			else if (StructProperty->Struct->GetFName() == NAME_Vector2D)
-			{
-				FVector2D Value = *StructProperty->ContainerPtrToValuePtr<FVector2D>(p_sensor);
-				AppendOption(line, cli_value, Value);
-			}
-		}
-		else if (FEnumProperty* EnumProperty = CastField<FEnumProperty>(Property))
-		{
-			int32 Value = *EnumProperty->ContainerPtrToValuePtr<int32>(p_sensor);
-			AppendOption(line, cli_value, Value);
-		}
-		else if (FIntProperty* Int32Property = CastField<FIntProperty>(Property))
-		{
-			int32 Value = *Int32Property->ContainerPtrToValuePtr<int32>(p_sensor);
-			AppendOption(line, cli_value, Value);
-		}
-		else if (FByteProperty* ByteProperty = CastField<FByteProperty>(Property))
-		{
-
-			uint8 Value = *ByteProperty->ContainerPtrToValuePtr<uint8>(p_sensor);
-			AppendOption(line, cli_value, Value);
-
-		}
-		else if (FInt16Property* Int16Property = CastField<FInt16Property>(Property))
-		{
-			int16 Value = *Int16Property->ContainerPtrToValuePtr<int16>(p_sensor);
-			AppendOption(line, cli_value, Value);
-		}
-		else if (FUInt16Property* UInt16Property = CastField<FUInt16Property>(Property))
-		{
-			uint16 Value = *UInt16Property->ContainerPtrToValuePtr<uint16>(p_sensor);
-			AppendOption(line, cli_value, Value);
-		}
-		else if (FUInt32Property* UInt32Property = CastField<FUInt32Property>(Property))
-		{
-			uint32 Value = *UInt32Property->ContainerPtrToValuePtr<uint32>(p_sensor);
-			AppendOption(line, cli_value, Value);
-		}
-		else if (FInt64Property* Int64Property = CastField<FInt64Property>(Property))
-		{
-			int64 Value = *Int64Property->ContainerPtrToValuePtr<int64>(p_sensor);
-			AppendOption(line, cli_value, Value);
-		}
-		else if (FUInt64Property* UInt64Property = CastField<FUInt64Property>(Property))
-		{
-			uint64 Value = *UInt64Property->ContainerPtrToValuePtr<uint64>(p_sensor);
-			AppendOption(line, cli_value, Value);
-		}
-
-
-	}
-#if false
-		for (TFieldIterator<UProperty> PropertyIt(p_sensor->GetClass(), EFieldIteratorFlags::IncludeSuper); PropertyIt; ++PropertyIt)
-		{
-			UProperty* Property = *PropertyIt;
-
-
-			if (Property->GetBoolMetaData(TEXT("SaveData"))) {
-				const FString& SaveDataValue = Property->GetMetaData(TEXT("SaveData"));
-				if (SaveDataValue.Equals(TEXT("true")))
-				{
-
-				}
-				else {
-					continue;
-				}
-			}
-
-			if (Property->GetBoolMetaData(TEXT("CLI"))) {
-				cli_value = Property->GetMetaData(TEXT("CLI"));
-			}
-			else {
-				continue;
-			}
-
-			// Get Property Name
-			FString PropertyName = Property->GetName();
-
-			// Log Property Name
-			UE_LOG(LogTemp, Warning, TEXT("Property Name: %s"), *PropertyName);
-
-			if (UFloatProperty* FloatProperty = Cast<UFloatProperty>(Property))
-			{
-				float Value = *FloatProperty->ContainerPtrToValuePtr<float>(p_sensor);
-				AppendOption(line, cli_value, Value);
-			}
-			else if (UDoubleProperty* DoubleProperty = Cast<UDoubleProperty>(Property))
-			{
-				double Value = *DoubleProperty->ContainerPtrToValuePtr<double>(p_sensor);
-				AppendOption(line, cli_value, Value);
-			}
-			else if (UBoolProperty* BoolProperty = Cast<UBoolProperty>(Property))
-			{
-				bool bValue = *BoolProperty->ContainerPtrToValuePtr<bool>(p_sensor);
-				AppendOption(line, cli_value, bValue);
-			}
-			else if (UStructProperty* StructProperty = Cast<UStructProperty>(Property))
-			{
-				if (StructProperty->Struct->GetFName() == NAME_Vector)
-				{
-					FVector Value = *StructProperty->ContainerPtrToValuePtr<FVector>(p_sensor);
-					AppendOption(line, cli_value, Value);
-				}
-				else if (StructProperty->Struct->GetFName() == NAME_Vector2D)
-				{
-					FVector2D Value = *StructProperty->ContainerPtrToValuePtr<FVector2D>(p_sensor);
-					AppendOption(line, cli_value, Value);
-				}
-			}
-			else if (UIntProperty* Int32Property = Cast<UIntProperty>(Property))
-			{
-				int32 Value = *Int32Property->ContainerPtrToValuePtr<int32>(p_sensor);
-				AppendOption(line, cli_value, Value);
-			}
-			else if (UByteProperty* ByteProperty = Cast<UByteProperty>(Property))
-			{
-
-				uint8 Value = *ByteProperty->ContainerPtrToValuePtr<uint8>(p_sensor);
-				AppendOption(line, cli_value, Value);
-
-			}
-			else if (UInt16Property* Int16Property = Cast<UInt16Property>(Property))
-			{
-				int16 Value = *Int16Property->ContainerPtrToValuePtr<int16>(p_sensor);
-				AppendOption(line, cli_value, Value);
-			}
-			else if (UUInt16Property* UInt16Property = Cast<UUInt16Property>(Property))
-			{
-				uint16 Value = *UInt16Property->ContainerPtrToValuePtr<uint16>(p_sensor);
-				AppendOption(line, cli_value, Value);
-			}
-			else if (UUInt32Property* UInt32Property = Cast<UUInt32Property>(Property))
-			{
-				uint32 Value = *UInt32Property->ContainerPtrToValuePtr<uint32>(p_sensor);
-				AppendOption(line, cli_value, Value);
-			}
-			else if (UInt64Property* Int64Property = Cast<UInt64Property>(Property))
-			{
-				int64 Value = *Int64Property->ContainerPtrToValuePtr<int64>(p_sensor);
-				AppendOption(line, cli_value, Value);
-			}
-			else if (UUInt64Property* UInt64Property = Cast<UUInt64Property>(Property))
-			{
-				uint64 Value = *UInt64Property->ContainerPtrToValuePtr<uint64>(p_sensor);
-				AppendOption(line, cli_value, Value);
-			}
-
-
-
-		}
-#endif
-		//CurrentClass = Cast<UClass>(CurrentClass->GetSuperStruct());
-	//}
-
-#endif
-
 
 
 }
 
+
 void USaverLoaderBase::SaveActor(AActorBase* p_actor, TArray<FString>& cli)
 {
-	FString line = CreateCommandWithName(pCLI->CreateCommand, p_actor->GetName());
-
+	FString line = CreateCommand(pCLI->CreateCommand);
+	AppendOption(line, pCLI->Name, p_actor->GetName());
 	AppendOption(line, pCLI->Bp, p_actor->GetBlueprintName());
-	cli.Add(line);
+	AddLine(line);
+
+
+	line = CreateCommandWithName(pCLI->SetCommand, p_actor->GetName());
+
+	auto parent = CUtil::GetParentActor(p_actor);
+	if (parent != nullptr) {
+		AppendOption(line, pCLI->Parent, parent->GetName());
+	}
+
+	AppendOption(line, pCLI->Position, TOW(p_actor->GetActorLocation()));
+	AppendOption(line, pCLI->Rotation, p_actor->GetActorRotation().Euler());
+	AppendOption(line, pCLI->Scale, p_actor->GetActorScale3D());
+	AddLine(line);
+
+	p_actor->Save(this);
 }
 
 bool USaverLoaderBase::Save(ISystemAPI* p_api, FString file_name)
@@ -434,6 +219,13 @@ bool USaverLoaderBase::Save(ISystemAPI* p_api, FString file_name)
 		SavePlatform(platform, CLIList);
 	}
 
+
+	auto non_sensors = p_api->QueryActors(EActorQueryArgs::ActorBasesExceptSensors);
+
+	for (auto p_actor : non_sensors) {
+		SaveActor((AActorBase*)p_actor, CLIList);
+		NewLine();
+	}
 
 	auto sensors = p_api->GetAllSensors();
 

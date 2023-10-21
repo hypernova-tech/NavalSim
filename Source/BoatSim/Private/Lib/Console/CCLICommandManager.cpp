@@ -34,6 +34,8 @@ FString CCLICommandManager::SensorSlotIndex = "slotindex";
 FString CCLICommandManager::Beam = "beam";
 FString CCLICommandManager::Range = "range";
 FString CCLICommandManager::Fov = "fov";
+FString CCLICommandManager::Selected = "selected";
+
 
 
 FString CCLICommandManager::VericalFov = "vfov";
@@ -73,6 +75,8 @@ FString CCLICommandManager::SimCommand = "sim";
 FString CCLICommandManager::Start = "start";
 FString CCLICommandManager::Pause = "pause";
 FString CCLICommandManager::Resume = "resume";
+
+
 
 CCLICommandManager::CCLICommandManager()
 {
@@ -275,6 +279,10 @@ void CCLICommandManager::PrepareSetCommandInfo()
 	info.Description = "sets the possesed pawn";
 	options.Add(info);
 
+	info.Option = "--" + CCLICommandManager::Selected;
+	info.Description = "selected the actor given name";
+	options.Add(info);
+
 	info.Option = "--" + CCLICommandManager::HorizontalFov ;
 	info.Description = "sets the horizontal fov of sensor";
 	options.Add(info);
@@ -419,6 +427,11 @@ void CCLICommandManager::PrepareGetCommandInfo()
 	info.Option = "--controller";
 	info.Description = "gets the possesed pawn";
 	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::Selected;
+	info.Description = "get selected actor";
+	options.Add(info);
+
 
 	info.Option = "--" + CCLICommandManager::HorizontalFov;
 	info.Description = "gets the horizontal fov of sensor";

@@ -109,6 +109,25 @@ TArray<AActor*> ASystemManagerBase::GetAllActorInWorld()
 	return ret;
 }
 
+ TArray<AActor*> ASystemManagerBase::QueryActors(EActorQueryArgs args)
+{
+	 TArray<AActor*> ret;
+	 if (args == EActorQueryArgs::ActorBasesExceptSensors) {
+		 for (auto pactor : ActorList) {
+			 if (ToActorBase(pactor)) {
+				 if (!ToSensorBase(pactor)) {
+					 ret.Add(pactor);
+				 }
+			 }
+			
+		 }
+
+	 }
+
+	 return ret;
+	
+}
+
 AActorBase* ASystemManagerBase::ToActorBase(AActor* p_actor)
 {
 	if (p_actor->IsA<AActorBase>()) {
@@ -147,6 +166,11 @@ AActor* ASystemManagerBase::GetSelectedActor()
 {
 	return pSelectedActor;
 }
+void ASystemManagerBase::SetGizmoTrackedActor(AActor* p_actor)
+{
+	pUIController->GetGizmoController()->SetTrackedActor(p_actor);
+}
+
 
 ASensorBase* ASystemManagerBase::ToSensorBase(AActor* p_actor)
 {

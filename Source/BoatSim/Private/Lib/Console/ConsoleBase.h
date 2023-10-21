@@ -48,6 +48,7 @@ protected:
 	void SendConsoleResponse(FString option, BOOLEAN ret);
 	void SendConsoleResponse(FString option, FVector2D ret);
 	void SendConsoleResponse(FString option, FVector ret);
+	void SendConsoleResponse(FString option, FString ret);
 
 public:	
 	// Called every frame

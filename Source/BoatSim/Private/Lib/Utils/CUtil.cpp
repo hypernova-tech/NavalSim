@@ -999,6 +999,21 @@ bool CUtil::GetIsActorVisible(AActor* p_actor)
 {
     return !p_actor->IsHidden();
 }
+bool CUtil::IsPossedByPlayerController(UWorld* p_world, APawn* p_pawn)
+{
+
+    APlayerController* PlayerController = p_world->GetFirstPlayerController();
+
+    if (PlayerController)
+    {
+        if (PlayerController->GetPawn() == p_pawn) {
+            return true;
+        }
+    }
+
+    return false;
+    
+}
 FString CUtil::CharToFString(const char* p_char)
 {
     FString str = FString( p_char);
