@@ -7,6 +7,7 @@
 #include <Lib/SystemManager/ISystemAPI.h>
 #include <CBoatBase.h>
 #include <Lib/Console/CCLICommandManager.h>
+#include <Lib/SaveLoad/ISaveLoader.h>
 #include "SaverLoaderBase.generated.h"
 
 
@@ -14,7 +15,7 @@
 
 
 UCLASS(meta=(BlueprintSpawnableComponent) )
-class USaverLoaderBase : public UActorComponent
+class USaverLoaderBase : public UActorComponent, public ISaveLoader
 {
 	GENERATED_BODY()
 
@@ -29,18 +30,8 @@ protected:
 	virtual void SaveSensor(ASensorBase* p_sensor, TArray<FString>& cli);
 	virtual void SaveActor(AActorBase *p_actor, TArray<FString>& cli);
 
-	FString CreateCommand(FString cmd);
-	void AppendOption(FString& line, FString option, FString value);
-	void AppendOption(FString& line, FString option, BOOLEAN value);
-	void AppendOption(FString& line, FString option, INT32U value);
-	void AppendOption(FString& line, FString option, INT32S value);
-	void AppendOption(FString& line, FString option, INT64U value);
-	void AppendOption(FString& line, FString option, INT64S value);
-	void AppendOption(FString& line, FString option, INT16U value);
-	void AppendOption(FString& line, FString option, FLOAT32 value);
-	void AppendOption(FString& line, FString option, FLOAT64 value);
-	void AppendOption(FString& line, FString option, FVector2D value);
-	void AppendOption(FString& line, FString option, FVector value);
+	
+	TArray<FString> CLIList;
 
 	
 
@@ -51,14 +42,22 @@ public:
 	virtual bool Save(ISystemAPI *p_api, FString file_name);
 	virtual bool Load(ISystemAPI* p_api, FString file_name);
 
-
-	UPROPERTY(EditAnywhere)
-		int RemoveThisField;
-
-	
-
-private:
 	ISystemAPI* pSystemApi;
 	CCLICommandManager* pCLI;
+	virtual FString CreateCommand(FString cmd);
+	virtual FString CreateCommandWithName(FString cmd, FString name) ;
+	virtual void NewLine();
+	virtual void AddLine(FString line);
+	virtual void AppendOption(FString& line, FString option, FString value) ;
+	virtual void AppendOption(FString& line, FString option, BOOLEAN value) ;
+	virtual void AppendOption(FString& line, FString option, INT32U value);
+	virtual void AppendOption(FString& line, FString option, INT32S value);
+	virtual void AppendOption(FString& line, FString option, INT64U value);
+	virtual void AppendOption(FString& line, FString option, INT64S value);
+	virtual void AppendOption(FString& line, FString option, INT16U value);
+	virtual void AppendOption(FString& line, FString option, FLOAT32 value);
+	virtual void AppendOption(FString& line, FString option, FLOAT64 value) ;
+	virtual void AppendOption(FString& line, FString option, FVector2D value) ;
+	virtual void AppendOption(FString& line, FString option, FVector value) ;
 		
 };

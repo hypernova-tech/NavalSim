@@ -183,7 +183,8 @@ struct SScanResult
 	
 	FLOAT32 ScanRangeMeter;
 
-
+	FLOAT64 TotalTimeSec;
+	FLOAT64 TotalRaycastTimeSec;
 
 public:
 

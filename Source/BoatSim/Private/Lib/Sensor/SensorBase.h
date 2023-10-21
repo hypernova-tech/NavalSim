@@ -11,7 +11,6 @@
 #include <Lib/ActorBase/ActorBase.h>
 #include "Lib/Clutter/ClutterDefs.h"
 #include <Lib/ScreenDepth/SceneCapturer.h>
-
 #include "SensorBase.generated.h"
 
 
@@ -179,4 +178,7 @@ public:
 
 	float GetVerticalScanStepAngleDeg();
 	void SetVerticalScanStepAngleDeg(float val);
+
+
+	virtual void Save(ISaveLoader *p_save_loader) override;
 };

@@ -13,6 +13,7 @@
 #include "CBoatBase.h"
 #include <Lib/Console/ConsoleBase.h>
 #include <Lib/SaveLoad/SaverLoaderBase.h>
+#include <Lib/Sensor/GenericSensor/RadarBase.h>
 #include "SystemManagerBase.generated.h"
 
 
@@ -122,7 +123,7 @@ public:
 	ADataContainer* GetDataContainer();
 
 
-
+	ARadarBase* ToRadarBase(AActor* p_actor);
 
 
 	static  ASystemManagerBase* GetInstance();
@@ -219,4 +220,54 @@ public:
 
 	virtual bool Save(FString fname);
 	virtual bool Load(FString fname);
+
+
+	virtual bool SetSlotIndex(AActor* p_actor, INT32S slot_index);
+	virtual bool GetSlotIndex(AActor* p_actor, INT32S& slot_index);
+	virtual bool SetHorizontalFov(AActor* p_actor, FLOAT64 angle_deg);
+	virtual bool GetHorizontalFov(AActor* p_actor, FLOAT64& angle_deg);
+	virtual bool SetVerticalFov(AActor* p_actor, FLOAT64 angle_deg);
+	virtual bool GetVerticalFov(AActor* p_actor, FLOAT64& angle_deg);
+	virtual bool SetHorizontalScanStepAngleDeg(AActor* p_actor, FLOAT64 angle_deg);
+	virtual bool GetHorizontalScanStepAngleDeg(AActor* p_actor, FLOAT64& angle_deg);
+	virtual bool SetVerticalScanStepAngleDeg(AActor* p_actor, FLOAT64 angle_deg);
+	virtual bool GetVerticalScanStepAngleDeg(AActor* p_actor, FLOAT64& angle_deg);
+	virtual bool SetMeasurementErrorMean(AActor* p_actor, FLOAT64 angle_deg);
+	virtual bool SetMeasurementErrorStd(AActor* p_actor, FLOAT64 angle_deg);
+	virtual bool GetMeasurementErrorMean(AActor* p_actor, FLOAT64& angle_deg);
+	virtual bool GetMeasurementErrorStd(AActor* p_actor, FLOAT64& angle_deg);
+	virtual bool SetEnableSurfaceDetect(AActor* p_actor, BOOLEAN val);
+	virtual bool SetEnableSubsurfaceDetect(AActor* p_actor, BOOLEAN val) ;
+	virtual bool SetEnableFoamDetect(AActor* p_actor, BOOLEAN angle_deg);
+	virtual bool SetSeaSurfaceDetectionProb(AActor* p_actor, FLOAT64 val) ;
+
+	virtual bool GetEnableSurfaceDetect(AActor* p_actor, BOOLEAN& val) ;
+	virtual bool GetEnableSubsurfaceDetect(AActor* p_actor, BOOLEAN& val) ;
+	virtual bool GetEnableFoamDetect(AActor* p_actor, BOOLEAN& angle_deg) ;
+	virtual bool GetSeaSurfaceDetectionProb(AActor* p_actor, FLOAT64& val);
+
+	virtual bool SetMaxSurfacePenetration(AActor* p_actor, FLOAT64 val);
+	virtual bool SetRadarScanLevel(AActor* p_actor, INT32S val);
+	virtual bool SetRadarScannerRPM(AActor* p_actor, INT32S val);
+	virtual bool SetRadarGainType(AActor* p_actor, INT32S val) ;
+	virtual bool SetRadarGainLevel(AActor* p_actor, INT32S val);
+	virtual bool SetRadarSeaClutterType(AActor* p_actor, INT32S val);
+	virtual bool SetRadarSeaClutterLevel(AActor* p_actor, INT32S val);
+	virtual bool SetRadarSeaClutterAutoOffset(AActor* p_actor, INT32S val);
+	virtual bool SetRadarRainClutterLevel(AActor* p_actor, INT32S val);
+	virtual bool SetRadarMaxGuardZoneCount(AActor* p_actor, INT32S val) ;
+	virtual bool SetRadarMaxSectorBlankingZoneCount(AActor* p_actor, INT32S val);
+
+
+	virtual bool GetMaxSurfacePenetration(AActor* p_actor, FLOAT64& val);
+	virtual bool GetRadarScanLevel(AActor* p_actor, INT32S& val) ;
+	virtual bool GetRadarScannerRPM(AActor* p_actor, INT32S& val) ;
+	virtual bool GetRadarGainType(AActor* p_actor, INT32S& val) ;
+	virtual bool GetRadarGainLevel(AActor* p_actor, INT32S& val) ;
+	virtual bool GetRadarSeaClutterType(AActor* p_actor, INT32S& val) ;
+	virtual bool GetRadarSeaClutterLevel(AActor* p_actor, INT32S& val) ;
+	virtual bool GetRadarSeaClutterAutoOffset(AActor* p_actor, INT32S& val) ;
+	virtual bool GetRadarRainClutterLevel(AActor* p_actor, INT32S& val) ;
+	virtual bool GetRadarMaxGuardZoneCount(AActor* p_actor, INT32S& val) ;
+	virtual bool GetRadarMaxSectorBlankingZoneCount(AActor* p_actor, INT32S& val);
 };

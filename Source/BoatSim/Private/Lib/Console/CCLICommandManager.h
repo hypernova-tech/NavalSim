@@ -28,7 +28,9 @@ struct SCommandOptionInfo
 
 	FString Option;
 	FString Description;
+	FString ParameterName;
 	EOptionType OptionType;
+	
 };
 
 struct SParsedOption
@@ -51,50 +53,76 @@ private:
 
 public:
 
-	FString WorkspaceCommand = "ws";
-	FString SaveFile = "save";
-	FString LoadFile = "load";
+	static  FString WorkspaceCommand;
+	static  FString SaveFile;
+	static  FString LoadFile;
 
-	FString ProcessCommand = "process";
-	FString ProcessKill = "kill";
+	static  FString ProcessCommand;
+	static  FString ProcessKill;
 
-	FString CreateCommand = "create";
-	FString Name = "name";
-	FString Bp = "bp";
-	FString Model = "model";
+	static  FString CreateCommand;
+	static  FString Name;
+	static  FString Bp;
+	static  FString Model;
 
-	FString DestroyCommand = "destroy";
+	static FString DestroyCommand ;
 
-	FString SetCommand = "set";
-	FString Active = "active";
-	FString Enabled = "enabled";
-	FString Instance = "instance";
-	FString Position = "position";
-	FString RelPosition = "relposition";
-	FString Rotation = "rotation";
-	FString RelRotation = "relrotation";
-	FString Scale = "scale";
-	FString Parent = "parent";
-	FString Controller = "controller";
-	FString SensorSlotIndex = "slotindex";
-	FString Beam = "beam";
-	FString Range = "range";
-	FString Fov = "fov";
-	FString ScanStep = "scanstepangle";
+	static FString SetCommand;
+	static FString Active;
+	static FString Enabled;
+	static FString Instance;
+	static FString Position;
+	static FString RelPosition;
+	static FString Rotation;
+	static FString RelRotation;
+	static FString Scale;
+	static FString Parent;
+	static FString Controller;
+	static FString SensorSlotIndex;
+	static FString Beam;
+	static FString Range;
+	static FString Fov;
 
 
-	FString GetCommand = "get";
+	static FString VericalFov;
+	static FString HorizontalFov;
+	static FString HorizontalScanStepAngleDeg;
+	static FString VerticalScanStepAngleDeg;
+	static FString MeasurementErrorMean;
+	static FString MeasurementErrorStd;
+	static FString EnableSurfaceDetect;
+	static FString EnableSubsurfaceDetect;
+	static FString EnableFoamDetect;
+	static FString SeaSurfaceDetectionProb;
+	static FString MaxSurfacePenetration;
 
-	FString PrintCommand	= "print";
-	FString Actors			= "actors";
-	FString Sensors			= "sensors";
-	FString SensorType		= "sensortype";
-	FString SensorTypes		= "sensortypes";
+	static FString RadarScanLevel;
+	static FString RadarScannerRPM;
+	static FString RadarGainType;
+	static FString RadarGainLevel;
+	static FString RadarSeaClutterType;
+	static FString RadarSeaClutterLevel;
+	static FString RadarSeaClutterAutoOffset;
+	static FString RadarRainClutterLevel;
+	static FString RadarMaxGuardZoneCount;
+	static FString RadarMaxSectorBlankingZoneCount;
+	
 
-	FString SimCommand = "sim";
-	FString Start = "start";
-	FString Pause = "pause";
-	FString Resume = "resume";
+
+
+
+	static FString GetCommand;
+
+	static FString PrintCommand;
+	static FString Actors;
+	static FString Sensors;
+	static FString SensorType;
+	static FString SensorTypes;
+
+	static FString SimCommand;
+	static FString Start;
+	static FString Pause;
+	static FString Resume;
 
 	SCommandOptionInfo* FindCommandOptionInfo(FString option);
 
@@ -124,6 +152,7 @@ public:
 
 	bool HasA(FString str);
 
+	bool GetValue(FString& name, BOOLEAN& val);
 	bool GetValue(FString& name, FVector& val);
 	bool GetValue(FString& name, FVector2D& val);
 	bool GetValue(FString& name, FLOAT64& val);
@@ -167,7 +196,7 @@ public:
 	bool HasController();
 	bool HasScanStep();
 
-	bool GetScanStepAngle(FVector2D& vec);
+
 
 
 	bool GetStart(bool& is_start);

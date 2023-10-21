@@ -3,6 +3,7 @@
 
 #include "Lib/Sensor/SensorBase.h"
 #include <Lib/Utils/CUtil.h>
+#include <Lib/Console/CCLICommandManager.h>
 
 
 
@@ -261,4 +262,29 @@ float  ASensorBase::GetVerticalScanStepAngleDeg()
 void  ASensorBase::SetVerticalScanStepAngleDeg(float val)
 {
 	VerticalScanStepAngleDeg = val;
+}
+
+void ASensorBase::Save(ISaveLoader* p_save_loader)
+{
+	Super::Save(p_save_loader);
+	FString line;
+	
+	
+	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
+	p_save_loader->AppendOption(line, CCLICommandManager::SensorSlotIndex, SensorSlotIndex);
+
+	p_save_loader->AppendOption(line, CCLICommandManager::VericalFov,					FovVerticalDeg);
+	p_save_loader->AppendOption(line, CCLICommandManager::HorizontalFov,				FovHorizontalDeg);
+	p_save_loader->AppendOption(line, CCLICommandManager::HorizontalScanStepAngleDeg,	HorizontalScanStepAngleDeg);
+	p_save_loader->AppendOption(line, CCLICommandManager::VerticalScanStepAngleDeg,		VerticalScanStepAngleDeg);
+	p_save_loader->AppendOption(line, CCLICommandManager::MeasurementErrorMean,			MeasurementErrorMean);
+	p_save_loader->AppendOption(line, CCLICommandManager::MeasurementErrorStd,			MeasurementErrorUncertainy);
+	p_save_loader->AppendOption(line, CCLICommandManager::EnableSurfaceDetect,			EnableSurfaceDetect);
+	p_save_loader->AppendOption(line, CCLICommandManager::EnableSubsurfaceDetect,		EnableSubsurfaceDetect);
+	p_save_loader->AppendOption(line, CCLICommandManager::EnableFoamDetect,				EnableFoamDetect);
+	p_save_loader->AppendOption(line, CCLICommandManager::SeaSurfaceDetectionProb,		SeaSurfaceDetectionProbability);
+	p_save_loader->AppendOption(line, CCLICommandManager::MaxSurfacePenetration,		MaxSurfacePenetrationMeter);
+
+	p_save_loader->AddLine(line);
+
 }

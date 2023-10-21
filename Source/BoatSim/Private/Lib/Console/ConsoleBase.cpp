@@ -45,6 +45,7 @@ void UConsoleBase::TickComponent(float DeltaTime, ELevelTick TickType, FActorCom
 	// ...
 }
 
+
 CCLICommandManager* UConsoleBase::GetCommandManager()
 {
     return &CommandManager;
@@ -294,7 +295,27 @@ void UConsoleBase::ProcessCommands(TArray<FString> tokens)
 }
 #endif
 
+void UConsoleBase::SendConsoleResponse(FString option, INT32S ret)
+{
+    pSystemAPI->SendConsoleResponse(option + " :" + CUtil::IntToString(ret));
+}
+void UConsoleBase::SendConsoleResponse(FString option, FLOAT64 ret)
+{
+    pSystemAPI->SendConsoleResponse(option + " :" + CUtil::FloatToString(ret));
+}
+void UConsoleBase::SendConsoleResponse(FString option, BOOLEAN ret)
+{
+    pSystemAPI->SendConsoleResponse(option + " :" + CUtil::BoolToStringBinary(ret));
+}
 
+void UConsoleBase::SendConsoleResponse(FString option, FVector2D ret)
+{
+    pSystemAPI->SendConsoleResponse(option + " :" + ret.ToString());
+}
+void UConsoleBase::SendConsoleResponse(FString option, FVector ret)
+{
+    pSystemAPI->SendConsoleResponse(option + " :" + ret.ToString());
+}
 
 bool UConsoleBase::ProcessHelpCommand(TMap<FString, FString>& options, FString& error_message)
 {
@@ -518,6 +539,9 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
     FVector vec;
     bool is_enabled;
     bool is_active;
+    INT32S sint;
+    FLOAT64 dbl;
+
 
     FString controller;
     ret = CommandManager.GetContoroller(controller);
@@ -598,19 +622,227 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
         CUtil::SetParent(p_actor, p_parent);
     }
 
-    ret = CommandManager.GetScanStepAngle(vec2d);
+    ret = CommandManager.GetValue(CCLICommandManager::SensorSlotIndex, sint);
     if (ret) {
-
-
-        if (pSystemAPI->SetSensorScanStepAngleDeg(p_actor, vec2d)) {
+        if (pSystemAPI->SetSlotIndex(p_actor, sint)) {
             return true;
         }
-        else {
-            return false;
-        }
-
-        return true;
     }
+    else {
+
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::HorizontalFov, dbl);
+    if (ret) {
+        if (pSystemAPI->SetHorizontalFov(p_actor, dbl)) {
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::VericalFov, dbl);
+    if (ret) {
+        if (pSystemAPI->SetVerticalFov(p_actor, dbl)) {
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::HorizontalScanStepAngleDeg, dbl);
+    if (ret) {
+        if (pSystemAPI->SetHorizontalScanStepAngleDeg(p_actor, dbl)) {
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::VerticalScanStepAngleDeg, dbl);
+    if (ret) {
+        if (pSystemAPI->SetVerticalScanStepAngleDeg(p_actor, dbl)) {
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::MeasurementErrorMean, dbl);
+    if (ret) {
+        if (pSystemAPI->SetMeasurementErrorMean(p_actor, dbl)) {
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::MeasurementErrorStd, dbl);
+    if (ret) {
+        if (pSystemAPI->SetMeasurementErrorStd(p_actor, dbl)) {
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::EnableSurfaceDetect, is_enabled);
+    if (ret) {
+        if (pSystemAPI->SetEnableSurfaceDetect(p_actor, is_enabled)) {
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::EnableSubsurfaceDetect, is_enabled);
+    if (ret) {
+        if (pSystemAPI->SetEnableSubsurfaceDetect(p_actor, is_enabled)) {
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::EnableFoamDetect, is_enabled);
+    if (ret) {
+        if (pSystemAPI->SetEnableFoamDetect(p_actor, is_enabled)) {
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::SeaSurfaceDetectionProb, dbl);
+    if (ret) {
+        if (pSystemAPI->SetSeaSurfaceDetectionProb(p_actor, dbl)) {
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::MaxSurfacePenetration, dbl);
+    if (ret) {
+        if (pSystemAPI->SetMaxSurfacePenetration(p_actor, dbl)) {
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::RadarScanLevel, dbl);
+    if (ret) {
+        if (pSystemAPI->SetRadarScanLevel(p_actor, dbl)) {
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::RadarScannerRPM, dbl);
+    if (ret) {
+        if (pSystemAPI->SetRadarScannerRPM(p_actor, dbl)) {
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::RadarGainType, sint);
+    if (ret) {
+        if (pSystemAPI->SetRadarGainType(p_actor, sint)) {
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::RadarGainLevel, sint);
+    if (ret) {
+        if (pSystemAPI->SetRadarGainLevel(p_actor, sint)) {
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::RadarSeaClutterType, sint);
+    if (ret) {
+        if (pSystemAPI->SetRadarSeaClutterType(p_actor, sint)) {
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::RadarSeaClutterLevel, sint);
+    if (ret) {
+        if (pSystemAPI->SetRadarSeaClutterLevel(p_actor, sint)) {
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::RadarSeaClutterAutoOffset, sint);
+    if (ret) {
+        if (pSystemAPI->SetRadarSeaClutterAutoOffset(p_actor, sint)) {
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::RadarRainClutterLevel, sint);
+    if (ret) {
+        if (pSystemAPI->SetRadarRainClutterLevel(p_actor, sint)) {
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::RadarMaxGuardZoneCount, sint);
+    if (ret) {
+        if (pSystemAPI->SetRadarMaxGuardZoneCount(p_actor, sint)) {
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::RadarMaxSectorBlankingZoneCount, sint);
+    if (ret) {
+        if (pSystemAPI->SetRadarMaxSectorBlankingZoneCount(p_actor, sint)) {
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    
 
     return true;
 }
@@ -625,6 +857,8 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
     AActor* p_actor;
     FVector vec;
     bool is_enabled;
+    INT32S sint;
+    FLOAT64 dbl;
 
 
 
@@ -733,18 +967,250 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
         return true;
     }
 
-    ret = CommandManager.HasA(CommandManager.ScanStep);
+
+
+    ret = CommandManager.HasA(CCLICommandManager::SensorSlotIndex);
     if (ret) {
 
-
-        if (pSystemAPI->GetSensorScanStepAngleDeg(p_actor, vec2d)) {
-            pSystemAPI->SendConsoleResponse("Scale: " + vec2d.ToString());
+        if (pSystemAPI->GetSlotIndex(p_actor, sint)) {
+            SendConsoleResponse(CCLICommandManager::SensorSlotIndex, sint);
+            return true;
         }
-        else {
-            return false;
-        }
+    }
+    else {
 
-        return true;
+    }
+
+
+    ret = CommandManager.HasA(CCLICommandManager::HorizontalFov);
+    if (ret) {
+        if (pSystemAPI->GetHorizontalFov(p_actor, dbl)) {
+            SendConsoleResponse(CCLICommandManager::HorizontalFov, dbl);
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.HasA(CCLICommandManager::VericalFov);
+    if (ret) {
+        if (pSystemAPI->GetVerticalFov(p_actor, dbl)) {
+            SendConsoleResponse(CCLICommandManager::VericalFov, dbl);
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.HasA(CCLICommandManager::HorizontalScanStepAngleDeg);
+    if (ret) {
+        if (pSystemAPI->GetHorizontalScanStepAngleDeg(p_actor, dbl)) {
+            SendConsoleResponse(CCLICommandManager::HorizontalScanStepAngleDeg, dbl);
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.HasA(CCLICommandManager::VerticalScanStepAngleDeg);
+    if (ret) {
+        if (pSystemAPI->SetVerticalScanStepAngleDeg(p_actor, dbl)) {
+            SendConsoleResponse(CCLICommandManager::VerticalScanStepAngleDeg, dbl);
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.HasA(CCLICommandManager::MeasurementErrorMean);
+    if (ret) {
+        if (pSystemAPI->GetMeasurementErrorMean(p_actor, dbl)) {
+            SendConsoleResponse(CCLICommandManager::MeasurementErrorMean, dbl);
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.HasA(CCLICommandManager::MeasurementErrorStd);
+    if (ret) {
+        if (pSystemAPI->GetMeasurementErrorStd(p_actor, dbl)) {
+            SendConsoleResponse(CCLICommandManager::MeasurementErrorStd, dbl);
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.HasA(CCLICommandManager::EnableSurfaceDetect);
+    if (ret) {
+        if (pSystemAPI->GetEnableSurfaceDetect(p_actor, is_enabled)) {
+            SendConsoleResponse(CCLICommandManager::EnableSurfaceDetect, is_enabled);
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.HasA(CCLICommandManager::EnableSubsurfaceDetect);
+    if (ret) {
+        if (pSystemAPI->GetEnableSubsurfaceDetect(p_actor, is_enabled)) {
+            SendConsoleResponse(CCLICommandManager::EnableSubsurfaceDetect, is_enabled);
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.HasA(CCLICommandManager::EnableFoamDetect);
+    if (ret) {
+        if (pSystemAPI->GetEnableFoamDetect(p_actor, is_enabled)) {
+            SendConsoleResponse(CCLICommandManager::EnableFoamDetect, is_enabled);
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.HasA(CCLICommandManager::SeaSurfaceDetectionProb);
+    if (ret) {
+        if (pSystemAPI->GetSeaSurfaceDetectionProb(p_actor, dbl)) {
+            SendConsoleResponse(CCLICommandManager::EnableFoamDetect, dbl);
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.HasA(CCLICommandManager::MaxSurfacePenetration);
+    if (ret) {
+        if (pSystemAPI->GetMaxSurfacePenetration(p_actor, dbl)) {
+            SendConsoleResponse(CCLICommandManager::MaxSurfacePenetration, dbl);
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.HasA(CCLICommandManager::RadarScanLevel);
+    if (ret) {
+        if (pSystemAPI->GetRadarScanLevel(p_actor, sint)) {
+            SendConsoleResponse(CCLICommandManager::RadarScanLevel, sint);
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.HasA(CCLICommandManager::RadarScannerRPM);
+    if (ret) {
+        if (pSystemAPI->GetRadarScannerRPM(p_actor, sint)) {
+            SendConsoleResponse(CCLICommandManager::RadarScannerRPM, sint);
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.HasA(CCLICommandManager::RadarGainType);
+    if (ret) {
+        if (pSystemAPI->GetRadarGainType(p_actor, sint)) {
+            SendConsoleResponse(CCLICommandManager::RadarGainType, sint);
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.HasA(CCLICommandManager::RadarGainLevel);
+    if (ret) {
+        if (pSystemAPI->GetRadarGainLevel(p_actor, sint)) {
+            SendConsoleResponse(CCLICommandManager::RadarGainLevel, sint);
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.HasA(CCLICommandManager::RadarSeaClutterType);
+    if (ret) {
+        if (pSystemAPI->GetRadarSeaClutterType(p_actor, sint)) {
+            SendConsoleResponse(CCLICommandManager::RadarSeaClutterType, sint);
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.HasA(CCLICommandManager::RadarSeaClutterLevel);
+    if (ret) {
+        if (pSystemAPI->GetRadarSeaClutterLevel(p_actor, sint)) {
+            SendConsoleResponse(CCLICommandManager::RadarSeaClutterLevel, sint);
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.HasA(CCLICommandManager::RadarSeaClutterAutoOffset);
+    if (ret) {
+        if (pSystemAPI->GetRadarSeaClutterAutoOffset(p_actor, sint)) {
+            SendConsoleResponse(CCLICommandManager::RadarSeaClutterAutoOffset, sint);
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.HasA(CCLICommandManager::RadarRainClutterLevel);
+    if (ret) {
+        if (pSystemAPI->GetRadarRainClutterLevel(p_actor, sint)) {
+            SendConsoleResponse(CCLICommandManager::RadarRainClutterLevel, sint);
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.HasA(CCLICommandManager::RadarMaxGuardZoneCount);
+    if (ret) {
+        if (pSystemAPI->GetRadarMaxGuardZoneCount(p_actor, sint)) {
+            SendConsoleResponse(CCLICommandManager::RadarMaxGuardZoneCount, sint);
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.HasA(CCLICommandManager::RadarMaxSectorBlankingZoneCount);
+    if (ret) {
+        if (pSystemAPI->GetRadarMaxSectorBlankingZoneCount(p_actor, sint)) {
+            SendConsoleResponse(CCLICommandManager::RadarMaxSectorBlankingZoneCount, sint);
+            return true;
+        }
+    }
+    else {
+
     }
 
     return true;
@@ -757,7 +1223,7 @@ bool UConsoleBase::ProcessWorkspaceCommand(TMap<FString, FString>& options, FStr
     CommandManager.SetCommandOptions(&options);
     FString path;
 
-    ret = CommandManager.GetValue(CommandManager.LoadFile, path);
+    ret = CommandManager.GetValue(CCLICommandManager::LoadFile, path);
     if (ret) {
         if (pSystemAPI->Load(path)) {
             return true;
@@ -767,7 +1233,7 @@ bool UConsoleBase::ProcessWorkspaceCommand(TMap<FString, FString>& options, FStr
         
     }
 
-    ret = CommandManager.GetValue(CommandManager.SaveFile, path);
+    ret = CommandManager.GetValue(CCLICommandManager::SaveFile, path);
     if (ret) {
         if (pSystemAPI->Save(path)) {
             return true;
@@ -828,3 +1294,4 @@ bool UConsoleBase::ProcessCommands(FString command, TMap<FString, FString>& opti
     return false;
 
 }
+

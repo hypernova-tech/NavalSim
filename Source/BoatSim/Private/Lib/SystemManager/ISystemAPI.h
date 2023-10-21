@@ -25,7 +25,15 @@ public:
 	virtual TArray<AActor*>& GetSensorGlobalIgnoreList() = 0;
 	virtual AActor* GetFloor() = 0;
 	virtual TArray<AActor*>& GetMoveableActorList() = 0;
-
+	/// <summary>
+	/// sensor access
+	/// </summary>
+	/// <param name="model_name"></param>
+	/// <param name="boat_name"></param>
+	/// <param name="world_pos"></param>
+	/// <param name="world_rot"></param>
+	/// <param name="scale"></param>
+	/// <returns></returns>
 	virtual AActor* CreateActor(FString model_name, FString boat_name, FVector world_pos, FVector world_rot, FVector scale)=0;
 	virtual void RegisterActor(AActor* p_actor) = 0;
 	virtual bool RemoveActor(AActor* p_actor) = 0;
@@ -35,6 +43,7 @@ public:
 	virtual bool DestroyActor(FString name) = 0;
 	virtual AActorBase* ToActorBase(AActor* p_actor) = 0;
 	virtual ASensorBase* ToSensorBase(AActor* p_actor) = 0;
+	
 	virtual bool SetActorEnabled(AActor* p_actor, bool val) = 0;
 	virtual bool GetActorEnabled(AActor* p_actor) = 0;
 	virtual void EnableAllActors() = 0;
@@ -89,4 +98,73 @@ public:
 	virtual TArray<ESensorType> GetAllSensorTypes() = 0;
 	virtual TArray<ASensorBase*> GetAllSensors() = 0;
 	virtual TArray<ASensorBase*> GetSensorsOfType(ESensorType sensor_type) = 0;
+
+
+
+    /// <summary>
+    /// Sensor modification
+    /// </summary>
+    /// <param name="p_actor"></param>
+    /// <param name="slot_index"></param>
+    /// <returns></returns>
+	virtual bool SetSlotIndex(AActor* p_actor, INT32S slot_index) = 0;
+	virtual bool GetSlotIndex(AActor* p_actor, INT32S &slot_index) = 0;
+    virtual bool SetHorizontalFov(AActor* p_actor, FLOAT64 angle_deg) = 0;
+	virtual bool GetHorizontalFov(AActor* p_actor, FLOAT64 &angle_deg) = 0;
+    virtual bool SetVerticalFov(AActor* p_actor, FLOAT64 angle_deg) = 0;
+	virtual bool GetVerticalFov(AActor* p_actor, FLOAT64& angle_deg) = 0;
+    virtual bool SetHorizontalScanStepAngleDeg(AActor* p_actor, FLOAT64 angle_deg) = 0;
+	virtual bool GetHorizontalScanStepAngleDeg(AActor* p_actor, FLOAT64& angle_deg) = 0;
+    virtual bool SetVerticalScanStepAngleDeg(AActor* p_actor, FLOAT64 angle_deg) = 0;
+	virtual bool GetVerticalScanStepAngleDeg(AActor* p_actor, FLOAT64& angle_deg) = 0;
+    virtual bool SetMeasurementErrorMean(AActor* p_actor, FLOAT64 angle_deg) = 0;
+    virtual bool SetMeasurementErrorStd(AActor* p_actor, FLOAT64 angle_deg) = 0;
+	virtual bool GetMeasurementErrorMean(AActor* p_actor, FLOAT64& angle_deg) = 0;
+	virtual bool GetMeasurementErrorStd(AActor* p_actor, FLOAT64& angle_deg) = 0;
+    virtual bool SetEnableSurfaceDetect(AActor* p_actor, BOOLEAN val) = 0;
+    virtual bool SetEnableSubsurfaceDetect(AActor* p_actor, BOOLEAN val) = 0;
+    virtual bool SetEnableFoamDetect(AActor* p_actor, BOOLEAN angle_deg) = 0;
+    virtual bool SetSeaSurfaceDetectionProb(AActor* p_actor, FLOAT64 val) = 0;
+
+	virtual bool GetEnableSurfaceDetect(AActor* p_actor, BOOLEAN& val) = 0;
+	virtual bool GetEnableSubsurfaceDetect(AActor* p_actor, BOOLEAN& val) = 0;
+	virtual bool GetEnableFoamDetect(AActor* p_actor, BOOLEAN& angle_deg) = 0;
+	virtual bool GetSeaSurfaceDetectionProb(AActor* p_actor, FLOAT64& val) = 0;
+
+    virtual bool SetMaxSurfacePenetration(AActor* p_actor, FLOAT64 val) = 0;
+    virtual bool SetRadarScanLevel(AActor* p_actor, INT32S val) = 0;
+    virtual bool SetRadarScannerRPM(AActor* p_actor, INT32S val) = 0;
+    virtual bool SetRadarGainType(AActor* p_actor, INT32S val) = 0;
+    virtual bool SetRadarGainLevel(AActor* p_actor, INT32S val) = 0;
+    virtual bool SetRadarSeaClutterType(AActor* p_actor, INT32S val) = 0;
+    virtual bool SetRadarSeaClutterLevel(AActor* p_actor, INT32S val) = 0;
+    virtual bool SetRadarSeaClutterAutoOffset(AActor* p_actor, INT32S val) = 0;
+	virtual bool SetRadarRainClutterLevel(AActor* p_actor, INT32S val) = 0;
+	virtual bool SetRadarMaxGuardZoneCount(AActor* p_actor, INT32S val) = 0;
+	virtual bool SetRadarMaxSectorBlankingZoneCount(AActor* p_actor, INT32S val) = 0;
+
+
+	virtual bool GetMaxSurfacePenetration(AActor* p_actor, FLOAT64& val) = 0;
+	virtual bool GetRadarScanLevel(AActor* p_actor, INT32S& val) = 0;
+	virtual bool GetRadarScannerRPM(AActor* p_actor, INT32S& val) = 0;
+	virtual bool GetRadarGainType(AActor* p_actor, INT32S& val) = 0;
+	virtual bool GetRadarGainLevel(AActor* p_actor, INT32S& val) = 0;
+	virtual bool GetRadarSeaClutterType(AActor* p_actor, INT32S& val) = 0;
+	virtual bool GetRadarSeaClutterLevel(AActor* p_actor, INT32S& val) = 0;
+	virtual bool GetRadarSeaClutterAutoOffset(AActor* p_actor, INT32S& val) = 0;
+	virtual bool GetRadarRainClutterLevel(AActor* p_actor, INT32S& val) = 0;
+	virtual bool GetRadarMaxGuardZoneCount(AActor* p_actor, INT32S& val) = 0;
+	virtual bool GetRadarMaxSectorBlankingZoneCount(AActor* p_actor, INT32S& val) = 0;
+	
+
+
+
+
+
+
+    
+ 
+
+
+
 };

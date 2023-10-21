@@ -42,6 +42,13 @@ protected:
 	bool ProcessSetCommand(TMap<FString, FString>& options, FString& error_message);
 	bool ProcessGetCommand(TMap<FString, FString>& options, FString& error_message);
 
+
+	void SendConsoleResponse(FString option, INT32S ret);
+	void SendConsoleResponse(FString option, FLOAT64 ret);
+	void SendConsoleResponse(FString option, BOOLEAN ret);
+	void SendConsoleResponse(FString option, FVector2D ret);
+	void SendConsoleResponse(FString option, FVector ret);
+
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;

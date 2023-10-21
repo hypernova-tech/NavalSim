@@ -58,6 +58,9 @@ public:
 
 	SDIFOP* GetConfigurationPacket();
 
+
+	
+
 private:
 
 	bool HasNewData;

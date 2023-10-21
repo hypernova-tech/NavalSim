@@ -5,6 +5,75 @@
 #include <Lib/Utils/CUtil.h>
 #include <Lib/SystemManager/SystemManagerBase.h>
 
+FString CCLICommandManager::WorkspaceCommand = ("ws");
+FString CCLICommandManager::SaveFile = ("save");
+FString CCLICommandManager::LoadFile = ("load");
+
+FString CCLICommandManager::ProcessCommand = "process";
+FString CCLICommandManager::ProcessKill = "kill";
+
+FString CCLICommandManager::CreateCommand = "create";
+FString CCLICommandManager::Name = "name";
+FString CCLICommandManager::Bp = "bp";
+FString CCLICommandManager::Model = "model";
+
+FString CCLICommandManager::DestroyCommand = "destroy";
+
+FString CCLICommandManager::SetCommand = "set";
+FString CCLICommandManager::Active = "active";
+FString CCLICommandManager::Enabled = "enabled";
+FString CCLICommandManager::Instance = "instance";
+FString CCLICommandManager::Position = "position";
+FString CCLICommandManager::RelPosition = "relposition";
+FString CCLICommandManager::Rotation = "rotation";
+FString CCLICommandManager::RelRotation = "relrotation";
+FString CCLICommandManager::Scale = "scale";
+FString CCLICommandManager::Parent = "parent";
+FString CCLICommandManager::Controller = "controller";
+FString CCLICommandManager::SensorSlotIndex = "slotindex";
+FString CCLICommandManager::Beam = "beam";
+FString CCLICommandManager::Range = "range";
+FString CCLICommandManager::Fov = "fov";
+
+
+FString CCLICommandManager::VericalFov = "vfov";
+FString CCLICommandManager::HorizontalFov = "hfov";
+FString CCLICommandManager::HorizontalScanStepAngleDeg = "hscanstepang";
+FString CCLICommandManager::VerticalScanStepAngleDeg = "vscanstepang";
+FString CCLICommandManager::MeasurementErrorMean= "merrormean";
+FString CCLICommandManager::MeasurementErrorStd= "merrorstd";
+FString CCLICommandManager::EnableSurfaceDetect = "surfacedetecten";
+FString CCLICommandManager::EnableSubsurfaceDetect = "subsurfacedetecten";
+FString CCLICommandManager::EnableFoamDetect = "foamen";
+FString CCLICommandManager::SeaSurfaceDetectionProb = "seasurfdetectprob";
+FString CCLICommandManager::MaxSurfacePenetration = "maxsurfpenet";
+
+FString CCLICommandManager::RadarScanLevel = "radscanlevel";
+FString CCLICommandManager::RadarScannerRPM = "radscanrpm";
+FString CCLICommandManager::RadarGainType = "radgaintype";
+FString CCLICommandManager::RadarGainLevel = "radgainlevel";
+FString CCLICommandManager::RadarSeaClutterType = "radseaclutleveltype";
+FString CCLICommandManager::RadarSeaClutterLevel = "radseaclutlevel";
+FString CCLICommandManager::RadarSeaClutterAutoOffset = "radseaclutautooffset";
+FString CCLICommandManager::RadarRainClutterLevel = "radrainclutlevel";
+FString CCLICommandManager::RadarMaxGuardZoneCount = "radmaxguardzonecount";
+FString CCLICommandManager::RadarMaxSectorBlankingZoneCount = "radmaxsectorblankingzonecount";
+
+
+
+FString CCLICommandManager::GetCommand = "get";
+
+FString CCLICommandManager::PrintCommand = "print";
+FString CCLICommandManager::Actors = "actors";
+FString CCLICommandManager::Sensors = "sensors";
+FString CCLICommandManager::SensorType = "sensortype";
+FString CCLICommandManager::SensorTypes = "sensortypes";
+
+FString CCLICommandManager::SimCommand = "sim";
+FString CCLICommandManager::Start = "start";
+FString CCLICommandManager::Pause = "pause";
+FString CCLICommandManager::Resume = "resume";
+
 CCLICommandManager::CCLICommandManager()
 {
 	PrepareProcessCommandInfo();
@@ -45,7 +114,7 @@ void CCLICommandManager::PrepareWorkspaceCommandInfo()
 
 
 
-	CommandInfo.Add(CreateCommand, options);
+	CommandInfo.Add(WorkspaceCommand, options);
 }
 void CCLICommandManager::PrepareCreateCommandInfo()
 {
@@ -110,6 +179,7 @@ void CCLICommandManager::PreparePrintCommandInfo()
 	info.Description = "prints all bp info";
 	options.Add(info);
 
+
 	info.Option = "--actors";
 	info.Description = "prints all actors";
 	options.Add(info);
@@ -163,8 +233,8 @@ void CCLICommandManager::PrepareSetCommandInfo()
 	info.Option = "--name";
 	info.Description = "sets the name of object";
 	options.Add(info);
-
-
+	
+	
 	info.Option = "--parent";
 	info.Description = "sets the scale of object of name";
 	options.Add(info);
@@ -205,9 +275,92 @@ void CCLICommandManager::PrepareSetCommandInfo()
 	info.Description = "sets the possesed pawn";
 	options.Add(info);
 
-	info.Option = "--scanstepangle";
-	info.Description = "sets the scan step angle in degrees (horizontal step angle, vertical step angle)";
+	info.Option = "--" + CCLICommandManager::HorizontalFov ;
+	info.Description = "sets the horizontal fov of sensor";
 	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::VericalFov;
+	info.Description = "sets the vertical fov of sensor";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::HorizontalScanStepAngleDeg;
+	info.Description = "sets the horizontal scan step angle";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::VerticalScanStepAngleDeg;
+	info.Description = "sets the vertical scan step angle";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::MeasurementErrorMean;
+	info.Description = "sets the measurment error mean";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::MeasurementErrorStd;
+	info.Description = "sets the measurement error standard deviation";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::EnableSurfaceDetect;
+	info.Description = "enable or disable sensor surface detect";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::EnableSurfaceDetect;
+	info.Description = "enable or disable sensor subsurface detect";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::EnableFoamDetect;
+	info.Description = "enable or disable foam detect";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::SeaSurfaceDetectionProb;
+	info.Description = "sets the water surface detection probablity";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::MaxSurfacePenetration;
+	info.Description = "sets the sensor surface penetration distance";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::RadarScanLevel;
+	info.Description = "sets radar scan level";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::RadarScannerRPM;
+	info.Description = "sets the radar scanner rpm";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::RadarGainType;
+	info.Description = "sets the radar gain type";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::RadarGainLevel;
+	info.Description = "sets the radar gain level";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::RadarSeaClutterType;
+	info.Description = "sets the radar sea clutter tpye";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::RadarSeaClutterLevel;
+	info.Description = "sets the radar sea clutter level";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::RadarSeaClutterAutoOffset;
+	info.Description = "sets the radar sea clutter auto offset";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::RadarRainClutterLevel;
+	info.Description = "sets the radar rain clutter level";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::RadarMaxGuardZoneCount;
+	info.Description = "sets the radar max guard zone count";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::RadarMaxSectorBlankingZoneCount;
+	info.Description = "sets the radar max. sektor blanking zone count";
+	options.Add(info);
+
+
+
 
 	CommandInfo.Add(SetCommand, options);
 }
@@ -267,8 +420,88 @@ void CCLICommandManager::PrepareGetCommandInfo()
 	info.Description = "gets the possesed pawn";
 	options.Add(info);
 
-	info.Option = "--scanstepangle";
-	info.Description = "gets the scan step angle";
+	info.Option = "--" + CCLICommandManager::HorizontalFov;
+	info.Description = "gets the horizontal fov of sensor";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::VericalFov;
+	info.Description = "gets the vertical fov of sensor";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::HorizontalScanStepAngleDeg;
+	info.Description = "gets the horizontal scan step angle";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::VerticalScanStepAngleDeg;
+	info.Description = "gets the vertical scan step angle";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::MeasurementErrorMean;
+	info.Description = "gets the measurment error mean";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::MeasurementErrorStd;
+	info.Description = "gets the measurement error standard deviation";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::EnableSurfaceDetect;
+	info.Description = "gets enable or disable sensor surface detect";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::EnableSurfaceDetect;
+	info.Description = "gets enable or disable sensor subsurface detect";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::EnableFoamDetect;
+	info.Description = "enable or disable foam detect";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::SeaSurfaceDetectionProb;
+	info.Description = "gets the water surface detection probablity";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::MaxSurfacePenetration;
+	info.Description = "gets the sensor surface penetration distance";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::RadarScanLevel;
+	info.Description = "gets radar scan level";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::RadarScannerRPM;
+	info.Description = "gets the radar scanner rpm";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::RadarGainType;
+	info.Description = "gets the radar gain type";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::RadarGainLevel;
+	info.Description = "gets the radar gain level";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::RadarSeaClutterType;
+	info.Description = "gets the radar sea clutter tpye";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::RadarSeaClutterLevel;
+	info.Description = "gets the radar sea clutter level";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::RadarSeaClutterAutoOffset;
+	info.Description = "gets the radar sea clutter auto offset";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::RadarRainClutterLevel;
+	info.Description = "gets the radar rain clutter level";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::RadarMaxGuardZoneCount;
+	info.Description = "gets the radar max guard zone count";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::RadarMaxSectorBlankingZoneCount;
+	info.Description = "gets the radar max. sektor blanking zone count";
 	options.Add(info);
 
 
@@ -537,6 +770,19 @@ bool CCLICommandManager::GetValue(FString& name, INT32S& val)
 	return false;
 }
 
+
+
+bool CCLICommandManager::GetValue(FString& name, BOOLEAN& val)
+{
+	bool ret = false;
+	auto pstr = pOptions->Find(name);
+	if (pstr != nullptr) {
+
+		val = (*pstr == TEXT("1"))?true:false;
+		return true;
+	}
+	return false;
+}
 bool CCLICommandManager::GetValue(FString& name, FString& val)
 {
 	bool ret = false;
@@ -564,19 +810,7 @@ bool CCLICommandManager::GetScale(FVector& vec)
 	return false;
 }
 
-bool CCLICommandManager::GetScanStepAngle(FVector2D& vec)
-{
-	bool ret = false;
-	auto pstr = pOptions->Find(ScanStep);
-	if (pstr != nullptr) {
 
-		ret = CUtil::ParseVector2D(*pstr, vec);
-		return ret;
-	}
-
-
-	return false;
-}
 bool CCLICommandManager::GetActive(bool& val)
 {
 	bool ret = false;

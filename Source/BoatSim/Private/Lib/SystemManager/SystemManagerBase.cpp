@@ -47,6 +47,10 @@ TArray<AActor*>& ASystemManagerBase::GetMoveableActorList()
 
 void ASystemManagerBase::RegisterActor(AActor* p_actor)
 {
+	if (AllActors.Find(p_actor->GetName())) {
+		return;
+	}
+
 	AllActors.FindOrAdd(p_actor->GetName(),p_actor);
 	ActorList.Add(p_actor);
 	if (p_actor->IsA<ASensorBase>()) {
@@ -152,7 +156,14 @@ ASensorBase* ASystemManagerBase::ToSensorBase(AActor* p_actor)
 
 	return nullptr;
 }
+ARadarBase* ASystemManagerBase::ToRadarBase(AActor* p_actor)
+{
+	if (p_actor->IsA<ARadarBase>()) {
+		return (ARadarBase*)p_actor;
+	}
 
+	return nullptr;
+}
 void ASystemManagerBase::EnableAllActors()
 {
 
@@ -446,22 +457,42 @@ bool ASystemManagerBase::SetMainPlayerController(FString name)
 {
 
 	APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
-	if (PlayerController && PlayerController->GetPawn())
+	if (PlayerController )
 	{
-		PlayerController->UnPossess();
-		auto pactor = FindActor(name);
-		if (pactor->IsA<APawn>()) {
-			PlayerController->Possess((APawn*)pactor);
+		if (PlayerController->GetPawn()) {
+			PlayerController->UnPossess();
+			auto pactor = FindActor(name);
+			if (pactor->IsA<APawn>()) {
+				PlayerController->Possess((APawn*)pactor);
 
-			
-			
-			PlayerController->SetViewTargetWithBlend(pactor, 0.1f);
-			APlatformBase* p_platform = (APlatformBase*)(PlayerController->GetPawn());
-			if (p_platform) {
-				SetPlatform(p_platform);
+
+
+				PlayerController->SetViewTargetWithBlend(pactor, 0.1f);
+				APlatformBase* p_platform = (APlatformBase*)(PlayerController->GetPawn());
+				if (p_platform) {
+					SetPlatform(p_platform);
+				}
+				return true;
 			}
-			return true;
 		}
+		else {
+			
+			auto pactor = FindActor(name);
+			if (pactor->IsA<APawn>()) {
+				PlayerController->SetPawn((APawn*)pactor);
+				PlayerController->Possess((APawn*)pactor);
+
+
+
+				PlayerController->SetViewTargetWithBlend(pactor, 0.1f);
+				APlatformBase* p_platform = (APlatformBase*)(PlayerController->GetPawn());
+				if (p_platform) {
+					SetPlatform(p_platform);
+				}
+				return true;
+			}
+		}
+		
 		
 	}
 
@@ -763,6 +794,7 @@ bool ASystemManagerBase::GetSensorScanStepAngleDeg(AActor* p_actor, FVector2D& r
 		return false;
 	}
 }
+
 bool ASystemManagerBase::SetSensorScanStepAngleDeg(AActor* p_actor, FVector2D ang)
 {
 	auto p_sensor = ToSensorBase(p_actor);
@@ -798,4 +830,447 @@ bool ASystemManagerBase::Save(FString fname)
 bool ASystemManagerBase::Load(FString fname)
 {
 	return pSaverLoader->Load(this, fname);
+}
+
+bool ASystemManagerBase::SetSlotIndex(AActor* p_actor, INT32S slot_index)
+{
+	auto p_obj = ToSensorBase(p_actor);
+	if (p_obj) {
+		p_obj->SensorSlotIndex = slot_index;
+		return true;
+	}
+	return false;
+}
+
+bool ASystemManagerBase::GetSlotIndex(AActor* p_actor, INT32S& slot_index)
+{
+	auto p_obj = ToSensorBase(p_actor);
+	if (p_obj) {
+		slot_index = p_obj->SensorSlotIndex;
+		return true;
+	}
+	return false;
+}
+
+bool ASystemManagerBase::SetHorizontalFov(AActor* p_actor, FLOAT64 angle_deg)
+{
+	auto p_obj = ToSensorBase(p_actor);
+	if (p_obj) {
+		p_obj->FovHorizontalDeg = angle_deg;
+		return true;
+	}
+	return false;
+}
+
+bool ASystemManagerBase::GetHorizontalFov(AActor* p_actor, FLOAT64& angle_deg)
+{
+	auto p_obj = ToSensorBase(p_actor);
+	if (p_obj) {
+		angle_deg = p_obj->FovHorizontalDeg;
+		return true;
+	}
+	return false;
+}
+
+bool ASystemManagerBase::SetVerticalFov(AActor* p_actor, FLOAT64 angle_deg)
+{
+	auto p_obj = ToSensorBase(p_actor);
+	if (p_obj) {
+		p_obj->FovVerticalDeg = angle_deg;
+		return true;
+	}
+	return false;
+}
+
+bool ASystemManagerBase::GetVerticalFov(AActor* p_actor, FLOAT64& angle_deg)
+{
+	auto p_obj = ToSensorBase(p_actor);
+	if (p_obj) {
+		angle_deg = p_obj->FovVerticalDeg;
+		return true;
+	}
+	return false;
+}
+
+bool ASystemManagerBase::SetHorizontalScanStepAngleDeg(AActor* p_actor, FLOAT64 angle_deg)
+{
+	auto p_obj = ToSensorBase(p_actor);
+	if (p_obj) {
+		p_obj->HorizontalScanStepAngleDeg = angle_deg;
+		return true;
+	}
+	return false;
+}
+
+bool ASystemManagerBase::GetHorizontalScanStepAngleDeg(AActor* p_actor, FLOAT64& angle_deg)
+{
+	auto p_obj = ToSensorBase(p_actor);
+	if (p_obj) {
+		angle_deg = p_obj->HorizontalScanStepAngleDeg;
+		return true;
+	}
+
+	return false;
+
+}
+
+bool ASystemManagerBase::SetVerticalScanStepAngleDeg(AActor* p_actor, FLOAT64 angle_deg)
+{
+	auto p_obj = ToSensorBase(p_actor);
+	if (p_obj) {
+		p_obj->VerticalScanStepAngleDeg = angle_deg;
+		return true;
+	}
+	return false;
+}
+
+bool ASystemManagerBase::GetVerticalScanStepAngleDeg(AActor* p_actor, FLOAT64& angle_deg)
+{
+	auto p_obj = ToSensorBase(p_actor);
+	if (p_obj) {
+		angle_deg = p_obj->VerticalScanStepAngleDeg;
+		return true;
+	}
+	return false;
+}
+
+bool ASystemManagerBase::SetMeasurementErrorMean(AActor* p_actor, FLOAT64 val)
+{
+	auto p_obj = ToSensorBase(p_actor);
+	if (p_obj) {
+		p_obj->MeasurementErrorMean = val;
+		return true;
+	}
+	return false;
+}
+
+bool ASystemManagerBase::SetMeasurementErrorStd(AActor* p_actor, FLOAT64 val)
+{
+	auto p_obj = ToSensorBase(p_actor);
+	if (p_obj) {
+		p_obj->MeasurementErrorUncertainy = val;
+		return true;
+	}
+	return false;
+}
+
+bool ASystemManagerBase::GetMeasurementErrorMean(AActor* p_actor, FLOAT64& val)
+{
+	auto p_obj = ToSensorBase(p_actor);
+	if (p_obj) {
+		val = p_obj->MeasurementErrorMean;
+		return true;
+	}
+	return false;
+}
+
+bool ASystemManagerBase::GetMeasurementErrorStd(AActor* p_actor, FLOAT64& val)
+{
+	auto p_obj = ToSensorBase(p_actor);
+	if (p_obj) {
+		val = p_obj->MeasurementErrorUncertainy ;
+		return true;
+	}
+	return false;
+}
+
+bool ASystemManagerBase::SetEnableSurfaceDetect(AActor* p_actor, BOOLEAN val)
+{
+	auto p_obj = ToSensorBase(p_actor);
+	if (p_obj) {
+		p_obj->MeasurementErrorUncertainy = val;
+		return true;
+	}
+
+	return false;
+}
+
+bool ASystemManagerBase::SetEnableSubsurfaceDetect(AActor* p_actor, BOOLEAN val)
+{
+	auto p_obj = ToSensorBase(p_actor);
+	if (p_obj) {
+		p_obj->EnableSurfaceDetect = val;
+		return true;
+	}
+	return false;
+}
+
+bool ASystemManagerBase::SetEnableFoamDetect(AActor* p_actor, BOOLEAN val)
+{
+	auto p_obj = ToSensorBase(p_actor);
+	if (p_obj) {
+		p_obj->EnableFoamDetect = val;
+		return true;
+	}
+	return false;
+}
+
+bool ASystemManagerBase::SetSeaSurfaceDetectionProb(AActor* p_actor, FLOAT64 val)
+{
+	auto p_obj = ToSensorBase(p_actor);
+	if (p_obj) {
+		p_obj->SeaSurfaceDetectionProbability = val;
+		return true;
+	}
+	return false;
+}
+
+bool ASystemManagerBase::GetEnableSurfaceDetect(AActor* p_actor, BOOLEAN& val)
+{
+	auto p_obj = ToSensorBase(p_actor);
+	if (p_obj) {
+		p_obj->EnableSurfaceDetect = val;
+		return true;
+	}
+	return false;
+}
+
+bool ASystemManagerBase::GetEnableSubsurfaceDetect(AActor* p_actor, BOOLEAN& val)
+{
+	auto p_obj = ToSensorBase(p_actor);
+	if (p_obj) {
+		p_obj->EnableSubsurfaceDetect = val;
+		return true;
+	}
+	return false;
+}
+
+bool ASystemManagerBase::GetEnableFoamDetect(AActor* p_actor, BOOLEAN& val)
+{
+	auto p_obj = ToSensorBase(p_actor);
+	if (p_obj) {
+		val = p_obj->EnableFoamDetect;
+		return true;
+	}
+	return false;
+}
+
+bool ASystemManagerBase::GetSeaSurfaceDetectionProb(AActor* p_actor, FLOAT64& val)
+{
+	auto p_obj = ToSensorBase(p_actor);
+	if (p_obj) {
+		val = p_obj->SeaSurfaceDetectionProbability;
+		return true;
+	}
+	return false;
+}
+
+bool ASystemManagerBase::SetMaxSurfacePenetration(AActor* p_actor, FLOAT64 val)
+{
+	auto p_obj = ToSensorBase(p_actor);
+	if (p_obj) {
+		p_obj->MaxSurfacePenetrationMeter = val;
+		return true;
+	}
+	return false;
+}
+
+bool ASystemManagerBase::SetRadarScanLevel(AActor* p_actor, INT32S val)
+{
+	auto p_obj = ToRadarBase(p_actor);
+	if (p_obj) {
+		p_obj->FastScanLevel = val;
+		return true;
+	}
+	return false;
+}
+
+bool ASystemManagerBase::SetRadarScannerRPM(AActor* p_actor, INT32S val)
+{
+	auto p_obj = ToRadarBase(p_actor);
+	if (p_obj) {
+		p_obj->ScannerRPMValue = val;
+		return true;
+	}
+	return false;
+}
+
+bool ASystemManagerBase::SetRadarGainType(AActor* p_actor, INT32S val)
+{
+	auto p_obj = ToRadarBase(p_actor);
+	if (p_obj) {
+		p_obj->GainType = val;
+		return true;
+	}
+	return false;
+}
+
+bool ASystemManagerBase::SetRadarGainLevel(AActor* p_actor, INT32S val)
+{
+	auto p_obj = ToRadarBase(p_actor);
+	if (p_obj) {
+		p_obj->GainLevel = val;
+		return true;
+	}
+	return false;
+}
+
+bool ASystemManagerBase::SetRadarSeaClutterType(AActor* p_actor, INT32S val)
+{
+	auto p_obj = ToRadarBase(p_actor);
+	if (p_obj) {
+		p_obj->SeaClutterType = val;
+		return true;
+	}
+	return false;
+}
+
+bool ASystemManagerBase::SetRadarSeaClutterLevel(AActor* p_actor, INT32S val)
+{
+	auto p_obj = ToRadarBase(p_actor);
+	if (p_obj) {
+		p_obj->SeaClutterLevel = val;
+		return true;
+	}
+	return false;
+}
+
+bool ASystemManagerBase::SetRadarSeaClutterAutoOffset(AActor* p_actor, INT32S val)
+{
+	auto p_obj = ToRadarBase(p_actor);
+	if (p_obj) {
+		p_obj->SeaClutterAutoOffset = val;
+		return true;
+	}
+	return false;
+}
+
+bool ASystemManagerBase::SetRadarRainClutterLevel(AActor* p_actor, INT32S val)
+{
+	auto p_obj = ToRadarBase(p_actor);
+	if (p_obj) {
+		p_obj->RainClutterLevel = val;
+		return true;
+	}
+	return false;
+}
+
+bool ASystemManagerBase::SetRadarMaxGuardZoneCount(AActor* p_actor, INT32S val)
+{
+	auto p_obj = ToRadarBase(p_actor);
+	if (p_obj) {
+		p_obj->MaxGuardZoneCount = val;
+		return true;
+	}
+	return false;
+}
+
+bool ASystemManagerBase::SetRadarMaxSectorBlankingZoneCount(AActor* p_actor, INT32S val)
+{
+	auto p_obj = ToRadarBase(p_actor);
+	if (p_obj) {
+		p_obj->MaxSectorBlankingZoneCount = val;
+		return true;
+	}
+	return false;
+}
+
+bool ASystemManagerBase::GetMaxSurfacePenetration(AActor* p_actor, FLOAT64& val)
+{
+	auto p_obj = ToRadarBase(p_actor);
+	if (p_obj) {
+		val = p_obj->MaxSurfacePenetrationMeter;
+		return true;
+	}
+	return false;
+}
+
+bool ASystemManagerBase::GetRadarScanLevel(AActor* p_actor, INT32S& val)
+{
+	auto p_obj = ToRadarBase(p_actor);
+	if (p_obj) {
+		val = p_obj->FastScanLevel;
+		return true;
+	}
+	return false;
+}
+
+bool ASystemManagerBase::GetRadarScannerRPM(AActor* p_actor, INT32S& val)
+{
+	auto p_obj = ToRadarBase(p_actor);
+	if (p_obj) {
+		val = p_obj->ScannerRPMValue;
+		return true;
+	}
+	return false;
+}
+
+bool ASystemManagerBase::GetRadarGainType(AActor* p_actor, INT32S& val)
+{
+	auto p_obj = ToRadarBase(p_actor);
+	if (p_obj) {
+		val = p_obj->GainType;
+		return true;
+	}
+	return false;
+}
+
+bool ASystemManagerBase::GetRadarGainLevel(AActor* p_actor, INT32S& val)
+{
+	auto p_obj = ToRadarBase(p_actor);
+	if (p_obj) {
+		val = p_obj->GainLevel;
+		return true;
+	}
+	return false;
+}
+
+bool ASystemManagerBase::GetRadarSeaClutterType(AActor* p_actor, INT32S& val)
+{
+	auto p_obj = ToRadarBase(p_actor);
+	if (p_obj) {
+		val = p_obj->SeaClutterType;
+		return true;
+	}
+	return false;
+}
+
+bool ASystemManagerBase::GetRadarSeaClutterLevel(AActor* p_actor, INT32S& val)
+{
+	auto p_obj = ToRadarBase(p_actor);
+	if (p_obj) {
+		val = p_obj->SeaClutterLevel;
+		return true;
+	}
+	return false;
+}
+
+bool ASystemManagerBase::GetRadarSeaClutterAutoOffset(AActor* p_actor, INT32S& val)
+{
+	auto p_obj = ToRadarBase(p_actor);
+	if (p_obj) {
+		val = p_obj->SeaClutterAutoOffset;
+		return true;
+	}
+	return false;
+}
+
+bool ASystemManagerBase::GetRadarRainClutterLevel(AActor* p_actor, INT32S& val)
+{
+	auto p_obj = ToRadarBase(p_actor);
+	if (p_obj) {
+		val = p_obj->RainClutterLevel;
+		return true;
+	}
+	return false;
+}
+
+bool ASystemManagerBase::GetRadarMaxGuardZoneCount(AActor* p_actor, INT32S& val)
+{
+	auto p_obj = ToRadarBase(p_actor);
+	if (p_obj) {
+		val = p_obj->MaxGuardZoneCount;
+		return true;
+	}
+	return false;
+}
+
+bool ASystemManagerBase::GetRadarMaxSectorBlankingZoneCount(AActor* p_actor, INT32S& val)
+{
+	auto p_obj = ToRadarBase(p_actor);
+	if (p_obj) {
+		val = p_obj->MaxSectorBlankingZoneCount;
+		return true;
+	}
+	return false;
 }

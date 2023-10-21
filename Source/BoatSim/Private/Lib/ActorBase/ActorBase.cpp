@@ -103,6 +103,10 @@ FString AActorBase::GetBlueprintName()
 	return BlueprintName;
 }
 
-void AActorBase::Save()
+void AActorBase::Save(ISaveLoader* p_save_loader)
 {
+	FString line;
+	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
+	p_save_loader->AppendOption(line, CCLICommandManager::Instance, AffinityInstanceId);
+	p_save_loader->AddLine(line);
 }

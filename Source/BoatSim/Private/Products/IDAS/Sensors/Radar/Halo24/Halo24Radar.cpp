@@ -191,6 +191,11 @@ char* AHalo24Radar::GetSerial()
 {
 	return Serial;
 }
+void AHalo24Radar::Save(ISaveLoader* p_save_load)
+{
+	Super::Save(p_save_load);
+	//p_save_load->AddLine(line);
+}
 void AHalo24Radar::OnRecievedMessage(SRadarSimSDKPacket* p_pack)
 {
 	if (p_pack->Header.PacketType == ESimSDKDataIDS::UnlockKeys) {

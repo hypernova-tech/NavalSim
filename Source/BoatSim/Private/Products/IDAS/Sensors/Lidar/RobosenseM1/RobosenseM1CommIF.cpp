@@ -55,6 +55,8 @@ SDIFOP* URobosenseM1CommIF::GetConfigurationPacket()
 	return &DIOPPacket;
 }
 
+
+
 inline bool URobosenseM1CommIF::FillMainOutputStreamPacket(SMSOPPacket* p_pack, INT32U &block_ind, INT32U &channel_ind, FLOAT32 azimuth_deg, FLOAT32 elevation_deg, FLOAT32 intensity, FLOAT32 range_meter)
 {
 	SLidarDataPacket* p_blok = &p_pack->LidarDataPackets[block_ind];

@@ -75,6 +75,7 @@ public:
 	static float ConvertToFloat(const char* p_str);
 	static FString ConvertToFString(const char* p_str);
 	static int StringToInt(FString& str);
+	static FString BoolToStringBinary(BOOLEAN val);
 	static FString IntToString(INT32S val);
 	static FString IntToString(INT32U val);
 	static FString IntToString(INT64S val);
@@ -113,9 +114,23 @@ public:
 	static AActor* GetTopParent(AActor *p_actor);
 	static AActor* SpawnObjectFromBlueprint(AActor* p_template, FString blueprint_path, UWorld* p_world, AActor* p_owner, FString name, FVector pos, FVector rot_rpy, FVector scale);
 	static FLOAT64 GetTimeSeconds();
-	static inline INT16U LittleToBig(INT16U val);
-	static inline INT32U LittleToBig(INT32U val);
-	static inline INT32U ReverseCopyBytes(INT8U* p_src, INT8U* p_dest, INT32U len);
+	static inline INT16U LittleToBig(INT16U val)
+	{
+		return (((val >> 8) & 0xFF) )| ((val << 8) & 0xFF00);
+	}
+	static inline INT32U LittleToBig(INT32U val)
+	{
+		return ((val << 24) & 0xFF000000) |
+			((val << 8) & 0x00FF0000) |
+			((val >> 8) & 0x0000FF00) |
+			((val >> 24) & 0x000000FF);
+	}
+	static inline INT32U ReverseCopyBytes(INT8U* p_src, INT8U* p_dest, INT32U len)
+	{
+		for (INT32U i = 0; i < len; i++) {
+			p_dest[i] = p_src[len - 1 - i];
+		}
+	}
 	static inline FLOAT32 GetRandomRange(FLOAT32 min_inclusive, FLOAT32 max_inclusive);
 	static FVector GetActorRPY(AActor* p_actor);
 	static AActor* GetParentActor(AActor *p_child);

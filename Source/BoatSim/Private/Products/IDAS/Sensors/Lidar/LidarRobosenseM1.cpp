@@ -23,3 +23,8 @@ void ALidarRobosenseM1::OnScanCompleted(SScanResult* p_scan_result)
 	 p_m1_comm->SendConfig();
 
 }
+
+ void ALidarRobosenseM1::Save(ISaveLoader* p_save_load)
+ {
+	 Super::Save(p_save_load);
+ }

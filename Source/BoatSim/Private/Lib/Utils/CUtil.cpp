@@ -21,6 +21,8 @@ bool CUtil::Trace(const STraceArgs& args, SScanResult* pscan_result)
 #if true
     auto trace_start_sec = CUtil::Tick();
 
+
+
     FVector start_pos = args.p_actor->GetActorLocation();
     FVector look_dir;
     FVector right_vec;
@@ -32,6 +34,11 @@ bool CUtil::Trace(const STraceArgs& args, SScanResult* pscan_result)
     int vertical_ind = 0;
 
     int success_count = 0;
+
+    pscan_result->TotalTimeSec = 0;
+    pscan_result->TotalRaycastTimeSec = 0;
+
+   
 
     if (args.is_world) {
         look_dir = FVector::ForwardVector;
@@ -152,8 +159,13 @@ bool CUtil::Trace(const STraceArgs& args, SScanResult* pscan_result)
                
             }
             else {
+                auto raytick = CUtil::Tick();
                 ret = args.p_actor->GetWorld()->LineTraceSingleByChannel(result, start_pos, end, ECollisionChannel::ECC_Visibility, query_params, FCollisionResponseParams());
+                auto ray_elp = CUtil::Tock(raytick);
 
+                pscan_result->TotalRaycastTimeSec += ray_elp;
+
+                
             }
            if (args.show_radar_beam) {
                 DrawDebugLine(args.p_actor->GetWorld(), start_pos, end, FColor::Green, false, 0.2f);
@@ -190,8 +202,12 @@ bool CUtil::Trace(const STraceArgs& args, SScanResult* pscan_result)
     pscan_result->HorizontalCount = horizantal_ind;
     pscan_result->VeriticalCount = vertical_ind;
 
+
+
     auto trace_elp_sec = CUtil::Tock(trace_start_sec);
-    CUtil::DebugLog(FString::Printf(TEXT("scan(ms) %s %f"), *args.p_actor->GetName(), trace_elp_sec * 1000));
+    pscan_result->TotalTimeSec = trace_elp_sec;
+
+    CUtil::DebugLog(FString::Printf(TEXT("scan(ms) %s total: %f only trace: %f tracePerc: %f"), *args.p_actor->GetName(), trace_elp_sec * 1000, pscan_result->TotalRaycastTimeSec*1000, pscan_result->TotalRaycastTimeSec/ trace_elp_sec*100));
 
     return success_count > 0;
 
@@ -546,6 +562,11 @@ int CUtil::StringToInt(FString& str)
     return ret;
 }
 
+FString CUtil::BoolToStringBinary(BOOLEAN val)
+{
+    return val ? TEXT("1") : TEXT("0");
+}
+
 AActor* CUtil::GetTopParent(AActor *p_actor)
 {
     AActor* p_temp = p_actor;
@@ -889,25 +910,10 @@ FLOAT64 CUtil::GetTimeSeconds()
     return FApp::GetCurrentTime();
 }
 
-INT16U CUtil::LittleToBig(INT16U val)
-{
-    return ((val >> 8) & 0xFF) | ((val << 8) & 0xFF00);
-}
 
-INT32U CUtil::LittleToBig(INT32U value)
-{
-    return ((value << 24) & 0xFF000000) |
-        ((value << 8) & 0x00FF0000) |
-        ((value >> 8) & 0x0000FF00) |
-        ((value >> 24) & 0x000000FF);
-}
 
-inline INT32U CUtil::ReverseCopyBytes(INT8U* p_src, INT8U* p_dest, INT32U len)
-{
-    for (INT32U i = 0; i < len; i++) {
-        p_dest[i] = p_src[len - 1 - i];
-    }
-}
+
+
 
 FLOAT32 CUtil::GetRandomRange(FLOAT32 min_inclusive, FLOAT32 max_inclusive)
 {
@@ -1001,7 +1007,7 @@ FString CUtil::CharToFString(const char* p_char)
 
 void CUtil::FStringToAsciiChar(const FString& str, char *p_dest, INT32U dest_len)
 {
-    const char* p_char_arr = TCHAR_TO_ANSI(*str);
+    const char* p_char_arr = TCHAR_TO_UTF8(*str); //TCHAR_TO_ANSI(*str);
     INT32U len = dest_len <= strlen(p_char_arr) ? dest_len : strlen(p_char_arr);
     memcpy(p_dest, p_char_arr, len);
 

@@ -22,6 +22,27 @@ protected:
 	CScanResultContainer ScanResultContainer;
 	SScanResult *pScanResult;
 
+	
+	
+	CZoneContainer GuardZone;
+	CZoneContainer BlankingZone;
+	FLOAT64 BeamWidthDeg;
+
+
+	CTrackerBase* pTracker = nullptr;
+
+	virtual void Run(float delta_time_sec) override;
+	virtual void InitSensor() override;
+	virtual void BeginPlay() override;
+
+	
+	virtual void RadarStateMachine();
+	virtual void OnDataReady() override;
+	virtual void InitTracker();
+	virtual void UpdateTracker();
+
+	FGraphEventRef RaycastTaskComplete;
+public:
 	UPROPERTY(EditAnywhere)
 		FString RadarSerial = "";
 
@@ -51,7 +72,7 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Gain")
 		uint32 GainLevel = 1;
 
-	UPROPERTY(EditAnywhere, Category ="SeaClutter")
+	UPROPERTY(EditAnywhere, Category = "SeaClutter")
 		uint8 SeaClutterType;
 
 	UPROPERTY(EditAnywhere, Category = "SeaClutter")
@@ -65,30 +86,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = "Guardzone")
 		uint8 MaxGuardZoneCount = 2;
-	
+
 	UPROPERTY(EditAnywhere, Category = "SectorBlanking")
 		uint8 MaxSectorBlankingZoneCount = 4;
-	
-	CZoneContainer GuardZone;
-	CZoneContainer BlankingZone;
-	FLOAT64 BeamWidthDeg;
-
-
-	CTrackerBase* pTracker = nullptr;
-
-	virtual void Run(float delta_time_sec) override;
-	virtual void InitSensor() override;
-	virtual void BeginPlay() override;
-
-	
-	virtual void RadarStateMachine();
-	virtual void OnDataReady() override;
-	virtual void InitTracker();
-	virtual void UpdateTracker();
-
-	FGraphEventRef RaycastTaskComplete;
-public:
-
 	virtual void Scan();
 	
 
@@ -101,6 +101,8 @@ public:
 	virtual void OnCaptureReady(void* p_data) override;
 
 	void OnAsynTaskComplete();
+
+	virtual void Save(ISaveLoader* p_save_load) override;
 
 private:
 	float CurrentScanAzimuth;

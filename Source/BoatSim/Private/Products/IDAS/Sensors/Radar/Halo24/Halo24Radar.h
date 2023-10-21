@@ -88,7 +88,7 @@ public :
 
 	virtual void OnRecievedMessage(SRadarSimSDKPacket* p_commands) override;
 	virtual char* GetSerial() override;
-
+	virtual void Save(ISaveLoader* p_save_load) override;
 	
 	
 };

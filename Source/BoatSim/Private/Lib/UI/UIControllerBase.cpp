@@ -124,7 +124,7 @@ void AUIControllerBase::FindActorAtClickPosition(int locationX, int locationY)
 		AActor* ClickedActor = HitResult.GetActor();
 		if (ClickedActor)
 		{
-			CUtil::DebugLogScreen(ClickedActor->GetActorLabel()/*ClickedActor->GetName()*/);
+			CUtil::DebugLogScreen(ClickedActor->GetName());
 			ASystemManagerBase::GetInstance()->GetConsole()->SendToConsole("clicked: "+ ClickedActor->GetName());
 			pSelectedActor = ClickedActor;
 			ASystemManagerBase::GetInstance()->SetSelectedActor(pSelectedActor);

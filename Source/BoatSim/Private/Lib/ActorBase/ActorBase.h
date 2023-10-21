@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Lib/Types/Primitives.h"
+#include <Lib/SaveLoad/ISaveLoader.h>
 #include "ActorBase.generated.h"
 
 
@@ -55,7 +56,7 @@ public:
 	void SetAffinityInstanceId(int val);
 	int GetAffinityInstanceId();
 	FString GetBlueprintName();
-	virtual void Save();
+	virtual void Save(ISaveLoader* p_save_loader);
 
 	
 };
