@@ -108,8 +108,8 @@ public:
 	static FString RadarMaxGuardZoneCount;
 	static FString RadarMaxSectorBlankingZoneCount;
 	
-
-
+	static FString CamWidthPx;
+	static FString CamHeightPx;
 
 
 	static FString GetCommand;

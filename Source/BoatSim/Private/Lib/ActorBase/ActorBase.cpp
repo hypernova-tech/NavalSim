@@ -110,3 +110,11 @@ void AActorBase::Save(ISaveLoader* p_save_loader)
 	p_save_loader->AppendOption(line, CCLICommandManager::Instance, AffinityInstanceId);
 	p_save_loader->AddLine(line);
 }
+
+void AActorBase::ShowActorGizmo(bool val)
+{
+	if (ActorGizmo) {
+		CUtil::SetActorActive(ActorGizmo, val);
+	}
+	
+}

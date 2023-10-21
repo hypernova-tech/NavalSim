@@ -34,6 +34,8 @@
             button1 = new Button();
             tabControl1 = new TabControl();
             tabPage2 = new TabPage();
+            SetActiveButton = new Button();
+            IsActiveCB = new CheckBox();
             SensorEnableCtrlButton = new Button();
             SensorEnabledCB = new CheckBox();
             SetInstanceNo = new Button();
@@ -41,8 +43,6 @@
             SensorListBox = new ListBox();
             CommandTextBox = new TextBox();
             listBox1 = new ListBox();
-            SetActiveButton = new Button();
-            IsActiveCB = new CheckBox();
             tabControl1.SuspendLayout();
             tabPage2.SuspendLayout();
             SuspendLayout();
@@ -92,6 +92,26 @@
             tabPage2.Text = "Sensors";
             tabPage2.UseVisualStyleBackColor = true;
             // 
+            // SetActiveButton
+            // 
+            SetActiveButton.Location = new Point(375, 174);
+            SetActiveButton.Name = "SetActiveButton";
+            SetActiveButton.Size = new Size(130, 23);
+            SetActiveButton.TabIndex = 6;
+            SetActiveButton.Text = "Set Active";
+            SetActiveButton.UseVisualStyleBackColor = true;
+            SetActiveButton.Click += SetActiveButton_Click;
+            // 
+            // IsActiveCB
+            // 
+            IsActiveCB.AutoSize = true;
+            IsActiveCB.Location = new Point(375, 149);
+            IsActiveCB.Name = "IsActiveCB";
+            IsActiveCB.Size = new Size(66, 19);
+            IsActiveCB.TabIndex = 5;
+            IsActiveCB.Text = "Enable?";
+            IsActiveCB.UseVisualStyleBackColor = true;
+            // 
             // SensorEnableCtrlButton
             // 
             SensorEnableCtrlButton.Location = new Point(375, 110);
@@ -139,6 +159,7 @@
             SensorListBox.Name = "SensorListBox";
             SensorListBox.Size = new Size(356, 511);
             SensorListBox.TabIndex = 0;
+            SensorListBox.MouseDoubleClick += SensorListBox_MouseDoubleClick;
             // 
             // CommandTextBox
             // 
@@ -160,26 +181,6 @@
             listBox1.Click += listBox1_Click;
             listBox1.MouseClick += listBox1_MouseClick_1;
             listBox1.MouseDoubleClick += listBox1_MouseDoubleClick_1;
-            // 
-            // SetActiveButton
-            // 
-            SetActiveButton.Location = new Point(375, 174);
-            SetActiveButton.Name = "SetActiveButton";
-            SetActiveButton.Size = new Size(130, 23);
-            SetActiveButton.TabIndex = 6;
-            SetActiveButton.Text = "Set Active";
-            SetActiveButton.UseVisualStyleBackColor = true;
-            SetActiveButton.Click += SetActiveButton_Click;
-            // 
-            // IsActiveCB
-            // 
-            IsActiveCB.AutoSize = true;
-            IsActiveCB.Location = new Point(375, 149);
-            IsActiveCB.Name = "IsActiveCB";
-            IsActiveCB.Size = new Size(66, 19);
-            IsActiveCB.TabIndex = 5;
-            IsActiveCB.Text = "Enable?";
-            IsActiveCB.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 

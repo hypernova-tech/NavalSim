@@ -41,6 +41,9 @@ protected:
 	UPROPERTY(EditAnywhere)
 		int AffinityInstanceId = -1;
 
+	UPROPERTY(EditAnywhere)
+		AActor* ActorGizmo;
+
 	 virtual void OnStep(float DeltaTime);
 	 bool CheckAffinity();
 
@@ -57,6 +60,7 @@ public:
 	int GetAffinityInstanceId();
 	FString GetBlueprintName();
 	virtual void Save(ISaveLoader* p_save_loader);
+	void ShowActorGizmo(bool val);
 
 	
 };

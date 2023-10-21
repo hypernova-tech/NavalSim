@@ -11,6 +11,9 @@ void ACameraBase::InitSensor()
 
 	UTextureRenderTarget2D *p_render_target = pPointVisualizer->CreateRenderTarget(SensorWidth, SensorHeight, ASystemManagerBase::GetInstance()->GetUIController()->GetCameraSlotImage(SensorSlotIndex));
 	pSceneCapture->TextureTarget = p_render_target;
+
+	pSceneCapture->FOVAngle = FovHorizontalDeg;
+	
 }
 
 void ACameraBase::ResumeSensor()
@@ -34,4 +37,18 @@ void ACameraBase::SetFovDeg(double fov_deg)
 {
 	FieldOfViewDeg = fov_deg;
 	pSceneCapture->FOVAngle = fov_deg;
+}
+void ACameraBase::Save(ISaveLoader* p_save_loader)
+{
+	Super::Save(p_save_loader);
+
+	FString line;
+
+	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
+	p_save_loader->AppendOption(line, CCLICommandManager::CamWidthPx, SensorWidth);
+	p_save_loader->AddLine(line);
+
+	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
+	p_save_loader->AppendOption(line, CCLICommandManager::CamHeightPx, SensorHeight);
+	p_save_loader->AddLine(line);
 }

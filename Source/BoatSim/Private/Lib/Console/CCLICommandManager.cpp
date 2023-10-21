@@ -60,6 +60,9 @@ FString CCLICommandManager::RadarSeaClutterAutoOffset = "radseaclutautooffset";
 FString CCLICommandManager::RadarRainClutterLevel = "radrainclutlevel";
 FString CCLICommandManager::RadarMaxGuardZoneCount = "radmaxguardzonecount";
 FString CCLICommandManager::RadarMaxSectorBlankingZoneCount = "radmaxsectorblankingzonecount";
+FString CCLICommandManager::CamWidthPx = "widthpx";
+FString CCLICommandManager::CamHeightPx = "heightpx";
+
 
 
 

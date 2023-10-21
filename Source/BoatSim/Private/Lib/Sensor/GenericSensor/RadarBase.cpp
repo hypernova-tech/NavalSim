@@ -145,14 +145,41 @@ void ARadarBase::Save(ISaveLoader* p_save_load)
 
 	line = p_save_load->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
 	p_save_load->AppendOption(line, CCLICommandManager::RadarScanLevel,						FastScanLevel);
+	p_save_load->AddLine(line);
+
+	line = p_save_load->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
 	p_save_load->AppendOption(line, CCLICommandManager::RadarScannerRPM,					ScannerRPMValue);
+	p_save_load->AddLine(line);
+
+	line = p_save_load->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
 	p_save_load->AppendOption(line, CCLICommandManager::RadarGainType,						GainType);
+	p_save_load->AddLine(line);
+
+	line = p_save_load->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
 	p_save_load->AppendOption(line, CCLICommandManager::RadarGainLevel,						GainLevel);
+	p_save_load->AddLine(line);
+
+	line = p_save_load->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
 	p_save_load->AppendOption(line, CCLICommandManager::RadarSeaClutterType,				SeaClutterType);
+	p_save_load->AddLine(line);
+
+	line = p_save_load->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
 	p_save_load->AppendOption(line, CCLICommandManager::RadarSeaClutterLevel,				SeaClutterLevel);
+	p_save_load->AddLine(line);
+
+	line = p_save_load->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
 	p_save_load->AppendOption(line, CCLICommandManager::RadarSeaClutterAutoOffset,			SeaClutterAutoOffset);
+	p_save_load->AddLine(line);
+
+	line = p_save_load->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
 	p_save_load->AppendOption(line, CCLICommandManager::RadarRainClutterLevel,				RainClutterLevel);
+	p_save_load->AddLine(line);
+
+	line = p_save_load->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
 	p_save_load->AppendOption(line, CCLICommandManager::RadarMaxGuardZoneCount,				MaxGuardZoneCount);
+	p_save_load->AddLine(line);
+
+	line = p_save_load->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
 	p_save_load->AppendOption(line, CCLICommandManager::RadarMaxSectorBlankingZoneCount,	MaxSectorBlankingZoneCount);
 	p_save_load->AddLine(line);
 

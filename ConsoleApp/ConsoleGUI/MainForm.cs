@@ -192,7 +192,7 @@ namespace ConsoleGUI
                 string unrealExecutablePath = ExecutablePath;
 
                 // Define any command-line arguments you want to pass
-                string unrealArgs = "-windowed  -instance=" + i.ToString()+" -instancestotal="+ instance_count.ToString();
+                string unrealArgs = "-windowed  -instance=" + i.ToString() + " -instancestotal=" + instance_count.ToString();
 
                 // Set up the process start info
                 ProcessStartInfo startInfo = new ProcessStartInfo(unrealExecutablePath, unrealArgs)
@@ -354,6 +354,20 @@ namespace ConsoleGUI
             {
                 string enabled = IsActiveCB.Checked ? "1" : "0";
                 string command = string.Format("set --name {0} --active {1}", selected_sensor, enabled);
+                SendData(command);
+            }
+        }
+
+        private void SensorListBox_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (SensorListBox.SelectedIndex < 0)
+            {
+                return;
+            }
+            var selected_sensor = SensorListBox.Items[SensorListBox.SelectedIndex].ToString();
+            {
+                
+                string command = string.Format("set --selected {0}", selected_sensor);
                 SendData(command);
             }
         }

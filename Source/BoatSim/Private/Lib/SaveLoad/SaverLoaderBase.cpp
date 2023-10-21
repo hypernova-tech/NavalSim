@@ -146,10 +146,18 @@ void USaverLoaderBase::SavePlatform(ACBoatBase* p_platform, TArray<FString>& cli
 	auto parent = CUtil::GetParentActor(p_platform);
 	if (parent != nullptr) {
 		AppendOption(line, pCLI->Parent, parent->GetName());
+		AddLine(line);
 	}
 	
+	line = CreateCommandWithName(pCLI->SetCommand, p_platform->GetName());
 	AppendOption(line, pCLI->Position, p_platform->GetActorLocation());
+	AddLine(line);
+
+	line = CreateCommandWithName(pCLI->SetCommand, p_platform->GetName());
 	AppendOption(line, pCLI->Rotation, p_platform->GetActorRotation().Euler());
+	AddLine(line);
+
+	line = CreateCommandWithName(pCLI->SetCommand, p_platform->GetName());
 	AppendOption(line, pCLI->Scale, p_platform->GetActorScale3D());
 	AddLine(line);
 	NewLine();
@@ -169,10 +177,18 @@ void USaverLoaderBase::SaveSensor(ASensorBase* p_sensor, TArray<FString>& cli)
 	auto parent = CUtil::GetParentActor(p_sensor);
 	if (parent != nullptr) {
 		AppendOption(line, pCLI->Parent, parent->GetName());
+		AddLine(line);
 	}
 	
+	line = CreateCommandWithName(pCLI->SetCommand, p_sensor->GetName());
 	AppendOption(line, pCLI->Position, TOW(p_sensor->GetActorLocation()));
+	AddLine(line);
+
+	line = CreateCommandWithName(pCLI->SetCommand, p_sensor->GetName());
 	AppendOption(line, pCLI->Rotation, p_sensor->GetActorRotation().Euler());
+	AddLine(line);
+	
+	line = CreateCommandWithName(pCLI->SetCommand, p_sensor->GetName());
 	AppendOption(line, pCLI->Scale, p_sensor->GetActorScale3D());
 	AddLine(line);
 
@@ -196,10 +212,18 @@ void USaverLoaderBase::SaveActor(AActorBase* p_actor, TArray<FString>& cli)
 	auto parent = CUtil::GetParentActor(p_actor);
 	if (parent != nullptr) {
 		AppendOption(line, pCLI->Parent, parent->GetName());
+		AddLine(line);
 	}
 
+	line = CreateCommandWithName(pCLI->SetCommand, p_actor->GetName());
 	AppendOption(line, pCLI->Position, TOW(p_actor->GetActorLocation()));
+	AddLine(line);
+
+	line = CreateCommandWithName(pCLI->SetCommand, p_actor->GetName());
 	AppendOption(line, pCLI->Rotation, p_actor->GetActorRotation().Euler());
+	AddLine(line);
+
+	line = CreateCommandWithName(pCLI->SetCommand, p_actor->GetName());
 	AppendOption(line, pCLI->Scale, p_actor->GetActorScale3D());
 	AddLine(line);
 

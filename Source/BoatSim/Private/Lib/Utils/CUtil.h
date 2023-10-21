@@ -6,6 +6,7 @@
 #include "Lib/Types/Primitives.h"
 #include "Lib/Utils/CScanResult.h"
 #include "Lib/Clutter/ClutterDefs.h"
+#include "Camera/CameraComponent.h"
 /**
  * 
  */
@@ -65,7 +66,7 @@ public:
 	static T* FindChildComponent(AActor* p_parent);
 
 	static void LookAt(AActor* p_actor, FVector& look_dir, FLOAT32 distance = 5);
-	static void CameraLookAt(UCameraComponent *p_looker, AActor* p_target, FLOAT32 distance);
+	
 	static FRotator GetActorRelativeRotation(AActor* p_actor);
 	/// <summary>
 	/// String conversions
@@ -140,7 +141,7 @@ public:
 	static void SetParent(AActor* p_child, AActor* p_parent);
 	static void SetActorActive(AActor* p_actor, bool is_active);
 	static bool GetIsActorVisible(AActor* p_actor);
-
 	static bool IsPossedByPlayerController(UWorld *p_world, APawn *p_pawn);
+	static void CameraLookAt(UCameraComponent* p_looker, AActor* p_target, FLOAT32 distance);
 };
 
