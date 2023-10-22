@@ -6,9 +6,11 @@ using System.Net.Sockets;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.ComponentModel;
-using ConsoleGUI;
 using System;
 using System.Collections.Generic;
+using System.Xml.Linq;
+using Newtonsoft.Json.Schema;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace ConsoleGUI
 {
@@ -24,8 +26,11 @@ namespace ConsoleGUI
         int RemotePort = 55000;
         int LocalPort = 55050;
         HashSet<string> SensorsReceived = new HashSet<string>();
+        CJsonParser mJsonParser = new CJsonParser();
+
         public MainForm()
         {
+            mJsonParser.SetMainForm(this);
             InitializeComponent();
             InitUDPConnection();
         }
@@ -122,11 +127,33 @@ namespace ConsoleGUI
             {
                 byte[] data = client.Receive(ref endPoint);
                 string message = Encoding.ASCII.GetString(data);
-                UpdateListBox(message);
+                
+                ProcessReceivedData(message);
             }
         }
 
-        void SendData(string cmd)
+
+        void ProcessReceivedData(string message)
+        {
+            UpdateListBox(message);
+
+            if (this.InvokeRequired) // For Windows Forms replace 'this' with the name of your form if necessary
+            {
+                // If not, we need to invoke the UI thread and pass it a delegate of this same method
+                this.Invoke(new Action<string>(TryParseJson), message);
+                return;
+            }
+
+            TryParseJson(message);
+        }
+
+        void TryParseJson(string message)
+        {
+            mJsonParser.TryParseJson(message);
+        }
+
+       
+        void SendData(string cmd, bool add_to_cmd_list = true)
         {
             for (int i = 0; i < InstanceCount; i++)
             {
@@ -135,7 +162,11 @@ namespace ConsoleGUI
                     return;
                 }
                 byte[] data = Encoding.ASCII.GetBytes(cmd);
-                AddCommandToList(cmd);
+                if (add_to_cmd_list)
+                {
+                    AddCommandToList(cmd);
+                }
+                
                 UdpClient.Send(data, data.Length, EndPoints[i]);
             }
 
@@ -357,7 +388,16 @@ namespace ConsoleGUI
                 SendData(command);
             }
         }
+        public string GetSelectedSensor()
+        {
+            if (SensorListBox.SelectedIndex < 0)
+            {
+                return "";
+            }
+            var selected_sensor = SensorListBox.Items[SensorListBox.SelectedIndex].ToString();
 
+            return selected_sensor;
+        }
         private void SensorListBox_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             if (SensorListBox.SelectedIndex < 0)
@@ -366,10 +406,236 @@ namespace ConsoleGUI
             }
             var selected_sensor = SensorListBox.Items[SensorListBox.SelectedIndex].ToString();
             {
-                
+
                 string command = string.Format("set --selected {0}", selected_sensor);
                 SendData(command);
+                RequestTransform(selected_sensor, false);
             }
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox2_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void TB_LocationX_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+        public void SetPosition(double x, double y, double z)
+        {
+            TB_LocationX.Text = x.ToString();
+            TB_LocationY.Text = y.ToString();
+            TB_LocationZ.Text = z.ToString();
+        }
+        public void SetRotation(double x, double y, double z)
+        {
+            TB_RotationX.Text = x.ToString();
+            TB_RotationY.Text = y.ToString();
+            TB_RotationZ.Text = z.ToString();
+        }
+        public void SetScale(double x, double y, double z)
+        {
+            TB_ScaleX.Text = x.ToString();
+            TB_ScaleY.Text = y.ToString();
+            TB_ScaleZ.Text = z.ToString();
+        }
+        void UpdatePosition()
+        {
+            var selected_sensor = GetSelectedSensor();
+            if (selected_sensor == "")
+            {
+                return;
+            }
+            if (!double.TryParse(TB_LocationX.Text, out double valx))
+            {
+                return;
+            }
+            if (!double.TryParse(TB_LocationY.Text, out double valy))
+            {
+                return;
+            }
+            if (!double.TryParse(TB_LocationZ.Text, out double valz))
+            {
+                return;
+            }
+
+            string pos = "\"" + TB_LocationX.Text + " " + TB_LocationY.Text + " " + TB_LocationZ.Text + "\"";
+            string command = string.Format("set --name {0} --position {1}", selected_sensor, pos);
+            SendData(command);
+            RequestTransform(selected_sensor, false);
+        }
+
+        void UpdateRotation()
+        {
+            var selected_sensor = GetSelectedSensor();
+            if (selected_sensor == "")
+            {
+                return;
+            }
+            if (!double.TryParse(TB_RotationX.Text, out double valx))
+            {
+                return;
+            }
+            if (!double.TryParse(TB_RotationY.Text, out double valy))
+            {
+                return;
+            }
+            if (!double.TryParse(TB_RotationZ.Text, out double valz))
+            {
+                return;
+            }
+
+            string pos = "\"" + TB_RotationX.Text + " " + TB_RotationY.Text + " " + TB_RotationZ.Text + "\"";
+            string command = string.Format("set --name {0} --rotation {1}", selected_sensor, pos);
+            SendData(command);
+            RequestTransform(selected_sensor, false);
+        }
+
+        void UpdateScale()
+        {
+            var selected_sensor = GetSelectedSensor();
+            if (selected_sensor == "")
+            {
+                return;
+            }
+            if (!double.TryParse(TB_ScaleX.Text, out double valx))
+            {
+                return;
+            }
+            if (!double.TryParse(TB_ScaleY.Text, out double valy))
+            {
+                return;
+            }
+            if (!double.TryParse(TB_ScaleZ.Text, out double valz))
+            {
+                return;
+            }
+
+            string pos = "\"" + TB_ScaleX.Text + " " + TB_ScaleY.Text + " " + TB_ScaleZ.Text + "\"";
+            string command = string.Format("set --name {0} --scale {1}", selected_sensor, pos);
+            SendData(command);
+            RequestTransform(selected_sensor, false);
+        }
+
+        private void TB_LocationX_MouseLeave(object sender, EventArgs e)
+        {
+
+        }
+
+        private void TB_LocationX_Leave(object sender, EventArgs e)
+        {
+
+        }
+
+        private void TB_LocationZ_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void TB_LocationX_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Tab)
+            {
+                UpdatePosition();
+            }
+
+        }
+
+        private void TB_LocationY_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Tab)
+            {
+                UpdatePosition();
+            }
+        }
+
+        private void TB_LocationZ_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Tab)
+            {
+                UpdatePosition();
+            }
+        }
+
+        private void TB_RotationX_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Tab)
+            {
+                UpdateRotation();
+            }
+        }
+
+        private void TB_RotationY_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Tab)
+            {
+                UpdateRotation();
+            }
+        }
+
+        private void TB_RotationZ_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Tab)
+            {
+                UpdateRotation();
+            }
+        }
+
+        private void TB_ScaleX_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Tab)
+            {
+                UpdateScale();
+            }
+        }
+
+        private void TB_ScaleY_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Tab)
+            {
+                UpdateScale();
+            }
+        }
+
+        private void TB_ScaleZ_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Tab)
+            {
+                UpdateScale();
+            }
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+
+        }
+
+        private void timer1_Tick_1(object sender, EventArgs e)
+        {
+            return;
+            var selected_sensor = GetSelectedSensor();
+            if (selected_sensor == "")
+            {
+                return;
+            }
+            RequestTransform(selected_sensor, false);
+        }
+
+        void RequestTransform(string name, bool add_to_cmd_list)
+        {
+            string command = string.Format("get --name {0} --position", name);
+            SendData(command);
+            command = string.Format("get --name {0} --rotation", name);
+            SendData(command);
+
+            command = string.Format("get --name {0} --scale", name);
+            SendData(command, false);
         }
     }
 }

@@ -8,7 +8,9 @@
 #include <Lib/Sensor/GenericSensor/CameraBase.h>
 #include <Lib/Sensor/GenericSensor/RadarBase.h>
 #include <Lib/Math/CMath.h>
-
+#include "Dom/JsonObject.h"
+#include "Serialization/JsonWriter.h"
+#include "Serialization/JsonSerializer.h"
 
 // Sets default values for this component's properties
 UConsoleBase::UConsoleBase()
@@ -200,126 +202,126 @@ bool UConsoleBase::ParseCommandLine(TCHAR* CommandLine, FString& OutCommand, TMa
 
 
 
-//cmd enable <vehiclename> <actorname> <true|false>
-//gimbal <vehiclename> <actorname> angles <x y z>
-#if false
-void UConsoleBase::ProcessCommands(TArray<FString> tokens)
+
+FString UConsoleBase::CreateAndSerializeJson(TMap<FString,FString> &data)
 {
+    // Create a new JSON object
+    TSharedPtr<FJsonObject> JsonObject = MakeShareable(new FJsonObject);
+
+    // Add some simple data
   
-    if (tokens[0] == "gimbal") {  
-        if (tokens.Num() < 7) {
-            return;
-        }
-        FString gimbal_command = tokens[3];
-        AGimbalBase* p_gimbal = ASystemManagerBase::GetInstance()->FindActor<AGimbalBase>(tokens[1], tokens[2]);
-        if (p_gimbal != nullptr && gimbal_command == "angles") {
-            double roll = CUtil::StringToFloat64(tokens[4]);
-            double pitch = CUtil::StringToFloat64(tokens[5]);
-            double yaw = CUtil::StringToFloat64(tokens[6]);
-
-            
-            p_gimbal->SetCommand(roll, pitch, yaw);
-        }
-    } else   if (tokens[0] == "enable") {
-
-        AActorBase* p_actor = ASystemManagerBase::GetInstance()->FindActor<AActorBase>(tokens[1], tokens[2]);
-        
-
-        if (p_actor != nullptr ) {
-            if (tokens[3] == "true") {
-                p_actor->SetEnabled(true);
-            }else  if (tokens[3] == "false") {
-                p_actor->SetEnabled(false);
-            }
-     
-        }
+    
+    // Iterate over all key-value pairs in the map
+    for (const TPair<FString, FString>& pair : data)
+    {
+        JsonObject->SetStringField(pair.Key, pair.Value);
     }
-    else   if (tokens[0] == "enableall") {
+   
 
-        ASystemManagerBase::GetInstance()->EnableAllActors();
-    }
-    else   if (tokens[0] == "disableall") {
+    
+    FString OutputString;
+    TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&OutputString);
+    FJsonSerializer::Serialize(JsonObject.ToSharedRef(), Writer);
 
-        ASystemManagerBase::GetInstance()->DisableAllActors();
-    }
-    else   if (tokens[0] == "camera") {//camera sida_name sensor_name fov 5 
-
-        ACameraBase* p_camera = ASystemManagerBase::GetInstance()->FindActor<ACameraBase>(tokens[1], tokens[2]);
-
-
-        if (p_camera != nullptr && tokens[3] == "fov") {
-            float fov = CUtil::StringToFloat64(tokens[4]);
-            p_camera->SetFovDeg(fov);
-               
-        }
-    }
-    else   if (tokens[0] == "radar") { //radar sida_name sensor_name rage 1000 
-
-        ARadarBase* p_radar = ASystemManagerBase::GetInstance()->FindActor<ARadarBase>(tokens[1], tokens[2]);
-
-
-        if (p_radar != nullptr && tokens[3] == "range") {
-            float min_range = CUtil::StringToFloat64(tokens[4]);
-            float max_range = CUtil::StringToFloat64(tokens[5]);
-            p_radar->SetRangeMeter(FVector2d(min_range, max_range));
-
-        }
-    }
-    else   if (tokens[0] == "beam") {// beam sida_name sensor_name enable true
-
-        ASensorBase* p_sensor = ASystemManagerBase::GetInstance()->FindActor<ASensorBase>(tokens[1], tokens[2]);
-
-
-        if (p_sensor != nullptr && tokens[3] == "enable") {
-            if (tokens[4] == "true") {
-                p_sensor->ShowBeam = true;
-            }
-            else  if (tokens[4] == "false") {
-                p_sensor->ShowBeam = false;
-            }
-
-        }
-    }
-    else if (tokens[0] == "add") { // add boat MIR name mir1 pose 10.0 -0 0 0 0 0 0.3 0.3 0.3
-        if (tokens[1] == "boat") {
-            FString model_name = tokens[2];
-            FString boat_name = tokens[4];
-            FVector world_pos = FVector(WORLDTOUNREALUNIT * CUtil::StringToFloat64(tokens[6]), WORLDTOUNREALUNIT * CUtil::StringToFloat64(tokens[7]), WORLDTOUNREALUNIT * CUtil::StringToFloat64(tokens[8]));
-            FVector world_rot = FVector(CUtil::StringToFloat64(tokens[9]), CUtil::StringToFloat64(tokens[10]), CUtil::StringToFloat64(tokens[11]));
-            FVector scale = FVector(CUtil::StringToFloat64(tokens[12]), CUtil::StringToFloat64(tokens[13]), CUtil::StringToFloat64(tokens[14]));
-
-
-            ASystemManagerBase::GetInstance()->AddBoat(model_name, boat_name, world_pos, world_rot, scale);
-        }
-    }
-}
-#endif
-
-void UConsoleBase::SendConsoleResponse(FString option, INT32S ret)
-{
-    pSystemAPI->SendConsoleResponse(option + " :" + CUtil::IntToString(ret));
-}
-void UConsoleBase::SendConsoleResponse(FString option, FLOAT64 ret)
-{
-    pSystemAPI->SendConsoleResponse(option + " :" + CUtil::FloatToString(ret));
-}
-void UConsoleBase::SendConsoleResponse(FString option, BOOLEAN ret)
-{
-    pSystemAPI->SendConsoleResponse(option + " :" + CUtil::BoolToStringBinary(ret));
+    return OutputString;
 }
 
-void UConsoleBase::SendConsoleResponse(FString option, FVector2D ret)
+
+
+void UConsoleBase::SendConsoleResponse(FString name, FString option, INT32S ret)
 {
-    pSystemAPI->SendConsoleResponse(option + " :" + ret.ToString());
+    TMap<FString, FString> data;
+
+    if (name != "") {
+        data.Add("name", name);
+    }
+    
+    data.Add("option", option);
+    data.Add("value", CUtil::IntToString(ret));
+    auto ret_json = CreateAndSerializeJson(data);
+    pSystemAPI->SendConsoleResponse(ret_json);
+    //pSystemAPI->SendConsoleResponse("--name "+name+" --"+option + " " + CUtil::IntToString(ret));
+    
 }
-void UConsoleBase::SendConsoleResponse(FString option, FVector ret)
+void UConsoleBase::SendConsoleResponse(FString name, FString option, FLOAT64 ret)
 {
-    pSystemAPI->SendConsoleResponse(option + " :" + ret.ToString());
+    TMap<FString, FString> data;
+
+    if (name != "") {
+        data.Add("name", name);
+    }
+
+    data.Add("option", option);
+    data.Add("value", CUtil::FloatToString(ret));
+    auto ret_json = CreateAndSerializeJson(data);
+    pSystemAPI->SendConsoleResponse(ret_json);
+
+    //pSystemAPI->SendConsoleResponse("--name " + name + " --" + option + " " + CUtil::FloatToString(ret));
+}
+void UConsoleBase::SendConsoleResponse(FString name, FString option, BOOLEAN ret)
+{
+
+    TMap<FString, FString> data;
+
+    if (name != "") {
+        data.Add("name", name);
+    }
+
+    data.Add("option", option);
+    data.Add("value", CUtil::BoolToStringBinary(ret));
+    auto ret_json = CreateAndSerializeJson(data);
+    pSystemAPI->SendConsoleResponse(ret_json);
+    //pSystemAPI->SendConsoleResponse("--name " + name + " --" + option + " " + CUtil::BoolToStringBinary(ret));
 }
 
-void UConsoleBase::SendConsoleResponse(FString option, FString ret)
+void UConsoleBase::SendConsoleResponse(FString name, FString option, FVector2D ret)
 {
-    pSystemAPI->SendConsoleResponse(option + " :" + ret);
+    FString retstr = CUtil::FloatToString(ret.X) + " " + CUtil::FloatToString(ret.Y);
+
+    TMap<FString, FString> data;
+
+    if (name != "") {
+        data.Add("name", name);
+    }
+
+    data.Add("option", option);
+    data.Add("value", (retstr));
+    auto ret_json = CreateAndSerializeJson(data);
+    pSystemAPI->SendConsoleResponse(ret_json);
+
+    //pSystemAPI->SendConsoleResponse("--name " + name + " --" + option + " " + "\""+ retstr + "\"");
+}
+void UConsoleBase::SendConsoleResponse(FString name, FString option, FVector ret)
+{
+    FString retstr = CUtil::FloatToString(ret.X) + " " + CUtil::FloatToString(ret.Y) + " " + CUtil::FloatToString(ret.Z);
+
+    TMap<FString, FString> data;
+
+    if (name != "") {
+        data.Add("name", name);
+    }
+
+    data.Add("option", option);
+    data.Add("value", (retstr));
+    auto ret_json = CreateAndSerializeJson(data);
+    pSystemAPI->SendConsoleResponse(ret_json);
+
+    //pSystemAPI->SendConsoleResponse("--name " + name + " --" + option + " " + "\""+ retstr + "\"");
+}
+
+void UConsoleBase::SendConsoleResponse(FString name, FString option, FString ret)
+{
+    TMap<FString, FString> data;
+
+    if (name != "") {
+        data.Add("name", name);
+    }
+
+    data.Add("option", option);
+    data.Add("value", (ret));
+    auto ret_json = CreateAndSerializeJson(data);
+    pSystemAPI->SendConsoleResponse(ret_json);
+    //pSystemAPI->SendConsoleResponse(option + " :" + ret);
 }
 
 bool UConsoleBase::ProcessHelpCommand(TMap<FString, FString>& options, FString& error_message)
@@ -904,11 +906,11 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
         auto selected = pSystemAPI->GetSelectedActor();
 
         if (selected) {
-            SendConsoleResponse(CCLICommandManager::Selected, selected->GetName());
+            SendConsoleResponse("",CCLICommandManager::Selected, selected->GetName());
             return true;
         }
         else {
-            SendConsoleResponse(CCLICommandManager::Selected, FString("none"));
+            SendConsoleResponse("",CCLICommandManager::Selected, FString("none"));
             return true;
         }
     }
@@ -947,21 +949,23 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
     int instance_no = -1;
     ret = CommandManager.GetInstance(instance_no);
     if (ret) {
-        pSystemAPI->SendConsoleResponse("Instance: " + CUtil::IntToString(instance_no));
+        
+        SendConsoleResponse("",CCLICommandManager::Instance, instance_no);
         return true;
 
     }
 
     ret = CommandManager.HasPosition();
     if (ret) {
-        pSystemAPI->SendConsoleResponse("Pos: " + p_actor->GetActorLocation().ToString());
+        SendConsoleResponse(name,CCLICommandManager::Position, p_actor->GetActorLocation());
         return true;
 
     }
 
     ret = CommandManager.HasRelposition();
     if (ret) {
-        pSystemAPI->SendConsoleResponse("Relpos: " + p_actor->GetActorLocation().ToString());
+       
+        SendConsoleResponse(name, CCLICommandManager::RelPosition, p_actor->GetActorLocation());
         return true;
 
     }
@@ -970,20 +974,21 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
     if (ret) {
 
         vec = CMath::GetActorEulerAnglesRPY(p_actor);
-        pSystemAPI->SendConsoleResponse("Rot: " + vec.ToString());
+        SendConsoleResponse(name, CCLICommandManager::Rotation, vec);
         return true;
     }
     ret = CommandManager.HasRelrotation();
     if (ret) {
         vec = CMath::GetActorReleativeEulerAnglesRPY(p_actor);
-        pSystemAPI->SendConsoleResponse("Relrot: " + vec.ToString());
+        SendConsoleResponse(name, CCLICommandManager::RelRotation, vec);
         return true;
     }
 
     ret = CommandManager.HasScale();
     if (ret) {
         vec = p_actor->GetActorScale();;
-        pSystemAPI->SendConsoleResponse("Scale: " + vec.ToString());
+        
+        SendConsoleResponse(name, CCLICommandManager::Scale, vec);
         return true;
     }
 
@@ -1014,7 +1019,7 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
     if (ret) {
 
         if (pSystemAPI->GetSlotIndex(p_actor, sint)) {
-            SendConsoleResponse(CCLICommandManager::SensorSlotIndex, sint);
+            SendConsoleResponse(name, CCLICommandManager::SensorSlotIndex, sint);
             return true;
         }
     }
@@ -1026,7 +1031,7 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
     ret = CommandManager.HasA(CCLICommandManager::HorizontalFov);
     if (ret) {
         if (pSystemAPI->GetHorizontalFov(p_actor, dbl)) {
-            SendConsoleResponse(CCLICommandManager::HorizontalFov, dbl);
+            SendConsoleResponse(name, CCLICommandManager::HorizontalFov, dbl);
             return true;
         }
     }
@@ -1037,7 +1042,7 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
     ret = CommandManager.HasA(CCLICommandManager::VericalFov);
     if (ret) {
         if (pSystemAPI->GetVerticalFov(p_actor, dbl)) {
-            SendConsoleResponse(CCLICommandManager::VericalFov, dbl);
+            SendConsoleResponse(name, CCLICommandManager::VericalFov, dbl);
             return true;
         }
     }
@@ -1048,7 +1053,7 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
     ret = CommandManager.HasA(CCLICommandManager::HorizontalScanStepAngleDeg);
     if (ret) {
         if (pSystemAPI->GetHorizontalScanStepAngleDeg(p_actor, dbl)) {
-            SendConsoleResponse(CCLICommandManager::HorizontalScanStepAngleDeg, dbl);
+            SendConsoleResponse(name, CCLICommandManager::HorizontalScanStepAngleDeg, dbl);
             return true;
         }
     }
@@ -1059,7 +1064,7 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
     ret = CommandManager.HasA(CCLICommandManager::VerticalScanStepAngleDeg);
     if (ret) {
         if (pSystemAPI->SetVerticalScanStepAngleDeg(p_actor, dbl)) {
-            SendConsoleResponse(CCLICommandManager::VerticalScanStepAngleDeg, dbl);
+            SendConsoleResponse(name, CCLICommandManager::VerticalScanStepAngleDeg, dbl);
             return true;
         }
     }
@@ -1070,7 +1075,7 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
     ret = CommandManager.HasA(CCLICommandManager::MeasurementErrorMean);
     if (ret) {
         if (pSystemAPI->GetMeasurementErrorMean(p_actor, dbl)) {
-            SendConsoleResponse(CCLICommandManager::MeasurementErrorMean, dbl);
+            SendConsoleResponse(name, CCLICommandManager::MeasurementErrorMean, dbl);
             return true;
         }
     }
@@ -1081,7 +1086,7 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
     ret = CommandManager.HasA(CCLICommandManager::MeasurementErrorStd);
     if (ret) {
         if (pSystemAPI->GetMeasurementErrorStd(p_actor, dbl)) {
-            SendConsoleResponse(CCLICommandManager::MeasurementErrorStd, dbl);
+            SendConsoleResponse(name, CCLICommandManager::MeasurementErrorStd, dbl);
             return true;
         }
     }
@@ -1092,7 +1097,7 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
     ret = CommandManager.HasA(CCLICommandManager::EnableSurfaceDetect);
     if (ret) {
         if (pSystemAPI->GetEnableSurfaceDetect(p_actor, is_enabled)) {
-            SendConsoleResponse(CCLICommandManager::EnableSurfaceDetect, is_enabled);
+            SendConsoleResponse(name, CCLICommandManager::EnableSurfaceDetect, is_enabled);
             return true;
         }
     }
@@ -1103,7 +1108,7 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
     ret = CommandManager.HasA(CCLICommandManager::EnableSubsurfaceDetect);
     if (ret) {
         if (pSystemAPI->GetEnableSubsurfaceDetect(p_actor, is_enabled)) {
-            SendConsoleResponse(CCLICommandManager::EnableSubsurfaceDetect, is_enabled);
+            SendConsoleResponse(name, CCLICommandManager::EnableSubsurfaceDetect, is_enabled);
             return true;
         }
     }
@@ -1114,7 +1119,7 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
     ret = CommandManager.HasA(CCLICommandManager::EnableFoamDetect);
     if (ret) {
         if (pSystemAPI->GetEnableFoamDetect(p_actor, is_enabled)) {
-            SendConsoleResponse(CCLICommandManager::EnableFoamDetect, is_enabled);
+            SendConsoleResponse(name, CCLICommandManager::EnableFoamDetect, is_enabled);
             return true;
         }
     }
@@ -1125,7 +1130,7 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
     ret = CommandManager.HasA(CCLICommandManager::SeaSurfaceDetectionProb);
     if (ret) {
         if (pSystemAPI->GetSeaSurfaceDetectionProb(p_actor, dbl)) {
-            SendConsoleResponse(CCLICommandManager::EnableFoamDetect, dbl);
+            SendConsoleResponse(name, CCLICommandManager::EnableFoamDetect, dbl);
             return true;
         }
     }
@@ -1136,7 +1141,7 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
     ret = CommandManager.HasA(CCLICommandManager::MaxSurfacePenetration);
     if (ret) {
         if (pSystemAPI->GetMaxSurfacePenetration(p_actor, dbl)) {
-            SendConsoleResponse(CCLICommandManager::MaxSurfacePenetration, dbl);
+            SendConsoleResponse(name, CCLICommandManager::MaxSurfacePenetration, dbl);
             return true;
         }
     }
@@ -1147,7 +1152,7 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
     ret = CommandManager.HasA(CCLICommandManager::RadarScanLevel);
     if (ret) {
         if (pSystemAPI->GetRadarScanLevel(p_actor, sint)) {
-            SendConsoleResponse(CCLICommandManager::RadarScanLevel, sint);
+            SendConsoleResponse(name, CCLICommandManager::RadarScanLevel, sint);
             return true;
         }
     }
@@ -1158,7 +1163,7 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
     ret = CommandManager.HasA(CCLICommandManager::RadarScannerRPM);
     if (ret) {
         if (pSystemAPI->GetRadarScannerRPM(p_actor, sint)) {
-            SendConsoleResponse(CCLICommandManager::RadarScannerRPM, sint);
+            SendConsoleResponse(name, CCLICommandManager::RadarScannerRPM, sint);
             return true;
         }
     }
@@ -1169,7 +1174,7 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
     ret = CommandManager.HasA(CCLICommandManager::RadarGainType);
     if (ret) {
         if (pSystemAPI->GetRadarGainType(p_actor, sint)) {
-            SendConsoleResponse(CCLICommandManager::RadarGainType, sint);
+            SendConsoleResponse(name, CCLICommandManager::RadarGainType, sint);
             return true;
         }
     }
@@ -1180,7 +1185,7 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
     ret = CommandManager.HasA(CCLICommandManager::RadarGainLevel);
     if (ret) {
         if (pSystemAPI->GetRadarGainLevel(p_actor, sint)) {
-            SendConsoleResponse(CCLICommandManager::RadarGainLevel, sint);
+            SendConsoleResponse(name, CCLICommandManager::RadarGainLevel, sint);
             return true;
         }
     }
@@ -1191,7 +1196,7 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
     ret = CommandManager.HasA(CCLICommandManager::RadarSeaClutterType);
     if (ret) {
         if (pSystemAPI->GetRadarSeaClutterType(p_actor, sint)) {
-            SendConsoleResponse(CCLICommandManager::RadarSeaClutterType, sint);
+            SendConsoleResponse(name, CCLICommandManager::RadarSeaClutterType, sint);
             return true;
         }
     }
@@ -1202,7 +1207,7 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
     ret = CommandManager.HasA(CCLICommandManager::RadarSeaClutterLevel);
     if (ret) {
         if (pSystemAPI->GetRadarSeaClutterLevel(p_actor, sint)) {
-            SendConsoleResponse(CCLICommandManager::RadarSeaClutterLevel, sint);
+            SendConsoleResponse(name, CCLICommandManager::RadarSeaClutterLevel, sint);
             return true;
         }
     }
@@ -1213,7 +1218,7 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
     ret = CommandManager.HasA(CCLICommandManager::RadarSeaClutterAutoOffset);
     if (ret) {
         if (pSystemAPI->GetRadarSeaClutterAutoOffset(p_actor, sint)) {
-            SendConsoleResponse(CCLICommandManager::RadarSeaClutterAutoOffset, sint);
+            SendConsoleResponse(name, CCLICommandManager::RadarSeaClutterAutoOffset, sint);
             return true;
         }
     }
@@ -1224,7 +1229,7 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
     ret = CommandManager.HasA(CCLICommandManager::RadarRainClutterLevel);
     if (ret) {
         if (pSystemAPI->GetRadarRainClutterLevel(p_actor, sint)) {
-            SendConsoleResponse(CCLICommandManager::RadarRainClutterLevel, sint);
+            SendConsoleResponse(name, CCLICommandManager::RadarRainClutterLevel, sint);
             return true;
         }
     }
@@ -1235,7 +1240,7 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
     ret = CommandManager.HasA(CCLICommandManager::RadarMaxGuardZoneCount);
     if (ret) {
         if (pSystemAPI->GetRadarMaxGuardZoneCount(p_actor, sint)) {
-            SendConsoleResponse(CCLICommandManager::RadarMaxGuardZoneCount, sint);
+            SendConsoleResponse(name, CCLICommandManager::RadarMaxGuardZoneCount, sint);
             return true;
         }
     }
@@ -1246,7 +1251,7 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
     ret = CommandManager.HasA(CCLICommandManager::RadarMaxSectorBlankingZoneCount);
     if (ret) {
         if (pSystemAPI->GetRadarMaxSectorBlankingZoneCount(p_actor, sint)) {
-            SendConsoleResponse(CCLICommandManager::RadarMaxSectorBlankingZoneCount, sint);
+            SendConsoleResponse(name, CCLICommandManager::RadarMaxSectorBlankingZoneCount, sint);
             return true;
         }
     }

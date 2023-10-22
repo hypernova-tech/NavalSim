@@ -4,16 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "ActorGizmoController.generated.h"
+#include "ActorBaseGizmoController.generated.h"
 
 UCLASS()
-class AActorGizmoController : public AActor
+class AActorBaseGizmoController : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	AActorGizmoController();
+	AActorBaseGizmoController();
 
 protected:
 	// Called when the game starts or when spawned

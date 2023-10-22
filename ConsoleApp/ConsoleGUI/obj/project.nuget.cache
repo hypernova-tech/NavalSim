@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "4EYzAlRe83r1ZCyBk+/K1k4Li1DRGvvNLo65mUwjwnqx6yx0fXt89gNq9xV+GlUlf5UehsLh8FBST4JviA3ztw==",
+  "dgSpecHash": "B32EV/Ay+9dgOYyNkZlEYCzaVqeU7ytOXHu6mxl5TC7QvJqVR/gEOSfuGvzzvATWF9qg+vsLEONFz5TWd4tqiw==",
   "success": true,
   "projectFilePath": "C:\\Users\\Pc\\Documents\\Unreal Projects\\BoatSim\\ConsoleApp\\ConsoleGUI\\ConsoleGUI.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\Pc\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512"
+  ],
   "logs": []
 }

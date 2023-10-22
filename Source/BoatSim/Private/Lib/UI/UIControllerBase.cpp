@@ -122,7 +122,11 @@ void AUIControllerBase::FindActorAtClickPosition(int locationX, int locationY)
 	{
 		// HitResult now contains information about what was hit
 		AActor* ClickedActor = HitResult.GetActor();
-		if (ClickedActor)
+		if (ClickedActor->ActorHasTag("Gizmo")) {
+			ClickedActor = CUtil::GetParentActor(ClickedActor);
+		}
+
+		if (ClickedActor&& !ClickedActor->ActorHasTag("Gizmo"))
 		{
 			SelectActor(ClickedActor);
 #if 0

@@ -43,13 +43,13 @@ protected:
 	bool ProcessGetCommand(TMap<FString, FString>& options, FString& error_message);
 
 
-	void SendConsoleResponse(FString option, INT32S ret);
-	void SendConsoleResponse(FString option, FLOAT64 ret);
-	void SendConsoleResponse(FString option, BOOLEAN ret);
-	void SendConsoleResponse(FString option, FVector2D ret);
-	void SendConsoleResponse(FString option, FVector ret);
-	void SendConsoleResponse(FString option, FString ret);
-
+	void SendConsoleResponse(FString name, FString option, INT32S ret);
+	void SendConsoleResponse(FString name, FString option, FLOAT64 ret);
+	void SendConsoleResponse(FString name, FString option, BOOLEAN ret);
+	void SendConsoleResponse(FString name, FString option, FVector2D ret);
+	void SendConsoleResponse(FString name, FString option, FVector ret);
+	void SendConsoleResponse(FString name, FString option, FString ret);
+	FString CreateAndSerializeJson(TMap<FString, FString> &data);
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
