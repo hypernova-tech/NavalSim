@@ -5,6 +5,7 @@
 #include <Lib/Utils/CUtil.h>
 #include <CBoatBase.h>
 #include <Lib/Sensor/GenericSensor/LidarBase.h>
+#include <Lib/PathController/PathController.h>
 
 // Sets default values
 ASystemManagerBase* ASystemManagerBase::pInstance = nullptr;
@@ -165,6 +166,11 @@ void ASystemManagerBase::SetSelectedActor(AActor *p_actor)
 AActor* ASystemManagerBase::GetSelectedActor()
 {
 	return pSelectedActor;
+}
+bool ASystemManagerBase::IsBakable(AActor* p_actor)
+{
+	
+	return ToActorBase(p_actor) != nullptr;
 }
 void ASystemManagerBase::SetGizmoTrackedActor(AActor* p_actor)
 {
@@ -1297,4 +1303,138 @@ bool ASystemManagerBase::GetRadarMaxSectorBlankingZoneCount(AActor* p_actor, INT
 		return true;
 	}
 	return false;
+}
+
+bool ASystemManagerBase::AddOrModifyWaypointToPath(AActor* p_actor, INT32S wp_ind, FVector position)
+{
+	if (p_actor->IsA<APathController>()) {
+		APathController* p_path = (APathController*)p_actor;
+
+		p_path->AddOrModifyWaypoint(wp_ind, position);
+
+		return true;
+	}
+	return false;
+}
+
+bool ASystemManagerBase::Bake(AActor* p_actor)
+{
+	
+	auto actorbase = ToActorBase(p_actor);
+	if (actorbase) {
+		actorbase->Bake();
+		return true;
+	}
+	return false;
+}
+bool ASystemManagerBase::SetPathClosed(AActor* p_actor, bool is_closed)
+{
+	auto actorbase = ToActorBase(p_actor);
+	if (actorbase && p_actor->IsA< APathController>()) {
+		APathController* p_path = (APathController*)actorbase;
+		p_path->SetIsClosed(is_closed);
+		return true;
+	}
+
+	return false;
+}
+
+bool ASystemManagerBase::SetPathSpeed(AActor* p_actor, FLOAT64 val)
+{
+	auto actorbase = ToActorBase(p_actor);
+	if (actorbase && actorbase->IsA< APathController>()) {
+		APathController* p_path = (APathController*)actorbase;
+		p_path->SetPathSpeed(val);
+		return true;
+	}
+
+	return false;
+}
+
+bool ASystemManagerBase::AttachToPath(AActor* p_path_actor, FString actor_name)
+{
+	auto actorbase = ToActorBase(p_path_actor);
+	if (actorbase != nullptr && actorbase->IsA< APathController>()) {
+		APathController* p_path = (APathController*)actorbase;
+
+		auto attachable = FindActor(actor_name);
+		
+		if (attachable) {
+			p_path->AddAttachedActor(attachable);
+		}
+		else {
+			return false;
+		}
+		
+	}
+
+	return false;
+}
+
+
+bool ASystemManagerBase::GetWaypointPosition(AActor* p_actor, INT32S wp_ind, FVector& position)
+{
+	auto actorbase = ToActorBase(p_actor);
+	if (actorbase != nullptr && actorbase->IsA< APathController>()) {
+		APathController* p_path = (APathController*)actorbase;
+
+		if (p_path) {
+			auto ret = p_path->GetWaypointPosition(wp_ind, position);
+			return ret;
+		}
+	}
+
+	return false;
+}
+
+ bool ASystemManagerBase::GetPathClosed(AActor* p_actor, bool& is_closed)
+{
+	 auto actorbase = ToActorBase(p_actor);
+	 if (actorbase != nullptr && actorbase->IsA< APathController>()) {
+		 APathController* p_path = (APathController*)actorbase;
+
+		 if (p_path) {
+			 is_closed = p_path->GetIsClosed();
+			 return true;
+		 }
+	 }
+
+	 return false;
+}
+bool ASystemManagerBase::GetPathSpeed(AActor* p_actor, FLOAT64& val)
+{
+	auto actorbase = ToActorBase(p_actor);
+	if (actorbase != nullptr && actorbase->IsA< APathController>()) {
+		APathController* p_path = (APathController*)actorbase;
+
+		if (p_path) {
+			val = p_path->GetPathSpeed();
+			return true;
+		}
+	}
+
+	return false;
+}
+ bool ASystemManagerBase::GetActorAttachedToPath(AActor* p_path, FString& actor_name)
+{
+	 auto actorbase = ToActorBase(p_path);
+	 if (actorbase != nullptr && actorbase->IsA< APathController>()) {
+		 APathController* p_path = (APathController*)actorbase;
+
+		 
+
+		 if (p_path) {
+			 auto actor_attached = p_path->GetAttachedActor();
+			 if (actor_attached) {
+				 actor_name = actor_attached->GetName();
+				 return true;
+			 }
+		 }
+		 else {
+			 return false;
+		 }
+
+	 }
+
+	 return false;
 }

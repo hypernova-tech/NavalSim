@@ -118,3 +118,7 @@ void AActorBase::ShowActorGizmo(bool val)
 	}
 	
 }
+
+void AActorBase::Bake()
+{
+}

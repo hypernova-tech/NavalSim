@@ -111,6 +111,12 @@ public:
 	static FString CamWidthPx;
 	static FString CamHeightPx;
 
+	static FString Wp;
+	static FString WpPos;
+	static FString Closed;
+	static FString Bake;
+	static FString Speed;
+	static FString Attach;
 
 	static FString GetCommand;
 

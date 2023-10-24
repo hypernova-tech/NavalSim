@@ -63,6 +63,14 @@ FString CCLICommandManager::RadarMaxSectorBlankingZoneCount = "radmaxsectorblank
 FString CCLICommandManager::CamWidthPx = "widthpx";
 FString CCLICommandManager::CamHeightPx = "heightpx";
 
+FString CCLICommandManager::Wp = "wp";
+FString CCLICommandManager::WpPos = "wppos";
+FString CCLICommandManager::Closed = "closed";
+FString CCLICommandManager::Bake = "bake";
+FString CCLICommandManager::Speed = "speed";
+FString CCLICommandManager::Attach = "attach";
+
+
 
 
 
@@ -370,8 +378,29 @@ void CCLICommandManager::PrepareSetCommandInfo()
 	info.Description = "sets the radar max. sektor blanking zone count";
 	options.Add(info);
 
+	info.Option = "--" + CCLICommandManager::Wp;
+	info.Description = "sets the index of the waypoint of given path of name";
+	options.Add(info);
 
+	info.Option = "--" + CCLICommandManager::WpPos;
+	info.Description = "sets the position of wp with index of path of name";
+	options.Add(info);
 
+	info.Option = "--" + CCLICommandManager::Closed;
+	info.Description = "make path closed(1) or open(0)";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::Bake;
+	info.Description = "bake the given object";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::Speed;
+	info.Description = "sets the speed of the attached object";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::Attach;
+	info.Description = "attach the object given actor name";
+	options.Add(info);
 
 	CommandInfo.Add(SetCommand, options);
 }
@@ -518,6 +547,22 @@ void CCLICommandManager::PrepareGetCommandInfo()
 
 	info.Option = "--" + CCLICommandManager::RadarMaxSectorBlankingZoneCount;
 	info.Description = "gets the radar max. sektor blanking zone count";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::Wp;
+	info.Description = "gets the waypoint info at index given path of name";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::WpPos;
+	info.Description = "gets the position of wp with index of path of name";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::Closed;
+	info.Description = "gets path closed(1) or not (0)";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::Attach;
+	info.Description = "gets the attached actor to path of name";
 	options.Add(info);
 
 

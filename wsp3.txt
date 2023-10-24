@@ -168,3 +168,10 @@ set --name ircam1 --seasurfdetectprob 0.000000
 set --name ircam1 --maxsurfpenet 0.000000
 set --name ircam1 --widthpx 1920
 set --name ircam1 --heightpx 1080
+
+create --name path1 --BP PATH
+set --name path1 --wp 0 --wppos "0 0 0"
+set --name path1 --wp 1 --wppos "100 0 0"
+set --name path1 --closed 1
+set --name path1 --build
+set --name path1 --attach sidamir

@@ -291,6 +291,27 @@ void UConsoleBase::SendConsoleResponse(FString name, FString option, FVector2D r
 
     //pSystemAPI->SendConsoleResponse("--name " + name + " --" + option + " " + "\""+ retstr + "\"");
 }
+
+void UConsoleBase::SendConsoleResponse(FString name, FString option, INT32S ind, FVector ret)
+{
+    FString retstr = CUtil::FloatToString(ret.X) + " " + CUtil::FloatToString(ret.Y);
+
+    TMap<FString, FString> data;
+
+    if (name != "") {
+        data.Add("name", name);
+    }
+
+    data.Add("option", option);
+    data.Add("ind", CUtil::IntToString(ind));
+    data.Add("value", (retstr));
+    auto ret_json = CreateAndSerializeJson(data);
+    pSystemAPI->SendConsoleResponse(ret_json);
+
+    //pSystemAPI->SendConsoleResponse("--name " + name + " --" + option + " " + "\""+ retstr + "\"");
+}
+
+
 void UConsoleBase::SendConsoleResponse(FString name, FString option, FVector ret)
 {
     FString retstr = CUtil::FloatToString(ret.X) + " " + CUtil::FloatToString(ret.Y) + " " + CUtil::FloatToString(ret.Z);
@@ -867,6 +888,70 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
 
     }
 
+    ret = CommandManager.GetValue(CCLICommandManager::Closed, is_enabled);
+    if (ret) {
+        if (pSystemAPI->SetPathClosed(p_actor, is_enabled)) {
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::Bake, sint);
+    if (ret) {
+        if (pSystemAPI->Bake(p_actor)) {
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::Speed, dbl);
+    if (ret) {
+        if (pSystemAPI->SetPathSpeed(p_actor, dbl)) {
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::Attach, sret);
+    if (ret) {
+        if (pSystemAPI->AttachToPath(p_actor, sret)) {
+            return true;
+        }
+    }
+    else {
+
+    }
+
+
+    {
+
+        INT32S wp_ind;
+        ret = CommandManager.GetValue(CCLICommandManager::Wp, wp_ind);
+        if (ret) {
+            FVector wp_pos;
+            ret = CommandManager.GetValue(CCLICommandManager::WpPos, wp_pos);
+            if (ret) {
+                
+                pSystemAPI->AddOrModifyWaypointToPath(p_actor, wp_ind, wp_pos);
+            }
+
+
+        }
+        else {
+
+        }
+
+    }
+
+
+
+
     
 
     return true;
@@ -1258,6 +1343,60 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
     else {
 
     }
+
+
+
+    ret = CommandManager.HasA(CCLICommandManager::Closed);
+    if (ret) {
+        if (pSystemAPI->GetPathClosed(p_actor, is_enabled)) {
+            SendConsoleResponse(name, CCLICommandManager::Closed, is_enabled);
+            return true;
+        }
+    }
+    else {
+
+    }
+
+
+    ret = CommandManager.HasA(CCLICommandManager::Speed);
+    if (ret) {
+        if (pSystemAPI->GetPathSpeed(p_actor, dbl)) {
+            SendConsoleResponse(name, CCLICommandManager::Speed, dbl);
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.HasA(CCLICommandManager::Attach);
+    if (ret) {
+        if (pSystemAPI->GetActorAttachedToPath(p_actor, sret)) {
+            SendConsoleResponse(name, CCLICommandManager::Attach, sret);
+            return true;
+        }
+    }
+    else {
+
+    }
+
+
+    {
+
+        INT32S wp_ind;
+        ret = CommandManager.GetValue(CCLICommandManager::Wp, wp_ind);
+        if (ret) {
+            if (pSystemAPI->GetWaypointPosition(p_actor, wp_ind, vec)) {
+                SendConsoleResponse(name, CCLICommandManager::Wp, wp_ind, vec);
+            }
+ 
+        }
+        else {
+
+        }
+
+    }
+
 
  
 

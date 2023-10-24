@@ -28,6 +28,10 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+
+	UPROPERTY(EditAnywhere)
+		AActor* pAttachedObject;
+
 	UPROPERTY(EditAnywhere)
 		USplineComponent* pSplineComponent;
 
@@ -39,11 +43,23 @@ public:
 
 	UPROPERTY(EditAnywhere)
 		TArray<AWaypointActor*> Waypoints;
+
+	
+
+	virtual void OnStep(float delta_time);
 private:
 
 
 private:
 
 	float CurrentDistance = 0;
+
+
+public:
+
+	void AddWaypoint(FVector vec, AWaypointActor* p_wp_actor);
+	void ModifyWaypoint(INT32S wp_ind, FVector pos);
+	void BuildPath(bool is_loop);
+	INT32S GetWaypointCount();
 		
 };

@@ -11,12 +11,6 @@ USplineFollower::USplineFollower()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 	
-	
-
-
-	
-
-	// ...
 }
 
 
@@ -25,13 +19,15 @@ void USplineFollower::BeginPlay()
 {
 	Super::BeginPlay();
 	pSplineComponent = CUtil::FindComponent< USplineComponent>(GetOwner());
-	pSplineComponent->DetachFromParent(true);
-	pSplineComponent->SetMobility(EComponentMobility::Static);
-	SetMobility(EComponentMobility::Movable);
+	//pSplineComponent->DetachFromParent(true);
+	//pSplineComponent->SetMobility(EComponentMobility::Static);
+	//SetMobility(EComponentMobility::Movable);
 
 	
 	pSplineComponent->ClearSplinePoints(true);
 
+
+#if false
 	for (AWaypointActor* p_wp : Waypoints) {
 		FVector pos = p_wp->GetActorLocation();
 		pSplineComponent->AddSplineWorldPoint(pos);
@@ -39,7 +35,9 @@ void USplineFollower::BeginPlay()
 
 	pSplineComponent->SetClosedLoop(true, true);
 	pSplineComponent->UpdateSpline();
-	// ...
+
+#endif
+
 	
 }
 
@@ -48,37 +46,47 @@ bool Once = false;
 void USplineFollower::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+}
+
+void USplineFollower::OnStep(float DeltaTime)
+{
+	
 	float len = pSplineComponent->GetSplineLength();
-	
+
 	FVector pos = pSplineComponent->GetLocationAtDistanceAlongSpline(CurrentDistance, ESplineCoordinateSpace::World);
-	FVector tangent = pSplineComponent->GetTangentAtSplineInputKey(CurrentDistance, ESplineCoordinateSpace::World);
-	// ...
-	
+	FVector tangent = pSplineComponent->GetDirectionAtDistanceAlongSpline(CurrentDistance, ESplineCoordinateSpace::World);
 
-
-	// Set the actor's new rotation
-	//GetOwner()->SetActorRotation(NewRotation);
-
-	GetOwner()->SetActorLocation(pos);
-
-	CurrentDistance += WORLD_TO_UNREAL( MoveSpeedMetersPerSec) * DeltaTime;
+	pAttachedObject->SetActorLocation(pos);
+	FRotator rot = tangent.Rotation();
+	pAttachedObject->SetActorRotation(rot);
+	CurrentDistance += WORLD_TO_UNREAL(MoveSpeedMetersPerSec) * DeltaTime;
 	if (CurrentDistance >= len) {
 		CurrentDistance = 0;
 	}
+}
 
-#if false
-	if (!Once) {
-		FVector prev_pos = pSplineComponent->GetLocationAtDistanceAlongSpline(0, ESplineCoordinateSpace::World);
-		for (float dist = 5; dist < len; dist += 5) {
-			FVector pos1 = pSplineComponent->GetLocationAtDistanceAlongSpline(dist, ESplineCoordinateSpace::World);
-			DrawDebugLine(GetWorld(), pos1, prev_pos, FColor::Magenta, false, 1000.0f, 0, 10.0f);
-			prev_pos = pos1;
-		}
-		Once = true;
+void USplineFollower::AddWaypoint(FVector vec, AWaypointActor* p_wp_actor)
+{
+	pSplineComponent->AddSplineWorldPoint(TOUE(vec));
+	Waypoints.Add(p_wp_actor);
+}
+
+void USplineFollower::ModifyWaypoint(INT32S wp_ind, FVector pos)
+{
+	if (wp_ind < GetWaypointCount()) {
+		pSplineComponent->SetLocationAtSplinePoint(wp_ind, pos, ESplineCoordinateSpace::World);
 	}
+}
 
-#endif
+void USplineFollower::BuildPath(bool is_loop)
+{
+	pSplineComponent->SetClosedLoop(is_loop, true);
+	pSplineComponent->UpdateSpline();
+}
 
+INT32S USplineFollower::GetWaypointCount()
+{
 
+	return Waypoints.Num();
 }
 

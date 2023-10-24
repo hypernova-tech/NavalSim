@@ -61,6 +61,6 @@ public:
 	FString GetBlueprintName();
 	virtual void Save(ISaveLoader* p_save_loader);
 	void ShowActorGizmo(bool val);
-
+	virtual void Bake();
 	
 };

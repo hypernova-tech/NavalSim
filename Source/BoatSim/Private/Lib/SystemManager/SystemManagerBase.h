@@ -169,6 +169,7 @@ public:
 	virtual bool DestroyActor(FString name);
 	virtual AActorBase* ToActorBase(AActor* p_actor);
 	virtual ASensorBase* ToSensorBase(AActor* p_actor);
+	virtual bool IsBakable(AActor* p_actor);
 	virtual void EnableAllActors();
 	virtual void DisableAllActors();
 	virtual bool SetActorEnabled(AActor* p_actor, bool val);
@@ -272,4 +273,15 @@ public:
 	virtual bool GetRadarRainClutterLevel(AActor* p_actor, INT32S& val) ;
 	virtual bool GetRadarMaxGuardZoneCount(AActor* p_actor, INT32S& val) ;
 	virtual bool GetRadarMaxSectorBlankingZoneCount(AActor* p_actor, INT32S& val);
+
+	virtual bool AddOrModifyWaypointToPath(AActor* p_actor, INT32S wp_ind, FVector position);
+	virtual bool Bake(AActor* p_actor);
+	virtual bool SetPathClosed(AActor* p_actor, bool is_closed);
+	virtual bool SetPathSpeed(AActor* p_actor, FLOAT64 val);
+	virtual bool AttachToPath(AActor* p_path, FString actor_name);
+
+	virtual bool GetWaypointPosition(AActor* p_actor, INT32S wp_ind, FVector& position);
+	virtual bool GetPathClosed(AActor* p_actor, bool& is_closed);
+	virtual bool GetPathSpeed(AActor* p_actor, FLOAT64& val);
+	virtual bool GetActorAttachedToPath(AActor* p_path, FString& actor_name);
 };

@@ -134,7 +134,7 @@ protected:
 	
 	virtual void OnDataReady();
 	virtual void InitSensor();
-	virtual void Run(float delta_time_sec);
+	virtual void Run(float delta_time_sec); 
 	virtual void FinalizeSensor();
 	virtual void PauseSensor();
 	virtual void ResumeSensor();
