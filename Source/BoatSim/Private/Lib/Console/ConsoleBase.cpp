@@ -292,6 +292,37 @@ void UConsoleBase::SendConsoleResponse(FString name, FString option, FVector2D r
     //pSystemAPI->SendConsoleResponse("--name " + name + " --" + option + " " + "\""+ retstr + "\"");
 }
 
+void UConsoleBase::SendConsoleResponse(FString name, FString option, FColor ret)
+{
+    FString retstr = CUtil::IntToString(ret.R) + " " + CUtil::IntToString(ret.G) + " " + CUtil::IntToString(ret.B) + " " + CUtil::IntToString(ret.A);
+
+    TMap<FString, FString> data;
+
+    if (name != "") {
+        data.Add("name", name);
+    }
+
+    data.Add("option", option);
+    data.Add("value", (retstr));
+    auto ret_json = CreateAndSerializeJson(data);
+    pSystemAPI->SendConsoleResponse(ret_json);
+}
+void UConsoleBase::SendConsoleResponse(FString name, FString option, FVector4 ret)
+{
+    FString retstr = CUtil::FloatToString(ret.X) + " " + CUtil::FloatToString(ret.Y) + " " + CUtil::FloatToString(ret.Z) + " " + CUtil::FloatToString(ret.W);
+
+    TMap<FString, FString> data;
+
+    if (name != "") {
+        data.Add("name", name);
+    }
+
+    data.Add("option", option);
+    data.Add("value", (retstr));
+    auto ret_json = CreateAndSerializeJson(data);
+    pSystemAPI->SendConsoleResponse(ret_json);
+}
+
 void UConsoleBase::SendConsoleResponse(FString name, FString option, INT32S ind, FVector ret)
 {
     FString retstr = CUtil::FloatToString(ret.X) + " " + CUtil::FloatToString(ret.Y);
@@ -560,6 +591,7 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
 {
     error_message = "";
     FVector2D vec2d;
+    FColor color;
     bool ret;
     FString sret;
     FString name;
@@ -929,6 +961,37 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
     }
 
 
+
+    ret = CommandManager.GetValue(CCLICommandManager::LineColor, color);
+    if (ret) {
+        if (pSystemAPI->SetPathLineColor(p_actor, color) ){
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::SegmentCount, sint);
+    if (ret) {
+        if (pSystemAPI->SetPathSegmentCount(p_actor, sint)) {
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::SegmentCount, is_enabled);
+    if (ret) {
+        if (pSystemAPI->SetPathStraight(p_actor, is_enabled)) {
+            return true;
+        }
+    }
+    else {
+
+    }
+
     {
 
         INT32S wp_ind;
@@ -949,11 +1012,6 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
 
     }
 
-
-
-
-    
-
     return true;
 }
 bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& error_message)
@@ -969,7 +1027,8 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
     bool is_enabled;
     INT32S sint;
     FLOAT64 dbl;
-
+    FVector4 vec4d;
+    FColor color;
 
 
     ret = CommandManager.HasController();
@@ -1369,6 +1428,39 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
 
     }
 
+    ret = CommandManager.HasA(CCLICommandManager::SegmentCount);
+    if (ret) {
+        if (pSystemAPI->GetPathSegmentCount(p_actor, sint)) {
+            SendConsoleResponse(name, CCLICommandManager::SegmentCount, sint);
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.HasA(CCLICommandManager::LineColor);
+    if (ret) {
+        if (pSystemAPI->GetPathLineColor(p_actor, color)) {
+            SendConsoleResponse(name, CCLICommandManager::LineColor, color);
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.HasA(CCLICommandManager::Straight);
+    if (ret) {
+        if (pSystemAPI->GetPathStraight(p_actor, is_enabled)) {
+            SendConsoleResponse(name, CCLICommandManager::Straight, is_enabled);
+            return true;
+        }
+    }
+    else {
+
+    }
+
     ret = CommandManager.HasA(CCLICommandManager::Attach);
     if (ret) {
         if (pSystemAPI->GetActorAttachedToPath(p_actor, sret)) {
@@ -1387,7 +1479,7 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
         ret = CommandManager.GetValue(CCLICommandManager::Wp, wp_ind);
         if (ret) {
             if (pSystemAPI->GetWaypointPosition(p_actor, wp_ind, vec)) {
-                SendConsoleResponse(name, CCLICommandManager::Wp, wp_ind, vec);
+                SendConsoleResponse(name, CCLICommandManager::Wp, wp_ind, TOW(vec));
             }
  
         }

@@ -2,6 +2,7 @@
 
 
 #include "Lib/Waypoint/WaypointActor.h"
+#include <Lib/PathController/PathController.h>
 
 // Sets default values
 AWaypointActor::AWaypointActor()
@@ -23,5 +24,21 @@ void AWaypointActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+AActor* AWaypointActor::GetOwnerPath()
+{
+	return pOwnerPath;
+}
+
+void AWaypointActor::SetOwnerPath(AActor* p_path)
+{
+	pOwnerPath = p_path;
+}
+
+void AWaypointActor::OnActorPredestroy()
+{
+
+	((APathController*)pOwnerPath)->NotifyWaypointDestroy(this);
 }
 

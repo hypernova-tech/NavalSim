@@ -6,6 +6,8 @@
 #include <Lib/Utils/CUtil.h>
 #include <Lib/Math/CMath.h>
 #include <Lib/InputManager/InputManagerBase.h>
+#include <Lib/SystemManager/SystemManagerBase.h>
+
 
 // Sets default values for this component's properties
 UGizmoUIController::UGizmoUIController()
@@ -372,6 +374,7 @@ void UGizmoUIController::StateMachine()
 		
 		if (IsMouseLeftButtonUp) {
 			next_state = GizmoStateDetect;
+			ASystemManagerBase::GetInstance()->OnActorMoved(pTrackedActor);
 		}
 		else {
 			OnCursorMove();

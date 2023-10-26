@@ -19,6 +19,11 @@ void USplineFollower::BeginPlay()
 {
 	Super::BeginPlay();
 	pSplineComponent = CUtil::FindComponent< USplineComponent>(GetOwner());
+
+	
+
+
+
 	//pSplineComponent->DetachFromParent(true);
 	//pSplineComponent->SetMobility(EComponentMobility::Static);
 	//SetMobility(EComponentMobility::Movable);
@@ -58,7 +63,17 @@ void USplineFollower::OnStep(float DeltaTime)
 
 	pAttachedObject->SetActorLocation(pos);
 	FRotator rot = tangent.Rotation();
-	pAttachedObject->SetActorRotation(rot);
+
+	// Get the current rotation
+	FRotator currentRot = pAttachedObject->GetActorRotation();
+
+
+	// Interpolate from the current rotation to the target rotation
+	FRotator smoothRot = FMath::RInterpConstantTo(currentRot, rot, DeltaTime, TurnRateDegPerSec);
+
+
+
+	pAttachedObject->SetActorRotation(smoothRot);
 	CurrentDistance += WORLD_TO_UNREAL(MoveSpeedMetersPerSec) * DeltaTime;
 	if (CurrentDistance >= len) {
 		CurrentDistance = 0;
@@ -88,5 +103,38 @@ INT32S USplineFollower::GetWaypointCount()
 {
 
 	return Waypoints.Num();
+}
+
+FVector USplineFollower::GetWaypointLocation(INT32S i)
+{
+	return Waypoints[i]->GetActorLocation();
+}
+
+void USplineFollower::UpdateWaypointsPositions()
+{
+	pSplineComponent->ClearSplinePoints();
+	for (auto wp : Waypoints) {
+
+		pSplineComponent->AddSplineWorldPoint(wp->GetActorLocation());
+	}
+
+
+	pSplineComponent->UpdateSpline();
+}
+
+void USplineFollower::RemoveWaypoint(AWaypointActor* p_wp)
+{
+
+	INT32S ind = 0;
+
+	for (auto wp : Waypoints) {
+
+		if (wp == p_wp) {
+			pSplineComponent->RemoveSplinePoint(ind);
+			Waypoints.Remove(p_wp);
+			return;
+		}
+		ind++;
+	}
 }
 

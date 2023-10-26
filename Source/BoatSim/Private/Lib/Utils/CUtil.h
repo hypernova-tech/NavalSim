@@ -57,6 +57,7 @@ public:
 
 	static bool ParseVector2D(const FString& Text, FVector2D& ret);
 	static bool ParseVector3D(const FString& Text, FVector& ret);
+	static bool ParseColor(const FString& Text, FColor& ret);
 	static bool ParsePose(const FString& Text, FVector& translation, FVector& rpy);
 	static void DebugLog(FString str);
 	static void DebugLogScreen(FString str, FLOAT32 duration_sec = 5, FColor col = FColor::Red);

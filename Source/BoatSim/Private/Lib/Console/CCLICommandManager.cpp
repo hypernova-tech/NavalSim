@@ -69,7 +69,9 @@ FString CCLICommandManager::Closed = "closed";
 FString CCLICommandManager::Bake = "bake";
 FString CCLICommandManager::Speed = "speed";
 FString CCLICommandManager::Attach = "attach";
-
+FString CCLICommandManager::Straight = "straight";
+FString CCLICommandManager::LineColor = "color";
+FString CCLICommandManager::SegmentCount = "segment";
 
 
 
@@ -402,6 +404,19 @@ void CCLICommandManager::PrepareSetCommandInfo()
 	info.Description = "attach the object given actor name";
 	options.Add(info);
 
+	info.Option = "--" + CCLICommandManager::SegmentCount;
+	info.Description = "set the segment couunt of drawn path the object given actor name";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::LineColor;
+	info.Description = "set the color of path the object given actor name";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::Straight;
+	info.Description = "set the path straight of given path of name";
+	options.Add(info);
+
+
 	CommandInfo.Add(SetCommand, options);
 }
 
@@ -565,6 +580,18 @@ void CCLICommandManager::PrepareGetCommandInfo()
 	info.Description = "gets the attached actor to path of name";
 	options.Add(info);
 
+
+	info.Option = "--" + CCLICommandManager::SegmentCount;
+	info.Description = "get the segment count of drawn path the object given actor name";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::LineColor;
+	info.Description = "get the color of path the object given actor name";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::Straight;
+	info.Description = "get the path straight (1) or not (0) of given path of name";
+	options.Add(info);
 
 
 	CommandInfo.Add(GetCommand, options);
@@ -792,6 +819,18 @@ bool CCLICommandManager::GetValue(FString &name, FVector& vec)
 	if (pstr != nullptr) {
 
 		ret = CUtil::ParseVector3D(*pstr, vec);
+		return ret;
+	}
+	return false;
+}
+
+bool CCLICommandManager::GetValue(FString& name, FColor& vec)
+{
+	bool ret = false;
+	auto pstr = pOptions->Find(name);
+	if (pstr != nullptr) {
+
+		ret = CUtil::ParseColor(*pstr, vec);
 		return ret;
 	}
 	return false;

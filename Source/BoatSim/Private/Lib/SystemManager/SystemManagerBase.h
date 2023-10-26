@@ -14,6 +14,7 @@
 #include <Lib/Console/ConsoleBase.h>
 #include <Lib/SaveLoad/SaverLoaderBase.h>
 #include <Lib/Sensor/GenericSensor/RadarBase.h>
+#include <Lib/PathController/PathController.h>
 #include "SystemManagerBase.generated.h"
 
 
@@ -128,6 +129,8 @@ public:
 
 	static  ASystemManagerBase* GetInstance();
 
+	void OnActorMoved(AActor* p_actor);
+
 	
 private:
 
@@ -167,8 +170,14 @@ public:
 	virtual TArray<AActor*> QueryActors(EActorQueryArgs args);
 	virtual AActor* FindActor(FString actor_name);
 	virtual bool DestroyActor(FString name);
+
 	virtual AActorBase* ToActorBase(AActor* p_actor);
 	virtual ASensorBase* ToSensorBase(AActor* p_actor);
+	APathController* ToPath(AActor* p_actor);
+	AWaypointActor* ToWaypoint(AActor* p_actor);
+	template <typename T>
+	T* To(AActor* p_actor);
+
 	virtual bool IsBakable(AActor* p_actor);
 	virtual void EnableAllActors();
 	virtual void DisableAllActors();
@@ -284,4 +293,14 @@ public:
 	virtual bool GetPathClosed(AActor* p_actor, bool& is_closed);
 	virtual bool GetPathSpeed(AActor* p_actor, FLOAT64& val);
 	virtual bool GetActorAttachedToPath(AActor* p_path, FString& actor_name);
+
+
+	virtual bool GetPathSegmentCount(AActor* p_actor, INT32S& val);
+	virtual bool SetPathSegmentCount(AActor* p_actor, INT32S& val);
+
+	virtual bool GetPathLineColor(AActor* p_actor, FColor& val);
+	virtual bool SetPathLineColor(AActor* p_actor, FColor& val);
+
+	virtual bool GetPathStraight(AActor* p_actor, bool& val);
+	virtual bool SetPathStraight(AActor* p_actor, bool& val);
 };

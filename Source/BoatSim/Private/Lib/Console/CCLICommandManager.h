@@ -117,6 +117,9 @@ public:
 	static FString Bake;
 	static FString Speed;
 	static FString Attach;
+	static FString Straight;
+	static FString LineColor;
+	static FString SegmentCount;
 
 	static FString GetCommand;
 
@@ -163,6 +166,7 @@ public:
 
 	bool GetValue(FString& name, BOOLEAN& val);
 	bool GetValue(FString& name, FVector& val);
+	bool GetValue(FString& name, FColor& val);
 	bool GetValue(FString& name, FVector2D& val);
 	bool GetValue(FString& name, FLOAT64& val);
 	bool GetValue(FString& name, INT32S& val);

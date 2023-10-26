@@ -5,7 +5,9 @@
 #include "CoreMinimal.h"
 #include "Lib/ActorBase/ActorBase.h"
 #include <Lib/SplineFollower/SplineFollower.h>
+#include <Components/SplineMeshComponent.h>
 #include "PathController.generated.h"
+
 
 
 /**
@@ -16,11 +18,39 @@ class APathController : public AActorBase
 {
 	GENERATED_BODY()
 
-
+public:
+	APathController();
 protected:
 
 	USplineFollower* pSplineFollower;
 	bool IsClosed;
+	TArray< USplineMeshComponent*> PathSegments;
+	void GenerateDrawablePathSegments();
+
+public:
+	UPROPERTY(EditAnywhere)
+		int NumSegments = 50;
+
+	UPROPERTY(EditAnywhere)
+		UStaticMesh* pMesh;
+
+	UPROPERTY(VisibleAnywhere)
+		USplineMeshComponent* pSplineMeshComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Custom Materials")
+		UMaterialInterface* pSplineMaterial;
+
+	UPROPERTY(EditAnywhere)
+		float LineoffsetAlongNormal = 0;
+
+	UPROPERTY(EditAnywhere)
+		bool IsStraightLine = false;
+
+	UPROPERTY(EditAnywhere)
+		float TurnRateDegPerSec = 90;
+
+	UPROPERTY(EditAnywhere)
+		FColor PathColor = FColor::Red;
 
 public:
 	virtual void BeginPlay() override;
@@ -35,5 +65,10 @@ public:
 	FLOAT64 GetPathSpeed();
 	void AddAttachedActor(AActor *p_actor);
 	AActor* GetAttachedActor();
+	void UpdatePathColor();
+	void NotifyWaypointMoved(AWaypointActor* p_wp);
+	void NotifyWaypointDestroy(AWaypointActor* p_wp);
+
+	virtual void Save(ISaveLoader* p_save_loader) override;
 
 };

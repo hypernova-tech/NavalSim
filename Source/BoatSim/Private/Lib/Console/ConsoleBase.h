@@ -49,6 +49,8 @@ protected:
 	void SendConsoleResponse(FString name, FString option, FVector2D ret);
 	void SendConsoleResponse(FString name, FString option, FVector ret);
 	void SendConsoleResponse(FString name, FString option, FString ret);
+	void SendConsoleResponse(FString name, FString option, FColor ret);
+	void SendConsoleResponse(FString name, FString option, FVector4 ret);
 	void SendConsoleResponse(FString name, FString option, INT32S ind, FVector ret);
 	FString CreateAndSerializeJson(TMap<FString, FString> &data);
 public:	

@@ -26,6 +26,20 @@ ASystemManagerBase* ASystemManagerBase::GetInstance()
 	return pInstance;
 }
 
+void ASystemManagerBase::OnActorMoved(AActor* p_actor)
+{
+	auto p_wp = To<AWaypointActor>(p_actor);
+
+	if (p_wp) {
+		auto *p_path_actor = p_wp->GetOwnerPath();
+		if (p_path_actor) {
+			auto* p_path = ToPath(p_path_actor);
+			p_path->NotifyWaypointMoved(p_wp);
+		}
+		
+	}
+}
+
 TArray<AActor*>& ASystemManagerBase::GetSensorGlobalIgnoreList()
 {
 	return SensorGlobalIgnoreList;
@@ -113,14 +127,24 @@ TArray<AActor*> ASystemManagerBase::GetAllActorInWorld()
  TArray<AActor*> ASystemManagerBase::QueryActors(EActorQueryArgs args)
 {
 	 TArray<AActor*> ret;
-	 if (args == EActorQueryArgs::ActorBasesExceptSensors) {
+	 if (args == EActorQueryArgs::ActorBasesExceptSensorsAndPaths) {
 		 for (auto pactor : ActorList) {
 			 if (ToActorBase(pactor)) {
-				 if (!ToSensorBase(pactor)) {
+				 if (!ToSensorBase(pactor) && !ToPath(pactor)) {
 					 ret.Add(pactor);
 				 }
 			 }
 			
+		 }
+
+	 }else if (args == EActorQueryArgs::ActorBasesOnlyPaths) {
+		 for (auto pactor : ActorList) {
+			 if (ToActorBase(pactor)) {
+				 if (ToPath(pactor)) {
+					 ret.Add(pactor);
+				 }
+			 }
+
 		 }
 
 	 }
@@ -194,6 +218,35 @@ ARadarBase* ASystemManagerBase::ToRadarBase(AActor* p_actor)
 
 	return nullptr;
 }
+
+APathController* ASystemManagerBase::ToPath(AActor* p_actor)
+{
+	if (p_actor->IsA<APathController>()) {
+		return (APathController*)p_actor;
+	}
+
+	return nullptr;
+}
+AWaypointActor* ASystemManagerBase::ToWaypoint(AActor* p_actor)
+{
+	if (p_actor->IsA<AWaypointActor>()) {
+		return (AWaypointActor*)p_actor;
+	}
+
+	return nullptr;
+}
+
+
+template <typename T>
+T* ASystemManagerBase::To(AActor* p_actor)
+{
+	if (p_actor->IsA<T>()) {
+		return (T*)p_actor;
+	}
+
+	return nullptr;
+}
+
 void ASystemManagerBase::EnableAllActors()
 {
 
@@ -283,6 +336,12 @@ bool ASystemManagerBase::DestroyActor(FString name)
 {
 	auto p_actor = FindActor(name);
 	if (p_actor) {
+
+		auto p_actor_base = ToActorBase(p_actor);
+		if (p_actor_base) {
+			p_actor_base->OnActorPredestroy();
+		}
+		
 		p_actor->Destroy();
 		RemoveActor(p_actor);
 		return true;
@@ -1401,6 +1460,69 @@ bool ASystemManagerBase::GetWaypointPosition(AActor* p_actor, INT32S wp_ind, FVe
 
 	 return false;
 }
+
+ bool ASystemManagerBase::GetPathSegmentCount(AActor* p_actor, INT32S& val)
+ {
+	 auto p_path = ToPath(p_actor);
+	 if (p_path) {
+		 val = p_path->NumSegments;
+		 return true;
+	 }
+	 return false;
+ }
+ bool ASystemManagerBase::SetPathSegmentCount(AActor* p_actor, INT32S& val)
+ {
+	 auto p_path = ToPath(p_actor);
+	 if (p_path) {
+		 p_path->NumSegments = val;
+		 return true;
+	 }
+	 return false;
+ }
+
+ bool ASystemManagerBase::SetPathLineColor(AActor* p_actor, FColor& val)
+ {
+	 auto p_path = ToPath(p_actor);
+	 if (p_path) {
+		 p_path->PathColor = val;
+		
+		 return true;
+	 }
+	 return false;
+ }
+
+bool ASystemManagerBase::GetPathLineColor(AActor* p_actor, FColor& val)
+ {
+	auto p_path = ToPath(p_actor);
+	if (p_path) {
+		val = p_path->PathColor;
+		return true;
+	}
+	return false;
+ }
+
+
+ bool ASystemManagerBase::GetPathStraight(AActor* p_actor, bool& val)
+ {
+	 auto p_path = ToPath(p_actor);
+	 if (p_path) {
+		 val = p_path->IsStraightLine;
+		 return true;
+	 }
+	 return false;
+ }
+ bool ASystemManagerBase::SetPathStraight(AActor* p_actor, bool& val)
+ {
+	 auto p_path = ToPath(p_actor);
+	 if (p_path) {
+		 p_path->IsStraightLine = val;
+		 return true;
+	 }
+	 return false;
+ }
+
+
+
 bool ASystemManagerBase::GetPathSpeed(AActor* p_actor, FLOAT64& val)
 {
 	auto actorbase = ToActorBase(p_actor);

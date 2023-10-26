@@ -4,6 +4,7 @@ set --name sidamir --position "0.000000 0.000000 0.000000"
 set --name sidamir --rotation "0.000000 0.000000 0.000000"
 set --name sidamir --scale "0.300000 0.300000 0.300000"
 
+
 create --name gimbal1 --bp GIMBAL2DOF
 set --name gimbal1 --parent sidamir
 set --name gimbal1 --position "0.000000 0.000000 0.000000"
@@ -17,6 +18,30 @@ set --name gimbal2 --position "0.000000 0.000000 0.000000"
 set --name gimbal2 --rotation "0.000000 45.000000 0.000000"
 set --name gimbal2 --scale "1.000000 1.000000 1.000000"
 set --name gimbal2 --instance -1
+
+create --name sidamirpathwp0 --bp 
+set --name sidamirpathwp0 --position "0.000000 0.000000 0.000000"
+set --name sidamirpathwp0 --rotation "0.000000 0.000000 0.000000"
+set --name sidamirpathwp0 --scale "1.000000 1.000000 1.000000"
+set --name sidamirpathwp0 --instance -1
+
+create --name sidamirpathwp1 --bp 
+set --name sidamirpathwp1 --position "50.000000 0.000000 0.000000"
+set --name sidamirpathwp1 --rotation "0.000000 0.000000 0.000000"
+set --name sidamirpathwp1 --scale "1.000000 1.000000 1.000000"
+set --name sidamirpathwp1 --instance -1
+
+create --name sidamirpathwp2 --bp 
+set --name sidamirpathwp2 --position "50.000000 50.000000 10.000000"
+set --name sidamirpathwp2 --rotation "0.000000 0.000000 0.000000"
+set --name sidamirpathwp2 --scale "1.000000 1.000000 1.000000"
+set --name sidamirpathwp2 --instance -1
+
+create --name sidamirpathwp3 --bp 
+set --name sidamirpathwp3 --position "0.000000 50.000000 0.000000"
+set --name sidamirpathwp3 --rotation "0.000000 0.000000 0.000000"
+set --name sidamirpathwp3 --scale "1.000000 1.000000 1.000000"
+set --name sidamirpathwp3 --instance -1
 
 create --name viscam1 --bp CAMVIS
 set --name viscam1 --parent gimbal1
@@ -72,7 +97,7 @@ set --name fls1 --hfov 45.000000
 set --name fls1 --hscanstepang 0.500000
 set --name fls1 --vscanstepang 0.500000
 set --name fls1 --merrormean 5.000000
-set --name fls1 --merrorstd 0.000000
+set --name fls1 --merrorstd 1.000000
 set --name fls1 --surfacedetecten 1
 set --name fls1 --subsurfacedetecten 1
 set --name fls1 --foamen 1
@@ -91,7 +116,7 @@ set --name haloradar1 --hfov 90.000000
 set --name haloradar1 --hscanstepang 1.000000
 set --name haloradar1 --vscanstepang 1.000000
 set --name haloradar1 --merrormean 10.000000
-set --name haloradar1 --merrorstd 1.000000
+set --name haloradar1 --merrorstd 0.000000
 set --name haloradar1 --surfacedetecten 0
 set --name haloradar1 --subsurfacedetecten 0
 set --name haloradar1 --foamen 1
@@ -111,7 +136,7 @@ set --name haloradar1 --radmaxsectorblankingzonecount 4
 create --name m1lidar1 --bp LIDARM1
 set --name m1lidar1 --parent sidamir
 set --name m1lidar1 --position "0.623725 -0.183834 3.687766"
-set --name m1lidar1 --rotation "-0.000000 -10.000000 -16.422135"
+set --name m1lidar1 --rotation "-0.000000 -10.000000 -16.422134"
 set --name m1lidar1 --scale "0.300000 0.300000 0.300000"
 set --name m1lidar1 --instance -1
 set --name m1lidar1 --slotindex 0
@@ -120,7 +145,7 @@ set --name m1lidar1 --hfov 120.000000
 set --name m1lidar1 --hscanstepang 0.200000
 set --name m1lidar1 --vscanstepang 0.200000
 set --name m1lidar1 --merrormean 3.000000
-set --name m1lidar1 --merrorstd 1.000000
+set --name m1lidar1 --merrorstd 0.000000
 set --name m1lidar1 --surfacedetecten 0
 set --name m1lidar1 --subsurfacedetecten 0
 set --name m1lidar1 --foamen 1
@@ -170,13 +195,14 @@ set --name ircam1 --widthpx 1920
 set --name ircam1 --heightpx 1080
 
 create --name sidamirpath --bp PATH
-set --name sidamirpath --wp 0 --wppos "0 0 0"
-set --name sidamirpath --wp 1 --wppos "50 0 0"
-set --name sidamirpath --wp 2 --wppos "50 50 10"
-set --name sidamirpath --wp 3 --wppos "0 50 0"
-set --name sidamirpath --speed 5
+set --name sidamirpath --position "0.000000 0.000000 0.000000"
+set --name sidamirpath --rotation "0.000000 0.000000 0.000000"
+set --name sidamirpath --scale "1.000000 1.000000 1.000000"
+set --name sidamirpath --instance -1
+set --name sidamirpath --wp 0 --wppos "0.000000 0.000000 0.000000"
+set --name sidamirpath --wp 1 --wppos "50.000000 0.000000 0.000000"
+set --name sidamirpath --wp 2 --wppos "50.000000 50.000000 10.000000"
+set --name sidamirpath --wp 3 --wppos "0.000000 50.000000 0.000000"
+set --name sidamirpath --speed 5.000000
 set --name sidamirpath --closed 1
-set --name sidamirpath --color "255 0 0 255"
-set --name sidamirpath --bake
 set --name sidamirpath --attach sidamir
-

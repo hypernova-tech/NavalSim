@@ -12,7 +12,8 @@
 
 enum EActorQueryArgs
 {
-	ActorBasesExceptSensors,
+	ActorBasesExceptSensorsAndPaths,
+	ActorBasesOnlyPaths
 
 };
 class UConsoleBase;
@@ -179,9 +180,12 @@ public:
 	virtual bool GetActorAttachedToPath(AActor* p_path, FString &actor_name) = 0;
 
 
-    
+	virtual bool GetPathSegmentCount(AActor* p_actor, INT32S &val) = 0;
+	virtual bool SetPathSegmentCount(AActor* p_actor, INT32S& val) = 0;
  
+	virtual bool GetPathLineColor(AActor* p_actor, FColor& val) = 0;
+	virtual bool SetPathLineColor(AActor* p_actor, FColor& val) = 0;
 
-
-
+	virtual bool GetPathStraight(AActor* p_actor, bool& val) = 0;
+	virtual bool SetPathStraight(AActor* p_actor, bool& val) = 0;
 };

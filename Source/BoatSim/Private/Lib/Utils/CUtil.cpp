@@ -449,6 +449,24 @@ bool CUtil::ParseVector3D(const FString& Text, FVector& ret)
     return false;
 }
 
+bool CUtil::ParseColor(const FString& Text, FColor& ret)
+{
+    FVector ParsedVector;
+    TArray<FString> VectorValues;
+    Text.ParseIntoArray(VectorValues, TEXT(" "), true);
+
+    if (VectorValues.Num() >= 4)
+    {
+        ret.R = FCString::Atof(*VectorValues[0]);
+        ret.G = FCString::Atof(*VectorValues[1]);
+        ret.B = FCString::Atof(*VectorValues[2]);
+        ret.A = FCString::Atof(*VectorValues[3]);
+        return true;
+    }
+
+    return false;
+}
+
 bool CUtil::ParsePose(const FString& Text, FVector& translation, FVector& rpy)
 {
     FVector ParsedVector;

@@ -44,7 +44,8 @@ public:
 	UPROPERTY(EditAnywhere)
 		TArray<AWaypointActor*> Waypoints;
 
-	
+	UPROPERTY(EditAnywhere)
+		float TurnRateDegPerSec = 90;
 
 	virtual void OnStep(float delta_time);
 private:
@@ -61,5 +62,8 @@ public:
 	void ModifyWaypoint(INT32S wp_ind, FVector pos);
 	void BuildPath(bool is_loop);
 	INT32S GetWaypointCount();
+	FVector GetWaypointLocation(INT32S i);
+	void UpdateWaypointsPositions();
+	void RemoveWaypoint(AWaypointActor* p_wp);
 		
 };

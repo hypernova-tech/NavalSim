@@ -122,3 +122,7 @@ void AActorBase::ShowActorGizmo(bool val)
 void AActorBase::Bake()
 {
 }
+
+void AActorBase::OnActorPredestroy()
+{
+}

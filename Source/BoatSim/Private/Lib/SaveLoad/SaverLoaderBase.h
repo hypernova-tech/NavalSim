@@ -29,7 +29,7 @@ protected:
 	virtual void SavePlatform(ACBoatBase* p_boat, TArray<FString> &cli);
 	virtual void SaveSensor(ASensorBase* p_sensor, TArray<FString>& cli);
 	virtual void SaveActor(AActorBase *p_actor, TArray<FString>& cli);
-
+	
 	
 	TArray<FString> CLIList;
 
