@@ -120,6 +120,7 @@ public:
 	static FString Straight;
 	static FString LineColor;
 	static FString SegmentCount;
+	static FString TurnRate;
 
 	static FString GetCommand;
 

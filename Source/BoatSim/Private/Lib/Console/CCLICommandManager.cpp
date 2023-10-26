@@ -72,7 +72,7 @@ FString CCLICommandManager::Attach = "attach";
 FString CCLICommandManager::Straight = "straight";
 FString CCLICommandManager::LineColor = "color";
 FString CCLICommandManager::SegmentCount = "segment";
-
+FString CCLICommandManager::TurnRate = "turnrate";
 
 
 

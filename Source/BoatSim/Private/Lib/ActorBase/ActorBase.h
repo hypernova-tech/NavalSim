@@ -23,6 +23,8 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	UPROPERTY(EditAnywhere)
+		bool IsSaveEnabled = true;
 
 	UPROPERTY(EditAnywhere)
 		FString BlueprintName = "";
@@ -63,5 +65,7 @@ public:
 	void ShowActorGizmo(bool val);
 	virtual void Bake();
 	virtual void OnActorPredestroy();
+	void SetIsSaveEnabled(bool val);
+	bool GetIsSaveEnabled();
 	
 };

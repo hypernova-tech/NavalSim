@@ -188,4 +188,7 @@ public:
 
 	virtual bool GetPathStraight(AActor* p_actor, bool& val) = 0;
 	virtual bool SetPathStraight(AActor* p_actor, bool& val) = 0;
+
+	virtual bool GetPathTurnRate(AActor* p_actor, FLOAT64& val) = 0;
+	virtual bool SetPathTurnRate(AActor* p_actor, FLOAT64 val) = 0;
 };

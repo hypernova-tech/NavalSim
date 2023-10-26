@@ -126,3 +126,13 @@ void AActorBase::Bake()
 void AActorBase::OnActorPredestroy()
 {
 }
+
+void AActorBase::SetIsSaveEnabled(bool val)
+{
+	IsSaveEnabled = val;
+}
+
+bool AActorBase::GetIsSaveEnabled()
+{
+	return IsSaveEnabled;
+}

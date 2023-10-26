@@ -4,7 +4,6 @@ set --name sidamir --position "0.000000 0.000000 0.000000"
 set --name sidamir --rotation "0.000000 0.000000 0.000000"
 set --name sidamir --scale "0.300000 0.300000 0.300000"
 
-
 create --name gimbal1 --bp GIMBAL2DOF
 set --name gimbal1 --parent sidamir
 set --name gimbal1 --position "0.000000 0.000000 0.000000"
@@ -18,30 +17,6 @@ set --name gimbal2 --position "0.000000 0.000000 0.000000"
 set --name gimbal2 --rotation "0.000000 45.000000 0.000000"
 set --name gimbal2 --scale "1.000000 1.000000 1.000000"
 set --name gimbal2 --instance -1
-
-create --name sidamirpathwp0 --bp 
-set --name sidamirpathwp0 --position "0.000000 0.000000 0.000000"
-set --name sidamirpathwp0 --rotation "0.000000 0.000000 0.000000"
-set --name sidamirpathwp0 --scale "1.000000 1.000000 1.000000"
-set --name sidamirpathwp0 --instance -1
-
-create --name sidamirpathwp1 --bp 
-set --name sidamirpathwp1 --position "50.000000 0.000000 0.000000"
-set --name sidamirpathwp1 --rotation "0.000000 0.000000 0.000000"
-set --name sidamirpathwp1 --scale "1.000000 1.000000 1.000000"
-set --name sidamirpathwp1 --instance -1
-
-create --name sidamirpathwp2 --bp 
-set --name sidamirpathwp2 --position "50.000000 50.000000 10.000000"
-set --name sidamirpathwp2 --rotation "0.000000 0.000000 0.000000"
-set --name sidamirpathwp2 --scale "1.000000 1.000000 1.000000"
-set --name sidamirpathwp2 --instance -1
-
-create --name sidamirpathwp3 --bp 
-set --name sidamirpathwp3 --position "0.000000 50.000000 0.000000"
-set --name sidamirpathwp3 --rotation "0.000000 0.000000 0.000000"
-set --name sidamirpathwp3 --scale "1.000000 1.000000 1.000000"
-set --name sidamirpathwp3 --instance -1
 
 create --name viscam1 --bp CAMVIS
 set --name viscam1 --parent gimbal1
@@ -206,3 +181,8 @@ set --name sidamirpath --wp 3 --wppos "0.000000 50.000000 0.000000"
 set --name sidamirpath --speed 5.000000
 set --name sidamirpath --closed 1
 set --name sidamirpath --attach sidamir
+set --name sidamirpath --color "255 0 0 255"
+set --name sidamirpath --segment 50
+set --name sidamirpath --straight 0
+set --name sidamirpath --turnrate 90.000000
+set --name sidamirpath --bake 

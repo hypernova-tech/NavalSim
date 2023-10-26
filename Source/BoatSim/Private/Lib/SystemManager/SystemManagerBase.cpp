@@ -1522,6 +1522,26 @@ bool ASystemManagerBase::GetPathLineColor(AActor* p_actor, FColor& val)
  }
 
 
+ bool ASystemManagerBase::GetPathTurnRate(AActor* p_actor, FLOAT64& val)
+ {
+	 auto p_path = ToPath(p_actor);
+	 if (p_path) {
+		 val = p_path->TurnRateDegPerSec;
+		 return true;
+	 }
+	 return false;
+ }
+ bool ASystemManagerBase::SetPathTurnRate(AActor* p_actor, FLOAT64 val)
+ {
+	 auto p_path = ToPath(p_actor);
+	 if (p_path) {
+		 p_path->TurnRateDegPerSec = val;
+		 return true;
+	 }
+	 return false;
+ }
+
+;
 
 bool ASystemManagerBase::GetPathSpeed(AActor* p_actor, FLOAT64& val)
 {

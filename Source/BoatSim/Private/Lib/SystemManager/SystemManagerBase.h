@@ -303,4 +303,7 @@ public:
 
 	virtual bool GetPathStraight(AActor* p_actor, bool& val);
 	virtual bool SetPathStraight(AActor* p_actor, bool& val);
+
+	virtual bool GetPathTurnRate(AActor* p_actor, FLOAT64& val);
+	virtual bool SetPathTurnRate(AActor* p_actor, FLOAT64 val);
 };

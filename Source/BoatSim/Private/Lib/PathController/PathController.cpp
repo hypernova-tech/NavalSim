@@ -32,6 +32,7 @@ void APathController::AddOrModifyWaypoint(INT32S wp_ind,  FVector wp)
 		auto wp_actor = ASystemManagerBase::GetInstance()->CreateActor("WP", name, TOUE(wp), FVector::ZeroVector, FVector::OneVector);
 		AWaypointActor* p_wp = (AWaypointActor*)wp_actor;
 		p_wp->SetOwnerPath(this);
+		p_wp->SetIsSaveEnabled(false); // save system is done on path creation
 		pSplineFollower->AddWaypoint(wp, (AWaypointActor*)wp_actor);
 	}
 	else {
@@ -74,6 +75,7 @@ void APathController::Bake()
 
 	GenerateDrawablePathSegments();
 	UpdatePathColor();
+	IsBaked = true;
 
 }
 
@@ -220,5 +222,28 @@ void APathController::Save(ISaveLoader* p_save_loader)
 	FString attached = GetAttachedActor()!= nullptr ? GetAttachedActor()->GetName() : "";
 	p_save_loader->AppendOption(line, CCLICommandManager::Attach, attached);
 	p_save_loader->AddLine(line);
+
+	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
+	p_save_loader->AppendOption(line, CCLICommandManager::LineColor, PathColor);
+	p_save_loader->AddLine(line);
+
+	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand , GetName());
+	p_save_loader->AppendOption(line, CCLICommandManager::SegmentCount, NumSegments);
+	p_save_loader->AddLine(line);
+
+	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
+	p_save_loader->AppendOption(line, CCLICommandManager::Straight, IsStraightLine);
+	p_save_loader->AddLine(line);
+
+	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
+	p_save_loader->AppendOption(line, CCLICommandManager::TurnRate, TurnRateDegPerSec);
+	p_save_loader->AddLine(line);
+
+	if (IsBaked) {
+		line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
+		p_save_loader->AppendOption(line, CCLICommandManager::Bake, FString(""));
+		p_save_loader->AddLine(line);
+	}
+
 }
 

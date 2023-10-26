@@ -982,9 +982,19 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
 
     }
 
-    ret = CommandManager.GetValue(CCLICommandManager::SegmentCount, is_enabled);
+    ret = CommandManager.GetValue(CCLICommandManager::Straight, is_enabled);
     if (ret) {
         if (pSystemAPI->SetPathStraight(p_actor, is_enabled)) {
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::TurnRate, dbl);
+    if (ret) {
+        if (pSystemAPI->GetPathTurnRate(p_actor, dbl)) {
             return true;
         }
     }
@@ -1454,6 +1464,17 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
     if (ret) {
         if (pSystemAPI->GetPathStraight(p_actor, is_enabled)) {
             SendConsoleResponse(name, CCLICommandManager::Straight, is_enabled);
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.HasA(CCLICommandManager::TurnRate);
+    if (ret) {
+        if (pSystemAPI->GetPathTurnRate(p_actor, dbl)) {
+            SendConsoleResponse(name, CCLICommandManager::TurnRate, dbl);
             return true;
         }
     }

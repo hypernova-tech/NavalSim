@@ -99,6 +99,12 @@ void USaverLoaderBase::AppendOption(FString &line, FString option, FVector value
 	FString val_str = "\"" + CUtil::FloatToString(value.X) + " " + CUtil::FloatToString(value.Y) +" "+CUtil::FloatToString(value.Z)+ "\"";
 	line += " --" + option + " " + val_str;
 }
+void USaverLoaderBase::AppendOption(FString& line, FString option, FColor color)
+{
+	FString val_str = "\"" + CUtil::IntToString(color.R) + " " + CUtil::IntToString(color.G) + " " + CUtil::IntToString(color.B) + " " + CUtil::IntToString(color.A) + "\"";
+	line += " --" + option + " " + val_str;
+}
+
 
 void USaverLoaderBase::AddLine(FString line)
 {
@@ -247,22 +253,34 @@ bool USaverLoaderBase::Save(ISystemAPI* p_api, FString file_name)
 	auto non_sensors = p_api->QueryActors(EActorQueryArgs::ActorBasesExceptSensorsAndPaths);
 
 	for (auto p_actor : non_sensors) {
-		SaveActor((AActorBase*)p_actor, CLIList);
-		NewLine();
+		AActorBase* p_actor_base = (AActorBase*)p_actor;
+
+		if (p_actor_base && p_actor_base->GetIsSaveEnabled()) {
+			SaveActor((AActorBase*)p_actor, CLIList);
+			NewLine();
+		}
+
 	}
 
 	auto sensors = p_api->GetAllSensors();
 
 	for (auto sensor : sensors) {
-		SaveSensor(sensor, CLIList);
-		NewLine();
+		if (sensor->GetIsSaveEnabled()) {
+			SaveSensor(sensor, CLIList);
+			NewLine();
+		}
+		
 	}
 
 	auto path = p_api->QueryActors(EActorQueryArgs::ActorBasesOnlyPaths);
 
 	for (auto p_path : path) {
-		SaveActor((AActorBase*)p_path, CLIList);
-		NewLine();
+		AActorBase* p_actor_base = (AActorBase*)p_path;
+
+		if (p_actor_base && p_actor_base->GetIsSaveEnabled()) {
+			SaveActor((AActorBase*)p_path, CLIList);
+			NewLine();
+		}
 	}
 
 

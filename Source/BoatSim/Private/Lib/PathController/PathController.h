@@ -26,6 +26,7 @@ protected:
 	bool IsClosed;
 	TArray< USplineMeshComponent*> PathSegments;
 	void GenerateDrawablePathSegments();
+	bool IsBaked = false;
 
 public:
 	UPROPERTY(EditAnywhere)

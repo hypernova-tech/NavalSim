@@ -29,6 +29,6 @@ public:
 	virtual void AppendOption(FString& line, FString option, FLOAT64 value) = 0;
 	virtual void AppendOption(FString& line, FString option, FVector2D value) = 0;
 	virtual void AppendOption(FString& line, FString option, FVector value) = 0;
-
+	virtual void AppendOption(FString& line, FString option, FColor value) = 0;
 
 };

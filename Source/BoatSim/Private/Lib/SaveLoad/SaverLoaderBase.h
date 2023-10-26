@@ -59,5 +59,5 @@ public:
 	virtual void AppendOption(FString& line, FString option, FLOAT64 value) ;
 	virtual void AppendOption(FString& line, FString option, FVector2D value) ;
 	virtual void AppendOption(FString& line, FString option, FVector value) ;
-		
+	virtual void AppendOption(FString& line, FString option, FColor color);
 };
