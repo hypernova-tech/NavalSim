@@ -15,10 +15,16 @@ class AAgent : public AActorBase
 public:
 	// Sets default values for this pawn's properties
 	AAgent();
+	void OnConstruction(const FTransform& Transform);
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	UPROPERTY(EditAnywhere)
+		UStaticMesh* pStaticMesh;
+
+	UStaticMeshComponent* MeshComponent;
 
 public:	
 	// Called every frame

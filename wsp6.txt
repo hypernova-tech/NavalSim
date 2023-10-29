@@ -181,7 +181,7 @@ set --name sidamirpath --wp 3 --wppos "0.000000 50.000000 0.000000"
 set --name sidamirpath --speed 5.000000
 set --name sidamirpath --closed 1
 set --name sidamirpath --attach sidamir
-set --name sidamirpath --color "255 0 0 255"
+set --name sidamirpath --color "0 0 255.0 255"
 set --name sidamirpath --segment 50
 set --name sidamirpath --straight 0
 set --name sidamirpath --turnrate 90.000000

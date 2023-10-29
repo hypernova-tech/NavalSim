@@ -118,6 +118,7 @@ void APathController::GenerateDrawablePathSegments()
 		// Set the mesh you want to deform
 		SplineMesh->SetStaticMesh(pMesh);  // Replace with your mesh
 		SplineMesh->SetMaterial(0, pSplineMaterial);
+		auto pset = SplineMesh->GetMaterial(0);
 		// Set the start and end points for this mesh segment
 		SplineMesh->SetStartAndEnd(
 			StartLocation, StartTangent * step_distance,  // You might need to adjust the tangent's length based on your step_distance
@@ -161,6 +162,8 @@ AActor* APathController::GetAttachedActor()
 
 void APathController::UpdatePathColor()
 {
+
+
 	UMaterialInterface* OriginalMaterial = PathSegments[0]->GetStaticMesh()->GetMaterial(0); // Get the original material
 
 	// Create a dynamic material instance (a copy of the material that you can safely modify)
