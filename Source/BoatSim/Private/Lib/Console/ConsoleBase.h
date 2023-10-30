@@ -62,5 +62,7 @@ public:
 	virtual void OnReceivedConnectionData(void* connection, INT8U* p_data, INT32U count);
 	void SendToConsole(FString val);
 	CCLICommandManager* GetCommandManager();
+
+	void SendActorTransform(AActor* p_actor);
 		
 };

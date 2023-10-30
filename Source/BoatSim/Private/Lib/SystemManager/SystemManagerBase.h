@@ -306,4 +306,13 @@ public:
 
 	virtual bool GetPathTurnRate(AActor* p_actor, FLOAT64& val);
 	virtual bool SetPathTurnRate(AActor* p_actor, FLOAT64 val);
+
+
+	virtual bool SetActorPosition(AActor* p_actor, FVector pos);
+	virtual bool SetActorRelPosition(AActor* p_actor, FVector pos);
+
+	virtual bool SetActorRot(AActor* p_actor, FVector pos);
+	virtual bool SetActorRelRot(AActor* p_actor, FVector pos);
+
+	virtual bool FocusCamera(AActor* p_actor);
 };

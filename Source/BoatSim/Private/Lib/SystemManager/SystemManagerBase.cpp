@@ -6,6 +6,7 @@
 #include <CBoatBase.h>
 #include <Lib/Sensor/GenericSensor/LidarBase.h>
 #include <Lib/PathController/PathController.h>
+#include <Lib/Math/CMath.h>
 
 // Sets default values
 ASystemManagerBase* ASystemManagerBase::pInstance = nullptr;
@@ -1541,7 +1542,61 @@ bool ASystemManagerBase::GetPathLineColor(AActor* p_actor, FColor& val)
 	 return false;
  }
 
-;
+ bool ASystemManagerBase::SetActorPosition(AActor* p_actor, FVector pos)
+ {
+	 auto p_base = ToActorBase(p_actor);
+	 if (p_base) {
+		 p_base->SetActorPosition(pos);
+	 }
+	 else {
+		 p_actor->SetActorLocation(pos);
+	 }
+
+	 return true;
+ }
+ bool ASystemManagerBase::SetActorRelPosition(AActor* p_actor, FVector pos)
+ {
+	 auto p_base = ToActorBase(p_actor);
+	 if (p_base) {
+		 p_base->SetActorRelPosition(pos);
+	 }
+	 else {
+		 p_actor->SetActorRelativeLocation(pos);
+	 }
+
+	 return true;
+ }
+
+ bool ASystemManagerBase::SetActorRot(AActor* p_actor, FVector val)
+ {
+	 auto p_base = ToActorBase(p_actor);
+	 if (p_base) {
+		 p_base->SetActorRot(val);
+	 }
+	 else {
+		 CMath::SetActorRotation(p_actor, val);
+	 }
+
+	 return true;
+ }
+ bool ASystemManagerBase::SetActorRelRot(AActor* p_actor, FVector val)
+ {
+	 auto p_base = ToActorBase(p_actor);
+	 if (p_base) {
+		 p_base->SetActorRelRot(val);
+	 }
+	 else {
+		 CMath::SetActorRelativeRotation(p_actor, val);
+	 }
+
+	 return true;
+ }
+
+ bool ASystemManagerBase::FocusCamera(AActor* p_actor)
+ {
+	 return GetPlatform()->FocusCamera(p_actor);
+ }
+
 
 bool ASystemManagerBase::GetPathSpeed(AActor* p_actor, FLOAT64& val)
 {

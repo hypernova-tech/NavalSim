@@ -35,7 +35,7 @@ FString CCLICommandManager::Beam = "beam";
 FString CCLICommandManager::Range = "range";
 FString CCLICommandManager::Fov = "fov";
 FString CCLICommandManager::Selected = "selected";
-
+FString CCLICommandManager::Focused = "focused";
 
 
 FString CCLICommandManager::VericalFov = "vfov";

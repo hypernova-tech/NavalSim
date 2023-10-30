@@ -42,3 +42,36 @@ void AWaypointActor::OnActorPredestroy()
 	((APathController*)pOwnerPath)->NotifyWaypointDestroy(this);
 }
 
+void AWaypointActor::SetActorPosition(FVector pos)
+{
+	Super::SetActorPosition(pos);
+	if (pOwnerPath) {
+		((APathController*)pOwnerPath)->NotifyWaypointMoved(this);
+	}
+
+}
+
+void AWaypointActor::SetActorRelPosition(FVector pos)
+{
+	Super::SetActorRelPosition(pos);
+	if (pOwnerPath) {
+		((APathController*)pOwnerPath)->NotifyWaypointMoved(this);
+	}
+}
+
+void AWaypointActor::SetActorRot(FVector rpy_deg)
+{
+	Super::SetActorRot(rpy_deg);
+	if (pOwnerPath) {
+		((APathController*)pOwnerPath)->NotifyWaypointMoved(this);
+	}
+}
+
+void AWaypointActor::SetActorRelRot(FVector rpy_deg)
+{
+	Super::SetActorRelRot(rpy_deg);
+	if (pOwnerPath) {
+		((APathController*)pOwnerPath)->NotifyWaypointMoved(this);
+	}
+}
+

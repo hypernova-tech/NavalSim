@@ -53,6 +53,21 @@ CCLICommandManager* UConsoleBase::GetCommandManager()
     return &CommandManager;
 }
 
+void UConsoleBase::SendActorTransform(AActor* p_actor)
+{
+    FVector vec;
+
+    if (p_actor) {
+        SendConsoleResponse(p_actor->GetName(), CCLICommandManager::Position, p_actor->GetActorLocation());
+
+        vec = CMath::GetActorEulerAnglesRPY(p_actor);
+        SendConsoleResponse(p_actor->GetName(), CCLICommandManager::Rotation, vec);
+
+        SendConsoleResponse(p_actor->GetName(), CCLICommandManager::Position, p_actor->GetActorScale3D());
+    }
+
+}
+
 void UConsoleBase::Command(FString command)
 {
 
@@ -441,7 +456,7 @@ bool UConsoleBase::ProcessPrintCommand(TMap<FString, FString>& options, FString&
         auto bp_info = ASystemManagerBase::GetInstance()->GetDataContainer()->GetBlueprintInfo();
         for (auto entry : *bp_info) {
 
-            pSystemAPI->SendConsoleResponse("BP: " + entry.Name);
+            pSystemAPI->SendConsoleResponse("<bp>" + entry.Name);
         }
 
         return true;
@@ -672,21 +687,25 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
 
     ret = CommandManager.GetPosition(vec);
     if (ret) {
-        p_actor->SetActorLocation(vec * WORLDTOUNREALUNIT);
+        pSystemAPI->SetActorPosition(p_actor, vec * WORLDTOUNREALUNIT);
+        //p_actor->SetActorLocation(vec * WORLDTOUNREALUNIT);
     }
 
     ret = CommandManager.GetRelPosition(vec);
     if (ret) {
-        p_actor->SetActorRelativeLocation(vec * WORLDTOUNREALUNIT);
+        pSystemAPI->SetActorRelPosition(p_actor, vec * WORLDTOUNREALUNIT);
+        //p_actor->SetActorRelativeLocation(vec * WORLDTOUNREALUNIT);
     }
 
     ret = CommandManager.GetRotation(vec);
     if (ret) {
-        CMath::SetActorRotation(p_actor, vec);
+        pSystemAPI->SetActorRot(p_actor, vec);
+        //CMath::SetActorRotation(p_actor, vec);
     }
     ret = CommandManager.GetRelRotation(vec);
     if (ret) {
-        CMath::SetActorRelativeRotation(p_actor, vec);
+        pSystemAPI->SetActorRelRot(p_actor, vec);
+        //CMath::SetActorRelativeRotation(p_actor, vec);
     }
 
     ret = CommandManager.GetScale(vec);
@@ -703,6 +722,16 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
     ret = CommandManager.GetValue(CCLICommandManager::SensorSlotIndex, sint);
     if (ret) {
         if (pSystemAPI->SetSlotIndex(p_actor, sint)) {
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::Focused, is_enabled);
+    if (ret) {
+        if (pSystemAPI->FocusCamera(p_actor)) {
             return true;
         }
     }

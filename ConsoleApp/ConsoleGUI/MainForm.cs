@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Xml.Linq;
 using Newtonsoft.Json.Schema;
 using static System.Net.Mime.MediaTypeNames;
+using static System.ComponentModel.Design.ObjectSelectorEditor;
 
 namespace ConsoleGUI
 {
@@ -26,8 +27,10 @@ namespace ConsoleGUI
         int RemotePort = 55000;
         int LocalPort = 55050;
         HashSet<string> SensorsReceived = new HashSet<string>();
+        HashSet<string> ActorsReceived = new HashSet<string>();
+        HashSet<string> ModelsReceived = new HashSet<string>();
         CJsonParser mJsonParser = new CJsonParser();
-
+        string Selected = "";
         public MainForm()
         {
             mJsonParser.SetMainForm(this);
@@ -89,6 +92,7 @@ namespace ConsoleGUI
 
         private void AddToSensorList(string item)
         {
+            bool is_added = false;
             if (item.Contains("<sensor>"))
             {
                 string item_striped = item;
@@ -98,9 +102,83 @@ namespace ConsoleGUI
                 {
                     SensorListBox.Items.Add(item_striped);
                     SensorsReceived.Add(item_striped);
+                    is_added = true;
                 }
 
             }
+            else if (item.Contains("<actor>"))
+            {
+                string item_striped = item;
+                item_striped = item_striped.Replace("<actor>", "");
+
+                if (!ActorsReceived.Contains(item_striped) && !SensorsReceived.Contains(item_striped))
+                {
+
+                    ActorsReceived.Add(item_striped);
+                    is_added = true;
+                }
+
+            }
+            else if (item.Contains("<bp>"))
+            {
+                string item_striped = item;
+                item_striped = item_striped.Replace("<bp>", "");
+
+                if (!ModelsReceived.Contains(item_striped))
+                {
+
+                    ModelsReceived.Add(item_striped);
+                    is_added = true;
+                }
+
+            }
+            else if (item.Contains("<clicked>"))
+            {
+                string item_striped = item;
+                item_striped = item_striped.Replace("<clicked>", "");
+
+                if (item_striped != "")
+                {
+                    Selected = item_striped;
+                    SelectActor();
+                }
+
+
+            }
+            if (is_added)
+            {
+                UpdateActorGrid();
+            }
+
+        }
+
+        private void UpdateActorGrid()
+        {
+            ActorGrid.Rows.Clear();
+            int ind = 0;
+
+            foreach (var obj in SensorsReceived)
+            {
+                ActorGrid.Rows.Add("Sensor", obj);
+                ActorGrid.Rows[ind].HeaderCell.Value = ind.ToString();
+                ActorGrid.Rows[ind].DefaultCellStyle.BackColor = Color.LightGreen;
+                ind++;
+            }
+            foreach (var obj in ModelsReceived)
+            {
+                ActorGrid.Rows.Add("Model", obj);
+                ActorGrid.Rows[ind].HeaderCell.Value = ind.ToString();
+                ActorGrid.Rows[ind].DefaultCellStyle.BackColor = Color.LightPink;
+                ind++;
+            }
+            foreach (var obj in ActorsReceived)
+            {
+                ActorGrid.Rows.Add("Actor", obj);
+                ActorGrid.Rows[ind].HeaderCell.Value = ind.ToString();
+                ActorGrid.Rows[ind].DefaultCellStyle.BackColor = Color.LightYellow;
+                ind++;
+            }
+            SelectActor();
         }
 
         private void UpdateListBox(string item)
@@ -127,7 +205,7 @@ namespace ConsoleGUI
             {
                 byte[] data = client.Receive(ref endPoint);
                 string message = Encoding.ASCII.GetString(data);
-                
+
                 ProcessReceivedData(message);
             }
         }
@@ -152,7 +230,7 @@ namespace ConsoleGUI
             mJsonParser.TryParseJson(message);
         }
 
-       
+
         void SendData(string cmd, bool add_to_cmd_list = true)
         {
             for (int i = 0; i < InstanceCount; i++)
@@ -166,7 +244,7 @@ namespace ConsoleGUI
                 {
                     AddCommandToList(cmd);
                 }
-                
+
                 UdpClient.Send(data, data.Length, EndPoints[i]);
             }
 
@@ -390,13 +468,9 @@ namespace ConsoleGUI
         }
         public string GetSelectedSensor()
         {
-            if (SensorListBox.SelectedIndex < 0)
-            {
-                return "";
-            }
-            var selected_sensor = SensorListBox.Items[SensorListBox.SelectedIndex].ToString();
 
-            return selected_sensor;
+
+            return Selected;
         }
         private void SensorListBox_MouseDoubleClick(object sender, MouseEventArgs e)
         {
@@ -636,6 +710,101 @@ namespace ConsoleGUI
 
             command = string.Format("get --name {0} --scale", name);
             SendData(command, false);
+        }
+
+        private void BTN_LoadWorkspace_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void contextMenuStrip2_Opening(object sender, CancelEventArgs e)
+        {
+
+        }
+
+        private void toolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            if (OpenFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                string filePath = OpenFileDialog.FileName;
+                string fileName = Path.GetFileName(filePath);
+                var command = string.Format("ws --load {0}", fileName);
+                SendData(command, false);
+            }
+        }
+
+        private void toolStripMenuItem2_Click(object sender, EventArgs e)
+        {
+            var command = ("print --actors");
+            SendData(command, false);
+        }
+
+        private void toolStripMenuItem3_Click(object sender, EventArgs e)
+        {
+            var command = ("print --sensors");
+            SendData(command, false);
+        }
+
+        private void loadModelsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var command = ("print --bp");
+            SendData(command, false);
+        }
+
+        private void ActorGrid_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            var hitTestInfo = ActorGrid.HitTest(e.X, e.Y);
+
+            // Check if a cell was clicked
+            if (hitTestInfo.Type == DataGridViewHitTestType.RowHeader)
+            {
+                string selected = ActorGrid.Rows[hitTestInfo.RowIndex].Cells[1].Value.ToString();
+
+                string command = string.Format("set --selected {0}", selected);
+                SendData(command);
+                RequestTransform(selected, false);
+                Selected = selected;
+
+            }
+
+
+
+        }
+
+        void SelectActor()
+        {
+            if (Selected != "")
+            {
+                for (int i = 0; i < ActorGrid.Rows.Count; i++)
+                {
+                    if (ActorGrid.Rows[i].Cells[1].Value.Equals(Selected))
+                    {
+                        ActorGrid.Rows[i].Selected = true;
+                        ActorGrid.CurrentCell = ActorGrid.Rows[i].Cells[1];
+                        break;
+                    }
+                }
+            }
+        }
+
+        private void createToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void focusToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (HasSelected())
+            {
+                string command = string.Format("set --name {0} --focused", Selected);
+                SendData(command);
+            }
+            
+        }
+
+        private bool HasSelected()
+        {
+            return Selected != null && Selected != "";
         }
     }
 }

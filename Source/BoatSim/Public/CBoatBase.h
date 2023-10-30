@@ -74,7 +74,7 @@ protected:
 	void OnRightMouseReleased();
 	void AdjustCameraDistance(float val);
 	void OnFocusEnter();
-	void FocusCamera(AActor *p_actor);
+	
 
 public:	
 	// Called every frame
@@ -85,6 +85,7 @@ public:
 
     virtual void Update(UCSOAObserverArgs* p_args) override;
 	virtual void OnControllerChanged();
+	bool FocusCamera(AActor* p_actor);
 private:
 	UCameraComponent* BoatCam;
 	bool IsForward;
@@ -103,7 +104,7 @@ private:
 	virtual void SetMaxSpeedMeterPerSec(FLOAT32 speed) override;
 
 	virtual FLOAT32 GetMaxSpeedMeterPerSec() override;
-
+	
 };
 
 typedef ACBoatBase APlatformBase;

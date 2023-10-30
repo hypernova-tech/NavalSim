@@ -27,4 +27,9 @@ public:
 	void SetOwnerPath(AActor *p_path);
 
 	virtual void OnActorPredestroy() override;
+
+	virtual void SetActorPosition(FVector pos) override ;
+	virtual void SetActorRelPosition(FVector pos) override;
+	virtual void SetActorRot(FVector rpy_deg) override;
+	virtual void SetActorRelRot(FVector rpy_deg) override;
 };

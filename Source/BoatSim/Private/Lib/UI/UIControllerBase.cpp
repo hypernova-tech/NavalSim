@@ -131,7 +131,7 @@ void AUIControllerBase::FindActorAtClickPosition(int locationX, int locationY)
 			SelectActor(ClickedActor);
 #if 0
 			CUtil::DebugLogScreen(ClickedActor->GetName());
-			ASystemManagerBase::GetInstance()->GetConsole()->SendToConsole("clicked: "+ ClickedActor->GetName());
+			ASystemManagerBase::GetInstance()->GetConsole()->SendToConsole("<clicked>"+ ClickedActor->GetName());
 			pSelectedActor = ClickedActor;
 			ASystemManagerBase::GetInstance()->SetSelectedActor(pSelectedActor);
 			pGizmoUIController->SetTrackedActor(pSelectedActor);
@@ -155,7 +155,8 @@ void AUIControllerBase::SetConsoleOutputText(FString text)
 void AUIControllerBase::SelectActor(AActor* p_actor)
 {
 	CUtil::DebugLogScreen(p_actor->GetName());
-	ASystemManagerBase::GetInstance()->GetConsole()->SendToConsole("clicked: " + p_actor->GetName());
+	ASystemManagerBase::GetInstance()->GetConsole()->SendToConsole("<clicked>" +p_actor->GetName());
+	ASystemManagerBase::GetInstance()->GetConsole()->SendActorTransform(p_actor);
 	pSelectedActor = p_actor;
 	ASystemManagerBase::GetInstance()->SetSelectedActor(pSelectedActor);
 	pGizmoUIController->SetTrackedActor(pSelectedActor);

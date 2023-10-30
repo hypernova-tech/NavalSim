@@ -71,6 +71,12 @@ public:
 	virtual INT32S GetInstanceNo() = 0;
 	virtual void ForceExit() = 0;
 
+	virtual bool SetActorPosition(AActor* p_actor, FVector pos) = 0;
+	virtual bool SetActorRelPosition(AActor* p_actor, FVector pos) = 0;
+
+	virtual bool SetActorRot(AActor* p_actor, FVector pos) = 0;
+	virtual bool SetActorRelRot(AActor* p_actor, FVector pos) = 0;
+
 	virtual  bool  SetMainPlayerController(FString name) = 0;
 	virtual AActor* GetMainPlayerController() = 0;
 
@@ -191,4 +197,7 @@ public:
 
 	virtual bool GetPathTurnRate(AActor* p_actor, FLOAT64& val) = 0;
 	virtual bool SetPathTurnRate(AActor* p_actor, FLOAT64 val) = 0;
+
+
+	virtual bool FocusCamera(AActor* p_actor) = 0;
 };

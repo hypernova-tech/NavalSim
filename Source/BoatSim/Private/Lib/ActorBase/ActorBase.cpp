@@ -4,6 +4,7 @@
 #include "Lib/ActorBase/ActorBase.h"
 #include <Lib/SystemManager/SystemManagerBase.h>
 #include <Lib/Utils/CUtil.h>
+#include <Lib/Math/CMath.h>
 
 // Sets default values
 AActorBase::AActorBase()
@@ -135,4 +136,24 @@ void AActorBase::SetIsSaveEnabled(bool val)
 bool AActorBase::GetIsSaveEnabled()
 {
 	return IsSaveEnabled;
+}
+
+void AActorBase::SetActorPosition(FVector pos)
+{
+	SetActorLocation(pos);
+}
+
+void AActorBase::SetActorRelPosition(FVector pos)
+{
+	SetActorRelativeLocation(pos);
+}
+
+void AActorBase::SetActorRot(FVector rpy_deg)
+{
+	CMath::SetActorRotation(this, rpy_deg);
+}
+
+void AActorBase::SetActorRelRot(FVector rpy_deg)
+{
+	CMath::SetActorRelativeRotation(this, rpy_deg);
 }

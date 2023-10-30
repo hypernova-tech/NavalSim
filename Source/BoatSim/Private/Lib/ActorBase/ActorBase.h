@@ -67,5 +67,10 @@ public:
 	virtual void OnActorPredestroy();
 	void SetIsSaveEnabled(bool val);
 	bool GetIsSaveEnabled();
+
+	virtual void SetActorPosition(FVector pos);
+	virtual void SetActorRelPosition(FVector pos);
+	virtual void SetActorRot(FVector rpy_deg);
+	virtual void SetActorRelRot(FVector rpy_deg);
 	
 };
