@@ -53,6 +53,11 @@ protected:
 	void SendConsoleResponse(FString name, FString option, FVector4 ret);
 	void SendConsoleResponse(FString name, FString option, INT32S ind, FVector ret);
 	FString CreateAndSerializeJson(TMap<FString, FString> &data);
+
+	void SendSensors();
+	void SendActors();
+	void SendBlueprints();
+
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;

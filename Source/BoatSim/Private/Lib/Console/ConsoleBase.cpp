@@ -453,32 +453,19 @@ bool UConsoleBase::ProcessPrintCommand(TMap<FString, FString>& options, FString&
 
     auto bp = CommandManager.HasBP();
     if (bp) {
-        auto bp_info = ASystemManagerBase::GetInstance()->GetDataContainer()->GetBlueprintInfo();
-        for (auto entry : *bp_info) {
-
-            pSystemAPI->SendConsoleResponse("<bp>" + entry.Name);
-        }
+        SendBlueprints();
 
         return true;
     }
     auto print_actors = CommandManager.HasActors();
     if (print_actors) {
-        auto all_actors = ASystemManagerBase::GetInstance()->GetAllActorInWorld();
-        for (auto p_act : all_actors)
-        {
-
-            pSystemAPI->SendConsoleResponse("<actor>" + p_act->GetName());
-        }
+        SendActors();
         return true;
     }
 
     auto has_sensors = CommandManager.HasSensors();
     if (has_sensors) {
-        auto all_sensors = pSystemAPI->GetAllSensors();
-        for (auto p_sensor : all_sensors)
-        {
-            pSystemAPI->SendConsoleResponse("<sensor>" + p_sensor->GetName());
-        }
+        SendSensors();
         return true;
     }
 
@@ -506,6 +493,31 @@ bool UConsoleBase::ProcessPrintCommand(TMap<FString, FString>& options, FString&
     }
 
     return false;
+}
+void UConsoleBase::SendSensors()
+{
+    auto all_sensors = pSystemAPI->GetAllSensors();
+    for (auto p_sensor : all_sensors)
+    {
+        pSystemAPI->SendConsoleResponse("<sensor>" + p_sensor->GetName());
+    }
+}
+void UConsoleBase::SendActors()
+{
+    auto all_actors = ASystemManagerBase::GetInstance()->GetAllActorInWorld();
+    for (auto p_act : all_actors)
+    {
+
+        pSystemAPI->SendConsoleResponse("<actor>" + p_act->GetName());
+    }
+}
+void UConsoleBase::SendBlueprints()
+{
+    auto bp_info = ASystemManagerBase::GetInstance()->GetDataContainer()->GetBlueprintInfo();
+    for (auto entry : *bp_info) {
+
+        pSystemAPI->SendConsoleResponse("<bp>" + entry.Name);
+    }
 }
 bool UConsoleBase::ProcessSimCommand(TMap<FString, FString>& options, FString& error_message)
 {
@@ -1555,6 +1567,9 @@ bool UConsoleBase::ProcessWorkspaceCommand(TMap<FString, FString>& options, FStr
     ret = CommandManager.GetValue(CCLICommandManager::LoadFile, path);
     if (ret) {
         if (pSystemAPI->Load(path)) {
+            SendBlueprints();
+            SendSensors();
+            SendActors();
             return true;
         }
     }

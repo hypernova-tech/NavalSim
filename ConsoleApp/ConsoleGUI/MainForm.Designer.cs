@@ -38,27 +38,22 @@ namespace ConsoleGUI
             toolStripMenuItem2 = new ToolStripMenuItem();
             toolStripMenuItem3 = new ToolStripMenuItem();
             loadModelsToolStripMenuItem = new ToolStripMenuItem();
+            createToolStripMenuItem = new ToolStripMenuItem();
+            focusToolStripMenuItem = new ToolStripMenuItem();
+            destroyToolStripMenuItem = new ToolStripMenuItem();
+            clearToolStripMenuItem = new ToolStripMenuItem();
             CommandTextBox = new TextBox();
             listBox1 = new ListBox();
             SensorTimer = new System.Windows.Forms.Timer(components);
             tabPage2 = new TabPage();
-            ActorGrid = new DataGridView();
-            ClType = new DataGridViewTextBoxColumn();
-            ClName = new DataGridViewTextBoxColumn();
-            groupBox3 = new GroupBox();
-            label7 = new Label();
-            label8 = new Label();
-            label9 = new Label();
-            TB_ScaleZ = new TextBox();
-            TB_ScaleY = new TextBox();
-            TB_ScaleX = new TextBox();
-            groupBox2 = new GroupBox();
-            label4 = new Label();
-            label5 = new Label();
-            label6 = new Label();
-            TB_RotationZ = new TextBox();
-            TB_RotationY = new TextBox();
-            TB_RotationX = new TextBox();
+            flowLayoutPanel1 = new FlowLayoutPanel();
+            label10 = new Label();
+            TBName = new TextBox();
+            groupBox4 = new GroupBox();
+            InstanceComboBox = new ComboBox();
+            SetInstanceNo = new Button();
+            CBActive = new CheckBox();
+            CBEnable = new CheckBox();
             groupBox1 = new GroupBox();
             label3 = new Label();
             label2 = new Label();
@@ -66,25 +61,34 @@ namespace ConsoleGUI
             TB_LocationZ = new TextBox();
             TB_LocationY = new TextBox();
             TB_LocationX = new TextBox();
-            SetActiveButton = new Button();
-            IsActiveCB = new CheckBox();
-            SensorEnableCtrlButton = new Button();
-            SensorEnabledCB = new CheckBox();
-            SetInstanceNo = new Button();
-            InstanceComboBox = new ComboBox();
+            groupBox2 = new GroupBox();
+            label4 = new Label();
+            label5 = new Label();
+            label6 = new Label();
+            TB_RotationZ = new TextBox();
+            TB_RotationY = new TextBox();
+            TB_RotationX = new TextBox();
+            groupBox3 = new GroupBox();
+            label7 = new Label();
+            label8 = new Label();
+            label9 = new Label();
+            TB_ScaleZ = new TextBox();
+            TB_ScaleY = new TextBox();
+            TB_ScaleX = new TextBox();
+            ActorGrid = new DataGridView();
+            ClType = new DataGridViewTextBoxColumn();
+            ClName = new DataGridViewTextBoxColumn();
             SensorListBox = new ListBox();
             tabControl1 = new TabControl();
             tabPage1 = new TabPage();
-            focusToolStripMenuItem = new ToolStripMenuItem();
-            clearToolStripMenuItem = new ToolStripMenuItem();
-            destroyToolStripMenuItem = new ToolStripMenuItem();
-            createToolStripMenuItem = new ToolStripMenuItem();
             ActorListContextMenu.SuspendLayout();
             tabPage2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)ActorGrid).BeginInit();
-            groupBox3.SuspendLayout();
-            groupBox2.SuspendLayout();
+            flowLayoutPanel1.SuspendLayout();
+            groupBox4.SuspendLayout();
             groupBox1.SuspendLayout();
+            groupBox2.SuspendLayout();
+            groupBox3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)ActorGrid).BeginInit();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             SuspendLayout();
@@ -109,30 +113,58 @@ namespace ConsoleGUI
             // toolStripMenuItem1
             // 
             toolStripMenuItem1.Name = "toolStripMenuItem1";
-            toolStripMenuItem1.Size = new Size(180, 22);
+            toolStripMenuItem1.Size = new Size(176, 22);
             toolStripMenuItem1.Text = "Load Workspace";
             toolStripMenuItem1.Click += toolStripMenuItem1_Click;
             // 
             // toolStripMenuItem2
             // 
             toolStripMenuItem2.Name = "toolStripMenuItem2";
-            toolStripMenuItem2.Size = new Size(180, 22);
+            toolStripMenuItem2.Size = new Size(176, 22);
             toolStripMenuItem2.Text = "Load Actors";
             toolStripMenuItem2.Click += toolStripMenuItem2_Click;
             // 
             // toolStripMenuItem3
             // 
             toolStripMenuItem3.Name = "toolStripMenuItem3";
-            toolStripMenuItem3.Size = new Size(180, 22);
+            toolStripMenuItem3.Size = new Size(176, 22);
             toolStripMenuItem3.Text = "Load Sensors";
             toolStripMenuItem3.Click += toolStripMenuItem3_Click;
             // 
             // loadModelsToolStripMenuItem
             // 
             loadModelsToolStripMenuItem.Name = "loadModelsToolStripMenuItem";
-            loadModelsToolStripMenuItem.Size = new Size(180, 22);
+            loadModelsToolStripMenuItem.Size = new Size(176, 22);
             loadModelsToolStripMenuItem.Text = "Load Models";
             loadModelsToolStripMenuItem.Click += loadModelsToolStripMenuItem_Click;
+            // 
+            // createToolStripMenuItem
+            // 
+            createToolStripMenuItem.Name = "createToolStripMenuItem";
+            createToolStripMenuItem.Size = new Size(176, 22);
+            createToolStripMenuItem.Text = "Create From Model";
+            createToolStripMenuItem.Click += createToolStripMenuItem_Click;
+            // 
+            // focusToolStripMenuItem
+            // 
+            focusToolStripMenuItem.Name = "focusToolStripMenuItem";
+            focusToolStripMenuItem.Size = new Size(176, 22);
+            focusToolStripMenuItem.Text = "Focus";
+            focusToolStripMenuItem.Click += focusToolStripMenuItem_Click;
+            // 
+            // destroyToolStripMenuItem
+            // 
+            destroyToolStripMenuItem.Name = "destroyToolStripMenuItem";
+            destroyToolStripMenuItem.Size = new Size(180, 22);
+            destroyToolStripMenuItem.Text = "Destroy";
+            destroyToolStripMenuItem.Click += destroyToolStripMenuItem_Click;
+            // 
+            // clearToolStripMenuItem
+            // 
+            clearToolStripMenuItem.Name = "clearToolStripMenuItem";
+            clearToolStripMenuItem.Size = new Size(176, 22);
+            clearToolStripMenuItem.Text = "Clear";
+            clearToolStripMenuItem.Click += clearToolStripMenuItem_Click;
             // 
             // CommandTextBox
             // 
@@ -158,60 +190,238 @@ namespace ConsoleGUI
             // SensorTimer
             // 
             SensorTimer.Enabled = true;
-            SensorTimer.Interval = 1000;
+            SensorTimer.Interval = 75;
             SensorTimer.Tick += timer1_Tick_1;
             // 
             // tabPage2
             // 
+            tabPage2.Controls.Add(flowLayoutPanel1);
             tabPage2.Controls.Add(ActorGrid);
-            tabPage2.Controls.Add(groupBox3);
-            tabPage2.Controls.Add(groupBox2);
-            tabPage2.Controls.Add(groupBox1);
-            tabPage2.Controls.Add(SetActiveButton);
-            tabPage2.Controls.Add(IsActiveCB);
-            tabPage2.Controls.Add(SensorEnableCtrlButton);
-            tabPage2.Controls.Add(SensorEnabledCB);
-            tabPage2.Controls.Add(SetInstanceNo);
-            tabPage2.Controls.Add(InstanceComboBox);
             tabPage2.Controls.Add(SensorListBox);
             tabPage2.Location = new Point(4, 24);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new Padding(3);
-            tabPage2.Size = new Size(517, 547);
+            tabPage2.Size = new Size(553, 547);
             tabPage2.TabIndex = 1;
             tabPage2.Text = "Actors";
             tabPage2.UseVisualStyleBackColor = true;
             // 
-            // ActorGrid
+            // flowLayoutPanel1
             // 
-            ActorGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            ActorGrid.Columns.AddRange(new DataGridViewColumn[] { ClType, ClName });
-            ActorGrid.ContextMenuStrip = ActorListContextMenu;
-            ActorGrid.Location = new Point(13, 11);
-            ActorGrid.MultiSelect = false;
-            ActorGrid.Name = "ActorGrid";
-            ActorGrid.ReadOnly = true;
-            ActorGrid.RowHeadersWidth = 50;
-            ActorGrid.RowTemplate.Height = 25;
-            ActorGrid.RowTemplate.ReadOnly = true;
-            ActorGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            ActorGrid.Size = new Size(356, 481);
-            ActorGrid.TabIndex = 15;
-            ActorGrid.MouseDoubleClick += ActorGrid_MouseDoubleClick;
+            flowLayoutPanel1.AutoScroll = true;
+            flowLayoutPanel1.Controls.Add(label10);
+            flowLayoutPanel1.Controls.Add(TBName);
+            flowLayoutPanel1.Controls.Add(groupBox4);
+            flowLayoutPanel1.Controls.Add(groupBox1);
+            flowLayoutPanel1.Controls.Add(groupBox2);
+            flowLayoutPanel1.Controls.Add(groupBox3);
+            flowLayoutPanel1.Location = new Point(386, 11);
+            flowLayoutPanel1.Name = "flowLayoutPanel1";
+            flowLayoutPanel1.Size = new Size(160, 531);
+            flowLayoutPanel1.TabIndex = 17;
             // 
-            // ClType
+            // label10
             // 
-            ClType.HeaderText = "Type";
-            ClType.Name = "ClType";
-            ClType.ReadOnly = true;
-            ClType.Width = 50;
+            label10.AutoSize = true;
+            label10.Location = new Point(3, 7);
+            label10.Margin = new Padding(3, 7, 3, 0);
+            label10.Name = "label10";
+            label10.Size = new Size(39, 15);
+            label10.TabIndex = 31;
+            label10.Text = "Name";
             // 
-            // ClName
+            // TBName
             // 
-            ClName.HeaderText = "Name";
-            ClName.Name = "ClName";
-            ClName.ReadOnly = true;
-            ClName.Width = 400;
+            TBName.Location = new Point(48, 3);
+            TBName.Name = "TBName";
+            TBName.Size = new Size(85, 23);
+            TBName.TabIndex = 30;
+            // 
+            // groupBox4
+            // 
+            groupBox4.Controls.Add(InstanceComboBox);
+            groupBox4.Controls.Add(SetInstanceNo);
+            groupBox4.Controls.Add(CBActive);
+            groupBox4.Controls.Add(CBEnable);
+            groupBox4.Location = new Point(3, 32);
+            groupBox4.Name = "groupBox4";
+            groupBox4.Size = new Size(130, 149);
+            groupBox4.TabIndex = 30;
+            groupBox4.TabStop = false;
+            groupBox4.Text = "Control";
+            // 
+            // InstanceComboBox
+            // 
+            InstanceComboBox.FormattingEnabled = true;
+            InstanceComboBox.Items.AddRange(new object[] { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15" });
+            InstanceComboBox.Location = new Point(16, 21);
+            InstanceComboBox.Name = "InstanceComboBox";
+            InstanceComboBox.Size = new Size(108, 23);
+            InstanceComboBox.TabIndex = 21;
+            // 
+            // SetInstanceNo
+            // 
+            SetInstanceNo.Location = new Point(16, 50);
+            SetInstanceNo.Name = "SetInstanceNo";
+            SetInstanceNo.Size = new Size(97, 23);
+            SetInstanceNo.TabIndex = 22;
+            SetInstanceNo.Text = "Set Instance";
+            SetInstanceNo.UseVisualStyleBackColor = true;
+            SetInstanceNo.Click += SetInstanceNo_Click_1;
+            // 
+            // CBActive
+            // 
+            CBActive.AutoSize = true;
+            CBActive.Location = new Point(16, 104);
+            CBActive.Name = "CBActive";
+            CBActive.Size = new Size(59, 19);
+            CBActive.TabIndex = 25;
+            CBActive.Text = "Active";
+            CBActive.UseVisualStyleBackColor = true;
+            CBActive.CheckedChanged += CBActive_CheckedChanged;
+            // 
+            // CBEnable
+            // 
+            CBEnable.AutoSize = true;
+            CBEnable.Location = new Point(16, 79);
+            CBEnable.Name = "CBEnable";
+            CBEnable.Size = new Size(61, 19);
+            CBEnable.TabIndex = 23;
+            CBEnable.Text = "Enable";
+            CBEnable.UseVisualStyleBackColor = true;
+            CBEnable.CheckedChanged += CBEnable_CheckedChanged;
+            // 
+            // groupBox1
+            // 
+            groupBox1.Controls.Add(label3);
+            groupBox1.Controls.Add(label2);
+            groupBox1.Controls.Add(label1);
+            groupBox1.Controls.Add(TB_LocationZ);
+            groupBox1.Controls.Add(TB_LocationY);
+            groupBox1.Controls.Add(TB_LocationX);
+            groupBox1.Location = new Point(3, 187);
+            groupBox1.Name = "groupBox1";
+            groupBox1.Size = new Size(130, 111);
+            groupBox1.TabIndex = 27;
+            groupBox1.TabStop = false;
+            groupBox1.Text = "Location";
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(4, 83);
+            label3.Name = "label3";
+            label3.Size = new Size(14, 15);
+            label3.TabIndex = 12;
+            label3.Text = "Z";
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(4, 54);
+            label2.Name = "label2";
+            label2.Size = new Size(14, 15);
+            label2.TabIndex = 11;
+            label2.Text = "Y";
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(4, 26);
+            label1.Name = "label1";
+            label1.Size = new Size(14, 15);
+            label1.TabIndex = 10;
+            label1.Text = "X";
+            // 
+            // TB_LocationZ
+            // 
+            TB_LocationZ.Location = new Point(24, 80);
+            TB_LocationZ.Name = "TB_LocationZ";
+            TB_LocationZ.Size = new Size(100, 23);
+            TB_LocationZ.TabIndex = 9;
+            TB_LocationZ.Text = "0";
+            // 
+            // TB_LocationY
+            // 
+            TB_LocationY.Location = new Point(24, 51);
+            TB_LocationY.Name = "TB_LocationY";
+            TB_LocationY.Size = new Size(100, 23);
+            TB_LocationY.TabIndex = 8;
+            TB_LocationY.Text = "0";
+            // 
+            // TB_LocationX
+            // 
+            TB_LocationX.Location = new Point(24, 23);
+            TB_LocationX.Name = "TB_LocationX";
+            TB_LocationX.Size = new Size(100, 23);
+            TB_LocationX.TabIndex = 7;
+            TB_LocationX.Text = "0";
+            // 
+            // groupBox2
+            // 
+            groupBox2.Controls.Add(label4);
+            groupBox2.Controls.Add(label5);
+            groupBox2.Controls.Add(label6);
+            groupBox2.Controls.Add(TB_RotationZ);
+            groupBox2.Controls.Add(TB_RotationY);
+            groupBox2.Controls.Add(TB_RotationX);
+            groupBox2.Location = new Point(3, 304);
+            groupBox2.Name = "groupBox2";
+            groupBox2.Size = new Size(130, 111);
+            groupBox2.TabIndex = 28;
+            groupBox2.TabStop = false;
+            groupBox2.Text = "Rotation";
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(4, 83);
+            label4.Name = "label4";
+            label4.Size = new Size(14, 15);
+            label4.TabIndex = 12;
+            label4.Text = "Z";
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(4, 54);
+            label5.Name = "label5";
+            label5.Size = new Size(14, 15);
+            label5.TabIndex = 11;
+            label5.Text = "Y";
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(4, 26);
+            label6.Name = "label6";
+            label6.Size = new Size(14, 15);
+            label6.TabIndex = 10;
+            label6.Text = "X";
+            // 
+            // TB_RotationZ
+            // 
+            TB_RotationZ.Location = new Point(24, 80);
+            TB_RotationZ.Name = "TB_RotationZ";
+            TB_RotationZ.Size = new Size(100, 23);
+            TB_RotationZ.TabIndex = 9;
+            TB_RotationZ.Text = "0";
+            // 
+            // TB_RotationY
+            // 
+            TB_RotationY.Location = new Point(24, 51);
+            TB_RotationY.Name = "TB_RotationY";
+            TB_RotationY.Size = new Size(100, 23);
+            TB_RotationY.TabIndex = 8;
+            TB_RotationY.Text = "0";
+            // 
+            // TB_RotationX
+            // 
+            TB_RotationX.Location = new Point(24, 23);
+            TB_RotationX.Name = "TB_RotationX";
+            TB_RotationX.Size = new Size(100, 23);
+            TB_RotationX.TabIndex = 7;
+            TB_RotationX.Text = "0";
             // 
             // groupBox3
             // 
@@ -221,10 +431,10 @@ namespace ConsoleGUI
             groupBox3.Controls.Add(TB_ScaleZ);
             groupBox3.Controls.Add(TB_ScaleY);
             groupBox3.Controls.Add(TB_ScaleX);
-            groupBox3.Location = new Point(379, 423);
+            groupBox3.Location = new Point(3, 421);
             groupBox3.Name = "groupBox3";
             groupBox3.Size = new Size(130, 111);
-            groupBox3.TabIndex = 14;
+            groupBox3.TabIndex = 29;
             groupBox3.TabStop = false;
             groupBox3.Text = "Scale";
             // 
@@ -261,7 +471,7 @@ namespace ConsoleGUI
             TB_ScaleZ.Name = "TB_ScaleZ";
             TB_ScaleZ.Size = new Size(100, 23);
             TB_ScaleZ.TabIndex = 9;
-            TB_ScaleZ.KeyDown += TB_ScaleZ_KeyDown;
+            TB_ScaleZ.Text = "1";
             // 
             // TB_ScaleY
             // 
@@ -269,7 +479,7 @@ namespace ConsoleGUI
             TB_ScaleY.Name = "TB_ScaleY";
             TB_ScaleY.Size = new Size(100, 23);
             TB_ScaleY.TabIndex = 8;
-            TB_ScaleY.KeyDown += TB_ScaleY_KeyDown;
+            TB_ScaleY.Text = "1";
             // 
             // TB_ScaleX
             // 
@@ -277,204 +487,39 @@ namespace ConsoleGUI
             TB_ScaleX.Name = "TB_ScaleX";
             TB_ScaleX.Size = new Size(100, 23);
             TB_ScaleX.TabIndex = 7;
-            TB_ScaleX.KeyDown += TB_ScaleX_KeyDown;
+            TB_ScaleX.Text = "1";
             // 
-            // groupBox2
+            // ActorGrid
             // 
-            groupBox2.Controls.Add(label4);
-            groupBox2.Controls.Add(label5);
-            groupBox2.Controls.Add(label6);
-            groupBox2.Controls.Add(TB_RotationZ);
-            groupBox2.Controls.Add(TB_RotationY);
-            groupBox2.Controls.Add(TB_RotationX);
-            groupBox2.Location = new Point(378, 306);
-            groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(130, 111);
-            groupBox2.TabIndex = 13;
-            groupBox2.TabStop = false;
-            groupBox2.Text = "Rotation";
-            groupBox2.Enter += groupBox2_Enter;
+            ActorGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            ActorGrid.Columns.AddRange(new DataGridViewColumn[] { ClType, ClName });
+            ActorGrid.ContextMenuStrip = ActorListContextMenu;
+            ActorGrid.Location = new Point(13, 11);
+            ActorGrid.MultiSelect = false;
+            ActorGrid.Name = "ActorGrid";
+            ActorGrid.ReadOnly = true;
+            ActorGrid.RowHeadersWidth = 50;
+            ActorGrid.RowTemplate.Height = 25;
+            ActorGrid.RowTemplate.ReadOnly = true;
+            ActorGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            ActorGrid.Size = new Size(356, 481);
+            ActorGrid.TabIndex = 15;
+            ActorGrid.MouseClick += ActorGrid_MouseClick;
+            ActorGrid.MouseDoubleClick += ActorGrid_MouseDoubleClick;
             // 
-            // label4
+            // ClType
             // 
-            label4.AutoSize = true;
-            label4.Location = new Point(4, 83);
-            label4.Name = "label4";
-            label4.Size = new Size(14, 15);
-            label4.TabIndex = 12;
-            label4.Text = "Z";
+            ClType.HeaderText = "Type";
+            ClType.Name = "ClType";
+            ClType.ReadOnly = true;
+            ClType.Width = 50;
             // 
-            // label5
+            // ClName
             // 
-            label5.AutoSize = true;
-            label5.Location = new Point(4, 54);
-            label5.Name = "label5";
-            label5.Size = new Size(14, 15);
-            label5.TabIndex = 11;
-            label5.Text = "Y";
-            // 
-            // label6
-            // 
-            label6.AutoSize = true;
-            label6.Location = new Point(4, 26);
-            label6.Name = "label6";
-            label6.Size = new Size(14, 15);
-            label6.TabIndex = 10;
-            label6.Text = "X";
-            // 
-            // TB_RotationZ
-            // 
-            TB_RotationZ.Location = new Point(24, 80);
-            TB_RotationZ.Name = "TB_RotationZ";
-            TB_RotationZ.Size = new Size(100, 23);
-            TB_RotationZ.TabIndex = 9;
-            TB_RotationZ.KeyDown += TB_RotationZ_KeyDown;
-            // 
-            // TB_RotationY
-            // 
-            TB_RotationY.Location = new Point(24, 51);
-            TB_RotationY.Name = "TB_RotationY";
-            TB_RotationY.Size = new Size(100, 23);
-            TB_RotationY.TabIndex = 8;
-            TB_RotationY.KeyDown += TB_RotationY_KeyDown;
-            // 
-            // TB_RotationX
-            // 
-            TB_RotationX.Location = new Point(24, 23);
-            TB_RotationX.Name = "TB_RotationX";
-            TB_RotationX.Size = new Size(100, 23);
-            TB_RotationX.TabIndex = 7;
-            TB_RotationX.KeyDown += TB_RotationX_KeyDown;
-            // 
-            // groupBox1
-            // 
-            groupBox1.Controls.Add(label3);
-            groupBox1.Controls.Add(label2);
-            groupBox1.Controls.Add(label1);
-            groupBox1.Controls.Add(TB_LocationZ);
-            groupBox1.Controls.Add(TB_LocationY);
-            groupBox1.Controls.Add(TB_LocationX);
-            groupBox1.Location = new Point(375, 189);
-            groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(130, 111);
-            groupBox1.TabIndex = 8;
-            groupBox1.TabStop = false;
-            groupBox1.Text = "Location";
-            // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.Location = new Point(4, 83);
-            label3.Name = "label3";
-            label3.Size = new Size(14, 15);
-            label3.TabIndex = 12;
-            label3.Text = "Z";
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Location = new Point(4, 54);
-            label2.Name = "label2";
-            label2.Size = new Size(14, 15);
-            label2.TabIndex = 11;
-            label2.Text = "Y";
-            label2.Click += label2_Click;
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Location = new Point(4, 26);
-            label1.Name = "label1";
-            label1.Size = new Size(14, 15);
-            label1.TabIndex = 10;
-            label1.Text = "X";
-            // 
-            // TB_LocationZ
-            // 
-            TB_LocationZ.Location = new Point(24, 80);
-            TB_LocationZ.Name = "TB_LocationZ";
-            TB_LocationZ.Size = new Size(100, 23);
-            TB_LocationZ.TabIndex = 9;
-            TB_LocationZ.TextChanged += TB_LocationZ_TextChanged;
-            TB_LocationZ.KeyDown += TB_LocationZ_KeyDown;
-            // 
-            // TB_LocationY
-            // 
-            TB_LocationY.Location = new Point(24, 51);
-            TB_LocationY.Name = "TB_LocationY";
-            TB_LocationY.Size = new Size(100, 23);
-            TB_LocationY.TabIndex = 8;
-            TB_LocationY.KeyDown += TB_LocationY_KeyDown;
-            // 
-            // TB_LocationX
-            // 
-            TB_LocationX.Location = new Point(24, 23);
-            TB_LocationX.Name = "TB_LocationX";
-            TB_LocationX.Size = new Size(100, 23);
-            TB_LocationX.TabIndex = 7;
-            TB_LocationX.TextChanged += TB_LocationX_TextChanged;
-            TB_LocationX.KeyDown += TB_LocationX_KeyDown;
-            TB_LocationX.Leave += TB_LocationX_Leave;
-            TB_LocationX.MouseLeave += TB_LocationX_MouseLeave;
-            // 
-            // SetActiveButton
-            // 
-            SetActiveButton.Location = new Point(375, 160);
-            SetActiveButton.Name = "SetActiveButton";
-            SetActiveButton.Size = new Size(130, 23);
-            SetActiveButton.TabIndex = 6;
-            SetActiveButton.Text = "Set Active";
-            SetActiveButton.UseVisualStyleBackColor = true;
-            SetActiveButton.Click += SetActiveButton_Click;
-            // 
-            // IsActiveCB
-            // 
-            IsActiveCB.AutoSize = true;
-            IsActiveCB.Location = new Point(375, 135);
-            IsActiveCB.Name = "IsActiveCB";
-            IsActiveCB.Size = new Size(66, 19);
-            IsActiveCB.TabIndex = 5;
-            IsActiveCB.Text = "Enable?";
-            IsActiveCB.UseVisualStyleBackColor = true;
-            // 
-            // SensorEnableCtrlButton
-            // 
-            SensorEnableCtrlButton.Location = new Point(375, 96);
-            SensorEnableCtrlButton.Name = "SensorEnableCtrlButton";
-            SensorEnableCtrlButton.Size = new Size(130, 23);
-            SensorEnableCtrlButton.TabIndex = 4;
-            SensorEnableCtrlButton.Text = "SetEnable";
-            SensorEnableCtrlButton.UseVisualStyleBackColor = true;
-            SensorEnableCtrlButton.Click += SensorEnableCtrlButton_Click;
-            // 
-            // SensorEnabledCB
-            // 
-            SensorEnabledCB.AutoSize = true;
-            SensorEnabledCB.Location = new Point(375, 71);
-            SensorEnabledCB.Name = "SensorEnabledCB";
-            SensorEnabledCB.Size = new Size(66, 19);
-            SensorEnabledCB.TabIndex = 3;
-            SensorEnabledCB.Text = "Enable?";
-            SensorEnabledCB.UseVisualStyleBackColor = true;
-            // 
-            // SetInstanceNo
-            // 
-            SetInstanceNo.Location = new Point(375, 40);
-            SetInstanceNo.Name = "SetInstanceNo";
-            SetInstanceNo.Size = new Size(130, 23);
-            SetInstanceNo.TabIndex = 2;
-            SetInstanceNo.Text = "Set Instance";
-            SetInstanceNo.UseVisualStyleBackColor = true;
-            SetInstanceNo.Click += SetInstanceNo_Click;
-            // 
-            // InstanceComboBox
-            // 
-            InstanceComboBox.FormattingEnabled = true;
-            InstanceComboBox.Items.AddRange(new object[] { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15" });
-            InstanceComboBox.Location = new Point(375, 11);
-            InstanceComboBox.Name = "InstanceComboBox";
-            InstanceComboBox.Size = new Size(130, 23);
-            InstanceComboBox.TabIndex = 1;
+            ClName.HeaderText = "Name";
+            ClName.Name = "ClName";
+            ClName.ReadOnly = true;
+            ClName.Width = 400;
             // 
             // SensorListBox
             // 
@@ -495,7 +540,7 @@ namespace ConsoleGUI
             tabControl1.Location = new Point(3, 12);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
-            tabControl1.Size = new Size(525, 575);
+            tabControl1.Size = new Size(561, 575);
             tabControl1.TabIndex = 4;
             // 
             // tabPage1
@@ -505,56 +550,33 @@ namespace ConsoleGUI
             tabPage1.Location = new Point(4, 24);
             tabPage1.Name = "tabPage1";
             tabPage1.Padding = new Padding(3);
-            tabPage1.Size = new Size(517, 547);
+            tabPage1.Size = new Size(553, 547);
             tabPage1.TabIndex = 2;
             tabPage1.Text = "Console";
             tabPage1.UseVisualStyleBackColor = true;
-            // 
-            // focusToolStripMenuItem
-            // 
-            focusToolStripMenuItem.Name = "focusToolStripMenuItem";
-            focusToolStripMenuItem.Size = new Size(180, 22);
-            focusToolStripMenuItem.Text = "Focus";
-            focusToolStripMenuItem.Click += focusToolStripMenuItem_Click;
-            // 
-            // clearToolStripMenuItem
-            // 
-            clearToolStripMenuItem.Name = "clearToolStripMenuItem";
-            clearToolStripMenuItem.Size = new Size(180, 22);
-            clearToolStripMenuItem.Text = "Clear";
-            // 
-            // destroyToolStripMenuItem
-            // 
-            destroyToolStripMenuItem.Name = "destroyToolStripMenuItem";
-            destroyToolStripMenuItem.Size = new Size(180, 22);
-            destroyToolStripMenuItem.Text = "Destroy";
-            // 
-            // createToolStripMenuItem
-            // 
-            createToolStripMenuItem.Name = "createToolStripMenuItem";
-            createToolStripMenuItem.Size = new Size(180, 22);
-            createToolStripMenuItem.Text = "Create From Model";
-            createToolStripMenuItem.Click += createToolStripMenuItem_Click;
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(529, 587);
+            ClientSize = new Size(566, 591);
             Controls.Add(tabControl1);
             Name = "MainForm";
             Text = "Sim Console";
             TopMost = true;
             ActorListContextMenu.ResumeLayout(false);
             tabPage2.ResumeLayout(false);
-            tabPage2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)ActorGrid).EndInit();
-            groupBox3.ResumeLayout(false);
-            groupBox3.PerformLayout();
-            groupBox2.ResumeLayout(false);
-            groupBox2.PerformLayout();
+            flowLayoutPanel1.ResumeLayout(false);
+            flowLayoutPanel1.PerformLayout();
+            groupBox4.ResumeLayout(false);
+            groupBox4.PerformLayout();
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
+            groupBox2.ResumeLayout(false);
+            groupBox2.PerformLayout();
+            groupBox3.ResumeLayout(false);
+            groupBox3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)ActorGrid).EndInit();
             tabControl1.ResumeLayout(false);
             tabPage1.ResumeLayout(false);
             tabPage1.PerformLayout();
@@ -573,33 +595,6 @@ namespace ConsoleGUI
         private ToolStripMenuItem toolStripMenuItem3;
         private ToolStripMenuItem loadModelsToolStripMenuItem;
         private TabPage tabPage2;
-        private GroupBox groupBox3;
-        private Label label7;
-        private Label label8;
-        private Label label9;
-        private TextBox TB_ScaleZ;
-        private TextBox TB_ScaleY;
-        private TextBox TB_ScaleX;
-        private GroupBox groupBox2;
-        private Label label4;
-        private Label label5;
-        private Label label6;
-        private TextBox TB_RotationZ;
-        private TextBox TB_RotationY;
-        private TextBox TB_RotationX;
-        private GroupBox groupBox1;
-        private Label label3;
-        private Label label2;
-        private Label label1;
-        private TextBox TB_LocationZ;
-        private TextBox TB_LocationY;
-        private TextBox TB_LocationX;
-        private Button SetActiveButton;
-        private CheckBox IsActiveCB;
-        private Button SensorEnableCtrlButton;
-        private CheckBox SensorEnabledCB;
-        private Button SetInstanceNo;
-        private ComboBox InstanceComboBox;
         private ListBox SensorListBox;
         private TabControl tabControl1;
         private DataGridView ActorGrid;
@@ -610,5 +605,36 @@ namespace ConsoleGUI
         private ToolStripMenuItem clearToolStripMenuItem;
         private ToolStripMenuItem destroyToolStripMenuItem;
         private ToolStripMenuItem createToolStripMenuItem;
+        private FlowLayoutPanel flowLayoutPanel1;
+        private TextBox TBName;
+        private Button SetActiveButton;
+        private CheckBox CBActive;
+        private Button SensorEnableCtrlButton;
+        private CheckBox CBEnable;
+        private Button SetInstanceNo;
+        private ComboBox InstanceComboBox;
+        private GroupBox groupBox1;
+        private Label label3;
+        private Label label2;
+        private Label label1;
+        private TextBox TB_LocationZ;
+        private TextBox TB_LocationY;
+        private TextBox TB_LocationX;
+        private GroupBox groupBox2;
+        private Label label4;
+        private Label label5;
+        private Label label6;
+        private TextBox TB_RotationZ;
+        private TextBox TB_RotationY;
+        private TextBox TB_RotationX;
+        private GroupBox groupBox3;
+        private Label label7;
+        private Label label8;
+        private Label label9;
+        private TextBox TB_ScaleZ;
+        private TextBox TB_ScaleY;
+        private TextBox TB_ScaleX;
+        private Label label10;
+        private GroupBox groupBox4;
     }
 }

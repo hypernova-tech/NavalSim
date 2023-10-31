@@ -17,3 +17,4 @@ C:\Users\Pc\Documents\Unreal Projects\BoatSim\ConsoleApp\ConsoleGUI\obj\Debug\ne
 C:\Users\Pc\Documents\Unreal Projects\BoatSim\ConsoleApp\ConsoleGUI\obj\Debug\net6.0-windows\ref\ConsoleGUI.dll
 C:\Users\Pc\Documents\Unreal Projects\BoatSim\ConsoleApp\ConsoleGUI\bin\Debug\net6.0-windows\Newtonsoft.Json.dll
 C:\Users\Pc\Documents\Unreal Projects\BoatSim\ConsoleApp\ConsoleGUI\obj\Debug\net6.0-windows\ConsoleGUI.csproj.CopyComplete
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\ConsoleApp\ConsoleGUI\obj\Debug\net6.0-windows\ConsoleGUI.InputBoxForm.resources

@@ -12,6 +12,7 @@ using System.Xml.Linq;
 using Newtonsoft.Json.Schema;
 using static System.Net.Mime.MediaTypeNames;
 using static System.ComponentModel.Design.ObjectSelectorEditor;
+using System.Diagnostics;
 
 namespace ConsoleGUI
 {
@@ -31,6 +32,8 @@ namespace ConsoleGUI
         HashSet<string> ModelsReceived = new HashSet<string>();
         CJsonParser mJsonParser = new CJsonParser();
         string Selected = "";
+        List<string> MessageList = new List<string>();
+        private readonly object _lockObject = new object();
         public MainForm()
         {
             mJsonParser.SetMainForm(this);
@@ -83,9 +86,6 @@ namespace ConsoleGUI
         }
         private void UpdateListBoxDataThreadSafe(string item)
         {
-            listBox1.Items.Add(item);
-            listBox1.SelectedIndex = listBox1.Items.Count - 1;
-            listBox1.ClearSelected();
 
             AddToSensorList(item);
         }
@@ -103,6 +103,7 @@ namespace ConsoleGUI
                     SensorListBox.Items.Add(item_striped);
                     SensorsReceived.Add(item_striped);
                     is_added = true;
+                    IsActorGridDirty = true;
                 }
 
             }
@@ -116,6 +117,7 @@ namespace ConsoleGUI
 
                     ActorsReceived.Add(item_striped);
                     is_added = true;
+                    IsActorGridDirty = true;
                 }
 
             }
@@ -129,6 +131,7 @@ namespace ConsoleGUI
 
                     ModelsReceived.Add(item_striped);
                     is_added = true;
+                    IsActorGridDirty = true;
                 }
 
             }
@@ -140,15 +143,13 @@ namespace ConsoleGUI
                 if (item_striped != "")
                 {
                     Selected = item_striped;
+
                     SelectActor();
                 }
 
 
             }
-            if (is_added)
-            {
-                UpdateActorGrid();
-            }
+        
 
         }
 
@@ -157,13 +158,6 @@ namespace ConsoleGUI
             ActorGrid.Rows.Clear();
             int ind = 0;
 
-            foreach (var obj in SensorsReceived)
-            {
-                ActorGrid.Rows.Add("Sensor", obj);
-                ActorGrid.Rows[ind].HeaderCell.Value = ind.ToString();
-                ActorGrid.Rows[ind].DefaultCellStyle.BackColor = Color.LightGreen;
-                ind++;
-            }
             foreach (var obj in ModelsReceived)
             {
                 ActorGrid.Rows.Add("Model", obj);
@@ -171,6 +165,15 @@ namespace ConsoleGUI
                 ActorGrid.Rows[ind].DefaultCellStyle.BackColor = Color.LightPink;
                 ind++;
             }
+
+            foreach (var obj in SensorsReceived)
+            {
+                ActorGrid.Rows.Add("Sensor", obj);
+                ActorGrid.Rows[ind].HeaderCell.Value = ind.ToString();
+                ActorGrid.Rows[ind].DefaultCellStyle.BackColor = Color.LightGreen;
+                ind++;
+            }
+
             foreach (var obj in ActorsReceived)
             {
                 ActorGrid.Rows.Add("Actor", obj);
@@ -201,12 +204,30 @@ namespace ConsoleGUI
             UdpClient client = new UdpClient();
             IPEndPoint endPoint = new IPEndPoint(IPAddress.Any, LocalPort);
             client.Client.Bind(endPoint);
+
+            Stopwatch stopwatch = new Stopwatch();
+
+            List<string> mes_list = new List<string>();
+
+
             while (true)
             {
+                stopwatch.Start();
                 byte[] data = client.Receive(ref endPoint);
-                string message = Encoding.ASCII.GetString(data);
+                stopwatch.Stop();
+                TimeSpan elapsedTime = stopwatch.Elapsed;
 
-                ProcessReceivedData(message);
+
+
+                string message = Encoding.ASCII.GetString(data);
+                lock (_lockObject)
+                {
+                    MessageList.Add(message);
+                }
+
+
+
+
             }
         }
 
@@ -426,43 +447,43 @@ namespace ConsoleGUI
 
         private void SetInstanceNo_Click(object sender, EventArgs e)
         {
-            if (SensorListBox.SelectedIndex < 0 || InstanceComboBox.SelectedIndex < 0)
+            if (!HasSelected())
             {
                 return;
             }
-            var selected_sensor = SensorListBox.Items[SensorListBox.SelectedIndex].ToString();
+
             var selected_text = InstanceComboBox.Items[InstanceComboBox.SelectedIndex].ToString();
             if (selected_text != "")
             {
-                string command = string.Format("set --name {0} --instance {1}", selected_sensor, selected_text);
+                string command = string.Format("set --name {0} --instance {1}", Selected, selected_text);
                 SendData(command);
             }
         }
 
         private void SensorEnableCtrlButton_Click(object sender, EventArgs e)
         {
-            if (SensorListBox.SelectedIndex < 0)
+            if (!HasSelected())
             {
                 return;
             }
-            var selected_sensor = SensorListBox.Items[SensorListBox.SelectedIndex].ToString();
+
             {
-                string enabled = SensorEnabledCB.Checked ? "1" : "0";
-                string command = string.Format("set --name {0} --enabled {1}", selected_sensor, enabled);
+                string enabled = CBEnable.Checked ? "1" : "0";
+                string command = string.Format("set --name {0} --enabled {1}", Selected, enabled);
                 SendData(command);
             }
         }
 
         private void SetActiveButton_Click(object sender, EventArgs e)
         {
-            if (SensorListBox.SelectedIndex < 0)
+            if (!HasSelected())
             {
                 return;
             }
-            var selected_sensor = SensorListBox.Items[SensorListBox.SelectedIndex].ToString();
+
             {
-                string enabled = IsActiveCB.Checked ? "1" : "0";
-                string command = string.Format("set --name {0} --active {1}", selected_sensor, enabled);
+                string enabled = CBActive.Checked ? "1" : "0";
+                string command = string.Format("set --name {0} --active {1}", Selected, enabled);
                 SendData(command);
             }
         }
@@ -522,6 +543,12 @@ namespace ConsoleGUI
         void UpdatePosition()
         {
             var selected_sensor = GetSelectedSensor();
+            SendPosition(selected_sensor);
+            RequestTransform(selected_sensor, false);
+        }
+
+        void SendPosition(string selected_sensor)
+        {
             if (selected_sensor == "")
             {
                 return;
@@ -542,12 +569,10 @@ namespace ConsoleGUI
             string pos = "\"" + TB_LocationX.Text + " " + TB_LocationY.Text + " " + TB_LocationZ.Text + "\"";
             string command = string.Format("set --name {0} --position {1}", selected_sensor, pos);
             SendData(command);
-            RequestTransform(selected_sensor, false);
         }
 
-        void UpdateRotation()
+        void SendRotation(string selected_sensor)
         {
-            var selected_sensor = GetSelectedSensor();
             if (selected_sensor == "")
             {
                 return;
@@ -568,12 +593,10 @@ namespace ConsoleGUI
             string pos = "\"" + TB_RotationX.Text + " " + TB_RotationY.Text + " " + TB_RotationZ.Text + "\"";
             string command = string.Format("set --name {0} --rotation {1}", selected_sensor, pos);
             SendData(command);
-            RequestTransform(selected_sensor, false);
         }
 
-        void UpdateScale()
+        void SendScale(string selected_sensor)
         {
-            var selected_sensor = GetSelectedSensor();
             if (selected_sensor == "")
             {
                 return;
@@ -594,6 +617,19 @@ namespace ConsoleGUI
             string pos = "\"" + TB_ScaleX.Text + " " + TB_ScaleY.Text + " " + TB_ScaleZ.Text + "\"";
             string command = string.Format("set --name {0} --scale {1}", selected_sensor, pos);
             SendData(command);
+        }
+
+        void UpdateRotation()
+        {
+            var selected_sensor = GetSelectedSensor();
+            SendRotation(selected_sensor);
+            RequestTransform(selected_sensor, false);
+        }
+
+        void UpdateScale()
+        {
+            var selected_sensor = GetSelectedSensor();
+            SendScale(selected_sensor);
             RequestTransform(selected_sensor, false);
         }
 
@@ -688,17 +724,25 @@ namespace ConsoleGUI
         private void timer1_Tick(object sender, EventArgs e)
         {
 
-        }
 
+        }
+        bool IsActorGridDirty = false;
         private void timer1_Tick_1(object sender, EventArgs e)
         {
-            return;
-            var selected_sensor = GetSelectedSensor();
-            if (selected_sensor == "")
+            lock (_lockObject)
             {
-                return;
+                IsActorGridDirty = false;
+                foreach (var mes in MessageList)
+                {
+                    ProcessReceivedData(mes);
+                }
+                MessageList.Clear();
+
+                if (IsActorGridDirty)
+                {
+                    UpdateActorGrid();
+                }
             }
-            RequestTransform(selected_sensor, false);
         }
 
         void RequestTransform(string name, bool add_to_cmd_list)
@@ -733,22 +777,40 @@ namespace ConsoleGUI
             }
         }
 
-        private void toolStripMenuItem2_Click(object sender, EventArgs e)
+        void GetActors()
         {
+            ActorsReceived.Clear();
             var command = ("print --actors");
             SendData(command, false);
         }
 
-        private void toolStripMenuItem3_Click(object sender, EventArgs e)
+        void GetSensors()
         {
+            SensorsReceived.Clear();
             var command = ("print --sensors");
             SendData(command, false);
         }
 
-        private void loadModelsToolStripMenuItem_Click(object sender, EventArgs e)
+        void GetModels()
         {
+            ModelsReceived.Clear();
             var command = ("print --bp");
             SendData(command, false);
+        }
+
+        private void toolStripMenuItem2_Click(object sender, EventArgs e)
+        {
+            GetActors();
+        }
+
+        private void toolStripMenuItem3_Click(object sender, EventArgs e)
+        {
+            GetSensors();
+        }
+
+        private void loadModelsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            GetModels();
         }
 
         private void ActorGrid_MouseDoubleClick(object sender, MouseEventArgs e)
@@ -756,7 +818,7 @@ namespace ConsoleGUI
             var hitTestInfo = ActorGrid.HitTest(e.X, e.Y);
 
             // Check if a cell was clicked
-            if (hitTestInfo.Type == DataGridViewHitTestType.RowHeader)
+            if (hitTestInfo.Type == DataGridViewHitTestType.RowHeader || hitTestInfo.Type == DataGridViewHitTestType.Cell)
             {
                 string selected = ActorGrid.Rows[hitTestInfo.RowIndex].Cells[1].Value.ToString();
 
@@ -777,7 +839,7 @@ namespace ConsoleGUI
             {
                 for (int i = 0; i < ActorGrid.Rows.Count; i++)
                 {
-                    if (ActorGrid.Rows[i].Cells[1].Value.Equals(Selected))
+                    if (ActorGrid.Rows[i].Cells[1].Value != null && ActorGrid.Rows[i].Cells[1].Value.Equals(Selected))
                     {
                         ActorGrid.Rows[i].Selected = true;
                         ActorGrid.CurrentCell = ActorGrid.Rows[i].Cells[1];
@@ -789,7 +851,7 @@ namespace ConsoleGUI
 
         private void createToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            CreateFromSelected();
         }
 
         private void focusToolStripMenuItem_Click(object sender, EventArgs e)
@@ -799,12 +861,149 @@ namespace ConsoleGUI
                 string command = string.Format("set --name {0} --focused", Selected);
                 SendData(command);
             }
-            
+
         }
 
         private bool HasSelected()
         {
             return Selected != null && Selected != "";
+        }
+
+        private void SetActiveButton_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void SensorEnableCtrlButton_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void SetInstanceNo_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void CBEnable_CheckedChanged(object sender, EventArgs e)
+        {
+            CheckBox cb = (CheckBox)sender;
+
+            if (cb != null)
+            {
+                if (cb.Checked)
+                {
+                    SendComSetComandWithSelected(CLICommandManager.Enabled, "1");
+                }
+                else
+                {
+                    SendComSetComandWithSelected(CLICommandManager.Enabled, "0");
+                }
+
+            }
+
+        }
+
+        void SendComSetComandWithSelected(string option, string option_value)
+        {
+            if (HasSelected())
+            {
+                string command = string.Format("set --name {0} --{1} {2}", Selected, option, option_value);
+                SendData(command);
+            }
+            else
+            {
+                MessageBox.Show("select an actor");
+            }
+        }
+
+        void CreateAndSendCommand(string cmd, string option1 = "", string value1 = "", string option2 = "", string value2 = "", string option3 = "", string value3 = "", string option4 = "", string value4 = "", string option5 = "", string value5 = "")
+        {
+            string ret = CCommandFactroy.CreateCommands(cmd, option1, value1, option2, value2, option3, value3, option4, value4, option5, value5);
+            SendData(ret);
+        }
+
+        private void CBActive_CheckedChanged(object sender, EventArgs e)
+        {
+            CheckBox cb = (CheckBox)sender;
+
+            if (cb != null)
+            {
+                if (cb.Checked)
+                {
+                    SendComSetComandWithSelected(CLICommandManager.Active, "1");
+                }
+                else
+                {
+                    SendComSetComandWithSelected(CLICommandManager.Active, "0");
+                }
+
+            }
+        }
+
+        private void clearToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ActorGrid.Rows.Clear();
+        }
+
+        void CreateFromSelected()
+        {
+            if (HasSelected())
+            {
+                if (IsSelectedBP())
+                {
+                    if (TBName.Text == "")
+                    {
+                        MessageBox.Show("enter a name");
+                    }
+                    else
+                    {
+                        CreateAndSendCommand(CLICommandManager.CreateCommand, CLICommandManager.Name, TBName.Text, CLICommandManager.Bp, Selected);
+                        SendPosition(TBName.Text);
+                        SendRotation(TBName.Text);
+                        SendScale(TBName.Text);
+                    }
+
+                }
+            }
+        }
+
+        private bool IsSelectedBP()
+        {
+            if (Selected != "")
+            {
+                if (ModelsReceived.Contains(Selected))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private void ActorGrid_MouseClick(object sender, MouseEventArgs e)
+        {
+            var hitTestInfo = ActorGrid.HitTest(e.X, e.Y);
+
+            // Check if a cell was clicked
+            if (hitTestInfo.Type == DataGridViewHitTestType.RowHeader || hitTestInfo.Type == DataGridViewHitTestType.Cell)
+            {
+                string selected = ActorGrid.Rows[hitTestInfo.RowIndex].Cells[1].Value.ToString();
+
+                string command = string.Format("set --selected {0}", selected);
+                SendData(command);
+                RequestTransform(selected, false);
+                Selected = selected;
+
+            }
+        }
+
+        private void destroyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CreateAndSendCommand(CLICommandManager.DestroyCommand, CLICommandManager.Name,Selected);
+            ActorsReceived.Remove(Selected);
+            SensorsReceived.Remove(Selected);
+            GetActors();
+            GetSensors();
         }
     }
 }
