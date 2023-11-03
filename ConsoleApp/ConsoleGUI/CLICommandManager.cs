@@ -1,4 +1,11 @@
-﻿public static class CLICommandManager
+﻿using System.Reflection;
+
+[AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
+public class ModifiableAttribute : Attribute
+{
+}
+
+public static class CLICommandManager
 {
     public const string WorkspaceCommand = "ws";
     public const string SaveFile = "save";
@@ -12,44 +19,44 @@
     public const string DestroyCommand = "destroy";
     public const string SetCommand = "set";
     public const string Active = "active";
-    public const string Enabled = "enabled";
+     public const string Enabled = "enabled";
     public const string Instance = "instance";
     public const string Position = "position";
     public const string RelPosition = "relposition";
     public const string Rotation = "rotation";
     public const string RelRotation = "relrotation";
     public const string Scale = "scale";
-    public const string Parent = "parent";
+    [Modifiable] public const string Parent = "parent";
     public const string Controller = "controller";
-    public const string SensorSlotIndex = "slotindex";
-    public const string Beam = "beam";
-    public const string Range = "range";
-    public const string Fov = "fov";
+    [Modifiable] public const string SensorSlotIndex = "slotindex";
+    [Modifiable] public const string Beam = "beam";
+    [Modifiable] public const string Range = "range";
+    [Modifiable] public const string Fov = "fov";
     public const string Selected = "selected";
     public const string Focused = "focused";
-    public const string VericalFov = "vfov";
-    public const string HorizontalFov = "hfov";
-    public const string HorizontalScanStepAngleDeg = "hscanstepang";
-    public const string VerticalScanStepAngleDeg = "vscanstepang";
-    public const string MeasurementErrorMean = "merrormean";
-    public const string MeasurementErrorStd = "merrorstd";
-    public const string EnableSurfaceDetect = "surfacedetecten";
-    public const string EnableSubsurfaceDetect = "subsurfacedetecten";
-    public const string EnableFoamDetect = "foamen";
-    public const string SeaSurfaceDetectionProb = "seasurfdetectprob";
-    public const string MaxSurfacePenetration = "maxsurfpenet";
-    public const string RadarScanLevel = "radscanlevel";
-    public const string RadarScannerRPM = "radscanrpm";
-    public const string RadarGainType = "radgaintype";
-    public const string RadarGainLevel = "radgainlevel";
-    public const string RadarSeaClutterType = "radseaclutleveltype";
-    public const string RadarSeaClutterLevel = "radseaclutlevel";
-    public const string RadarSeaClutterAutoOffset = "radseaclutautooffset";
-    public const string RadarRainClutterLevel = "radrainclutlevel";
-    public const string RadarMaxGuardZoneCount = "radmaxguardzonecount";
-    public const string RadarMaxSectorBlankingZoneCount = "radmaxsectorblankingzonecount";
-    public const string CamWidthPx = "widthpx";
-    public const string CamHeightPx = "heightpx";
+    [Modifiable] public const string VericalFov = "vfov";
+    [Modifiable] public const string HorizontalFov = "hfov";
+    [Modifiable] public const string HorizontalScanStepAngleDeg = "hscanstepang";
+    [Modifiable] public const string VerticalScanStepAngleDeg = "vscanstepang";
+    [Modifiable] public const string MeasurementErrorMean = "merrormean";
+    [Modifiable] public const string MeasurementErrorStd = "merrorstd";
+    [Modifiable] public const string EnableSurfaceDetect = "surfacedetecten";
+    [Modifiable] public const string EnableSubsurfaceDetect = "subsurfacedetecten";
+    [Modifiable] public const string EnableFoamDetect = "foamen";
+    [Modifiable] public const string SeaSurfaceDetectionProb = "seasurfdetectprob";
+    [Modifiable] public const string MaxSurfacePenetration = "maxsurfpenet";
+    [Modifiable] public const string RadarScanLevel = "radscanlevel";
+    [Modifiable] public const string RadarScannerRPM = "radscanrpm";
+    [Modifiable] public const string RadarGainType = "radgaintype";
+    [Modifiable] public const string RadarGainLevel = "radgainlevel";
+    [Modifiable] public const string RadarSeaClutterType = "radseaclutleveltype";
+    [Modifiable] public const string RadarSeaClutterLevel = "radseaclutlevel";
+    [Modifiable] public const string RadarSeaClutterAutoOffset = "radseaclutautooffset";
+    [Modifiable] public const string RadarRainClutterLevel = "radrainclutlevel";
+    [Modifiable] public const string RadarMaxGuardZoneCount = "radmaxguardzonecount";
+    [Modifiable] public const string RadarMaxSectorBlankingZoneCount = "radmaxsectorblankingzonecount";
+    [Modifiable] public const string CamWidthPx = "widthpx";
+    [Modifiable] public const string CamHeightPx = "heightpx";
     public const string Wp = "wp";
     public const string WpPos = "wppos";
     public const string Closed = "closed";
@@ -70,4 +77,25 @@
     public const string Start = "start";
     public const string Pause = "pause";
     public const string Resume = "resume";
+
+    public static Dictionary<string, string> GetModifiableConstants()
+    {
+        var modifiableFields = new Dictionary<string, string>();
+
+        // Using reflection to get all public static fields
+        var fields = typeof(CLICommandManager).GetFields(BindingFlags.Public | BindingFlags.Static);
+
+        foreach (var field in fields)
+        {
+            var attributes = field.GetCustomAttributes(typeof(ModifiableAttribute), false);
+            if (attributes.Length > 0)
+            {
+                // If the field has the ModifiableAttribute, we add it to the dictionary
+                modifiableFields.Add(field.Name, (string)field.GetValue(null));
+            }
+        }
+
+        return modifiableFields;
+    }
+
 }

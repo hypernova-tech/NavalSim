@@ -72,9 +72,7 @@ namespace ConsoleGUI
             TB_ScaleZ = new TextBox();
             TB_ScaleY = new TextBox();
             TB_ScaleX = new TextBox();
-            ActorGrid = new DataGridView();
-            ClType = new DataGridViewTextBoxColumn();
-            ClName = new DataGridViewTextBoxColumn();
+            ModifyableDataGrid = new DataGridView();
             tabControl1 = new TabControl();
             tabPage1 = new TabPage();
             menuStrip1 = new MenuStrip();
@@ -101,7 +99,7 @@ namespace ConsoleGUI
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)ActorGrid).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)ModifyableDataGrid).BeginInit();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             menuStrip1.SuspendLayout();
@@ -163,11 +161,10 @@ namespace ConsoleGUI
             // 
             tabPage2.Controls.Add(ObjectEditor);
             tabPage2.Controls.Add(flowLayoutPanel1);
-            tabPage2.Controls.Add(ActorGrid);
             tabPage2.Location = new Point(4, 24);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new Padding(3);
-            tabPage2.Size = new Size(553, 547);
+            tabPage2.Size = new Size(502, 650);
             tabPage2.TabIndex = 1;
             tabPage2.Text = "Actors";
             tabPage2.UseVisualStyleBackColor = true;
@@ -175,14 +172,15 @@ namespace ConsoleGUI
             // ObjectEditor
             // 
             ObjectEditor.ContextMenuStrip = ObjectEditorContextMenu;
-            ObjectEditor.Location = new Point(13, 147);
+            ObjectEditor.Location = new Point(13, 11);
             ObjectEditor.Name = "ObjectEditor";
             treeNode1.Name = "World";
             treeNode1.Text = "World";
             ObjectEditor.Nodes.AddRange(new TreeNode[] { treeNode1 });
-            ObjectEditor.Size = new Size(356, 370);
+            ObjectEditor.Size = new Size(246, 633);
             ObjectEditor.TabIndex = 18;
             ObjectEditor.NodeMouseClick += ObjectEditor_NodeMouseClick;
+            ObjectEditor.NodeMouseDoubleClick += ObjectEditor_NodeMouseDoubleClick;
             ObjectEditor.MouseClick += ObjectEditor_MouseClick;
             // 
             // ObjectEditorContextMenu
@@ -196,6 +194,7 @@ namespace ConsoleGUI
             createToolStripMenuItem1.Name = "createToolStripMenuItem1";
             createToolStripMenuItem1.Size = new Size(108, 22);
             createToolStripMenuItem1.Text = "Create";
+            createToolStripMenuItem1.Click += createToolStripMenuItem1_Click;
             // 
             // flowLayoutPanel1
             // 
@@ -206,9 +205,10 @@ namespace ConsoleGUI
             flowLayoutPanel1.Controls.Add(groupBox1);
             flowLayoutPanel1.Controls.Add(groupBox2);
             flowLayoutPanel1.Controls.Add(groupBox3);
-            flowLayoutPanel1.Location = new Point(386, 11);
+            flowLayoutPanel1.Controls.Add(ModifyableDataGrid);
+            flowLayoutPanel1.Location = new Point(265, 11);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
-            flowLayoutPanel1.Size = new Size(160, 531);
+            flowLayoutPanel1.Size = new Size(229, 633);
             flowLayoutPanel1.TabIndex = 17;
             // 
             // label10
@@ -236,7 +236,7 @@ namespace ConsoleGUI
             groupBox4.Controls.Add(CBEnable);
             groupBox4.Location = new Point(3, 32);
             groupBox4.Name = "groupBox4";
-            groupBox4.Size = new Size(130, 149);
+            groupBox4.Size = new Size(202, 149);
             groupBox4.TabIndex = 30;
             groupBox4.TabStop = false;
             groupBox4.Text = "Control";
@@ -292,7 +292,7 @@ namespace ConsoleGUI
             groupBox1.Controls.Add(TB_LocationX);
             groupBox1.Location = new Point(3, 187);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(130, 111);
+            groupBox1.Size = new Size(202, 111);
             groupBox1.TabIndex = 27;
             groupBox1.TabStop = false;
             groupBox1.Text = "Location";
@@ -328,7 +328,7 @@ namespace ConsoleGUI
             // 
             TB_LocationZ.Location = new Point(24, 80);
             TB_LocationZ.Name = "TB_LocationZ";
-            TB_LocationZ.Size = new Size(100, 23);
+            TB_LocationZ.Size = new Size(172, 23);
             TB_LocationZ.TabIndex = 9;
             TB_LocationZ.Text = "0";
             TB_LocationZ.KeyDown += TB_LocationZ_KeyDown;
@@ -337,7 +337,7 @@ namespace ConsoleGUI
             // 
             TB_LocationY.Location = new Point(24, 51);
             TB_LocationY.Name = "TB_LocationY";
-            TB_LocationY.Size = new Size(100, 23);
+            TB_LocationY.Size = new Size(172, 23);
             TB_LocationY.TabIndex = 8;
             TB_LocationY.Text = "0";
             TB_LocationY.KeyDown += TB_LocationY_KeyDown;
@@ -346,7 +346,7 @@ namespace ConsoleGUI
             // 
             TB_LocationX.Location = new Point(24, 23);
             TB_LocationX.Name = "TB_LocationX";
-            TB_LocationX.Size = new Size(100, 23);
+            TB_LocationX.Size = new Size(172, 23);
             TB_LocationX.TabIndex = 7;
             TB_LocationX.Text = "0";
             TB_LocationX.KeyDown += TB_LocationX_KeyDown;
@@ -361,7 +361,7 @@ namespace ConsoleGUI
             groupBox2.Controls.Add(TB_RotationX);
             groupBox2.Location = new Point(3, 304);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(130, 111);
+            groupBox2.Size = new Size(202, 111);
             groupBox2.TabIndex = 28;
             groupBox2.TabStop = false;
             groupBox2.Text = "Rotation";
@@ -397,7 +397,7 @@ namespace ConsoleGUI
             // 
             TB_RotationZ.Location = new Point(24, 80);
             TB_RotationZ.Name = "TB_RotationZ";
-            TB_RotationZ.Size = new Size(100, 23);
+            TB_RotationZ.Size = new Size(172, 23);
             TB_RotationZ.TabIndex = 9;
             TB_RotationZ.Text = "0";
             TB_RotationZ.KeyDown += TB_RotationZ_KeyDown;
@@ -406,7 +406,7 @@ namespace ConsoleGUI
             // 
             TB_RotationY.Location = new Point(24, 51);
             TB_RotationY.Name = "TB_RotationY";
-            TB_RotationY.Size = new Size(100, 23);
+            TB_RotationY.Size = new Size(172, 23);
             TB_RotationY.TabIndex = 8;
             TB_RotationY.Text = "0";
             TB_RotationY.KeyDown += TB_RotationY_KeyDown;
@@ -415,7 +415,7 @@ namespace ConsoleGUI
             // 
             TB_RotationX.Location = new Point(24, 23);
             TB_RotationX.Name = "TB_RotationX";
-            TB_RotationX.Size = new Size(100, 23);
+            TB_RotationX.Size = new Size(172, 23);
             TB_RotationX.TabIndex = 7;
             TB_RotationX.Text = "0";
             TB_RotationX.KeyDown += TB_RotationX_KeyDown;
@@ -430,7 +430,7 @@ namespace ConsoleGUI
             groupBox3.Controls.Add(TB_ScaleX);
             groupBox3.Location = new Point(3, 421);
             groupBox3.Name = "groupBox3";
-            groupBox3.Size = new Size(130, 111);
+            groupBox3.Size = new Size(202, 107);
             groupBox3.TabIndex = 29;
             groupBox3.TabStop = false;
             groupBox3.Text = "Scale";
@@ -466,7 +466,7 @@ namespace ConsoleGUI
             // 
             TB_ScaleZ.Location = new Point(24, 80);
             TB_ScaleZ.Name = "TB_ScaleZ";
-            TB_ScaleZ.Size = new Size(100, 23);
+            TB_ScaleZ.Size = new Size(172, 23);
             TB_ScaleZ.TabIndex = 9;
             TB_ScaleZ.Text = "1";
             TB_ScaleZ.KeyDown += TB_ScaleZ_KeyDown;
@@ -475,7 +475,7 @@ namespace ConsoleGUI
             // 
             TB_ScaleY.Location = new Point(24, 51);
             TB_ScaleY.Name = "TB_ScaleY";
-            TB_ScaleY.Size = new Size(100, 23);
+            TB_ScaleY.Size = new Size(172, 23);
             TB_ScaleY.TabIndex = 8;
             TB_ScaleY.Text = "1";
             TB_ScaleY.KeyDown += TB_ScaleY_KeyDown;
@@ -484,42 +484,20 @@ namespace ConsoleGUI
             // 
             TB_ScaleX.Location = new Point(24, 23);
             TB_ScaleX.Name = "TB_ScaleX";
-            TB_ScaleX.Size = new Size(100, 23);
+            TB_ScaleX.Size = new Size(172, 23);
             TB_ScaleX.TabIndex = 7;
             TB_ScaleX.Text = "1";
             TB_ScaleX.KeyDown += TB_ScaleX_KeyDown;
             // 
-            // ActorGrid
+            // ModifyableDataGrid
             // 
-            ActorGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            ActorGrid.Columns.AddRange(new DataGridViewColumn[] { ClType, ClName });
-            ActorGrid.ContextMenuStrip = ActorListContextMenu;
-            ActorGrid.Location = new Point(13, 11);
-            ActorGrid.MultiSelect = false;
-            ActorGrid.Name = "ActorGrid";
-            ActorGrid.ReadOnly = true;
-            ActorGrid.RowHeadersWidth = 50;
-            ActorGrid.RowTemplate.Height = 25;
-            ActorGrid.RowTemplate.ReadOnly = true;
-            ActorGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            ActorGrid.Size = new Size(356, 130);
-            ActorGrid.TabIndex = 15;
-            ActorGrid.MouseClick += ActorGrid_MouseClick;
-            ActorGrid.MouseDoubleClick += ActorGrid_MouseDoubleClick;
-            // 
-            // ClType
-            // 
-            ClType.HeaderText = "Type";
-            ClType.Name = "ClType";
-            ClType.ReadOnly = true;
-            ClType.Width = 50;
-            // 
-            // ClName
-            // 
-            ClName.HeaderText = "Name";
-            ClName.Name = "ClName";
-            ClName.ReadOnly = true;
-            ClName.Width = 400;
+            ModifyableDataGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            ModifyableDataGrid.Location = new Point(3, 534);
+            ModifyableDataGrid.Name = "ModifyableDataGrid";
+            ModifyableDataGrid.RowHeadersVisible = false;
+            ModifyableDataGrid.RowTemplate.Height = 25;
+            ModifyableDataGrid.Size = new Size(202, 405);
+            ModifyableDataGrid.TabIndex = 34;
             // 
             // tabControl1
             // 
@@ -528,7 +506,7 @@ namespace ConsoleGUI
             tabControl1.Location = new Point(5, 27);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
-            tabControl1.Size = new Size(561, 575);
+            tabControl1.Size = new Size(510, 678);
             tabControl1.TabIndex = 4;
             // 
             // tabPage1
@@ -538,7 +516,7 @@ namespace ConsoleGUI
             tabPage1.Location = new Point(4, 24);
             tabPage1.Name = "tabPage1";
             tabPage1.Padding = new Padding(3);
-            tabPage1.Size = new Size(553, 547);
+            tabPage1.Size = new Size(502, 650);
             tabPage1.TabIndex = 2;
             tabPage1.Text = "Console";
             tabPage1.UseVisualStyleBackColor = true;
@@ -548,7 +526,7 @@ namespace ConsoleGUI
             menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, viewToolStripMenuItem, simulationToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(566, 24);
+            menuStrip1.Size = new Size(516, 24);
             menuStrip1.TabIndex = 5;
             menuStrip1.Text = "menuStrip1";
             // 
@@ -659,7 +637,7 @@ namespace ConsoleGUI
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(566, 591);
+            ClientSize = new Size(516, 727);
             Controls.Add(menuStrip1);
             Controls.Add(tabControl1);
             Name = "MainForm";
@@ -678,7 +656,7 @@ namespace ConsoleGUI
             groupBox2.PerformLayout();
             groupBox3.ResumeLayout(false);
             groupBox3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)ActorGrid).EndInit();
+            ((System.ComponentModel.ISupportInitialize)ModifyableDataGrid).EndInit();
             tabControl1.ResumeLayout(false);
             tabPage1.ResumeLayout(false);
             tabPage1.PerformLayout();
@@ -700,9 +678,6 @@ namespace ConsoleGUI
         private ToolStripMenuItem loadModelsToolStripMenuItem;
         private TabPage tabPage2;
         private TabControl tabControl1;
-        private DataGridView ActorGrid;
-        private DataGridViewTextBoxColumn ClType;
-        private DataGridViewTextBoxColumn ClName;
         private TabPage tabPage1;
         private ToolStripMenuItem createToolStripMenuItem;
         private FlowLayoutPanel flowLayoutPanel1;
@@ -755,5 +730,6 @@ namespace ConsoleGUI
         private ToolStripMenuItem toolStripMenuItem2;
         private ToolStripMenuItem viewToolStripMenuItem;
         private ToolStripMenuItem clearAllToolStripMenuItem;
+        private DataGridView ModifyableDataGrid;
     }
 }

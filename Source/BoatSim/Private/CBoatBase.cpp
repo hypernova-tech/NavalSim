@@ -270,7 +270,7 @@ void ACBoatBase::OnFocusEnter()
 }
 bool ACBoatBase::FocusCamera(AActor* p_actor)
 {
-	CUtil::CameraLookAt(BoatCam, p_actor,  TOUE(10));
+	CUtil::CameraLookAt(BoatCam, p_actor,  TOUE(20));
 	return true;
 }
 // Called to bind functionality to input

@@ -14,6 +14,7 @@ using static System.Net.Mime.MediaTypeNames;
 using static System.ComponentModel.Design.ObjectSelectorEditor;
 using System.Diagnostics;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using System.Reflection;
 
 namespace ConsoleGUI
 {
@@ -36,6 +37,7 @@ namespace ConsoleGUI
         List<string> MessageList = new List<string>();
         private readonly object _lockObject = new object();
         CTreeViewManager TreeViewManager = new CTreeViewManager();
+        Dictionary<string, string> Modifyables = new Dictionary<string, string>();
         public MainForm()
         {
             mJsonParser.SetMainForm(this);
@@ -44,9 +46,35 @@ namespace ConsoleGUI
             TreeViewManager.SetUpTreeViewForCustomDraw(ObjectEditor);
             LoadModels();
             LoadActorBases();
-            
+            Modifyables = CLICommandManager.GetModifiableConstants();
+            PopulateDataGridView();
         }
+        private void PopulateDataGridView()
+        {
 
+            ModifyableDataGrid.Columns.Add("ConstantName", "Name");
+            ModifyableDataGrid.Columns.Add("ConstantValue", "Value");
+            // Ensure the grid is clear before populating
+            ModifyableDataGrid.Rows.Clear();
+
+            // Get the list of modifiable constants
+
+            // Populate the DataGridView
+            foreach (var fieldName in Modifyables)
+            {
+                // Add a new row with the name of the constant
+                int rowIndex = ModifyableDataGrid.Rows.Add();
+                ModifyableDataGrid.Rows[rowIndex].Cells["ConstantName"].Value = fieldName.Key;
+
+                // Assuming the value of the constant is a string, you can access it using reflection
+                FieldInfo fieldInfo = typeof(CLICommandManager).GetField(fieldName.Key);
+                if (fieldInfo != null)
+                {
+                    string value = (string)fieldInfo.GetValue(null); // static fields do not require an instance
+                    ModifyableDataGrid.Rows[rowIndex].Cells["ConstantValue"].Value = "";
+                }
+            }
+        }
         private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
         {
 
@@ -161,18 +189,9 @@ namespace ConsoleGUI
 
         private void UpdateActorGrid()
         {
-            ActorGrid.Rows.Clear();
+          
             int ind = 0;
 
-            foreach (var obj in ModelsReceived)
-            {
-                ActorGrid.Rows.Add("Model", obj);
-                ActorGrid.Rows[ind].HeaderCell.Value = ind.ToString();
-                ActorGrid.Rows[ind].DefaultCellStyle.BackColor = Color.LightPink;
-                ind++;
-
-
-            }
 
             CreateSubmenu(ObjectEditorContextMenu, ModelsReceived);
 #if false
@@ -812,42 +831,11 @@ namespace ConsoleGUI
             LoadModels();
         }
 
-        private void ActorGrid_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-            var hitTestInfo = ActorGrid.HitTest(e.X, e.Y);
-
-            // Check if a cell was clicked
-            if (hitTestInfo.Type == DataGridViewHitTestType.RowHeader || hitTestInfo.Type == DataGridViewHitTestType.Cell)
-            {
-                string selected = ActorGrid.Rows[hitTestInfo.RowIndex].Cells[1].Value.ToString();
-
-                string command = string.Format("set --selected {0}", selected);
-                SendData(command);
-                RequestTransform(selected, false);
-                Selected = selected;
-
-            }
-
-
-
-        }
+       
 
         void SelectActor()
         {
-#if false
-            if (Selected != "")
-            {
-                for (int i = 0; i < ActorGrid.Rows.Count; i++)
-                {
-                    if (ActorGrid.Rows[i].Cells[1].Value != null && ActorGrid.Rows[i].Cells[1].Value.Equals(Selected))
-                    {
-                        ActorGrid.Rows[i].Selected = true;
-                        ActorGrid.CurrentCell = ActorGrid.Rows[i].Cells[1];
-                        break;
-                    }
-                }
-            }
-#endif
+
             if (Selected == "")
             {
                 return;
@@ -859,6 +847,10 @@ namespace ConsoleGUI
                 ObjectEditor.SelectedNode = foundNode;
                 // Ensure that the selected node is visible to the user
                 ObjectEditor.SelectedNode.EnsureVisible();
+            }
+            else
+            {
+                Selected = "";
             }
         }
 
@@ -985,26 +977,42 @@ namespace ConsoleGUI
             {
                 if (IsSelectedBP())
                 {
-                    if (TBName.Text == "")
+
+                    string result = CInputDialog.Show("Enter Your Name", "Name:");
+                    if (result != null)
                     {
-                        MessageBox.Show("enter a name");
+                        // The user clicked OK and entered something.
+
+                        {
+                            CreateAndSendCommand(CLICommandManager.CreateCommand, CLICommandManager.Name, result, CLICommandManager.Bp, Selected);
+                            SendPosition(result);
+                            SendRotation(result);
+                            SendScale(result);
+                            if (parent != "")
+                            {
+                                Selected = result;
+                                CreateAndSendCommand(CLICommandManager.SetCommand, CLICommandManager.Name, result, CLICommandManager.Parent, parent);
+                                CreateAndSendCommand(CLICommandManager.SetCommand, CLICommandManager.Selected, result);
+
+
+                            }
+                        }
                     }
                     else
                     {
-                        CreateAndSendCommand(CLICommandManager.CreateCommand, CLICommandManager.Name, TBName.Text, CLICommandManager.Bp, Selected);
-                        SendPosition(TBName.Text);
-                        SendRotation(TBName.Text);
-                        SendScale(TBName.Text);
-                        if (parent != "")
-                        {
-                            CreateAndSendCommand(CLICommandManager.SetCommand, CLICommandManager.Name, TBName.Text, CLICommandManager.Parent, parent);
-
-                        }
+                        // The user clicked Cancel or closed the dialog.
+                        MessageBox.Show("Operation canceled.");
                     }
+
+
+
 
                 }
             }
         }
+
+
+
 
 
 
@@ -1021,22 +1029,7 @@ namespace ConsoleGUI
             return false;
         }
 
-        private void ActorGrid_MouseClick(object sender, MouseEventArgs e)
-        {
-            var hitTestInfo = ActorGrid.HitTest(e.X, e.Y);
 
-            // Check if a cell was clicked
-            if (hitTestInfo.Type == DataGridViewHitTestType.RowHeader || hitTestInfo.Type == DataGridViewHitTestType.Cell)
-            {
-                string selected = ActorGrid.Rows[hitTestInfo.RowIndex].Cells[1].Value.ToString();
-
-                string command = string.Format("set --selected {0}", selected);
-                SendData(command);
-                RequestTransform(selected, false);
-                Selected = selected;
-
-            }
-        }
 
         private void destroyToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1136,7 +1129,7 @@ namespace ConsoleGUI
 
         private void clearToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            ActorGrid.Rows.Clear();
+        
             ActorsReceived.Clear();
             SensorsReceived.Clear();
             ModelsReceived.Clear();
@@ -1205,9 +1198,30 @@ namespace ConsoleGUI
         private void clearAllToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ObjectEditor.Nodes.Clear();
-            ActorGrid.Rows.Clear();
             ModelsReceived.Clear();
             ActorsReceived.Clear();
+
+        }
+
+        private void ObjectEditor_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            if (e.Node == null)
+            {
+                return;
+            }
+
+            string selected = e.Node.Text;
+
+            string command = string.Format("set --selected {0}", selected);
+            SendData(command);
+            command = string.Format("set --name {0} --focused", selected);
+            SendData(command);
+            RequestTransform(selected, false);
+            Selected = selected;
+        }
+
+        private void createToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
 
         }
     }
