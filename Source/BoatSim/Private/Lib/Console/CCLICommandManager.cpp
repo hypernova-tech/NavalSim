@@ -80,6 +80,8 @@ FString CCLICommandManager::GetCommand = "get";
 
 FString CCLICommandManager::PrintCommand = "print";
 FString CCLICommandManager::Actors = "actors";
+FString CCLICommandManager::ActorBases = "actorbases";
+
 FString CCLICommandManager::Sensors = "sensors";
 FString CCLICommandManager::SensorType = "sensortype";
 FString CCLICommandManager::SensorTypes = "sensortypes";

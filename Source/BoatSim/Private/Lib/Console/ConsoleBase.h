@@ -56,6 +56,7 @@ protected:
 
 	void SendSensors();
 	void SendActors();
+	void SendActorBases();
 	void SendBlueprints();
 
 public:	

@@ -249,8 +249,8 @@ bool USaverLoaderBase::Save(ISystemAPI* p_api, FString file_name)
 		SavePlatform(platform, CLIList);
 	}
 
-
-	auto non_sensors = p_api->QueryActors(EActorQueryArgs::ActorBasesExceptSensorsAndPaths);
+	TArray<AActor*> non_sensors;
+	p_api->QueryActors(EActorQueryArgs::ActorBasesExceptSensorsAndPaths, non_sensors);
 
 	for (auto p_actor : non_sensors) {
 		AActorBase* p_actor_base = (AActorBase*)p_actor;
@@ -271,8 +271,8 @@ bool USaverLoaderBase::Save(ISystemAPI* p_api, FString file_name)
 		}
 		
 	}
-
-	auto path = p_api->QueryActors(EActorQueryArgs::ActorBasesOnlyPaths);
+	TArray<AActor*> path;
+	p_api->QueryActors(EActorQueryArgs::ActorBasesOnlyPaths, path);
 
 	for (auto p_path : path) {
 		AActorBase* p_actor_base = (AActorBase*)p_path;

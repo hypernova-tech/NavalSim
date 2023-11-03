@@ -1045,3 +1045,25 @@ void CUtil::FStringToAsciiChar(const FString& str, char *p_dest, INT32U dest_len
     memcpy(p_dest, p_char_arr, len);
 
 }
+
+
+// Function to recursively gather the hierarchy of Outers for a given UObject
+void CUtil::GetActorHierarchy(const AActor* Object, TArray<FString>& Hierarchy)
+{
+    // Safety check if the passed object is nullptr
+    if (!Object)
+    {
+        return;
+    }
+    else {
+        if (Object->GetName() == "PersistentLevel") {
+            return;
+        }
+    }
+
+    // Add the object's name to the hierarchy array
+    Hierarchy.Add(Object->GetName());
+
+    // Recursively process the object's outer
+    GetActorHierarchy(CUtil::GetParentActor((AActor*)Object), Hierarchy);
+}

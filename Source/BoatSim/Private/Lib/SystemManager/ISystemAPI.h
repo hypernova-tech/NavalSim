@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include <Lib/Types/Primitives.h>
 #include <Lib/Console/ConsoleBase.h>
+#include <Lib/Platform/PlatformBase.h>
 
 /**
  * 
@@ -13,8 +14,9 @@
 enum EActorQueryArgs
 {
 	ActorBasesExceptSensorsAndPaths,
-	ActorBasesOnlyPaths
-
+	ActorBasesOnlyPaths,
+	ActorBases,
+	Platforms,
 };
 class UConsoleBase;
 class ISystemAPI
@@ -47,7 +49,7 @@ public:
 	virtual TArray<AActor*> GetRegisteredActors() = 0;
 	virtual TArray<AActor*> GetAllActorInWorld() = 0;
 
-	virtual TArray<AActor*> QueryActors(EActorQueryArgs args) = 0;
+	virtual void QueryActors(EActorQueryArgs args, TArray<AActor*> &actors) = 0;
 	virtual AActor* FindActor(FString actor_name) = 0;
 	virtual bool DestroyActor(FString name) = 0;
 	virtual AActorBase* ToActorBase(AActor* p_actor) = 0;
@@ -83,7 +85,7 @@ public:
 	
 	virtual ACBoatBase* GetPlatform() = 0;
 	
-	virtual void SetPlatform(ACBoatBase* p_platform) = 0;
+	virtual void SetPlatform(APlatformBase* p_platform) = 0;
 
 
 	virtual void StartSimulation() = 0;

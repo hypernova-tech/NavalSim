@@ -31,21 +31,18 @@ namespace ConsoleGUI
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
+            TreeNode treeNode1 = new TreeNode("World");
             OpenFileDialog = new OpenFileDialog();
             contextMenuStrip1 = new ContextMenuStrip(components);
             ActorListContextMenu = new ContextMenuStrip(components);
-            toolStripMenuItem1 = new ToolStripMenuItem();
-            toolStripMenuItem2 = new ToolStripMenuItem();
-            toolStripMenuItem3 = new ToolStripMenuItem();
-            loadModelsToolStripMenuItem = new ToolStripMenuItem();
             createToolStripMenuItem = new ToolStripMenuItem();
-            focusToolStripMenuItem = new ToolStripMenuItem();
-            destroyToolStripMenuItem = new ToolStripMenuItem();
-            clearToolStripMenuItem = new ToolStripMenuItem();
             CommandTextBox = new TextBox();
             listBox1 = new ListBox();
             SensorTimer = new System.Windows.Forms.Timer(components);
             tabPage2 = new TabPage();
+            ObjectEditor = new TreeView();
+            ObjectEditorContextMenu = new ContextMenuStrip(components);
+            createToolStripMenuItem1 = new ToolStripMenuItem();
             flowLayoutPanel1 = new FlowLayoutPanel();
             label10 = new Label();
             TBName = new TextBox();
@@ -78,11 +75,27 @@ namespace ConsoleGUI
             ActorGrid = new DataGridView();
             ClType = new DataGridViewTextBoxColumn();
             ClName = new DataGridViewTextBoxColumn();
-            SensorListBox = new ListBox();
             tabControl1 = new TabControl();
             tabPage1 = new TabPage();
+            menuStrip1 = new MenuStrip();
+            fileToolStripMenuItem = new ToolStripMenuItem();
+            loadWorkspaceToolStripMenuItem = new ToolStripMenuItem();
+            loadBlueprintsToolStripMenuItem = new ToolStripMenuItem();
+            loadUserActorsToolStripMenuItem = new ToolStripMenuItem();
+            toolStripMenuItem2 = new ToolStripMenuItem();
+            loadActorsToolStripMenuItem = new ToolStripMenuItem();
+            viewToolStripMenuItem = new ToolStripMenuItem();
+            clearAllToolStripMenuItem = new ToolStripMenuItem();
+            simulationToolStripMenuItem = new ToolStripMenuItem();
+            startToolStripMenuItem = new ToolStripMenuItem();
+            pauseToolStripMenuItem = new ToolStripMenuItem();
+            contextObjectEditor = new ContextMenuStrip(components);
+            focusToolStripMenuItem1 = new ToolStripMenuItem();
+            destroyToolStripMenuItem1 = new ToolStripMenuItem();
+            clearToolStripMenuItem1 = new ToolStripMenuItem();
             ActorListContextMenu.SuspendLayout();
             tabPage2.SuspendLayout();
+            ObjectEditorContextMenu.SuspendLayout();
             flowLayoutPanel1.SuspendLayout();
             groupBox4.SuspendLayout();
             groupBox1.SuspendLayout();
@@ -91,6 +104,8 @@ namespace ConsoleGUI
             ((System.ComponentModel.ISupportInitialize)ActorGrid).BeginInit();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
+            menuStrip1.SuspendLayout();
+            contextObjectEditor.SuspendLayout();
             SuspendLayout();
             // 
             // OpenFileDialog
@@ -105,38 +120,10 @@ namespace ConsoleGUI
             // 
             // ActorListContextMenu
             // 
-            ActorListContextMenu.Items.AddRange(new ToolStripItem[] { toolStripMenuItem1, toolStripMenuItem2, toolStripMenuItem3, loadModelsToolStripMenuItem, createToolStripMenuItem, focusToolStripMenuItem, destroyToolStripMenuItem, clearToolStripMenuItem });
+            ActorListContextMenu.Items.AddRange(new ToolStripItem[] { createToolStripMenuItem });
             ActorListContextMenu.Name = "ActorListContextMenu";
-            ActorListContextMenu.Size = new Size(181, 202);
+            ActorListContextMenu.Size = new Size(177, 26);
             ActorListContextMenu.Opening += contextMenuStrip2_Opening;
-            // 
-            // toolStripMenuItem1
-            // 
-            toolStripMenuItem1.Name = "toolStripMenuItem1";
-            toolStripMenuItem1.Size = new Size(176, 22);
-            toolStripMenuItem1.Text = "Load Workspace";
-            toolStripMenuItem1.Click += toolStripMenuItem1_Click;
-            // 
-            // toolStripMenuItem2
-            // 
-            toolStripMenuItem2.Name = "toolStripMenuItem2";
-            toolStripMenuItem2.Size = new Size(176, 22);
-            toolStripMenuItem2.Text = "Load Actors";
-            toolStripMenuItem2.Click += toolStripMenuItem2_Click;
-            // 
-            // toolStripMenuItem3
-            // 
-            toolStripMenuItem3.Name = "toolStripMenuItem3";
-            toolStripMenuItem3.Size = new Size(176, 22);
-            toolStripMenuItem3.Text = "Load Sensors";
-            toolStripMenuItem3.Click += toolStripMenuItem3_Click;
-            // 
-            // loadModelsToolStripMenuItem
-            // 
-            loadModelsToolStripMenuItem.Name = "loadModelsToolStripMenuItem";
-            loadModelsToolStripMenuItem.Size = new Size(176, 22);
-            loadModelsToolStripMenuItem.Text = "Load Models";
-            loadModelsToolStripMenuItem.Click += loadModelsToolStripMenuItem_Click;
             // 
             // createToolStripMenuItem
             // 
@@ -144,27 +131,6 @@ namespace ConsoleGUI
             createToolStripMenuItem.Size = new Size(176, 22);
             createToolStripMenuItem.Text = "Create From Model";
             createToolStripMenuItem.Click += createToolStripMenuItem_Click;
-            // 
-            // focusToolStripMenuItem
-            // 
-            focusToolStripMenuItem.Name = "focusToolStripMenuItem";
-            focusToolStripMenuItem.Size = new Size(176, 22);
-            focusToolStripMenuItem.Text = "Focus";
-            focusToolStripMenuItem.Click += focusToolStripMenuItem_Click;
-            // 
-            // destroyToolStripMenuItem
-            // 
-            destroyToolStripMenuItem.Name = "destroyToolStripMenuItem";
-            destroyToolStripMenuItem.Size = new Size(180, 22);
-            destroyToolStripMenuItem.Text = "Destroy";
-            destroyToolStripMenuItem.Click += destroyToolStripMenuItem_Click;
-            // 
-            // clearToolStripMenuItem
-            // 
-            clearToolStripMenuItem.Name = "clearToolStripMenuItem";
-            clearToolStripMenuItem.Size = new Size(176, 22);
-            clearToolStripMenuItem.Text = "Clear";
-            clearToolStripMenuItem.Click += clearToolStripMenuItem_Click;
             // 
             // CommandTextBox
             // 
@@ -195,9 +161,9 @@ namespace ConsoleGUI
             // 
             // tabPage2
             // 
+            tabPage2.Controls.Add(ObjectEditor);
             tabPage2.Controls.Add(flowLayoutPanel1);
             tabPage2.Controls.Add(ActorGrid);
-            tabPage2.Controls.Add(SensorListBox);
             tabPage2.Location = new Point(4, 24);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new Padding(3);
@@ -205,6 +171,31 @@ namespace ConsoleGUI
             tabPage2.TabIndex = 1;
             tabPage2.Text = "Actors";
             tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // ObjectEditor
+            // 
+            ObjectEditor.ContextMenuStrip = ObjectEditorContextMenu;
+            ObjectEditor.Location = new Point(13, 147);
+            ObjectEditor.Name = "ObjectEditor";
+            treeNode1.Name = "World";
+            treeNode1.Text = "World";
+            ObjectEditor.Nodes.AddRange(new TreeNode[] { treeNode1 });
+            ObjectEditor.Size = new Size(356, 370);
+            ObjectEditor.TabIndex = 18;
+            ObjectEditor.NodeMouseClick += ObjectEditor_NodeMouseClick;
+            ObjectEditor.MouseClick += ObjectEditor_MouseClick;
+            // 
+            // ObjectEditorContextMenu
+            // 
+            ObjectEditorContextMenu.Items.AddRange(new ToolStripItem[] { createToolStripMenuItem1 });
+            ObjectEditorContextMenu.Name = "contextMenuStrip2";
+            ObjectEditorContextMenu.Size = new Size(109, 26);
+            // 
+            // createToolStripMenuItem1
+            // 
+            createToolStripMenuItem1.Name = "createToolStripMenuItem1";
+            createToolStripMenuItem1.Size = new Size(108, 22);
+            createToolStripMenuItem1.Text = "Create";
             // 
             // flowLayoutPanel1
             // 
@@ -340,6 +331,7 @@ namespace ConsoleGUI
             TB_LocationZ.Size = new Size(100, 23);
             TB_LocationZ.TabIndex = 9;
             TB_LocationZ.Text = "0";
+            TB_LocationZ.KeyDown += TB_LocationZ_KeyDown;
             // 
             // TB_LocationY
             // 
@@ -348,6 +340,7 @@ namespace ConsoleGUI
             TB_LocationY.Size = new Size(100, 23);
             TB_LocationY.TabIndex = 8;
             TB_LocationY.Text = "0";
+            TB_LocationY.KeyDown += TB_LocationY_KeyDown;
             // 
             // TB_LocationX
             // 
@@ -356,6 +349,7 @@ namespace ConsoleGUI
             TB_LocationX.Size = new Size(100, 23);
             TB_LocationX.TabIndex = 7;
             TB_LocationX.Text = "0";
+            TB_LocationX.KeyDown += TB_LocationX_KeyDown;
             // 
             // groupBox2
             // 
@@ -406,6 +400,7 @@ namespace ConsoleGUI
             TB_RotationZ.Size = new Size(100, 23);
             TB_RotationZ.TabIndex = 9;
             TB_RotationZ.Text = "0";
+            TB_RotationZ.KeyDown += TB_RotationZ_KeyDown;
             // 
             // TB_RotationY
             // 
@@ -414,6 +409,7 @@ namespace ConsoleGUI
             TB_RotationY.Size = new Size(100, 23);
             TB_RotationY.TabIndex = 8;
             TB_RotationY.Text = "0";
+            TB_RotationY.KeyDown += TB_RotationY_KeyDown;
             // 
             // TB_RotationX
             // 
@@ -422,6 +418,7 @@ namespace ConsoleGUI
             TB_RotationX.Size = new Size(100, 23);
             TB_RotationX.TabIndex = 7;
             TB_RotationX.Text = "0";
+            TB_RotationX.KeyDown += TB_RotationX_KeyDown;
             // 
             // groupBox3
             // 
@@ -472,6 +469,7 @@ namespace ConsoleGUI
             TB_ScaleZ.Size = new Size(100, 23);
             TB_ScaleZ.TabIndex = 9;
             TB_ScaleZ.Text = "1";
+            TB_ScaleZ.KeyDown += TB_ScaleZ_KeyDown;
             // 
             // TB_ScaleY
             // 
@@ -480,6 +478,7 @@ namespace ConsoleGUI
             TB_ScaleY.Size = new Size(100, 23);
             TB_ScaleY.TabIndex = 8;
             TB_ScaleY.Text = "1";
+            TB_ScaleY.KeyDown += TB_ScaleY_KeyDown;
             // 
             // TB_ScaleX
             // 
@@ -488,6 +487,7 @@ namespace ConsoleGUI
             TB_ScaleX.Size = new Size(100, 23);
             TB_ScaleX.TabIndex = 7;
             TB_ScaleX.Text = "1";
+            TB_ScaleX.KeyDown += TB_ScaleX_KeyDown;
             // 
             // ActorGrid
             // 
@@ -502,7 +502,7 @@ namespace ConsoleGUI
             ActorGrid.RowTemplate.Height = 25;
             ActorGrid.RowTemplate.ReadOnly = true;
             ActorGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            ActorGrid.Size = new Size(356, 481);
+            ActorGrid.Size = new Size(356, 130);
             ActorGrid.TabIndex = 15;
             ActorGrid.MouseClick += ActorGrid_MouseClick;
             ActorGrid.MouseDoubleClick += ActorGrid_MouseDoubleClick;
@@ -521,23 +521,11 @@ namespace ConsoleGUI
             ClName.ReadOnly = true;
             ClName.Width = 400;
             // 
-            // SensorListBox
-            // 
-            SensorListBox.ContextMenuStrip = ActorListContextMenu;
-            SensorListBox.Enabled = false;
-            SensorListBox.Font = new Font("Segoe UI", 8F, FontStyle.Regular, GraphicsUnit.Point);
-            SensorListBox.FormattingEnabled = true;
-            SensorListBox.Location = new Point(13, 498);
-            SensorListBox.Name = "SensorListBox";
-            SensorListBox.Size = new Size(356, 43);
-            SensorListBox.TabIndex = 0;
-            SensorListBox.MouseDoubleClick += SensorListBox_MouseDoubleClick;
-            // 
             // tabControl1
             // 
             tabControl1.Controls.Add(tabPage2);
             tabControl1.Controls.Add(tabPage1);
-            tabControl1.Location = new Point(3, 12);
+            tabControl1.Location = new Point(5, 27);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
             tabControl1.Size = new Size(561, 575);
@@ -555,17 +543,131 @@ namespace ConsoleGUI
             tabPage1.Text = "Console";
             tabPage1.UseVisualStyleBackColor = true;
             // 
+            // menuStrip1
+            // 
+            menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, viewToolStripMenuItem, simulationToolStripMenuItem });
+            menuStrip1.Location = new Point(0, 0);
+            menuStrip1.Name = "menuStrip1";
+            menuStrip1.Size = new Size(566, 24);
+            menuStrip1.TabIndex = 5;
+            menuStrip1.Text = "menuStrip1";
+            // 
+            // fileToolStripMenuItem
+            // 
+            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { loadWorkspaceToolStripMenuItem, loadBlueprintsToolStripMenuItem, loadUserActorsToolStripMenuItem, toolStripMenuItem2, loadActorsToolStripMenuItem });
+            fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+            fileToolStripMenuItem.Size = new Size(37, 20);
+            fileToolStripMenuItem.Text = "File";
+            // 
+            // loadWorkspaceToolStripMenuItem
+            // 
+            loadWorkspaceToolStripMenuItem.Name = "loadWorkspaceToolStripMenuItem";
+            loadWorkspaceToolStripMenuItem.Size = new Size(163, 22);
+            loadWorkspaceToolStripMenuItem.Text = "Load Workspace";
+            loadWorkspaceToolStripMenuItem.Click += loadWorkspaceToolStripMenuItem_Click;
+            // 
+            // loadBlueprintsToolStripMenuItem
+            // 
+            loadBlueprintsToolStripMenuItem.Name = "loadBlueprintsToolStripMenuItem";
+            loadBlueprintsToolStripMenuItem.Size = new Size(163, 22);
+            loadBlueprintsToolStripMenuItem.Text = "Load Blueprints";
+            loadBlueprintsToolStripMenuItem.Click += loadBlueprintsToolStripMenuItem_Click;
+            // 
+            // loadUserActorsToolStripMenuItem
+            // 
+            loadUserActorsToolStripMenuItem.Name = "loadUserActorsToolStripMenuItem";
+            loadUserActorsToolStripMenuItem.Size = new Size(163, 22);
+            loadUserActorsToolStripMenuItem.Text = "Load User Actors";
+            loadUserActorsToolStripMenuItem.Click += loadUserActorsToolStripMenuItem_Click;
+            // 
+            // toolStripMenuItem2
+            // 
+            toolStripMenuItem2.Name = "toolStripMenuItem2";
+            toolStripMenuItem2.Size = new Size(163, 22);
+            toolStripMenuItem2.Text = "  ";
+            // 
+            // loadActorsToolStripMenuItem
+            // 
+            loadActorsToolStripMenuItem.Name = "loadActorsToolStripMenuItem";
+            loadActorsToolStripMenuItem.Size = new Size(163, 22);
+            loadActorsToolStripMenuItem.Text = "Load All Actors";
+            loadActorsToolStripMenuItem.Click += loadActorsToolStripMenuItem_Click;
+            // 
+            // viewToolStripMenuItem
+            // 
+            viewToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { clearAllToolStripMenuItem });
+            viewToolStripMenuItem.Name = "viewToolStripMenuItem";
+            viewToolStripMenuItem.Size = new Size(44, 20);
+            viewToolStripMenuItem.Text = "View";
+            // 
+            // clearAllToolStripMenuItem
+            // 
+            clearAllToolStripMenuItem.Name = "clearAllToolStripMenuItem";
+            clearAllToolStripMenuItem.Size = new Size(118, 22);
+            clearAllToolStripMenuItem.Text = "Clear All";
+            clearAllToolStripMenuItem.Click += clearAllToolStripMenuItem_Click;
+            // 
+            // simulationToolStripMenuItem
+            // 
+            simulationToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { startToolStripMenuItem, pauseToolStripMenuItem });
+            simulationToolStripMenuItem.Name = "simulationToolStripMenuItem";
+            simulationToolStripMenuItem.Size = new Size(76, 20);
+            simulationToolStripMenuItem.Text = "Simulation";
+            // 
+            // startToolStripMenuItem
+            // 
+            startToolStripMenuItem.Name = "startToolStripMenuItem";
+            startToolStripMenuItem.Size = new Size(105, 22);
+            startToolStripMenuItem.Text = "Start";
+            startToolStripMenuItem.Click += startToolStripMenuItem_Click;
+            // 
+            // pauseToolStripMenuItem
+            // 
+            pauseToolStripMenuItem.Name = "pauseToolStripMenuItem";
+            pauseToolStripMenuItem.Size = new Size(105, 22);
+            pauseToolStripMenuItem.Text = "Pause";
+            pauseToolStripMenuItem.Click += pauseToolStripMenuItem_Click;
+            // 
+            // contextObjectEditor
+            // 
+            contextObjectEditor.Items.AddRange(new ToolStripItem[] { focusToolStripMenuItem1, destroyToolStripMenuItem1, clearToolStripMenuItem1 });
+            contextObjectEditor.Name = "contextObjectEditor";
+            contextObjectEditor.Size = new Size(115, 70);
+            // 
+            // focusToolStripMenuItem1
+            // 
+            focusToolStripMenuItem1.Name = "focusToolStripMenuItem1";
+            focusToolStripMenuItem1.Size = new Size(114, 22);
+            focusToolStripMenuItem1.Text = "Focus";
+            focusToolStripMenuItem1.Click += focusToolStripMenuItem1_Click;
+            // 
+            // destroyToolStripMenuItem1
+            // 
+            destroyToolStripMenuItem1.Name = "destroyToolStripMenuItem1";
+            destroyToolStripMenuItem1.Size = new Size(114, 22);
+            destroyToolStripMenuItem1.Text = "Destroy";
+            destroyToolStripMenuItem1.Click += destroyToolStripMenuItem1_Click;
+            // 
+            // clearToolStripMenuItem1
+            // 
+            clearToolStripMenuItem1.Name = "clearToolStripMenuItem1";
+            clearToolStripMenuItem1.Size = new Size(114, 22);
+            clearToolStripMenuItem1.Text = "Clear";
+            clearToolStripMenuItem1.Click += clearToolStripMenuItem1_Click;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(566, 591);
+            Controls.Add(menuStrip1);
             Controls.Add(tabControl1);
             Name = "MainForm";
             Text = "Sim Console";
             TopMost = true;
             ActorListContextMenu.ResumeLayout(false);
             tabPage2.ResumeLayout(false);
+            ObjectEditorContextMenu.ResumeLayout(false);
             flowLayoutPanel1.ResumeLayout(false);
             flowLayoutPanel1.PerformLayout();
             groupBox4.ResumeLayout(false);
@@ -580,7 +682,11 @@ namespace ConsoleGUI
             tabControl1.ResumeLayout(false);
             tabPage1.ResumeLayout(false);
             tabPage1.PerformLayout();
+            menuStrip1.ResumeLayout(false);
+            menuStrip1.PerformLayout();
+            contextObjectEditor.ResumeLayout(false);
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -590,20 +696,14 @@ namespace ConsoleGUI
         private ListBox listBox1;
         private System.Windows.Forms.Timer SensorTimer;
         private ContextMenuStrip ActorListContextMenu;
-        private ToolStripMenuItem toolStripMenuItem1;
-        private ToolStripMenuItem toolStripMenuItem2;
         private ToolStripMenuItem toolStripMenuItem3;
         private ToolStripMenuItem loadModelsToolStripMenuItem;
         private TabPage tabPage2;
-        private ListBox SensorListBox;
         private TabControl tabControl1;
         private DataGridView ActorGrid;
         private DataGridViewTextBoxColumn ClType;
         private DataGridViewTextBoxColumn ClName;
         private TabPage tabPage1;
-        private ToolStripMenuItem focusToolStripMenuItem;
-        private ToolStripMenuItem clearToolStripMenuItem;
-        private ToolStripMenuItem destroyToolStripMenuItem;
         private ToolStripMenuItem createToolStripMenuItem;
         private FlowLayoutPanel flowLayoutPanel1;
         private TextBox TBName;
@@ -636,5 +736,24 @@ namespace ConsoleGUI
         private TextBox TB_ScaleX;
         private Label label10;
         private GroupBox groupBox4;
+        private MenuStrip menuStrip1;
+        private ToolStripMenuItem fileToolStripMenuItem;
+        private ToolStripMenuItem loadWorkspaceToolStripMenuItem;
+        private ToolStripMenuItem simulationToolStripMenuItem;
+        private ToolStripMenuItem startToolStripMenuItem;
+        private ToolStripMenuItem pauseToolStripMenuItem;
+        private TreeView ObjectEditor;
+        private ContextMenuStrip contextObjectEditor;
+        private ToolStripMenuItem focusToolStripMenuItem1;
+        private ToolStripMenuItem destroyToolStripMenuItem1;
+        private ToolStripMenuItem clearToolStripMenuItem1;
+        private ToolStripMenuItem loadActorsToolStripMenuItem;
+        private ToolStripMenuItem loadUserActorsToolStripMenuItem;
+        private ContextMenuStrip ObjectEditorContextMenu;
+        private ToolStripMenuItem createToolStripMenuItem1;
+        private ToolStripMenuItem loadBlueprintsToolStripMenuItem;
+        private ToolStripMenuItem toolStripMenuItem2;
+        private ToolStripMenuItem viewToolStripMenuItem;
+        private ToolStripMenuItem clearAllToolStripMenuItem;
     }
 }

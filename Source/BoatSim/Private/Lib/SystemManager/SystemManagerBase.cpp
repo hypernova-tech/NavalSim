@@ -8,6 +8,7 @@
 #include <Lib/PathController/PathController.h>
 #include <Lib/Math/CMath.h>
 
+
 // Sets default values
 ASystemManagerBase* ASystemManagerBase::pInstance = nullptr;
 
@@ -82,12 +83,20 @@ void ASystemManagerBase::RegisterActor(AActor* p_actor)
 			SensorsOfType.Add(p_sensor->SensorType, new_data);
 
 		}
-		
-		
 
+	}
+	APlatformBase* p_platform = Cast<APlatformBase>(p_actor);
+
+	if (p_platform) {
 		
+		Platforms.Add(p_platform);
+		if (Platforms.Num() == 1) {
+			SetMainPlayerController(p_actor->GetName());
+		}
 	}
 	
+
+
 }
 
 bool ASystemManagerBase::RemoveActor(AActor* p_actor)
@@ -125,14 +134,14 @@ TArray<AActor*> ASystemManagerBase::GetAllActorInWorld()
 	return ret;
 }
 
- TArray<AActor*> ASystemManagerBase::QueryActors(EActorQueryArgs args)
+void ASystemManagerBase::QueryActors(EActorQueryArgs args, TArray<AActor*>& actors)
 {
-	 TArray<AActor*> ret;
+	
 	 if (args == EActorQueryArgs::ActorBasesExceptSensorsAndPaths) {
 		 for (auto pactor : ActorList) {
 			 if (ToActorBase(pactor)) {
 				 if (!ToSensorBase(pactor) && !ToPath(pactor)) {
-					 ret.Add(pactor);
+					 actors.Add(pactor);
 				 }
 			 }
 			
@@ -142,15 +151,37 @@ TArray<AActor*> ASystemManagerBase::GetAllActorInWorld()
 		 for (auto pactor : ActorList) {
 			 if (ToActorBase(pactor)) {
 				 if (ToPath(pactor)) {
-					 ret.Add(pactor);
+					 actors.Add(pactor);
 				 }
 			 }
 
 		 }
 
 	 }
+	 else if (args == EActorQueryArgs::ActorBases) {
+		 for (auto pactor : ActorList) {
+			 if (ToActorBase(pactor)) {
+				
+				 actors.Add(pactor);
+				 
+			 }
 
-	 return ret;
+		 }
+
+	 }
+	 else if (args == EActorQueryArgs::Platforms) {
+		 for (auto pactor : ActorList) {
+			 if (ToPlatform(pactor)) {
+
+				 actors.Add(pactor);
+
+			 }
+
+		 }
+
+	 }
+
+	 
 	
 }
 
@@ -224,6 +255,15 @@ APathController* ASystemManagerBase::ToPath(AActor* p_actor)
 {
 	if (p_actor->IsA<APathController>()) {
 		return (APathController*)p_actor;
+	}
+
+	return nullptr;
+}
+
+APlatformBase* ASystemManagerBase::ToPlatform(AActor* p_actor)
+{
+	if (p_actor->IsA<APlatformBase>()) {
+		return (APlatformBase*)p_actor;
 	}
 
 	return nullptr;
@@ -596,13 +636,13 @@ AActor* ASystemManagerBase::GetMainPlayerController()
 	APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
 	return PlayerController->GetPawn();
 }
-ACBoatBase* ASystemManagerBase::GetPlatform()
+APlatformBase* ASystemManagerBase::GetPlatform()
 {
 	return pPlatform;
 }
 
 
-void ASystemManagerBase::SetPlatform(ACBoatBase* p_platform)
+void ASystemManagerBase::SetPlatform(APlatformBase* p_platform)
 {
 	pPlatform = p_platform;
 	pPlatform->OnControllerChanged();

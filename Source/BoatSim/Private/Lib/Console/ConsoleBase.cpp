@@ -462,6 +462,12 @@ bool UConsoleBase::ProcessPrintCommand(TMap<FString, FString>& options, FString&
         SendActors();
         return true;
     }
+   
+    if (CommandManager.HasA(CCLICommandManager::ActorBases)) {
+        SendActorBases();
+        return true;
+    }
+
 
     auto has_sensors = CommandManager.HasSensors();
     if (has_sensors) {
@@ -507,10 +513,47 @@ void UConsoleBase::SendActors()
     auto all_actors = ASystemManagerBase::GetInstance()->GetAllActorInWorld();
     for (auto p_act : all_actors)
     {
+       auto full_name =  p_act->GetFullName();
+       TArray<FString> hier;
+       CUtil::GetActorHierarchy(p_act, hier);
+       FString path = "";
+       for (INT32S i = hier.Num() - 1; i >= 0; i--) {
+           path += hier[i];
+           if (i != 0) {
+               path += "/";
+           }
+           
+       }
 
-        pSystemAPI->SendConsoleResponse("<actor>" + p_act->GetName());
+        pSystemAPI->SendConsoleResponse("<actor>" + path);
     }
 }
+
+void UConsoleBase::SendActorBases()
+{
+    TArray<AActor*> all_actors;
+    ASystemManagerBase::GetInstance()->QueryActors(EActorQueryArgs::ActorBases, all_actors);
+
+    ASystemManagerBase::GetInstance()->QueryActors(EActorQueryArgs::Platforms, all_actors);
+    for (auto p_act : all_actors)
+    {
+        auto full_name = p_act->GetFullName();
+        TArray<FString> hier;
+        CUtil::GetActorHierarchy(p_act, hier);
+        FString path = "";
+        for (INT32S i = hier.Num() - 1; i >= 0; i--) {
+            path += hier[i];
+            if (i != 0) {
+                path += "/";
+            }
+
+        }
+
+        pSystemAPI->SendConsoleResponse("<actor>" + path);
+    }
+}
+
+
 void UConsoleBase::SendBlueprints()
 {
     auto bp_info = ASystemManagerBase::GetInstance()->GetDataContainer()->GetBlueprintInfo();
@@ -579,6 +622,7 @@ bool UConsoleBase::ProcessCreateCommand(TMap<FString, FString>& options, FString
             error_message = "object cannot created";
             return false;
         }
+        SendActorBases();
 
     }
 
@@ -729,6 +773,7 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
     if (ret) {
         AActor* p_parent = ASystemManagerBase::GetInstance()->FindActor(parent);
         CUtil::SetParent(p_actor, p_parent);
+        SendActorBases();
     }
 
     ret = CommandManager.GetValue(CCLICommandManager::SensorSlotIndex, sint);
@@ -1568,8 +1613,8 @@ bool UConsoleBase::ProcessWorkspaceCommand(TMap<FString, FString>& options, FStr
     if (ret) {
         if (pSystemAPI->Load(path)) {
             SendBlueprints();
-            SendSensors();
-            SendActors();
+            //SendSensors();
+            SendActorBases();
             return true;
         }
     }

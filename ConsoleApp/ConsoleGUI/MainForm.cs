@@ -13,6 +13,7 @@ using Newtonsoft.Json.Schema;
 using static System.Net.Mime.MediaTypeNames;
 using static System.ComponentModel.Design.ObjectSelectorEditor;
 using System.Diagnostics;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace ConsoleGUI
 {
@@ -34,11 +35,16 @@ namespace ConsoleGUI
         string Selected = "";
         List<string> MessageList = new List<string>();
         private readonly object _lockObject = new object();
+        CTreeViewManager TreeViewManager = new CTreeViewManager();
         public MainForm()
         {
             mJsonParser.SetMainForm(this);
             InitializeComponent();
             InitUDPConnection();
+            TreeViewManager.SetUpTreeViewForCustomDraw(ObjectEditor);
+            LoadModels();
+            LoadActorBases();
+            
         }
 
         private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
@@ -100,7 +106,7 @@ namespace ConsoleGUI
 
                 if (!SensorsReceived.Contains(item_striped))
                 {
-                    SensorListBox.Items.Add(item_striped);
+
                     SensorsReceived.Add(item_striped);
                     is_added = true;
                     IsActorGridDirty = true;
@@ -149,7 +155,7 @@ namespace ConsoleGUI
 
 
             }
-        
+
 
         }
 
@@ -164,8 +170,12 @@ namespace ConsoleGUI
                 ActorGrid.Rows[ind].HeaderCell.Value = ind.ToString();
                 ActorGrid.Rows[ind].DefaultCellStyle.BackColor = Color.LightPink;
                 ind++;
+
+
             }
 
+            CreateSubmenu(ObjectEditorContextMenu, ModelsReceived);
+#if false
             foreach (var obj in SensorsReceived)
             {
                 ActorGrid.Rows.Add("Sensor", obj);
@@ -173,13 +183,18 @@ namespace ConsoleGUI
                 ActorGrid.Rows[ind].DefaultCellStyle.BackColor = Color.LightGreen;
                 ind++;
             }
+#endif
 
             foreach (var obj in ActorsReceived)
             {
+#if false
                 ActorGrid.Rows.Add("Actor", obj);
                 ActorGrid.Rows[ind].HeaderCell.Value = ind.ToString();
                 ActorGrid.Rows[ind].DefaultCellStyle.BackColor = Color.LightYellow;
                 ind++;
+#endif
+
+                TreeViewManager.AddHierarchyToTreeView(ObjectEditor, obj);
             }
             SelectActor();
         }
@@ -495,17 +510,7 @@ namespace ConsoleGUI
         }
         private void SensorListBox_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            if (SensorListBox.SelectedIndex < 0)
-            {
-                return;
-            }
-            var selected_sensor = SensorListBox.Items[SensorListBox.SelectedIndex].ToString();
-            {
 
-                string command = string.Format("set --selected {0}", selected_sensor);
-                SendData(command);
-                RequestTransform(selected_sensor, false);
-            }
         }
 
         private void label2_Click(object sender, EventArgs e)
@@ -768,30 +773,24 @@ namespace ConsoleGUI
 
         private void toolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            if (OpenFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                string filePath = OpenFileDialog.FileName;
-                string fileName = Path.GetFileName(filePath);
-                var command = string.Format("ws --load {0}", fileName);
-                SendData(command, false);
-            }
+
         }
 
-        void GetActors()
+        void LoadActors()
         {
             ActorsReceived.Clear();
             var command = ("print --actors");
             SendData(command, false);
         }
 
-        void GetSensors()
+        void LoadSensors()
         {
             SensorsReceived.Clear();
             var command = ("print --sensors");
             SendData(command, false);
         }
 
-        void GetModels()
+        void LoadModels()
         {
             ModelsReceived.Clear();
             var command = ("print --bp");
@@ -800,17 +799,17 @@ namespace ConsoleGUI
 
         private void toolStripMenuItem2_Click(object sender, EventArgs e)
         {
-            GetActors();
+            LoadActors();
         }
 
         private void toolStripMenuItem3_Click(object sender, EventArgs e)
         {
-            GetSensors();
+            LoadSensors();
         }
 
         private void loadModelsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            GetModels();
+            LoadModels();
         }
 
         private void ActorGrid_MouseDoubleClick(object sender, MouseEventArgs e)
@@ -835,6 +834,7 @@ namespace ConsoleGUI
 
         void SelectActor()
         {
+#if false
             if (Selected != "")
             {
                 for (int i = 0; i < ActorGrid.Rows.Count; i++)
@@ -847,7 +847,45 @@ namespace ConsoleGUI
                     }
                 }
             }
+#endif
+            if (Selected == "")
+            {
+                return;
+            }
+            TreeNode foundNode = FindNodeByName(ObjectEditor.Nodes, Selected);
+            if (foundNode != null)
+            {
+                // Select the found node
+                ObjectEditor.SelectedNode = foundNode;
+                // Ensure that the selected node is visible to the user
+                ObjectEditor.SelectedNode.EnsureVisible();
+            }
         }
+
+        private TreeNode FindNodeByName(TreeNodeCollection nodes, string name)
+        {
+            foreach (TreeNode node in nodes)
+            {
+                // Check if the current node's name matches the search value
+                if (node.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
+                {
+                    return node; // Node with the name found
+                }
+                else
+                {
+                    // If not found, perform recursive search in child nodes
+                    TreeNode foundNode = FindNodeByName(node.Nodes, name);
+                    if (foundNode != null)
+                    {
+                        return foundNode; // Node found in a child
+                    }
+                }
+            }
+            return null; // No node found
+        }
+
+
+
 
         private void createToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -856,11 +894,7 @@ namespace ConsoleGUI
 
         private void focusToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (HasSelected())
-            {
-                string command = string.Format("set --name {0} --focused", Selected);
-                SendData(command);
-            }
+
 
         }
 
@@ -942,10 +976,10 @@ namespace ConsoleGUI
 
         private void clearToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ActorGrid.Rows.Clear();
+
         }
 
-        void CreateFromSelected()
+        void CreateFromSelected(string parent = "")
         {
             if (HasSelected())
             {
@@ -961,11 +995,18 @@ namespace ConsoleGUI
                         SendPosition(TBName.Text);
                         SendRotation(TBName.Text);
                         SendScale(TBName.Text);
+                        if (parent != "")
+                        {
+                            CreateAndSendCommand(CLICommandManager.SetCommand, CLICommandManager.Name, TBName.Text, CLICommandManager.Parent, parent);
+
+                        }
                     }
 
                 }
             }
         }
+
+
 
         private bool IsSelectedBP()
         {
@@ -999,11 +1040,175 @@ namespace ConsoleGUI
 
         private void destroyToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            CreateAndSendCommand(CLICommandManager.DestroyCommand, CLICommandManager.Name,Selected);
+
+        }
+
+        private void loadAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        void LoadAll()
+        {
+            LoadModels();
+            LoadSensors();
+            LoadActors();
+
+        }
+
+        void LoadActorBases()
+        {
+            ActorsReceived.Clear();
+            var command = ("print --actorbases");
+            SendData(command, false);
+        }
+
+        private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+
+        }
+
+        private void menuStrip1_ItemClicked_1(object sender, ToolStripItemClickedEventArgs e)
+        {
+
+        }
+
+        private void loadWorkspaceToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (OpenFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                string filePath = OpenFileDialog.FileName;
+                string fileName = Path.GetFileName(filePath);
+                var command = string.Format("ws --load {0}", fileName);
+                SendData(command, false);
+            }
+        }
+
+        private void startToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var command = string.Format("sim --start");
+            SendData(command, false);
+        }
+
+        private void pauseToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var command = string.Format("sim --pause");
+            SendData(command, false);
+        }
+
+        private void ObjectEditor_MouseClick(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void ObjectEditor_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            if (e.Node == null)
+            {
+                return;
+            }
+
+            string selected = e.Node.Text;
+
+            string command = string.Format("set --selected {0}", selected);
+            SendData(command);
+            RequestTransform(selected, false);
+            Selected = selected;
+        }
+
+        private void focusToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            if (HasSelected())
+            {
+                string command = string.Format("set --name {0} --focused", Selected);
+                SendData(command);
+            }
+        }
+
+        private void destroyToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            CreateAndSendCommand(CLICommandManager.DestroyCommand, CLICommandManager.Name, Selected);
             ActorsReceived.Remove(Selected);
             SensorsReceived.Remove(Selected);
-            GetActors();
-            GetSensors();
+            LoadActors();
+            LoadSensors();
+        }
+
+        private void clearToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            ActorGrid.Rows.Clear();
+            ActorsReceived.Clear();
+            SensorsReceived.Clear();
+            ModelsReceived.Clear();
+        }
+
+        private void loadActorsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            LoadAll();
+        }
+
+        private void loadUserActorsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            LoadActorBases();
+        }
+
+        public void CreateSubmenu(ContextMenuStrip contextMenuStrip, HashSet<string> items)
+        {
+            // First, clear the existing items if needed
+            contextMenuStrip.Items.Clear();
+
+            // Create a new ToolStripMenuItem as the main sub-menu item
+            ToolStripMenuItem subMenu = new ToolStripMenuItem("Blueprints");
+
+            // Loop through the HashSet and add each string as a ToolStripMenuItem
+            foreach (string item in items)
+            {
+                // Create a new ToolStripMenuItem for each item
+                ToolStripMenuItem menuItem = new ToolStripMenuItem(item);
+
+                // Set the Click event handler for the sub-items here
+                menuItem.Click += new EventHandler(MenuItem_Click);
+
+                // Add the new ToolStripMenuItem to the sub-menu
+                subMenu.DropDownItems.Add(menuItem);
+            }
+
+            // Add the sub-menu to the main context menu strip
+            contextMenuStrip.Items.Add(subMenu);
+        }
+
+        // Event handler for sub-menu item clicks
+        private void MenuItem_Click(object sender, EventArgs e)
+        {
+            ToolStripMenuItem clickedItem = sender as ToolStripMenuItem;
+
+            if (clickedItem != null)
+            {
+                if (clickedItem.Text != "")
+                {
+                    Selected = clickedItem.Text;
+                    string parent = "";
+                    if (ObjectEditor.SelectedNode != null)
+                    {
+                        parent = ObjectEditor.SelectedNode.Text;
+                    }
+                    CreateFromSelected(parent);
+                }
+            }
+        }
+
+        private void loadBlueprintsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            LoadModels();
+        }
+
+        private void clearAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ObjectEditor.Nodes.Clear();
+            ActorGrid.Rows.Clear();
+            ModelsReceived.Clear();
+            ActorsReceived.Clear();
+
         }
     }
 }

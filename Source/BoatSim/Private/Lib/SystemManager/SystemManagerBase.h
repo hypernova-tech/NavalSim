@@ -15,6 +15,7 @@
 #include <Lib/SaveLoad/SaverLoaderBase.h>
 #include <Lib/Sensor/GenericSensor/RadarBase.h>
 #include <Lib/PathController/PathController.h>
+#include <Lib/Platform/PlatformBase.h>
 #include "SystemManagerBase.generated.h"
 
 
@@ -138,6 +139,7 @@ private:
 	TMap<FString,  AActor*> AllActors;
 	TArray<AActor*> ActorList;
 	TArray<ASensorBase*> Sensors;
+	TArray<APlatformBase*> Platforms;
 	TMap<ESensorType, TArray<ASensorBase*> > SensorsOfType;
 	bool IsStartReceived = false;
 	bool IsResumeReceived = false;
@@ -167,13 +169,14 @@ public:
 	virtual bool RemoveActor(AActor* p_actor);
 	virtual TArray<AActor*> GetRegisteredActors();
 	virtual TArray<AActor*> GetAllActorInWorld();
-	virtual TArray<AActor*> QueryActors(EActorQueryArgs args);
+	virtual void QueryActors(EActorQueryArgs args, TArray<AActor*>& actors);
 	virtual AActor* FindActor(FString actor_name);
 	virtual bool DestroyActor(FString name);
 
 	virtual AActorBase* ToActorBase(AActor* p_actor);
 	virtual ASensorBase* ToSensorBase(AActor* p_actor);
 	APathController* ToPath(AActor* p_actor);
+	APlatformBase* ToPlatform(AActor* p_actor);
 	AWaypointActor* ToWaypoint(AActor* p_actor);
 	template <typename T>
 	T* To(AActor* p_actor);
@@ -201,10 +204,10 @@ public:
 	virtual AActor* GetMainPlayerController();
 
 	UFUNCTION(BlueprintCallable)
-	virtual ACBoatBase* GetPlatform();
+	virtual APlatformBase* GetPlatform();
 
 	UFUNCTION(BlueprintCallable)
-	virtual void SetPlatform(ACBoatBase* p_platform);
+	virtual void SetPlatform(APlatformBase* p_platform);
 
 
 	virtual void StartSimulation();

@@ -107,4 +107,3 @@ private:
 	
 };
 
-typedef ACBoatBase APlatformBase;

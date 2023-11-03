@@ -127,6 +127,7 @@ public:
 
 	static FString PrintCommand;
 	static FString Actors;
+	static FString ActorBases;
 	static FString Sensors;
 	static FString SensorType;
 	static FString SensorTypes;
