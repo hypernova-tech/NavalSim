@@ -15,6 +15,7 @@ using static System.ComponentModel.Design.ObjectSelectorEditor;
 using System.Diagnostics;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using System.Reflection;
+using Microsoft.VisualBasic.Logging;
 
 namespace ConsoleGUI
 {
@@ -38,6 +39,7 @@ namespace ConsoleGUI
         private readonly object _lockObject = new object();
         CTreeViewManager TreeViewManager = new CTreeViewManager();
         Dictionary<string, string> Modifyables = new Dictionary<string, string>();
+
         public MainForm()
         {
             mJsonParser.SetMainForm(this);
@@ -47,6 +49,7 @@ namespace ConsoleGUI
             LoadModels();
             LoadActorBases();
             Modifyables = CLICommandManager.GetModifiableConstants();
+
             PopulateDataGridView();
         }
         private void PopulateDataGridView()
@@ -189,7 +192,7 @@ namespace ConsoleGUI
 
         private void UpdateActorGrid()
         {
-          
+
             int ind = 0;
 
 
@@ -564,6 +567,18 @@ namespace ConsoleGUI
             TB_ScaleY.Text = y.ToString();
             TB_ScaleZ.Text = z.ToString();
         }
+
+        public void SetOptionValue(string param_name, string value)
+        {
+            for (int i = 0; i < ModifyableDataGrid.Rows.Count; i++)
+            {
+                if (ModifyableDataGrid.Rows[i].Cells[0].Value == param_name)
+                {
+                    ModifyableDataGrid.Rows[i].Cells[1].Value = value;
+                }
+            }
+
+        }
         void UpdatePosition()
         {
             var selected_sensor = GetSelectedSensor();
@@ -780,6 +795,17 @@ namespace ConsoleGUI
             SendData(command, false);
         }
 
+        void RequestAll()
+        {
+            var prm = CLICommandManager.GetModifiableConstants();
+
+            foreach (var pair in prm)
+            {
+                CreateAndSendCommand(CLICommandManager.GetCommand, CLICommandManager.Name, Selected, CLICommandManager.All);
+            }
+
+
+        }
         private void BTN_LoadWorkspace_Click(object sender, EventArgs e)
         {
 
@@ -831,7 +857,7 @@ namespace ConsoleGUI
             LoadModels();
         }
 
-       
+
 
         void SelectActor()
         {
@@ -947,7 +973,16 @@ namespace ConsoleGUI
             string ret = CCommandFactroy.CreateCommands(cmd, option1, value1, option2, value2, option3, value3, option4, value4, option5, value5);
             SendData(ret);
         }
-
+        void SendSetCommand(string option1, string value1 = "")
+        {
+            string ret = CCommandFactroy.CreateCommands(CLICommandManager.SetCommand, CLICommandManager.Name, Selected, option1, value1);
+            SendData(ret);
+        }
+        void SendGetCommand(string option1)
+        {
+            string ret = CCommandFactroy.CreateCommands(CLICommandManager.GetCommand, CLICommandManager.Name, Selected, option1);
+            SendData(ret);
+        }
         private void CBActive_CheckedChanged(object sender, EventArgs e)
         {
             CheckBox cb = (CheckBox)sender;
@@ -985,17 +1020,22 @@ namespace ConsoleGUI
 
                         {
                             CreateAndSendCommand(CLICommandManager.CreateCommand, CLICommandManager.Name, result, CLICommandManager.Bp, Selected);
+                            Selected = result;
                             SendPosition(result);
                             SendRotation(result);
                             SendScale(result);
+
+
                             if (parent != "")
                             {
-                                Selected = result;
+
                                 CreateAndSendCommand(CLICommandManager.SetCommand, CLICommandManager.Name, result, CLICommandManager.Parent, parent);
                                 CreateAndSendCommand(CLICommandManager.SetCommand, CLICommandManager.Selected, result);
 
 
                             }
+
+                            RequestAll();
                         }
                     }
                     else
@@ -1103,13 +1143,35 @@ namespace ConsoleGUI
 
             string selected = e.Node.Text;
 
+            SelectObject(selected);
+        }
+
+        void ClearActorGrid()
+        {
+            for (int i = 0; i < ModifyableDataGrid.Rows.Count; i++)
+            {
+                var cell_cnt = ModifyableDataGrid.Rows[i].Cells.Count;
+
+                for (int j = 1; j < cell_cnt; j++)
+                {
+                    ModifyableDataGrid.Rows[i].Cells[j].Value = "";
+                }
+            }
+
+        }
+
+        public void SelectObject(string selected)
+        {
+            ClearActorGrid();
+            Selected = selected;
             string command = string.Format("set --selected {0}", selected);
             SendData(command);
             RequestTransform(selected, false);
-            Selected = selected;
+            RequestAll();
+
         }
 
-        private void focusToolStripMenuItem1_Click(object sender, EventArgs e)
+        public void Focus()
         {
             if (HasSelected())
             {
@@ -1118,7 +1180,12 @@ namespace ConsoleGUI
             }
         }
 
-        private void destroyToolStripMenuItem1_Click(object sender, EventArgs e)
+        private void focusToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            Focus();
+        }
+
+        public void Destroy()
         {
             CreateAndSendCommand(CLICommandManager.DestroyCommand, CLICommandManager.Name, Selected);
             ActorsReceived.Remove(Selected);
@@ -1127,9 +1194,14 @@ namespace ConsoleGUI
             LoadSensors();
         }
 
+        private void destroyToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            Destroy();
+        }
+
         private void clearToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-        
+
             ActorsReceived.Clear();
             SensorsReceived.Clear();
             ModelsReceived.Clear();
@@ -1223,6 +1295,80 @@ namespace ConsoleGUI
         private void createToolStripMenuItem1_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void ModifyableDataGrid_KeyDown(object sender, KeyEventArgs e)
+        {
+
+        }
+
+        private void ModifyableDataGrid_CellEnter(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void ModifyableDataGrid_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void ModifyableDataGrid_KeyPress(object sender, KeyPressEventArgs e)
+        {
+
+        }
+
+        private void ModifyableDataGrid_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
+        {
+            if (e.Control is DataGridViewTextBoxEditingControl)
+            {
+                DataGridViewTextBoxEditingControl tb = e.Control as DataGridViewTextBoxEditingControl;
+                tb.KeyDown -= dataGridView1_KeyDown;
+                tb.PreviewKeyDown -= dataGridView_PreviewKeyDown;
+                tb.KeyDown += dataGridView1_KeyDown;
+                tb.PreviewKeyDown += dataGridView_PreviewKeyDown;
+            }
+        }
+        private void dataGridView1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyData == (Keys.Alt | Keys.S))
+            {
+                //save data
+            }
+        }
+        void dataGridView_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            if (e.KeyData == Keys.Enter)
+            {
+
+            }
+        }
+
+        private void ModifyableDataGrid_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            DataGridView grid = sender as DataGridView;
+            int col = e.ColumnIndex;
+            int row = e.RowIndex;
+            if (col >= 1)
+            {
+                var val = grid[col, row].Value.ToString();
+                var param = grid[0, row].Value.ToString();
+
+                if (Modifyables.TryGetValue(param, out string option))
+                {
+                    SendSetCommand(option, val);
+                    SendGetCommand(option);
+                }
+            }
+        }
+
+        private void clearCommandsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ClearCommands();
+        }
+
+        private void ClearCommands()
+        {
+            ClearCommandList();
         }
     }
 }

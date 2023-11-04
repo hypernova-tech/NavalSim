@@ -103,6 +103,7 @@ public:
 	void OnAsynTaskComplete();
 
 	virtual void Save(ISaveLoader* p_save_load) override;
+	virtual void SaveJSON(CJsonDataContainer& data) override;
 
 private:
 	float CurrentScanAzimuth;

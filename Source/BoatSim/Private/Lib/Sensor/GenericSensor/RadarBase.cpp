@@ -190,6 +190,22 @@ void ARadarBase::Save(ISaveLoader* p_save_load)
 
 
 }
+void ARadarBase::SaveJSON(CJsonDataContainer& data)
+{
+	Super::SaveJSON(data);
+
+	data.Add(CCLICommandManager::RadarScanLevel, FastScanLevel);
+	data.Add(CCLICommandManager::RadarScannerRPM, ScannerRPMValue);
+	data.Add(CCLICommandManager::RadarGainType, GainType);
+	data.Add(CCLICommandManager::RadarGainLevel, GainLevel);
+	data.Add(CCLICommandManager::RadarSeaClutterType, SeaClutterType);
+	data.Add(CCLICommandManager::RadarSeaClutterLevel, SeaClutterLevel);
+	data.Add(CCLICommandManager::RadarSeaClutterAutoOffset, SeaClutterAutoOffset);
+	data.Add(CCLICommandManager::RadarRainClutterLevel, RainClutterLevel);
+	data.Add(CCLICommandManager::RadarMaxGuardZoneCount, MaxGuardZoneCount);
+	data.Add(CCLICommandManager::RadarMaxSectorBlankingZoneCount, MaxSectorBlankingZoneCount);
+
+}
 void ARadarBase::OnDataReady()
 {
 	if (pCommIF != nullptr) {

@@ -32,12 +32,16 @@ namespace ConsoleGUI
         {
             components = new System.ComponentModel.Container();
             TreeNode treeNode1 = new TreeNode("World");
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
             OpenFileDialog = new OpenFileDialog();
             contextMenuStrip1 = new ContextMenuStrip(components);
             ActorListContextMenu = new ContextMenuStrip(components);
             createToolStripMenuItem = new ToolStripMenuItem();
             CommandTextBox = new TextBox();
             listBox1 = new ListBox();
+            contextMenuConsoleListBox = new ContextMenuStrip(components);
             SensorTimer = new System.Windows.Forms.Timer(components);
             tabPage2 = new TabPage();
             ObjectEditor = new TreeView();
@@ -91,7 +95,11 @@ namespace ConsoleGUI
             focusToolStripMenuItem1 = new ToolStripMenuItem();
             destroyToolStripMenuItem1 = new ToolStripMenuItem();
             clearToolStripMenuItem1 = new ToolStripMenuItem();
+            ConsoeListBoxContextMenu = new ContextMenuStrip(components);
+            clearToolStripMenuItem = new ToolStripMenuItem();
+            clearCommandsToolStripMenuItem = new ToolStripMenuItem();
             ActorListContextMenu.SuspendLayout();
+            contextMenuConsoleListBox.SuspendLayout();
             tabPage2.SuspendLayout();
             ObjectEditorContextMenu.SuspendLayout();
             flowLayoutPanel1.SuspendLayout();
@@ -104,6 +112,7 @@ namespace ConsoleGUI
             tabPage1.SuspendLayout();
             menuStrip1.SuspendLayout();
             contextObjectEditor.SuspendLayout();
+            ConsoeListBoxContextMenu.SuspendLayout();
             SuspendLayout();
             // 
             // OpenFileDialog
@@ -140,6 +149,7 @@ namespace ConsoleGUI
             // 
             // listBox1
             // 
+            listBox1.ContextMenuStrip = contextMenuConsoleListBox;
             listBox1.FormattingEnabled = true;
             listBox1.HorizontalScrollbar = true;
             listBox1.ItemHeight = 15;
@@ -150,6 +160,12 @@ namespace ConsoleGUI
             listBox1.Click += listBox1_Click;
             listBox1.MouseClick += listBox1_MouseClick_1;
             listBox1.MouseDoubleClick += listBox1_MouseDoubleClick_1;
+            // 
+            // contextMenuConsoleListBox
+            // 
+            contextMenuConsoleListBox.Items.AddRange(new ToolStripItem[] { clearCommandsToolStripMenuItem });
+            contextMenuConsoleListBox.Name = "contextMenuConsoleListBox";
+            contextMenuConsoleListBox.Size = new Size(181, 48);
             // 
             // SensorTimer
             // 
@@ -491,13 +507,43 @@ namespace ConsoleGUI
             // 
             // ModifyableDataGrid
             // 
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = SystemColors.Control;
+            dataGridViewCellStyle1.Font = new Font("Segoe UI", 1F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            ModifyableDataGrid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             ModifyableDataGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = SystemColors.Window;
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 8F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle2.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
+            ModifyableDataGrid.DefaultCellStyle = dataGridViewCellStyle2;
             ModifyableDataGrid.Location = new Point(3, 534);
             ModifyableDataGrid.Name = "ModifyableDataGrid";
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = SystemColors.Control;
+            dataGridViewCellStyle3.Font = new Font("Segoe UI", 6F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
+            ModifyableDataGrid.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             ModifyableDataGrid.RowHeadersVisible = false;
             ModifyableDataGrid.RowTemplate.Height = 25;
             ModifyableDataGrid.Size = new Size(202, 405);
             ModifyableDataGrid.TabIndex = 34;
+            ModifyableDataGrid.CellEndEdit += ModifyableDataGrid_CellEndEdit;
+            ModifyableDataGrid.CellEnter += ModifyableDataGrid_CellEnter;
+            ModifyableDataGrid.CellValueChanged += ModifyableDataGrid_CellValueChanged;
+            ModifyableDataGrid.EditingControlShowing += ModifyableDataGrid_EditingControlShowing;
+            ModifyableDataGrid.KeyDown += ModifyableDataGrid_KeyDown;
+            ModifyableDataGrid.KeyPress += ModifyableDataGrid_KeyPress;
             // 
             // tabControl1
             // 
@@ -633,6 +679,25 @@ namespace ConsoleGUI
             clearToolStripMenuItem1.Text = "Clear";
             clearToolStripMenuItem1.Click += clearToolStripMenuItem1_Click;
             // 
+            // ConsoeListBoxContextMenu
+            // 
+            ConsoeListBoxContextMenu.Items.AddRange(new ToolStripItem[] { clearToolStripMenuItem });
+            ConsoeListBoxContextMenu.Name = "ConsoeListBoxContextMenu";
+            ConsoeListBoxContextMenu.Size = new Size(102, 26);
+            // 
+            // clearToolStripMenuItem
+            // 
+            clearToolStripMenuItem.Name = "clearToolStripMenuItem";
+            clearToolStripMenuItem.Size = new Size(101, 22);
+            clearToolStripMenuItem.Text = "Clear";
+            // 
+            // clearCommandsToolStripMenuItem
+            // 
+            clearCommandsToolStripMenuItem.Name = "clearCommandsToolStripMenuItem";
+            clearCommandsToolStripMenuItem.Size = new Size(180, 22);
+            clearCommandsToolStripMenuItem.Text = "Clear Commands";
+            clearCommandsToolStripMenuItem.Click += clearCommandsToolStripMenuItem_Click;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -644,6 +709,7 @@ namespace ConsoleGUI
             Text = "Sim Console";
             TopMost = true;
             ActorListContextMenu.ResumeLayout(false);
+            contextMenuConsoleListBox.ResumeLayout(false);
             tabPage2.ResumeLayout(false);
             ObjectEditorContextMenu.ResumeLayout(false);
             flowLayoutPanel1.ResumeLayout(false);
@@ -663,6 +729,7 @@ namespace ConsoleGUI
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
             contextObjectEditor.ResumeLayout(false);
+            ConsoeListBoxContextMenu.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -731,5 +798,9 @@ namespace ConsoleGUI
         private ToolStripMenuItem viewToolStripMenuItem;
         private ToolStripMenuItem clearAllToolStripMenuItem;
         private DataGridView ModifyableDataGrid;
+        private ContextMenuStrip ConsoeListBoxContextMenu;
+        private ToolStripMenuItem clearToolStripMenuItem;
+        private ContextMenuStrip contextMenuConsoleListBox;
+        private ToolStripMenuItem clearCommandsToolStripMenuItem;
     }
 }

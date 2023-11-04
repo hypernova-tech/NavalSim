@@ -112,6 +112,25 @@ void AActorBase::Save(ISaveLoader* p_save_loader)
 	p_save_loader->AddLine(line);
 }
 
+void AActorBase::SaveJSON(CJsonDataContainer& data)
+{
+	data.Add(CCLICommandManager::Name, GetName());
+	data.Add(CCLICommandManager::Instance, (AffinityInstanceId));
+
+	data.Add(CCLICommandManager::Bp, BlueprintName);
+	auto parent = CUtil::GetParentActor(this);
+	if (parent != nullptr) {
+		data.Add(CCLICommandManager::Parent, parent->GetName());
+	}
+	else {
+		data.Add(CCLICommandManager::Parent, FString(""));
+	}
+	
+	data.Add(CCLICommandManager::Position,(GetActorLocation()));
+	data.Add(CCLICommandManager::Rotation, (GetActorRotation().Euler()));
+	data.Add(CCLICommandManager::Scale, (GetActorScale3D()));
+}
+
 void AActorBase::ShowActorGizmo(bool val)
 {
 	if (ActorGizmo) {

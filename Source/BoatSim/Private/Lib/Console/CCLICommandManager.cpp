@@ -77,7 +77,7 @@ FString CCLICommandManager::TurnRate = "turnrate";
 
 
 FString CCLICommandManager::GetCommand = "get";
-
+FString CCLICommandManager::All = "all";
 FString CCLICommandManager::PrintCommand = "print";
 FString CCLICommandManager::Actors = "actors";
 FString CCLICommandManager::ActorBases = "actorbases";

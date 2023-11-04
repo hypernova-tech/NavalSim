@@ -35,9 +35,12 @@ public class CConverter
 public class CJsonParser
 {
     MainForm mMainForm;
+    Dictionary<string, string> Options;
+    Dictionary<string, string> OptionParamMap = new Dictionary<string, string>();
     public CJsonParser( ) 
     {
-        
+        Options = CLICommandManager.GetModifiableConstants();
+        OptionParamMap = CLICommandManager.GetOptionNameContants();
     }
 
     public void SetMainForm(MainForm form)
@@ -81,14 +84,31 @@ public class CJsonParser
 
         if (json_obj != null)
         {
+            
             var name = json_obj["name"];
+            
             var option = json_obj["option"];
-            var value = json_obj["value"];
+            
 
-            if (name != null)
+            if (name != null && option != null)
             {
+                var value = json_obj["value"];
                 ProcessOptions(name, option, value);
             }
+            else
+            {
+                foreach (var pair in json_obj)
+                {
+                    string key = pair.Key;
+                    JToken value = pair.Value;
+
+                    ProcessOptions(name, key, value);
+                }
+            }
+            
+
+
+          
 
         }
     }
@@ -123,12 +143,61 @@ public class CJsonParser
 
     }
 
+    private void ProcessOptions(JToken name, string key, JToken? value)
+    {
+        string option_value = "";
+        if (name.Value<string>() == mMainForm.GetSelectedSensor())
+        {
+            string option_str = key;
+            option_value = value.Value<string>();
+
+            if (option_str != null)
+            {
+                if (option_str == "position")
+                {
+                    FVector vec = new FVector();
+                    if (ParseVector(option_value, vec))
+                    {
+                        CConverter.UEToWorld(vec);
+                        mMainForm.SetPosition(vec.X, vec.Y, vec.Z);
+                    }
+                }
+                else if (option_str == "rotation")
+                {
+                    FVector vec = new FVector();
+                    if (ParseVector(option_value, vec))
+                    {
+                        mMainForm.SetRotation(vec.X, vec.Y, vec.Z);
+                    }
+                }
+                else if (option_str == "scale")
+                {
+                    FVector vec = new FVector();
+                    if (ParseVector(option_value, vec))
+                    {
+                        mMainForm.SetScale(vec.X, vec.Y, vec.Z);
+                    }
+                }
+                else
+                {
+                    if (OptionParamMap.TryGetValue(option_str, out string param_name))
+                    {
+                        mMainForm.SetOptionValue(param_name, option_value);
+                    }
+
+                }
+
+            }
+        }
+    }
+
     private void ProcessOptions(JToken name, JToken? option, JToken? value)
     {
+        string option_value = "";
         if (name.Value<string>() == mMainForm.GetSelectedSensor())
         {
             string option_str = option.Value<string>();
-            string option_value = value.Value<string>();
+            option_value = value.Value<string>();
 
             if (option_str != null)
             {
@@ -156,6 +225,14 @@ public class CJsonParser
                     {
                         mMainForm.SetScale(vec.X, vec.Y, vec.Z);
                     }
+                }
+                else
+                {
+                    if(OptionParamMap.TryGetValue(option_str, out string param_name))
+                    {
+                        mMainForm.SetOptionValue(param_name, option_value);
+                    }
+
                 }
 
             }

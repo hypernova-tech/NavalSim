@@ -243,6 +243,17 @@ FString UConsoleBase::CreateAndSerializeJson(TMap<FString,FString> &data)
 
 
 
+void UConsoleBase::SendConsoleResponse(AActor* p_actor)
+{
+    auto p_base = pSystemAPI->ToActorBase(p_actor);
+    CJsonDataContainer json_data;
+    if (p_base) {
+        p_base->SaveJSON(json_data);
+        auto ret_json = CreateAndSerializeJson(json_data.Data);
+        pSystemAPI->SendConsoleResponse(ret_json);
+    }
+}
+
 void UConsoleBase::SendConsoleResponse(FString name, FString option, INT32S ret)
 {
     TMap<FString, FString> data;
@@ -1253,7 +1264,17 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
         return true;
     }
 
+    ret = CommandManager.HasA(CCLICommandManager::All);
+    if (ret) {
 
+   
+        SendConsoleResponse(p_actor);
+        return true;
+      
+    }
+    else {
+
+    }
 
     ret = CommandManager.HasA(CCLICommandManager::SensorSlotIndex);
     if (ret) {
@@ -1303,7 +1324,7 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
 
     ret = CommandManager.HasA(CCLICommandManager::VerticalScanStepAngleDeg);
     if (ret) {
-        if (pSystemAPI->SetVerticalScanStepAngleDeg(p_actor, dbl)) {
+        if (pSystemAPI->GetVerticalScanStepAngleDeg(p_actor, dbl)) {
             SendConsoleResponse(name, CCLICommandManager::VerticalScanStepAngleDeg, dbl);
             return true;
         }

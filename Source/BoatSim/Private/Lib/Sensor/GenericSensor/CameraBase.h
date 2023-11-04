@@ -41,5 +41,6 @@ protected:
 public:
 	void SetFovDeg(double fov_deg);
 	virtual void Save(ISaveLoader* p_save_loader) override;
+	virtual void SaveJSON(CJsonDataContainer& data) override;
 
 };

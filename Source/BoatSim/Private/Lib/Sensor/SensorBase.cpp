@@ -319,3 +319,21 @@ void ASensorBase::Save(ISaveLoader* p_save_loader)
 	p_save_loader->AddLine(line);
 
 }
+
+void ASensorBase::SaveJSON(CJsonDataContainer& data)
+{
+	Super::SaveJSON(data);
+	data.Add(CCLICommandManager::SensorSlotIndex, SensorSlotIndex);
+	data.Add(CCLICommandManager::VericalFov, FovVerticalDeg);
+	data.Add(CCLICommandManager::HorizontalFov, FovHorizontalDeg);
+	data.Add(CCLICommandManager::HorizontalScanStepAngleDeg, HorizontalScanStepAngleDeg);
+	data.Add(CCLICommandManager::VerticalScanStepAngleDeg, VerticalScanStepAngleDeg);
+	data.Add(CCLICommandManager::MeasurementErrorMean, MeasurementErrorMean);
+	data.Add(CCLICommandManager::MeasurementErrorStd, MeasurementErrorUncertainy);
+	data.Add(CCLICommandManager::EnableSurfaceDetect, EnableSurfaceDetect);
+	data.Add(CCLICommandManager::EnableSubsurfaceDetect, EnableSubsurfaceDetect);
+	data.Add(CCLICommandManager::EnableFoamDetect, EnableFoamDetect);
+	data.Add(CCLICommandManager::SeaSurfaceDetectionProb, SeaSurfaceDetectionProbability);
+	data.Add(CCLICommandManager::MaxSurfacePenetration, MaxSurfacePenetrationMeter);
+
+}

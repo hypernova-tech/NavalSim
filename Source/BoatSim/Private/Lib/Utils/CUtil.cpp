@@ -467,6 +467,11 @@ bool CUtil::ParseColor(const FString& Text, FColor& ret)
     return false;
 }
 
+FString CUtil::ColorToString(const FColor& color)
+{
+    return CUtil::IntToString(color.R) + " " + CUtil::IntToString(color.G) + " " + CUtil::IntToString(color.B) + " " + CUtil::IntToString(color.A);
+}
+
 bool CUtil::ParsePose(const FString& Text, FVector& translation, FVector& rpy)
 {
     FVector ParsedVector;
@@ -823,6 +828,21 @@ FVector CUtil::StringToFVector(FString& value)
     return FVector::ZeroVector;
 }
 
+FString CUtil::VectorToString(FVector& value)
+{
+    return CUtil::FloatToString(value.X) + " " + CUtil::FloatToString(value.Y) + " " + CUtil::FloatToString(value.Z);
+}
+
+FString CUtil::VectorToString(FVector2D& value)
+{
+    return CUtil::FloatToString(value.X) + " " + CUtil::FloatToString(value.Y);
+}
+
+FString CUtil::VectorToString(FVector4& value)
+{
+    return CUtil::FloatToString(value.X) + " " + CUtil::FloatToString(value.Y) + " " + CUtil::FloatToString(value.Z) + " " + CUtil::FloatToString(value.W);
+}
+
 
 
 template <typename T>
@@ -1040,9 +1060,18 @@ FString CUtil::CharToFString(const char* p_char)
 
 void CUtil::FStringToAsciiChar(const FString& str, char *p_dest, INT32U dest_len)
 {
-    const char* p_char_arr = TCHAR_TO_UTF8(*str); //TCHAR_TO_ANSI(*str);
+    FTCHARToUTF8 UTF8String(*str);
+
+
+    INT32S len = (INT32S)dest_len <= UTF8String.Length() ? (INT32S)dest_len : UTF8String.Length();
+    memcpy(p_dest, UTF8String.Get(), len);
+
+
+#if false
+    ANSICHAR* p_char_arr = TCHAR_TO_UTF8(*str); //TCHAR_TO_ANSI(*str);
     INT32U len = dest_len <= strlen(p_char_arr) ? dest_len : strlen(p_char_arr);
     memcpy(p_dest, p_char_arr, len);
+#endif
 
 }
 

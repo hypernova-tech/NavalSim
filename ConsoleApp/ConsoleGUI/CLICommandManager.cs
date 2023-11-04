@@ -34,7 +34,7 @@ public static class CLICommandManager
     [Modifiable] public const string Fov = "fov";
     public const string Selected = "selected";
     public const string Focused = "focused";
-    [Modifiable] public const string VericalFov = "vfov";
+    [Modifiable] public const string VerticalFov = "vfov";
     [Modifiable] public const string HorizontalFov = "hfov";
     [Modifiable] public const string HorizontalScanStepAngleDeg = "hscanstepang";
     [Modifiable] public const string VerticalScanStepAngleDeg = "vscanstepang";
@@ -68,6 +68,8 @@ public static class CLICommandManager
     public const string SegmentCount = "segment";
     public const string TurnRate = "turnrate";
     public const string GetCommand = "get";
+    public const string All = "all";
+    
     public const string PrintCommand = "print";
     public const string Actors = "actors";
     public const string Sensors = "sensors";
@@ -97,5 +99,23 @@ public static class CLICommandManager
 
         return modifiableFields;
     }
+    public static Dictionary<string, string> GetOptionNameContants()
+    {
+        var modifiableFields = new Dictionary<string, string>();
 
+        // Using reflection to get all public static fields
+        var fields = typeof(CLICommandManager).GetFields(BindingFlags.Public | BindingFlags.Static);
+
+        foreach (var field in fields)
+        {
+            var attributes = field.GetCustomAttributes(typeof(ModifiableAttribute), false);
+            if (attributes.Length > 0)
+            {
+                // If the field has the ModifiableAttribute, we add it to the dictionary
+                modifiableFields.Add((string)field.GetValue(null), field.Name);
+            }
+        }
+
+        return modifiableFields;
+    }
 }

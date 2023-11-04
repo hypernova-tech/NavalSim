@@ -6,7 +6,9 @@
 #include "GameFramework/Actor.h"
 #include "Lib/Types/Primitives.h"
 #include <Lib/SaveLoad/ISaveLoader.h>
+#include <Lib/JSON/CJsonDataContainer.h>
 #include "ActorBase.generated.h"
+
 
 
 
@@ -62,6 +64,7 @@ public:
 	int GetAffinityInstanceId();
 	FString GetBlueprintName();
 	virtual void Save(ISaveLoader* p_save_loader);
+	virtual void SaveJSON(CJsonDataContainer &data);
 	void ShowActorGizmo(bool val);
 	virtual void Bake();
 	virtual void OnActorPredestroy();

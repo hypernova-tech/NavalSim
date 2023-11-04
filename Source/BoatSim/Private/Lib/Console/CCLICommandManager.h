@@ -124,7 +124,7 @@ public:
 	static FString TurnRate;
 
 	static FString GetCommand;
-
+	static FString All;
 	static FString PrintCommand;
 	static FString Actors;
 	static FString ActorBases;

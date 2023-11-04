@@ -52,3 +52,10 @@ void ACameraBase::Save(ISaveLoader* p_save_loader)
 	p_save_loader->AppendOption(line, CCLICommandManager::CamHeightPx, SensorHeight);
 	p_save_loader->AddLine(line);
 }
+
+void ACameraBase::SaveJSON(CJsonDataContainer& data)
+{
+	Super::SaveJSON(data);
+	data.Add(CCLICommandManager::CamWidthPx, SensorWidth);
+	data.Add(CCLICommandManager::CamHeightPx, SensorHeight);
+}
