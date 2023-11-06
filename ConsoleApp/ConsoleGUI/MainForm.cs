@@ -1566,5 +1566,16 @@ namespace ConsoleGUI
             var command = string.Format("sim --resume");
             SendData(command, false);
         }
+
+        private void saveWorkspaceToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (FileSaver.ShowDialog() == DialogResult.OK)
+            {
+                string filePath = FileSaver.FileName;
+                string fileName = Path.GetFileName(filePath);
+                var command = string.Format("ws --save {0}", fileName);
+                SendData(command, false);
+            }
+        }
     }
 }

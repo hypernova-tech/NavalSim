@@ -215,6 +215,22 @@ bool CUtil::Trace(const STraceArgs& args, SScanResult* pscan_result)
     return false;
 }
 
+bool CUtil::DoesExist(FString name, UWorld* p_world)
+{
+  
+    for (TActorIterator<AActor> It(p_world); It; ++It) {
+        AActor* CurrentActor = *It;
+        // Check if the actor's name matches the desired name
+        if (CurrentActor && CurrentActor->GetName() == name) {
+            return true;
+        }
+    }
+    // If we get here, no actor with the specified name was found
+    return false;
+  
+
+}
+
 bool CUtil::Trace(AActor * p_actor, bool is_world, float min_range_meter, float range_meter, float azimuth_start_deg, float azimuth_end_deg,
                                                                           float elevation_start_deg, float elevation_end_deg, float azimuth_angle_step_deg, float elevation_angle_step_deg,
                                                                           float measurement_error_mean, float measurement_error_std, const SClutterParams& clutter_params,
@@ -891,6 +907,10 @@ T* CUtil::FindChildComponent(AActor* p_parent)
 
 AActor* CUtil::SpawnObjectFromBlueprint(AActor *p_template, FString blueprint_path, UWorld *p_world, AActor *p_owner, FString name, FVector pos, FVector rot_rpy, FVector scale)
 {
+
+    try {
+
+    
     // The blueprint name should be the path to the blueprint asset, relative to the Content folder.
     FString BlueprintPath = blueprint_path;
 
@@ -941,6 +961,11 @@ AActor* CUtil::SpawnObjectFromBlueprint(AActor *p_template, FString blueprint_pa
     }
     SpawnedActor->SetActorScale3D(scale);
     return SpawnedActor;
+
+    }
+    catch (...) {
+        return nullptr;
+    }
 }
 
 FLOAT64 CUtil::GetTimeSeconds()

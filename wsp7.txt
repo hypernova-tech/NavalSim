@@ -1,0 +1,31 @@
+create --name BP_Vessel_C_1 --bp CRUISER
+set --name BP_Vessel_C_1 --position "5187.021512 -1834.525683 -57.165104"
+set --name BP_Vessel_C_1 --rotation "0.000000 0.000000 0.000000"
+set --name BP_Vessel_C_1 --scale "1.000000 1.000000 1.000000"
+set --name BP_Vessel_C_1 --instance -1
+
+create --name BP_GeneticAgent_C_1 --bp 
+set --name BP_GeneticAgent_C_1 --position "-338.572255 -1729.419315 -254.829670"
+set --name BP_GeneticAgent_C_1 --rotation "0.000000 0.000000 0.000000"
+set --name BP_GeneticAgent_C_1 --scale "1.000000 1.000000 1.000000"
+set --name BP_GeneticAgent_C_1 --instance -1
+
+create --name path1 --bp PATH
+set --name path1 --position "0.000000 0.000000 0.000000"
+set --name path1 --rotation "0.000000 0.000000 0.000000"
+set --name path1 --scale "1.000000 1.000000 1.000000"
+set --name path1 --instance -1
+set --name path1 --wp 0 --wppos "0.000000 0.000000 0.000000"
+set --name path1wp0 --parent path1
+set --name path1 --wp 1 --wppos "100.000000 0.000000 0.000000"
+set --name path1wp1 --parent path1
+set --name path1 --wp 2 --wppos "100.000000 100.000000 0.000000"
+set --name path1wp2 --parent path1
+set --name path1 --speed 10.000000
+set --name path1 --closed 1
+set --name path1 --attach 
+set --name path1 --color "255 0 0 255"
+set --name path1 --segment 50
+set --name path1 --straight 0
+set --name path1 --turnrate 90.000000
+set --name path1 --bake 

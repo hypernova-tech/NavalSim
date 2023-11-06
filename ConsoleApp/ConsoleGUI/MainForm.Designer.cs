@@ -114,13 +114,16 @@ namespace ConsoleGUI
             simulationToolStripMenuItem = new ToolStripMenuItem();
             startToolStripMenuItem = new ToolStripMenuItem();
             pauseToolStripMenuItem = new ToolStripMenuItem();
+            resumeToolStripMenuItem = new ToolStripMenuItem();
             contextObjectEditor = new ContextMenuStrip(components);
             focusToolStripMenuItem1 = new ToolStripMenuItem();
             destroyToolStripMenuItem1 = new ToolStripMenuItem();
             clearToolStripMenuItem1 = new ToolStripMenuItem();
             ConsoeListBoxContextMenu = new ContextMenuStrip(components);
             clearToolStripMenuItem = new ToolStripMenuItem();
-            resumeToolStripMenuItem = new ToolStripMenuItem();
+            FileSaver = new SaveFileDialog();
+            saveWorkspaceToolStripMenuItem = new ToolStripMenuItem();
+            toolStripMenuItem4 = new ToolStripMenuItem();
             ActorListContextMenu.SuspendLayout();
             contextMenuConsoleListBox.SuspendLayout();
             tabPage2.SuspendLayout();
@@ -805,7 +808,7 @@ namespace ConsoleGUI
             // 
             // fileToolStripMenuItem
             // 
-            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { loadWorkspaceToolStripMenuItem, loadBlueprintsToolStripMenuItem, loadUserActorsToolStripMenuItem, toolStripMenuItem2, loadActorsToolStripMenuItem });
+            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { loadWorkspaceToolStripMenuItem, saveWorkspaceToolStripMenuItem, toolStripMenuItem4, loadBlueprintsToolStripMenuItem, loadUserActorsToolStripMenuItem, toolStripMenuItem2, loadActorsToolStripMenuItem });
             fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             fileToolStripMenuItem.Size = new Size(37, 20);
             fileToolStripMenuItem.Text = "File";
@@ -813,34 +816,34 @@ namespace ConsoleGUI
             // loadWorkspaceToolStripMenuItem
             // 
             loadWorkspaceToolStripMenuItem.Name = "loadWorkspaceToolStripMenuItem";
-            loadWorkspaceToolStripMenuItem.Size = new Size(163, 22);
+            loadWorkspaceToolStripMenuItem.Size = new Size(180, 22);
             loadWorkspaceToolStripMenuItem.Text = "Load Workspace";
             loadWorkspaceToolStripMenuItem.Click += loadWorkspaceToolStripMenuItem_Click;
             // 
             // loadBlueprintsToolStripMenuItem
             // 
             loadBlueprintsToolStripMenuItem.Name = "loadBlueprintsToolStripMenuItem";
-            loadBlueprintsToolStripMenuItem.Size = new Size(163, 22);
+            loadBlueprintsToolStripMenuItem.Size = new Size(180, 22);
             loadBlueprintsToolStripMenuItem.Text = "Load Blueprints";
             loadBlueprintsToolStripMenuItem.Click += loadBlueprintsToolStripMenuItem_Click;
             // 
             // loadUserActorsToolStripMenuItem
             // 
             loadUserActorsToolStripMenuItem.Name = "loadUserActorsToolStripMenuItem";
-            loadUserActorsToolStripMenuItem.Size = new Size(163, 22);
+            loadUserActorsToolStripMenuItem.Size = new Size(180, 22);
             loadUserActorsToolStripMenuItem.Text = "Load User Actors";
             loadUserActorsToolStripMenuItem.Click += loadUserActorsToolStripMenuItem_Click;
             // 
             // toolStripMenuItem2
             // 
             toolStripMenuItem2.Name = "toolStripMenuItem2";
-            toolStripMenuItem2.Size = new Size(163, 22);
+            toolStripMenuItem2.Size = new Size(180, 22);
             toolStripMenuItem2.Text = "  ";
             // 
             // loadActorsToolStripMenuItem
             // 
             loadActorsToolStripMenuItem.Name = "loadActorsToolStripMenuItem";
-            loadActorsToolStripMenuItem.Size = new Size(163, 22);
+            loadActorsToolStripMenuItem.Size = new Size(180, 22);
             loadActorsToolStripMenuItem.Text = "Load All Actors";
             loadActorsToolStripMenuItem.Click += loadActorsToolStripMenuItem_Click;
             // 
@@ -868,16 +871,23 @@ namespace ConsoleGUI
             // startToolStripMenuItem
             // 
             startToolStripMenuItem.Name = "startToolStripMenuItem";
-            startToolStripMenuItem.Size = new Size(180, 22);
+            startToolStripMenuItem.Size = new Size(116, 22);
             startToolStripMenuItem.Text = "Start";
             startToolStripMenuItem.Click += startToolStripMenuItem_Click;
             // 
             // pauseToolStripMenuItem
             // 
             pauseToolStripMenuItem.Name = "pauseToolStripMenuItem";
-            pauseToolStripMenuItem.Size = new Size(180, 22);
+            pauseToolStripMenuItem.Size = new Size(116, 22);
             pauseToolStripMenuItem.Text = "Pause";
             pauseToolStripMenuItem.Click += pauseToolStripMenuItem_Click;
+            // 
+            // resumeToolStripMenuItem
+            // 
+            resumeToolStripMenuItem.Name = "resumeToolStripMenuItem";
+            resumeToolStripMenuItem.Size = new Size(116, 22);
+            resumeToolStripMenuItem.Text = "Resume";
+            resumeToolStripMenuItem.Click += resumeToolStripMenuItem_Click;
             // 
             // contextObjectEditor
             // 
@@ -918,12 +928,18 @@ namespace ConsoleGUI
             clearToolStripMenuItem.Size = new Size(101, 22);
             clearToolStripMenuItem.Text = "Clear";
             // 
-            // resumeToolStripMenuItem
+            // saveWorkspaceToolStripMenuItem
             // 
-            resumeToolStripMenuItem.Name = "resumeToolStripMenuItem";
-            resumeToolStripMenuItem.Size = new Size(180, 22);
-            resumeToolStripMenuItem.Text = "Resume";
-            resumeToolStripMenuItem.Click += resumeToolStripMenuItem_Click;
+            saveWorkspaceToolStripMenuItem.Name = "saveWorkspaceToolStripMenuItem";
+            saveWorkspaceToolStripMenuItem.Size = new Size(180, 22);
+            saveWorkspaceToolStripMenuItem.Text = "Save Workspace";
+            saveWorkspaceToolStripMenuItem.Click += saveWorkspaceToolStripMenuItem_Click;
+            // 
+            // toolStripMenuItem4
+            // 
+            toolStripMenuItem4.Name = "toolStripMenuItem4";
+            toolStripMenuItem4.Size = new Size(180, 22);
+            toolStripMenuItem4.Text = "  ";
             // 
             // MainForm
             // 
@@ -1056,5 +1072,8 @@ namespace ConsoleGUI
         private ToolStripMenuItem attachToPathToolStripMenuItem;
         private ToolStripMenuItem destroyToolStripMenuItem;
         private ToolStripMenuItem resumeToolStripMenuItem;
+        private SaveFileDialog FileSaver;
+        private ToolStripMenuItem saveWorkspaceToolStripMenuItem;
+        private ToolStripMenuItem toolStripMenuItem4;
     }
 }

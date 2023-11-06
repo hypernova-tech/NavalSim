@@ -241,12 +241,12 @@ bool USaverLoaderBase::Save(ISystemAPI* p_api, FString file_name)
 	pSystemApi = p_api;
 
 	pCLI = p_api->GetConsole()->GetCommandManager();
-
-	auto platform = p_api->GetPlatform();
+	TArray<AActor*> platforms;
 	
+	p_api->QueryActors(EActorQueryArgs::Platforms, platforms);
 	
-	if (platform != nullptr) {
-		SavePlatform(platform, CLIList);
+	for (auto platform : platforms) {
+		SavePlatform((APlatformBase*)platform, CLIList);
 	}
 
 	TArray<AActor*> non_sensors;

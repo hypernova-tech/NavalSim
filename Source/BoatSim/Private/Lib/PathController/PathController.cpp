@@ -84,12 +84,18 @@ void APathController::GenerateDrawablePathSegments()
 	for (auto segment : PathSegments) {
 		segment->DestroyComponent();
 	}
-	PathSegments.Reset();
+	
 	auto pspline_comp = pSplineFollower->pSplineComponent;
 	// Get the total length of the spline
 	float totalLength = pspline_comp->GetSplineLength();
 	float step_distance_meter = 5;
 	float  step_distance = totalLength / NumSegments;  // This ensures even spacing of segments.
+	if (step_distance == 0) {
+		
+		return;
+	}
+
+	PathSegments.Reset();
 
 	// Calculate the number of segments based on your step distance
 	int32 numSegments = FMath::CeilToInt(totalLength / step_distance);
@@ -210,6 +216,11 @@ void APathController::Save(ISaveLoader* p_save_loader)
 		line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
 		p_save_loader->AppendOption(line, CCLICommandManager::Wp, i);
 		p_save_loader->AppendOption(line, CCLICommandManager::WpPos, TOW(pSplineFollower->Waypoints[i]->GetActorLocation()));
+		p_save_loader->AddLine(line);
+
+		FString wp_name = GetName() + "wp" + CUtil::IntToString(i);
+		line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, wp_name);
+		p_save_loader->AppendOption(line, CCLICommandManager::Parent, CUtil::GetParentActor(pSplineFollower->Waypoints[i])->GetName());
 		p_save_loader->AddLine(line);
 	}
 

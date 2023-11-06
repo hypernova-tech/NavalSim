@@ -561,6 +561,11 @@ bool ASystemManagerBase::LoadConfig()
 
 AActor* ASystemManagerBase::CreateActor(FString model_name, FString boat_name, FVector world_pos, FVector world_rot, FVector scale)
 {
+
+	if (CUtil::DoesExist(boat_name, GetWorld())) {
+		SendConsoleResponse(boat_name + "already exists, choose a unique name");
+		return nullptr;
+	}
 	auto info = pDataContainer->FindBlueprintInfo(model_name);
 	
 	auto path = info.BlueprintAsset.ToSoftObjectPath().GetAssetPathString();
