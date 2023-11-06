@@ -33,6 +33,9 @@ namespace ConsoleGUI
         HashSet<string> SensorsReceived = new HashSet<string>();
         HashSet<string> ActorsReceived = new HashSet<string>();
         HashSet<string> ModelsReceived = new HashSet<string>();
+        HashSet<string> PathsReceived = new HashSet<string>();
+
+
         CJsonParser mJsonParser = new CJsonParser();
         string Selected = "";
         List<string> MessageList = new List<string>();
@@ -172,6 +175,19 @@ namespace ConsoleGUI
                 }
 
             }
+            else if (item.Contains("<path>"))
+            {
+                string item_striped = item;
+                item_striped = item_striped.Replace("<path>", "");
+
+                if (!PathsReceived.Contains(item_striped))
+                {
+
+                    PathsReceived.Add(item_striped);
+
+                }
+
+            }
             else if (item.Contains("<clicked>"))
             {
                 string item_striped = item;
@@ -197,6 +213,8 @@ namespace ConsoleGUI
 
 
             CreateSubmenu(ObjectEditorContextMenu, ModelsReceived);
+            UpdatePaths(ObjectEditorContextMenu, PathsReceived);
+
 #if false
             foreach (var obj in SensorsReceived)
             {
@@ -799,7 +817,7 @@ namespace ConsoleGUI
         {
             var prm = CLICommandManager.GetModifiableConstants();
 
-            foreach (var pair in prm)
+            //foreach (var pair in prm)
             {
                 CreateAndSendCommand(CLICommandManager.GetCommand, CLICommandManager.Name, Selected, CLICommandManager.All);
             }
@@ -1188,15 +1206,22 @@ namespace ConsoleGUI
         public void Destroy()
         {
             CreateAndSendCommand(CLICommandManager.DestroyCommand, CLICommandManager.Name, Selected);
+            if (ObjectEditor.SelectedNode != null)
+            {
+                ObjectEditor.Nodes.Remove(ObjectEditor.SelectedNode);
+            }
+
+#if false
             ActorsReceived.Remove(Selected);
             SensorsReceived.Remove(Selected);
-            LoadActors();
-            LoadSensors();
+            ObjectEditor.Nodes.Clear();
+            LoadActorBases();
+#endif
         }
 
         private void destroyToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            Destroy();
+
         }
 
         private void clearToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -1217,13 +1242,88 @@ namespace ConsoleGUI
             LoadActorBases();
         }
 
+        public void UpdatePaths(ContextMenuStrip contextMenuStrip, HashSet<string> items)
+        {
+            HashSet<string> filteredSet = items;
+            /*
+
+                = items
+    .Where(item => item.Contains("path"))
+    .ToHashSet();
+            */
+
+            ToolStripMenuItem subMenu = null;
+
+            // First, clear the existing items if needed
+            foreach (ToolStripItem item in contextMenuStrip.Items)
+            {
+                if (item.ToString() == "Attach Path")
+                {
+                    subMenu = (ToolStripMenuItem)item;
+                    subMenu.DropDownItems.Clear();
+                    break;
+                }
+            }
+
+
+            // Create a new ToolStripMenuItem as the main sub-menu item
+
+
+            // Loop through the HashSet and add each string as a ToolStripMenuItem
+            foreach (string item in filteredSet)
+            {
+                // Create a new ToolStripMenuItem for each item
+                ToolStripMenuItem menuItem = new ToolStripMenuItem(item);
+
+                // Set the Click event handler for the sub-items here
+                menuItem.Click += new EventHandler(MenuItem_ClickAttachPath);
+
+                // Add the new ToolStripMenuItem to the sub-menu
+                subMenu.DropDownItems.Add(menuItem);
+            }
+
+            // Add the sub-menu to the main context menu strip
+            //contextMenuStrip.Items.Add(subMenu);
+        }
+
+        private void MenuItem_ClickAttachPath(object sender, EventArgs e)
+        {
+            ToolStripMenuItem clickedItem = sender as ToolStripMenuItem;
+
+            if (clickedItem != null)
+            {
+                if (clickedItem.Text != "")
+                {
+                    Selected = clickedItem.Text;
+                    string parent = "";
+                    if (ObjectEditor.SelectedNode != null)
+                    {
+                        parent = ObjectEditor.SelectedNode.Text;
+                    }
+                    AttachParentToPath(parent, Selected);
+                }
+            }
+        }
+
+
         public void CreateSubmenu(ContextMenuStrip contextMenuStrip, HashSet<string> items)
         {
             // First, clear the existing items if needed
-            contextMenuStrip.Items.Clear();
+            ToolStripMenuItem subMenu = null;
+
+            foreach (ToolStripItem item in contextMenuStrip.Items)
+            {
+                if (item.ToString() == "Blueprints")
+                {
+                    subMenu = (ToolStripMenuItem)item;
+                    subMenu.DropDownItems.Clear();
+                    break;
+                }
+            }
+
 
             // Create a new ToolStripMenuItem as the main sub-menu item
-            ToolStripMenuItem subMenu = new ToolStripMenuItem("Blueprints");
+            //ToolStripMenuItem subMenu = new ToolStripMenuItem("Blueprints");
 
             // Loop through the HashSet and add each string as a ToolStripMenuItem
             foreach (string item in items)
@@ -1239,7 +1339,7 @@ namespace ConsoleGUI
             }
 
             // Add the sub-menu to the main context menu strip
-            contextMenuStrip.Items.Add(subMenu);
+            // contextMenuStrip.Items.Add(subMenu);
         }
 
         // Event handler for sub-menu item clicks
@@ -1262,6 +1362,11 @@ namespace ConsoleGUI
             }
         }
 
+        void AttachParentToPath(string obj, string path)
+        {
+            CreateAndSendCommand(CLICommandManager.SetCommand, CLICommandManager.Name, path, CLICommandManager.Attach, obj);
+        }
+
         private void loadBlueprintsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             LoadModels();
@@ -1272,7 +1377,7 @@ namespace ConsoleGUI
             ObjectEditor.Nodes.Clear();
             ModelsReceived.Clear();
             ActorsReceived.Clear();
-
+            PathsReceived.Clear();
         }
 
         private void ObjectEditor_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
@@ -1369,6 +1474,97 @@ namespace ConsoleGUI
         private void ClearCommands()
         {
             ClearCommandList();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (WaypointGrid.Rows.Count == 0)
+            {
+                MessageBox.Show("Enter Waypoint");
+                return;
+            }
+            else
+            {
+                for (int i = 0; i < WaypointGrid.Rows.Count; i++)
+                {
+                    var row = WaypointGrid.Rows[i];
+
+                    double val = 0;
+
+                    if (!double.TryParse(row.Cells[0].Value.ToString(), out val))
+                    {
+                        MessageBox.Show("Enter Valid Coordinate");
+                        return;
+                    }
+                    if (!double.TryParse(row.Cells[1].Value.ToString(), out val))
+                    {
+                        MessageBox.Show("Enter Valid Coordinate");
+                        return;
+                    }
+
+                    if (!double.TryParse(row.Cells[2].Value.ToString(), out val))
+                    {
+                        MessageBox.Show("Enter Valid Coordinate");
+                        return;
+                    }
+                }
+            }
+
+            string path_name = TbPathName.Text;
+
+            CreateAndSendCommand(CLICommandManager.CreateCommand, CLICommandManager.Name, path_name, CLICommandManager.Bp, "PATH");
+            CreateAndSendCommand(CLICommandManager.SetCommand, CLICommandManager.Name, path_name, CLICommandManager.Closed, CBIsLooped.Checked ? "1" : "0");
+            CreateAndSendCommand(CLICommandManager.SetCommand, CLICommandManager.Name, path_name, CLICommandManager.Straight, CBIsCurved.Checked ? "0" : "1");
+            CreateAndSendCommand(CLICommandManager.SetCommand, CLICommandManager.Name, path_name, CLICommandManager.Speed, TbPathSpeed.Text);
+            CreateAndSendCommand(CLICommandManager.SetCommand, CLICommandManager.Name, path_name, CLICommandManager.TurnRate, TbTurnRate.Text);
+            CreateAndSendCommand(CLICommandManager.SetCommand, CLICommandManager.Name, path_name, CLICommandManager.SegmentCount, TbPathSegmentCount.Text);
+
+            CreateAndSendCommand(CLICommandManager.SetCommand, CLICommandManager.Name, path_name, CLICommandManager.LineColor, "\"" + "255 0 0 255" + "\"");
+            for (int i = 0; i < WaypointGrid.Rows.Count; i++)
+            {
+                var row = WaypointGrid.Rows[i];
+                int ind = i;
+                FVector pos = new FVector();
+                string wp_name = path_name + i.ToString();
+                pos.X = double.Parse(row.Cells[0].Value.ToString());
+                pos.Y = double.Parse(row.Cells[1].Value.ToString());
+                pos.Z = double.Parse(row.Cells[2].Value.ToString());
+
+                CreateAndSendCommand(CLICommandManager.SetCommand, CLICommandManager.Name, path_name, CLICommandManager.Wp, i.ToString(), CLICommandManager.WpPos, pos.ToString());
+                CreateAndSendCommand(CLICommandManager.SetCommand, CLICommandManager.Name, path_name + "wp" + i.ToString(), CLICommandManager.Parent, path_name);
+            }
+            CreateAndSendCommand(CLICommandManager.SetCommand, CLICommandManager.Name, path_name, CLICommandManager.Bake);
+
+        }
+
+        private void addToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            WaypointGrid.Rows.Add();
+            var row = WaypointGrid.Rows[WaypointGrid.Rows.Count - 1];
+            row.Cells[0].Value = "0";
+            row.Cells[1].Value = "0";
+            row.Cells[2].Value = "0";
+        }
+
+        private void removeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            WaypointGrid.Rows.RemoveAt(WaypointGrid.CurrentRow.Index);
+        }
+
+        private void ObjectEditorContextMenu_Opening(object sender, CancelEventArgs e)
+        {
+
+        }
+
+        private void destroyToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            Destroy();
+        }
+
+        private void resumeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var command = string.Format("sim --resume");
+            SendData(command, false);
         }
     }
 }

@@ -479,6 +479,10 @@ bool UConsoleBase::ProcessPrintCommand(TMap<FString, FString>& options, FString&
         return true;
     }
 
+    if (CommandManager.HasA(CCLICommandManager::ActorBases)) {
+        SendActorBases();
+        return true;
+    }
 
     auto has_sensors = CommandManager.HasSensors();
     if (has_sensors) {
@@ -544,7 +548,6 @@ void UConsoleBase::SendActorBases()
 {
     TArray<AActor*> all_actors;
     ASystemManagerBase::GetInstance()->QueryActors(EActorQueryArgs::ActorBases, all_actors);
-
     ASystemManagerBase::GetInstance()->QueryActors(EActorQueryArgs::Platforms, all_actors);
     for (auto p_act : all_actors)
     {
@@ -561,6 +564,15 @@ void UConsoleBase::SendActorBases()
         }
 
         pSystemAPI->SendConsoleResponse("<actor>" + path);
+    }
+
+    TArray<AActor*> paths;
+    ASystemManagerBase::GetInstance()->QueryActors(EActorQueryArgs::ActorBasesOnlyPaths, paths);
+
+
+    for (auto p_act : paths)
+    {
+        pSystemAPI->SendConsoleResponse("<path>" + p_act->GetName());
     }
 }
 
@@ -654,6 +666,7 @@ bool UConsoleBase::ProcessDestroyCommand(TMap<FString, FString>& options, FStrin
     name = CommandManager.GetName();
     if (name != "") {
         if (ASystemManagerBase::GetInstance()->DestroyActor(name)) {
+            SendActorBases();
             return true;
         }
         else {
@@ -728,11 +741,13 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
         return false;
     }
 
+    bool one_success = false;
+
 
     ret = CommandManager.GetActive(is_active);
     if (ret) {
         CUtil::SetActorActive(p_actor, is_active);
-        return true;
+        one_success =  true;
 
     }
 
@@ -740,7 +755,7 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
     ret = CommandManager.GetEnabled(is_enabled);
     if (ret) {
         pSystemAPI->SetActorEnabled(p_actor, is_enabled);
-        return true;
+        one_success = true;
 
     }
 
@@ -748,7 +763,7 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
     ret = CommandManager.GetInstance(instance_no);
     if (ret) {
         pSystemAPI->SetActorInstanceNo(p_actor, instance_no);
-        return true;
+        one_success = true;
 
     }
 
@@ -756,28 +771,33 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
     if (ret) {
         pSystemAPI->SetActorPosition(p_actor, vec * WORLDTOUNREALUNIT);
         //p_actor->SetActorLocation(vec * WORLDTOUNREALUNIT);
+        one_success = true;
     }
 
     ret = CommandManager.GetRelPosition(vec);
     if (ret) {
         pSystemAPI->SetActorRelPosition(p_actor, vec * WORLDTOUNREALUNIT);
         //p_actor->SetActorRelativeLocation(vec * WORLDTOUNREALUNIT);
+        one_success = true;
     }
 
     ret = CommandManager.GetRotation(vec);
     if (ret) {
         pSystemAPI->SetActorRot(p_actor, vec);
         //CMath::SetActorRotation(p_actor, vec);
+        one_success = true;
     }
     ret = CommandManager.GetRelRotation(vec);
     if (ret) {
         pSystemAPI->SetActorRelRot(p_actor, vec);
         //CMath::SetActorRelativeRotation(p_actor, vec);
+        one_success = true;
     }
 
     ret = CommandManager.GetScale(vec);
     if (ret) {
         p_actor->SetActorScale3D(vec);
+        one_success = true;
     }
     FString parent;
     ret = CommandManager.GetParent(parent);
@@ -790,7 +810,7 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
     ret = CommandManager.GetValue(CCLICommandManager::SensorSlotIndex, sint);
     if (ret) {
         if (pSystemAPI->SetSlotIndex(p_actor, sint)) {
-            return true;
+            one_success = true;
         }
     }
     else {
@@ -800,7 +820,7 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
     ret = CommandManager.GetValue(CCLICommandManager::Focused, is_enabled);
     if (ret) {
         if (pSystemAPI->FocusCamera(p_actor)) {
-            return true;
+            one_success = true;
         }
     }
     else {
@@ -810,7 +830,7 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
     ret = CommandManager.GetValue(CCLICommandManager::HorizontalFov, dbl);
     if (ret) {
         if (pSystemAPI->SetHorizontalFov(p_actor, dbl)) {
-            return true;
+            one_success = true;
         }
     }
     else {
@@ -820,7 +840,7 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
     ret = CommandManager.GetValue(CCLICommandManager::VericalFov, dbl);
     if (ret) {
         if (pSystemAPI->SetVerticalFov(p_actor, dbl)) {
-            return true;
+            one_success = true;
         }
     }
     else {
@@ -830,7 +850,7 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
     ret = CommandManager.GetValue(CCLICommandManager::HorizontalScanStepAngleDeg, dbl);
     if (ret) {
         if (pSystemAPI->SetHorizontalScanStepAngleDeg(p_actor, dbl)) {
-            return true;
+            one_success = true;
         }
     }
     else {
@@ -840,7 +860,7 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
     ret = CommandManager.GetValue(CCLICommandManager::VerticalScanStepAngleDeg, dbl);
     if (ret) {
         if (pSystemAPI->SetVerticalScanStepAngleDeg(p_actor, dbl)) {
-            return true;
+            one_success = true;
         }
     }
     else {
@@ -850,7 +870,7 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
     ret = CommandManager.GetValue(CCLICommandManager::MeasurementErrorMean, dbl);
     if (ret) {
         if (pSystemAPI->SetMeasurementErrorMean(p_actor, dbl)) {
-            return true;
+            one_success = true;
         }
     }
     else {
@@ -860,7 +880,7 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
     ret = CommandManager.GetValue(CCLICommandManager::MeasurementErrorStd, dbl);
     if (ret) {
         if (pSystemAPI->SetMeasurementErrorStd(p_actor, dbl)) {
-            return true;
+            one_success = true;
         }
     }
     else {
@@ -870,7 +890,7 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
     ret = CommandManager.GetValue(CCLICommandManager::EnableSurfaceDetect, is_enabled);
     if (ret) {
         if (pSystemAPI->SetEnableSurfaceDetect(p_actor, is_enabled)) {
-            return true;
+            one_success = true;
         }
     }
     else {
@@ -880,7 +900,7 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
     ret = CommandManager.GetValue(CCLICommandManager::EnableSubsurfaceDetect, is_enabled);
     if (ret) {
         if (pSystemAPI->SetEnableSubsurfaceDetect(p_actor, is_enabled)) {
-            return true;
+            one_success = true;
         }
     }
     else {
@@ -890,7 +910,7 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
     ret = CommandManager.GetValue(CCLICommandManager::EnableFoamDetect, is_enabled);
     if (ret) {
         if (pSystemAPI->SetEnableFoamDetect(p_actor, is_enabled)) {
-            return true;
+            one_success = true;
         }
     }
     else {
@@ -900,7 +920,7 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
     ret = CommandManager.GetValue(CCLICommandManager::SeaSurfaceDetectionProb, dbl);
     if (ret) {
         if (pSystemAPI->SetSeaSurfaceDetectionProb(p_actor, dbl)) {
-            return true;
+            one_success = true;
         }
     }
     else {
@@ -910,7 +930,7 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
     ret = CommandManager.GetValue(CCLICommandManager::MaxSurfacePenetration, dbl);
     if (ret) {
         if (pSystemAPI->SetMaxSurfacePenetration(p_actor, dbl)) {
-            return true;
+            one_success = true;
         }
     }
     else {
@@ -920,7 +940,7 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
     ret = CommandManager.GetValue(CCLICommandManager::RadarScanLevel, dbl);
     if (ret) {
         if (pSystemAPI->SetRadarScanLevel(p_actor, dbl)) {
-            return true;
+            one_success = true;
         }
     }
     else {
@@ -930,7 +950,7 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
     ret = CommandManager.GetValue(CCLICommandManager::RadarScannerRPM, dbl);
     if (ret) {
         if (pSystemAPI->SetRadarScannerRPM(p_actor, dbl)) {
-            return true;
+            one_success = true;
         }
     }
     else {
@@ -940,7 +960,7 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
     ret = CommandManager.GetValue(CCLICommandManager::RadarGainType, sint);
     if (ret) {
         if (pSystemAPI->SetRadarGainType(p_actor, sint)) {
-            return true;
+            one_success = true;
         }
     }
     else {
@@ -950,7 +970,7 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
     ret = CommandManager.GetValue(CCLICommandManager::RadarGainLevel, sint);
     if (ret) {
         if (pSystemAPI->SetRadarGainLevel(p_actor, sint)) {
-            return true;
+            one_success = true;
         }
     }
     else {
@@ -960,7 +980,7 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
     ret = CommandManager.GetValue(CCLICommandManager::RadarSeaClutterType, sint);
     if (ret) {
         if (pSystemAPI->SetRadarSeaClutterType(p_actor, sint)) {
-            return true;
+            one_success = true;
         }
     }
     else {
@@ -970,7 +990,7 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
     ret = CommandManager.GetValue(CCLICommandManager::RadarSeaClutterLevel, sint);
     if (ret) {
         if (pSystemAPI->SetRadarSeaClutterLevel(p_actor, sint)) {
-            return true;
+            one_success = true;
         }
     }
     else {
@@ -980,7 +1000,7 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
     ret = CommandManager.GetValue(CCLICommandManager::RadarSeaClutterAutoOffset, sint);
     if (ret) {
         if (pSystemAPI->SetRadarSeaClutterAutoOffset(p_actor, sint)) {
-            return true;
+            one_success = true;
         }
     }
     else {
@@ -990,7 +1010,7 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
     ret = CommandManager.GetValue(CCLICommandManager::RadarRainClutterLevel, sint);
     if (ret) {
         if (pSystemAPI->SetRadarRainClutterLevel(p_actor, sint)) {
-            return true;
+            one_success = true;
         }
     }
     else {
@@ -1000,7 +1020,7 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
     ret = CommandManager.GetValue(CCLICommandManager::RadarMaxGuardZoneCount, sint);
     if (ret) {
         if (pSystemAPI->SetRadarMaxGuardZoneCount(p_actor, sint)) {
-            return true;
+            one_success = true;
         }
     }
     else {
@@ -1010,7 +1030,7 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
     ret = CommandManager.GetValue(CCLICommandManager::RadarMaxSectorBlankingZoneCount, sint);
     if (ret) {
         if (pSystemAPI->SetRadarMaxSectorBlankingZoneCount(p_actor, sint)) {
-            return true;
+            one_success = true;;
         }
     }
     else {
@@ -1020,7 +1040,7 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
     ret = CommandManager.GetValue(CCLICommandManager::Closed, is_enabled);
     if (ret) {
         if (pSystemAPI->SetPathClosed(p_actor, is_enabled)) {
-            return true;
+            one_success = true;
         }
     }
     else {
@@ -1030,7 +1050,7 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
     ret = CommandManager.GetValue(CCLICommandManager::Bake, sint);
     if (ret) {
         if (pSystemAPI->Bake(p_actor)) {
-            return true;
+            one_success = true;
         }
     }
     else {
@@ -1040,7 +1060,7 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
     ret = CommandManager.GetValue(CCLICommandManager::Speed, dbl);
     if (ret) {
         if (pSystemAPI->SetPathSpeed(p_actor, dbl)) {
-            return true;
+            one_success = true;
         }
     }
     else {
@@ -1050,7 +1070,7 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
     ret = CommandManager.GetValue(CCLICommandManager::Attach, sret);
     if (ret) {
         if (pSystemAPI->AttachToPath(p_actor, sret)) {
-            return true;
+            one_success = true;
         }
     }
     else {
@@ -1062,7 +1082,7 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
     ret = CommandManager.GetValue(CCLICommandManager::LineColor, color);
     if (ret) {
         if (pSystemAPI->SetPathLineColor(p_actor, color) ){
-            return true;
+            one_success = true;
         }
     }
     else {
@@ -1072,7 +1092,7 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
     ret = CommandManager.GetValue(CCLICommandManager::SegmentCount, sint);
     if (ret) {
         if (pSystemAPI->SetPathSegmentCount(p_actor, sint)) {
-            return true;
+            one_success = true;
         }
     }
     else {
@@ -1082,7 +1102,7 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
     ret = CommandManager.GetValue(CCLICommandManager::Straight, is_enabled);
     if (ret) {
         if (pSystemAPI->SetPathStraight(p_actor, is_enabled)) {
-            return true;
+            one_success = true;
         }
     }
     else {
@@ -1092,7 +1112,7 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
     ret = CommandManager.GetValue(CCLICommandManager::TurnRate, dbl);
     if (ret) {
         if (pSystemAPI->GetPathTurnRate(p_actor, dbl)) {
-            return true;
+            one_success = true;
         }
     }
     else {
@@ -1118,8 +1138,8 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
         }
 
     }
-
-    return true;
+  
+    return one_success;
 }
 bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& error_message)
 {

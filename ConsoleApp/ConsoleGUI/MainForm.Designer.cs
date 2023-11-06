@@ -31,10 +31,10 @@ namespace ConsoleGUI
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            TreeNode treeNode1 = new TreeNode("World");
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            TreeNode treeNode2 = new TreeNode("World");
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
             OpenFileDialog = new OpenFileDialog();
             contextMenuStrip1 = new ContextMenuStrip(components);
             ActorListContextMenu = new ContextMenuStrip(components);
@@ -42,11 +42,14 @@ namespace ConsoleGUI
             CommandTextBox = new TextBox();
             listBox1 = new ListBox();
             contextMenuConsoleListBox = new ContextMenuStrip(components);
+            clearCommandsToolStripMenuItem = new ToolStripMenuItem();
             SensorTimer = new System.Windows.Forms.Timer(components);
             tabPage2 = new TabPage();
             ObjectEditor = new TreeView();
             ObjectEditorContextMenu = new ContextMenuStrip(components);
-            createToolStripMenuItem1 = new ToolStripMenuItem();
+            blueprintToolStripMenuItem = new ToolStripMenuItem();
+            attachToPathToolStripMenuItem = new ToolStripMenuItem();
+            destroyToolStripMenuItem = new ToolStripMenuItem();
             flowLayoutPanel1 = new FlowLayoutPanel();
             label10 = new Label();
             TBName = new TextBox();
@@ -79,6 +82,26 @@ namespace ConsoleGUI
             ModifyableDataGrid = new DataGridView();
             tabControl1 = new TabControl();
             tabPage1 = new TabPage();
+            tabPage3 = new TabPage();
+            TbPathSegmentCount = new TextBox();
+            label15 = new Label();
+            TbTurnRate = new TextBox();
+            label14 = new Label();
+            TbPathSpeed = new TextBox();
+            label13 = new Label();
+            CBIsCurved = new CheckBox();
+            CBIsLooped = new CheckBox();
+            label12 = new Label();
+            TbPathName = new TextBox();
+            label11 = new Label();
+            button1 = new Button();
+            WaypointGrid = new DataGridView();
+            Column2 = new DataGridViewTextBoxColumn();
+            Column3 = new DataGridViewTextBoxColumn();
+            Column4 = new DataGridViewTextBoxColumn();
+            PathContextMenu = new ContextMenuStrip(components);
+            addToolStripMenuItem = new ToolStripMenuItem();
+            removeToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1 = new MenuStrip();
             fileToolStripMenuItem = new ToolStripMenuItem();
             loadWorkspaceToolStripMenuItem = new ToolStripMenuItem();
@@ -97,7 +120,7 @@ namespace ConsoleGUI
             clearToolStripMenuItem1 = new ToolStripMenuItem();
             ConsoeListBoxContextMenu = new ContextMenuStrip(components);
             clearToolStripMenuItem = new ToolStripMenuItem();
-            clearCommandsToolStripMenuItem = new ToolStripMenuItem();
+            resumeToolStripMenuItem = new ToolStripMenuItem();
             ActorListContextMenu.SuspendLayout();
             contextMenuConsoleListBox.SuspendLayout();
             tabPage2.SuspendLayout();
@@ -110,6 +133,9 @@ namespace ConsoleGUI
             ((System.ComponentModel.ISupportInitialize)ModifyableDataGrid).BeginInit();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
+            tabPage3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)WaypointGrid).BeginInit();
+            PathContextMenu.SuspendLayout();
             menuStrip1.SuspendLayout();
             contextObjectEditor.SuspendLayout();
             ConsoeListBoxContextMenu.SuspendLayout();
@@ -165,7 +191,14 @@ namespace ConsoleGUI
             // 
             contextMenuConsoleListBox.Items.AddRange(new ToolStripItem[] { clearCommandsToolStripMenuItem });
             contextMenuConsoleListBox.Name = "contextMenuConsoleListBox";
-            contextMenuConsoleListBox.Size = new Size(181, 48);
+            contextMenuConsoleListBox.Size = new Size(167, 26);
+            // 
+            // clearCommandsToolStripMenuItem
+            // 
+            clearCommandsToolStripMenuItem.Name = "clearCommandsToolStripMenuItem";
+            clearCommandsToolStripMenuItem.Size = new Size(166, 22);
+            clearCommandsToolStripMenuItem.Text = "Clear Commands";
+            clearCommandsToolStripMenuItem.Click += clearCommandsToolStripMenuItem_Click;
             // 
             // SensorTimer
             // 
@@ -190,9 +223,9 @@ namespace ConsoleGUI
             ObjectEditor.ContextMenuStrip = ObjectEditorContextMenu;
             ObjectEditor.Location = new Point(13, 11);
             ObjectEditor.Name = "ObjectEditor";
-            treeNode1.Name = "World";
-            treeNode1.Text = "World";
-            ObjectEditor.Nodes.AddRange(new TreeNode[] { treeNode1 });
+            treeNode2.Name = "World";
+            treeNode2.Text = "World";
+            ObjectEditor.Nodes.AddRange(new TreeNode[] { treeNode2 });
             ObjectEditor.Size = new Size(246, 633);
             ObjectEditor.TabIndex = 18;
             ObjectEditor.NodeMouseClick += ObjectEditor_NodeMouseClick;
@@ -201,16 +234,29 @@ namespace ConsoleGUI
             // 
             // ObjectEditorContextMenu
             // 
-            ObjectEditorContextMenu.Items.AddRange(new ToolStripItem[] { createToolStripMenuItem1 });
+            ObjectEditorContextMenu.Items.AddRange(new ToolStripItem[] { blueprintToolStripMenuItem, attachToPathToolStripMenuItem, destroyToolStripMenuItem });
             ObjectEditorContextMenu.Name = "contextMenuStrip2";
-            ObjectEditorContextMenu.Size = new Size(109, 26);
+            ObjectEditorContextMenu.Size = new Size(137, 70);
+            ObjectEditorContextMenu.Opening += ObjectEditorContextMenu_Opening;
             // 
-            // createToolStripMenuItem1
+            // blueprintToolStripMenuItem
             // 
-            createToolStripMenuItem1.Name = "createToolStripMenuItem1";
-            createToolStripMenuItem1.Size = new Size(108, 22);
-            createToolStripMenuItem1.Text = "Create";
-            createToolStripMenuItem1.Click += createToolStripMenuItem1_Click;
+            blueprintToolStripMenuItem.Name = "blueprintToolStripMenuItem";
+            blueprintToolStripMenuItem.Size = new Size(136, 22);
+            blueprintToolStripMenuItem.Text = "Blueprints";
+            // 
+            // attachToPathToolStripMenuItem
+            // 
+            attachToPathToolStripMenuItem.Name = "attachToPathToolStripMenuItem";
+            attachToPathToolStripMenuItem.Size = new Size(136, 22);
+            attachToPathToolStripMenuItem.Text = "Attach Path";
+            // 
+            // destroyToolStripMenuItem
+            // 
+            destroyToolStripMenuItem.Name = "destroyToolStripMenuItem";
+            destroyToolStripMenuItem.Size = new Size(136, 22);
+            destroyToolStripMenuItem.Text = "Destroy";
+            destroyToolStripMenuItem.Click += destroyToolStripMenuItem_Click_1;
             // 
             // flowLayoutPanel1
             // 
@@ -507,33 +553,33 @@ namespace ConsoleGUI
             // 
             // ModifyableDataGrid
             // 
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = SystemColors.Control;
-            dataGridViewCellStyle1.Font = new Font("Segoe UI", 1F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-            ModifyableDataGrid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = SystemColors.Control;
+            dataGridViewCellStyle4.Font = new Font("Segoe UI", 1F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle4.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
+            ModifyableDataGrid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
             ModifyableDataGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = SystemColors.Window;
-            dataGridViewCellStyle2.Font = new Font("Segoe UI", 8F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle2.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
-            ModifyableDataGrid.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = SystemColors.Window;
+            dataGridViewCellStyle5.Font = new Font("Segoe UI", 8F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle5.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle5.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle5.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle5.WrapMode = DataGridViewTriState.False;
+            ModifyableDataGrid.DefaultCellStyle = dataGridViewCellStyle5;
             ModifyableDataGrid.Location = new Point(3, 534);
             ModifyableDataGrid.Name = "ModifyableDataGrid";
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = SystemColors.Control;
-            dataGridViewCellStyle3.Font = new Font("Segoe UI", 6F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
-            ModifyableDataGrid.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = SystemColors.Control;
+            dataGridViewCellStyle6.Font = new Font("Segoe UI", 6F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle6.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle6.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle6.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = DataGridViewTriState.True;
+            ModifyableDataGrid.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
             ModifyableDataGrid.RowHeadersVisible = false;
             ModifyableDataGrid.RowTemplate.Height = 25;
             ModifyableDataGrid.Size = new Size(202, 405);
@@ -549,7 +595,8 @@ namespace ConsoleGUI
             // 
             tabControl1.Controls.Add(tabPage2);
             tabControl1.Controls.Add(tabPage1);
-            tabControl1.Location = new Point(5, 27);
+            tabControl1.Controls.Add(tabPage3);
+            tabControl1.Location = new Point(6, 27);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
             tabControl1.Size = new Size(510, 678);
@@ -566,6 +613,186 @@ namespace ConsoleGUI
             tabPage1.TabIndex = 2;
             tabPage1.Text = "Console";
             tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // tabPage3
+            // 
+            tabPage3.Controls.Add(TbPathSegmentCount);
+            tabPage3.Controls.Add(label15);
+            tabPage3.Controls.Add(TbTurnRate);
+            tabPage3.Controls.Add(label14);
+            tabPage3.Controls.Add(TbPathSpeed);
+            tabPage3.Controls.Add(label13);
+            tabPage3.Controls.Add(CBIsCurved);
+            tabPage3.Controls.Add(CBIsLooped);
+            tabPage3.Controls.Add(label12);
+            tabPage3.Controls.Add(TbPathName);
+            tabPage3.Controls.Add(label11);
+            tabPage3.Controls.Add(button1);
+            tabPage3.Controls.Add(WaypointGrid);
+            tabPage3.Location = new Point(4, 24);
+            tabPage3.Name = "tabPage3";
+            tabPage3.Size = new Size(502, 650);
+            tabPage3.TabIndex = 3;
+            tabPage3.Text = "Path";
+            tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // TbPathSegmentCount
+            // 
+            TbPathSegmentCount.Location = new Point(106, 35);
+            TbPathSegmentCount.Name = "TbPathSegmentCount";
+            TbPathSegmentCount.Size = new Size(100, 23);
+            TbPathSegmentCount.TabIndex = 12;
+            TbPathSegmentCount.Text = "50";
+            // 
+            // label15
+            // 
+            label15.AutoSize = true;
+            label15.Location = new Point(4, 38);
+            label15.Name = "label15";
+            label15.Size = new Size(90, 15);
+            label15.TabIndex = 11;
+            label15.Text = "Segment Count";
+            // 
+            // TbTurnRate
+            // 
+            TbTurnRate.Location = new Point(106, 129);
+            TbTurnRate.Name = "TbTurnRate";
+            TbTurnRate.Size = new Size(100, 23);
+            TbTurnRate.TabIndex = 10;
+            TbTurnRate.Text = "50";
+            // 
+            // label14
+            // 
+            label14.AutoSize = true;
+            label14.Location = new Point(4, 132);
+            label14.Name = "label14";
+            label14.Size = new Size(96, 15);
+            label14.TabIndex = 9;
+            label14.Text = "Turn Rate(Deg/s)";
+            // 
+            // TbPathSpeed
+            // 
+            TbPathSpeed.Location = new Point(106, 100);
+            TbPathSpeed.Name = "TbPathSpeed";
+            TbPathSpeed.Size = new Size(100, 23);
+            TbPathSpeed.TabIndex = 8;
+            TbPathSpeed.Text = "10";
+            // 
+            // label13
+            // 
+            label13.AutoSize = true;
+            label13.Location = new Point(4, 103);
+            label13.Name = "label13";
+            label13.Size = new Size(68, 15);
+            label13.TabIndex = 7;
+            label13.Text = "Speed(m/s)";
+            // 
+            // CBIsCurved
+            // 
+            CBIsCurved.AutoSize = true;
+            CBIsCurved.Checked = true;
+            CBIsCurved.CheckState = CheckState.Checked;
+            CBIsCurved.Location = new Point(4, 81);
+            CBIsCurved.Name = "CBIsCurved";
+            CBIsCurved.Size = new Size(64, 19);
+            CBIsCurved.TabIndex = 6;
+            CBIsCurved.Text = "Curved";
+            CBIsCurved.UseVisualStyleBackColor = true;
+            // 
+            // CBIsLooped
+            // 
+            CBIsLooped.AutoSize = true;
+            CBIsLooped.Checked = true;
+            CBIsLooped.CheckState = CheckState.Checked;
+            CBIsLooped.Location = new Point(4, 56);
+            CBIsLooped.Name = "CBIsLooped";
+            CBIsLooped.Size = new Size(53, 19);
+            CBIsLooped.TabIndex = 5;
+            CBIsLooped.Text = "Loop";
+            CBIsLooped.UseVisualStyleBackColor = true;
+            // 
+            // label12
+            // 
+            label12.AutoSize = true;
+            label12.Location = new Point(7, 43);
+            label12.Name = "label12";
+            label12.Size = new Size(0, 15);
+            label12.TabIndex = 4;
+            // 
+            // TbPathName
+            // 
+            TbPathName.Location = new Point(106, 10);
+            TbPathName.Name = "TbPathName";
+            TbPathName.Size = new Size(100, 23);
+            TbPathName.TabIndex = 3;
+            TbPathName.Text = "path1";
+            // 
+            // label11
+            // 
+            label11.AutoSize = true;
+            label11.Location = new Point(7, 13);
+            label11.Name = "label11";
+            label11.Size = new Size(39, 15);
+            label11.TabIndex = 2;
+            label11.Text = "Name";
+            // 
+            // button1
+            // 
+            button1.Location = new Point(0, 483);
+            button1.Name = "button1";
+            button1.Size = new Size(124, 27);
+            button1.TabIndex = 1;
+            button1.Text = "Create Path";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
+            // 
+            // WaypointGrid
+            // 
+            WaypointGrid.AllowUserToAddRows = false;
+            WaypointGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            WaypointGrid.Columns.AddRange(new DataGridViewColumn[] { Column2, Column3, Column4 });
+            WaypointGrid.ContextMenuStrip = PathContextMenu;
+            WaypointGrid.Location = new Point(2, 212);
+            WaypointGrid.MultiSelect = false;
+            WaypointGrid.Name = "WaypointGrid";
+            WaypointGrid.RowTemplate.Height = 25;
+            WaypointGrid.Size = new Size(344, 265);
+            WaypointGrid.TabIndex = 0;
+            // 
+            // Column2
+            // 
+            Column2.HeaderText = "X";
+            Column2.Name = "Column2";
+            // 
+            // Column3
+            // 
+            Column3.HeaderText = "Y";
+            Column3.Name = "Column3";
+            // 
+            // Column4
+            // 
+            Column4.HeaderText = "Z";
+            Column4.Name = "Column4";
+            // 
+            // PathContextMenu
+            // 
+            PathContextMenu.Items.AddRange(new ToolStripItem[] { addToolStripMenuItem, removeToolStripMenuItem });
+            PathContextMenu.Name = "PathContextMenu";
+            PathContextMenu.Size = new Size(118, 48);
+            // 
+            // addToolStripMenuItem
+            // 
+            addToolStripMenuItem.Name = "addToolStripMenuItem";
+            addToolStripMenuItem.Size = new Size(117, 22);
+            addToolStripMenuItem.Text = "Add";
+            addToolStripMenuItem.Click += addToolStripMenuItem_Click;
+            // 
+            // removeToolStripMenuItem
+            // 
+            removeToolStripMenuItem.Name = "removeToolStripMenuItem";
+            removeToolStripMenuItem.Size = new Size(117, 22);
+            removeToolStripMenuItem.Text = "Remove";
+            removeToolStripMenuItem.Click += removeToolStripMenuItem_Click;
             // 
             // menuStrip1
             // 
@@ -633,7 +860,7 @@ namespace ConsoleGUI
             // 
             // simulationToolStripMenuItem
             // 
-            simulationToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { startToolStripMenuItem, pauseToolStripMenuItem });
+            simulationToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { startToolStripMenuItem, pauseToolStripMenuItem, resumeToolStripMenuItem });
             simulationToolStripMenuItem.Name = "simulationToolStripMenuItem";
             simulationToolStripMenuItem.Size = new Size(76, 20);
             simulationToolStripMenuItem.Text = "Simulation";
@@ -641,14 +868,14 @@ namespace ConsoleGUI
             // startToolStripMenuItem
             // 
             startToolStripMenuItem.Name = "startToolStripMenuItem";
-            startToolStripMenuItem.Size = new Size(105, 22);
+            startToolStripMenuItem.Size = new Size(180, 22);
             startToolStripMenuItem.Text = "Start";
             startToolStripMenuItem.Click += startToolStripMenuItem_Click;
             // 
             // pauseToolStripMenuItem
             // 
             pauseToolStripMenuItem.Name = "pauseToolStripMenuItem";
-            pauseToolStripMenuItem.Size = new Size(105, 22);
+            pauseToolStripMenuItem.Size = new Size(180, 22);
             pauseToolStripMenuItem.Text = "Pause";
             pauseToolStripMenuItem.Click += pauseToolStripMenuItem_Click;
             // 
@@ -691,12 +918,12 @@ namespace ConsoleGUI
             clearToolStripMenuItem.Size = new Size(101, 22);
             clearToolStripMenuItem.Text = "Clear";
             // 
-            // clearCommandsToolStripMenuItem
+            // resumeToolStripMenuItem
             // 
-            clearCommandsToolStripMenuItem.Name = "clearCommandsToolStripMenuItem";
-            clearCommandsToolStripMenuItem.Size = new Size(180, 22);
-            clearCommandsToolStripMenuItem.Text = "Clear Commands";
-            clearCommandsToolStripMenuItem.Click += clearCommandsToolStripMenuItem_Click;
+            resumeToolStripMenuItem.Name = "resumeToolStripMenuItem";
+            resumeToolStripMenuItem.Size = new Size(180, 22);
+            resumeToolStripMenuItem.Text = "Resume";
+            resumeToolStripMenuItem.Click += resumeToolStripMenuItem_Click;
             // 
             // MainForm
             // 
@@ -726,6 +953,10 @@ namespace ConsoleGUI
             tabControl1.ResumeLayout(false);
             tabPage1.ResumeLayout(false);
             tabPage1.PerformLayout();
+            tabPage3.ResumeLayout(false);
+            tabPage3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)WaypointGrid).EndInit();
+            PathContextMenu.ResumeLayout(false);
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
             contextObjectEditor.ResumeLayout(false);
@@ -792,7 +1023,6 @@ namespace ConsoleGUI
         private ToolStripMenuItem loadActorsToolStripMenuItem;
         private ToolStripMenuItem loadUserActorsToolStripMenuItem;
         private ContextMenuStrip ObjectEditorContextMenu;
-        private ToolStripMenuItem createToolStripMenuItem1;
         private ToolStripMenuItem loadBlueprintsToolStripMenuItem;
         private ToolStripMenuItem toolStripMenuItem2;
         private ToolStripMenuItem viewToolStripMenuItem;
@@ -802,5 +1032,29 @@ namespace ConsoleGUI
         private ToolStripMenuItem clearToolStripMenuItem;
         private ContextMenuStrip contextMenuConsoleListBox;
         private ToolStripMenuItem clearCommandsToolStripMenuItem;
+        private TabPage tabPage3;
+        private DataGridView WaypointGrid;
+        private Button button1;
+        private TextBox TbTurnRate;
+        private Label label14;
+        private TextBox TbPathSpeed;
+        private Label label13;
+        private CheckBox CBIsCurved;
+        private CheckBox CBIsLooped;
+        private Label label12;
+        private TextBox TbPathName;
+        private Label label11;
+        private TextBox TbPathSegmentCount;
+        private Label label15;
+        private ContextMenuStrip PathContextMenu;
+        private ToolStripMenuItem addToolStripMenuItem;
+        private ToolStripMenuItem removeToolStripMenuItem;
+        private DataGridViewTextBoxColumn Column2;
+        private DataGridViewTextBoxColumn Column3;
+        private DataGridViewTextBoxColumn Column4;
+        private ToolStripMenuItem blueprintToolStripMenuItem;
+        private ToolStripMenuItem attachToPathToolStripMenuItem;
+        private ToolStripMenuItem destroyToolStripMenuItem;
+        private ToolStripMenuItem resumeToolStripMenuItem;
     }
 }

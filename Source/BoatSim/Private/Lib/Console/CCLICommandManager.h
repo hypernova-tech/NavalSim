@@ -131,6 +131,7 @@ public:
 	static FString Sensors;
 	static FString SensorType;
 	static FString SensorTypes;
+	static FString Paths;
 
 	static FString SimCommand;
 	static FString Start;

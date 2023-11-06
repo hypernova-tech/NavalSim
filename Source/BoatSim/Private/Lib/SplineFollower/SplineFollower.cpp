@@ -55,7 +55,9 @@ void USplineFollower::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 
 void USplineFollower::OnStep(float DeltaTime)
 {
-	
+	if (pAttachedObject == nullptr) {
+		return;
+	}
 	float len = pSplineComponent->GetSplineLength();
 
 	FVector pos = pSplineComponent->GetLocationAtDistanceAlongSpline(CurrentDistance, ESplineCoordinateSpace::World);
