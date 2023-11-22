@@ -318,4 +318,7 @@ public:
 	virtual bool SetActorRelRot(AActor* p_actor, FVector pos);
 
 	virtual bool FocusCamera(AActor* p_actor);
+
+	virtual bool GetIsUIVisible(bool& val);
+	virtual bool SetIsUIVisible(bool val);
 };

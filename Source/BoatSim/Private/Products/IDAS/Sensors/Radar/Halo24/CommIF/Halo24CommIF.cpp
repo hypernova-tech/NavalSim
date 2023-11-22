@@ -62,7 +62,7 @@ void UHalo24CommIF::BeginPlay()
 	SenderThread = FRunnableThread::Create(this, *(GetOwner()->GetName()));
 	
 }
-
+SRadarSimSDKPacket packspoke;
 void UHalo24CommIF::SendRadarTrack()
 {
 	SScanResult* p_current = CurrentRequest[0];
@@ -84,31 +84,32 @@ void UHalo24CommIF::SendRadarTrack()
 
 	for (int i = 0; i < SpokeCountPerSector; i++) {
 
-		SRadarSimSDKPacket pack;
-		memset(&pack, 0, sizeof(SRadarSimSDKPacket));
+		//SRadarSimSDKPacket pack;
+		memset(&packspoke, 0, sizeof(SRadarSimSDKPacket));
 
-		SHalo24SpokePayload* p_spoke_payload = (SHalo24SpokePayload*)pack.Payload;
+		SHalo24SpokePayload* p_spoke_payload = (SHalo24SpokePayload*)packspoke.Payload;
 
 		S9174SpokeHeader* p_hdr = &(p_spoke_payload->SpokeData.Header);
-		p_hdr->spokeLength_bytes = 536;
-		p_hdr->sequenceNumber = SpokeSequanceNumber;
-		p_hdr->sampleEncoding = 0;
-		p_hdr->nOfSamples = 1024;
-		p_hdr->bitsPerSample = 4;
-		p_hdr->rangeCellSize_mm = (each_cell_size)*1000;
-		p_hdr->spokeAzimuth = p_current->AzimuthRange.X;
-		p_hdr->bearingZeroError = 0;
-		p_hdr->spokeCompass = p_current->ScanRPYWorld.Z / 4096.0f;
-		p_hdr->trueNorth = 1;
-		p_hdr->rangeCellsDiv2 = p_current->ScanRangeMeter / (each_cell_size) * 0.5f;
+		p_spoke_payload->SpokeData.Header.spokeLength_bytes = 536;
+		p_spoke_payload->SpokeData.Header.sequenceNumber = SpokeSequanceNumber;
+		p_spoke_payload->SpokeData.Header.sampleEncoding = 0;
+		p_spoke_payload->SpokeData.Header.nOfSamples = 1024;
+		p_spoke_payload->SpokeData.Header.bitsPerSample = 4;
+		p_spoke_payload->SpokeData.Header.rangeCellSize_mm = (each_cell_size)*1000;
+		p_spoke_payload->SpokeData.Header.spokeAzimuth = p_current->AzimuthRange.X;
+		p_spoke_payload->SpokeData.Header.bearingZeroError = 0;
+		p_spoke_payload->SpokeData.Header.spokeCompass = p_current->ScanRPYWorld.Z / 4096.0f;
+		p_spoke_payload->SpokeData.Header.trueNorth = 1;
+		p_spoke_payload->SpokeData.Header.rangeCellsDiv2 = p_current->ScanRangeMeter / (each_cell_size) * 0.5f;
 
 		bool ret = p_current_sector->MapSpoke4Bits(p_current->ScanCenter,p_current_sector->StartAzimuthDeg +  i * each_spoke_step, each_cell_size, p_spoke_payload->SpokeData.Data);
 
 		if (ret) {
-			pack.SetID(ESimSDKDataIDS::SpokeData);
+			packspoke.SetID(ESimSDKDataIDS::SpokeData);
 			p_spoke_payload->SerialData.SetSerial(pHostIF->GetSerial(), strlen(pHostIF->GetSerial()));
-			pack.SetPayloadSize(sizeof(SHalo24SpokePayload));
-			pUDPConnection->SendUDPData((const INT8U*)&pack, pack.GetTransmitSize());
+			packspoke.SetPayload(ESimSDKDataIDS::SpokeData, (INT8U*)packspoke.Payload, sizeof(SHalo24SpokePayload));
+			//pack.SetPayloadSize(sizeof(SHalo24SpokePayload));
+			pUDPConnection->SendUDPData((const INT8U*)&packspoke, packspoke.GetTransmitSize());
 		}
 		else {
 			break;

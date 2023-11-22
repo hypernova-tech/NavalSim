@@ -32,6 +32,7 @@ public static class CLICommandManager
     [Modifiable] public const string Beam = "beam";
     [Modifiable] public const string Range = "range";
     [Modifiable] public const string Fov = "fov";
+    public const string UIVisible = "uivisible";
     public const string Selected = "selected";
     public const string Focused = "focused";
     [Modifiable] public const string VerticalFov = "vfov";

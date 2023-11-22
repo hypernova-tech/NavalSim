@@ -4,9 +4,14 @@
 #include "Halo24SDK/include/MultiRadarClient.h"
 #include "CBoatSimListener.h"
 #include "CHalo24SimIF.h"
+#if _WIN32
 #include "CWinUDPSocket.h"
+#elif
+#include "CLinuxUDPSocket.h"
+#endif
 #include "Halo24SDK/include/MultiRadarClient.h"
 #include "CHost.h"
+#include "RadarSimSdkConfig.h"
 
 
 

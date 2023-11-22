@@ -44,6 +44,7 @@ protected:
 	virtual void ComputeFPS(float DeltaTime);
 
 	UGizmoUIController* pGizmoUIController;
+	bool IsUIVisible = false;
 
 public:	
 	// Called every frame
@@ -79,6 +80,11 @@ public:
 	UFUNCTION(BlueprintCallable)
 		float GetAverageFPS();
 
+	UFUNCTION(BlueprintCallable)
+		bool GetIsUIVisible();
+
+	UFUNCTION(BlueprintCallable)
+		void SetIsUIVisible(bool val);
 
 	void FindActorAtClickPosition(int locationX, int locationY);
 

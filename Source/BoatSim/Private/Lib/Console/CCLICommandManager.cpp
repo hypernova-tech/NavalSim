@@ -36,7 +36,7 @@ FString CCLICommandManager::Range = "range";
 FString CCLICommandManager::Fov = "fov";
 FString CCLICommandManager::Selected = "selected";
 FString CCLICommandManager::Focused = "focused";
-
+FString CCLICommandManager::UIVisible = "uivisible";
 
 FString CCLICommandManager::VericalFov = "vfov";
 FString CCLICommandManager::HorizontalFov = "hfov";
@@ -404,6 +404,10 @@ void CCLICommandManager::PrepareSetCommandInfo()
 	info.Description = "sets the speed of the attached object";
 	options.Add(info);
 
+	info.Option = "--" + CCLICommandManager::TurnRate;
+	info.Description = "sets the turn rate of attached object";
+	options.Add(info);
+
 	info.Option = "--" + CCLICommandManager::Attach;
 	info.Description = "attach the object given actor name";
 	options.Add(info);
@@ -418,6 +422,10 @@ void CCLICommandManager::PrepareSetCommandInfo()
 
 	info.Option = "--" + CCLICommandManager::Straight;
 	info.Description = "set the path straight of given path of name";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::UIVisible;
+	info.Description = "set the UI Visibility visible(1) hidden(0)";
 	options.Add(info);
 
 
@@ -580,6 +588,14 @@ void CCLICommandManager::PrepareGetCommandInfo()
 	info.Description = "gets path closed(1) or not (0)";
 	options.Add(info);
 
+	info.Option = "--" + CCLICommandManager::TurnRate;
+	info.Description = "gets the turn rate of attached object";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::Speed;
+	info.Description = "gets the speed of attached object";
+	options.Add(info);
+
 	info.Option = "--" + CCLICommandManager::Attach;
 	info.Description = "gets the attached actor to path of name";
 	options.Add(info);
@@ -595,6 +611,10 @@ void CCLICommandManager::PrepareGetCommandInfo()
 
 	info.Option = "--" + CCLICommandManager::Straight;
 	info.Description = "get the path straight (1) or not (0) of given path of name";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::UIVisible;
+	info.Description = "get the UI Visibility visible(1) hidden(0)";
 	options.Add(info);
 
 

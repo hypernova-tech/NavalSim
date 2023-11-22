@@ -84,6 +84,7 @@ public:
 	static FString Fov;
 	static FString Selected;
 	static FString Focused;
+	static FString UIVisible;
 
 
 	static FString VericalFov;

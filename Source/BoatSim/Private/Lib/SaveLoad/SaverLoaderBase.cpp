@@ -289,6 +289,10 @@ bool USaverLoaderBase::Save(ISystemAPI* p_api, FString file_name)
 
 	// Save the string to the file
 	FString FilePath = FPaths::Combine(FPaths::ProjectDir(), *file_name);
+	p_api->SendConsoleResponse("File Path Proj: " + FilePath);
+	p_api->SendConsoleResponse("Save  Proj: " + FPaths::ProjectSavedDir());
+	p_api->SendConsoleResponse("Engine Save  Dir: " + FPaths::EngineSavedDir());
+	p_api->SendConsoleResponse("ShouldSaveToUserDir: " + FPaths::ShouldSaveToUserDir());
 	bool ret =  FFileHelper::SaveStringToFile(CombinedString, *FilePath);
 
 

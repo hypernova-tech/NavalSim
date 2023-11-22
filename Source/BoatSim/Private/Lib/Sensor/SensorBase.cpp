@@ -335,5 +335,6 @@ void ASensorBase::SaveJSON(CJsonDataContainer& data)
 	data.Add(CCLICommandManager::EnableFoamDetect, EnableFoamDetect);
 	data.Add(CCLICommandManager::SeaSurfaceDetectionProb, SeaSurfaceDetectionProbability);
 	data.Add(CCLICommandManager::MaxSurfacePenetration, MaxSurfacePenetrationMeter);
+	data.Add(CCLICommandManager::Range, RangeMeter.Y);
 
 }

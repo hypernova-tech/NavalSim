@@ -1,7 +1,5 @@
 #include "CHost.h"
 #include <iostream>
-
-
 #include "Halo24SDK/include/ImageClient.h"
 #include "Halo24SDK/include/TargetTrackingClient.h"
 #include <math.h>
@@ -15,13 +13,19 @@ CHost* CHost::pInstance = nullptr;
 
 void CHost::Init()
 {
-	//pHostThread = new std::thread(&CHost::ThreadFunction, this);
+#if SIMULATE_HOST
+	pHostThread = new std::thread(&CHost::ThreadFunction, this);
+#endif
 
 
 	pHalo24SimSDK = new CHalo24IF();
 	pBoatSimListener = new CBoatSimListener();
-
+#if _WIN32
 	pRadarStreamConnection = new CWinUDPSocket();
+#elif
+	pRadarStreamConnection = new CLinuxUDPSocket();
+#endif
+
 	SConnectionArgs args = { "127.0.0.1",4143, 4142 };
 	pRadarStreamConnection->Create(&args);
 
@@ -45,7 +49,6 @@ void CHost::Init()
 
 void CHost::ThreadFunction()
 {
-	#if false
 	double time = 0;
 	tMultiRadarClient::GetInstance()->AddRadarListObserver(this);
 	tMultiRadarClient::GetInstance()->AddUnlockStateObserver(this);
@@ -496,7 +499,6 @@ void CHost::ThreadFunction()
 	
 
 	}
-#endif
 }
 void CHost::UpdateRadarList(const char* pSerialNumber, eAction action)
 {

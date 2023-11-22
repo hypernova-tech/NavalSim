@@ -1639,7 +1639,27 @@ bool ASystemManagerBase::GetPathLineColor(AActor* p_actor, FColor& val)
 
  bool ASystemManagerBase::FocusCamera(AActor* p_actor)
  {
-	 return GetPlatform()->FocusCamera(p_actor);
+	 auto* p_platform = GetPlatform();
+	 if (p_platform != nullptr) {
+		 return GetPlatform()->FocusCamera(p_actor);
+	 }
+	 else {
+		 return false;
+	 }
+
+	 
+ }
+
+ bool ASystemManagerBase::GetIsUIVisible(bool& val)
+ {
+	 val =  GetUIController()->GetIsUIVisible();
+	 return true;
+ }
+
+ bool ASystemManagerBase::SetIsUIVisible(bool val)
+ {
+	 GetUIController()->SetIsUIVisible(val);
+	 return true;
  }
 
 

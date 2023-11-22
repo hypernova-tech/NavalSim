@@ -171,6 +171,16 @@ float AUIControllerBase::GetAverageFPS()
 	return AverageFPS;
 }
 
+bool AUIControllerBase::GetIsUIVisible()
+{
+	return IsUIVisible;
+}
+
+void AUIControllerBase::SetIsUIVisible(bool val)
+{
+	IsUIVisible = val;
+}
+
 void AUIControllerBase::ComputeFPS(float DeltaTime)
 {
 	FPSMeasurments.Add(DeltaTime);

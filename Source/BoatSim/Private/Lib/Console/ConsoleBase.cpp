@@ -706,6 +706,16 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
         return ctrl_ret;
     }
 
+    ret = CommandManager.GetValue(CCLICommandManager::UIVisible, is_enabled);
+    if (ret) {
+        if (pSystemAPI->SetIsUIVisible(is_enabled)) {
+            return true;
+        }
+    }
+    else {
+
+    }
+
     ret = CommandManager.GetValue(CCLICommandManager::Selected, sret);
     if (ret) {
         auto selected = pSystemAPI->FindActor(sret);
@@ -826,6 +836,8 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
     else {
 
     }
+
+
 
     ret = CommandManager.GetValue(CCLICommandManager::HorizontalFov, dbl);
     if (ret) {
@@ -1111,7 +1123,7 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
 
     ret = CommandManager.GetValue(CCLICommandManager::TurnRate, dbl);
     if (ret) {
-        if (pSystemAPI->GetPathTurnRate(p_actor, dbl)) {
+        if (pSystemAPI->SetPathTurnRate(p_actor, dbl)) {
             one_success = true;
         }
     }
@@ -1171,6 +1183,17 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
         return true;
     }
 
+    ret = CommandManager.HasA(CCLICommandManager::UIVisible);
+    if (ret) {
+        if (pSystemAPI->GetIsUIVisible(is_enabled)) {
+            SendConsoleResponse(name, CCLICommandManager::UIVisible, is_enabled);
+            return true;
+        }
+    }
+    else {
+
+    }
+
 
     ret = CommandManager.GetValue(CCLICommandManager::Selected, sret);
     if (ret) {
@@ -1228,7 +1251,7 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
 
     ret = CommandManager.HasPosition();
     if (ret) {
-        SendConsoleResponse(name,CCLICommandManager::Position, p_actor->GetActorLocation());
+        SendConsoleResponse(name,CCLICommandManager::Position, TOW(p_actor->GetActorLocation()));
         return true;
 
     }
@@ -1236,7 +1259,7 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
     ret = CommandManager.HasRelposition();
     if (ret) {
        
-        SendConsoleResponse(name, CCLICommandManager::RelPosition, p_actor->GetActorLocation());
+        SendConsoleResponse(name, CCLICommandManager::RelPosition, TOW(p_actor->GetActorLocation()));
         return true;
 
     }
@@ -1308,6 +1331,8 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
 
     }
 
+
+ 
 
     ret = CommandManager.HasA(CCLICommandManager::HorizontalFov);
     if (ret) {
@@ -1658,6 +1683,9 @@ bool UConsoleBase::ProcessWorkspaceCommand(TMap<FString, FString>& options, FStr
             SendActorBases();
             return true;
         }
+        else {
+            error_message = "failed to load";
+        }
     }
     else {
         
@@ -1667,6 +1695,9 @@ bool UConsoleBase::ProcessWorkspaceCommand(TMap<FString, FString>& options, FStr
     if (ret) {
         if (pSystemAPI->Save(path)) {
             return true;
+        }
+        else {
+            error_message = "failed to save";
         }
     }
     else {

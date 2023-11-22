@@ -17,9 +17,15 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using System.Reflection;
 using Microsoft.VisualBasic.Logging;
 
+
+public interface IConnection
+{
+    public void SendData(string cmd, bool add_to_cmd_list = true);
+}
+
 namespace ConsoleGUI
 {
-    public partial class MainForm : Form
+    public partial class MainForm : Form, IConnection
     {
         const string ExecutablePath = @"C:\Users\Pc\Documents\Unreal Projects\BoatSim\package\Windows\BoatSim.exe";
         UdpClient UdpClient;
@@ -42,7 +48,7 @@ namespace ConsoleGUI
         private readonly object _lockObject = new object();
         CTreeViewManager TreeViewManager = new CTreeViewManager();
         Dictionary<string, string> Modifyables = new Dictionary<string, string>();
-
+        CSystemAPIImplementor SystemAPIImplementor = new CSystemAPIImplementor();
         public MainForm()
         {
             mJsonParser.SetMainForm(this);
@@ -54,6 +60,7 @@ namespace ConsoleGUI
             Modifyables = CLICommandManager.GetModifiableConstants();
 
             PopulateDataGridView();
+            SystemAPIImplementor.SetConnection(this);
         }
         private void PopulateDataGridView()
         {
@@ -307,7 +314,7 @@ namespace ConsoleGUI
         }
 
 
-        void SendData(string cmd, bool add_to_cmd_list = true)
+        public void SendData(string cmd, bool add_to_cmd_list = true)
         {
             for (int i = 0; i < InstanceCount; i++)
             {
@@ -1240,6 +1247,7 @@ namespace ConsoleGUI
         private void loadUserActorsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             LoadActorBases();
+            LoadModels();
         }
 
         public void UpdatePaths(ContextMenuStrip contextMenuStrip, HashSet<string> items)
@@ -1576,6 +1584,16 @@ namespace ConsoleGUI
                 var command = string.Format("ws --save {0}", fileName);
                 SendData(command, false);
             }
+        }
+
+        private void showChartsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SystemAPIImplementor.SetUIVisible(true);
+        }
+
+        private void hideChartsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SystemAPIImplementor.SetUIVisible(false);
         }
     }
 }

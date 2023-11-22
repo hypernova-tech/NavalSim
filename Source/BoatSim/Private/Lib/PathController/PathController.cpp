@@ -183,8 +183,9 @@ void APathController::UpdatePathColor()
 	for (auto segment : PathSegments) {
 		auto StaticMeshComp = segment->GetStaticMesh();
 		// Now, set this material instance to the mesh component
+#if WITH_EDITOR
 		StaticMeshComp->SetMaterial(0, DynamicMaterial);
-
+#endif
 		// Convert FColor to FLinearColor. Note that FColor is in sRGB space, so we need to convert it properly.
 		
 	}

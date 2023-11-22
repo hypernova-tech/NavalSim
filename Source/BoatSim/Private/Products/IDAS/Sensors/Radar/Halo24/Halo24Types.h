@@ -437,7 +437,7 @@ struct S9174SpokeHeader
 	INT32U : 16;                     //!< reserved
 	INT32U : 16;                     //!< reserved
 	INT32U : 16;                     //!< reserved
-} BYTE_ALIGNED_END;
+}BYTE_ALIGNED_END; 
 
 //------------------------------------------------------------------------------
 //! Structure for conveying radar image data & header information (ie. spokes)
@@ -450,7 +450,7 @@ struct S9174SpokeData
 	INT8U Data[SAMPLE_COUNT_PER_SPOKE / 2];
 } BYTE_ALIGNED_END;
 
-
+BYTE_ALIGNED_BEGIN
 struct SHalo24SpokePayload
 {
 public:
@@ -462,7 +462,7 @@ public:
 	S9174SpokeData SpokeData;
 
 
-};
+}BYTE_ALIGNED_END;
 
 
 /// Tracking Client
@@ -577,7 +577,7 @@ public:
 
 
 
-
+BYTE_ALIGNED_BEGIN
 struct SRadarSimSDKPacket
 {
 	struct {
@@ -665,4 +665,4 @@ public:
 		Header.PayloadSize = sizeof(T);
 		Payload[sizeof(T)] = 0;
 	}
-};
+}BYTE_ALIGNED_END;

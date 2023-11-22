@@ -202,4 +202,7 @@ public:
 
 
 	virtual bool FocusCamera(AActor* p_actor) = 0;
+
+	virtual bool GetIsUIVisible(bool& val) = 0;
+	virtual bool SetIsUIVisible(bool val) = 0;
 };

@@ -148,5 +148,7 @@ public:
 	static void CameraLookAt(UCameraComponent* p_looker, AActor* p_target, FLOAT32 distance);
 
 	static void GetActorHierarchy(const AActor* Object, TArray<FString>& Hierarchy);
+	static TArray<uint8> HexStringToByteArray(const FString& HexString);
+	static FString CharToHexString(INT8U* p_data, INT32U len);
 };
 

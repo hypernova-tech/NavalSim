@@ -1,9 +1,11 @@
 ﻿#include "CBoatSimListener.h"
-#include <iostream>
-//#include <Windows.h>
-
-#include <thread>
 #include "Lib/Types/Primitives.h"
+#include <iostream>
+#if IS_WIN()
+#include <Windows.h>
+#endif
+#include <thread>
+
 
 
 void CBoatSimListener::Init()
@@ -19,7 +21,7 @@ void CBoatSimListener::Init()
 
 void CBoatSimListener::ThreadFunction() {
    
-    //HANDLE hPipe;
+  
     INT32U size = 1024 * 1024 * 4;
     INT8U *p_buffer = new INT8U[size];
     INT32U bytes_read = 0;

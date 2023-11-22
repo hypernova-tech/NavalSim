@@ -1,3 +1,4 @@
+#if __linux__
 #pragma once
 #include "IConnection.h"
 
@@ -6,7 +7,7 @@
 #include "../src/Network/AbstractComm.hpp"
 
 class CWinUDPSocket : public IConnection,
-					public INetworkCommManager
+    public INetworkCommManager
 {
 
 private:
@@ -14,21 +15,21 @@ private:
     //struct sockaddr_in m_address;
     //WSADATA m_wsaData
 
-	bool IsDataReceived;
-	INT8U ReceivedDataBuff[2048];
-	INT32S ReceivedDataLen;
+    bool IsDataReceived;
+    INT8U ReceivedDataBuff[2048];
+    INT32S ReceivedDataLen;
 
 public:
 
     CWinUDPSocket();
 
-    NetworkComm 			*simComm_;
+    NetworkComm* simComm_;
     void					receivePackage(NetworkComm* networkComm, uint8_t data[], uint16_t len, const portIP& senderPortIP);
 
 
     virtual bool Create(SConnectionArgs* p_args) override;
     virtual bool SendData(INT8U* p_data, INT32U count, INT16U remote_port) override;
-    virtual bool ReceivedData(INT8U* p_dest, INT32U dest_size,  INT32U& read_count);
+    virtual bool ReceivedData(INT8U* p_dest, INT32U dest_size, INT32U& read_count);
     ~CWinUDPSocket();
 };
-
+#endif

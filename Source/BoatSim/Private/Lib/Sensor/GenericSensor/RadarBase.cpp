@@ -67,6 +67,7 @@ bool ARadarBase::GetTrackerEnabled()
 	return IsTrackerEnabled;
 }
 
+
 void ARadarBase::SetScanEnabled(bool val)
 {
 	IsScanEnabled = val;
@@ -82,7 +83,7 @@ void ARadarBase::BeginPlay()
 {
 	CUtil::DebugLog("ARadarBase Beginplay");
 	Super::BeginPlay();
-	
+	SetScanEnabled(false);
 	CUtil::FStringToAsciiChar(RadarSerial, Serial, sizeof(Serial));
 }
 

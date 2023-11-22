@@ -9,8 +9,14 @@
 void AHalo24Radar::BeginPlay()
 {
 	Super::BeginPlay();
+	
 
 
+}
+
+void AHalo24Radar::OnDataReady()
+{
+	Super::OnDataReady();
 }
 
 void AHalo24Radar::RadarStateMachine()
@@ -55,15 +61,16 @@ void AHalo24Radar::RadarStateMachine()
 	case EHalo24StateMachineStates::WaitTransmit:
 		if (IsTransmitOn) {
 			SetRadarState(ERadarState::eTransmit);
+			SetScanEnabled(true);
 			next_state = EHalo24StateMachineStates::Transmitting;
 		}
 		break;
 	case EHalo24StateMachineStates::Transmitting:
-		if (IsTransmitOn) {
-			SetScanEnabled(true);
+		if (!IsTransmitOn) {
+			SetScanEnabled(false);
 			next_state = EHalo24StateMachineStates::WaitTransmit;
 		}
-		if (IsPoweredOn) {
+		if (!IsPoweredOn) {
 			next_state = EHalo24StateMachineStates::WaitPoweredOn;
 		}
 		break;
@@ -377,8 +384,10 @@ void AHalo24Radar::InitTracker()
 
 void AHalo24Radar::ValidateKeys(INT8U* p_keys, INT8U key_count)
 {
-	if (RadarUnlockKey.Len() == key_count) {
-		FString str = CUtil::CharToFString((const char*)p_keys);
+
+	//aoutCUtil::HexStringToByteArray(RadarUnlockKey)
+	if (RadarUnlockKey.Len()/2 == key_count) {
+		FString str = CUtil::CharToHexString(p_keys, key_count);
 
 		if (str == RadarUnlockKey) {
 			IsKeysVerified = true;

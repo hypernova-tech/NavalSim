@@ -4,6 +4,8 @@
 #include "Lib/Utils/CUtil.h"
 #include <Lib/Math/CMath.h>
 #include <Lib/SystemManager/SystemManagerBase.h>
+#include <sstream>
+#include <iomanip>
 
 
 
@@ -908,7 +910,7 @@ T* CUtil::FindChildComponent(AActor* p_parent)
 AActor* CUtil::SpawnObjectFromBlueprint(AActor *p_template, FString blueprint_path, UWorld *p_world, AActor *p_owner, FString name, FVector pos, FVector rot_rpy, FVector scale)
 {
 
-    try {
+ 
 
     
     // The blueprint name should be the path to the blueprint asset, relative to the Content folder.
@@ -962,10 +964,8 @@ AActor* CUtil::SpawnObjectFromBlueprint(AActor *p_template, FString blueprint_pa
     SpawnedActor->SetActorScale3D(scale);
     return SpawnedActor;
 
-    }
-    catch (...) {
-        return nullptr;
-    }
+    
+  
 }
 
 FLOAT64 CUtil::GetTimeSeconds()
@@ -1120,4 +1120,42 @@ void CUtil::GetActorHierarchy(const AActor* Object, TArray<FString>& Hierarchy)
 
     // Recursively process the object's outer
     GetActorHierarchy(CUtil::GetParentActor((AActor*)Object), Hierarchy);
+}
+
+TArray<uint8> CUtil::HexStringToByteArray(const FString& HexString)
+{
+    TArray<uint8> ByteArray;
+
+    // Ensure the hex string length is even
+    if (HexString.Len() % 2 != 0)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("HexString length is not even"));
+        return ByteArray;
+    }
+
+    for (int32 Index = 0; Index < HexString.Len(); Index += 2)
+    {
+        FString ByteString = HexString.Mid(Index, 2);
+        int32 ByteValue = 0;
+        ByteValue = FParse::HexNumber(*ByteString);
+      
+        ByteArray.Add(static_cast<uint8>(ByteValue));
+        
+    
+    }
+
+    return ByteArray;
+}
+
+FString CUtil::CharToHexString(INT8U* p_data, INT32U len)
+{
+    std::stringstream ss;
+    ss << std::hex << std::setfill('0');
+
+    for (INT32U i = 0; i < len; ++i)
+    {
+        ss << std::setw(2) << static_cast<int>(p_data[i]);
+    }
+
+    return FString(ss.str().c_str());
 }
