@@ -197,12 +197,13 @@ double ASensorBase::GetFrequency()
 
 void ASensorBase::SetRangeMeter(FVector2D val)
 {
-	RangeMeter = val;
+	RangeMinMeter = val.X;
+	RangeMaxMeter = val.Y;
 }
 
 FVector2D ASensorBase::GetRangeMeter()
 {
-	return RangeMeter;
+	return FVector2D(RangeMinMeter, RangeMaxMeter);
 }
 
 void ASensorBase::SetNoiseMean(double val)
@@ -335,6 +336,6 @@ void ASensorBase::SaveJSON(CJsonDataContainer& data)
 	data.Add(CCLICommandManager::EnableFoamDetect, EnableFoamDetect);
 	data.Add(CCLICommandManager::SeaSurfaceDetectionProb, SeaSurfaceDetectionProbability);
 	data.Add(CCLICommandManager::MaxSurfacePenetration, MaxSurfacePenetrationMeter);
-	data.Add(CCLICommandManager::Range, RangeMeter.Y);
-
+	data.Add(CCLICommandManager::RangeMin, RangeMinMeter);
+	data.Add(CCLICommandManager::RangeMax, RangeMaxMeter);
 }

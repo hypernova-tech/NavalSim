@@ -80,8 +80,8 @@ public:
 	static FString Controller;
 	static FString SensorSlotIndex;
 	static FString Beam;
-	static FString Range;
-	static FString Fov;
+	static FString RangeMin;
+	static FString RangeMax;
 	static FString Selected;
 	static FString Focused;
 	static FString UIVisible;

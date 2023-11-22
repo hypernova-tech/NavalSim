@@ -1069,6 +1069,44 @@ bool ASystemManagerBase::GetVerticalScanStepAngleDeg(AActor* p_actor, FLOAT64& a
 	return false;
 }
 
+
+bool ASystemManagerBase::GetRangeMinMeter(AActor* p_actor, FLOAT64 &val)
+{
+	auto p_obj = ToSensorBase(p_actor);
+	if (p_obj) {
+		val = p_obj->RangeMinMeter;
+		return true;
+	}
+	return false;
+}
+bool ASystemManagerBase::SetRangeMinMeter(AActor* p_actor, FLOAT64 val)
+{
+	auto p_obj = ToSensorBase(p_actor);
+	if (p_obj) {
+		p_obj->RangeMinMeter = val;
+		return true;
+	}
+	return false;
+}
+bool ASystemManagerBase::SetRangeMaxMeter(AActor* p_actor, FLOAT64 val)
+{
+	auto p_obj = ToSensorBase(p_actor);
+	if (p_obj) {
+		p_obj->RangeMaxMeter = val;
+		return true;
+	}
+	return false;
+}
+bool ASystemManagerBase::GetRangeMaxMeter(AActor* p_actor, FLOAT64& val)
+{
+	auto p_obj = ToSensorBase(p_actor);
+	if (p_obj) {
+		val = p_obj->RangeMaxMeter;
+		return true;
+	}
+	return false;
+}
+
 bool ASystemManagerBase::SetMeasurementErrorMean(AActor* p_actor, FLOAT64 val)
 {
 	auto p_obj = ToSensorBase(p_actor);

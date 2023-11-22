@@ -879,6 +879,26 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
 
     }
 
+    ret = CommandManager.GetValue(CCLICommandManager::RangeMin, dbl);
+    if (ret) {
+        if (pSystemAPI->SetRangeMinMeter(p_actor, dbl)) {
+            one_success = true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::RangeMax, dbl);
+    if (ret) {
+        if (pSystemAPI->SetRangeMaxMeter(p_actor, dbl)) {
+            one_success = true;
+        }
+    }
+    else {
+
+    }
+
     ret = CommandManager.GetValue(CCLICommandManager::MeasurementErrorMean, dbl);
     if (ret) {
         if (pSystemAPI->SetMeasurementErrorMean(p_actor, dbl)) {
@@ -1349,6 +1369,28 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
     if (ret) {
         if (pSystemAPI->GetVerticalFov(p_actor, dbl)) {
             SendConsoleResponse(name, CCLICommandManager::VericalFov, dbl);
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.HasA(CCLICommandManager::RangeMin);
+    if (ret) {
+        if (pSystemAPI->GetRangeMinMeter(p_actor, dbl)) {
+            SendConsoleResponse(name, CCLICommandManager::RangeMin, dbl);
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.HasA(CCLICommandManager::RangeMax);
+    if (ret) {
+        if (pSystemAPI->GetRangeMaxMeter(p_actor, dbl)) {
+            SendConsoleResponse(name, CCLICommandManager::RangeMax, dbl);
             return true;
         }
     }

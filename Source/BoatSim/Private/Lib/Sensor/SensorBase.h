@@ -76,7 +76,11 @@ public:
 	UPROPERTY(EditAnywhere)
 		double Frequency;
 
-	UPROPERTY(EditAnywhere) FVector2D RangeMeter;
+	UPROPERTY(EditAnywhere) 
+		double  RangeMinMeter = 5;
+
+	UPROPERTY(EditAnywhere)
+		double  RangeMaxMeter = 100;
 
 	UPROPERTY(EditAnywhere)
 		double NoiseMean;

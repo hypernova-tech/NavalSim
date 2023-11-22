@@ -36,7 +36,8 @@ enum ESimSDKDataIDS :INT32U  // if PacketType is command
 	TrackingAcquire,
 	TrackingCancel,
 	TrackingOwnshipData,
-	TrackingStatus
+	TrackingStatus,
+	QueryRadars,
 };
 BYTE_ALIGNED_BEGIN
 struct SSerialData

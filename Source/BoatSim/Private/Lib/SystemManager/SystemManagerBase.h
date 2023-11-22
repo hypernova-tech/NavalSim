@@ -241,6 +241,10 @@ public:
 	virtual bool GetSlotIndex(AActor* p_actor, INT32S& slot_index);
 	virtual bool SetHorizontalFov(AActor* p_actor, FLOAT64 angle_deg);
 	virtual bool GetHorizontalFov(AActor* p_actor, FLOAT64& angle_deg);
+	virtual bool SetRangeMinMeter(AActor* p_actor, FLOAT64 val);
+	virtual bool GetRangeMinMeter(AActor* p_actor, FLOAT64& val);
+	virtual bool SetRangeMaxMeter(AActor* p_actor, FLOAT64 val);
+	virtual bool GetRangeMaxMeter(AActor* p_actor, FLOAT64& val);
 	virtual bool SetVerticalFov(AActor* p_actor, FLOAT64 angle_deg);
 	virtual bool GetVerticalFov(AActor* p_actor, FLOAT64& angle_deg);
 	virtual bool SetHorizontalScanStepAngleDeg(AActor* p_actor, FLOAT64 angle_deg);
@@ -321,4 +325,7 @@ public:
 
 	virtual bool GetIsUIVisible(bool& val);
 	virtual bool SetIsUIVisible(bool val);
+
+
+
 };

@@ -67,7 +67,7 @@ void AHalo24Radar::RadarStateMachine()
 		break;
 	case EHalo24StateMachineStates::Transmitting:
 		if (!IsTransmitOn) {
-			SetScanEnabled(false);
+			SetScanEnabled(true);
 			next_state = EHalo24StateMachineStates::WaitTransmit;
 		}
 		if (!IsPoweredOn) {
@@ -110,7 +110,7 @@ void AHalo24Radar::UpdateSetupData()
 	RadarSetupData.pwType = 0;
 
 
-	RadarSetupData.range_dm = RangeMeter.Y * 0.1f;               ///< Currently selected range (in 10ths of a metre)
+	RadarSetupData.range_dm = RangeMaxMeter * 0.1f;               ///< Currently selected range (in 10ths of a metre)
 	RadarSetupData.useMode = RadarState;               ///< Use mode
 	
 #if false
@@ -176,7 +176,7 @@ void AHalo24Radar::UpdateTracker()
 	if (!UseSimulationDataAsOwnShip) {
 		FRotator rot(0, -(360 - (INT32S)LastOwnshipData.DirectionDeg), 0);
 		FVector vel = rot.RotateVector(FVector::ForwardVector) * LastOwnshipData.SpeedMetersPerSec;
-		pTracker->SetOwnshipData(this, GetActorLocation(), CUtil::GetActorRPY(this), vel, RangeMeter, NoiseMean, NoiseStdDeviation);
+		pTracker->SetOwnshipData(this, GetActorLocation(), CUtil::GetActorRPY(this), vel, GetRangeMeter(), NoiseMean, NoiseStdDeviation);
 	}
 	
 	Super::UpdateTracker();
@@ -267,7 +267,7 @@ void AHalo24Radar::OnRecievedMessage(SRadarSimSDKPacket* p_pack)
 		SRangeControl* p_connect_args = (SRangeControl*)p_pack->Payload;
 		if (strcmp((char*)p_connect_args->SerialData.SerialKey, Serial) == 0) {
 	
-			RangeMeter.Y = p_connect_args->RangeMeter;
+			RangeMaxMeter = p_connect_args->RangeMeter;
 			pHalo24CommIF->SendResponseAckNack(ESimSDKDataIDS::RangeControl, Serial, true);
 		}
 	}

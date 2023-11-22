@@ -7,6 +7,7 @@
 #include <Lib/Console/ConsoleBase.h>
 #include <Lib/Platform/PlatformBase.h>
 
+
 /**
  * 
  */
@@ -129,6 +130,10 @@ public:
 	virtual bool GetSlotIndex(AActor* p_actor, INT32S &slot_index) = 0;
     virtual bool SetHorizontalFov(AActor* p_actor, FLOAT64 angle_deg) = 0;
 	virtual bool GetHorizontalFov(AActor* p_actor, FLOAT64 &angle_deg) = 0;
+	virtual bool SetRangeMinMeter(AActor* p_actor, FLOAT64 val) = 0;
+	virtual bool GetRangeMinMeter(AActor* p_actor, FLOAT64& val) = 0;
+	virtual bool SetRangeMaxMeter(AActor* p_actor, FLOAT64 val) = 0;
+	virtual bool GetRangeMaxMeter(AActor* p_actor, FLOAT64& val) = 0;
     virtual bool SetVerticalFov(AActor* p_actor, FLOAT64 angle_deg) = 0;
 	virtual bool GetVerticalFov(AActor* p_actor, FLOAT64& angle_deg) = 0;
     virtual bool SetHorizontalScanStepAngleDeg(AActor* p_actor, FLOAT64 angle_deg) = 0;

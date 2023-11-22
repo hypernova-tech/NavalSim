@@ -30,6 +30,8 @@ public static class CLICommandManager
     public const string Controller = "controller";
     [Modifiable] public const string SensorSlotIndex = "slotindex";
     [Modifiable] public const string Beam = "beam";
+    [Modifiable] public const string RangeMin = "rangemin";
+    [Modifiable] public const string RangeMax = "rangemax";
     [Modifiable] public const string Range = "range";
     [Modifiable] public const string Fov = "fov";
     public const string UIVisible = "uivisible";

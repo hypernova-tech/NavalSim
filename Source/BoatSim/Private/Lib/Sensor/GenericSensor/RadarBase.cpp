@@ -134,7 +134,7 @@ void ARadarBase::RadarStateMachine()
 
 void ARadarBase::OnAsynTaskComplete()
 {
-	Visualize(pScanResult, GetActorLocation(), GetActorForwardVector(), GetActorRightVector(), RangeMeter.Y, (void*)pTracker);
+	Visualize(pScanResult, GetActorLocation(), GetActorForwardVector(), GetActorRightVector(), RangeMaxMeter, (void*)pTracker);
 }
 void ARadarBase::Save(ISaveLoader* p_save_load)
 {
@@ -221,7 +221,7 @@ void ARadarBase::UpdateTracker()
 {
 	if (IsTrackerEnabled) {
 		if (UseSimulationDataAsOwnShip) {
-			pTracker->SetOwnshipData(this, GetActorLocation(), CUtil::GetActorRPY(this), GetVelocity(), RangeMeter, NoiseMean, NoiseStdDeviation);
+			pTracker->SetOwnshipData(this, GetActorLocation(), CUtil::GetActorRPY(this), GetVelocity(), GetRangeMeter(), NoiseMean, NoiseStdDeviation);
 		}
 		
 		pTracker->Update();
@@ -267,8 +267,8 @@ void ARadarBase::Scan()
 
 		args.p_actor = this;
 		args.is_world = true;
-		args.range_meter = RangeMeter.Y;
-		args.min_range_meter = RangeMeter.X;
+		args.range_meter = RangeMaxMeter;
+		args.min_range_meter = RangeMinMeter;
 		args.azimuth_start_deg = start_azimuth;
 		args.azimuth_end_deg = end_azimuth;
 		args.elevation_start_deg = 0;
@@ -320,7 +320,7 @@ void ARadarBase::Scan()
 
 			CurrentScanAzimuth = end_azimuth + HorizontalScanStepAngleDeg;
 
-			Visualize(pScanResult, GetActorLocation(), GetActorForwardVector(), GetActorRightVector(), RangeMeter.Y, (void*)pTracker);
+			Visualize(pScanResult, GetActorLocation(), GetActorForwardVector(), GetActorRightVector(), RangeMaxMeter, (void*)pTracker);
 
 			NextScanTime = FApp::GetCurrentTime() + 0.1;
 

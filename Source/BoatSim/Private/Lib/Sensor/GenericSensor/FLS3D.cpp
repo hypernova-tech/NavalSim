@@ -54,8 +54,8 @@ void AFLS3D::Run(float delta_time_sec)
 
 		args.p_actor = this;
 		args.is_world = false;
-		args.range_meter = RangeMeter.Y;
-		args.min_range_meter = RangeMeter.X;
+		args.range_meter = RangeMaxMeter;
+		args.min_range_meter = RangeMinMeter;
 		args.azimuth_start_deg = start_azimuth;
 		args.azimuth_end_deg = end_azimuth;
 		args.elevation_start_deg = -FovVerticalDeg;
@@ -103,7 +103,7 @@ void AFLS3D::Run(float delta_time_sec)
 		FVector forward = GetActorForwardVector();
 		FVector right = GetActorRightVector();
 	
-		Visualize(pScanResult, GetActorLocation(), forward, right, RangeMeter.Y);
+		Visualize(pScanResult, GetActorLocation(), forward, right, RangeMaxMeter);
 
 		NextScanTime = FApp::GetCurrentTime() + 0.2;
 
