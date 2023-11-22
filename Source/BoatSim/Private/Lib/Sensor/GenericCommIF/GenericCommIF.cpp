@@ -40,6 +40,31 @@ void UGenericCommIF::SendConfig()
 {
 }
 
+TArray<SConnectionEntry> UGenericCommIF::GetConnectionsInfo()
+{
+	return Connections;
+}
+
+bool UGenericCommIF::SetConnectionInfo(INT32S ind, SConnectionInfo info)
+{
+	if (ind < Connections.Num()) {
+		Connections[ind].ConnectionInfo = info;
+		((UConnectionBase*)Connections[ind].pOwner)->OnModifiedConnection(info);
+	}
+	
+	return true;
+}
+
+void UGenericCommIF::RegisterConnectionInfo(INT32S ind, SConnectionInfo info, UConnectionBase *p_owner)
+{
+	SConnectionEntry entry;
+	entry.ConnectionInfo = info;
+	entry.pOwner = p_owner;
+	Connections.Add(entry);
+}
+
+
+
 void UGenericCommIF::OnReceivedConnectionData(void* connection, INT8U* p_data, INT32U count)
 {
 

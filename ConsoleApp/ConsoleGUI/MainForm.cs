@@ -126,6 +126,7 @@ namespace ConsoleGUI
 
 
             Thread udpListenerThread = new Thread(new ThreadStart(UDPListener));
+            udpListenerThread.IsBackground = true;
             udpListenerThread.Start();
 
 

@@ -239,6 +239,10 @@ public:
 
 	virtual bool SetSlotIndex(AActor* p_actor, INT32S slot_index);
 	virtual bool GetSlotIndex(AActor* p_actor, INT32S& slot_index);
+
+	virtual bool GetConnectionInfo(AActor* p_actor, INT32S ind, SConnectionInfo& conn);
+	virtual bool SetConnectionInfo(AActor* p_actor, INT32S ind, SConnectionInfo conn) ;
+
 	virtual bool SetHorizontalFov(AActor* p_actor, FLOAT64 angle_deg);
 	virtual bool GetHorizontalFov(AActor* p_actor, FLOAT64& angle_deg);
 	virtual bool SetRangeMinMeter(AActor* p_actor, FLOAT64 val);
@@ -325,6 +329,8 @@ public:
 
 	virtual bool GetIsUIVisible(bool& val);
 	virtual bool SetIsUIVisible(bool val);
+
+
 
 
 

@@ -1,0 +1,223 @@
+create --name sidamir --bp MIR
+set --controller sidamir
+set --name sidamir --position "0.000000 0.000000 0.000000"
+set --name sidamir --rotation "0.000000 0.000000 0.000000"
+set --name sidamir --scale "0.300000 0.300000 0.300000"
+
+create --name BP_Vessel_C_1 --bp CRUISER
+set --name BP_Vessel_C_1 --position "5187.021512 -1834.525683 -57.165104"
+set --name BP_Vessel_C_1 --rotation "0.000000 0.000000 0.000000"
+set --name BP_Vessel_C_1 --scale "1.000000 1.000000 1.000000"
+set --name BP_Vessel_C_1 --instance -1
+
+create --name BP_GeneticAgent_C_1 --bp 
+set --name BP_GeneticAgent_C_1 --position "-338.572255 -1729.419315 -254.829670"
+set --name BP_GeneticAgent_C_1 --rotation "0.000000 0.000000 0.000000"
+set --name BP_GeneticAgent_C_1 --scale "1.000000 1.000000 1.000000"
+set --name BP_GeneticAgent_C_1 --instance -1
+
+create --name gimbal1 --bp GIMBAL2DOF
+set --name gimbal1 --parent sidamir
+set --name gimbal1 --position "0.000000 0.000000 0.000000"
+set --name gimbal1 --rotation "0.000000 45.000000 0.000000"
+set --name gimbal1 --scale "1.000000 1.000000 1.000000"
+set --name gimbal1 --instance -1
+
+create --name gimbal2 --bp GIMBAL2DOF
+set --name gimbal2 --parent sidamir
+set --name gimbal2 --position "0.000000 0.000000 0.000000"
+set --name gimbal2 --rotation "0.000000 45.000000 0.000000"
+set --name gimbal2 --scale "1.000000 1.000000 1.000000"
+set --name gimbal2 --instance -1
+
+create --name viscam1 --bp CAMVIS
+set --name viscam1 --parent gimbal1
+set --name viscam1 --position "-5.229231 0.000000 4.756321"
+set --name viscam1 --rotation "0.000000 90.000000 0.000000"
+set --name viscam1 --scale "1.000000 1.000000 1.000000"
+set --name viscam1 --instance -1
+set --name viscam1 --slotindex 2
+set --name viscam1 --rangemin 5.000000
+set --name viscam1 --rangemax 100.000000
+set --name viscam1 --vfov 0.000000
+set --name viscam1 --hfov 60.000000
+set --name viscam1 --hscanstepang 0.000000
+set --name viscam1 --vscanstepang 36.000000
+set --name viscam1 --merrormean 0.000000
+set --name viscam1 --merrorstd 0.000000
+set --name viscam1 --surfacedetecten 0
+set --name viscam1 --subsurfacedetecten 0
+set --name viscam1 --foamen 0
+set --name viscam1 --seasurfdetectprob 0.000000
+set --name viscam1 --maxsurfpenet 0.000000
+set --name viscam1 --widthpx 1920
+set --name viscam1 --heightpx 1080
+
+create --name viscam2 --bp CAMVIS
+set --name viscam2 --parent gimbal2
+set --name viscam2 --position "-5.308550 1.907922 2.836402"
+set --name viscam2 --rotation "0.000000 7.201151 50.753635"
+set --name viscam2 --scale "0.300000 0.300000 0.300000"
+set --name viscam2 --instance -1
+set --name viscam2 --slotindex 3
+set --name viscam2 --rangemin 5.000000
+set --name viscam2 --rangemax 100.000000
+set --name viscam2 --vfov 0.000000
+set --name viscam2 --hfov 75.000000
+set --name viscam2 --hscanstepang 0.000000
+set --name viscam2 --vscanstepang 36.000000
+set --name viscam2 --merrormean 0.000000
+set --name viscam2 --merrorstd 0.000000
+set --name viscam2 --surfacedetecten 0
+set --name viscam2 --subsurfacedetecten 0
+set --name viscam2 --foamen 0
+set --name viscam2 --seasurfdetectprob 0.000000
+set --name viscam2 --maxsurfpenet 0.000000
+set --name viscam2 --widthpx 1920
+set --name viscam2 --heightpx 1080
+
+create --name fls1 --bp FLSFARSOUNDER
+set --name fls1 --parent sidamir
+set --name fls1 --position "6.550326 0.000000 0.000000"
+set --name fls1 --rotation "-0.000000 -21.571529 0.000000"
+set --name fls1 --scale "0.300000 0.300000 0.300000"
+set --name fls1 --instance -1
+set --name fls1 --slotindex 0
+set --name fls1 --rangemin 5.000000
+set --name fls1 --rangemax 100.000000
+set --name fls1 --vfov 45.000000
+set --name fls1 --hfov 45.000000
+set --name fls1 --hscanstepang 0.500000
+set --name fls1 --vscanstepang 0.500000
+set --name fls1 --merrormean 5.000000
+set --name fls1 --merrorstd 1.000000
+set --name fls1 --surfacedetecten 1
+set --name fls1 --subsurfacedetecten 1
+set --name fls1 --foamen 1
+set --name fls1 --seasurfdetectprob 0.001000
+set --name fls1 --maxsurfpenet 0.000000
+
+create --name haloradar1 --bp RADARHALO24
+set --name haloradar1 --parent sidamir
+set --name haloradar1 --position "2.296332 0.000000 4.063767"
+set --name haloradar1 --rotation "0.000000 1.999909 0.000000"
+set --name haloradar1 --scale "0.300000 0.300000 0.300000"
+set --name haloradar1 --instance -1
+set --name haloradar1 --slotindex 0
+set --name haloradar1 --ipaddr1 127.0.0.1
+set --name haloradar1 --localport1 13080
+set --name haloradar1 --remoteport 13081
+set --name haloradar1 --rangemin 5.000000
+set --name haloradar1 --rangemax 100.000000
+set --name haloradar1 --vfov 10.000000
+set --name haloradar1 --hfov 90.000000
+set --name haloradar1 --hscanstepang 1.000000
+set --name haloradar1 --vscanstepang 1.000000
+set --name haloradar1 --merrormean 10.000000
+set --name haloradar1 --merrorstd 0.000000
+set --name haloradar1 --surfacedetecten 0
+set --name haloradar1 --subsurfacedetecten 0
+set --name haloradar1 --foamen 1
+set --name haloradar1 --seasurfdetectprob 0.010000
+set --name haloradar1 --maxsurfpenet 2.000000
+set --name haloradar1 --radscanlevel 0
+set --name haloradar1 --radscanrpm 0
+set --name haloradar1 --radgaintype 2
+set --name haloradar1 --radgainlevel 1
+set --name haloradar1 --radseaclutleveltype 0
+set --name haloradar1 --radseaclutlevel 0
+set --name haloradar1 --radseaclutautooffset 0
+set --name haloradar1 --radrainclutlevel 0
+set --name haloradar1 --radmaxguardzonecount 2
+set --name haloradar1 --radmaxsectorblankingzonecount 4
+
+create --name m1lidar1 --bp LIDARM1
+set --name m1lidar1 --parent sidamir
+set --name m1lidar1 --position "0.623725 -0.183834 3.687766"
+set --name m1lidar1 --rotation "-0.000000 -10.000000 -16.422134"
+set --name m1lidar1 --scale "0.300000 0.300000 0.300000"
+set --name m1lidar1 --instance -1
+set --name m1lidar1 --slotindex 0
+set --name m1lidar1 --ipaddr1 192.168.1.102
+set --name m1lidar1 --localport1 2000
+set --name m1lidar1 --remoteport 2023
+set --name m1lidar1 --ipaddr2 192.168.1.102
+set --name m1lidar1 --localport2 54001
+set --name m1lidar1 --remoteport2 2024
+set --name m1lidar1 --rangemin 5.000000
+set --name m1lidar1 --rangemax 100.000000
+set --name m1lidar1 --vfov 10.000000
+set --name m1lidar1 --hfov 120.000000
+set --name m1lidar1 --hscanstepang 0.200000
+set --name m1lidar1 --vscanstepang 0.200000
+set --name m1lidar1 --merrormean 3.000000
+set --name m1lidar1 --merrorstd 0.000000
+set --name m1lidar1 --surfacedetecten 0
+set --name m1lidar1 --subsurfacedetecten 0
+set --name m1lidar1 --foamen 1
+set --name m1lidar1 --seasurfdetectprob 0.050000
+set --name m1lidar1 --maxsurfpenet 1.000000
+
+create --name viscam3 --bp CAMVIS
+set --name viscam3 --parent sidamir
+set --name viscam3 --position "0.000000 0.000000 1.964447"
+set --name viscam3 --rotation "-0.000000 0.000000 67.920670"
+set --name viscam3 --scale "0.300000 0.300000 0.300000"
+set --name viscam3 --instance -1
+set --name viscam3 --slotindex 0
+set --name viscam3 --rangemin 5.000000
+set --name viscam3 --rangemax 100.000000
+set --name viscam3 --vfov 0.000000
+set --name viscam3 --hfov 45.000000
+set --name viscam3 --hscanstepang 0.000000
+set --name viscam3 --vscanstepang 36.000000
+set --name viscam3 --merrormean 0.000000
+set --name viscam3 --merrorstd 0.000000
+set --name viscam3 --surfacedetecten 0
+set --name viscam3 --subsurfacedetecten 0
+set --name viscam3 --foamen 0
+set --name viscam3 --seasurfdetectprob 0.000000
+set --name viscam3 --maxsurfpenet 0.000000
+set --name viscam3 --widthpx 1920
+set --name viscam3 --heightpx 1080
+
+create --name ircam1 --bp CAMIR
+set --name ircam1 --parent sidamir
+set --name ircam1 --position "-5.172829 0.000000 1.444506"
+set --name ircam1 --rotation "-0.000000 0.000000 180.000000"
+set --name ircam1 --scale "0.300000 0.300000 0.300000"
+set --name ircam1 --instance -1
+set --name ircam1 --slotindex 1
+set --name ircam1 --rangemin 5.000000
+set --name ircam1 --rangemax 100.000000
+set --name ircam1 --vfov 0.000000
+set --name ircam1 --hfov 60.000000
+set --name ircam1 --hscanstepang 0.000000
+set --name ircam1 --vscanstepang 36.000000
+set --name ircam1 --merrormean 0.000000
+set --name ircam1 --merrorstd 0.000000
+set --name ircam1 --surfacedetecten 0
+set --name ircam1 --subsurfacedetecten 0
+set --name ircam1 --foamen 0
+set --name ircam1 --seasurfdetectprob 0.000000
+set --name ircam1 --maxsurfpenet 0.000000
+set --name ircam1 --widthpx 1920
+set --name ircam1 --heightpx 1080
+
+create --name sidamirpath --bp PATH
+set --name sidamirpath --position "0.000000 0.000000 0.000000"
+set --name sidamirpath --rotation "0.000000 0.000000 0.000000"
+set --name sidamirpath --scale "1.000000 1.000000 1.000000"
+set --name sidamirpath --instance -1
+set --name sidamirpath --wp 0 --wppos "0.000000 0.000000 0.000000"
+set --name sidamirpath --wp 1 --wppos "50.000000 0.000000 0.000000"
+set --name sidamirpath --wp 2 --wppos "50.000000 50.000000 10.000000"
+set --name sidamirpath --wp 3 --wppos "0.000000 50.000000 0.000000"
+set --name sidamirpath --speed 5.000000
+set --name sidamirpath --closed 1
+set --name sidamirpath --attach sidamir
+set --name sidamirpath --color "0 0 255 255"
+set --name sidamirpath --segment 50
+set --name sidamirpath --straight 0
+set --name sidamirpath --turnrate 90.000000
+set --name sidamirpath --bake 

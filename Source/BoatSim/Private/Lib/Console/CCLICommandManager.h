@@ -85,7 +85,12 @@ public:
 	static FString Selected;
 	static FString Focused;
 	static FString UIVisible;
-
+	static FString IPAddr1;
+	static FString LocalPort1;
+	static FString RemotePort1;
+	static FString IPAddr2;
+	static FString LocalPort2;
+	static FString RemotePort2;
 
 	static FString VericalFov;
 	static FString HorizontalFov;

@@ -219,10 +219,16 @@ void APathController::Save(ISaveLoader* p_save_loader)
 		p_save_loader->AppendOption(line, CCLICommandManager::WpPos, TOW(pSplineFollower->Waypoints[i]->GetActorLocation()));
 		p_save_loader->AddLine(line);
 
-		FString wp_name = GetName() + "wp" + CUtil::IntToString(i);
-		line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, wp_name);
-		p_save_loader->AppendOption(line, CCLICommandManager::Parent, CUtil::GetParentActor(pSplineFollower->Waypoints[i])->GetName());
-		p_save_loader->AddLine(line);
+		
+		auto p_parent_actor = CUtil::GetParentActor(pSplineFollower->Waypoints[i]);
+		if (p_parent_actor != nullptr) {
+			FString wp_name = GetName() + "wp" + CUtil::IntToString(i);
+			line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, wp_name);
+			p_save_loader->AppendOption(line, CCLICommandManager::Parent, p_parent_actor->GetName());
+			p_save_loader->AddLine(line);
+		}
+		
+		
 	}
 
 	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());

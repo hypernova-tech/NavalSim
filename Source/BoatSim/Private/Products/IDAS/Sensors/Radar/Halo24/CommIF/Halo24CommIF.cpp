@@ -60,6 +60,7 @@ void UHalo24CommIF::BeginPlay()
 	}
 
 	SenderThread = FRunnableThread::Create(this, *(GetOwner()->GetName()));
+	RegisterConnectionInfo(0, pUDPConnection->GetConnectionInfo(), pUDPConnection);
 	
 }
 SRadarSimSDKPacket packspoke;

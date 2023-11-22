@@ -46,3 +46,7 @@ bool UConnectionBase::GetIsRunning()
 {
 	return IsRunning;
 }
+
+void UConnectionBase::OnModifiedConnection(SConnectionInfo info)
+{
+}

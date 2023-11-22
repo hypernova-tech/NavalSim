@@ -696,6 +696,7 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
     bool is_active;
     INT32S sint;
     FLOAT64 dbl;
+    SConnectionInfo conn;
 
 
     FString controller;
@@ -836,8 +837,98 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
     else {
 
     }
+    
+    ret = CommandManager.GetValue(CCLICommandManager::IPAddr1, sret);
+    if (ret) {
+        
+        if (pSystemAPI->GetConnectionInfo(p_actor, 0, conn)) {
+            conn.IpAddr = sret;
+            if (pSystemAPI->SetConnectionInfo(p_actor, 0, conn)) {
+                one_success = true;
+            }
+        }
+       
+    }
+    else {
+
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::LocalPort1, sint);
+    if (ret) {
+
+        if (pSystemAPI->GetConnectionInfo(p_actor, 0, conn)) {
+            conn.LocalPort = sint;
+            if (pSystemAPI->SetConnectionInfo(p_actor, 0, conn)) {
+                one_success = true;
+            }
+        }
+
+    }
+    else {
+
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::RemotePort1, sint);
+    if (ret) {
+
+        if (pSystemAPI->GetConnectionInfo(p_actor, 0, conn)) {
+            conn.RemotePort = sint;
+            if (pSystemAPI->SetConnectionInfo(p_actor, 0, conn)) {
+                one_success = true;
+            }
+        }
+
+    }
+    else {
+
+    }
 
 
+
+    ret = CommandManager.GetValue(CCLICommandManager::IPAddr2, sret);
+    if (ret) {
+
+        if (pSystemAPI->GetConnectionInfo(p_actor, 1, conn)) {
+            conn.IpAddr = sret;
+            if (pSystemAPI->SetConnectionInfo(p_actor, 1, conn)) {
+                one_success = true;
+            }
+        }
+
+    }
+    else {
+
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::LocalPort2, sint);
+    if (ret) {
+
+        if (pSystemAPI->GetConnectionInfo(p_actor, 1, conn)) {
+            conn.LocalPort = sint;
+            if (pSystemAPI->SetConnectionInfo(p_actor, 1, conn)) {
+                one_success = true;
+            }
+        }
+
+    }
+    else {
+
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::RemotePort2, sint);
+    if (ret) {
+
+        if (pSystemAPI->GetConnectionInfo(p_actor, 1, conn)) {
+            conn.RemotePort = sint;
+            if (pSystemAPI->SetConnectionInfo(p_actor, 1, conn)) {
+                one_success = true;
+            }
+        }
+
+    }
+    else {
+
+    }
 
     ret = CommandManager.GetValue(CCLICommandManager::HorizontalFov, dbl);
     if (ret) {
@@ -1188,6 +1279,7 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
     FLOAT64 dbl;
     FVector4 vec4d;
     FColor color;
+    SConnectionInfo conn_info;
 
 
     ret = CommandManager.HasController();
@@ -1369,6 +1461,68 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
     if (ret) {
         if (pSystemAPI->GetVerticalFov(p_actor, dbl)) {
             SendConsoleResponse(name, CCLICommandManager::VericalFov, dbl);
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.HasA(CCLICommandManager::IPAddr1);
+    if (ret) {
+        if (pSystemAPI->GetConnectionInfo(p_actor,0, conn_info)) {
+            SendConsoleResponse(name, CCLICommandManager::IPAddr1, conn_info.IpAddr);
+            return true;
+        }
+    }
+    else {
+
+    }
+    ret = CommandManager.HasA(CCLICommandManager::LocalPort1);
+    if (ret) {
+        if (pSystemAPI->GetConnectionInfo(p_actor, 0, conn_info)) {
+            SendConsoleResponse(name, CCLICommandManager::LocalPort1, conn_info.LocalPort);
+            return true;
+        }
+    }
+    else {
+
+    }
+    ret = CommandManager.HasA(CCLICommandManager::RemotePort1);
+    if (ret) {
+        if (pSystemAPI->GetConnectionInfo(p_actor, 0, conn_info)) {
+            SendConsoleResponse(name, CCLICommandManager::RemotePort1, conn_info.RemotePort);
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.HasA(CCLICommandManager::IPAddr2);
+    if (ret) {
+        if (pSystemAPI->GetConnectionInfo(p_actor, 1, conn_info)) {
+            SendConsoleResponse(name, CCLICommandManager::IPAddr2, conn_info.IpAddr);
+            return true;
+        }
+    }
+    else {
+
+    }
+    ret = CommandManager.HasA(CCLICommandManager::LocalPort2);
+    if (ret) {
+        if (pSystemAPI->GetConnectionInfo(p_actor, 1, conn_info)) {
+            SendConsoleResponse(name, CCLICommandManager::LocalPort2, conn_info.LocalPort);
+            return true;
+        }
+    }
+    else {
+
+    }
+    ret = CommandManager.HasA(CCLICommandManager::RemotePort2);
+    if (ret) {
+        if (pSystemAPI->GetConnectionInfo(p_actor, 1, conn_info)) {
+            SendConsoleResponse(name, CCLICommandManager::RemotePort2, conn_info.RemotePort);
             return true;
         }
     }

@@ -46,6 +46,8 @@ protected:
 	void Stop() override; // Clean up any memory you allocated here
 
 
+	virtual void OnModifiedConnection(SConnectionInfo info) override;
+
 
 
 
@@ -117,6 +119,7 @@ public:
 
 	
 	virtual void InitConnection() override;
+	SConnectionInfo GetConnectionInfo();
 
 
 };

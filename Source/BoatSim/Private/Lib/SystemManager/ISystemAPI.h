@@ -210,4 +210,7 @@ public:
 
 	virtual bool GetIsUIVisible(bool& val) = 0;
 	virtual bool SetIsUIVisible(bool val) = 0;
+
+	virtual bool GetConnectionInfo(AActor* p_actor, INT32S ind, SConnectionInfo& conn) = 0;
+	virtual bool SetConnectionInfo(AActor* p_actor, INT32S ind, SConnectionInfo conn) = 0;
 };

@@ -32,6 +32,9 @@ void URobosenseM1CommIF::BeginPlay()
 	SenderThread = FRunnableThread::Create(this, *(GetOwner()->GetName()));
 	
 	GetConfigurationPacket()->Reset()->SetIPAddr("127.0.0.1", pMainOutputStreamConnection->GetRemoteIP(), "00:01:00:02:00:03", pMainOutputStreamConnection->GetRemotePort(), pDIFOP->GetRemotePort());
+	
+	RegisterConnectionInfo(0, pMainOutputStreamConnection->GetConnectionInfo(), pMainOutputStreamConnection);
+	RegisterConnectionInfo(1, pDIFOP->GetConnectionInfo(), pDIFOP);
 }
 void URobosenseM1CommIF::Stop()
 { 
@@ -54,6 +57,8 @@ SDIFOP* URobosenseM1CommIF::GetConfigurationPacket()
 {
 	return &DIOPPacket;
 }
+
+
 
 
 

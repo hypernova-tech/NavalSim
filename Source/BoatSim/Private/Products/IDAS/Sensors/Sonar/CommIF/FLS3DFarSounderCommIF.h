@@ -13,5 +13,7 @@ UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class UFLS3DFarSounderCommIF : public UGenericCommIF
 {
 	GENERATED_BODY()
-	
+
+
+		
 };

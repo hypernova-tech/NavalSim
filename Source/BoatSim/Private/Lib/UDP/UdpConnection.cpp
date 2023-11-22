@@ -70,6 +70,18 @@ void UUdpConnection::InitConnection()
 	StartUDPThread();
 }
 
+SConnectionInfo UUdpConnection::GetConnectionInfo()
+{
+	SConnectionInfo info;
+
+	info.IpAddr = IP;
+	info.LocalPort = LocalPort;
+	info.RemotePort = RemotePort;
+
+	return info;
+
+}
+
 // Called every frame
 void UUdpConnection::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
@@ -132,6 +144,14 @@ void UUdpConnection::Stop()  // Clean up any memory you allocated here
 
 	
 	
+}
+
+void UUdpConnection::OnModifiedConnection(SConnectionInfo info)
+{
+	IP = info.IpAddr;
+	LocalPort = info.LocalPort;
+	RemotePort = info.RemotePort;
+
 }
 
 // Start the UDP thread

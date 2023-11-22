@@ -5,7 +5,9 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include <Lib/UDP/IConnectionDataReceiver.h>
+#include "ConnectionDefs.h"
 #include "ConnectionBase.generated.h"
+
 
 
 
@@ -35,4 +37,5 @@ public:
 	virtual void InitConnection();
 	void AddConnectionDataReceiver(IConnectionDataReceiver* p_rcv);
 	bool GetIsRunning();
+	virtual void OnModifiedConnection(SConnectionInfo info);
 };

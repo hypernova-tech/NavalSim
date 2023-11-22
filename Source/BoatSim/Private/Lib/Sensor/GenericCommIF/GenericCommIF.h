@@ -4,8 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include <Lib/Connection/ConnectionDefs.h>
 #include "Lib/UDP/IConnectionDataReceiver.h"
+#include <Lib/Connection/ConnectionBase.h>
 #include "GenericCommIF.generated.h"
+
+
+
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -21,6 +26,7 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 	virtual void OnReceivedConnectionData(void* connection, INT8U* p_data, INT32U count) override;
+	TArray< SConnectionEntry> Connections;
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
@@ -29,5 +35,9 @@ public:
 	virtual void SendData(void* p_data, uint32 size_in_bytes);
 	virtual void SendConfig();
 	
+	virtual TArray< SConnectionEntry> GetConnectionsInfo();
+	virtual bool SetConnectionInfo(INT32S ind, SConnectionInfo info);
+	void RegisterConnectionInfo(INT32S ind, SConnectionInfo info, UConnectionBase *p_owner);
+
 		
 };

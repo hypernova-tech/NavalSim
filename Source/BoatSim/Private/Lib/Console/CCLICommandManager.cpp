@@ -38,6 +38,13 @@ FString CCLICommandManager::Selected = "selected";
 FString CCLICommandManager::Focused = "focused";
 FString CCLICommandManager::UIVisible = "uivisible";
 
+FString CCLICommandManager::IPAddr1 = "ipaddr1";
+FString CCLICommandManager::LocalPort1 = "localport1";
+FString CCLICommandManager::RemotePort1 = "remoteport";
+FString CCLICommandManager::IPAddr2 = "ipaddr2";
+FString CCLICommandManager::LocalPort2 = "localport2";
+FString CCLICommandManager::RemotePort2 = "remoteport2";
+
 FString CCLICommandManager::VericalFov = "vfov";
 FString CCLICommandManager::HorizontalFov = "hfov";
 FString CCLICommandManager::HorizontalScanStepAngleDeg = "hscanstepang";
@@ -300,6 +307,30 @@ void CCLICommandManager::PrepareSetCommandInfo()
 	info.Description = "selected the actor given name";
 	options.Add(info);
 
+	info.Option = "--" + CCLICommandManager::IPAddr1;
+	info.Description = "sets the remote ip 1 of connection if any";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::LocalPort1;
+	info.Description = "sets the local port 1 of connection if any";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::RemotePort1;
+	info.Description = "sets the remote port 1 of connection if any";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::IPAddr2;
+	info.Description = "sets the remote ip 2 of connection if any";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::LocalPort2;
+	info.Description = "sets the local port 2 of connection if any";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::RemotePort2;
+	info.Description = "sets the remote port 2 of connection if any";
+	options.Add(info);
+
 	info.Option = "--" + CCLICommandManager::HorizontalFov ;
 	info.Description = "sets the horizontal fov of sensor";
 	options.Add(info);
@@ -491,6 +522,29 @@ void CCLICommandManager::PrepareGetCommandInfo()
 	info.Description = "get selected actor";
 	options.Add(info);
 
+	info.Option = "--" + CCLICommandManager::IPAddr1;
+	info.Description = "gets the remote ip 1 of connection if any";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::LocalPort1;
+	info.Description = "gets the local port 1 of connection if any";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::RemotePort1;
+	info.Description = "gets the remote port 1 of connection if any";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::IPAddr2;
+	info.Description = "gets the remote ip 2 of connection if any";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::LocalPort2;
+	info.Description = "gets the local port 2 of connection if any";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::RemotePort2;
+	info.Description = "gets the remote port 2 of connection if any";
+	options.Add(info);
 
 	info.Option = "--" + CCLICommandManager::HorizontalFov;
 	info.Description = "gets the horizontal fov of sensor";

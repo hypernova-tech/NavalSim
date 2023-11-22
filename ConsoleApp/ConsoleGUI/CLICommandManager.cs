@@ -19,7 +19,7 @@ public static class CLICommandManager
     public const string DestroyCommand = "destroy";
     public const string SetCommand = "set";
     public const string Active = "active";
-     public const string Enabled = "enabled";
+    public const string Enabled = "enabled";
     public const string Instance = "instance";
     public const string Position = "position";
     public const string RelPosition = "relposition";
@@ -32,11 +32,15 @@ public static class CLICommandManager
     [Modifiable] public const string Beam = "beam";
     [Modifiable] public const string RangeMin = "rangemin";
     [Modifiable] public const string RangeMax = "rangemax";
-    [Modifiable] public const string Range = "range";
-    [Modifiable] public const string Fov = "fov";
     public const string UIVisible = "uivisible";
     public const string Selected = "selected";
     public const string Focused = "focused";
+    [Modifiable] public const string IPAddr1 = "ipaddr1";
+    [Modifiable] public const string LocalPort1 = "localport1";
+    [Modifiable] public const string RemotePort1 = "remoteport";
+    [Modifiable] public const string IPAddr2 = "ipaddr2";
+    [Modifiable] public const string LocalPort2 = "localport2";
+    [Modifiable] public const string RemotePort2 = "remoteport2";
     [Modifiable] public const string VerticalFov = "vfov";
     [Modifiable] public const string HorizontalFov = "hfov";
     [Modifiable] public const string HorizontalScanStepAngleDeg = "hscanstepang";

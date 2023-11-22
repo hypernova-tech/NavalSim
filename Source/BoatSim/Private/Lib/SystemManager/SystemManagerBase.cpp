@@ -987,6 +987,26 @@ bool ASystemManagerBase::GetSlotIndex(AActor* p_actor, INT32S& slot_index)
 	return false;
 }
 
+
+bool ASystemManagerBase::GetConnectionInfo(AActor* p_actor, INT32S ind, SConnectionInfo& conn)
+{
+	auto p_obj = ToSensorBase(p_actor);
+	if (p_obj) {
+		return p_obj->GetConnnectionInfo(ind,conn);
+
+	}
+	return false;
+}
+bool ASystemManagerBase::SetConnectionInfo(AActor* p_actor, INT32S ind, SConnectionInfo conn)
+{
+	auto p_obj = ToSensorBase(p_actor);
+	if (p_obj) {
+		return p_obj->SetConnnectionInfo(ind, conn);
+
+	}
+	return false;
+}
+
 bool ASystemManagerBase::SetHorizontalFov(AActor* p_actor, FLOAT64 angle_deg)
 {
 	auto p_obj = ToSensorBase(p_actor);

@@ -1,5 +1,7 @@
 #pragma once
 #include "Lib/Types/Primitives.h"
+
+
 class IConnectionDataReceiver
 {
 public:
