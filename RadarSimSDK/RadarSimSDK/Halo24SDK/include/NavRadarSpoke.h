@@ -90,6 +90,8 @@ inline eSampleEncoding GetSampleEncoding( const t9174SpokeHeader& spoke )
 //------------------------------------------------------------------------------
 inline uint32_t GetSampleRange_mm( const t9174SpokeHeader& spoke ) 
 { 
+	if(spoke.nOfSamples == 0)
+		return 0;
     return (uint32_t(spoke.rangeCellSize_mm) * spoke.rangeCellsDiv2) / (spoke.nOfSamples >> 1);
 }
 

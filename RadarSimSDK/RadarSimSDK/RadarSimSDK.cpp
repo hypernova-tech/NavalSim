@@ -3,9 +3,11 @@
 
 #include <iostream>
 #include "CHost.h"
+#include "RadarSimSdkConfig.h"
 
 CHost* pHost;
 
+#if SIMULATE_HOST > 0
 int main()
 {
 
@@ -23,6 +25,8 @@ int main()
 
     std::cout << "Hello World!\n";
 }
+
+#endif
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
 // Debug program: F5 or Debug > Start Debugging menu

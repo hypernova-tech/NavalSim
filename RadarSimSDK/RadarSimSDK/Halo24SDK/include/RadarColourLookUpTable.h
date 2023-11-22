@@ -68,13 +68,13 @@ public:
 class NAVICO_SDK_EXPORT tRadarColourLookUpTableNavico : public tRadarColourLookUpTable
 {
 public:
-    tRadarColourLookUpTableNavico();
+    tRadarColourLookUpTableNavico(){}
 };
 
 class NAVICO_SDK_EXPORT tRadarColourLookUpTableNavicoDoppler : public tRadarColourLookUpTable
 {
 public:
-    tRadarColourLookUpTableNavicoDoppler();
+    tRadarColourLookUpTableNavicoDoppler(){}
 };
 
 //-----------------------------------------------------------------------------

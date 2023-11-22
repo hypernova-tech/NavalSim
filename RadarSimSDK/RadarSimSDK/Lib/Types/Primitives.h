@@ -8,7 +8,7 @@
 #define BYTE_ALIGNED_END    __pragma(pack(pop))
 #elif defined(__GNUC__)  // GCC compiler
 #define BYTE_ALIGNED_BEGIN
-#define BYTE_ALIGNED_END    __attribute__((aligned(1)))
+#define BYTE_ALIGNED_END   __attribute__((packed)) //__attribute__((aligned(1)))
 #else
 #error "Unsupported compiler"
 #endif
@@ -16,6 +16,10 @@
 
 /**
  * 
+ */
+
+/**
+ *
  */
 typedef char INT8S;
 typedef unsigned char INT8U;
@@ -28,11 +32,12 @@ typedef unsigned int INT32U;
 typedef  int INT32S;
 
 
-typedef unsigned _int64 INT64U;
-typedef  _int64 INT64S;
+typedef  uint64_t INT64U;
+typedef  int64_t INT64S;
 
 typedef float FLOAT32;
 typedef  double FLOAT64;
+
 
 #ifdef __linux__
 #define IS_LINUX() 1

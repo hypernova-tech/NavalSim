@@ -90,10 +90,41 @@ void tMultiRadarClient::ClearUnlockKeys()
 
 int tMultiRadarClient::UnlockRadar(const char* pSerialNumber, uint32_t wait_ms)
 {
-    if (wait_ms > 0) {
-        std::this_thread::sleep_for(std::chrono::milliseconds(wait_ms));
-    }
-    return 0;
+	auto* p_radar = FindRadar(pSerialNumber);
+
+	    if (p_radar->GetIsUnlocked()) {
+	        return 1;
+	    }
+
+	    if (p_radar != nullptr) {
+	        SRadarSimSDKPacket* p_pack = new SRadarSimSDKPacket();
+
+
+
+	        SUnlockKeysPayload* p_payload = (SUnlockKeysPayload*)p_pack->Payload;
+
+	        memcpy(p_payload->SerialKey, pSerialNumber, strlen(pSerialNumber));
+	        p_payload->SerialLen = strlen(pSerialNumber);
+
+	        memcpy(p_payload->UnlockKey, p_radar->UnlockKey, p_radar->UnlockKeySize);
+	        p_payload->UnlockKeyLen = p_radar->UnlockKeySize;
+
+	        p_pack->SetID(ESimSDKDataIDS::UnlockKeys);
+	        p_pack->SetPayloadSize(sizeof(SUnlockKeysPayload));
+	        p_radar->pConnection->SendData((INT8U*)p_pack, p_pack->GetTransmitSize(), p_radar->pConnection->GetRemotePort());
+
+	        if (wait_ms > 0) {
+	            std::this_thread::sleep_for(std::chrono::milliseconds(wait_ms));
+	            if (p_radar->GetIsUnlocked()) {
+	                return 1;
+	            }
+	            else {
+	                return 0;
+	            }
+	        }
+	    }
+
+	    return 0;
 }
 
 int tMultiRadarClient::UnlockRadar(const char* pSerialNumber, const uint8_t* pUnlockKey, unsigned unlockKeySize, uint32_t wait_ms)

@@ -83,12 +83,12 @@ struct SCommandAckNackResponse
 
 enum ERadarState :INT8U
 {
-	eOff = 0,
-	eStandby = 1,
-	eTransmit = 2,
-	eWarming = 3,
-	eNoScanner = 4,
-	eDetectingScanner = 5,
+	eeOff = 0,
+	eeStandby = 1,
+	eeTransmit = 2,
+	eeWarming = 3,
+	eeNoScanner = 4,
+	eeDetectingScanner = 5,
 
 };
 
@@ -420,7 +420,7 @@ public:
 //------------------------------------------------------------------------------
 //! Structure for conveying radar image data header information
 //------------------------------------------------------------------------------
-BYTE_ALIGNED_BEGIN
+//BYTE_ALIGNED_BEGIN
 struct S9174SpokeHeader
 {
 	INT32U spokeLength_bytes : 12;   //!< Length of the whole spoke in bytes
@@ -448,7 +448,7 @@ struct S9174SpokeHeader
 	INT32U : 16;                     //!< reserved
 	INT32U : 16;                     //!< reserved
 	INT32U : 16;                     //!< reserved
-} BYTE_ALIGNED_END;
+};// BYTE_ALIGNED_END;
 
 //------------------------------------------------------------------------------
 //! Structure for conveying radar image data & header information (ie. spokes)
@@ -461,19 +461,15 @@ struct S9174SpokeData
 	INT8U Data[SAMPLE_COUNT_PER_SPOKE / 2];
 } BYTE_ALIGNED_END;
 
-
+BYTE_ALIGNED_BEGIN
 struct SHalo24SpokePayload
 {
 public:
-
-
-
-
 	SSerialData SerialData;
 	S9174SpokeData SpokeData;
 
 
-};
+}BYTE_ALIGNED_END;
 
 
 /// Tracking Client
@@ -588,7 +584,7 @@ public:
 
 
 
-
+BYTE_ALIGNED_BEGIN
 struct SRadarSimSDKPacket
 {
 	struct {
@@ -676,4 +672,4 @@ public:
 		Header.PayloadSize = sizeof(T);
 		Payload[sizeof(T)] = 0;
 	}
-};
+}BYTE_ALIGNED_END;

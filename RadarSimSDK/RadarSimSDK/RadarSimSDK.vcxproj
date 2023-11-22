@@ -134,6 +134,7 @@
     <ClCompile Include="CHalo24SimIF.cpp" />
     <ClCompile Include="CHost.cpp" />
     <ClCompile Include="CLinuxUDPSocket.cpp" />
+    <ClCompile Include="CUtil.cpp" />
     <ClCompile Include="CWinUDPSocket.cpp" />
     <ClCompile Include="Halo24SDK\include\ImageClient.cpp" />
     <ClCompile Include="Halo24SDK\include\MultiRadarClient.cpp" />
@@ -148,6 +149,7 @@
     <ClInclude Include="CHalo24SimIF.h" />
     <ClInclude Include="CHost.h" />
     <ClInclude Include="CLinuxUDPSocket.h" />
+    <ClInclude Include="CUtil.h" />
     <ClInclude Include="CWinUDPSocket.h" />
     <ClInclude Include="Halo24SDK\include\BytePackOff.h" />
     <ClInclude Include="Halo24SDK\include\BytePackOn.h" />

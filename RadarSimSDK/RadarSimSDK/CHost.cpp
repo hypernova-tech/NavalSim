@@ -3,6 +3,7 @@
 #include "Halo24SDK/include/ImageClient.h"
 #include "Halo24SDK/include/TargetTrackingClient.h"
 #include <math.h>
+#include "CUtil.h"
 using namespace Navico::Protocol::NRP;
 
 #define DEBUG_HOST
@@ -22,11 +23,11 @@ void CHost::Init()
 	pBoatSimListener = new CBoatSimListener();
 #if _WIN32
 	pRadarStreamConnection = new CWinUDPSocket();
-#elif
+#else
 	pRadarStreamConnection = new CLinuxUDPSocket();
 #endif
 
-	SConnectionArgs args = { "127.0.0.1",4143, 4142 };
+	SConnectionArgs args = { SIM_IP,SIM_RCV_PORT, SIM_XMT_PORT };
 	pRadarStreamConnection->Create(&args);
 
 
@@ -53,15 +54,15 @@ void CHost::ThreadFunction()
 	tMultiRadarClient::GetInstance()->AddRadarListObserver(this);
 	tMultiRadarClient::GetInstance()->AddUnlockStateObserver(this);
 	char radars[2][MAX_SERIALNUMBER_SIZE];
-	char radars_unlockkey[2][MAX_UNLOCKKEY_SIZE];
+	char radars_unlockkey[2][MAX_UNLOCKKEY_SIZE+1];
 
 	
 
 
 	memset(radars_unlockkey, 0, sizeof(radars_unlockkey));
 
-	strcpy(radars_unlockkey[0], "123456789");
-	strcpy(radars_unlockkey[1], "987654321");
+	strcpy(radars_unlockkey[0], RADAR1_UNLOCK_KEY);
+	strcpy(radars_unlockkey[1], RADAR2_UNLOCK_KEY);
 
 
 
@@ -113,7 +114,9 @@ void CHost::ThreadFunction()
 						auto* p_radar = tMultiRadarClient::GetInstance()->FindRadar(radars[i]);
 
 						if (p_radar && !p_radar->GetIsUnlocked()) {
-							auto ret = tMultiRadarClient::GetInstance()->UnlockRadar(radars[i], (const uint8_t*)radars_unlockkey[i], strlen(radars_unlockkey[i]), 50);
+							auto raw_vec = CUtil::HexStrToByteArray((const char*)radars_unlockkey[i]);
+							INT8U* p_unlock_key = raw_vec.data();
+							auto ret = tMultiRadarClient::GetInstance()->UnlockRadar(radars[i], p_unlock_key, raw_vec.size(), 50);
 							if (ret) {
 								cout << "Radar Unclocked " << string(radars[i]) << endl;
 							}

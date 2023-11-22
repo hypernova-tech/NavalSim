@@ -60,6 +60,9 @@
     <ClCompile Include="Halo24SDK\include\PPIController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CUtil.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CHalo24SimIF.h">
@@ -147,6 +150,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CLinuxUDPSocket.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CUtil.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
