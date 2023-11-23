@@ -581,9 +581,25 @@ void Navico::Protocol::NRP::tImageClient::OnReceivedRadarSetup(const SRadarSetup
         p_obs->UpdateSetup(&Setup);
     }
 }
-void Navico::Protocol::NRP::tImageClient::OnReceivedRadarSpoke(const SHalo24SpokePayload* p_spoke)
+void Navico::Protocol::NRP::tImageClient::OnReceivedRadarSpoke( SHalo24SpokePayload* p_spoke)
 {
+
+    p_spoke->SpokeData.Header.spokeLength_bytes = p_spoke->HeaderNoneBitField.spokeLength_bytes;
+    p_spoke->SpokeData.Header.sequenceNumber = p_spoke->HeaderNoneBitField.sequenceNumber;
+    p_spoke->SpokeData.Header.sampleEncoding = p_spoke->HeaderNoneBitField.sampleEncoding;
+    p_spoke->SpokeData.Header.nOfSamples = p_spoke->HeaderNoneBitField.nOfSamples;
+    p_spoke->SpokeData.Header.bitsPerSample = p_spoke->HeaderNoneBitField.bitsPerSample;
+    p_spoke->SpokeData.Header.rangeCellSize_mm = p_spoke->HeaderNoneBitField.rangeCellSize_mm;
+    p_spoke->SpokeData.Header.spokeAzimuth = p_spoke->HeaderNoneBitField.spokeAzimuth;
+    p_spoke->SpokeData.Header.bearingZeroError = p_spoke->HeaderNoneBitField.bearingZeroError;
+    p_spoke->SpokeData.Header.spokeCompass = p_spoke->HeaderNoneBitField.spokeCompass;
+    p_spoke->SpokeData.Header.trueNorth = p_spoke->HeaderNoneBitField.trueNorth;
+    p_spoke->SpokeData.Header.rangeCellsDiv2 = p_spoke->HeaderNoneBitField.rangeCellsDiv2;
+
     for (auto* p_obs : CientSpokeObservers) {
+
+
+
 
         p_obs->UpdateSpoke((Spoke::tSpokeV9174*)&p_spoke->SpokeData);
     }

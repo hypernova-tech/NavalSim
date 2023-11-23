@@ -90,18 +90,18 @@ void UHalo24CommIF::SendRadarTrack()
 
 		SHalo24SpokePayload* p_spoke_payload = (SHalo24SpokePayload*)packspoke.Payload;
 
-		S9174SpokeHeader* p_hdr = &(p_spoke_payload->SpokeData.Header);
-		p_spoke_payload->SpokeData.Header.spokeLength_bytes = 536;
-		p_spoke_payload->SpokeData.Header.sequenceNumber = SpokeSequanceNumber;
-		p_spoke_payload->SpokeData.Header.sampleEncoding = 0;
-		p_spoke_payload->SpokeData.Header.nOfSamples = 1024;
-		p_spoke_payload->SpokeData.Header.bitsPerSample = 4;
-		p_spoke_payload->SpokeData.Header.rangeCellSize_mm = (each_cell_size)*1000;
-		p_spoke_payload->SpokeData.Header.spokeAzimuth = p_current->AzimuthRange.X;
-		p_spoke_payload->SpokeData.Header.bearingZeroError = 0;
-		p_spoke_payload->SpokeData.Header.spokeCompass = p_current->ScanRPYWorld.Z / 4096.0f;
-		p_spoke_payload->SpokeData.Header.trueNorth = 1;
-		p_spoke_payload->SpokeData.Header.rangeCellsDiv2 = p_current->ScanRangeMeter / (each_cell_size) * 0.5f;
+		S9174SpokeHeaderNoneBitField* p_hdr = &(p_spoke_payload->HeaderNoneBitField);
+		p_hdr->spokeLength_bytes = 536;
+		p_hdr->sequenceNumber = SpokeSequanceNumber;
+		p_hdr->sampleEncoding = 0;
+		p_hdr->nOfSamples = 1024;
+		p_hdr->bitsPerSample = 4;
+		p_hdr->rangeCellSize_mm = (each_cell_size)*1000;
+		p_hdr->spokeAzimuth = p_current->AzimuthRange.X;
+		p_hdr->bearingZeroError = 0;
+		p_hdr->spokeCompass = p_current->ScanRPYWorld.Z / 4096.0f;
+		p_hdr->trueNorth = 1;
+		p_hdr->rangeCellsDiv2 = p_current->ScanRangeMeter / (each_cell_size) * 0.5f;
 
 		bool ret = p_current_sector->MapSpoke4Bits(p_current->ScanCenter,p_current_sector->StartAzimuthDeg +  i * each_spoke_step, each_cell_size, p_spoke_payload->SpokeData.Data);
 

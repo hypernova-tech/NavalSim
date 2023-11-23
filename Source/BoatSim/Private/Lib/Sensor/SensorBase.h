@@ -131,7 +131,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UGenericCommIF* pCommIF;
+	
 	APointVisualizer* pPointVisualizer;
 	ASceneCapturer* pSceneCapturer;
 	ESensorState SensorState = ESensorState::Init;
@@ -185,8 +185,6 @@ public:
 
 
 	virtual void Save(ISaveLoader *p_save_loader) override;
-	void SaveConnection(FString& line, FString ip_addr_param, FString local_port_param, FString remote_port_param, ISaveLoader* p_save_loader, SConnectionInfo& conn);
 	virtual void SaveJSON(CJsonDataContainer& data) override;
-	bool GetConnnectionInfo(INT32S ind, SConnectionInfo& info);
-	bool SetConnnectionInfo(INT32S ind, SConnectionInfo info);
+
 };

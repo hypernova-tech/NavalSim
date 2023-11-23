@@ -206,7 +206,7 @@ public class CJsonParser
                     FVector vec = new FVector();
                     if(ParseVector(option_value, vec))
                     {
-                        CConverter.UEToWorld(vec);
+                        //CConverter.UEToWorld(vec);
                         mMainForm.SetPosition(vec.X, vec.Y, vec.Z);
                     }
                 }

@@ -342,6 +342,7 @@ void Navico::Protocol::tMultiRadarClient::HandleSpoke(IConnection* p_conn, SHalo
     if (p_radar->pImageClient == nullptr) {
         return;
     }
+
     p_radar->pImageClient->OnReceivedRadarSpoke(p_res);
 }
 void Navico::Protocol::tMultiRadarClient::HandleTrackingStatus(IConnection* p_conn, STrackingTargetStatusPayload* p_res)

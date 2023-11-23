@@ -14,11 +14,7 @@ ASensorBase::ASensorBase()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	
-	
 
-	
-
-	
 }
 
 void ASensorBase::Run(float delta_time_sec)
@@ -134,7 +130,7 @@ void ASensorBase::BeginPlay()
 
 	}
 
-	pCommIF = GetComponentByClass<UGenericCommIF>();
+	
 }
 
 void ASensorBase::OnStep(float DeltaTime)
@@ -277,21 +273,6 @@ void ASensorBase::Save(ISaveLoader* p_save_loader)
 	p_save_loader->AppendOption(line, CCLICommandManager::SensorSlotIndex, SensorSlotIndex);
 	p_save_loader->AddLine(line);
 
-	if (pCommIF) {
-		auto connections = pCommIF->GetConnectionsInfo();
-		int ind = 0;
-		for (auto conn : connections) {
-			if (ind == 0) {
-				SaveConnection(line, CCLICommandManager::IPAddr1, CCLICommandManager::LocalPort1, CCLICommandManager::RemotePort1, p_save_loader, conn.ConnectionInfo);
-
-			}
-			else if (ind == 1) {
-				SaveConnection(line, CCLICommandManager::IPAddr2, CCLICommandManager::LocalPort2, CCLICommandManager::RemotePort2, p_save_loader, conn.ConnectionInfo);
-			}
-			ind++;
-		}
-	}
-
 	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
 	p_save_loader->AppendOption(line, CCLICommandManager::RangeMin, RangeMinMeter);
 	p_save_loader->AddLine(line);
@@ -346,20 +327,7 @@ void ASensorBase::Save(ISaveLoader* p_save_loader)
 
 }
 
-void ASensorBase::SaveConnection(FString& line, FString ip_addr_param, FString local_port_param, FString remote_port_param, ISaveLoader* p_save_loader, SConnectionInfo& conn)
-{
-	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
-	p_save_loader->AppendOption(line, ip_addr_param, conn.IpAddr);
-	p_save_loader->AddLine(line);
 
-	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
-	p_save_loader->AppendOption(line, local_port_param, conn.LocalPort);
-	p_save_loader->AddLine(line);
-
-	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
-	p_save_loader->AppendOption(line, remote_port_param, conn.RemotePort);
-	p_save_loader->AddLine(line);
-}
 
 void ASensorBase::SaveJSON(CJsonDataContainer& data)
 {
@@ -379,52 +347,5 @@ void ASensorBase::SaveJSON(CJsonDataContainer& data)
 	data.Add(CCLICommandManager::RangeMin, RangeMinMeter);
 	data.Add(CCLICommandManager::RangeMax, RangeMaxMeter);
 
-	if (pCommIF) {
-		auto connections = pCommIF->GetConnectionsInfo();
-		int ind = 0;
-		for (auto conn : connections) {
-			if (ind == 0) {
-				data.Add(CCLICommandManager::IPAddr1, conn.ConnectionInfo.IpAddr);
-				data.Add(CCLICommandManager::LocalPort1, conn.ConnectionInfo.LocalPort);
-				data.Add(CCLICommandManager::RemotePort1, conn.ConnectionInfo.RemotePort);
-			}else	if (ind == 1) {
-				data.Add(CCLICommandManager::IPAddr2, conn.ConnectionInfo.IpAddr);
-				data.Add(CCLICommandManager::LocalPort2, conn.ConnectionInfo.LocalPort);
-				data.Add(CCLICommandManager::RemotePort2, conn.ConnectionInfo.RemotePort);
-			}
-			ind++;
-		}
-	}
-}
-
-bool ASensorBase::GetConnnectionInfo(INT32S ind, SConnectionInfo& info)
-{
-	if (pCommIF) {
-		auto connections = pCommIF->GetConnectionsInfo();
-		if (ind < connections.Num()) {
-			info = connections[ind].ConnectionInfo;
-			return true;
-		}
-	}
-	else {
-		return false;
-	}
-
-	return false;
-}
-
-bool ASensorBase::SetConnnectionInfo(INT32S ind, SConnectionInfo info)
-{
-	if (pCommIF) {
-		auto connections = pCommIF->GetConnectionsInfo();
-		if (ind < connections.Num()) {
-			pCommIF->SetConnectionInfo(ind, info);
-			return true;
-		}
-	}
-	else {
-		return false;
-	}
-
-	return false;
+	
 }

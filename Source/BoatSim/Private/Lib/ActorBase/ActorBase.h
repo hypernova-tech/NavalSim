@@ -7,6 +7,7 @@
 #include "Lib/Types/Primitives.h"
 #include <Lib/SaveLoad/ISaveLoader.h>
 #include <Lib/JSON/CJsonDataContainer.h>
+#include <Lib/Sensor/GenericCommIF/GenericCommIF.h>
 #include "ActorBase.generated.h"
 
 
@@ -54,6 +55,10 @@ protected:
 	 virtual void OnActorDisabled();
 	 virtual void OnActorEnabled();
 
+	 UGenericCommIF* pCommIF;
+
+
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -75,5 +80,9 @@ public:
 	virtual void SetActorRelPosition(FVector pos);
 	virtual void SetActorRot(FVector rpy_deg);
 	virtual void SetActorRelRot(FVector rpy_deg);
+
+	bool GetConnnectionInfo(INT32S ind, SConnectionInfo& info);
+	bool SetConnnectionInfo(INT32S ind, SConnectionInfo info);
+	void SaveConnection(FString& line, FString ip_addr_param, FString local_port_param, FString remote_port_param, ISaveLoader* p_save_loader, SConnectionInfo& conn);
 	
 };

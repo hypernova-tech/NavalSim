@@ -28,6 +28,7 @@ bool CUtil::Trace(const STraceArgs& args, SScanResult* pscan_result)
     FVector start_pos = args.p_actor->GetActorLocation();
     FVector look_dir;
     FVector right_vec;
+    FVector up_vec;
 
     FVector end;
     FHitResult result;
@@ -51,8 +52,11 @@ bool CUtil::Trace(const STraceArgs& args, SScanResult* pscan_result)
         look_dir = args.p_actor->GetActorForwardVector();
         look_dir.Normalize();
         right_vec = args.p_actor->GetActorRightVector();
-        right_vec.Z = 0;
+        //right_vec.Z = 0;
         right_vec.Normalize();
+        up_vec = args.p_actor->GetActorUpVector();
+
+        up_vec.Normalize();
 
     }
 
@@ -131,10 +135,14 @@ bool CUtil::Trace(const STraceArgs& args, SScanResult* pscan_result)
             else {
                 // quat pitch etrafinda rotasyonu tamamen sol el kuralına göre, FRotatoreden farklı olarak
                 FQuat QuatPitch(right_vec,   elevation * DEGTORAD);
-                FQuat Yaw(FVector::UpVector, azimuth * DEGTORAD);
+                new_dir = QuatPitch.RotateVector(look_dir);
+                FVector new_up = QuatPitch.RotateVector(up_vec);
 
-                FVector temp = QuatPitch * (look_dir);
-                new_dir = Yaw * temp;
+                FQuat Yaw(new_up, azimuth * DEGTORAD);
+                new_dir = Yaw.RotateVector(new_dir);
+                
+                //FVector temp = QuatPitch * (look_dir);
+                //new_dir = Yaw * temp;
 
                 start_pos = start_loc + new_dir * TOUE(args.min_range_meter);
 
@@ -142,6 +150,9 @@ bool CUtil::Trace(const STraceArgs& args, SScanResult* pscan_result)
                     float visible_range_meter = CMath::GetVisibleDistanceOverSurfaceMeter(start_pos, new_dir, args.clutter_params.MaxSurfacePenetrationMeter);
                     if (visible_range_meter >= 0) {
                         filtered_range_meter = FMath::Min(visible_range_meter, filtered_range_meter);
+                    }
+                    else {
+                        filtered_range_meter = filtered_range_meter;
                     }
                 }
                 end = start_pos + new_dir * TOUE(filtered_range_meter);
@@ -191,6 +202,10 @@ bool CUtil::Trace(const STraceArgs& args, SScanResult* pscan_result)
                 }
                 else {
                     p_current_sektor->Add(detected_pos_error);
+                }
+                int pos_err = 0;
+                if (detected_pos_error.Z < 0) {
+                    pos_err++;
                 }
 
 

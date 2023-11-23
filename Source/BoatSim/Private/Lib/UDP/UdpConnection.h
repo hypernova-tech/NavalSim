@@ -99,7 +99,7 @@ private:
 	UPROPERTY(EditAnywhere, Category = "UDP")
 	int32 BufferSize;
 	UPROPERTY(EditAnywhere, Category = "UDP")
-	FString IP = "192.168.50.232";
+	FString IP = "127.0.0.1";
 
 	// Delegate to be called when data is received
 

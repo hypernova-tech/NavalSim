@@ -864,21 +864,21 @@ namespace ConsoleGUI
             // clearAllToolStripMenuItem
             // 
             clearAllToolStripMenuItem.Name = "clearAllToolStripMenuItem";
-            clearAllToolStripMenuItem.Size = new Size(180, 22);
+            clearAllToolStripMenuItem.Size = new Size(140, 22);
             clearAllToolStripMenuItem.Text = "Clear All";
             clearAllToolStripMenuItem.Click += clearAllToolStripMenuItem_Click;
             // 
             // showChartsToolStripMenuItem
             // 
             showChartsToolStripMenuItem.Name = "showChartsToolStripMenuItem";
-            showChartsToolStripMenuItem.Size = new Size(180, 22);
+            showChartsToolStripMenuItem.Size = new Size(140, 22);
             showChartsToolStripMenuItem.Text = "Show Charts";
             showChartsToolStripMenuItem.Click += showChartsToolStripMenuItem_Click;
             // 
             // hideChartsToolStripMenuItem
             // 
             hideChartsToolStripMenuItem.Name = "hideChartsToolStripMenuItem";
-            hideChartsToolStripMenuItem.Size = new Size(180, 22);
+            hideChartsToolStripMenuItem.Size = new Size(140, 22);
             hideChartsToolStripMenuItem.Text = "Hide Charts";
             hideChartsToolStripMenuItem.Click += hideChartsToolStripMenuItem_Click;
             // 
@@ -957,7 +957,7 @@ namespace ConsoleGUI
             Controls.Add(menuStrip1);
             Controls.Add(tabControl1);
             Name = "MainForm";
-            Text = "Sim Console";
+            Text = "IDAS-Console";
             TopMost = true;
             ActorListContextMenu.ResumeLayout(false);
             contextMenuConsoleListBox.ResumeLayout(false);

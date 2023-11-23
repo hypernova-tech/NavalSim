@@ -4,6 +4,11 @@ set --name sidamir --position "0.000000 0.000000 0.000000"
 set --name sidamir --rotation "0.000000 0.000000 0.000000"
 set --name sidamir --scale "0.300000 0.300000 0.300000"
 
+create --name hostif --bp HOSTIF
+set --name hostif --position "0.000000 0.000000 0.000000"
+set --name hostif --rotation "0.000000 0.000000 0.000000"
+set --name hostif --scale "1 1 1"
+
 create --name gimbal1 --bp GIMBAL2DOF
 set --name gimbal1 --parent sidamir
 set --name gimbal1 --position "0.000000 0.000000 0.000000"

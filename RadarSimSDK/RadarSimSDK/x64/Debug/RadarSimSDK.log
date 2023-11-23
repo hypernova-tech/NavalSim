@@ -1,33 +1,9 @@
-﻿  CHost.cpp
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\Lib\Types\Halo24Types.h(660,1): warning C4267: '=': conversion from 'size_t' to 'INT8U', possible loss of data
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\CHost.cpp(112,27): warning C4018: '<': signed/unsigned mismatch
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\CHost.cpp(119,108): warning C4267: 'argument': conversion from 'size_t' to 'unsigned int', possible loss of data
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\CHost.cpp(157,27): warning C4018: '<': signed/unsigned mismatch
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\CHost.cpp(174,27): warning C4018: '<': signed/unsigned mismatch
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\CHost.cpp(241,26): warning C4018: '<': signed/unsigned mismatch
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\CHost.cpp(252,26): warning C4018: '<': signed/unsigned mismatch
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\CHost.cpp(263,26): warning C4018: '<': signed/unsigned mismatch
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\CHost.cpp(275,26): warning C4018: '<': signed/unsigned mismatch
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\CHost.cpp(287,26): warning C4018: '<': signed/unsigned mismatch
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\CHost.cpp(299,26): warning C4018: '<': signed/unsigned mismatch
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\CHost.cpp(311,26): warning C4018: '<': signed/unsigned mismatch
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\CHost.cpp(323,26): warning C4018: '<': signed/unsigned mismatch
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\CHost.cpp(336,26): warning C4018: '<': signed/unsigned mismatch
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\CHost.cpp(366,26): warning C4018: '<': signed/unsigned mismatch
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\CHost.cpp(384,26): warning C4018: '<': signed/unsigned mismatch
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\CHost.cpp(400,26): warning C4018: '<': signed/unsigned mismatch
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\CHost.cpp(421,26): warning C4018: '<': signed/unsigned mismatch
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\CHost.cpp(449,26): warning C4018: '<': signed/unsigned mismatch
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\CHost.cpp(458,26): warning C4018: '<': signed/unsigned mismatch
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\CHost.cpp(468,26): warning C4018: '<': signed/unsigned mismatch
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\CHost.cpp(483,26): warning C4018: '<': signed/unsigned mismatch
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\CHost.cpp(485,44): warning C4244: 'argument': conversion from 'double' to 'uint32_t', possible loss of data
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\CHost.cpp(488,26): warning C4018: '<': signed/unsigned mismatch
-  MultiRadarClient.cpp
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\Lib\Types\Halo24Types.h(660,1): warning C4267: '=': conversion from 'size_t' to 'INT8U', possible loss of data
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\Halo24SDK\include\MultiRadarClient.cpp(107,54): warning C4267: '=': conversion from 'size_t' to 'INT8U', possible loss of data
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\Halo24SDK\include\MultiRadarClient.cpp(147,53): warning C4267: '=': conversion from 'size_t' to 'INT8U', possible loss of data
-  RadarSimSDK.cpp
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\Lib\Types\Halo24Types.h(660,1): warning C4267: '=': conversion from 'size_t' to 'INT8U', possible loss of data
-  Generating Code...
+﻿  ImageClient.cpp
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\Lib\Types\Halo24Types.h(681,1): warning C4267: '=': conversion from 'size_t' to 'INT8U', possible loss of data
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\Halo24SDK\include\MultiRadarClient.h(164,5): warning C4267: '=': conversion from 'size_t' to 'INT8U', possible loss of data
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\Halo24SDK\include\ImageClient.cpp(27,115): message : see reference to function template instantiation 'void Navico::Protocol::SRadar::SendPacket<SConnectRadar>(ESimSDKDataIDS,char *,T *)' being compiled
+          with
+          [
+              T=SConnectRadar
+          ]
   RadarSimSDK.vcxproj -> C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\x64\Debug\RadarSimSDK.exe

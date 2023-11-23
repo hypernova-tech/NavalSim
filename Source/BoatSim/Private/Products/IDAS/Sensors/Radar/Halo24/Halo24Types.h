@@ -439,13 +439,34 @@ struct S9174SpokeHeader
 	INT32U : 16;                     //!< reserved
 }BYTE_ALIGNED_END; 
 
+BYTE_ALIGNED_BEGIN
+struct S9174SpokeHeaderNoneBitField
+{
+	INT32U spokeLength_bytes ;   //!< Length of the whole spoke in bytes
+	INT32U sequenceNumber ;      //!< Spoke sequence number
+	INT32U sampleEncoding ;       ///< How the samples should be interpreted (see eSampleEncoding enum)
+
+	INT32U nOfSamples ;          //!< Number of samples present in the spoke
+	INT32U bitsPerSample;         //!< Number of bits per sample, normally is set to 4
+	INT32U rangeCellSize_mm ;    //!< Distance represented by each range-cell. sample size is computed as: rangeCellSize_mm * 2*rangeCellsDiv2 / nOfSamples;
+
+	INT32U spokeAzimuth ;         //!< Azimuth of the spoke in the range 0-4095. Values greater than 4095 must be mapped to 4095. This represents a full circle 0-360 degrees
+	INT32U bearingZeroError ;      //!< Set if there is malfunctioning bearing zero
+	INT32U spokeCompass;         //!< Heading of the boat when this spoke was sampled. It is represented in the 0-4095 range for 0-360degrees of heading
+	INT32U trueNorth;            //!< The connected heading sensor is reporting true north (1) or magnetic north (0)
+	INT32U compassInvalid;       //!< If this bit is 1, the compass information are invalid
+
+	INT32U rangeCellsDiv2;      //!< Number of range-cells represented by the data in this spoke, divided by 2
+}BYTE_ALIGNED_END;
+
 //------------------------------------------------------------------------------
 //! Structure for conveying radar image data & header information (ie. spokes)
 //------------------------------------------------------------------------------
 #define SAMPLE_COUNT_PER_SPOKE 1024
 BYTE_ALIGNED_BEGIN
 struct S9174SpokeData
-{
+{ 
+
 	S9174SpokeHeader Header;
 	INT8U Data[SAMPLE_COUNT_PER_SPOKE / 2];
 } BYTE_ALIGNED_END;
@@ -459,6 +480,7 @@ public:
 
 
 	SSerialData SerialData;
+	S9174SpokeHeaderNoneBitField HeaderNoneBitField;
 	S9174SpokeData SpokeData;
 
 

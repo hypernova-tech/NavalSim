@@ -58,7 +58,7 @@ void UConsoleBase::SendActorTransform(AActor* p_actor)
     FVector vec;
 
     if (p_actor) {
-        SendConsoleResponse(p_actor->GetName(), CCLICommandManager::Position, p_actor->GetActorLocation());
+        SendConsoleResponse(p_actor->GetName(), CCLICommandManager::Position, TOW(p_actor->GetActorLocation()));
 
         vec = CMath::GetActorEulerAnglesRPY(p_actor);
         SendConsoleResponse(p_actor->GetName(), CCLICommandManager::Rotation, vec);
@@ -780,14 +780,14 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
 
     ret = CommandManager.GetPosition(vec);
     if (ret) {
-        pSystemAPI->SetActorPosition(p_actor, vec * WORLDTOUNREALUNIT);
+        pSystemAPI->SetActorPosition(p_actor, TOUE(vec));
         //p_actor->SetActorLocation(vec * WORLDTOUNREALUNIT);
         one_success = true;
     }
 
     ret = CommandManager.GetRelPosition(vec);
     if (ret) {
-        pSystemAPI->SetActorRelPosition(p_actor, vec * WORLDTOUNREALUNIT);
+        pSystemAPI->SetActorRelPosition(p_actor, TOUE(vec ));
         //p_actor->SetActorRelativeLocation(vec * WORLDTOUNREALUNIT);
         one_success = true;
     }
