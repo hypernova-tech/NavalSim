@@ -24,8 +24,19 @@ void AUIControllerBase::BeginPlay()
 // Called every frame
 void AUIControllerBase::Tick(float DeltaTime)
 {
+	FLOAT64 elp_time_sec = -1;
+
+	if (TotalFrameCount > 0) {
+		elp_time_sec = CUtil::Tock(LastFrameTime);
+	}
 	Super::Tick(DeltaTime);
-	ComputeFPS(DeltaTime);
+	if (elp_time_sec > 0) {
+		ComputeFPS(elp_time_sec);
+	}
+	
+	TotalFrameCount++;
+	
+	LastFrameTime = CUtil::Tick();
 
 }
 
@@ -185,13 +196,13 @@ void AUIControllerBase::ComputeFPS(float DeltaTime)
 {
 	FPSMeasurments.Add(DeltaTime);
 
-	if (FPSMeasurments.Num() > 10) {
+	if (FPSMeasurments.Num() > 100) {
 		FPSMeasurments.RemoveAt(0);
 	}
-	FLOAT32 total_fps = 0;
+	FLOAT32 total_time = 0;
 	for (int i = 0; i < FPSMeasurments.Num(); i++) {
-		total_fps += 1/FPSMeasurments[i];
+		total_time += FPSMeasurments[i];
 	}
 
-	AverageFPS = total_fps / FPSMeasurments.Num();
+	AverageFPS = FPSMeasurments.Num()/ total_time;
 }

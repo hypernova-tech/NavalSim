@@ -38,6 +38,7 @@ void APointVisualizer::Visualize(SScanResult *p_scan_result, FVector origin, FVe
 
  
 
+
         if (!pRenderTarget)
         {
             UE_LOG(LogTemp, Error, TEXT("Invalid render target."));
@@ -46,6 +47,10 @@ void APointVisualizer::Visualize(SScanResult *p_scan_result, FVector origin, FVe
 
 
         FRenderTarget* RenderTargetResource = pRenderTarget->GameThread_GetRenderTargetResource();
+
+        if (RenderTargetResource == nullptr) {
+            return;
+        }
 
 
         double one_over_max_range = 1.0 / WORLD_TO_UNREAL(max_range_meter);
@@ -225,6 +230,7 @@ void APointVisualizer::SetPixelValue(UTextureRenderTarget2D* RenderTarget, int32
 
 UTextureRenderTarget2D* APointVisualizer::CreateRenderTarget(int width, int height, UImage* p_image)
 {
+
     pRenderTarget = NewObject<UTextureRenderTarget2D>(this);
     pRenderTarget->InitAutoFormat(width, height);
     CreateMaterialInstanceWithTexture(this, pBaseMaterial, pRenderTarget, p_image);

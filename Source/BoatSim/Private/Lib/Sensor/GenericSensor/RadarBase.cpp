@@ -103,8 +103,10 @@ void ARadarBase::InitSensor()
 	BlankingZone.SetArea(3, 270, 360);
 
 	InitTracker();
-
-	pSceneCapturer->CreateRenderTexture(this, DepthRenderTargetWidthPx, DepthRenderTargetHeightPx, EPixelFormat::PF_B8G8R8A8);
+	if (UseRenderTargetForDepthCalculation) {
+		pSceneCapturer->CreateRenderTexture(this, DepthRenderTargetWidthPx, DepthRenderTargetHeightPx, EPixelFormat::PF_B8G8R8A8);
+		
+	}
 }
 
 

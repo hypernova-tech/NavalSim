@@ -42,7 +42,7 @@ ASOAImplementor* ASOAImplementor::GetInstance()
 void ASOAImplementor::BeginPlay()
 {
 	Super::BeginPlay();
-	pEthernetDataProcessorBase = Cast<UIDASEthernetDataProcessor>(GetComponentByClass<UIDASEthernetDataProcessor>());
+	pEthernetDataProcessorBase = (GetComponentByClass<UIDASEthernetDataProcessor>());
 
 }
 
@@ -62,7 +62,8 @@ void ASOAImplementor::OnReceivedNewMessage(const TArray<uint8>& data, int32 byte
 		pEthernetDataProcessorBase->OnReceivedData(data, bytes_read);
 	}
 	else {
-		UE_LOG(LogTemp, Error, TEXT("pEthernetDataProcessorBase null"));
+		
+		//UE_LOG(LogTemp, Error, TEXT("pEthernetDataProcessorBase null"));
 	}
 }
 

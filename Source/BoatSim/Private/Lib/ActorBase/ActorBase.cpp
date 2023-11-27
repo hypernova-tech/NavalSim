@@ -34,6 +34,10 @@ void AActorBase::BeginPlay()
 	
 }
 
+void AActorBase::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+}
+
 void AActorBase::OnStep(float DeltaTime)
 {
 

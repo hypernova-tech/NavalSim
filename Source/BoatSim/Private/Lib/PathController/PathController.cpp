@@ -18,6 +18,13 @@ void APathController::BeginPlay()
 	RootComponent = pSplineMeshComponent;
 }
 
+void APathController::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	pSplineMeshComponent->DestroyComponent();
+	SplineMesh->DestroyComponent();
+	DynamicMaterial = nullptr;
+}
+
 void APathController::OnStep(float DeltaTime)
 {
 	Super::OnStep(DeltaTime);
@@ -117,7 +124,7 @@ void APathController::GenerateDrawablePathSegments()
 		FVector EndTangent = pspline_comp->GetTangentAtDistanceAlongSpline(endDist, ESplineCoordinateSpace::Local);
 
 		// ... (the rest of your loop creating the USplineMeshComponent instances remains unchanged)
-		USplineMeshComponent* SplineMesh = NewObject<USplineMeshComponent>(this);
+		SplineMesh = NewObject<USplineMeshComponent>(this);
 
 		SplineMesh->SetupAttachment(RootComponent);  // Assuming you're in an AActor subclass
 
@@ -158,6 +165,7 @@ FLOAT64 APathController::GetPathSpeed()
 
 void APathController::AddAttachedActor(AActor* p_actor)
 {
+
 	pSplineFollower->pAttachedObject = p_actor;
 }
 
@@ -173,7 +181,7 @@ void APathController::UpdatePathColor()
 	UMaterialInterface* OriginalMaterial = PathSegments[0]->GetStaticMesh()->GetMaterial(0); // Get the original material
 
 	// Create a dynamic material instance (a copy of the material that you can safely modify)
-	UMaterialInstanceDynamic* DynamicMaterial = UMaterialInstanceDynamic::Create(OriginalMaterial, this);
+	DynamicMaterial = UMaterialInstanceDynamic::Create(OriginalMaterial, this);
 	FColor MyColor = PathColor; // For instance, red.
 	FLinearColor MyLinearColor = MyColor.ReinterpretAsLinear();
 

@@ -28,8 +28,7 @@ protected:
 
 public:
 
-	UPROPERTY(EditAnywhere)
-		UIDASEthernetDataProcessor* pEthernetDataProcessorBase;
+	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -41,7 +40,7 @@ private:
 	static ASOAImplementor* Instance;
 	TMap<int32, TSet<ISOAObserver*>> ObserverDictionary;
 	int TotalReceivedCount = 0;
-	
+	UIDASEthernetDataProcessor* pEthernetDataProcessorBase;
 };
 
 

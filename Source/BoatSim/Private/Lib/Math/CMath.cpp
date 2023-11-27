@@ -168,3 +168,8 @@ FVector CMath::ToVec3(const FVector2D& vec2d)
 
     return ret;
 }
+
+bool CMath::IsZero(FVector vec, FLOAT64 tolerance)
+{
+    return (FMath::Abs(vec.X)<= tolerance) && (FMath::Abs(vec.Y) <= tolerance) && (FMath::Abs(vec.Z) <= tolerance);
+}

@@ -17,7 +17,7 @@ class UPlatformKinematicData : public UCSOAObserverArgs
 
 public:
 
-	int BodId;
+	int    BodId;
 	double BotPosLatDeg;
 	double BotPosLonDeg;
 	double VelNorthNedMeterSec;
@@ -40,5 +40,23 @@ public:
 	FVector GetEulerRPYDeg()
 	{
 		return FVector(EulerPhiDeg, EulerThetaDeg,EulerPsiDeg);
+	}
+
+	void Copy(UPlatformKinematicData *p_dest) {
+		p_dest->BodId = 							BodId;
+		p_dest->BotPosLatDeg = BotPosLatDeg;
+		p_dest->BotPosLonDeg = BotPosLonDeg;
+		p_dest->VelNorthNedMeterSec = VelNorthNedMeterSec;
+		p_dest->VelEastNedMeterPerSec = VelEastNedMeterPerSec;
+		p_dest->VelDownMeterPerSec = VelDownMeterPerSec;
+		p_dest->BotPosNorthMeter = BotPosNorthMeter;
+		p_dest->BotPosEastMeter = BotPosEastMeter;
+		p_dest->BotPosDownMeter = BotPosDownMeter;
+		p_dest->EulerPhiDeg = EulerPhiDeg;
+		p_dest->EulerThetaDeg = EulerThetaDeg;
+		p_dest->EulerPsiDeg = EulerPsiDeg;
+		p_dest->BodyVelSurgeMeterPerSec = BodyVelSurgeMeterPerSec;
+		p_dest->BodyVelSwayMeterPerSec = BodyVelSwayMeterPerSec;
+		p_dest->BodyVelHeaveMeterPerSec = BodyVelHeaveMeterPerSec;
 	}
 };

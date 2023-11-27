@@ -1,9 +1,0 @@
-﻿  ImageClient.cpp
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\Lib\Types\Halo24Types.h(681,1): warning C4267: '=': conversion from 'size_t' to 'INT8U', possible loss of data
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\Halo24SDK\include\MultiRadarClient.h(164,5): warning C4267: '=': conversion from 'size_t' to 'INT8U', possible loss of data
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\Halo24SDK\include\ImageClient.cpp(27,115): message : see reference to function template instantiation 'void Navico::Protocol::SRadar::SendPacket<SConnectRadar>(ESimSDKDataIDS,char *,T *)' being compiled
-          with
-          [
-              T=SConnectRadar
-          ]
-  RadarSimSDK.vcxproj -> C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\x64\Debug\RadarSimSDK.exe

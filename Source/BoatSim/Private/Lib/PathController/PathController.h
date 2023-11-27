@@ -27,7 +27,8 @@ protected:
 	TArray< USplineMeshComponent*> PathSegments;
 	void GenerateDrawablePathSegments();
 	bool IsBaked = false;
-
+	USplineMeshComponent* SplineMesh;
+	UMaterialInstanceDynamic* DynamicMaterial;
 public:
 	UPROPERTY(EditAnywhere)
 		int NumSegments = 50;
@@ -55,6 +56,7 @@ public:
 
 public:
 	virtual void BeginPlay() override;
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 	virtual void OnStep(float DeltaTime) override;
 
 	virtual void AddOrModifyWaypoint(INT32S wp_ind, FVector wp);

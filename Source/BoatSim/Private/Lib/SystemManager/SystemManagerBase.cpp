@@ -382,6 +382,19 @@ bool ASystemManagerBase::DestroyActor(FString name)
 		if (p_actor_base) {
 			p_actor_base->OnActorPredestroy();
 		}
+
+		TArray<AActor*> AttachedActors;
+		p_actor->GetAttachedActors(AttachedActors);
+
+		for (AActor* ChildActor : AttachedActors)
+		{
+			if (ChildActor)
+			{
+				ChildActor->Destroy();
+				RemoveActor(ChildActor);
+			}
+		}
+
 		
 		p_actor->Destroy();
 		RemoveActor(p_actor);

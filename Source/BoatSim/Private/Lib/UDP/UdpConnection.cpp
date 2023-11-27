@@ -106,13 +106,14 @@ uint32 UUdpConnection::Run()
 	
 	TSharedRef<FInternetAddr> targetAddr = ISocketSubsystem::Get(PLATFORM_SOCKETSUBSYSTEM)->CreateInternetAddr();
 	uint32 Size;
+	ReceivedData.SetNumUninitialized(2000);
 	while (!bShouldStopThread) {
 		while (Socket != nullptr && Socket->HasPendingData(Size))
 		{
 		
 			int32 BytesRead = 0;
 
-			ReceivedData.SetNumUninitialized(FMath::Min(Size, 65507u));
+			//ReceivedData.SetNumUninitialized(FMath::Min(Size, 65507u));
 			Socket->RecvFrom(ReceivedData.GetData(), ReceivedData.Num(), BytesRead, *targetAddr);
 
 	

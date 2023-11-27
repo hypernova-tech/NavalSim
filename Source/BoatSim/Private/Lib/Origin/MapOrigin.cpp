@@ -2,6 +2,7 @@
 
 
 #include "Lib/Origin/MapOrigin.h"
+#include <Lib/Math/CMath.h>
 
 // Sets default values
 AMapOrigin::AMapOrigin()
@@ -35,5 +36,15 @@ FVector AMapOrigin::GetGELocation(FVector pos)
 	//ret.Z += pos.Z;
 
 	return ret;
+}
+
+void AMapOrigin::ChangeCenterCoordinateOnce(FVector new_center)
+{
+	if (!IsCenterChangedOnce) {
+		if (!CMath::IsZero(new_center, 1e-6)) {
+			Center = new_center;
+			IsCenterChangedOnce = true;
+		}
+	}
 }
 

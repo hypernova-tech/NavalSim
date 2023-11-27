@@ -26,6 +26,7 @@ private:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	bool IsCenterChangedOnce = false;
 
 public:	
 	// Called every frame
@@ -34,7 +35,7 @@ public:
 	static AMapOrigin* GetMapOrigin();
 
 	FVector GetGELocation(FVector pos);
-
+	void ChangeCenterCoordinateOnce(FVector new_center);
 
 
 

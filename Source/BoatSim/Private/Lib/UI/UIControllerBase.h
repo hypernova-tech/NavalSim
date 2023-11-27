@@ -101,4 +101,6 @@ private:
 	FLOAT32 AverageFPS;
 	TArray< FLOAT32> FPSMeasurments;
 	AActor* pSelectedActor;
+	INT64U TotalFrameCount = 0;
+	FLOAT64 LastFrameTime;
 };

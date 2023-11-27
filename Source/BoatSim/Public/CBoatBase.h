@@ -7,6 +7,7 @@
 #include "Lib/SOA/ISOAObserver.h"
 #include <Lib/Sensor/SensorBase.h>
 #include <Lib/Platform/IPlatform.h>
+#include <Lib/SOACommonObserverArgs/PlatformKinematicData.h>
 #include "CBoatBase.generated.h"
 
 
@@ -86,6 +87,10 @@ public:
     virtual void Update(UCSOAObserverArgs* p_args) override;
 	virtual void OnControllerChanged();
 	bool FocusCamera(AActor* p_actor);
+	UPlatformKinematicData *pLastData;
+	bool IsDirty;
+	void UpdateKinematicData();
+	FCriticalSection Mutex;
 private:
 	UCameraComponent* BoatCam;
 	bool IsForward;
@@ -97,6 +102,7 @@ private:
 	bool bIsRightMousePressed;
 	float TimeSec;
 	void Oscillate();
+
 
 
 

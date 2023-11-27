@@ -31,7 +31,7 @@ void ACBoatBase::BeginPlay()
 	Super::BeginPlay();
 	ASOAImplementor::GetInstance()->Subscribe(CommonSOAObservers::PlatformKinematicObserverId,this);
 	BoatCam = Cast<UCameraComponent>(GetComponentByClass<UCameraComponent>());
-
+	pLastData = NewObject< UPlatformKinematicData>();
 
 	
 }
@@ -100,11 +100,8 @@ void ACBoatBase::Tick(float DeltaTime)
 #endif
 
 	
-	AGimbalBase* ChildComponent = CUtil::FindChildComponent< AGimbalBase>(this); 
-	
-	//ChildComponent->UpdateAttachedActors(FVector(0,0,0));
 	Oscillate();
-
+	UpdateKinematicData();
 }
 
 
@@ -298,35 +295,46 @@ void ACBoatBase::Update(UCSOAObserverArgs* p_args)
 	
 
 	if (p_args->GetSubjectId() == CommonSOAObservers::PlatformKinematicObserverId) {
-		UPlatformKinematicData* p_kinematic =Cast<UPlatformKinematicData>(p_args);
+		UPlatformKinematicData* p_kinematic = (UPlatformKinematicData*)(p_args);
 		
 		if (p_kinematic != nullptr) {
 			
-			AMapOrigin* p_origin = ASystemManagerBase::GetInstance()->GetMapOrigin();
-			FVector llh =  p_kinematic->GetLocationLLH();
-			FVector new_pos = p_origin->GetGELocation(llh);
-			FVector euler = p_kinematic->GetEulerRPYDeg();
+			
+			//Mutex.Lock();
+			p_kinematic->Copy(pLastData);
+			IsDirty = true;
+			//Mutex.Unlock();
+			UpdateKinematicData();
 
-
-			// Create a task to execute on the game thread
-			FGraphEventRef Task = FFunctionGraphTask::CreateAndDispatchWhenReady([&]()
-				{
-					
-						// Update the actor's location
-						SetActorLocation(new_pos);
-						SetActorRotation(FRotator(euler.Y, euler.Z, euler.X));
-					
-				}, TStatId(), nullptr, ENamedThreads::GameThread);
-
-			// Wait for the task to complete
-			FTaskGraphInterface::Get().WaitUntilTaskCompletes(Task);
-
-
-			//SetActorLocation(new_pos);
-			//SetActorRotation(FRotator(euler.Y,euler.Z, euler.X));
 		}
 	}
 
+}
+
+void ACBoatBase::UpdateKinematicData()
+{
+	bool should_unlock = true;
+	//Mutex.Lock();
+	if (IsDirty) {
+
+		AMapOrigin* p_origin = ASystemManagerBase::GetInstance()->GetMapOrigin();
+		
+		FVector llh = pLastData->GetLocationLLH();
+		p_origin->ChangeCenterCoordinateOnce(llh);
+		FVector new_pos = p_origin->GetGELocation(llh);
+		FVector euler = pLastData->GetEulerRPYDeg();
+		IsDirty = false;
+		//Mutex.Unlock();
+		should_unlock = false;
+		SetActorLocation(new_pos);
+		SetActorRotation(FRotator(euler.Y, euler.Z, euler.X));
+	
+		
+	}
+	if (should_unlock) {
+		//Mutex.Unlock();
+	}
+	
 }
 
 void ACBoatBase::OnControllerChanged()

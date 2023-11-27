@@ -33,7 +33,10 @@ void ALidarBase::InitSensor()
 
 	pScanResult = new SScanResult();
 	pScanResult->Init(1);
-	pSceneCapturer->CreateRenderTexture(this, DepthRenderTargetWidthPx, DepthRenderTargetHeightPx, EPixelFormat::PF_B8G8R8A8);
+	if (UseRenderTargetForDepthCalculation) {
+		pSceneCapturer->CreateRenderTexture(this, DepthRenderTargetWidthPx, DepthRenderTargetHeightPx, EPixelFormat::PF_B8G8R8A8);
+	}
+	
 }
 
 void ALidarBase::OnCaptureReady(void* p_data)
