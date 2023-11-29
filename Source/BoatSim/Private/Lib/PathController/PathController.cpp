@@ -174,6 +174,12 @@ AActor* APathController::GetAttachedActor()
 	return pSplineFollower->pAttachedObject;
 }
 
+bool APathController::RemoveAttachedActor(AActor* p_actor)
+{
+	return pSplineFollower->RemoveAttachedActor(p_actor);
+	return false;
+}
+
 void APathController::UpdatePathColor()
 {
 

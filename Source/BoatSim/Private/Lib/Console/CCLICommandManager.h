@@ -124,6 +124,7 @@ public:
 	static FString Bake;
 	static FString Speed;
 	static FString Attach;
+	static FString Detach;
 	static FString Straight;
 	static FString LineColor;
 	static FString SegmentCount;

@@ -186,6 +186,7 @@ public:
 	virtual bool SetPathClosed(AActor* p_actor, bool is_closed) = 0;
 	virtual bool SetPathSpeed(AActor* p_actor, FLOAT64 val) = 0;
 	virtual bool AttachToPath(AActor* p_path, FString actor_name) = 0;
+	virtual bool DetachFromPath(AActor* p_path, FString actor_name) = 0;
 
 	virtual bool GetWaypointPosition(AActor* p_actor, INT32S wp_ind, FVector &position) = 0;
 	virtual bool GetPathClosed(AActor* p_actor, bool &is_closed) = 0;

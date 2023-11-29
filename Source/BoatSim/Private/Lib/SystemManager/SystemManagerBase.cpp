@@ -1546,7 +1546,25 @@ bool ASystemManagerBase::AttachToPath(AActor* p_path_actor, FString actor_name)
 
 	return false;
 }
+bool ASystemManagerBase::DetachFromPath(AActor* p_path_actor, FString actor_name)
+{
+	auto actorbase = ToActorBase(p_path_actor);
+	if (actorbase != nullptr && actorbase->IsA< APathController>()) {
+		APathController* p_path = (APathController*)actorbase;
 
+		auto detachable = FindActor(actor_name);
+
+		if (detachable) {
+			return p_path->RemoveAttachedActor(detachable);
+		}
+		else {
+			return false;
+		}
+
+	}
+
+	return false;
+}
 
 bool ASystemManagerBase::GetWaypointPosition(AActor* p_actor, INT32S wp_ind, FVector& position)
 {

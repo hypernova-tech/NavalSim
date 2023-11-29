@@ -68,6 +68,7 @@ public:
 	FLOAT64 GetPathSpeed();
 	void AddAttachedActor(AActor *p_actor);
 	AActor* GetAttachedActor();
+	bool RemoveAttachedActor(AActor* p_actor);
 	void UpdatePathColor();
 	void NotifyWaypointMoved(AWaypointActor* p_wp);
 	void NotifyWaypointDestroy(AWaypointActor* p_wp);

@@ -102,9 +102,9 @@ private:
 	bool bIsRightMousePressed;
 	float TimeSec;
 	void Oscillate();
-
-
-
+	float AnglueSpeedDegPerSec = 5;;
+	float R = 100;
+	float Theta = 0;
 
 	// Inherited via IPlatform
 	virtual void SetMaxSpeedMeterPerSec(FLOAT32 speed) override;

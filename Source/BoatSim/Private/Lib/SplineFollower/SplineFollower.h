@@ -65,5 +65,6 @@ public:
 	FVector GetWaypointLocation(INT32S i);
 	void UpdateWaypointsPositions();
 	void RemoveWaypoint(AWaypointActor* p_wp);
+	bool RemoveAttachedActor(AActor *p_actor);
 		
 };

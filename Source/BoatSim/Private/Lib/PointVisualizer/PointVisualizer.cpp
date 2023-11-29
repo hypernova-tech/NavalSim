@@ -51,7 +51,7 @@ void APointVisualizer::Visualize(SScanResult *p_scan_result, FVector origin, FVe
         if (RenderTargetResource == nullptr) {
             return;
         }
-
+        RenderCount = 0;
 
         double one_over_max_range = 1.0 / WORLD_TO_UNREAL(max_range_meter);
         FCanvas Canvas(RenderTargetResource, nullptr, 0, 0, 0, ERHIFeatureLevel::SM5);
@@ -89,6 +89,7 @@ void APointVisualizer::Visualize(SScanResult *p_scan_result, FVector origin, FVe
 
                 TileItem.BlendMode = SE_BLEND_Opaque;
                 Canvas.DrawItem(TileItem);
+                RenderCount++;
             }
 
 
@@ -123,6 +124,7 @@ void APointVisualizer::Visualize(SScanResult *p_scan_result, FVector origin, FVe
 
                 TileItem.BlendMode = SE_BLEND_Opaque;
                 Canvas.DrawItem(TileItem);
+                RenderCount++;
             }
         }
 
@@ -130,7 +132,7 @@ void APointVisualizer::Visualize(SScanResult *p_scan_result, FVector origin, FVe
             Canvas.Flush_GameThread();
         }
        
-        RenderCount++;
+        
  
 
 }

@@ -295,13 +295,14 @@ void ACBoatBase::Update(UCSOAObserverArgs* p_args)
 	
 
 	if (p_args->GetSubjectId() == CommonSOAObservers::PlatformKinematicObserverId) {
-		UPlatformKinematicData* p_kinematic = (UPlatformKinematicData*)(p_args);
+		UPlatformKinematicData* p_kinematic = Cast<UPlatformKinematicData>(p_args);
 		
 		if (p_kinematic != nullptr) {
 			
 			
 			//Mutex.Lock();
-			p_kinematic->Copy(pLastData);
+			pLastData = p_kinematic;
+			//p_kinematic->Copy(pLastData);
 			IsDirty = true;
 			//Mutex.Unlock();
 			UpdateKinematicData();
@@ -316,16 +317,24 @@ void ACBoatBase::UpdateKinematicData()
 	bool should_unlock = true;
 	//Mutex.Lock();
 	if (IsDirty) {
-
+#if true
 		AMapOrigin* p_origin = ASystemManagerBase::GetInstance()->GetMapOrigin();
 		
 		FVector llh = pLastData->GetLocationLLH();
 		p_origin->ChangeCenterCoordinateOnce(llh);
 		FVector new_pos = p_origin->GetGELocation(llh);
 		FVector euler = pLastData->GetEulerRPYDeg();
-		IsDirty = false;
+		
 		//Mutex.Unlock();
 		should_unlock = false;
+#endif
+		IsDirty = false;
+		
+		//Theta += 1 / 60.0 * AnglueSpeedDegPerSec;
+		//FVector pos = R * (FMath::Cos(Theta * PI / 180) * FVector::RightVector + FMath::Cos(Theta * PI / 180) * FVector::ForwardVector);
+		//FVector rot = FVector(0,0 , Theta);
+	
+
 		SetActorLocation(new_pos);
 		SetActorRotation(FRotator(euler.Y, euler.Z, euler.X));
 	

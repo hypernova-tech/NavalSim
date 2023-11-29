@@ -1136,6 +1136,8 @@ namespace ConsoleGUI
         {
             if (OpenFileDialog.ShowDialog() == DialogResult.OK)
             {
+
+                ClearObjectEditor();
                 string filePath = OpenFileDialog.FileName;
                 string fileName = Path.GetFileName(filePath);
                 var command = string.Format("ws --load {0}", fileName);
@@ -1254,14 +1256,10 @@ namespace ConsoleGUI
         public void UpdatePaths(ContextMenuStrip contextMenuStrip, HashSet<string> items)
         {
             HashSet<string> filteredSet = items;
-            /*
-
-                = items
-    .Where(item => item.Contains("path"))
-    .ToHashSet();
-            */
+     
 
             ToolStripMenuItem subMenu = null;
+            ToolStripMenuItem detach_menu = null;
 
             // First, clear the existing items if needed
             foreach (ToolStripItem item in contextMenuStrip.Items)
@@ -1270,6 +1268,17 @@ namespace ConsoleGUI
                 {
                     subMenu = (ToolStripMenuItem)item;
                     subMenu.DropDownItems.Clear();
+                   
+                }
+              
+            }
+
+            foreach (ToolStripItem item in contextMenuStrip.Items)
+            {
+                if (item.ToString() == "Detach Path")
+                {
+                    detach_menu = (ToolStripMenuItem)item;
+                    detach_menu.DropDownItems.Clear();
                     break;
                 }
             }
@@ -1289,6 +1298,19 @@ namespace ConsoleGUI
 
                 // Add the new ToolStripMenuItem to the sub-menu
                 subMenu.DropDownItems.Add(menuItem);
+            }
+
+            // Loop through the HashSet and add each string as a ToolStripMenuItem
+            foreach (string item in filteredSet)
+            {
+                // Create a new ToolStripMenuItem for each item
+                ToolStripMenuItem menuItem = new ToolStripMenuItem(item);
+
+                // Set the Click event handler for the sub-items here
+                menuItem.Click += new EventHandler(MenuItem_ClickDetachPath);
+
+                // Add the new ToolStripMenuItem to the sub-menu
+                detach_menu.DropDownItems.Add(menuItem);
             }
 
             // Add the sub-menu to the main context menu strip
@@ -1313,7 +1335,24 @@ namespace ConsoleGUI
                 }
             }
         }
+        private void MenuItem_ClickDetachPath(object sender, EventArgs e)
+        {
+            ToolStripMenuItem clickedItem = sender as ToolStripMenuItem;
 
+            if (clickedItem != null)
+            {
+                if (clickedItem.Text != "")
+                {
+                    Selected = clickedItem.Text;
+                    string parent = "";
+                    if (ObjectEditor.SelectedNode != null)
+                    {
+                        parent = ObjectEditor.SelectedNode.Text;
+                    }
+                    DetachParentFromPath(parent, Selected);
+                }
+            }
+        }
 
         public void CreateSubmenu(ContextMenuStrip contextMenuStrip, HashSet<string> items)
         {
@@ -1375,16 +1414,36 @@ namespace ConsoleGUI
         {
             CreateAndSendCommand(CLICommandManager.SetCommand, CLICommandManager.Name, path, CLICommandManager.Attach, obj);
         }
+        void DetachParentFromPath(string obj, string path)
+        {
+            CreateAndSendCommand(CLICommandManager.SetCommand, CLICommandManager.Name, path, CLICommandManager.Detach, obj);
+        }
+
 
         private void loadBlueprintsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             LoadModels();
         }
-
-        private void clearAllToolStripMenuItem_Click(object sender, EventArgs e)
+        void ClearObjectEditor()
         {
             ObjectEditor.Nodes.Clear();
+        }
+        void ClearModelsReceived()
+        {
             ModelsReceived.Clear();
+        }
+        void ClearActorsReceived()
+        {
+            ActorsReceived.Clear();
+        }
+        void ClearPathsReceived()
+        {
+            PathsReceived.Clear();
+        }
+        private void clearAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ClearObjectEditor();
+            ClearModelsReceived();
             ActorsReceived.Clear();
             PathsReceived.Clear();
         }

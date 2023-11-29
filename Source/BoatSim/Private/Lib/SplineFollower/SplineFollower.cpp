@@ -140,3 +140,14 @@ void USplineFollower::RemoveWaypoint(AWaypointActor* p_wp)
 	}
 }
 
+bool USplineFollower::RemoveAttachedActor(AActor* p_actor)
+{
+	if (pAttachedObject == p_actor) {
+		pAttachedObject = nullptr;
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+

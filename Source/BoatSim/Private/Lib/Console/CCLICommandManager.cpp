@@ -76,6 +76,7 @@ FString CCLICommandManager::Closed = "closed";
 FString CCLICommandManager::Bake = "bake";
 FString CCLICommandManager::Speed = "speed";
 FString CCLICommandManager::Attach = "attach";
+FString CCLICommandManager::Detach = "detach";
 FString CCLICommandManager::Straight = "straight";
 FString CCLICommandManager::LineColor = "color";
 FString CCLICommandManager::SegmentCount = "segment";
@@ -441,6 +442,9 @@ void CCLICommandManager::PrepareSetCommandInfo()
 
 	info.Option = "--" + CCLICommandManager::Attach;
 	info.Description = "attach the object given actor name";
+	options.Add(info);
+	info.Option = "--" + CCLICommandManager::Detach;
+	info.Description = "detach the object given actor name";
 	options.Add(info);
 
 	info.Option = "--" + CCLICommandManager::SegmentCount;

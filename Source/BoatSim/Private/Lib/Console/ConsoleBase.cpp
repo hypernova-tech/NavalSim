@@ -1200,7 +1200,15 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
 
     }
 
+    ret = CommandManager.GetValue(CCLICommandManager::Detach, sret);
+    if (ret) {
+        if (pSystemAPI->DetachFromPath(p_actor, sret)) {
+            one_success = true;
+        }
+    }
+    else {
 
+    }
 
     ret = CommandManager.GetValue(CCLICommandManager::LineColor, color);
     if (ret) {

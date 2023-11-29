@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 [AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
 public class ModifiableAttribute : Attribute
@@ -70,6 +71,7 @@ public static class CLICommandManager
     public const string Bake = "bake";
     public const string Speed = "speed";
     public const string Attach = "attach";
+    public const string Detach = "detach";
     public const string Straight = "straight";
     public const string LineColor = "color";
     public const string SegmentCount = "segment";

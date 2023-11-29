@@ -125,6 +125,7 @@ namespace ConsoleGUI
             ConsoeListBoxContextMenu = new ContextMenuStrip(components);
             clearToolStripMenuItem = new ToolStripMenuItem();
             FileSaver = new SaveFileDialog();
+            detachPathToolStripMenuItem = new ToolStripMenuItem();
             ActorListContextMenu.SuspendLayout();
             contextMenuConsoleListBox.SuspendLayout();
             tabPage2.SuspendLayout();
@@ -238,27 +239,27 @@ namespace ConsoleGUI
             // 
             // ObjectEditorContextMenu
             // 
-            ObjectEditorContextMenu.Items.AddRange(new ToolStripItem[] { blueprintToolStripMenuItem, attachToPathToolStripMenuItem, destroyToolStripMenuItem });
+            ObjectEditorContextMenu.Items.AddRange(new ToolStripItem[] { blueprintToolStripMenuItem, attachToPathToolStripMenuItem, detachPathToolStripMenuItem, destroyToolStripMenuItem });
             ObjectEditorContextMenu.Name = "contextMenuStrip2";
-            ObjectEditorContextMenu.Size = new Size(137, 70);
+            ObjectEditorContextMenu.Size = new Size(181, 114);
             ObjectEditorContextMenu.Opening += ObjectEditorContextMenu_Opening;
             // 
             // blueprintToolStripMenuItem
             // 
             blueprintToolStripMenuItem.Name = "blueprintToolStripMenuItem";
-            blueprintToolStripMenuItem.Size = new Size(136, 22);
+            blueprintToolStripMenuItem.Size = new Size(180, 22);
             blueprintToolStripMenuItem.Text = "Blueprints";
             // 
             // attachToPathToolStripMenuItem
             // 
             attachToPathToolStripMenuItem.Name = "attachToPathToolStripMenuItem";
-            attachToPathToolStripMenuItem.Size = new Size(136, 22);
+            attachToPathToolStripMenuItem.Size = new Size(180, 22);
             attachToPathToolStripMenuItem.Text = "Attach Path";
             // 
             // destroyToolStripMenuItem
             // 
             destroyToolStripMenuItem.Name = "destroyToolStripMenuItem";
-            destroyToolStripMenuItem.Size = new Size(136, 22);
+            destroyToolStripMenuItem.Size = new Size(180, 22);
             destroyToolStripMenuItem.Text = "Destroy";
             destroyToolStripMenuItem.Click += destroyToolStripMenuItem_Click_1;
             // 
@@ -949,6 +950,12 @@ namespace ConsoleGUI
             clearToolStripMenuItem.Size = new Size(101, 22);
             clearToolStripMenuItem.Text = "Clear";
             // 
+            // detachPathToolStripMenuItem
+            // 
+            detachPathToolStripMenuItem.Name = "detachPathToolStripMenuItem";
+            detachPathToolStripMenuItem.Size = new Size(180, 22);
+            detachPathToolStripMenuItem.Text = "Detach Path";
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1084,5 +1091,6 @@ namespace ConsoleGUI
         private ToolStripMenuItem toolStripMenuItem4;
         private ToolStripMenuItem showChartsToolStripMenuItem;
         private ToolStripMenuItem hideChartsToolStripMenuItem;
+        private ToolStripMenuItem detachPathToolStripMenuItem;
     }
 }
