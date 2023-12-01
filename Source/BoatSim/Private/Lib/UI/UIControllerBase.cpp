@@ -55,6 +55,26 @@ int AUIControllerBase::GetSensorSlotCount()
 	return SensorSlots.Num();
 }
 
+void AUIControllerBase::SetSensorTitle(int no, UTextBlock* p_val)
+{
+	SensorTitles.Add(p_val);
+}
+
+
+UTextBlock* AUIControllerBase::GetSensorTitle(int no)
+{
+	return SensorTitles[no];
+}
+
+void AUIControllerBase::SetSensorTitleText(int no, FString val)
+{
+	auto sensor_title = GetSensorTitle(no);
+
+	if (sensor_title != nullptr) {
+		sensor_title->SetText(FText::FromString(val));
+	}
+	
+}
 
 void AUIControllerBase::SetConsoleOutputTextWidget(UTextBlock* pwidget)
 {

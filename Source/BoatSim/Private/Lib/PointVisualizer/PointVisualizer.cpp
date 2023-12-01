@@ -127,7 +127,11 @@ void APointVisualizer::Visualize(SScanResult *p_scan_result, FVector origin, FVe
                 RenderCount++;
             }
         }
-
+        /*
+        FVector2D pos_text = FVector2D(100, 100);
+        FCanvasTextItem TextItem(pos_text, FText::FromString(TEXT("Your Text Here")), GEngine->GetMediumFont(), FLinearColor::Red);
+        Canvas.DrawItem(TextItem);
+        */
         if (RenderCount > 0) {
             Canvas.Flush_GameThread();
         }

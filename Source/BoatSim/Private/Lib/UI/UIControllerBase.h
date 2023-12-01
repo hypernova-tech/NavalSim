@@ -37,6 +37,9 @@ protected:
 	UPROPERTY(EditAnywhere)
 		TArray<UImage*> SensorSlots;
 
+	UPROPERTY(EditAnywhere)
+		TArray<UTextBlock*> SensorTitles;
+
 	virtual void ComputeFPS(float DeltaTime);
 
 	UGizmoUIController* pGizmoUIController;
@@ -55,8 +58,14 @@ public:
 	UFUNCTION(BlueprintCallable)
 		int GetSensorSlotCount();
 
-	
 
+	UFUNCTION(BlueprintCallable)
+		void SetSensorTitle(int no, UTextBlock* p_image);
+
+	UFUNCTION(BlueprintCallable)
+		UTextBlock* GetSensorTitle(int no);
+
+	void SetSensorTitleText(int no, FString val);
 
 	UFUNCTION(BlueprintCallable)
 		void SetConsoleOutputTextWidget(UTextBlock* pwidget);
@@ -83,6 +92,8 @@ public:
 	void SelectActor(AActor* p_actor);
 
 	UGizmoUIController* GetGizmoController();
+
+	
 
 
 

@@ -4,6 +4,7 @@
 #include "Lib/Sensor/SensorBase.h"
 #include <Lib/Utils/CUtil.h>
 #include <Lib/Console/CCLICommandManager.h>
+#include <Lib/SystemManager/SystemManagerBase.h>
 
 
 
@@ -70,6 +71,8 @@ void ASensorBase::InitSensor()
 		this->DisableComponentsSimulatePhysics();
 
 	}
+
+	ASystemManagerBase::GetInstance()->GetUIController()->SetSensorTitleText(SensorSlotIndex, GetName());
 
 }
 
