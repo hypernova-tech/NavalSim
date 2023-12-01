@@ -522,9 +522,9 @@ AUIControllerBase* ASystemManagerBase::GetUIController()
 	return pUIController;
 }
 
-ADataContainer* ASystemManagerBase::GetDataContainer()
+ADataManager* ASystemManagerBase::GetDataManager()
 {
-	return pDataContainer;
+	return pDataManager;
 }
 UConsoleBase* ASystemManagerBase::GetConsole()
 {
@@ -579,7 +579,7 @@ AActor* ASystemManagerBase::CreateActor(FString model_name, FString boat_name, F
 		SendConsoleResponse(boat_name + "already exists, choose a unique name");
 		return nullptr;
 	}
-	auto info = pDataContainer->FindBlueprintInfo(model_name);
+	auto info = pDataManager->FindBlueprintInfo(model_name);
 	
 	auto path = info.BlueprintAsset.ToSoftObjectPath().GetAssetPathString();
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, path);
@@ -588,7 +588,7 @@ AActor* ASystemManagerBase::CreateActor(FString model_name, FString boat_name, F
 
 
 
-    auto ret = CUtil::SpawnObjectFromBlueprint(info.ActorToSpawn, path, GetWorld(), nullptr, boat_name,world_pos, world_rot, scale);
+    auto ret = CUtil::SpawnObjectFromBlueprint(nullptr, path, GetWorld(), nullptr, boat_name,world_pos, world_rot, scale);
 	
 	if (ret != nullptr) {
 		RegisterActor(ret);

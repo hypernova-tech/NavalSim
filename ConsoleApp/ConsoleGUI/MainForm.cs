@@ -16,11 +16,95 @@ using System.Diagnostics;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using System.Reflection;
 using Microsoft.VisualBasic.Logging;
+using Newtonsoft.Json.Linq;
 
 
 public interface IConnection
 {
     public void SendData(string cmd, bool add_to_cmd_list = true);
+}
+
+public class CObjectInfo
+{
+    public string Name;
+    public string MainCategory;
+}
+
+public class CObjectContainer
+{
+    Dictionary<string, CObjectInfo> Objects = new Dictionary<string, CObjectInfo>();
+
+    public bool Contains(string name)
+    {
+        if(Objects.TryGetValue(name, out var model))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public void Add(string name, CObjectInfo model)
+    {
+        if(!Contains(name))
+        {
+            Objects.Add(name, model);
+        }
+        
+    }
+    public List<string> GetObjects()
+    {
+        var models =  Objects.Keys.ToList();
+        return models;
+    }
+
+    public List<string> GetCategoriesForObject(string name)
+    {
+        List<string> ret = new List<string>();
+
+        foreach (var pair in Objects)
+        {
+            if(pair.Key == name)
+            {
+                ret.Add(pair.Value.MainCategory);
+            }
+        }
+
+        return ret;
+    }
+    public List<string> GetObjectsForCategories(string category)
+    {
+        List<string> ret = new List<string>();
+
+        foreach (var pair in Objects)
+        {
+            if (pair.Value.MainCategory == category)
+            {
+                ret.Add(pair.Value.Name);
+            }
+        }
+
+        return ret;
+    }
+
+    public HashSet<string> GetCategories()
+    {
+        HashSet<string> ret = new HashSet<string>();
+
+        foreach (var pair in Objects)
+        {
+            ret.Add(pair.Value.MainCategory); ;
+        }
+
+        return ret;
+    }
+
+    internal void Clear()
+    {
+        Objects.Clear();
+    }
 }
 
 namespace ConsoleGUI
@@ -38,9 +122,10 @@ namespace ConsoleGUI
         int LocalPort = 55050;
         HashSet<string> SensorsReceived = new HashSet<string>();
         HashSet<string> ActorsReceived = new HashSet<string>();
-        HashSet<string> ModelsReceived = new HashSet<string>();
+        //HashSet<string> ModelsReceived = new HashSet<string>();
         HashSet<string> PathsReceived = new HashSet<string>();
 
+        CObjectContainer Models = new CObjectContainer();
 
         CJsonParser mJsonParser = new CJsonParser();
         string Selected = "";
@@ -169,20 +254,7 @@ namespace ConsoleGUI
                 }
 
             }
-            else if (item.Contains("<bp>"))
-            {
-                string item_striped = item;
-                item_striped = item_striped.Replace("<bp>", "");
-
-                if (!ModelsReceived.Contains(item_striped))
-                {
-
-                    ModelsReceived.Add(item_striped);
-                    is_added = true;
-                    IsActorGridDirty = true;
-                }
-
-            }
+         
             else if (item.Contains("<path>"))
             {
                 string item_striped = item;
@@ -220,7 +292,7 @@ namespace ConsoleGUI
             int ind = 0;
 
 
-            CreateSubmenu(ObjectEditorContextMenu, ModelsReceived);
+            CreateSubmenu(ObjectEditorContextMenu, Models);
             UpdatePaths(ObjectEditorContextMenu, PathsReceived);
 
 #if false
@@ -863,7 +935,7 @@ namespace ConsoleGUI
 
         void LoadModels()
         {
-            ModelsReceived.Clear();
+            Models.Clear();
             var command = ("print --bp");
             SendData(command, false);
         }
@@ -1086,7 +1158,7 @@ namespace ConsoleGUI
         {
             if (Selected != "")
             {
-                if (ModelsReceived.Contains(Selected))
+                if (Models.Contains(Selected))
                 {
                     return true;
                 }
@@ -1239,7 +1311,7 @@ namespace ConsoleGUI
 
             ActorsReceived.Clear();
             SensorsReceived.Clear();
-            ModelsReceived.Clear();
+            Models.Clear();
         }
 
         private void loadActorsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1256,7 +1328,7 @@ namespace ConsoleGUI
         public void UpdatePaths(ContextMenuStrip contextMenuStrip, HashSet<string> items)
         {
             HashSet<string> filteredSet = items;
-     
+
 
             ToolStripMenuItem subMenu = null;
             ToolStripMenuItem detach_menu = null;
@@ -1268,9 +1340,9 @@ namespace ConsoleGUI
                 {
                     subMenu = (ToolStripMenuItem)item;
                     subMenu.DropDownItems.Clear();
-                   
+
                 }
-              
+
             }
 
             foreach (ToolStripItem item in contextMenuStrip.Items)
@@ -1354,8 +1426,12 @@ namespace ConsoleGUI
             }
         }
 
-        public void CreateSubmenu(ContextMenuStrip contextMenuStrip, HashSet<string> items)
+        public void CreateSubmenu(ContextMenuStrip contextMenuStrip, CObjectContainer container)
         {
+
+            var objects = container.GetObjects();
+            var categories = container.GetCategories();
+
             // First, clear the existing items if needed
             ToolStripMenuItem subMenu = null;
 
@@ -1370,24 +1446,25 @@ namespace ConsoleGUI
             }
 
 
-            // Create a new ToolStripMenuItem as the main sub-menu item
-            //ToolStripMenuItem subMenu = new ToolStripMenuItem("Blueprints");
-
-            // Loop through the HashSet and add each string as a ToolStripMenuItem
-            foreach (string item in items)
+            foreach(var category in categories)
             {
-                // Create a new ToolStripMenuItem for each item
-                ToolStripMenuItem menuItem = new ToolStripMenuItem(item);
-
-                // Set the Click event handler for the sub-items here
-                menuItem.Click += new EventHandler(MenuItem_Click);
-
-                // Add the new ToolStripMenuItem to the sub-menu
+                ToolStripMenuItem menuItem = new ToolStripMenuItem(category);
+                var objs = container.GetObjectsForCategories(category);
                 subMenu.DropDownItems.Add(menuItem);
-            }
 
-            // Add the sub-menu to the main context menu strip
-            // contextMenuStrip.Items.Add(subMenu);
+                foreach (string item in objs)
+                {
+                    // Create a new ToolStripMenuItem for each item
+                    ToolStripMenuItem itm = new ToolStripMenuItem(item);
+
+                    // Set the Click event handler for the sub-items here
+                    itm.Click += new EventHandler(MenuItem_Click);
+
+                    // Add the new ToolStripMenuItem to the sub-menu
+                    menuItem.DropDownItems.Add(itm);
+                }
+
+            }
         }
 
         // Event handler for sub-menu item clicks
@@ -1430,7 +1507,7 @@ namespace ConsoleGUI
         }
         void ClearModelsReceived()
         {
-            ModelsReceived.Clear();
+            Models.Clear();
         }
         void ClearActorsReceived()
         {
@@ -1654,6 +1731,11 @@ namespace ConsoleGUI
         private void hideChartsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SystemAPIImplementor.SetUIVisible(false);
+        }
+
+        internal void RegisterModel(CObjectInfo info)
+        {
+            Models.Add(info.Name, info);
         }
     }
 }

@@ -579,11 +579,24 @@ void UConsoleBase::SendActorBases()
 
 void UConsoleBase::SendBlueprints()
 {
-    auto bp_info = ASystemManagerBase::GetInstance()->GetDataContainer()->GetBlueprintInfo();
+    auto bp_info = ASystemManagerBase::GetInstance()->GetDataManager()->GetBlueprintInfo();
+
     for (auto entry : *bp_info) {
 
-        pSystemAPI->SendConsoleResponse("<bp>" + entry.Name);
+        //pSystemAPI->SendConsoleResponse("<bp>" + entry.Name);
+        TMap<FString, FString> data;
+        data.Add("class", "bp");
+        if (entry.Name != "") {
+            data.Add("name", entry.Name);
+        }
+
+        data.Add("maincategory", ASystemManagerBase::GetInstance()->GetDataManager()->GetCategoryName(entry.Category));
+        auto ret_json = CreateAndSerializeJson(data);
+        pSystemAPI->SendConsoleResponse(ret_json);
+
     }
+
+
 }
 bool UConsoleBase::ProcessSimCommand(TMap<FString, FString>& options, FString& error_message)
 {

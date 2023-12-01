@@ -951,7 +951,7 @@ AActor* CUtil::SpawnObjectFromBlueprint(AActor *p_template, FString blueprint_pa
     // Create the object from the blueprint and spawn it in the world.
     FActorSpawnParameters SpawnParams;
     SpawnParams.Name = FName(*name);
-    SpawnParams.Template = p_template;
+    SpawnParams.Template = nullptr;
     SpawnParams.Owner = p_owner; // Set the owner if required.
     SpawnParams.Instigator = nullptr; // Set the instigator if required.
     SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;

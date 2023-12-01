@@ -4,7 +4,6 @@ C:\Users\Pc\Documents\Unreal Projects\BoatSim\ConsoleApp\ConsoleGUI\bin\Debug\ne
 C:\Users\Pc\Documents\Unreal Projects\BoatSim\ConsoleApp\ConsoleGUI\bin\Debug\net6.0-windows\ConsoleGUI.dll
 C:\Users\Pc\Documents\Unreal Projects\BoatSim\ConsoleApp\ConsoleGUI\bin\Debug\net6.0-windows\ConsoleGUI.pdb
 C:\Users\Pc\Documents\Unreal Projects\BoatSim\ConsoleApp\ConsoleGUI\obj\Debug\net6.0-windows\ConsoleGUI.csproj.AssemblyReference.cache
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\ConsoleApp\ConsoleGUI\obj\Debug\net6.0-windows\ConsoleGUI.MainForm.resources
 C:\Users\Pc\Documents\Unreal Projects\BoatSim\ConsoleApp\ConsoleGUI\obj\Debug\net6.0-windows\ConsoleGUI.csproj.GenerateResource.cache
 C:\Users\Pc\Documents\Unreal Projects\BoatSim\ConsoleApp\ConsoleGUI\obj\Debug\net6.0-windows\ConsoleGUI.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\Pc\Documents\Unreal Projects\BoatSim\ConsoleApp\ConsoleGUI\obj\Debug\net6.0-windows\ConsoleGUI.AssemblyInfoInputs.cache
@@ -18,3 +17,4 @@ C:\Users\Pc\Documents\Unreal Projects\BoatSim\ConsoleApp\ConsoleGUI\obj\Debug\ne
 C:\Users\Pc\Documents\Unreal Projects\BoatSim\ConsoleApp\ConsoleGUI\bin\Debug\net6.0-windows\Newtonsoft.Json.dll
 C:\Users\Pc\Documents\Unreal Projects\BoatSim\ConsoleApp\ConsoleGUI\obj\Debug\net6.0-windows\ConsoleGUI.csproj.CopyComplete
 C:\Users\Pc\Documents\Unreal Projects\BoatSim\ConsoleApp\ConsoleGUI\obj\Debug\net6.0-windows\ConsoleGUI.CInputDialog.resources
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\ConsoleApp\ConsoleGUI\obj\Debug\net6.0-windows\CObjectInfo.resources

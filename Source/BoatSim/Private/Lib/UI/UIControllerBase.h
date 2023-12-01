@@ -35,11 +35,7 @@ protected:
 		AActor* GizmoActor;
 
 	UPROPERTY(EditAnywhere)
-		TArray<UImage*> LidarSlots;
-
-
-	UPROPERTY(EditAnywhere)
-		TArray<UImage*> CameraSlots;
+		TArray<UImage*> SensorSlots;
 
 	virtual void ComputeFPS(float DeltaTime);
 
@@ -51,22 +47,16 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION(BlueprintCallable)
-	void SetLidarSlotImage(int no, UImage* p_image);
+	void SetSensorSlotImage(int no, UImage* p_image);
 
 	UFUNCTION(BlueprintCallable)
-		UImage* GetLidarSlotImage(int no);
+		UImage* GetSensorSlotImage(int no);
 
 	UFUNCTION(BlueprintCallable)
-		int GetLidarSlotCount();
+		int GetSensorSlotCount();
 
-	UFUNCTION(BlueprintCallable)
-		void SetCameraSlotImage(int no, UImage* p_image);
+	
 
-	UFUNCTION(BlueprintCallable)
-		UImage* GetCameraSlotImage(int no);
-
-	UFUNCTION(BlueprintCallable)
-		int GetCameraSlotCount();
 
 	UFUNCTION(BlueprintCallable)
 		void SetConsoleOutputTextWidget(UTextBlock* pwidget);

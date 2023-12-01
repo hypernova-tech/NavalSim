@@ -63,7 +63,9 @@ public:
 	
 	STrackedObjectInfo()
 	{
+		memset(this, 0, sizeof(STrackedObjectInfo));
 		TrackState = EObjectTrackState::JustCreated;
+		
 	}
 	bool IsAcquireTimeout(FLOAT64 timeout_sec)
 	{

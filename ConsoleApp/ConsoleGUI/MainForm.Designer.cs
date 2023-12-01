@@ -31,10 +31,10 @@ namespace ConsoleGUI
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            TreeNode treeNode1 = new TreeNode("World");
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            TreeNode treeNode2 = new TreeNode("World");
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
             OpenFileDialog = new OpenFileDialog();
             contextMenuStrip1 = new ContextMenuStrip(components);
             ActorListContextMenu = new ContextMenuStrip(components);
@@ -49,6 +49,7 @@ namespace ConsoleGUI
             ObjectEditorContextMenu = new ContextMenuStrip(components);
             blueprintToolStripMenuItem = new ToolStripMenuItem();
             attachToPathToolStripMenuItem = new ToolStripMenuItem();
+            detachPathToolStripMenuItem = new ToolStripMenuItem();
             destroyToolStripMenuItem = new ToolStripMenuItem();
             flowLayoutPanel1 = new FlowLayoutPanel();
             label10 = new Label();
@@ -125,7 +126,6 @@ namespace ConsoleGUI
             ConsoeListBoxContextMenu = new ContextMenuStrip(components);
             clearToolStripMenuItem = new ToolStripMenuItem();
             FileSaver = new SaveFileDialog();
-            detachPathToolStripMenuItem = new ToolStripMenuItem();
             ActorListContextMenu.SuspendLayout();
             contextMenuConsoleListBox.SuspendLayout();
             tabPage2.SuspendLayout();
@@ -228,9 +228,9 @@ namespace ConsoleGUI
             ObjectEditor.ContextMenuStrip = ObjectEditorContextMenu;
             ObjectEditor.Location = new Point(13, 11);
             ObjectEditor.Name = "ObjectEditor";
-            treeNode1.Name = "World";
-            treeNode1.Text = "World";
-            ObjectEditor.Nodes.AddRange(new TreeNode[] { treeNode1 });
+            treeNode2.Name = "World";
+            treeNode2.Text = "World";
+            ObjectEditor.Nodes.AddRange(new TreeNode[] { treeNode2 });
             ObjectEditor.Size = new Size(246, 633);
             ObjectEditor.TabIndex = 18;
             ObjectEditor.NodeMouseClick += ObjectEditor_NodeMouseClick;
@@ -241,25 +241,31 @@ namespace ConsoleGUI
             // 
             ObjectEditorContextMenu.Items.AddRange(new ToolStripItem[] { blueprintToolStripMenuItem, attachToPathToolStripMenuItem, detachPathToolStripMenuItem, destroyToolStripMenuItem });
             ObjectEditorContextMenu.Name = "contextMenuStrip2";
-            ObjectEditorContextMenu.Size = new Size(181, 114);
+            ObjectEditorContextMenu.Size = new Size(139, 92);
             ObjectEditorContextMenu.Opening += ObjectEditorContextMenu_Opening;
             // 
             // blueprintToolStripMenuItem
             // 
             blueprintToolStripMenuItem.Name = "blueprintToolStripMenuItem";
-            blueprintToolStripMenuItem.Size = new Size(180, 22);
+            blueprintToolStripMenuItem.Size = new Size(138, 22);
             blueprintToolStripMenuItem.Text = "Blueprints";
             // 
             // attachToPathToolStripMenuItem
             // 
             attachToPathToolStripMenuItem.Name = "attachToPathToolStripMenuItem";
-            attachToPathToolStripMenuItem.Size = new Size(180, 22);
+            attachToPathToolStripMenuItem.Size = new Size(138, 22);
             attachToPathToolStripMenuItem.Text = "Attach Path";
+            // 
+            // detachPathToolStripMenuItem
+            // 
+            detachPathToolStripMenuItem.Name = "detachPathToolStripMenuItem";
+            detachPathToolStripMenuItem.Size = new Size(138, 22);
+            detachPathToolStripMenuItem.Text = "Detach Path";
             // 
             // destroyToolStripMenuItem
             // 
             destroyToolStripMenuItem.Name = "destroyToolStripMenuItem";
-            destroyToolStripMenuItem.Size = new Size(180, 22);
+            destroyToolStripMenuItem.Size = new Size(138, 22);
             destroyToolStripMenuItem.Text = "Destroy";
             destroyToolStripMenuItem.Click += destroyToolStripMenuItem_Click_1;
             // 
@@ -558,33 +564,33 @@ namespace ConsoleGUI
             // 
             // ModifyableDataGrid
             // 
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = SystemColors.Control;
-            dataGridViewCellStyle1.Font = new Font("Segoe UI", 1F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-            ModifyableDataGrid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = SystemColors.Control;
+            dataGridViewCellStyle4.Font = new Font("Segoe UI", 1F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle4.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
+            ModifyableDataGrid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
             ModifyableDataGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = SystemColors.Window;
-            dataGridViewCellStyle2.Font = new Font("Segoe UI", 8F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle2.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
-            ModifyableDataGrid.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = SystemColors.Window;
+            dataGridViewCellStyle5.Font = new Font("Segoe UI", 8F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle5.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle5.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle5.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle5.WrapMode = DataGridViewTriState.False;
+            ModifyableDataGrid.DefaultCellStyle = dataGridViewCellStyle5;
             ModifyableDataGrid.Location = new Point(3, 534);
             ModifyableDataGrid.Name = "ModifyableDataGrid";
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = SystemColors.Control;
-            dataGridViewCellStyle3.Font = new Font("Segoe UI", 6F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
-            ModifyableDataGrid.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = SystemColors.Control;
+            dataGridViewCellStyle6.Font = new Font("Segoe UI", 6F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle6.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle6.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle6.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = DataGridViewTriState.True;
+            ModifyableDataGrid.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
             ModifyableDataGrid.RowHeadersVisible = false;
             ModifyableDataGrid.RowTemplate.Height = 25;
             ModifyableDataGrid.Size = new Size(202, 405);
@@ -818,41 +824,41 @@ namespace ConsoleGUI
             // loadWorkspaceToolStripMenuItem
             // 
             loadWorkspaceToolStripMenuItem.Name = "loadWorkspaceToolStripMenuItem";
-            loadWorkspaceToolStripMenuItem.Size = new Size(163, 22);
+            loadWorkspaceToolStripMenuItem.Size = new Size(180, 22);
             loadWorkspaceToolStripMenuItem.Text = "Load Workspace";
             loadWorkspaceToolStripMenuItem.Click += loadWorkspaceToolStripMenuItem_Click;
             // 
             // saveWorkspaceToolStripMenuItem
             // 
             saveWorkspaceToolStripMenuItem.Name = "saveWorkspaceToolStripMenuItem";
-            saveWorkspaceToolStripMenuItem.Size = new Size(163, 22);
+            saveWorkspaceToolStripMenuItem.Size = new Size(180, 22);
             saveWorkspaceToolStripMenuItem.Text = "Save Workspace";
             saveWorkspaceToolStripMenuItem.Click += saveWorkspaceToolStripMenuItem_Click;
             // 
             // toolStripMenuItem4
             // 
             toolStripMenuItem4.Name = "toolStripMenuItem4";
-            toolStripMenuItem4.Size = new Size(163, 22);
+            toolStripMenuItem4.Size = new Size(180, 22);
             toolStripMenuItem4.Text = "  ";
             // 
             // loadUserActorsToolStripMenuItem
             // 
             loadUserActorsToolStripMenuItem.Name = "loadUserActorsToolStripMenuItem";
-            loadUserActorsToolStripMenuItem.Size = new Size(163, 22);
+            loadUserActorsToolStripMenuItem.Size = new Size(180, 22);
             loadUserActorsToolStripMenuItem.Text = "Load User Actors";
             loadUserActorsToolStripMenuItem.Click += loadUserActorsToolStripMenuItem_Click;
             // 
             // toolStripMenuItem2
             // 
             toolStripMenuItem2.Name = "toolStripMenuItem2";
-            toolStripMenuItem2.Size = new Size(163, 22);
+            toolStripMenuItem2.Size = new Size(180, 22);
             toolStripMenuItem2.Text = "  ";
             // 
             // loadActorsToolStripMenuItem
             // 
             loadActorsToolStripMenuItem.Name = "loadActorsToolStripMenuItem";
-            loadActorsToolStripMenuItem.Size = new Size(163, 22);
-            loadActorsToolStripMenuItem.Text = "Load All Actors";
+            loadActorsToolStripMenuItem.Size = new Size(180, 22);
+            loadActorsToolStripMenuItem.Text = "Load Scene";
             loadActorsToolStripMenuItem.Click += loadActorsToolStripMenuItem_Click;
             // 
             // viewToolStripMenuItem
@@ -949,12 +955,6 @@ namespace ConsoleGUI
             clearToolStripMenuItem.Name = "clearToolStripMenuItem";
             clearToolStripMenuItem.Size = new Size(101, 22);
             clearToolStripMenuItem.Text = "Clear";
-            // 
-            // detachPathToolStripMenuItem
-            // 
-            detachPathToolStripMenuItem.Name = "detachPathToolStripMenuItem";
-            detachPathToolStripMenuItem.Size = new Size(180, 22);
-            detachPathToolStripMenuItem.Text = "Detach Path";
             // 
             // MainForm
             // 

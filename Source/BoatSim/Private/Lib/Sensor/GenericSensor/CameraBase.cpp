@@ -9,7 +9,7 @@ void ACameraBase::InitSensor()
 	Super::InitSensor();
 	pSceneCapture = GetComponentByClass<USceneCaptureComponent2D>();
 
-	UTextureRenderTarget2D *p_render_target = pPointVisualizer->CreateRenderTarget(SensorWidth, SensorHeight, ASystemManagerBase::GetInstance()->GetUIController()->GetCameraSlotImage(SensorSlotIndex));
+	UTextureRenderTarget2D *p_render_target = pPointVisualizer->CreateRenderTarget(SensorWidth, SensorHeight, ASystemManagerBase::GetInstance()->GetUIController()->GetSensorSlotImage(SensorSlotIndex));
 	pSceneCapture->TextureTarget = p_render_target;
 
 	pSceneCapture->FOVAngle = FovHorizontalDeg;

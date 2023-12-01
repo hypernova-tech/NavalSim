@@ -4,34 +4,6 @@ using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using static System.Net.Mime.MediaTypeNames;
 
-public class CConverter
-{
-    
-    public static double UEToWorld(double val)
-    {
-        return val * 0.01;
-    }
-
-    public static double WorldToUE(double val)
-    {
-        return val * 100;
-    }
-
-    public static void UEToWorld(FVector val)
-    {
-        val.X *=  0.01;
-        val.Y *= 0.01;
-        val.Z *= 0.01;
-    }
-
-    public static void WorldToUE(FVector val)
-    {
-        val.X *= 100;
-        val.Y *= 100;
-        val.Z *= 100;
-    }
-}
-
 public class CJsonParser
 {
     MainForm mMainForm;
@@ -88,9 +60,18 @@ public class CJsonParser
             var name = json_obj["name"];
             
             var option = json_obj["option"];
+            var class_val = json_obj["class"];
             
+            if(class_val != null)
+            {
+                if(class_val.Value<string>() == "bp")
+                {
+                    ParseModels(json_obj);
+                }
 
-            if (name != null && option != null)
+            }
+
+            else if (name != null && option != null)
             {
                 var value = json_obj["value"];
                 ProcessOptions(name, option, value);
@@ -105,11 +86,6 @@ public class CJsonParser
                     ProcessOptions(name, key, value);
                 }
             }
-            
-
-
-          
-
         }
     }
 
@@ -141,6 +117,25 @@ public class CJsonParser
 
         return true;
 
+    }
+    private void ParseModels(JObject? obj)
+    {
+
+        if (obj != null)
+        {
+            CObjectInfo info = new CObjectInfo();
+            var name = obj["name"];
+            var main_category = obj["maincategory"];
+
+            if (name != null && main_category != null)
+            {
+                info.Name = name.Value<string>();
+                info.MainCategory = main_category.Value<string>();
+                mMainForm.RegisterModel(info);
+            }
+        }
+            
+        
     }
 
     private void ProcessOptions(JToken name, string key, JToken? value)
@@ -238,6 +233,4 @@ public class CJsonParser
             }
         }
     }
-
-
 }

@@ -9,14 +9,15 @@
 #include <Lib/Config/ConfigManager.h>
 #include <Lib/UI/UIControllerBase.h>
 #include <Lib/ActorBase/ActorBase.h>
-#include <Lib/DataContainer/DataContainer.h>
 #include "CBoatBase.h"
 #include <Lib/Console/ConsoleBase.h>
 #include <Lib/SaveLoad/SaverLoaderBase.h>
 #include <Lib/Sensor/GenericSensor/RadarBase.h>
 #include <Lib/PathController/PathController.h>
 #include <Lib/Platform/PlatformBase.h>
+#include <Lib/DataContainer/DataManager.h>
 #include "SystemManagerBase.generated.h"
+
 
 
 
@@ -63,7 +64,7 @@ protected:
 		AActor* pFloor;
 
 	UPROPERTY(EditAnywhere)
-		ADataContainer* pDataContainer;
+		ADataManager* pDataManager;
 
 	UPROPERTY(EditAnywhere)
 		TArray<AActor*> MoveableActorList;
@@ -122,7 +123,7 @@ public:
 	AUIControllerBase* GetUIController();
 
 	UFUNCTION(BlueprintCallable)
-	ADataContainer* GetDataContainer();
+	ADataManager* GetDataManager();
 
 
 	ARadarBase* ToRadarBase(AActor* p_actor);

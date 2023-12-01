@@ -29,7 +29,7 @@ set --name viscam1 --position "-5.229231 0.000000 4.756321"
 set --name viscam1 --rotation "0.000000 90.000000 0.000000"
 set --name viscam1 --scale "1.000000 1.000000 1.000000"
 set --name viscam1 --instance -1
-set --name viscam1 --slotindex 2
+set --name viscam1 --slotindex 0
 set --name viscam1 --vfov 0.000000
 set --name viscam1 --hfov 60.000000
 set --name viscam1 --hscanstepang 0.000000
@@ -50,7 +50,7 @@ set --name viscam2 --position "-5.308550 1.907922 2.836402"
 set --name viscam2 --rotation "0.000000 7.201151 50.753635"
 set --name viscam2 --scale "0.300000 0.300000 0.300000"
 set --name viscam2 --instance -1
-set --name viscam2 --slotindex 3
+set --name viscam2 --slotindex 1
 set --name viscam2 --vfov 0.000000
 set --name viscam2 --hfov 75.000000
 set --name viscam2 --hscanstepang 0.000000
@@ -71,7 +71,7 @@ set --name fls1 --position "6.550326 0.000000 0.000000"
 set --name fls1 --rotation "-0.000000 -21.571529 0.000000"
 set --name fls1 --scale "0.300000 0.300000 0.300000"
 set --name fls1 --instance -1
-set --name fls1 --slotindex 0
+set --name fls1 --slotindex 9
 set --name fls1 --vfov 45.000000
 set --name fls1 --hfov 45.000000
 set --name fls1 --hscanstepang 0.500000
@@ -90,7 +90,7 @@ set --name haloradar1 --position "2.296332 0.000000 4.063767"
 set --name haloradar1 --rotation "0.000000 1.999909 0.000000"
 set --name haloradar1 --scale "0.300000 0.300000 0.300000"
 set --name haloradar1 --instance -1
-set --name haloradar1 --slotindex 0
+set --name haloradar1 --slotindex 5
 set --name haloradar1 --vfov 10.000000
 set --name haloradar1 --hfov 90.000000
 set --name haloradar1 --hscanstepang 1.000000
@@ -119,7 +119,7 @@ set --name m1lidar1 --position "0.623725 -0.183834 3.687766"
 set --name m1lidar1 --rotation "-0.000000 -10.000000 -16.422134"
 set --name m1lidar1 --scale "0.300000 0.300000 0.300000"
 set --name m1lidar1 --instance -1
-set --name m1lidar1 --slotindex 0
+set --name m1lidar1 --slotindex 6
 set --name m1lidar1 --vfov 10.000000
 set --name m1lidar1 --hfov 120.000000
 set --name m1lidar1 --hscanstepang 0.200000
@@ -138,7 +138,7 @@ set --name viscam3 --position "0.000000 0.000000 1.964447"
 set --name viscam3 --rotation "-0.000000 0.000000 67.920670"
 set --name viscam3 --scale "0.300000 0.300000 0.300000"
 set --name viscam3 --instance -1
-set --name viscam3 --slotindex 0
+set --name viscam3 --slotindex 2
 set --name viscam3 --vfov 0.000000
 set --name viscam3 --hfov 45.000000
 set --name viscam3 --hscanstepang 0.000000
@@ -159,7 +159,7 @@ set --name ircam1 --position "-5.172829 0.000000 1.444506"
 set --name ircam1 --rotation "-0.000000 0.000000 180.000000"
 set --name ircam1 --scale "0.300000 0.300000 0.300000"
 set --name ircam1 --instance -1
-set --name ircam1 --slotindex 1
+set --name ircam1 --slotindex 3
 set --name ircam1 --vfov 0.000000
 set --name ircam1 --hfov 60.000000
 set --name ircam1 --hscanstepang 0.000000

@@ -245,7 +245,11 @@ void UHalo24CommIF::OnReceivedConnectionData(void* connection, INT8U* p_data, IN
 	Super::OnReceivedConnectionData(connection, p_data, count);
 	SRadarSimSDKPacket* p_pack = (SRadarSimSDKPacket*)p_data;
 	p_pack->Init();
-	pHostIF->OnRecievedMessage(p_pack);
+
+	if (pHostIF) {
+		pHostIF->OnRecievedMessage(p_pack);
+	}
+	
 
 
 }

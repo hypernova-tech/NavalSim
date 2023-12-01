@@ -40,38 +40,21 @@ void AUIControllerBase::Tick(float DeltaTime)
 
 }
 
-void AUIControllerBase::SetLidarSlotImage(int no, UImage* p_image)
+void AUIControllerBase::SetSensorSlotImage(int no, UImage* p_image)
 {
-	LidarSlots.Add(p_image) ;
+	SensorSlots.Add(p_image) ;
 }
 
-UImage* AUIControllerBase::GetLidarSlotImage(int no)
+UImage* AUIControllerBase::GetSensorSlotImage(int no)
 {
 
-	return LidarSlots[no];
+	return SensorSlots[no];
 }
-int AUIControllerBase::GetLidarSlotCount()
+int AUIControllerBase::GetSensorSlotCount()
 {
-	return LidarSlots.Num();
+	return SensorSlots.Num();
 }
 
-
-
-
-void AUIControllerBase::SetCameraSlotImage(int no, UImage* p_image)
-{
-	CameraSlots.Add(p_image);
-}
-
-UImage* AUIControllerBase::GetCameraSlotImage(int no)
-{
-
-	return CameraSlots[no];
-}
-int AUIControllerBase::GetCameraSlotCount()
-{
-	return CameraSlots.Num();
-}
 
 void AUIControllerBase::SetConsoleOutputTextWidget(UTextBlock* pwidget)
 {
