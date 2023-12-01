@@ -26,6 +26,7 @@ public interface IConnection
 
 public class CObjectInfo
 {
+
     public string Name;
     public string MainCategory;
 }

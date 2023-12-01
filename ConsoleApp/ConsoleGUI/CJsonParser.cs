@@ -124,11 +124,13 @@ public class CJsonParser
         if (obj != null)
         {
             CObjectInfo info = new CObjectInfo();
+            var cls = obj["class"];
             var name = obj["name"];
             var main_category = obj["maincategory"];
 
             if (name != null && main_category != null)
             {
+                
                 info.Name = name.Value<string>();
                 info.MainCategory = main_category.Value<string>();
                 mMainForm.RegisterModel(info);
