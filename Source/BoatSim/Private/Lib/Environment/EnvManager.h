@@ -104,6 +104,9 @@ public:
 		double GetWindDirectionDeg();
 
 	UFUNCTION(BlueprintCallable)
+		FVector GetWindDirectionVector();
+
+	UFUNCTION(BlueprintCallable)
 		void SetDustLevelPercent(double level);
 
 	UFUNCTION(BlueprintCallable)

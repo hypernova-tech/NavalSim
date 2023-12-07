@@ -90,6 +90,13 @@ double AEnvManager::GetWindDirectionDeg()
 	return WindDirectionDeg;
 }
 
+FVector AEnvManager::GetWindDirectionVector()
+{
+	FQuat QuatPitch(FVector::UpVector, WindDirectionDeg * DEGTORAD);
+	FVector new_dir = QuatPitch.RotateVector(FVector::ForwardVector);
+	return new_dir;
+}
+
 void AEnvManager::SetDustLevelPercent(double level)
 {
 	DustPercent = level;
