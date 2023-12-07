@@ -364,6 +364,9 @@ public:
 	virtual bool SetWindDirectionDeg(INT32S region, FLOAT64 val);
 	virtual bool GetWindDirectionDeg(INT32S region, FLOAT64& val);
 
+	virtual bool SetTimeOfDayHr(INT32S region, FLOAT64 val) ;
+	virtual bool GetTimeOfDayHr(INT32S region, FLOAT64& val);
+
 
 
 

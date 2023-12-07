@@ -80,6 +80,8 @@ FString CCLICommandManager::ThunderPercent="thunder";
 FString CCLICommandManager::EnvSoundFxEnabled = "envsoundfx";
 FString CCLICommandManager::WindSpeed = "wind";
 FString CCLICommandManager::WindDirection ="winddir";
+FString CCLICommandManager::TimeOfDayHour = "timeofday";
+
 
 FString CCLICommandManager::Wp = "wp";
 FString CCLICommandManager::WpPos = "wppos";
@@ -473,6 +475,8 @@ void CCLICommandManager::PrepareSetCommandInfo()
 	info.Option = "--" + CCLICommandManager::UIVisible;
 	info.Description = "set the UI Visibility visible(1) hidden(0)";
 	options.Add(info);
+
+
 
 
 	CommandInfo.Add(SetCommand, options);

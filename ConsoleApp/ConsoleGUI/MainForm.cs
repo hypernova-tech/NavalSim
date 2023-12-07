@@ -58,6 +58,7 @@ namespace ConsoleGUI
 
             PopulateDataGridView();
             SystemAPIImplementor.SetConnection(this);
+            LBTimeValue.Text = SystemAPIImplementor.GetTimeOfDayHour(TBTimeOfDay.Value).ToString();
         }
         private void PopulateDataGridView()
         {
@@ -1684,6 +1685,18 @@ namespace ConsoleGUI
         {
             TrackBar bar = (TrackBar)sender;
             SystemAPIImplementor.SetFogPercent(bar.Value);
+        }
+
+        private void TBTimeOfDay_ValueChanged(object sender, EventArgs e)
+        {
+            TrackBar bar = (TrackBar)sender;
+            SystemAPIImplementor.SetTimeOfDayHr(bar.Value);
+            LBTimeValue.Text = SystemAPIImplementor.GetTimeOfDayHour(bar.Value).ToString("F2");
+        }
+
+        private void TBTimeOfDay_Scroll(object sender, EventArgs e)
+        {
+
         }
     }
 }

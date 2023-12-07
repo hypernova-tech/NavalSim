@@ -42,4 +42,18 @@
     {
         CreateAndSendCommand(CLICommandManager.SetCommand, CLICommandManager.Name, Env, CLICommandManager.ThunderPercent, val.ToString());
     }
+
+    internal void SetTimeOfDayHr(double percent)
+    {
+
+        double tof = GetTimeOfDayHour(percent);
+        
+        CreateAndSendCommand(CLICommandManager.SetCommand, CLICommandManager.Name, Env, CLICommandManager.TimeOfDay, tof.ToString());
+    }
+
+    internal double GetTimeOfDayHour(double percent)
+    {
+        double tof = percent / 100.0 * 24;
+        return tof;
+    }
 }

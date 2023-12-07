@@ -1754,6 +1754,11 @@ bool ASystemManagerBase::GetPathLineColor(AActor* p_actor, FColor& val)
  bool ASystemManagerBase::SetEnvSoundEnabled(INT32S region, bool val)
  {
 	  pEnvManager->SetEnvSoundFxEnabled(val);
+	  if (val) {
+		 // FAudioDevice* AudioDevice = GEngine->GetMainAudioDevice();
+		 // AudioDevice->SetMasterVolume(Volume);
+	  }
+	
 	  return true;
 
  }
@@ -1856,6 +1861,18 @@ bool ASystemManagerBase::GetPathLineColor(AActor* p_actor, FColor& val)
  bool ASystemManagerBase::GetWindDirectionDeg(INT32S region, FLOAT64& val)
  {
 	 val = pEnvManager->GetWindDirectionDeg();
+	 return true;
+ }
+
+ bool ASystemManagerBase::SetTimeOfDayHr(INT32S region, FLOAT64 val)
+ {
+	 pEnvManager->SetTimeOfDayHr(val);
+	 return true;
+ }
+
+ bool ASystemManagerBase::GetTimeOfDayHr(INT32S region, FLOAT64& val)
+ {
+	 val = pEnvManager->GetTimeOfDayHr();
 	 return true;
  }
 

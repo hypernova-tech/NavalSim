@@ -761,6 +761,18 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
     bool one_success = false;
 
     if (name == "env") {
+
+        ret = CommandManager.GetValue(CCLICommandManager::TimeOfDayHour, dbl);
+        if (ret) {
+            if (pSystemAPI->SetTimeOfDayHr(region, dbl)) {
+                one_success = true;
+            }
+        }
+        else {
+
+        }
+
+
         ret = CommandManager.GetValue(CCLICommandManager::RainPercent, dbl);
         if (ret) {
             if (pSystemAPI->SetRainPercent(region, dbl)) {

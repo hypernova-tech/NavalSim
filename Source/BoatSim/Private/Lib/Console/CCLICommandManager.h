@@ -127,6 +127,7 @@ public:
 	static FString EnvSoundFxEnabled;
 	static FString WindSpeed;
 	static FString WindDirection;
+	static FString TimeOfDayHour;
 
 	static FString Wp;
 	static FString WpPos;

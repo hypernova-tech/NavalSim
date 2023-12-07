@@ -120,9 +120,20 @@ double AEnvManager::GetThunderLevelPercent()
 	return ThunderLevelPercent;
 }
 
+void AEnvManager::SetTimeOfDayHr(double val)
+{
+	TimeOfDayHour = val;
+}
+
+double AEnvManager::GetTimeOfDayHr()
+{
+	return TimeOfDayHour;
+}
+
 void AEnvManager::SaveJSON(CJsonDataContainer& data)
 {
 	Super::SaveJSON(data);
+	data.Add(CCLICommandManager::TimeOfDayHour, TimeOfDayHour);
 	data.Add(CCLICommandManager::RainPercent, RainPercent);
 	data.Add(CCLICommandManager::CloudPercent, CloudPercent);
 	data.Add(CCLICommandManager::SnowPercent, SnowPercent);
@@ -139,6 +150,10 @@ void AEnvManager::Save(ISaveLoader* p_save_loader)
 	Super::Save(p_save_loader);
 
 	FString line;
+
+	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
+	p_save_loader->AppendOption(line, CCLICommandManager::TimeOfDayHour, TimeOfDayHour);
+	p_save_loader->AddLine(line);
 
 	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
 	p_save_loader->AppendOption(line, CCLICommandManager::RainPercent, RainPercent);
@@ -175,6 +190,8 @@ void AEnvManager::Save(ISaveLoader* p_save_loader)
 	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
 	p_save_loader->AppendOption(line, CCLICommandManager::WindDirection, WindDirectionDeg);
 	p_save_loader->AddLine(line);
+
+
 }
 
 

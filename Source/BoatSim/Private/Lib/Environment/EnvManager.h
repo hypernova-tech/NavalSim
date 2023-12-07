@@ -21,6 +21,9 @@ public:
 protected:
 
 	UPROPERTY(EditAnywhere)
+		double TimeOfDayHour = 12;
+
+	UPROPERTY(EditAnywhere)
 		double CloudPercent = 0;
 
 	UPROPERTY(EditAnywhere)
@@ -114,6 +117,12 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		double GetThunderLevelPercent();
+
+	UFUNCTION(BlueprintCallable)
+		void SetTimeOfDayHr(double level);
+
+	UFUNCTION(BlueprintCallable)
+		double GetTimeOfDayHr();
 
 	virtual void SaveJSON(CJsonDataContainer& data);
 	virtual void Save(ISaveLoader* p_save_loader);

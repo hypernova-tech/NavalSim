@@ -104,6 +104,11 @@ namespace ConsoleGUI
             addToolStripMenuItem = new ToolStripMenuItem();
             removeToolStripMenuItem = new ToolStripMenuItem();
             tabPage4 = new TabPage();
+            LBTimeValue = new Label();
+            label22 = new Label();
+            TBTimeOfDay = new TrackBar();
+            label21 = new Label();
+            TBFog = new TrackBar();
             label20 = new Label();
             TBDust = new TrackBar();
             label19 = new Label();
@@ -137,8 +142,6 @@ namespace ConsoleGUI
             ConsoeListBoxContextMenu = new ContextMenuStrip(components);
             clearToolStripMenuItem = new ToolStripMenuItem();
             FileSaver = new SaveFileDialog();
-            label21 = new Label();
-            TBFog = new TrackBar();
             ActorListContextMenu.SuspendLayout();
             contextMenuConsoleListBox.SuspendLayout();
             tabPage2.SuspendLayout();
@@ -155,6 +158,8 @@ namespace ConsoleGUI
             ((System.ComponentModel.ISupportInitialize)WaypointGrid).BeginInit();
             PathContextMenu.SuspendLayout();
             tabPage4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)TBTimeOfDay).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)TBFog).BeginInit();
             ((System.ComponentModel.ISupportInitialize)TBDust).BeginInit();
             ((System.ComponentModel.ISupportInitialize)BThunder).BeginInit();
             ((System.ComponentModel.ISupportInitialize)TBSnow).BeginInit();
@@ -163,7 +168,6 @@ namespace ConsoleGUI
             menuStrip1.SuspendLayout();
             contextObjectEditor.SuspendLayout();
             ConsoeListBoxContextMenu.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)TBFog).BeginInit();
             SuspendLayout();
             // 
             // OpenFileDialog
@@ -828,6 +832,9 @@ namespace ConsoleGUI
             // 
             // tabPage4
             // 
+            tabPage4.Controls.Add(LBTimeValue);
+            tabPage4.Controls.Add(label22);
+            tabPage4.Controls.Add(TBTimeOfDay);
             tabPage4.Controls.Add(label21);
             tabPage4.Controls.Add(TBFog);
             tabPage4.Controls.Add(label20);
@@ -847,10 +854,58 @@ namespace ConsoleGUI
             tabPage4.Text = "Environment";
             tabPage4.UseVisualStyleBackColor = true;
             // 
+            // LBTimeValue
+            // 
+            LBTimeValue.AutoSize = true;
+            LBTimeValue.Location = new Point(218, 51);
+            LBTimeValue.Name = "LBTimeValue";
+            LBTimeValue.Size = new Size(0, 15);
+            LBTimeValue.TabIndex = 14;
+            // 
+            // label22
+            // 
+            label22.AutoSize = true;
+            label22.Location = new Point(17, 35);
+            label22.Name = "label22";
+            label22.Size = new Size(52, 15);
+            label22.TabIndex = 13;
+            label22.Text = "Time(hr)";
+            // 
+            // TBTimeOfDay
+            // 
+            TBTimeOfDay.Location = new Point(75, 22);
+            TBTimeOfDay.Margin = new Padding(3, 3, 3, 0);
+            TBTimeOfDay.Maximum = 100;
+            TBTimeOfDay.Name = "TBTimeOfDay";
+            TBTimeOfDay.Size = new Size(330, 45);
+            TBTimeOfDay.TabIndex = 12;
+            TBTimeOfDay.Value = 50;
+            TBTimeOfDay.Scroll += TBTimeOfDay_Scroll;
+            TBTimeOfDay.ValueChanged += TBTimeOfDay_ValueChanged;
+            // 
+            // label21
+            // 
+            label21.AutoSize = true;
+            label21.Location = new Point(17, 397);
+            label21.Name = "label21";
+            label21.Size = new Size(27, 15);
+            label21.TabIndex = 11;
+            label21.Text = "Fog";
+            // 
+            // TBFog
+            // 
+            TBFog.Location = new Point(75, 384);
+            TBFog.Margin = new Padding(3, 3, 3, 0);
+            TBFog.Maximum = 100;
+            TBFog.Name = "TBFog";
+            TBFog.Size = new Size(330, 45);
+            TBFog.TabIndex = 10;
+            TBFog.ValueChanged += TBFog_ValueChanged;
+            // 
             // label20
             // 
             label20.AutoSize = true;
-            label20.Location = new Point(16, 270);
+            label20.Location = new Point(17, 336);
             label20.Name = "label20";
             label20.Size = new Size(31, 15);
             label20.TabIndex = 9;
@@ -858,7 +913,7 @@ namespace ConsoleGUI
             // 
             // TBDust
             // 
-            TBDust.Location = new Point(74, 257);
+            TBDust.Location = new Point(75, 323);
             TBDust.Margin = new Padding(3, 3, 3, 0);
             TBDust.Maximum = 100;
             TBDust.Name = "TBDust";
@@ -869,7 +924,7 @@ namespace ConsoleGUI
             // label19
             // 
             label19.AutoSize = true;
-            label19.Location = new Point(16, 211);
+            label19.Location = new Point(17, 277);
             label19.Name = "label19";
             label19.Size = new Size(51, 15);
             label19.TabIndex = 7;
@@ -877,7 +932,7 @@ namespace ConsoleGUI
             // 
             // BThunder
             // 
-            BThunder.Location = new Point(74, 198);
+            BThunder.Location = new Point(75, 264);
             BThunder.Margin = new Padding(3, 3, 3, 0);
             BThunder.Maximum = 100;
             BThunder.Name = "BThunder";
@@ -888,7 +943,7 @@ namespace ConsoleGUI
             // label18
             // 
             label18.AutoSize = true;
-            label18.Location = new Point(16, 151);
+            label18.Location = new Point(17, 217);
             label18.Name = "label18";
             label18.Size = new Size(36, 15);
             label18.TabIndex = 5;
@@ -896,7 +951,7 @@ namespace ConsoleGUI
             // 
             // TBSnow
             // 
-            TBSnow.Location = new Point(74, 138);
+            TBSnow.Location = new Point(75, 204);
             TBSnow.Margin = new Padding(3, 3, 3, 0);
             TBSnow.Maximum = 100;
             TBSnow.Name = "TBSnow";
@@ -907,7 +962,7 @@ namespace ConsoleGUI
             // label17
             // 
             label17.AutoSize = true;
-            label17.Location = new Point(16, 91);
+            label17.Location = new Point(17, 157);
             label17.Name = "label17";
             label17.Size = new Size(30, 15);
             label17.TabIndex = 3;
@@ -915,7 +970,7 @@ namespace ConsoleGUI
             // 
             // TBRain
             // 
-            TBRain.Location = new Point(74, 78);
+            TBRain.Location = new Point(75, 144);
             TBRain.Margin = new Padding(3, 3, 3, 0);
             TBRain.Maximum = 100;
             TBRain.Name = "TBRain";
@@ -926,7 +981,7 @@ namespace ConsoleGUI
             // label16
             // 
             label16.AutoSize = true;
-            label16.Location = new Point(16, 32);
+            label16.Location = new Point(17, 98);
             label16.Name = "label16";
             label16.Size = new Size(39, 15);
             label16.TabIndex = 1;
@@ -934,7 +989,7 @@ namespace ConsoleGUI
             // 
             // TBCloud
             // 
-            TBCloud.Location = new Point(74, 19);
+            TBCloud.Location = new Point(75, 85);
             TBCloud.Margin = new Padding(3, 3, 3, 0);
             TBCloud.Maximum = 100;
             TBCloud.Name = "TBCloud";
@@ -1093,25 +1148,6 @@ namespace ConsoleGUI
             clearToolStripMenuItem.Size = new Size(101, 22);
             clearToolStripMenuItem.Text = "Clear";
             // 
-            // label21
-            // 
-            label21.AutoSize = true;
-            label21.Location = new Point(16, 331);
-            label21.Name = "label21";
-            label21.Size = new Size(27, 15);
-            label21.TabIndex = 11;
-            label21.Text = "Fog";
-            // 
-            // TBFog
-            // 
-            TBFog.Location = new Point(74, 318);
-            TBFog.Margin = new Padding(3, 3, 3, 0);
-            TBFog.Maximum = 100;
-            TBFog.Name = "TBFog";
-            TBFog.Size = new Size(330, 45);
-            TBFog.TabIndex = 10;
-            TBFog.ValueChanged += TBFog_ValueChanged;
-            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1146,6 +1182,8 @@ namespace ConsoleGUI
             PathContextMenu.ResumeLayout(false);
             tabPage4.ResumeLayout(false);
             tabPage4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)TBTimeOfDay).EndInit();
+            ((System.ComponentModel.ISupportInitialize)TBFog).EndInit();
             ((System.ComponentModel.ISupportInitialize)TBDust).EndInit();
             ((System.ComponentModel.ISupportInitialize)BThunder).EndInit();
             ((System.ComponentModel.ISupportInitialize)TBSnow).EndInit();
@@ -1155,7 +1193,6 @@ namespace ConsoleGUI
             menuStrip1.PerformLayout();
             contextObjectEditor.ResumeLayout(false);
             ConsoeListBoxContextMenu.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)TBFog).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -1269,5 +1306,8 @@ namespace ConsoleGUI
         private Label label16;
         private Label label21;
         private TrackBar TBFog;
+        private Label label22;
+        private TrackBar TBTimeOfDay;
+        private Label LBTimeValue;
     }
 }
