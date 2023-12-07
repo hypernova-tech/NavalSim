@@ -16,7 +16,9 @@
 #include <Lib/PathController/PathController.h>
 #include <Lib/Platform/PlatformBase.h>
 #include <Lib/DataContainer/DataManager.h>
+#include <Lib/Environment/EnvManager.h>
 #include "SystemManagerBase.generated.h"
+
 
 
 
@@ -78,8 +80,11 @@ protected:
 	UPROPERTY(EditAnywhere)
 		AActor* pConsoleActor;
 
+	UPROPERTY(EditAnywhere)
+		AEnvManager* pEnvManager;
 
-		UConsoleBase* pConsole = nullptr;
+
+	UConsoleBase* pConsole = nullptr;
 		
 
 	UPROPERTY(EditAnywhere)
@@ -332,6 +337,32 @@ public:
 	virtual bool GetIsUIVisible(bool& val);
 	virtual bool SetIsUIVisible(bool val);
 
+	virtual bool SetEnvSoundEnabled(INT32S region, bool val) ;
+	virtual bool GetEnvSoundEnabled(INT32S region, bool& val);
+
+	virtual bool SetCloudPercent(INT32S region, FLOAT64 val) ;
+	virtual bool GetCloudPercent(INT32S region, FLOAT64& val) ;
+
+	virtual bool SetRainPercent(INT32S region, FLOAT64 val) ;
+	virtual bool GetRainPercent(INT32S region, FLOAT64& val);
+
+	virtual bool SetSnowPercent(INT32S region, FLOAT64 val) ;
+	virtual bool GetSnowPercent(INT32S region, FLOAT64& val);
+
+	virtual bool SetDustPercent(INT32S region, FLOAT64 val) ;
+	virtual bool GetDustPercent(INT32S region, FLOAT64& val);
+
+	virtual bool SetFogPercent(INT32S region, FLOAT64 val);
+	virtual bool GetFogPercent(INT32S region, FLOAT64& val);
+
+	virtual bool SetThunderPercent(INT32S region, FLOAT64 val);
+	virtual bool GetThunderPercent(INT32S region, FLOAT64& val);
+
+	virtual bool SetWindSpeedMeterPerSec(INT32S region, FLOAT64 val);
+	virtual bool GetWindSpeedMeterPerSec(INT32S region, FLOAT64& val);
+
+	virtual bool SetWindDirectionDeg(INT32S region, FLOAT64 val);
+	virtual bool GetWindDirectionDeg(INT32S region, FLOAT64& val);
 
 
 

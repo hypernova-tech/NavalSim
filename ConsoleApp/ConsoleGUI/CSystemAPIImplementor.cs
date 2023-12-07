@@ -1,6 +1,7 @@
 ﻿public class CSystemAPIImplementor
 {
     IConnection Connection;
+    string Env = "env";
     public void SetUIVisible(bool visible)
     {
         CreateAndSendCommand(CLICommandManager.SetCommand, CLICommandManager.UIVisible, CUtil.BoolToBinaryString(visible));
@@ -15,5 +16,30 @@
     {
         string ret = CCommandFactroy.CreateCommands(cmd, option1, value1, option2, value2, option3, value3, option4, value4, option5, value5);
         Connection.SendData(ret);
+    }
+
+    public void SetCloudPercent(double val)
+    {
+        CreateAndSendCommand(CLICommandManager.SetCommand, CLICommandManager.Name, Env, CLICommandManager.CloudPercent, val.ToString());
+    }
+    public void SetRainPercent(double val)
+    {
+        CreateAndSendCommand(CLICommandManager.SetCommand, CLICommandManager.Name, Env, CLICommandManager.RainPercent, val.ToString());
+    }
+    public void SetSnowPercent(double val)
+    {
+        CreateAndSendCommand(CLICommandManager.SetCommand, CLICommandManager.Name, Env, CLICommandManager.SnowPercent, val.ToString());
+    }
+    public void SetFogPercent(double val)
+    {
+        CreateAndSendCommand(CLICommandManager.SetCommand, CLICommandManager.Name, Env, CLICommandManager.FogPercent, val.ToString());
+    }
+    public void SetDustPercent(double val)
+    {
+        CreateAndSendCommand(CLICommandManager.SetCommand, CLICommandManager.Name, Env, CLICommandManager.DustPercent, val.ToString());
+    }
+    public void SetThunderPercent(double val)
+    {
+        CreateAndSendCommand(CLICommandManager.SetCommand, CLICommandManager.Name, Env, CLICommandManager.ThunderPercent, val.ToString());
     }
 }

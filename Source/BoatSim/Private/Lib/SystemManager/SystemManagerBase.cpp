@@ -7,7 +7,7 @@
 #include <Lib/Sensor/GenericSensor/LidarBase.h>
 #include <Lib/PathController/PathController.h>
 #include <Lib/Math/CMath.h>
-
+#include "EngineUtils.h"
 
 // Sets default values
 ASystemManagerBase* ASystemManagerBase::pInstance = nullptr;
@@ -1748,6 +1748,114 @@ bool ASystemManagerBase::GetPathLineColor(AActor* p_actor, FColor& val)
  bool ASystemManagerBase::SetIsUIVisible(bool val)
  {
 	 GetUIController()->SetIsUIVisible(val);
+	 return true;
+ }
+
+ bool ASystemManagerBase::SetEnvSoundEnabled(INT32S region, bool val)
+ {
+	  pEnvManager->SetEnvSoundFxEnabled(val);
+	  return true;
+
+ }
+
+ bool ASystemManagerBase::GetEnvSoundEnabled(INT32S region, bool& val)
+ {
+	 return pEnvManager->GetEnvSoundFxEnabled();
+ }
+
+ bool ASystemManagerBase::SetCloudPercent(INT32S region, FLOAT64 val)
+ {
+	  pEnvManager->SetCloudLevelPercent(val);
+	  return true;
+ }
+
+ bool ASystemManagerBase::GetCloudPercent(INT32S region, FLOAT64& val)
+ {
+	 val = pEnvManager->GetCloudLevelPercent();
+	 return true;
+ }
+
+ bool ASystemManagerBase::SetRainPercent(INT32S region, FLOAT64 val)
+ {
+	 pEnvManager->SeRainLevelPercent(val);
+	 return true;
+ }
+
+ bool ASystemManagerBase::GetRainPercent(INT32S region, FLOAT64& val)
+ {
+	 val = pEnvManager->GetRainLevelPercent();
+	 return true;
+ }
+
+ bool ASystemManagerBase::SetSnowPercent(INT32S region, FLOAT64 val)
+ {
+	 pEnvManager->SetSnowLevelPercent(val);
+	 return true;
+ }
+
+ bool ASystemManagerBase::GetSnowPercent(INT32S region, FLOAT64& val)
+ {
+	 val = pEnvManager->GetSnowLevelPercent();
+	 return true;
+ }
+
+ bool ASystemManagerBase::SetDustPercent(INT32S region, FLOAT64 val)
+ {
+	 pEnvManager->SetDustLevelPercent(val);
+	 return true;
+ }
+
+ bool ASystemManagerBase::GetDustPercent(INT32S region, FLOAT64& val)
+ {
+	 val = pEnvManager->GetDustLevelPercent();
+	 return true;
+ }
+
+ bool ASystemManagerBase::SetFogPercent(INT32S region, FLOAT64 val)
+ {
+	 pEnvManager->SetFogLevelPercent(val);
+	 return true;
+ }
+
+ bool ASystemManagerBase::GetFogPercent(INT32S region, FLOAT64& val)
+ {
+	 val = pEnvManager->GetFogLevelPercent();
+	 return true;
+ }
+
+ bool ASystemManagerBase::SetThunderPercent(INT32S region, FLOAT64 val)
+ {
+	 pEnvManager->SetThunderLevelPercent(val);
+	 return true;
+ }
+
+ bool ASystemManagerBase::GetThunderPercent(INT32S region, FLOAT64& val)
+ {
+	 val = pEnvManager->GetThunderLevelPercent();
+	 return true;
+ }
+
+ bool ASystemManagerBase::SetWindSpeedMeterPerSec(INT32S region, FLOAT64 val)
+ {
+	 pEnvManager->SetWindSpeedMetersPerSec(val);
+	 return true;
+ }
+
+ bool ASystemManagerBase::GetWindSpeedMeterPerSec(INT32S region, FLOAT64& val)
+ {
+	 val = pEnvManager->GetWindSpeedMetersPerSec();
+	 return true;
+ }
+
+ bool ASystemManagerBase::SetWindDirectionDeg(INT32S region, FLOAT64 val)
+ {
+	 pEnvManager->SetWindDirectionDeg(val);
+	 return true;
+ }
+
+ bool ASystemManagerBase::GetWindDirectionDeg(INT32S region, FLOAT64& val)
+ {
+	 val = pEnvManager->GetWindDirectionDeg();
 	 return true;
  }
 

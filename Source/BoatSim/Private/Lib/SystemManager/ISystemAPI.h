@@ -214,4 +214,35 @@ public:
 
 	virtual bool GetConnectionInfo(AActor* p_actor, INT32S ind, SConnectionInfo& conn) = 0;
 	virtual bool SetConnectionInfo(AActor* p_actor, INT32S ind, SConnectionInfo conn) = 0;
+
+
+	//environment
+
+	virtual bool SetEnvSoundEnabled(INT32S region, bool val) = 0;
+	virtual bool GetEnvSoundEnabled(INT32S region, bool& val) = 0;
+
+	virtual bool SetCloudPercent(INT32S region, FLOAT64 val) = 0;
+	virtual bool GetCloudPercent(INT32S region, FLOAT64 &val) = 0;
+
+	virtual bool SetRainPercent(INT32S region, FLOAT64 val) = 0;
+	virtual bool GetRainPercent(INT32S region, FLOAT64& val) = 0;
+
+	virtual bool SetSnowPercent(INT32S region, FLOAT64 val) = 0;
+	virtual bool GetSnowPercent(INT32S region, FLOAT64& val) = 0;
+
+	virtual bool SetDustPercent(INT32S region, FLOAT64 val) = 0;
+	virtual bool GetDustPercent(INT32S region, FLOAT64& val) = 0;
+
+	virtual bool SetFogPercent(INT32S region, FLOAT64 val) = 0;
+	virtual bool GetFogPercent(INT32S region, FLOAT64& val) = 0;
+
+
+	virtual bool SetThunderPercent(INT32S region, FLOAT64 val) = 0;
+	virtual bool GetThunderPercent(INT32S region, FLOAT64& val) = 0;
+
+	virtual bool SetWindSpeedMeterPerSec(INT32S region, FLOAT64 val) = 0;
+	virtual bool GetWindSpeedMeterPerSec(INT32S region, FLOAT64& val) = 0;
+
+	virtual bool SetWindDirectionDeg(INT32S region, FLOAT64 val) = 0;
+	virtual bool GetWindDirectionDeg(INT32S region, FLOAT64& val) = 0;
 };

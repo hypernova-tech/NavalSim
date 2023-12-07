@@ -17,96 +17,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using System.Reflection;
 using Microsoft.VisualBasic.Logging;
 using Newtonsoft.Json.Linq;
-
-
-public interface IConnection
-{
-    public void SendData(string cmd, bool add_to_cmd_list = true);
-}
-
-public class CObjectInfo
-{
-
-    public string Name;
-    public string MainCategory;
-}
-
-public class CObjectContainer
-{
-    Dictionary<string, CObjectInfo> Objects = new Dictionary<string, CObjectInfo>();
-
-    public bool Contains(string name)
-    {
-        if(Objects.TryGetValue(name, out var model))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-    public void Add(string name, CObjectInfo model)
-    {
-        if(!Contains(name))
-        {
-            Objects.Add(name, model);
-        }
-        
-    }
-    public List<string> GetObjects()
-    {
-        var models =  Objects.Keys.ToList();
-        return models;
-    }
-
-    public List<string> GetCategoriesForObject(string name)
-    {
-        List<string> ret = new List<string>();
-
-        foreach (var pair in Objects)
-        {
-            if(pair.Key == name)
-            {
-                ret.Add(pair.Value.MainCategory);
-            }
-        }
-
-        return ret;
-    }
-    public List<string> GetObjectsForCategories(string category)
-    {
-        List<string> ret = new List<string>();
-
-        foreach (var pair in Objects)
-        {
-            if (pair.Value.MainCategory == category)
-            {
-                ret.Add(pair.Value.Name);
-            }
-        }
-
-        return ret;
-    }
-
-    public HashSet<string> GetCategories()
-    {
-        HashSet<string> ret = new HashSet<string>();
-
-        foreach (var pair in Objects)
-        {
-            ret.Add(pair.Value.MainCategory); ;
-        }
-
-        return ret;
-    }
-
-    internal void Clear()
-    {
-        Objects.Clear();
-    }
-}
+using TrackBar = System.Windows.Forms.TrackBar;
 
 namespace ConsoleGUI
 {
@@ -255,7 +166,7 @@ namespace ConsoleGUI
                 }
 
             }
-         
+
             else if (item.Contains("<path>"))
             {
                 string item_striped = item;
@@ -1447,7 +1358,7 @@ namespace ConsoleGUI
             }
 
 
-            foreach(var category in categories)
+            foreach (var category in categories)
             {
                 ToolStripMenuItem menuItem = new ToolStripMenuItem(category);
                 var objs = container.GetObjectsForCategories(category);
@@ -1737,6 +1648,42 @@ namespace ConsoleGUI
         internal void RegisterModel(CObjectInfo info)
         {
             Models.Add(info.Name, info);
+        }
+
+        private void TBCloud_ValueChanged(object sender, EventArgs e)
+        {
+            TrackBar bar = (TrackBar)sender;
+            SystemAPIImplementor.SetCloudPercent(bar.Value);
+        }
+
+        private void TBRain_ValueChanged(object sender, EventArgs e)
+        {
+            TrackBar bar = (TrackBar)sender;
+            SystemAPIImplementor.SetRainPercent(bar.Value);
+        }
+
+        private void TBSnow_ValueChanged(object sender, EventArgs e)
+        {
+            TrackBar bar = (TrackBar)sender;
+            SystemAPIImplementor.SetSnowPercent(bar.Value);
+        }
+
+        private void BThunder_ValueChanged(object sender, EventArgs e)
+        {
+            TrackBar bar = (TrackBar)sender;
+            SystemAPIImplementor.SetThunderPercent(bar.Value);
+        }
+
+        private void TBDust_ValueChanged(object sender, EventArgs e)
+        {
+            TrackBar bar = (TrackBar)sender;
+            SystemAPIImplementor.SetDustPercent(bar.Value);
+        }
+
+        private void TBFog_ValueChanged(object sender, EventArgs e)
+        {
+            TrackBar bar = (TrackBar)sender;
+            SystemAPIImplementor.SetFogPercent(bar.Value);
         }
     }
 }

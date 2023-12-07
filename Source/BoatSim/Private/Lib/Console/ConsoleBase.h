@@ -9,7 +9,7 @@
 #include <Lib/SystemManager/ISystemAPI.h>
 #include "ConsoleBase.generated.h"
 
-
+class ISystemAPI;
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )

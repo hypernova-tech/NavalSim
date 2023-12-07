@@ -65,6 +65,17 @@ public static class CLICommandManager
     [Modifiable] public const string RadarMaxSectorBlankingZoneCount = "radmaxsectorblankingzonecount";
     [Modifiable] public const string CamWidthPx = "widthpx";
     [Modifiable] public const string CamHeightPx = "heightpx";
+
+    [Modifiable] public const string RainPercent = "rain";
+    [Modifiable] public const string CloudPercent = "cloud";
+    [Modifiable] public const string SnowPercent = "snow";
+    [Modifiable] public const string DustPercent = "dust";
+    [Modifiable] public const string FogPercent = "fog";
+    [Modifiable] public const string ThunderPercent= "thunder";
+    [Modifiable] public const string EnvSoundFxEnabled = "envsoundfx";
+    [Modifiable] public const string WindSpeed = "wind";
+    [Modifiable] public const string WindDirection = "winddir";
+
     public const string Wp = "wp";
     public const string WpPos = "wppos";
     public const string Closed = "closed";

@@ -757,6 +757,76 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
         return false;
     }
 
+    int region = 0;
+    bool one_success = false;
+
+    if (name == "env") {
+        ret = CommandManager.GetValue(CCLICommandManager::RainPercent, dbl);
+        if (ret) {
+            if (pSystemAPI->SetRainPercent(region, dbl)) {
+                one_success = true;
+            }
+        }
+        else {
+
+        }
+
+
+        ret = CommandManager.GetValue(CCLICommandManager::CloudPercent, dbl);
+        if (ret) {
+            if (pSystemAPI->SetCloudPercent(region, dbl)) {
+                one_success = true;
+            }
+        }
+        else {
+
+        }
+
+        ret = CommandManager.GetValue(CCLICommandManager::FogPercent, dbl);
+        if (ret) {
+            if (pSystemAPI->SetFogPercent(region, dbl)) {
+                one_success = true;
+            }
+        }
+        else {
+
+        }
+
+        ret = CommandManager.GetValue(CCLICommandManager::SnowPercent, dbl);
+        if (ret) {
+            if (pSystemAPI->SetRainPercent(region, dbl)) {
+                one_success = true;
+            }
+        }
+        else {
+
+        }
+
+        ret = CommandManager.GetValue(CCLICommandManager::DustPercent, dbl);
+        if (ret) {
+            if (pSystemAPI->SetDustPercent(region, dbl)) {
+                one_success = true;
+            }
+        }
+        else {
+
+        }
+
+        ret = CommandManager.GetValue(CCLICommandManager::ThunderPercent, dbl);
+        if (ret) {
+            if (pSystemAPI->SetThunderPercent(region, dbl)) {
+                one_success = true;
+            }
+        }
+        else {
+
+        }
+
+        return one_success;
+    }
+
+
+
     p_actor = ASystemManagerBase::GetInstance()->FindActor(name);
 
 
@@ -765,7 +835,7 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
         return false;
     }
 
-    bool one_success = false;
+   
 
 
     ret = CommandManager.GetActive(is_active);
@@ -1282,6 +1352,9 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
         }
 
     }
+
+
+
   
     return one_success;
 }
@@ -1368,7 +1441,7 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
     p_actor = ASystemManagerBase::GetInstance()->FindActor(name);
 
 
-    if (p_actor == nullptr) {
+    if (p_actor == nullptr ) {
         error_message += (("cannot find actor "));
         return false;
     }

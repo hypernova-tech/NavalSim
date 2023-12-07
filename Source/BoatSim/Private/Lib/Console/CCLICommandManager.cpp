@@ -70,6 +70,17 @@ FString CCLICommandManager::RadarMaxSectorBlankingZoneCount = "radmaxsectorblank
 FString CCLICommandManager::CamWidthPx = "widthpx";
 FString CCLICommandManager::CamHeightPx = "heightpx";
 
+
+FString CCLICommandManager::RainPercent = "rain";
+FString CCLICommandManager::CloudPercent = "cloud";
+FString CCLICommandManager::SnowPercent = "snow";
+FString CCLICommandManager::DustPercent = "dust";
+FString CCLICommandManager::FogPercent ="fog";
+FString CCLICommandManager::ThunderPercent="thunder";
+FString CCLICommandManager::EnvSoundFxEnabled = "envsoundfx";
+FString CCLICommandManager::WindSpeed = "wind";
+FString CCLICommandManager::WindDirection ="winddir";
+
 FString CCLICommandManager::Wp = "wp";
 FString CCLICommandManager::WpPos = "wppos";
 FString CCLICommandManager::Closed = "closed";

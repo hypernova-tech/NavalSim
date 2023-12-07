@@ -118,6 +118,16 @@ public:
 	static FString CamWidthPx;
 	static FString CamHeightPx;
 
+	static FString RainPercent;
+	static FString CloudPercent;
+	static FString SnowPercent;
+	static FString DustPercent;
+	static FString FogPercent;
+	static FString ThunderPercent;
+	static FString EnvSoundFxEnabled;
+	static FString WindSpeed;
+	static FString WindDirection;
+
 	static FString Wp;
 	static FString WpPos;
 	static FString Closed;

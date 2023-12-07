@@ -31,10 +31,10 @@ namespace ConsoleGUI
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            TreeNode treeNode2 = new TreeNode("World");
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
+            TreeNode treeNode1 = new TreeNode("World");
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
             OpenFileDialog = new OpenFileDialog();
             contextMenuStrip1 = new ContextMenuStrip(components);
             ActorListContextMenu = new ContextMenuStrip(components);
@@ -103,6 +103,17 @@ namespace ConsoleGUI
             PathContextMenu = new ContextMenuStrip(components);
             addToolStripMenuItem = new ToolStripMenuItem();
             removeToolStripMenuItem = new ToolStripMenuItem();
+            tabPage4 = new TabPage();
+            label20 = new Label();
+            TBDust = new TrackBar();
+            label19 = new Label();
+            BThunder = new TrackBar();
+            label18 = new Label();
+            TBSnow = new TrackBar();
+            label17 = new Label();
+            TBRain = new TrackBar();
+            label16 = new Label();
+            TBCloud = new TrackBar();
             menuStrip1 = new MenuStrip();
             fileToolStripMenuItem = new ToolStripMenuItem();
             loadWorkspaceToolStripMenuItem = new ToolStripMenuItem();
@@ -126,6 +137,8 @@ namespace ConsoleGUI
             ConsoeListBoxContextMenu = new ContextMenuStrip(components);
             clearToolStripMenuItem = new ToolStripMenuItem();
             FileSaver = new SaveFileDialog();
+            label21 = new Label();
+            TBFog = new TrackBar();
             ActorListContextMenu.SuspendLayout();
             contextMenuConsoleListBox.SuspendLayout();
             tabPage2.SuspendLayout();
@@ -141,9 +154,16 @@ namespace ConsoleGUI
             tabPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)WaypointGrid).BeginInit();
             PathContextMenu.SuspendLayout();
+            tabPage4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)TBDust).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)BThunder).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)TBSnow).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)TBRain).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)TBCloud).BeginInit();
             menuStrip1.SuspendLayout();
             contextObjectEditor.SuspendLayout();
             ConsoeListBoxContextMenu.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)TBFog).BeginInit();
             SuspendLayout();
             // 
             // OpenFileDialog
@@ -228,9 +248,9 @@ namespace ConsoleGUI
             ObjectEditor.ContextMenuStrip = ObjectEditorContextMenu;
             ObjectEditor.Location = new Point(13, 11);
             ObjectEditor.Name = "ObjectEditor";
-            treeNode2.Name = "World";
-            treeNode2.Text = "World";
-            ObjectEditor.Nodes.AddRange(new TreeNode[] { treeNode2 });
+            treeNode1.Name = "World";
+            treeNode1.Text = "World";
+            ObjectEditor.Nodes.AddRange(new TreeNode[] { treeNode1 });
             ObjectEditor.Size = new Size(246, 633);
             ObjectEditor.TabIndex = 18;
             ObjectEditor.NodeMouseClick += ObjectEditor_NodeMouseClick;
@@ -564,33 +584,33 @@ namespace ConsoleGUI
             // 
             // ModifyableDataGrid
             // 
-            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = SystemColors.Control;
-            dataGridViewCellStyle4.Font = new Font("Segoe UI", 1F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle4.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle4.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
-            ModifyableDataGrid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = SystemColors.Control;
+            dataGridViewCellStyle1.Font = new Font("Segoe UI", 1F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            ModifyableDataGrid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             ModifyableDataGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle5.BackColor = SystemColors.Window;
-            dataGridViewCellStyle5.Font = new Font("Segoe UI", 8F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle5.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle5.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle5.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle5.WrapMode = DataGridViewTriState.False;
-            ModifyableDataGrid.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = SystemColors.Window;
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 8F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle2.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
+            ModifyableDataGrid.DefaultCellStyle = dataGridViewCellStyle2;
             ModifyableDataGrid.Location = new Point(3, 534);
             ModifyableDataGrid.Name = "ModifyableDataGrid";
-            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle6.BackColor = SystemColors.Control;
-            dataGridViewCellStyle6.Font = new Font("Segoe UI", 6F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle6.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle6.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle6.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle6.WrapMode = DataGridViewTriState.True;
-            ModifyableDataGrid.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = SystemColors.Control;
+            dataGridViewCellStyle3.Font = new Font("Segoe UI", 6F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
+            ModifyableDataGrid.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             ModifyableDataGrid.RowHeadersVisible = false;
             ModifyableDataGrid.RowTemplate.Height = 25;
             ModifyableDataGrid.Size = new Size(202, 405);
@@ -607,6 +627,7 @@ namespace ConsoleGUI
             tabControl1.Controls.Add(tabPage2);
             tabControl1.Controls.Add(tabPage1);
             tabControl1.Controls.Add(tabPage3);
+            tabControl1.Controls.Add(tabPage4);
             tabControl1.Location = new Point(6, 27);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
@@ -805,6 +826,122 @@ namespace ConsoleGUI
             removeToolStripMenuItem.Text = "Remove";
             removeToolStripMenuItem.Click += removeToolStripMenuItem_Click;
             // 
+            // tabPage4
+            // 
+            tabPage4.Controls.Add(label21);
+            tabPage4.Controls.Add(TBFog);
+            tabPage4.Controls.Add(label20);
+            tabPage4.Controls.Add(TBDust);
+            tabPage4.Controls.Add(label19);
+            tabPage4.Controls.Add(BThunder);
+            tabPage4.Controls.Add(label18);
+            tabPage4.Controls.Add(TBSnow);
+            tabPage4.Controls.Add(label17);
+            tabPage4.Controls.Add(TBRain);
+            tabPage4.Controls.Add(label16);
+            tabPage4.Controls.Add(TBCloud);
+            tabPage4.Location = new Point(4, 24);
+            tabPage4.Name = "tabPage4";
+            tabPage4.Size = new Size(502, 650);
+            tabPage4.TabIndex = 4;
+            tabPage4.Text = "Environment";
+            tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // label20
+            // 
+            label20.AutoSize = true;
+            label20.Location = new Point(16, 270);
+            label20.Name = "label20";
+            label20.Size = new Size(31, 15);
+            label20.TabIndex = 9;
+            label20.Text = "Dust";
+            // 
+            // TBDust
+            // 
+            TBDust.Location = new Point(74, 257);
+            TBDust.Margin = new Padding(3, 3, 3, 0);
+            TBDust.Maximum = 100;
+            TBDust.Name = "TBDust";
+            TBDust.Size = new Size(330, 45);
+            TBDust.TabIndex = 8;
+            TBDust.ValueChanged += TBDust_ValueChanged;
+            // 
+            // label19
+            // 
+            label19.AutoSize = true;
+            label19.Location = new Point(16, 211);
+            label19.Name = "label19";
+            label19.Size = new Size(51, 15);
+            label19.TabIndex = 7;
+            label19.Text = "Thunder";
+            // 
+            // BThunder
+            // 
+            BThunder.Location = new Point(74, 198);
+            BThunder.Margin = new Padding(3, 3, 3, 0);
+            BThunder.Maximum = 100;
+            BThunder.Name = "BThunder";
+            BThunder.Size = new Size(330, 45);
+            BThunder.TabIndex = 6;
+            BThunder.ValueChanged += BThunder_ValueChanged;
+            // 
+            // label18
+            // 
+            label18.AutoSize = true;
+            label18.Location = new Point(16, 151);
+            label18.Name = "label18";
+            label18.Size = new Size(36, 15);
+            label18.TabIndex = 5;
+            label18.Text = "Snow";
+            // 
+            // TBSnow
+            // 
+            TBSnow.Location = new Point(74, 138);
+            TBSnow.Margin = new Padding(3, 3, 3, 0);
+            TBSnow.Maximum = 100;
+            TBSnow.Name = "TBSnow";
+            TBSnow.Size = new Size(330, 45);
+            TBSnow.TabIndex = 4;
+            TBSnow.ValueChanged += TBSnow_ValueChanged;
+            // 
+            // label17
+            // 
+            label17.AutoSize = true;
+            label17.Location = new Point(16, 91);
+            label17.Name = "label17";
+            label17.Size = new Size(30, 15);
+            label17.TabIndex = 3;
+            label17.Text = "Rain";
+            // 
+            // TBRain
+            // 
+            TBRain.Location = new Point(74, 78);
+            TBRain.Margin = new Padding(3, 3, 3, 0);
+            TBRain.Maximum = 100;
+            TBRain.Name = "TBRain";
+            TBRain.Size = new Size(330, 45);
+            TBRain.TabIndex = 2;
+            TBRain.ValueChanged += TBRain_ValueChanged;
+            // 
+            // label16
+            // 
+            label16.AutoSize = true;
+            label16.Location = new Point(16, 32);
+            label16.Name = "label16";
+            label16.Size = new Size(39, 15);
+            label16.TabIndex = 1;
+            label16.Text = "Cloud";
+            // 
+            // TBCloud
+            // 
+            TBCloud.Location = new Point(74, 19);
+            TBCloud.Margin = new Padding(3, 3, 3, 0);
+            TBCloud.Maximum = 100;
+            TBCloud.Name = "TBCloud";
+            TBCloud.Size = new Size(330, 45);
+            TBCloud.TabIndex = 0;
+            TBCloud.ValueChanged += TBCloud_ValueChanged;
+            // 
             // menuStrip1
             // 
             menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, viewToolStripMenuItem, simulationToolStripMenuItem });
@@ -824,40 +961,40 @@ namespace ConsoleGUI
             // loadWorkspaceToolStripMenuItem
             // 
             loadWorkspaceToolStripMenuItem.Name = "loadWorkspaceToolStripMenuItem";
-            loadWorkspaceToolStripMenuItem.Size = new Size(180, 22);
+            loadWorkspaceToolStripMenuItem.Size = new Size(163, 22);
             loadWorkspaceToolStripMenuItem.Text = "Load Workspace";
             loadWorkspaceToolStripMenuItem.Click += loadWorkspaceToolStripMenuItem_Click;
             // 
             // saveWorkspaceToolStripMenuItem
             // 
             saveWorkspaceToolStripMenuItem.Name = "saveWorkspaceToolStripMenuItem";
-            saveWorkspaceToolStripMenuItem.Size = new Size(180, 22);
+            saveWorkspaceToolStripMenuItem.Size = new Size(163, 22);
             saveWorkspaceToolStripMenuItem.Text = "Save Workspace";
             saveWorkspaceToolStripMenuItem.Click += saveWorkspaceToolStripMenuItem_Click;
             // 
             // toolStripMenuItem4
             // 
             toolStripMenuItem4.Name = "toolStripMenuItem4";
-            toolStripMenuItem4.Size = new Size(180, 22);
+            toolStripMenuItem4.Size = new Size(163, 22);
             toolStripMenuItem4.Text = "  ";
             // 
             // loadUserActorsToolStripMenuItem
             // 
             loadUserActorsToolStripMenuItem.Name = "loadUserActorsToolStripMenuItem";
-            loadUserActorsToolStripMenuItem.Size = new Size(180, 22);
+            loadUserActorsToolStripMenuItem.Size = new Size(163, 22);
             loadUserActorsToolStripMenuItem.Text = "Load User Actors";
             loadUserActorsToolStripMenuItem.Click += loadUserActorsToolStripMenuItem_Click;
             // 
             // toolStripMenuItem2
             // 
             toolStripMenuItem2.Name = "toolStripMenuItem2";
-            toolStripMenuItem2.Size = new Size(180, 22);
+            toolStripMenuItem2.Size = new Size(163, 22);
             toolStripMenuItem2.Text = "  ";
             // 
             // loadActorsToolStripMenuItem
             // 
             loadActorsToolStripMenuItem.Name = "loadActorsToolStripMenuItem";
-            loadActorsToolStripMenuItem.Size = new Size(180, 22);
+            loadActorsToolStripMenuItem.Size = new Size(163, 22);
             loadActorsToolStripMenuItem.Text = "Load Scene";
             loadActorsToolStripMenuItem.Click += loadActorsToolStripMenuItem_Click;
             // 
@@ -956,6 +1093,25 @@ namespace ConsoleGUI
             clearToolStripMenuItem.Size = new Size(101, 22);
             clearToolStripMenuItem.Text = "Clear";
             // 
+            // label21
+            // 
+            label21.AutoSize = true;
+            label21.Location = new Point(16, 331);
+            label21.Name = "label21";
+            label21.Size = new Size(27, 15);
+            label21.TabIndex = 11;
+            label21.Text = "Fog";
+            // 
+            // TBFog
+            // 
+            TBFog.Location = new Point(74, 318);
+            TBFog.Margin = new Padding(3, 3, 3, 0);
+            TBFog.Maximum = 100;
+            TBFog.Name = "TBFog";
+            TBFog.Size = new Size(330, 45);
+            TBFog.TabIndex = 10;
+            TBFog.ValueChanged += TBFog_ValueChanged;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -988,10 +1144,18 @@ namespace ConsoleGUI
             tabPage3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)WaypointGrid).EndInit();
             PathContextMenu.ResumeLayout(false);
+            tabPage4.ResumeLayout(false);
+            tabPage4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)TBDust).EndInit();
+            ((System.ComponentModel.ISupportInitialize)BThunder).EndInit();
+            ((System.ComponentModel.ISupportInitialize)TBSnow).EndInit();
+            ((System.ComponentModel.ISupportInitialize)TBRain).EndInit();
+            ((System.ComponentModel.ISupportInitialize)TBCloud).EndInit();
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
             contextObjectEditor.ResumeLayout(false);
             ConsoeListBoxContextMenu.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)TBFog).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -1092,5 +1256,18 @@ namespace ConsoleGUI
         private ToolStripMenuItem showChartsToolStripMenuItem;
         private ToolStripMenuItem hideChartsToolStripMenuItem;
         private ToolStripMenuItem detachPathToolStripMenuItem;
+        private TabPage tabPage4;
+        private TrackBar TBCloud;
+        private Label label20;
+        private TrackBar TBDust;
+        private Label label19;
+        private TrackBar BThunder;
+        private Label label18;
+        private TrackBar TBSnow;
+        private Label label17;
+        private TrackBar TBRain;
+        private Label label16;
+        private Label label21;
+        private TrackBar TBFog;
     }
 }
