@@ -247,4 +247,9 @@ public:
 
 	virtual bool SetWindDirectionDeg(INT32S region, FLOAT64 val) = 0;
 	virtual bool GetWindDirectionDeg(INT32S region, FLOAT64& val) = 0;
+
+	virtual bool SetEnvTimeFlowScale(INT32S region, FLOAT64 val) = 0;
+	virtual bool GetEnvTimeFlowScale(INT32S region, FLOAT64& val) = 0;
+
+
 };

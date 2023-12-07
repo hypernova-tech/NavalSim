@@ -1876,6 +1876,20 @@ bool ASystemManagerBase::GetPathLineColor(AActor* p_actor, FColor& val)
 	 return true;
  }
 
+ bool ASystemManagerBase::SetEnvTimeFlowScale(INT32S region, FLOAT64 val)
+ {
+	 pEnvManager->SetEnvTimeFlowScale(val);
+	 return true;
+ }
+
+ bool ASystemManagerBase::GetEnvTimeFlowScale(INT32S region, FLOAT64& val)
+ {
+	 val = pEnvManager->GetEnvTimeFlowScale();
+	 return true;
+ }
+
+
+
 
 bool ASystemManagerBase::GetPathSpeed(AActor* p_actor, FLOAT64& val)
 {

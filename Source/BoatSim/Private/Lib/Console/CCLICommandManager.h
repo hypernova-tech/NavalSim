@@ -128,6 +128,7 @@ public:
 	static FString WindSpeed;
 	static FString WindDirection;
 	static FString TimeOfDayHour;
+	static FString EnvTimeFlowScale;
 
 	static FString Wp;
 	static FString WpPos;

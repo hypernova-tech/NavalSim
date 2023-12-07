@@ -24,6 +24,9 @@ protected:
 		double TimeOfDayHour = 12;
 
 	UPROPERTY(EditAnywhere)
+		double EnvTimeFlowScale = 1;
+
+	UPROPERTY(EditAnywhere)
 		double CloudPercent = 0;
 
 	UPROPERTY(EditAnywhere)
@@ -124,6 +127,13 @@ public:
 	UFUNCTION(BlueprintCallable)
 		double GetTimeOfDayHr();
 
+	UFUNCTION(BlueprintCallable)
+		void SetEnvTimeFlowScale(double level);
+
+	UFUNCTION(BlueprintCallable)
+		double GetEnvTimeFlowScale();
+
 	virtual void SaveJSON(CJsonDataContainer& data);
 	virtual void Save(ISaveLoader* p_save_loader);
+	virtual void OnStep(float DeltaTime) override;
 };

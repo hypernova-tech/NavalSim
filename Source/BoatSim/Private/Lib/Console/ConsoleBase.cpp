@@ -772,6 +772,15 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
 
         }
 
+        ret = CommandManager.GetValue(CCLICommandManager::EnvTimeFlowScale, dbl);
+        if (ret) {
+            if (pSystemAPI->SetEnvTimeFlowScale(region, dbl)) {
+                one_success = true;
+            }
+        }
+        else {
+
+        }
 
         ret = CommandManager.GetValue(CCLICommandManager::RainPercent, dbl);
         if (ret) {
@@ -833,6 +842,39 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
         else {
 
         }
+
+
+        ret = CommandManager.GetValue(CCLICommandManager::EnvSoundFxEnabled, is_enabled);
+        if (ret) {
+            if (pSystemAPI->SetEnvSoundEnabled(region, is_enabled)) {
+                one_success = true;
+            }
+        }
+        else {
+
+        }
+
+        ret = CommandManager.GetValue(CCLICommandManager::WindSpeed, dbl);
+        if (ret) {
+            if (pSystemAPI->SetWindSpeedMeterPerSec(region, dbl)) {
+                one_success = true;
+            }
+        }
+        else {
+
+        }
+
+        ret = CommandManager.GetValue(CCLICommandManager::WindDirection, dbl);
+        if (ret) {
+            if (pSystemAPI->SetWindDirectionDeg(region, dbl)) {
+                one_success = true;
+            }
+        }
+        else {
+
+        }
+
+
 
         return one_success;
     }
@@ -1448,6 +1490,138 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
             pSystemAPI->SendConsoleResponse("Actor: " + p_act->GetName());
         }
         return true;
+    }
+
+
+
+    if (name == "env") {
+        int region = -1;
+        ret = CommandManager.HasA(CCLICommandManager::TimeOfDayHour);
+        if (ret) {
+            if (pSystemAPI->GetTimeOfDayHr(region, dbl)) {
+                SendConsoleResponse(name, CCLICommandManager::TimeOfDayHour, dbl);
+                return true;
+            }
+        }
+        else {
+
+        }
+
+
+        ret = CommandManager.HasA(CCLICommandManager::RainPercent);
+        if (ret) {
+            if (pSystemAPI->GetRainPercent(region, dbl)) {
+                SendConsoleResponse(name, CCLICommandManager::RainPercent, dbl);
+                return true;
+            }
+        }
+        else {
+
+        }
+
+
+        ret = CommandManager.HasA(CCLICommandManager::CloudPercent);
+        if (ret) {
+            if (pSystemAPI->GetCloudPercent(region, dbl)) {
+                SendConsoleResponse(name, CCLICommandManager::CloudPercent, dbl);
+                return true;
+            }
+        }
+        else {
+
+        }
+
+        ret = CommandManager.HasA(CCLICommandManager::FogPercent);
+        if (ret) {
+            if (pSystemAPI->GetFogPercent(region, dbl)) {
+                SendConsoleResponse(name, CCLICommandManager::FogPercent, dbl);
+                return true;
+            }
+        }
+        else {
+
+        }
+
+        ret = CommandManager.HasA(CCLICommandManager::SnowPercent);
+        if (ret) {
+            if (pSystemAPI->GetSnowPercent(region, dbl)) {
+                SendConsoleResponse(name, CCLICommandManager::SnowPercent, dbl);
+                return true;
+            }
+        }
+        else {
+
+        }
+
+        ret = CommandManager.HasA(CCLICommandManager::DustPercent);
+        if (ret) {
+            if (pSystemAPI->GetDustPercent(region, dbl)) {
+                SendConsoleResponse(name, CCLICommandManager::DustPercent, dbl);
+                return true;
+            }
+        }
+        else {
+
+        }
+
+        ret = CommandManager.HasA(CCLICommandManager::ThunderPercent);
+        if (ret) {
+            if (pSystemAPI->GetThunderPercent(region, dbl)) {
+                SendConsoleResponse(name, CCLICommandManager::ThunderPercent, dbl);
+                return true;
+            }
+        }
+        else {
+
+        }
+
+        ret = CommandManager.HasA(CCLICommandManager::EnvSoundFxEnabled);
+        if (ret) {
+            if (pSystemAPI->GetEnvSoundEnabled(region, is_enabled)) {
+                SendConsoleResponse(name, CCLICommandManager::EnvSoundFxEnabled, is_enabled);
+                return true;
+            }
+        }
+        else {
+
+        }
+
+        ret = CommandManager.HasA(CCLICommandManager::WindSpeed);
+        if (ret) {
+            if (pSystemAPI->GetWindSpeedMeterPerSec(region, dbl)) {
+                SendConsoleResponse(name, CCLICommandManager::WindSpeed, is_enabled);
+                return true;
+            }
+        }
+        else {
+
+        }
+
+        ret = CommandManager.HasA(CCLICommandManager::WindDirection);
+        if (ret) {
+            if (pSystemAPI->GetWindDirectionDeg(region, dbl)) {
+                SendConsoleResponse(name, CCLICommandManager::WindDirection, is_enabled);
+                return true;
+            }
+        }
+        else {
+
+        }
+
+ 
+
+        ret = CommandManager.HasA(CCLICommandManager::EnvTimeFlowScale);
+        if (ret) {
+            if (pSystemAPI->GetEnvTimeFlowScale(region, dbl)) {
+                SendConsoleResponse(name, CCLICommandManager::EnvTimeFlowScale, dbl);
+                return true;
+            }
+        }
+        else {
+
+        }
+
+       
     }
 
     p_actor = ASystemManagerBase::GetInstance()->FindActor(name);

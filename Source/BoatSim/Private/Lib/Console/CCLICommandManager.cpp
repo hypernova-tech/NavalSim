@@ -70,7 +70,8 @@ FString CCLICommandManager::RadarMaxSectorBlankingZoneCount = "radmaxsectorblank
 FString CCLICommandManager::CamWidthPx = "widthpx";
 FString CCLICommandManager::CamHeightPx = "heightpx";
 
-
+FString CCLICommandManager::TimeOfDayHour = "timeofday";
+FString CCLICommandManager::EnvTimeFlowScale = "envtimeflowscale";
 FString CCLICommandManager::RainPercent = "rain";
 FString CCLICommandManager::CloudPercent = "cloud";
 FString CCLICommandManager::SnowPercent = "snow";
@@ -80,7 +81,7 @@ FString CCLICommandManager::ThunderPercent="thunder";
 FString CCLICommandManager::EnvSoundFxEnabled = "envsoundfx";
 FString CCLICommandManager::WindSpeed = "wind";
 FString CCLICommandManager::WindDirection ="winddir";
-FString CCLICommandManager::TimeOfDayHour = "timeofday";
+
 
 
 FString CCLICommandManager::Wp = "wp";
@@ -473,14 +474,54 @@ void CCLICommandManager::PrepareSetCommandInfo()
 	options.Add(info);
 
 	info.Option = "--" + CCLICommandManager::UIVisible;
-	info.Description = "set the UI Visibility visible(1) hidden(0)";
+	info.Description = "sets the UI Visibility visible(1) hidden(0)";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::RainPercent;
+	info.Description = "sets the rain percent (0-100)";
 	options.Add(info);
 
 
+	info.Option = "--" + CCLICommandManager::CloudPercent;
+	info.Description = "sets the cloud percent (0-100)";
+	options.Add(info);
 
+	info.Option = "--" + CCLICommandManager::SnowPercent;
+	info.Description = "sets the snow percent (0-100)";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::DustPercent;
+	info.Description = "sets the dust percent (0-100)";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::ThunderPercent;
+	info.Description = "sets the thunder percent (0-100)";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::EnvSoundFxEnabled;
+	info.Description = "sets the env sound fx enabled (1) or disabled(0)";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::WindSpeed;
+	info.Description = "sets the wind speed in m/s";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::WindDirection;
+	info.Description = "sets the wind direction  angle (0) north, south(180)";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::TimeOfDayHour;
+	info.Description = "sets time of day in between 0-24";
+	options.Add(info);
+
+
+	info.Option = "--" + CCLICommandManager::EnvTimeFlowScale;
+	info.Description = "sets time environment time flow simulation scale ";
+	options.Add(info);
 
 	CommandInfo.Add(SetCommand, options);
 }
+
 
 void CCLICommandManager::PrepareGetCommandInfo()
 {
@@ -688,6 +729,49 @@ void CCLICommandManager::PrepareGetCommandInfo()
 
 	info.Option = "--" + CCLICommandManager::UIVisible;
 	info.Description = "get the UI Visibility visible(1) hidden(0)";
+	options.Add(info);
+
+
+	info.Option = "--" + CCLICommandManager::RainPercent;
+	info.Description = "gets the rain percent (0-100)";
+	options.Add(info);
+
+
+	info.Option = "--" + CCLICommandManager::CloudPercent;
+	info.Description = "gets the cloud percent (0-100)";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::SnowPercent;
+	info.Description = "gets the snow percent (0-100)";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::DustPercent;
+	info.Description = "gets the dust percent (0-100)";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::ThunderPercent;
+	info.Description = "gets the thunder percent (0-100)";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::EnvSoundFxEnabled;
+	info.Description = "gets the env sound fx enabled (1) or disabled(0)";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::WindSpeed;
+	info.Description = "gets the wind speed in m/s";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::WindDirection;
+	info.Description = "gets the wind direction  angle (0) north, south(180)";
+	options.Add(info);
+
+	info.Option = "--" + CCLICommandManager::TimeOfDayHour;
+	info.Description = "gets time of day in between 0-24";
+	options.Add(info);
+
+
+	info.Option = "--" + CCLICommandManager::EnvTimeFlowScale;
+	info.Description = "gets environment time flow simulation scale";
 	options.Add(info);
 
 

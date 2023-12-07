@@ -67,6 +67,7 @@ public static class CLICommandManager
     [Modifiable] public const string CamHeightPx = "heightpx";
 
     [Modifiable] public const string TimeOfDay = "timeofday";
+    [Modifiable] public const string EnvTimeFlowScale = "envtimeflowscale";
     [Modifiable] public const string RainPercent = "rain";
     [Modifiable] public const string CloudPercent = "cloud";
     [Modifiable] public const string SnowPercent = "snow";
