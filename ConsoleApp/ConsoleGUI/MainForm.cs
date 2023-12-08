@@ -1698,5 +1698,17 @@ namespace ConsoleGUI
         {
 
         }
+
+        private void TBWind_ValueChanged(object sender, EventArgs e)
+        {
+            TrackBar bar = (TrackBar)sender;
+            SystemAPIImplementor.SetWindSpeed(bar.Value);
+        }
+
+        private void TBWindAzimuth_ValueChanged(object sender, EventArgs e)
+        {
+            TrackBar bar = (TrackBar)sender;
+            SystemAPIImplementor.SetWindDirection(bar.Value);
+        }
     }
 }

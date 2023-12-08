@@ -709,6 +709,17 @@ void ASystemManagerBase::StartRuntimeConnections()
 	}
 }
 
+void ASystemManagerBase::UpdateActorsScenarioMode(float deltatime)
+{
+	for (auto* p_actor : ActorList) {
+		if (p_actor->IsA<AActorBase>()) {
+			AActorBase* p_base = (AActorBase*)(p_actor);
+			if(p_base->GetIsExternalUpdateScenarioMode())
+			p_base->ExternalUpdateScenarioMode(deltatime);
+		}
+	}
+}
+
 void ASystemManagerBase::UpdateActors(float deltatime)
 {
 	for (auto* p_actor : ActorList) {
@@ -754,6 +765,9 @@ void ASystemManagerBase::StateMachine(float deltatime)
 			IsStartReceived = false;
 			StartRuntimeConnections();
 		}
+		else {
+			UpdateActorsScenarioMode(deltatime);
+		}
 		break;
 	case ESystemState::SystemStateRunSimulation:
 
@@ -778,6 +792,9 @@ void ASystemManagerBase::StateMachine(float deltatime)
 		if (IsResumeReceived) {
 			next_state = ESystemState::SystemStateResumeSimulation;
 			IsResumeReceived = false;
+		}
+		else {
+			UpdateActorsScenarioMode(deltatime);
 		}
 		break;
 	case ESystemState::SystemStateResumeSimulation:

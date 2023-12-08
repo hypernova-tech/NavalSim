@@ -50,6 +50,17 @@
         
         CreateAndSendCommand(CLICommandManager.SetCommand, CLICommandManager.Name, Env, CLICommandManager.TimeOfDay, tof.ToString());
     }
+    internal void SetWindSpeed(double percent)
+    { 
+        CreateAndSendCommand(CLICommandManager.SetCommand, CLICommandManager.Name, Env, CLICommandManager.WindSpeed, (0.5*percent).ToString());
+    }
+
+    internal void SetWindDirection(double percent)
+    {
+        double ang = percent * 0.01 * 360;
+        CreateAndSendCommand(CLICommandManager.SetCommand, CLICommandManager.Name, Env, CLICommandManager.WindDirection, ang.ToString());
+    }
+
 
     internal double GetTimeOfDayHour(double percent)
     {

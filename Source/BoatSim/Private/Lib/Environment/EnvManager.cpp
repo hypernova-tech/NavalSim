@@ -16,6 +16,8 @@ void AEnvManager::BeginPlay()
 	Rename((TEXT("env")));
 }
 
+
+
 void AEnvManager::SetStartingDate(int year, int month, int day, int hour, int min, double sec)
 {
 }
@@ -73,6 +75,8 @@ double AEnvManager::GetSnowLevelPercent()
 void AEnvManager::SetWindSpeedMetersPerSec(double level)
 {
 	WindSpeedMetersPerSec = level;
+	IsOceanDynamicsDirty = true;
+	FrameCountOceanDynamicDirty = GFrameCounter;
 }
 
 double AEnvManager::GetWindSpeedMetersPerSec()
@@ -83,6 +87,8 @@ double AEnvManager::GetWindSpeedMetersPerSec()
 void AEnvManager::SetWindDirectionDeg(double val)
 {
 	WindDirectionDeg = val;
+	IsOceanDynamicsDirty = true;
+	FrameCountOceanDynamicDirty = GFrameCounter;
 }
 
 double AEnvManager::GetWindDirectionDeg()
@@ -145,6 +151,12 @@ void AEnvManager::SetEnvTimeFlowScale(double level)
 double AEnvManager::GetEnvTimeFlowScale()
 {
 	return EnvTimeFlowScale;
+}
+
+
+bool AEnvManager::GetIsOceanDynamicsDirty()
+{
+	return IsOceanDynamicsDirty;
 }
 
 void AEnvManager::SaveJSON(CJsonDataContainer& data)
@@ -216,6 +228,15 @@ void AEnvManager::Save(ISaveLoader* p_save_loader)
 
 }
 
+void AEnvManager::HandleDynamicOcean()
+{
+	if (IsOceanDynamicsDirty) {
+		if (GFrameCounter >= (FrameCountOceanDynamicDirty + 5)) {
+			IsOceanDynamicsDirty = false;
+		}
+	}
+}
+
 void AEnvManager::OnStep(float DeltaTime)
 {
 	Super::OnStep(DeltaTime);
@@ -223,6 +244,13 @@ void AEnvManager::OnStep(float DeltaTime)
 	if (TimeOfDayHour >= 24) {
 		TimeOfDayHour = 0;
 	}
+	HandleDynamicOcean();
+}
+
+void AEnvManager::OnStepScenarioMode(float DeltaTime)
+{
+	Super::OnStepScenarioMode(DeltaTime);
+	HandleDynamicOcean();
 }
 
 

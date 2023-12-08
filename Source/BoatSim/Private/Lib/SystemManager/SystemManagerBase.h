@@ -99,6 +99,7 @@ protected:
 	virtual bool LoadConfig();
 
 	virtual void UpdateActors(float deltatime);
+	virtual void UpdateActorsScenarioMode(float deltatime);
 	virtual void StateMachine(float deltatime);
 
 	ESystemState SystemState = ESystemState::SystemStateJustLaunched;

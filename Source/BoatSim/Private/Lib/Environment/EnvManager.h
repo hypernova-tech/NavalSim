@@ -6,6 +6,8 @@
 #include "Lib/ActorBase/ActorBase.h"
 #include "EnvManager.generated.h"
 
+
+
 /**
  * 
  */
@@ -55,6 +57,9 @@ protected:
 	
 
 	
+	bool IsOceanDynamicsDirty = false;
+	INT64U FrameCountOceanDynamicDirty;
+	void HandleDynamicOcean();
 
 public:
 
@@ -136,7 +141,11 @@ public:
 	UFUNCTION(BlueprintCallable)
 		double GetEnvTimeFlowScale();
 
+	UFUNCTION(BlueprintCallable)
+		bool GetIsOceanDynamicsDirty();
+
 	virtual void SaveJSON(CJsonDataContainer& data);
 	virtual void Save(ISaveLoader* p_save_loader);
 	virtual void OnStep(float DeltaTime) override;
+	virtual void OnStepScenarioMode(float DeltaTime) override;
 };

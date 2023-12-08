@@ -43,6 +43,10 @@ void AActorBase::OnStep(float DeltaTime)
 
 }
 
+void AActorBase::OnStepScenarioMode(float DeltaTime)
+{
+}
+
 bool AActorBase::CheckAffinity()
 {
 
@@ -87,12 +91,24 @@ bool AActorBase::GetEnabled()
 	return Enabled;
 }
 
+bool AActorBase::GetIsExternalUpdateScenarioMode()
+{
+	return IsExternalUpdateScenarioMode;
+}
+
 void AActorBase::ExternalUpdate(float DeltaTime)
 {
 	if (CheckAffinity()) {
 		OnStep(DeltaTime);
 	}
 	
+}
+
+void AActorBase::ExternalUpdateScenarioMode(float DeltaTime)
+{
+	if (CheckAffinity()) {
+		OnStepScenarioMode(DeltaTime);
+	}
 }
 
 void AActorBase::SetAffinityInstanceId(int val)

@@ -40,6 +40,9 @@ protected:
 		bool IsExternalUpdate = true;
 
 	UPROPERTY(EditAnywhere)
+		bool IsExternalUpdateScenarioMode = false;
+
+	UPROPERTY(EditAnywhere)
 		bool Enabled = false;
 
 
@@ -50,6 +53,7 @@ protected:
 		AActor* ActorGizmo;
 
 	 virtual void OnStep(float DeltaTime);
+	 virtual void OnStepScenarioMode(float DeltaTime);
 	 bool CheckAffinity();
 
 	 virtual void OnActorDisabled();
@@ -64,7 +68,9 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	void SetEnabled(bool val);
 	bool GetEnabled();
+	bool GetIsExternalUpdateScenarioMode();
 	void ExternalUpdate(float DeltaTime);
+	void ExternalUpdateScenarioMode(float DeltaTime);
 	void SetAffinityInstanceId(int val);
 	int GetAffinityInstanceId();
 	FString GetBlueprintName();

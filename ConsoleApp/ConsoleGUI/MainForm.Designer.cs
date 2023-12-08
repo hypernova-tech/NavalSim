@@ -104,6 +104,10 @@ namespace ConsoleGUI
             addToolStripMenuItem = new ToolStripMenuItem();
             removeToolStripMenuItem = new ToolStripMenuItem();
             tabPage4 = new TabPage();
+            label24 = new Label();
+            TBWindAzimuth = new TrackBar();
+            label23 = new Label();
+            TBWind = new TrackBar();
             LBTimeValue = new Label();
             label22 = new Label();
             TBTimeOfDay = new TrackBar();
@@ -158,6 +162,8 @@ namespace ConsoleGUI
             ((System.ComponentModel.ISupportInitialize)WaypointGrid).BeginInit();
             PathContextMenu.SuspendLayout();
             tabPage4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)TBWindAzimuth).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)TBWind).BeginInit();
             ((System.ComponentModel.ISupportInitialize)TBTimeOfDay).BeginInit();
             ((System.ComponentModel.ISupportInitialize)TBFog).BeginInit();
             ((System.ComponentModel.ISupportInitialize)TBDust).BeginInit();
@@ -832,6 +838,10 @@ namespace ConsoleGUI
             // 
             // tabPage4
             // 
+            tabPage4.Controls.Add(label24);
+            tabPage4.Controls.Add(TBWindAzimuth);
+            tabPage4.Controls.Add(label23);
+            tabPage4.Controls.Add(TBWind);
             tabPage4.Controls.Add(LBTimeValue);
             tabPage4.Controls.Add(label22);
             tabPage4.Controls.Add(TBTimeOfDay);
@@ -854,6 +864,44 @@ namespace ConsoleGUI
             tabPage4.Text = "Environment";
             tabPage4.UseVisualStyleBackColor = true;
             // 
+            // label24
+            // 
+            label24.AutoSize = true;
+            label24.Location = new Point(17, 526);
+            label24.Name = "label24";
+            label24.Size = new Size(83, 15);
+            label24.TabIndex = 18;
+            label24.Text = "Wind Azimuth";
+            // 
+            // TBWindAzimuth
+            // 
+            TBWindAzimuth.Location = new Point(97, 512);
+            TBWindAzimuth.Margin = new Padding(3, 3, 3, 0);
+            TBWindAzimuth.Maximum = 100;
+            TBWindAzimuth.Name = "TBWindAzimuth";
+            TBWindAzimuth.Size = new Size(330, 45);
+            TBWindAzimuth.TabIndex = 17;
+            TBWindAzimuth.ValueChanged += TBWindAzimuth_ValueChanged;
+            // 
+            // label23
+            // 
+            label23.AutoSize = true;
+            label23.Location = new Point(17, 460);
+            label23.Name = "label23";
+            label23.Size = new Size(35, 15);
+            label23.TabIndex = 16;
+            label23.Text = "Wind";
+            // 
+            // TBWind
+            // 
+            TBWind.Location = new Point(97, 446);
+            TBWind.Margin = new Padding(3, 3, 3, 0);
+            TBWind.Maximum = 100;
+            TBWind.Name = "TBWind";
+            TBWind.Size = new Size(330, 45);
+            TBWind.TabIndex = 15;
+            TBWind.ValueChanged += TBWind_ValueChanged;
+            // 
             // LBTimeValue
             // 
             LBTimeValue.AutoSize = true;
@@ -873,7 +921,7 @@ namespace ConsoleGUI
             // 
             // TBTimeOfDay
             // 
-            TBTimeOfDay.Location = new Point(75, 22);
+            TBTimeOfDay.Location = new Point(97, 21);
             TBTimeOfDay.Margin = new Padding(3, 3, 3, 0);
             TBTimeOfDay.Maximum = 100;
             TBTimeOfDay.Name = "TBTimeOfDay";
@@ -894,7 +942,7 @@ namespace ConsoleGUI
             // 
             // TBFog
             // 
-            TBFog.Location = new Point(75, 384);
+            TBFog.Location = new Point(97, 383);
             TBFog.Margin = new Padding(3, 3, 3, 0);
             TBFog.Maximum = 100;
             TBFog.Name = "TBFog";
@@ -913,7 +961,7 @@ namespace ConsoleGUI
             // 
             // TBDust
             // 
-            TBDust.Location = new Point(75, 323);
+            TBDust.Location = new Point(97, 322);
             TBDust.Margin = new Padding(3, 3, 3, 0);
             TBDust.Maximum = 100;
             TBDust.Name = "TBDust";
@@ -932,7 +980,7 @@ namespace ConsoleGUI
             // 
             // BThunder
             // 
-            BThunder.Location = new Point(75, 264);
+            BThunder.Location = new Point(97, 263);
             BThunder.Margin = new Padding(3, 3, 3, 0);
             BThunder.Maximum = 100;
             BThunder.Name = "BThunder";
@@ -951,7 +999,7 @@ namespace ConsoleGUI
             // 
             // TBSnow
             // 
-            TBSnow.Location = new Point(75, 204);
+            TBSnow.Location = new Point(97, 203);
             TBSnow.Margin = new Padding(3, 3, 3, 0);
             TBSnow.Maximum = 100;
             TBSnow.Name = "TBSnow";
@@ -970,7 +1018,7 @@ namespace ConsoleGUI
             // 
             // TBRain
             // 
-            TBRain.Location = new Point(75, 144);
+            TBRain.Location = new Point(97, 143);
             TBRain.Margin = new Padding(3, 3, 3, 0);
             TBRain.Maximum = 100;
             TBRain.Name = "TBRain";
@@ -989,7 +1037,7 @@ namespace ConsoleGUI
             // 
             // TBCloud
             // 
-            TBCloud.Location = new Point(75, 85);
+            TBCloud.Location = new Point(97, 84);
             TBCloud.Margin = new Padding(3, 3, 3, 0);
             TBCloud.Maximum = 100;
             TBCloud.Name = "TBCloud";
@@ -1182,6 +1230,8 @@ namespace ConsoleGUI
             PathContextMenu.ResumeLayout(false);
             tabPage4.ResumeLayout(false);
             tabPage4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)TBWindAzimuth).EndInit();
+            ((System.ComponentModel.ISupportInitialize)TBWind).EndInit();
             ((System.ComponentModel.ISupportInitialize)TBTimeOfDay).EndInit();
             ((System.ComponentModel.ISupportInitialize)TBFog).EndInit();
             ((System.ComponentModel.ISupportInitialize)TBDust).EndInit();
@@ -1309,5 +1359,9 @@ namespace ConsoleGUI
         private Label label22;
         private TrackBar TBTimeOfDay;
         private Label LBTimeValue;
+        private Label label23;
+        private TrackBar TBWind;
+        private Label label24;
+        private TrackBar TBWindAzimuth;
     }
 }
