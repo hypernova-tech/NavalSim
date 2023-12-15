@@ -5,22 +5,24 @@ set --name sidamir --rotation "0.000000 0.000000 0.000000"
 set --name sidamir --scale "0.300000 0.300000 0.300000"
 
 create --name BP_Vessel_C_1 --bp CRUISER
-set --name BP_Vessel_C_1 --position "5187.021512 -1834.525683 -57.165104"
+set --name BP_Vessel_C_1 --position "5187.021484 -1834.525635 -57.165104"
 set --name BP_Vessel_C_1 --rotation "0.000000 0.000000 0.000000"
 set --name BP_Vessel_C_1 --scale "1.000000 1.000000 1.000000"
 set --name BP_Vessel_C_1 --instance -1
 
 create --name BP_GeneticAgent_C_1 --bp 
-set --name BP_GeneticAgent_C_1 --position "-338.572255 -1729.419315 -254.829670"
+set --name BP_GeneticAgent_C_1 --position "-338.572266 -1729.419312 -254.829666"
 set --name BP_GeneticAgent_C_1 --rotation "0.000000 0.000000 0.000000"
 set --name BP_GeneticAgent_C_1 --scale "1.000000 1.000000 1.000000"
 set --name BP_GeneticAgent_C_1 --instance -1
 
- 
+create --name env --bp 
 set --name env --position "324.600000 284.200000 4.600000"
 set --name env --rotation "0.000000 0.000000 0.000000"
 set --name env --scale "1.000000 1.000000 1.000000"
 set --name env --instance -1
+set --name env --timeofday 23.000000
+set --name env --envtimeflowscale 1.000000
 set --name env --rain 0.000000
 set --name env --cloud 50.000000
 set --name env --snow 0.000000
@@ -44,6 +46,22 @@ set --name gimbal2 --position "0.000000 0.000000 0.000000"
 set --name gimbal2 --rotation "0.000000 45.000000 0.000000"
 set --name gimbal2 --scale "1.000000 1.000000 1.000000"
 set --name gimbal2 --instance -1
+
+create --name terrain1 --bp TERRAIN
+set --name terrain1 --position "-6000.000000 -6000.000000 0.000000"
+set --name terrain1 --rotation "0.000000 0.000000 0.000000"
+set --name terrain1 --scale "1.000000 1.000000 1.000000"
+set --name terrain1 --instance -1
+set --name terrain1 --terrhmap hmap.png
+set --name terrain1 --terrdmap dmap
+set --name terrain1 --terrbasetexture hmaptexturesat.png
+set --name terrain1 --terrhmapminlvl 0.000000
+set --name terrain1 --terrhmapmaxlvl 500.000000
+set --name terrain1 --terrdmapminlvl 50.000000
+set --name terrain1 --terrdmapmaxlvl 100.000000
+set --name terrain1 --terrwidth 12000.000000
+set --name terrain1 --terrlen 12000.000000
+set --name terrain1 --bake 
 
 create --name viscam1 --bp CAMVIS
 set --name viscam1 --parent gimbal1

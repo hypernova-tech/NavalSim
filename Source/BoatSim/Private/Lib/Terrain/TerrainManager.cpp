@@ -340,6 +340,8 @@ void ATerrainManager::SetBaseMap(const FString& text_path)
     SetupMeshMaterial(path, (""));
 }
 
+
+
 void ATerrainManager::Bake()
 {
     ISystemAPI* p_api = ASystemManagerBase::GetInstance()->GetSystemAPI();
@@ -380,6 +382,112 @@ void ATerrainManager::Bake()
     BuildTerrain(HeightMapPath, HeightMapMinLevelMeter, HeightMapMaxLevelMeter, TerrainWidthMeter, TerrainLengthMeter, FVector(0, 0, 0), FVector2D(0.5, 0.5));
     SetBaseMap(BaseTexturePath);
 
+}
+void ATerrainManager::SetTerrainLowerLeftCornerXYZ(FVector val)
+{
+    TerrainLowerLeftCornerXYZ = val;
+    CoordSystem = ECoordSystem::CoordSystemXYZ;
+}
+
+FVector ATerrainManager::GetTerrainLowerLeftCornerXYZ()
+{
+    return TerrainLowerLeftCornerXYZ;
+}
+void ATerrainManager::Save(ISaveLoader* p_save_loader)
+{
+    Super::Save(p_save_loader);
+    FString line;
+
+
+    line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
+    p_save_loader->AppendOption(line, CCLICommandManager::TerrHMap, HeightMapPath);
+    p_save_loader->AddLine(line);
+
+    line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
+    p_save_loader->AppendOption(line, CCLICommandManager::TerrDMap, DepthMapPath);
+    p_save_loader->AddLine(line);
+
+    line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
+    p_save_loader->AppendOption(line, CCLICommandManager::TerrBaseTexture, BaseTexturePath);
+    p_save_loader->AddLine(line);
+
+    line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
+    p_save_loader->AppendOption(line, CCLICommandManager::TerrHMapMinLvlMt, (HeightMapMinLevelMeter));
+    p_save_loader->AddLine(line);
+
+
+    line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
+    p_save_loader->AppendOption(line, CCLICommandManager::TerrHMapMaxLvlMt, (HeightMapMaxLevelMeter));
+    p_save_loader->AddLine(line);
+
+    line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
+    p_save_loader->AppendOption(line, CCLICommandManager::TerrDMapMinLvlMt, (DepthMapMinLevelMeter));
+    p_save_loader->AddLine(line);
+
+    line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
+    p_save_loader->AppendOption(line, CCLICommandManager::TerrDMapMaxLvlMt, (DepthMapMaxLevelMeter));
+    p_save_loader->AddLine(line);
+
+    line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
+    p_save_loader->AppendOption(line, CCLICommandManager::TerrWidthMt, (TerrainWidthMeter));
+    p_save_loader->AddLine(line);
+
+    line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
+    p_save_loader->AppendOption(line, CCLICommandManager::TerrLengthMt, (TerrainLengthMeter));
+    p_save_loader->AddLine(line);
+
+    if (CoordSystem == ECoordSystem::CoordSystemXYZ) {
+        line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
+        p_save_loader->AppendOption(line, CCLICommandManager::TerrLowerLeftCornerXYZ, TerrainLowerLeftCornerXYZ);
+        p_save_loader->AddLine(line);
+    }
+    else if (CoordSystem == ECoordSystem::CoordSystemLLH_WGS84) {
+      
+        line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
+        p_save_loader->AppendOption(line, CCLICommandManager::TerrLowerLeftCornerLLH, TerrainLowerLeftCornerLLH);
+        p_save_loader->AddLine(line);
+    }
+
+
+    line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
+    p_save_loader->AppendOption(line, CCLICommandManager::Bake,FString(""));
+    p_save_loader->AddLine(line);
+  
+
+ 
+}
+
+
+void ATerrainManager::SaveJSON(CJsonDataContainer& data)
+{
+    Super::SaveJSON(data);
+
+    data.Add(CCLICommandManager::TerrHMap, HeightMapPath);
+    data.Add(CCLICommandManager::TerrDMap, DepthMapPath);
+    data.Add(CCLICommandManager::TerrBaseTexture, BaseTexturePath);
+    data.Add(CCLICommandManager::TerrHMapMinLvlMt, (HeightMapMinLevelMeter));
+    data.Add(CCLICommandManager::TerrHMapMaxLvlMt, (HeightMapMaxLevelMeter));
+    data.Add(CCLICommandManager::TerrDMapMinLvlMt, (DepthMapMinLevelMeter));
+    data.Add(CCLICommandManager::TerrDMapMaxLvlMt, (DepthMapMaxLevelMeter));
+    data.Add(CCLICommandManager::TerrWidthMt, (TerrainWidthMeter));
+    data.Add(CCLICommandManager::TerrLengthMt, (TerrainLengthMeter));
+    if (CoordSystem == ECoordSystem::CoordSystemXYZ) {
+        data.Add(CCLICommandManager::TerrLowerLeftCornerXYZ, TerrainLowerLeftCornerXYZ);
+    }
+    else if (CoordSystem == ECoordSystem::CoordSystemLLH_WGS84) {
+        data.Add(CCLICommandManager::TerrLowerLeftCornerLLH, TerrainLowerLeftCornerLLH);
+    }
+    
+    
+}
+void ATerrainManager::SetTerrainLowerLeftCornerLLH(FVector val)
+{
+    TerrainLowerLeftCornerLLH = val;
+    CoordSystem = ECoordSystem::CoordSystemLLH_WGS84;
+}
+FVector ATerrainManager::GetTerrainLowerLeftCornerLLH()
+{
+    return TerrainLowerLeftCornerLLH;
 }
 #if false
 // Function to update landscape height from a texture

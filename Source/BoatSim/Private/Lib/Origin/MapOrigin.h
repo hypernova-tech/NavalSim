@@ -6,6 +6,14 @@
 #include "GameFramework/Actor.h"
 #include "MapOrigin.generated.h"
 
+enum ECoordSystem {
+
+	CoordSystemUNDEF = 0,
+	CoordSystemXYZ = 1,
+	CoordSystemLLH_WGS84 = 2
+};
+
+
 UCLASS()
 class AMapOrigin : public AActor
 {

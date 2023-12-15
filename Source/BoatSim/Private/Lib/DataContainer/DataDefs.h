@@ -26,7 +26,9 @@ enum class EBlueprintCategory : uint8
 	CategoryConnection = 11,
 	CategoryIsland = 12,
 	CategoryHuman = 13,
-	CategoryAnimal = 14
+	CategoryAnimal = 14,
+	CategoryEnvironment = 15,
+	CategoryTerrain = 16
 };
 
 

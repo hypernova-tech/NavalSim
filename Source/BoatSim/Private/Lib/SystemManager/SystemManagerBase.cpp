@@ -2171,7 +2171,7 @@ bool ASystemManagerBase::GetPathLineColor(AActor* p_actor, FColor& val)
  {
 	 auto p_terr = ToTerrain(p_actor);
 	 if (p_terr) {
-		 p_terr->TerrainLowerLeftCornerXYZ = vec;
+		 p_terr->SetTerrainLowerLeftCornerXYZ(vec);
 		 return true;
 	 }
 	 else {
@@ -2185,7 +2185,7 @@ bool ASystemManagerBase::GetPathLineColor(AActor* p_actor, FColor& val)
  {
 	 auto p_terr = ToTerrain(p_actor);
 	 if (p_terr) {
-		 vec = p_terr->TerrainLowerLeftCornerXYZ;
+		 vec = p_terr->GetTerrainLowerLeftCornerXYZ();
 		 return true;
 	 }
 	 else {
@@ -2199,7 +2199,7 @@ bool ASystemManagerBase::GetPathLineColor(AActor* p_actor, FColor& val)
  {
 	 auto p_terr = ToTerrain(p_actor);
 	 if (p_terr) {
-		 p_terr->TerrainLowerLeftCornerLLH = vec;
+		 p_terr->SetTerrainLowerLeftCornerLLH(vec);
 		 return true;
 	 }
 	 else {
@@ -2213,7 +2213,7 @@ bool ASystemManagerBase::GetPathLineColor(AActor* p_actor, FColor& val)
  {
 	 auto p_terr = ToTerrain(p_actor);
 	 if (p_terr) {
-		 vec = p_terr->TerrainLowerLeftCornerLLH;
+		 vec = p_terr->GetTerrainLowerLeftCornerLLH();
 		 return true;
 	 }
 	 else {

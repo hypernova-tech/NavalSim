@@ -7,7 +7,9 @@
 #include <ProceduralMeshComponent.h>
 #include "IImageWrapper.h"
 #include "PixelFormat.h"
+#include <Lib/Origin/MapOrigin.h>
 #include "TerrainManager.generated.h"
+
 
 #define TERRAIN_INVALID_VAL (double)(DBL_MAX);
 
@@ -30,6 +32,7 @@ protected:
 	TArray<int32> Triangles;
 	TArray<FVector2D> UVs;
 	TArray<FVector> Normals;
+	ECoordSystem CoordSystem = ECoordSystem::CoordSystemUNDEF;
 
 	UTexture2D* LoadPNGTextureFromFile(const FString& ImagePath, ERGBFormat format, INT32S bit_depth, EPixelFormat px_format);
 
@@ -99,8 +102,17 @@ public:
 	UPROPERTY(EditAnywhere)
 		UMaterialInterface* pMaterial;
 
+	void SetTerrainLowerLeftCornerXYZ(FVector val);
+	FVector GetTerrainLowerLeftCornerXYZ();
+
+	void SetTerrainLowerLeftCornerLLH(FVector val);
+	FVector GetTerrainLowerLeftCornerLLH();
 
 	virtual void Bake() override;
+	virtual void Save(ISaveLoader* p_save_loader) override;
+	virtual void SaveJSON(CJsonDataContainer& data) override;
+
+
 
 	
 };
