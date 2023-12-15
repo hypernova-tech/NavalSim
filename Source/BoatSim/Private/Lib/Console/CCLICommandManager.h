@@ -130,6 +130,18 @@ public:
 	static FString TimeOfDayHour;
 	static FString EnvTimeFlowScale;
 
+	static FString TerrHMap;
+	static FString TerrDMap;
+	static FString TerrBaseTexture;
+	static FString TerrHMapMinLvlMt;
+	static FString TerrHMapMaxLvlMt;
+	static FString TerrDMapMinLvlMt;
+	static FString TerrDMapMaxLvlMt;
+	static FString TerrWidthMt;
+	static FString TerrLengthMt;
+	static FString TerrLowerLeftCornerXYZ;
+	static FString TerrLowerLeftCornerLLH;
+
 	static FString Wp;
 	static FString WpPos;
 	static FString Closed;

@@ -878,16 +878,137 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
 
         return one_success;
     }
-
-
-
     p_actor = ASystemManagerBase::GetInstance()->FindActor(name);
-
 
     if (p_actor == nullptr) {
         error_message += (("cannot find actor "));
         return false;
     }
+
+
+    { // terrain command
+        
+        ret = CommandManager.GetValue(CCLICommandManager::TerrHMap, sret);
+        if (ret) {
+            if (pSystemAPI->SetTerrainHeightMap(p_actor, sret)) {
+                one_success = true;
+            }
+        }
+        else {
+
+        }
+
+        ret = CommandManager.GetValue(CCLICommandManager::TerrDMap, sret);
+        if (ret) {
+            if (pSystemAPI->SetTerrainDepthMap(p_actor, sret)) {
+                one_success = true;
+            }
+        }
+        else {
+
+        }
+
+        ret = CommandManager.GetValue(CCLICommandManager::TerrBaseTexture, sret);
+        if (ret) {
+            if (pSystemAPI->SetTerraiBaseTexture(p_actor, sret)) {
+                one_success = true;
+            }
+        }
+        else {
+
+        }
+
+        ret = CommandManager.GetValue(CCLICommandManager::TerrHMapMinLvlMt, dbl);
+        if (ret) {
+            if (pSystemAPI->SetTerrainHeightMapMinLevelMeter(p_actor, dbl)) {
+                one_success = true;
+            }
+        }
+        else {
+
+        }
+
+        ret = CommandManager.GetValue(CCLICommandManager::TerrHMapMaxLvlMt, dbl);
+        if (ret) {
+            if (pSystemAPI->SetTerrainHeightMapMaxLevelMeter(p_actor, dbl)) {
+                one_success = true;
+            }
+        }
+        else {
+
+        }
+
+
+        ret = CommandManager.GetValue(CCLICommandManager::TerrDMapMinLvlMt, dbl);
+        if (ret) {
+            if (pSystemAPI->SetTerrainDepthMapMinLevelMeter(p_actor, dbl)) {
+                one_success = true;
+            }
+        }
+        else {
+
+        }
+
+  
+
+        ret = CommandManager.GetValue(CCLICommandManager::TerrDMapMaxLvlMt, dbl);
+        if (ret) {
+            if (pSystemAPI->SetTerrainDepthMapMaxLevelMeter(p_actor, dbl)) {
+                one_success = true;
+            }
+        }
+        else {
+
+        }
+
+        ret = CommandManager.GetValue(CCLICommandManager::TerrWidthMt, dbl);
+        if (ret) {
+            if (pSystemAPI->SetTerrainWidthMeter(p_actor, dbl)) {
+                one_success = true;
+            }
+        }
+        else {
+
+        }
+
+        ret = CommandManager.GetValue(CCLICommandManager::TerrLengthMt, dbl);
+        if (ret) {
+            if (pSystemAPI->SetTerrainLengthMeter(p_actor, dbl)) {
+                one_success = true;
+            }
+        }
+        else {
+
+        }
+
+        ret = CommandManager.GetValue(CCLICommandManager::TerrLowerLeftCornerXYZ, vec);
+        if (ret) {
+            if (pSystemAPI->SetTerrainLowerLeftCornerCoordXYZ(p_actor, vec)) {
+                one_success = true;
+            }
+        }
+        else {
+
+        }
+
+        ret = CommandManager.GetValue(CCLICommandManager::TerrLowerLeftCornerLLH, vec);
+        if (ret) {
+            if (pSystemAPI->SetTerrainLowerLeftCornerCoordLLH(p_actor, vec)) {
+                one_success = true;
+            }
+        }
+        else {
+
+        }
+
+    }
+
+
+
+   
+
+
+
 
    
 

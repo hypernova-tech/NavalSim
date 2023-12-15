@@ -252,4 +252,49 @@ public:
 	virtual bool GetEnvTimeFlowScale(INT32S region, FLOAT64& val) = 0;
 
 
+	/// <summary>
+	/// terrain managment
+	/// </summary>
+	/// <param name="p_actor"></param>
+	/// <param name="path"></param>
+	/// <returns></returns>
+	virtual bool SetTerrainHeightMap(AActor* p_actor, FString  path) = 0;
+	virtual bool GetTerrainHeightMap(AActor* p_actor, FString  &path) = 0;
+
+	virtual bool SetTerrainDepthMap(AActor* p_actor, FString path) = 0;
+	virtual bool GetTerrainDepthMap(AActor* p_actor, FString &path) = 0;
+
+	virtual bool SetTerraiBaseTexture(AActor* p_actor, FString path) = 0;
+	virtual bool GetTerraiBaseTexture(AActor* p_actor, FString &path) = 0;
+
+	virtual bool SetTerrainHeightMapMinLevelMeter(AActor* p_actor, FLOAT64 val) = 0;
+	virtual bool GetTerrainHeightMapMinLevelMeter(AActor* p_actor, FLOAT64 &val) = 0;
+
+	virtual bool SetTerrainHeightMapMaxLevelMeter(AActor* p_actor, FLOAT64 val) = 0;
+	virtual bool GetTerrainHeightMapMaxLevelMeter(AActor* p_actor, FLOAT64 &val) = 0;
+
+	virtual bool SetTerrainDepthMapMinLevelMeter(AActor* p_actor, FLOAT64 val) = 0;
+	virtual bool GetTerrainDepthMapMinLevelMeter(AActor* p_actor, FLOAT64 &val) = 0;
+
+	virtual bool SetTerrainDepthMapMaxLevelMeter(AActor* p_actor, FLOAT64 val) = 0;
+	virtual bool GetTerrainDepthMapMaxLevelMeter(AActor* p_actor, FLOAT64 &val) = 0;
+
+	virtual bool SetTerrainWidthMeter(AActor* p_actor, FLOAT64 val) = 0;
+	virtual bool GetTerrainWidthMeter(AActor* p_actor, FLOAT64 &val) = 0;
+
+	virtual bool SetTerrainLengthMeter(AActor* p_actor, FLOAT64 val) = 0;
+	virtual bool GetTerrainLengthMeter(AActor* p_actor, FLOAT64 &val) = 0;
+
+	virtual bool SetTerrainLowerLeftCornerCoordXYZ(AActor* p_actor, FVector vec) = 0;
+	virtual bool GetTerrainLowerLeftCornerCoordXYZ(AActor* p_actor, FVector &vec) = 0;
+
+
+	virtual bool SetTerrainLowerLeftCornerCoordLLH(AActor* p_actor, FVector vec) = 0;
+	virtual bool GetTerrainLowerLeftCornerCoordLLH(AActor* p_actor, FVector &vec) = 0;
+
+	
+
+	
+
+
 };

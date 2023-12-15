@@ -82,7 +82,17 @@ FString CCLICommandManager::EnvSoundFxEnabled = "envsoundfx";
 FString CCLICommandManager::WindSpeed = "wind";
 FString CCLICommandManager::WindDirection ="winddir";
 
-
+FString CCLICommandManager::TerrHMap = "terrhmap";
+FString CCLICommandManager::TerrDMap = "terrdmap";
+FString CCLICommandManager::TerrBaseTexture = "terrbasetexture";
+FString CCLICommandManager::TerrHMapMinLvlMt = "terrhmapminlvl";
+FString CCLICommandManager::TerrHMapMaxLvlMt = "terrhmapmaxlvl";
+FString CCLICommandManager::TerrDMapMinLvlMt = "terrdmapminlvl";
+FString CCLICommandManager::TerrDMapMaxLvlMt = "terrdmapmaxlvl";
+FString CCLICommandManager::TerrWidthMt = "terrwidth";
+FString CCLICommandManager::TerrLengthMt = "terrlen";
+FString CCLICommandManager::TerrLowerLeftCornerXYZ = "terrlowerleftcornerxyz";
+FString CCLICommandManager::TerrLowerLeftCornerLLH = "terrlowerleftcornerllh";
 
 FString CCLICommandManager::Wp = "wp";
 FString CCLICommandManager::WpPos = "wppos";
@@ -95,8 +105,6 @@ FString CCLICommandManager::Straight = "straight";
 FString CCLICommandManager::LineColor = "color";
 FString CCLICommandManager::SegmentCount = "segment";
 FString CCLICommandManager::TurnRate = "turnrate";
-
-
 
 FString CCLICommandManager::GetCommand = "get";
 FString CCLICommandManager::All = "all";

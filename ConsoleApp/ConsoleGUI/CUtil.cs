@@ -4,4 +4,9 @@
     {
         return value ? "1" : "0";
     }
+
+    internal static string MakeVectorString(double x, double y, double z)
+    {
+        return x.ToString() +" "+ y.ToString() + " "+z.ToString();
+    }
 }

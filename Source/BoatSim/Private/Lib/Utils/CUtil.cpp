@@ -1174,3 +1174,38 @@ FString CUtil::CharToHexString(INT8U* p_data, INT32U len)
 
     return FString(ss.str().c_str());
 }
+
+void CUtil::FindMinMaxPixelValue16Bit(UTexture2D* Texture, uint16& MinValue, uint16& MaxValue)
+{
+    if (!Texture) return;
+
+    // Access the raw texture data
+    FTexture2DResource* TextureResource = (FTexture2DResource*)Texture->Resource;
+    if (!TextureResource) return;
+
+    FTexture2DMipMap& Mip = Texture->PlatformData->Mips[0];
+    void* Data = Mip.BulkData.Lock(LOCK_READ_ONLY);
+
+    // Assuming a 16-bit grayscale texture format
+    uint16* Pixels = static_cast<uint16*>(Data);
+
+    MinValue = 65535;
+    MaxValue = 0;
+
+    int32 TextureWidth = Texture->GetSizeX();
+    int32 TextureHeight = Texture->GetSizeY();
+
+    for (int32 y = 0; y < TextureHeight; ++y)
+    {
+        for (int32 x = 0; x < TextureWidth; ++x)
+        {
+            uint16 PixelValue = Pixels[x + y * TextureWidth];
+            MinValue = FMath::Min(MinValue, PixelValue);
+            MaxValue = FMath::Max(MaxValue, PixelValue);
+        }
+    }
+
+    // Unlock the texture data
+    Mip.BulkData.Unlock();
+}
+

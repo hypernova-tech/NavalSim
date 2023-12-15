@@ -1710,5 +1710,110 @@ namespace ConsoleGUI
             TrackBar bar = (TrackBar)sender;
             SystemAPIImplementor.SetWindDirection(bar.Value);
         }
+
+        private void BTCreate_Click(object sender, EventArgs e)
+        {
+            if (TBTerrainName.Text == "")
+            {
+                MessageBox.Show("Enter TerrainName");
+                return;
+            }
+            if (TBHMapName.Text == "")
+            {
+                MessageBox.Show("Enter HMapName");
+                return;
+            }
+            if (TBDMapTexture.Text == "")
+            {
+                MessageBox.Show("Enter DMapTexture");
+                return;
+            }
+            if (TBImaryTexture.Text == "")
+            {
+                MessageBox.Show("Enter ImaryTexture");
+                return;
+            }
+            if (TBHMapMinLevel.Text == "")
+            {
+                MessageBox.Show("Enter HMapMinLevel");
+                return;
+            }
+            double hmap_min, hmap_max;
+            double dmap_min, dmap_max;
+            double width, lenght;
+            double x, y, z;
+            ECoordSystem coord_sys;
+
+            if (!double.TryParse(TBHMapMinLevel.Text, out hmap_min))
+            {
+                MessageBox.Show("Enter valid HMapMinLevel");
+                return;
+            }
+
+            if (!double.TryParse(TBHMapMaxLevel.Text, out hmap_max))
+            {
+                MessageBox.Show("Enter valid HMapMaxLevel");
+                return;
+            }
+
+            if (!double.TryParse(TBDMapMinLevel.Text, out dmap_min))
+            {
+                MessageBox.Show("Enter valid DMapMinLevel");
+                return;
+            }
+
+            if (!double.TryParse(TBDMapMaxLevel.Text, out dmap_max))
+            {
+                MessageBox.Show("Enter valid TBDMapMaxLevel");
+                return;
+            }
+
+            if (!double.TryParse(TBWidth.Text, out width))
+            {
+                MessageBox.Show("Enter valid Width");
+                return;
+            }
+            if (!double.TryParse(TBLength.Text, out lenght))
+            {
+                MessageBox.Show("Enter valid Length");
+                return;
+            }
+            if (!double.TryParse(TBCoordX.Text, out x))
+            {
+                MessageBox.Show("Enter valid X");
+                return;
+            }
+            if (!double.TryParse(TBCoordY.Text, out y))
+            {
+                MessageBox.Show("Enter valid Y");
+                return;
+            }
+            if (!double.TryParse(TBCoordZ.Text, out z))
+            {
+                MessageBox.Show("Enter valid Z");
+                return;
+            }
+            if (CBCoordinateSystem.SelectedIndex < 0)
+            {
+                MessageBox.Show("Select Coordinate System");
+                return;
+            }
+            else
+            {
+                if (CBCoordinateSystem.SelectedIndex == 0)
+                {
+                    coord_sys = ECoordSystem.XYZ;
+                }
+                else
+                {
+                    coord_sys = ECoordSystem.LLH;
+                }
+            }
+            SystemAPIImplementor.CreateTerrain(TBTerrainName.Text, TBHMapName.Text, TBDMapTexture.Text, TBImaryTexture.Text,
+                hmap_min, hmap_max, dmap_min, dmap_max, width, lenght, x, y, z, coord_sys);
+
+
+
+        }
     }
 }

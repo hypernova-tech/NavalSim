@@ -78,6 +78,18 @@ public static class CLICommandManager
     [Modifiable] public const string WindSpeed = "wind";
     [Modifiable] public const string WindDirection = "winddir";
 
+    [Modifiable] public const string TerrHMap = "terrhmap";
+    [Modifiable] public const string TerrDMap = "terrdmap";
+    [Modifiable] public const string TerrBaseTexture = "terrbasetexture";
+    [Modifiable] public const string TerrHMapMinLvlMt = "terrhmapminlvl";
+    [Modifiable] public const string TerrHMapMaxLvlMt = "terrhmapmaxlvl";
+    [Modifiable] public const string TerrDMapMinLvlMt = "terrdmapminlvl";
+    [Modifiable] public const string TerrDMapMaxLvlMt = "terrdmapmaxlvl";
+    [Modifiable] public const string TerrWidthMt = "terrwidth";
+    [Modifiable] public const string TerrLengthMt = "terrlen";
+    [Modifiable] public const string TerrLowerLeftCornerXYZ = "terrlowerleftcornerxyz";
+    [Modifiable] public const string TerrLowerLeftCornerLLH = "terrlowerleftcornerllh";
+
     public const string Wp = "wp";
     public const string WpPos = "wppos";
     public const string Closed = "closed";

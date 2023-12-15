@@ -31,10 +31,10 @@ namespace ConsoleGUI
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            TreeNode treeNode1 = new TreeNode("World");
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            TreeNode treeNode2 = new TreeNode("World");
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
             OpenFileDialog = new OpenFileDialog();
             contextMenuStrip1 = new ContextMenuStrip(components);
             ActorListContextMenu = new ContextMenuStrip(components);
@@ -123,6 +123,33 @@ namespace ConsoleGUI
             TBRain = new TrackBar();
             label16 = new Label();
             TBCloud = new TrackBar();
+            tabPage5 = new TabPage();
+            TBDMapMaxLevel = new TextBox();
+            label34 = new Label();
+            TBDMapMinLevel = new TextBox();
+            label35 = new Label();
+            TBTerrainName = new TextBox();
+            label26 = new Label();
+            BTCreate = new Button();
+            CBCoordinateSystem = new ComboBox();
+            TBCoordZ = new TextBox();
+            TBCoordY = new TextBox();
+            TBCoordX = new TextBox();
+            label33 = new Label();
+            TBHMapMaxLevel = new TextBox();
+            label32 = new Label();
+            TBHMapMinLevel = new TextBox();
+            label31 = new Label();
+            TBLength = new TextBox();
+            label29 = new Label();
+            TBWidth = new TextBox();
+            label28 = new Label();
+            TBDMapTexture = new TextBox();
+            label27 = new Label();
+            TBImaryTexture = new TextBox();
+            LBImaryTexture = new Label();
+            TBHMapName = new TextBox();
+            label25 = new Label();
             menuStrip1 = new MenuStrip();
             fileToolStripMenuItem = new ToolStripMenuItem();
             loadWorkspaceToolStripMenuItem = new ToolStripMenuItem();
@@ -171,6 +198,7 @@ namespace ConsoleGUI
             ((System.ComponentModel.ISupportInitialize)TBSnow).BeginInit();
             ((System.ComponentModel.ISupportInitialize)TBRain).BeginInit();
             ((System.ComponentModel.ISupportInitialize)TBCloud).BeginInit();
+            tabPage5.SuspendLayout();
             menuStrip1.SuspendLayout();
             contextObjectEditor.SuspendLayout();
             ConsoeListBoxContextMenu.SuspendLayout();
@@ -258,9 +286,9 @@ namespace ConsoleGUI
             ObjectEditor.ContextMenuStrip = ObjectEditorContextMenu;
             ObjectEditor.Location = new Point(13, 11);
             ObjectEditor.Name = "ObjectEditor";
-            treeNode1.Name = "World";
-            treeNode1.Text = "World";
-            ObjectEditor.Nodes.AddRange(new TreeNode[] { treeNode1 });
+            treeNode2.Name = "World";
+            treeNode2.Text = "World";
+            ObjectEditor.Nodes.AddRange(new TreeNode[] { treeNode2 });
             ObjectEditor.Size = new Size(246, 633);
             ObjectEditor.TabIndex = 18;
             ObjectEditor.NodeMouseClick += ObjectEditor_NodeMouseClick;
@@ -594,33 +622,33 @@ namespace ConsoleGUI
             // 
             // ModifyableDataGrid
             // 
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = SystemColors.Control;
-            dataGridViewCellStyle1.Font = new Font("Segoe UI", 1F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-            ModifyableDataGrid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = SystemColors.Control;
+            dataGridViewCellStyle4.Font = new Font("Segoe UI", 1F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle4.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
+            ModifyableDataGrid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
             ModifyableDataGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = SystemColors.Window;
-            dataGridViewCellStyle2.Font = new Font("Segoe UI", 8F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle2.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
-            ModifyableDataGrid.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = SystemColors.Window;
+            dataGridViewCellStyle5.Font = new Font("Segoe UI", 8F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle5.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle5.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle5.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle5.WrapMode = DataGridViewTriState.False;
+            ModifyableDataGrid.DefaultCellStyle = dataGridViewCellStyle5;
             ModifyableDataGrid.Location = new Point(3, 534);
             ModifyableDataGrid.Name = "ModifyableDataGrid";
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = SystemColors.Control;
-            dataGridViewCellStyle3.Font = new Font("Segoe UI", 6F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
-            ModifyableDataGrid.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = SystemColors.Control;
+            dataGridViewCellStyle6.Font = new Font("Segoe UI", 6F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle6.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle6.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle6.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = DataGridViewTriState.True;
+            ModifyableDataGrid.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
             ModifyableDataGrid.RowHeadersVisible = false;
             ModifyableDataGrid.RowTemplate.Height = 25;
             ModifyableDataGrid.Size = new Size(202, 405);
@@ -638,6 +666,7 @@ namespace ConsoleGUI
             tabControl1.Controls.Add(tabPage1);
             tabControl1.Controls.Add(tabPage3);
             tabControl1.Controls.Add(tabPage4);
+            tabControl1.Controls.Add(tabPage5);
             tabControl1.Location = new Point(6, 27);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
@@ -1045,6 +1074,263 @@ namespace ConsoleGUI
             TBCloud.TabIndex = 0;
             TBCloud.ValueChanged += TBCloud_ValueChanged;
             // 
+            // tabPage5
+            // 
+            tabPage5.Controls.Add(TBDMapMaxLevel);
+            tabPage5.Controls.Add(label34);
+            tabPage5.Controls.Add(TBDMapMinLevel);
+            tabPage5.Controls.Add(label35);
+            tabPage5.Controls.Add(TBTerrainName);
+            tabPage5.Controls.Add(label26);
+            tabPage5.Controls.Add(BTCreate);
+            tabPage5.Controls.Add(CBCoordinateSystem);
+            tabPage5.Controls.Add(TBCoordZ);
+            tabPage5.Controls.Add(TBCoordY);
+            tabPage5.Controls.Add(TBCoordX);
+            tabPage5.Controls.Add(label33);
+            tabPage5.Controls.Add(TBHMapMaxLevel);
+            tabPage5.Controls.Add(label32);
+            tabPage5.Controls.Add(TBHMapMinLevel);
+            tabPage5.Controls.Add(label31);
+            tabPage5.Controls.Add(TBLength);
+            tabPage5.Controls.Add(label29);
+            tabPage5.Controls.Add(TBWidth);
+            tabPage5.Controls.Add(label28);
+            tabPage5.Controls.Add(TBDMapTexture);
+            tabPage5.Controls.Add(label27);
+            tabPage5.Controls.Add(TBImaryTexture);
+            tabPage5.Controls.Add(LBImaryTexture);
+            tabPage5.Controls.Add(TBHMapName);
+            tabPage5.Controls.Add(label25);
+            tabPage5.Location = new Point(4, 24);
+            tabPage5.Name = "tabPage5";
+            tabPage5.Size = new Size(502, 650);
+            tabPage5.TabIndex = 5;
+            tabPage5.Text = "Terrain";
+            tabPage5.UseVisualStyleBackColor = true;
+            // 
+            // TBDMapMaxLevel
+            // 
+            TBDMapMaxLevel.Location = new Point(159, 285);
+            TBDMapMaxLevel.Name = "TBDMapMaxLevel";
+            TBDMapMaxLevel.Size = new Size(56, 23);
+            TBDMapMaxLevel.TabIndex = 31;
+            TBDMapMaxLevel.Text = "100";
+            // 
+            // label34
+            // 
+            label34.AutoSize = true;
+            label34.Location = new Point(16, 288);
+            label34.Name = "label34";
+            label34.Size = new Size(132, 15);
+            label34.TabIndex = 30;
+            label34.Text = "DepthMapMaxLevel(m)";
+            // 
+            // TBDMapMinLevel
+            // 
+            TBDMapMinLevel.Location = new Point(159, 256);
+            TBDMapMinLevel.Name = "TBDMapMinLevel";
+            TBDMapMinLevel.Size = new Size(56, 23);
+            TBDMapMinLevel.TabIndex = 29;
+            TBDMapMinLevel.Text = "50";
+            // 
+            // label35
+            // 
+            label35.AutoSize = true;
+            label35.Location = new Point(16, 259);
+            label35.Name = "label35";
+            label35.Size = new Size(130, 15);
+            label35.TabIndex = 28;
+            label35.Text = "DepthMapMinLevel(m)";
+            // 
+            // TBTerrainName
+            // 
+            TBTerrainName.Location = new Point(159, 22);
+            TBTerrainName.Name = "TBTerrainName";
+            TBTerrainName.Size = new Size(312, 23);
+            TBTerrainName.TabIndex = 27;
+            TBTerrainName.Text = "terrain1";
+            // 
+            // label26
+            // 
+            label26.AutoSize = true;
+            label26.Location = new Point(16, 25);
+            label26.Name = "label26";
+            label26.Size = new Size(77, 15);
+            label26.TabIndex = 26;
+            label26.Text = "Terrain Name";
+            // 
+            // BTCreate
+            // 
+            BTCreate.Location = new Point(179, 383);
+            BTCreate.Name = "BTCreate";
+            BTCreate.Size = new Size(114, 34);
+            BTCreate.TabIndex = 25;
+            BTCreate.Text = "Create Terrain";
+            BTCreate.UseVisualStyleBackColor = true;
+            BTCreate.Click += BTCreate_Click;
+            // 
+            // CBCoordinateSystem
+            // 
+            CBCoordinateSystem.FormattingEnabled = true;
+            CBCoordinateSystem.Items.AddRange(new object[] { "XYZ", "LLH" });
+            CBCoordinateSystem.Location = new Point(392, 316);
+            CBCoordinateSystem.Name = "CBCoordinateSystem";
+            CBCoordinateSystem.Size = new Size(78, 23);
+            CBCoordinateSystem.TabIndex = 0;
+            // 
+            // TBCoordZ
+            // 
+            TBCoordZ.Location = new Point(282, 316);
+            TBCoordZ.Name = "TBCoordZ";
+            TBCoordZ.Size = new Size(56, 23);
+            TBCoordZ.TabIndex = 23;
+            TBCoordZ.Text = "0";
+            // 
+            // TBCoordY
+            // 
+            TBCoordY.Location = new Point(220, 316);
+            TBCoordY.Name = "TBCoordY";
+            TBCoordY.Size = new Size(56, 23);
+            TBCoordY.TabIndex = 22;
+            TBCoordY.Text = "0";
+            // 
+            // TBCoordX
+            // 
+            TBCoordX.Location = new Point(158, 316);
+            TBCoordX.Name = "TBCoordX";
+            TBCoordX.Size = new Size(56, 23);
+            TBCoordX.TabIndex = 21;
+            TBCoordX.Text = "0";
+            // 
+            // label33
+            // 
+            label33.AutoSize = true;
+            label33.Location = new Point(15, 319);
+            label33.Name = "label33";
+            label33.Size = new Size(104, 15);
+            label33.TabIndex = 20;
+            label33.Text = "Center Coordinate";
+            // 
+            // TBHMapMaxLevel
+            // 
+            TBHMapMaxLevel.Location = new Point(159, 227);
+            TBHMapMaxLevel.Name = "TBHMapMaxLevel";
+            TBHMapMaxLevel.Size = new Size(56, 23);
+            TBHMapMaxLevel.TabIndex = 19;
+            TBHMapMaxLevel.Text = "500";
+            // 
+            // label32
+            // 
+            label32.AutoSize = true;
+            label32.Location = new Point(16, 230);
+            label32.Name = "label32";
+            label32.Size = new Size(136, 15);
+            label32.TabIndex = 18;
+            label32.Text = "HeightMapMaxLevel(m)";
+            // 
+            // TBHMapMinLevel
+            // 
+            TBHMapMinLevel.Location = new Point(159, 198);
+            TBHMapMinLevel.Name = "TBHMapMinLevel";
+            TBHMapMinLevel.Size = new Size(56, 23);
+            TBHMapMinLevel.TabIndex = 17;
+            TBHMapMinLevel.Text = "0";
+            // 
+            // label31
+            // 
+            label31.AutoSize = true;
+            label31.Location = new Point(16, 201);
+            label31.Name = "label31";
+            label31.Size = new Size(134, 15);
+            label31.TabIndex = 16;
+            label31.Text = "HeightMapMinLevel(m)";
+            // 
+            // TBLength
+            // 
+            TBLength.Location = new Point(159, 167);
+            TBLength.Name = "TBLength";
+            TBLength.Size = new Size(56, 23);
+            TBLength.TabIndex = 13;
+            TBLength.Text = "12000";
+            // 
+            // label29
+            // 
+            label29.AutoSize = true;
+            label29.Location = new Point(16, 170);
+            label29.Name = "label29";
+            label29.Size = new Size(63, 15);
+            label29.TabIndex = 12;
+            label29.Text = "Length(m)";
+            // 
+            // TBWidth
+            // 
+            TBWidth.Location = new Point(159, 138);
+            TBWidth.Name = "TBWidth";
+            TBWidth.Size = new Size(56, 23);
+            TBWidth.TabIndex = 11;
+            TBWidth.Text = "12000";
+            // 
+            // label28
+            // 
+            label28.AutoSize = true;
+            label28.Location = new Point(16, 141);
+            label28.Name = "label28";
+            label28.Size = new Size(58, 15);
+            label28.TabIndex = 10;
+            label28.Text = "Width(m)";
+            // 
+            // TBDMapTexture
+            // 
+            TBDMapTexture.Location = new Point(159, 109);
+            TBDMapTexture.Name = "TBDMapTexture";
+            TBDMapTexture.Size = new Size(312, 23);
+            TBDMapTexture.TabIndex = 9;
+            TBDMapTexture.Text = "dmap";
+            // 
+            // label27
+            // 
+            label27.AutoSize = true;
+            label27.Location = new Point(16, 112);
+            label27.Name = "label27";
+            label27.Size = new Size(66, 15);
+            label27.TabIndex = 8;
+            label27.Text = "Depth Map";
+            // 
+            // TBImaryTexture
+            // 
+            TBImaryTexture.Location = new Point(159, 80);
+            TBImaryTexture.Name = "TBImaryTexture";
+            TBImaryTexture.Size = new Size(312, 23);
+            TBImaryTexture.TabIndex = 7;
+            TBImaryTexture.Text = "hmaptexturesat";
+            // 
+            // LBImaryTexture
+            // 
+            LBImaryTexture.AutoSize = true;
+            LBImaryTexture.Location = new Point(16, 83);
+            LBImaryTexture.Name = "LBImaryTexture";
+            LBImaryTexture.Size = new Size(91, 15);
+            LBImaryTexture.TabIndex = 6;
+            LBImaryTexture.Text = "Imagery Texture";
+            // 
+            // TBHMapName
+            // 
+            TBHMapName.Location = new Point(159, 51);
+            TBHMapName.Name = "TBHMapName";
+            TBHMapName.Size = new Size(312, 23);
+            TBHMapName.TabIndex = 5;
+            TBHMapName.Text = "hmap.png";
+            // 
+            // label25
+            // 
+            label25.AutoSize = true;
+            label25.Location = new Point(16, 54);
+            label25.Name = "label25";
+            label25.Size = new Size(67, 15);
+            label25.TabIndex = 4;
+            label25.Text = "HeightMap";
+            // 
             // menuStrip1
             // 
             menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, viewToolStripMenuItem, simulationToolStripMenuItem });
@@ -1239,6 +1525,8 @@ namespace ConsoleGUI
             ((System.ComponentModel.ISupportInitialize)TBSnow).EndInit();
             ((System.ComponentModel.ISupportInitialize)TBRain).EndInit();
             ((System.ComponentModel.ISupportInitialize)TBCloud).EndInit();
+            tabPage5.ResumeLayout(false);
+            tabPage5.PerformLayout();
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
             contextObjectEditor.ResumeLayout(false);
@@ -1363,5 +1651,32 @@ namespace ConsoleGUI
         private TrackBar TBWind;
         private Label label24;
         private TrackBar TBWindAzimuth;
+        private TabPage tabPage5;
+        private TextBox TBHMapName;
+        private Label label25;
+        private Label label33;
+        private TextBox TBHMapMaxLevel;
+        private Label label32;
+        private TextBox TBHMapMinLevel;
+        private Label label31;
+        private TextBox TBLength;
+        private Label label29;
+        private TextBox TBWidth;
+        private Label label28;
+        private TextBox TBDMapTexture;
+        private Label label27;
+        private TextBox TBImaryTexture;
+        private Label LBImaryTexture;
+        private ComboBox CBCoordinateSystem;
+        private TextBox TBCoordZ;
+        private TextBox TBCoordY;
+        private TextBox TBCoordX;
+        private Button BTCreate;
+        private TextBox TBTerrainName;
+        private Label label26;
+        private TextBox TBDMapMaxLevel;
+        private Label label34;
+        private TextBox TBDMapMinLevel;
+        private Label label35;
     }
 }

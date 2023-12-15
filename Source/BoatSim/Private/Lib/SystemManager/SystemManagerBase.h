@@ -17,7 +17,9 @@
 #include <Lib/Platform/PlatformBase.h>
 #include <Lib/DataContainer/DataManager.h>
 #include <Lib/Environment/EnvManager.h>
+#include <Lib/Terrain/TerrainManager.h>
 #include "SystemManagerBase.generated.h"
+
 
 
 
@@ -185,6 +187,7 @@ public:
 	APathController* ToPath(AActor* p_actor);
 	APlatformBase* ToPlatform(AActor* p_actor);
 	AWaypointActor* ToWaypoint(AActor* p_actor);
+	ATerrainManager* ToTerrain(AActor* p_actor);
 	template <typename T>
 	T* To(AActor* p_actor);
 
@@ -372,6 +375,39 @@ public:
 	virtual bool GetEnvTimeFlowScale(INT32S region, FLOAT64& val) ;
 
 
+	virtual bool SetTerrainHeightMap(AActor* p_actor, FString  path);
+	virtual bool GetTerrainHeightMap(AActor* p_actor, FString& path);
+
+	virtual bool SetTerrainDepthMap(AActor* p_actor, FString path);
+	virtual bool GetTerrainDepthMap(AActor* p_actor, FString& path);
+
+	virtual bool SetTerraiBaseTexture(AActor* p_actor, FString path);
+	virtual bool GetTerraiBaseTexture(AActor* p_actor, FString& path);
+
+	virtual bool SetTerrainHeightMapMinLevelMeter(AActor* p_actor, FLOAT64 val);
+	virtual bool GetTerrainHeightMapMinLevelMeter(AActor* p_actor, FLOAT64& val);
+
+	virtual bool SetTerrainHeightMapMaxLevelMeter(AActor* p_actor, FLOAT64 val);
+	virtual bool GetTerrainHeightMapMaxLevelMeter(AActor* p_actor, FLOAT64& val);
+
+	virtual bool SetTerrainDepthMapMinLevelMeter(AActor* p_actor, FLOAT64 val);
+	virtual bool GetTerrainDepthMapMinLevelMeter(AActor* p_actor, FLOAT64& val);
+
+	virtual bool SetTerrainDepthMapMaxLevelMeter(AActor* p_actor, FLOAT64 val);
+	virtual bool GetTerrainDepthMapMaxLevelMeter(AActor* p_actor, FLOAT64& val);
+
+	virtual bool SetTerrainWidthMeter(AActor* p_actor, FLOAT64 val);
+	virtual bool GetTerrainWidthMeter(AActor* p_actor, FLOAT64& val);
+
+	virtual bool SetTerrainLengthMeter(AActor* p_actor, FLOAT64 val);
+	virtual bool GetTerrainLengthMeter(AActor* p_actor, FLOAT64& val);
+
+	virtual bool SetTerrainLowerLeftCornerCoordXYZ(AActor* p_actor, FVector vec);
+	virtual bool GetTerrainLowerLeftCornerCoordXYZ(AActor* p_actor, FVector& vec);
+
+
+	virtual bool SetTerrainLowerLeftCornerCoordLLH(AActor* p_actor, FVector vec);
+	virtual bool GetTerrainLowerLeftCornerCoordLLH(AActor* p_actor, FVector& vec);
 
 
 

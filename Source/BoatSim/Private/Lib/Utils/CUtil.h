@@ -18,6 +18,13 @@ struct STraceArgs
 	FVector scan_center;
 	FVector scan_rpy_world_deg;
 	bool is_world;
+
+
+
+
+
+
+
 	float min_range_meter;
 	float range_meter;
 	float azimuth_start_deg;
@@ -150,5 +157,7 @@ public:
 	static void GetActorHierarchy(const AActor* Object, TArray<FString>& Hierarchy);
 	static TArray<uint8> HexStringToByteArray(const FString& HexString);
 	static FString CharToHexString(INT8U* p_data, INT32U len);
+	static void FindMinMaxPixelValue16Bit(UTexture2D* Texture, uint16& MinValue, uint16& MaxValue);
+	
 };
 

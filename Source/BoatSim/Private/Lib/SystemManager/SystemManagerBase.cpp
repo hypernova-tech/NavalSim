@@ -277,6 +277,15 @@ AWaypointActor* ASystemManagerBase::ToWaypoint(AActor* p_actor)
 	return nullptr;
 }
 
+ATerrainManager* ASystemManagerBase::ToTerrain(AActor* p_actor)
+{
+	if (p_actor->IsA<ATerrainManager>()) {
+		return (ATerrainManager*)p_actor;
+	}
+
+	return nullptr;
+}
+
 
 template <typename T>
 T* ASystemManagerBase::To(AActor* p_actor)
@@ -1903,6 +1912,315 @@ bool ASystemManagerBase::GetPathLineColor(AActor* p_actor, FColor& val)
  {
 	 val = pEnvManager->GetEnvTimeFlowScale();
 	 return true;
+ }
+
+ bool ASystemManagerBase::SetTerrainHeightMap(AActor* p_actor, FString path)
+ {
+
+	 auto p_terr = ToTerrain(p_actor);
+	 if (p_terr) {
+		 p_terr->HeightMapPath = path;
+		 return true;
+	 }
+	 else {
+		 
+	 }
+
+	 return false;
+ }
+
+ bool ASystemManagerBase::GetTerrainHeightMap(AActor* p_actor, FString& path)
+ {
+	 auto p_terr = ToTerrain(p_actor);
+	 if (p_terr) {
+		 path = p_terr->HeightMapPath;
+		 return true;
+	 }
+	 else {
+
+	 }
+
+	 return false;
+ }
+
+ bool ASystemManagerBase::SetTerrainDepthMap(AActor* p_actor, FString path)
+ {
+	 auto p_terr = ToTerrain(p_actor);
+	 if (p_terr) {
+		 p_terr->DepthMapPath = path;
+		 return true;
+	 }
+	 else {
+
+	 }
+
+	 return false;
+ }
+
+ bool ASystemManagerBase::GetTerrainDepthMap(AActor* p_actor, FString& path)
+ {
+	 auto p_terr = ToTerrain(p_actor);
+	 if (p_terr) {
+		 path = p_terr->DepthMapPath;
+		 return true;
+	 }
+	 else {
+
+	 }
+
+	 return false;
+ }
+
+ bool ASystemManagerBase::SetTerraiBaseTexture(AActor* p_actor, FString path)
+ {
+	 auto p_terr = ToTerrain(p_actor);
+	 if (p_terr) {
+		 p_terr->BaseTexturePath = path;
+		 return true;
+	 }
+	 else {
+
+	 }
+
+	 return false;
+ }
+
+ bool ASystemManagerBase::GetTerraiBaseTexture(AActor* p_actor, FString& path)
+ {
+	 auto p_terr = ToTerrain(p_actor);
+	 if (p_terr) {
+		 path = p_terr->BaseTexturePath;
+		 return true;
+	 }
+	 else {
+
+	 }
+
+	 return false;
+ }
+
+ bool ASystemManagerBase::SetTerrainHeightMapMinLevelMeter(AActor* p_actor, FLOAT64 val)
+ {
+	 auto p_terr = ToTerrain(p_actor);
+	 if (p_terr) {
+		 p_terr->HeightMapMinLevelMeter = val;
+		 return true;
+	 }
+	 else {
+
+	 }
+
+	 return false;
+ }
+
+ bool ASystemManagerBase::GetTerrainHeightMapMinLevelMeter(AActor* p_actor, FLOAT64& val)
+ {
+	 auto p_terr = ToTerrain(p_actor);
+	 if (p_terr) {
+		 val = p_terr->HeightMapMinLevelMeter;
+		 return true;
+	 }
+	 else {
+
+	 }
+
+	 return false;
+ }
+
+ bool ASystemManagerBase::SetTerrainHeightMapMaxLevelMeter(AActor* p_actor, FLOAT64 val)
+ {
+	 auto p_terr = ToTerrain(p_actor);
+	 if (p_terr) {
+		 p_terr->HeightMapMaxLevelMeter = val;
+		 return true;
+	 }
+	 else {
+
+	 }
+
+	 return false;
+ }
+
+ bool ASystemManagerBase::GetTerrainHeightMapMaxLevelMeter(AActor* p_actor, FLOAT64& val)
+ {
+	 auto p_terr = ToTerrain(p_actor);
+	 if (p_terr) {
+		 val = p_terr->HeightMapMaxLevelMeter;
+		 return true;
+	 }
+	 else {
+
+	 }
+
+	 return false;
+ }
+
+ bool ASystemManagerBase::SetTerrainDepthMapMinLevelMeter(AActor* p_actor, FLOAT64 val)
+ {
+	 auto p_terr = ToTerrain(p_actor);
+	 if (p_terr) {
+		 p_terr->DepthMapMinLevelMeter = val;
+		 return true;
+	 }
+	 else {
+
+	 }
+
+	 return false;
+ }
+
+ bool ASystemManagerBase::GetTerrainDepthMapMinLevelMeter(AActor* p_actor, FLOAT64& val)
+ {
+	 auto p_terr = ToTerrain(p_actor);
+	 if (p_terr) {
+		 val = p_terr->DepthMapMinLevelMeter;
+		 return true;
+	 }
+	 else {
+
+	 }
+
+	 return false;
+ }
+
+ bool ASystemManagerBase::SetTerrainDepthMapMaxLevelMeter(AActor* p_actor, FLOAT64 val)
+ {
+	 auto p_terr = ToTerrain(p_actor);
+	 if (p_terr) {
+		 p_terr->DepthMapMaxLevelMeter = val;
+		 return true;
+	 }
+	 else {
+
+	 }
+
+	 return false;
+ }
+
+ bool ASystemManagerBase::GetTerrainDepthMapMaxLevelMeter(AActor* p_actor, FLOAT64& val)
+ {
+	 auto p_terr = ToTerrain(p_actor);
+	 if (p_terr) {
+		 val = p_terr->DepthMapMaxLevelMeter;
+		 return true;
+	 }
+	 else {
+
+	 }
+
+	 return false;
+ }
+
+ bool ASystemManagerBase::SetTerrainWidthMeter(AActor* p_actor, FLOAT64 val)
+ {
+	 auto p_terr = ToTerrain(p_actor);
+	 if (p_terr) {
+		 p_terr->TerrainWidthMeter = val;
+		 return true;
+	 }
+	 else {
+
+	 }
+
+	 return false;
+ }
+
+ bool ASystemManagerBase::GetTerrainWidthMeter(AActor* p_actor, FLOAT64& val)
+ {
+	 auto p_terr = ToTerrain(p_actor);
+	 if (p_terr) {
+		 val = p_terr->TerrainWidthMeter;
+		 return true;
+	 }
+	 else {
+
+	 }
+
+	 return false;
+ }
+
+ bool ASystemManagerBase::SetTerrainLengthMeter(AActor* p_actor, FLOAT64 val)
+ {
+	 auto p_terr = ToTerrain(p_actor);
+	 if (p_terr) {
+		 p_terr->TerrainLengthMeter = val;
+		 return true;
+	 }
+	 else {
+
+	 }
+
+	 return false;
+ }
+
+ bool ASystemManagerBase::GetTerrainLengthMeter(AActor* p_actor, FLOAT64& val)
+ {
+	 auto p_terr = ToTerrain(p_actor);
+	 if (p_terr) {
+		 val = p_terr->TerrainLengthMeter;
+		 return true;
+	 }
+	 else {
+
+	 }
+
+	 return false;
+ }
+
+ bool ASystemManagerBase::SetTerrainLowerLeftCornerCoordXYZ(AActor* p_actor, FVector vec)
+ {
+	 auto p_terr = ToTerrain(p_actor);
+	 if (p_terr) {
+		 p_terr->TerrainLowerLeftCornerXYZ = vec;
+		 return true;
+	 }
+	 else {
+
+	 }
+
+	 return false;
+ }
+
+ bool ASystemManagerBase::GetTerrainLowerLeftCornerCoordXYZ(AActor* p_actor, FVector& vec)
+ {
+	 auto p_terr = ToTerrain(p_actor);
+	 if (p_terr) {
+		 vec = p_terr->TerrainLowerLeftCornerXYZ;
+		 return true;
+	 }
+	 else {
+
+	 }
+
+	 return false;
+ }
+
+ bool ASystemManagerBase::SetTerrainLowerLeftCornerCoordLLH(AActor* p_actor, FVector vec)
+ {
+	 auto p_terr = ToTerrain(p_actor);
+	 if (p_terr) {
+		 p_terr->TerrainLowerLeftCornerLLH = vec;
+		 return true;
+	 }
+	 else {
+
+	 }
+
+	 return false;
+ }
+
+ bool ASystemManagerBase::GetTerrainLowerLeftCornerCoordLLH(AActor* p_actor, FVector& vec)
+ {
+	 auto p_terr = ToTerrain(p_actor);
+	 if (p_terr) {
+		 vec = p_terr->TerrainLowerLeftCornerLLH;
+		 return true;
+	 }
+	 else {
+
+	 }
+
+	 return false;
  }
 
 
