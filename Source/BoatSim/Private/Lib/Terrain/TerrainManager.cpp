@@ -43,18 +43,27 @@ void ATerrainManager::EndPlay(const EEndPlayReason::Type EndPlayReason)
         ProceduralMesh = nullptr; // İşaretçiyi sıfırla
     }
 }
-void ATerrainManager::BuildTerrain(FString png_path, FLOAT64 min_height, FLOAT64 max_height, FLOAT64 max_width, FLOAT64 max_len, FVector center, FVector2D normalized_png)
+void ATerrainManager::BuildTerrain(FString png_path, FString depth_map,  FLOAT64 min_height, FLOAT64 max_height, FLOAT64 max_width, FLOAT64 max_len, FVector center, FVector2D normalized_png)
 {
-    FString ImagePath = FPaths::Combine(FPaths::ProjectDir(), *png_path);
-    UTexture2D* HeightmapTexture = LoadPNGAsTexture2D(ImagePath);
-    TArray<FLOAT64> data;
-    GetDataTextureData(HeightmapTexture, min_height, max_height, data);
+    FString hight_map_path = CUtil::GetFilePathProject(png_path);
+    UTexture2D* HeightmapTexture = LoadPNGAsTexture2D(hight_map_path);
 
+    UTexture2D* p_depth_texture = LoadPNGAsTexture2D(CUtil::GetFilePathProject(depth_map));
+
+
+    TArray<FLOAT64> data;
+    TArray<FLOAT64> depth_data;
+    GetDataTextureData(HeightmapTexture, min_height, max_height, data);
+    if (p_depth_texture != nullptr) {
+        GetDataTextureData(p_depth_texture, DepthMapMinLevelMeter, DepthMapMaxLevelMeter, depth_data);
+
+    }
+   
     int32 texture_size_x = HeightmapTexture->GetSizeX();
     int32 texture_size_y = HeightmapTexture->GetSizeY();
 
 
-    GenerateTerrain(data, texture_size_x, texture_size_y, max_width, max_len);
+    GenerateTerrain(data, texture_size_x, texture_size_y, max_width, max_len, depth_data);
 
     FVector location = TOUE(center) - FVector(TOUE(max_len * normalized_png.X), TOUE(max_width * normalized_png.Y), 0);
     ProceduralMesh->SetWorldLocation(location);
@@ -69,7 +78,9 @@ bool ATerrainManager::IsDoubleUpdated(double val)
 
 UTexture2D* ATerrainManager::LoadPNGAsTexture2D(const FString& ImagePath)
 {
-
+    if (ImagePath == "") {
+        return nullptr;
+    }
     return LoadPNGTextureFromFile(ImagePath, ERGBFormat::Gray, 16, PF_G16);
 #if false
     // Load the compressed byte data from the file
@@ -152,11 +163,11 @@ UTexture2D* ATerrainManager::LoadPNGTextureFromFile(const FString& ImagePath, ER
     return nullptr;
 }
 
-void ATerrainManager::GenerateTerrain(const TArray<FLOAT64>& HeightMap, int32 MapWidth, int32 MapHeight, FLOAT64 max_width, FLOAT64 max_len)
+void ATerrainManager::GenerateTerrain(const TArray<FLOAT64>& HeightMap, int32 MapWidth, int32 MapHeight, FLOAT64 max_width, FLOAT64 max_len, const TArray<FLOAT64>& depth_map)
 {
 
 
-    CalculateVertices(HeightMap, MapWidth, MapHeight, max_width, max_len,Vertices);
+    CalculateVertices(HeightMap, MapWidth, MapHeight, max_width, max_len, depth_map, Vertices);
     CalculateTriangles(MapWidth, MapHeight, Triangles);
     CalculateUVs(MapWidth, MapHeight, UVs);
     CalculateNormals(Vertices, MapWidth, MapHeight, Normals);
@@ -165,17 +176,22 @@ void ATerrainManager::GenerateTerrain(const TArray<FLOAT64>& HeightMap, int32 Ma
     ProceduralMesh->SetMaterial(0, pMaterial);
 }
 
-void ATerrainManager::CalculateVertices(const TArray<FLOAT64>& HeightMap, int32 MapWidth, int32 MapHeight, FLOAT64 max_width, FLOAT64 max_len, TArray<FVector>& OutVertices)
+void ATerrainManager::CalculateVertices(const TArray<FLOAT64>& HeightMap, int32 MapWidth, int32 MapHeight, FLOAT64 max_width, FLOAT64 max_len, const TArray<FLOAT64>& depth_map, TArray<FVector>& OutVertices)
 {
     for (int32 x = 0; x < MapHeight  ; ++x)
     {
         for (int32 y = 0; y < MapWidth; ++y)
         {
             double Height = (double)HeightMap[y + x * MapWidth];
-            Height *= 100.0f; // Scale to desired height range, e.g., 0-100 units
+            Height = TOUE(Height); // Scale to desired height range, e.g., 0-100 units
             
             if (Height == 0) {
-                Height =- CUtil::GetRandomRange(5000, 10000);
+                if (depth_map.Num() != 0) {
+                    Height = TOUE(depth_map[y + x * MapWidth]);
+                }
+                else {
+                    Height = TOUE(CUtil::GetRandomRange(DepthMapMinLevelMeter, DepthMapMaxLevelMeter));
+                }
             }
             OutVertices.Add(FVector(x / (FLOAT64)(MapHeight-1) * TOUE(max_len), y / (FLOAT64)(MapWidth - 1) * TOUE(max_width), Height));
         }
@@ -351,6 +367,11 @@ void ATerrainManager::Bake()
         return;
     }
 
+    if (DepthMapPath == "") {
+        p_api->SendConsoleResponse("Enter valid DepthMapPath");
+        return;
+    }
+
     if (BaseTexturePath == "") {
         p_api->SendConsoleResponse("Enter valid Base Map Texture");
         return;
@@ -379,7 +400,7 @@ void ATerrainManager::Bake()
 
 
 
-    BuildTerrain(HeightMapPath, HeightMapMinLevelMeter, HeightMapMaxLevelMeter, TerrainWidthMeter, TerrainLengthMeter, FVector(0, 0, 0), FVector2D(0.5, 0.5));
+    BuildTerrain(HeightMapPath, DepthMapPath, HeightMapMinLevelMeter, HeightMapMaxLevelMeter, TerrainWidthMeter, TerrainLengthMeter, FVector(0, 0, 0), FVector2D(0.5, 0.5));
     SetBaseMap(BaseTexturePath);
 
 }

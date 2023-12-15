@@ -77,14 +77,14 @@ protected:
 	bool IsDoubleUpdated(double val);
 	UTexture2D* LoadPNGAsTexture2D(const FString& ImagePath);
 	//void UpdateLandscapeHeightFromTexture(ALandscape* Landscape, UTexture2D* HeightmapTexture, FLOAT64 min_height_meter, FLOAT64 max_height_meter);
-	void BuildTerrain(FString png_path, FLOAT64 min_height, FLOAT64 max_height, FLOAT64 max_width, FLOAT64 max_len, FVector center, FVector2D normalized_png);
+	void BuildTerrain(FString png_path, FString depth_map, FLOAT64 min_height, FLOAT64 max_height, FLOAT64 max_width, FLOAT64 max_len, FVector center, FVector2D normalized_png);
 	//bool SetHeightmapData(ALandscapeProxy* Landscape, const TArray<uint16>& Data);
 	//void SetAll(float h);
 	//virtual void OnStepScenarioMode(float DeltaTime) override;
 	//FIntPoint GetLandscapeHeightmapSize(ALandscape* Landscape);
 	//FLOAT64 GetTextureValue(UTexture2D *p_text , FLOAT64 tf_x, FLOAT64 tf_y);
-	void GenerateTerrain(const TArray<FLOAT64>& HeightMap, int32 MapWidth, int32 MapHeight, FLOAT64 max_width, FLOAT64 max_len);
-	void CalculateVertices(const TArray<FLOAT64>& HeightMap, int32 MapWidth, int32 MapHeight, FLOAT64 max_width, FLOAT64 max_len, TArray<FVector>& OutVertices);
+	void GenerateTerrain(const TArray<FLOAT64>& HeightMap, int32 MapWidth, int32 MapHeight, FLOAT64 max_width, FLOAT64 max_len, const TArray<FLOAT64>& depth_map);
+	void CalculateVertices(const TArray<FLOAT64>& HeightMap, int32 MapWidth, int32 MapHeight, FLOAT64 max_width, FLOAT64 max_len, const TArray<FLOAT64>& depth_map, TArray<FVector>& OutVertices);
 	void CalculateTriangles(int32 MapWidth, int32 MapHeight, TArray<int32>& OutTriangles);
 	void CalculateUVs(int32 MapWidth, int32 MapHeight, TArray<FVector2D>& OutUVs);
 	void CalculateNormals(const TArray<FVector>& Vertices, int32 Width, int32 Height, TArray<FVector>& Normals);

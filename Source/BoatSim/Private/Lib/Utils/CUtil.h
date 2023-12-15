@@ -158,6 +158,6 @@ public:
 	static TArray<uint8> HexStringToByteArray(const FString& HexString);
 	static FString CharToHexString(INT8U* p_data, INT32U len);
 	static void FindMinMaxPixelValue16Bit(UTexture2D* Texture, uint16& MinValue, uint16& MaxValue);
-	
+	static FString GetFilePathProject(FString file_path);
 };
 

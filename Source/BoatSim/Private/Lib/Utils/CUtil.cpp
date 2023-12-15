@@ -1209,3 +1209,9 @@ void CUtil::FindMinMaxPixelValue16Bit(UTexture2D* Texture, uint16& MinValue, uin
     Mip.BulkData.Unlock();
 }
 
+FString CUtil::GetFilePathProject(FString file_path)
+{
+    FString proj_path = FPaths::Combine(FPaths::ProjectDir(), *file_path);
+    return proj_path;
+}
+
