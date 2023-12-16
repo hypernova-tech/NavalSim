@@ -7,6 +7,6 @@
 
     internal static string MakeVectorString(double x, double y, double z)
     {
-        return x.ToString() +" "+ y.ToString() + " "+z.ToString();
+        return "\""+x.ToString() +" "+ y.ToString() + " "+z.ToString() + "\"" ;
     }
 }

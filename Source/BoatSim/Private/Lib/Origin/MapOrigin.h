@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "GeoReferencingSystem.h"
 #include "MapOrigin.generated.h"
 
 enum ECoordSystem {
@@ -24,10 +25,11 @@ public:
 	AMapOrigin();
 
 	UPROPERTY(EditAnywhere)
-		FVector Center;
+		FVector CenterLLH;
 	UPROPERTY(EditAnywhere)
 		int Speed;
 
+	AGeoReferencingSystem* pGeoReferencingSystem;
 private:
 	static AMapOrigin* pInstance;
 
@@ -35,14 +37,15 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	bool IsCenterChangedOnce = false;
-
+	void UpdateGeoreferencingCenter();
+	void Test();
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	static AMapOrigin* GetMapOrigin();
 
-	FVector GetGELocation(FVector pos);
+	FVector ConvertLLHToUEXYZ(FVector pos);
 	void ChangeCenterCoordinateOnce(FVector new_center);
 
 

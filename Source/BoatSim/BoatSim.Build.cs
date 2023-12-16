@@ -9,7 +9,7 @@ public class BoatSim : ModuleRules
 		OptimizeCode = CodeOptimization.Never;
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "RenderCore", "CoreUObject", "Engine", "InputCore","Networking","Sockets","ProceduralMeshComponent","UMG","Slate","SlateCore","RHI","json" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "RenderCore", "CoreUObject", "Engine", "InputCore", "GeoReferencing", "Networking","Sockets","ProceduralMeshComponent","UMG","Slate","SlateCore","RHI","json" });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 

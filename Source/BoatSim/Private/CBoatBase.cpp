@@ -322,7 +322,7 @@ void ACBoatBase::UpdateKinematicData()
 		
 		FVector llh = pLastData->GetLocationLLH();
 		p_origin->ChangeCenterCoordinateOnce(llh);
-		FVector new_pos = p_origin->GetGELocation(llh);
+		FVector new_pos = p_origin->ConvertLLHToUEXYZ(llh);
 		FVector euler = pLastData->GetEulerRPYDeg();
 		
 		//Mutex.Unlock();

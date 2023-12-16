@@ -44,7 +44,9 @@ FString CCLICommandManager::RemotePort1 = "remoteport";
 FString CCLICommandManager::IPAddr2 = "ipaddr2";
 FString CCLICommandManager::LocalPort2 = "localport2";
 FString CCLICommandManager::RemotePort2 = "remoteport2";
-
+FString CCLICommandManager::CamSpeed = "camspeed";
+FString CCLICommandManager::PlatformTurnRate = "pltturnrate";
+FString CCLICommandManager::PlatformSpeed = "pltspeed";
 FString CCLICommandManager::VericalFov = "vfov";
 FString CCLICommandManager::HorizontalFov = "hfov";
 FString CCLICommandManager::HorizontalScanStepAngleDeg = "hscanstepang";
@@ -89,8 +91,8 @@ FString CCLICommandManager::TerrHMapMinLvlMt = "terrhmapminlvl";
 FString CCLICommandManager::TerrHMapMaxLvlMt = "terrhmapmaxlvl";
 FString CCLICommandManager::TerrDMapMinLvlMt = "terrdmapminlvl";
 FString CCLICommandManager::TerrDMapMaxLvlMt = "terrdmapmaxlvl";
-FString CCLICommandManager::TerrWidthMt = "terrwidth";
-FString CCLICommandManager::TerrLengthMt = "terrlen";
+FString CCLICommandManager::TerrWidthDeg = "terrwidth";
+FString CCLICommandManager::TerrLengthDeg = "terrlen";
 FString CCLICommandManager::TerrLowerLeftCornerXYZ = "terrlowerleftcornerxyz";
 FString CCLICommandManager::TerrLowerLeftCornerLLH = "terrlowerleftcornerllh";
 

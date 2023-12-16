@@ -2111,11 +2111,11 @@ bool ASystemManagerBase::GetPathLineColor(AActor* p_actor, FColor& val)
 	 return false;
  }
 
- bool ASystemManagerBase::SetTerrainWidthMeter(AActor* p_actor, FLOAT64 val)
+ bool ASystemManagerBase::SetTerrainWidthDeg(AActor* p_actor, FLOAT64 val)
  {
 	 auto p_terr = ToTerrain(p_actor);
 	 if (p_terr) {
-		 p_terr->TerrainWidthMeter = val;
+		 p_terr->TerrainWidthDeg = val;
 		 return true;
 	 }
 	 else {
@@ -2125,11 +2125,11 @@ bool ASystemManagerBase::GetPathLineColor(AActor* p_actor, FColor& val)
 	 return false;
  }
 
- bool ASystemManagerBase::GetTerrainWidthMeter(AActor* p_actor, FLOAT64& val)
+ bool ASystemManagerBase::GetTerrainWidthDeg(AActor* p_actor, FLOAT64& val)
  {
 	 auto p_terr = ToTerrain(p_actor);
 	 if (p_terr) {
-		 val = p_terr->TerrainWidthMeter;
+		 val = p_terr->TerrainWidthDeg;
 		 return true;
 	 }
 	 else {
@@ -2139,11 +2139,11 @@ bool ASystemManagerBase::GetPathLineColor(AActor* p_actor, FColor& val)
 	 return false;
  }
 
- bool ASystemManagerBase::SetTerrainLengthMeter(AActor* p_actor, FLOAT64 val)
+ bool ASystemManagerBase::SetTerrainLengthDeg(AActor* p_actor, FLOAT64 val)
  {
 	 auto p_terr = ToTerrain(p_actor);
 	 if (p_terr) {
-		 p_terr->TerrainLengthMeter = val;
+		 p_terr->TerrainLengthDeg = val;
 		 return true;
 	 }
 	 else {
@@ -2153,11 +2153,11 @@ bool ASystemManagerBase::GetPathLineColor(AActor* p_actor, FColor& val)
 	 return false;
  }
 
- bool ASystemManagerBase::GetTerrainLengthMeter(AActor* p_actor, FLOAT64& val)
+ bool ASystemManagerBase::GetTerrainLengthDeg(AActor* p_actor, FLOAT64& val)
  {
 	 auto p_terr = ToTerrain(p_actor);
 	 if (p_terr) {
-		 val = p_terr->TerrainLengthMeter;
+		 val = p_terr->TerrainLengthDeg;
 		 return true;
 	 }
 	 else {
@@ -2167,33 +2167,7 @@ bool ASystemManagerBase::GetPathLineColor(AActor* p_actor, FColor& val)
 	 return false;
  }
 
- bool ASystemManagerBase::SetTerrainLowerLeftCornerCoordXYZ(AActor* p_actor, FVector vec)
- {
-	 auto p_terr = ToTerrain(p_actor);
-	 if (p_terr) {
-		 p_terr->SetTerrainLowerLeftCornerXYZ(vec);
-		 return true;
-	 }
-	 else {
 
-	 }
-
-	 return false;
- }
-
- bool ASystemManagerBase::GetTerrainLowerLeftCornerCoordXYZ(AActor* p_actor, FVector& vec)
- {
-	 auto p_terr = ToTerrain(p_actor);
-	 if (p_terr) {
-		 vec = p_terr->GetTerrainLowerLeftCornerXYZ();
-		 return true;
-	 }
-	 else {
-
-	 }
-
-	 return false;
- }
 
  bool ASystemManagerBase::SetTerrainLowerLeftCornerCoordLLH(AActor* p_actor, FVector vec)
  {
@@ -2220,6 +2194,26 @@ bool ASystemManagerBase::GetPathLineColor(AActor* p_actor, FColor& val)
 
 	 }
 
+	 return false;
+ }
+
+ bool ASystemManagerBase::SetCamSpeed(AActor* p_actor, FLOAT64 val)
+ {
+	 auto plt = GetPlatform();
+	 if (plt != nullptr) {
+		 plt->CamMovementSpeed = val;
+		 return true;
+	 }
+	 return false;
+ }
+
+ bool ASystemManagerBase::GetCamSpeed(AActor* p_actor, FLOAT64& val)
+ {
+	 auto plt = GetPlatform();
+	 if (plt != nullptr) {
+		 val = plt->CamMovementSpeed;
+		 return true;
+	 }
 	 return false;
  }
 

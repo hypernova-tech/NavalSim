@@ -1173,35 +1173,36 @@ namespace ConsoleGUI
             // CBCoordinateSystem
             // 
             CBCoordinateSystem.FormattingEnabled = true;
-            CBCoordinateSystem.Items.AddRange(new object[] { "XYZ", "LLH" });
+            CBCoordinateSystem.Items.AddRange(new object[] { "LLH" });
             CBCoordinateSystem.Location = new Point(392, 316);
             CBCoordinateSystem.Name = "CBCoordinateSystem";
             CBCoordinateSystem.Size = new Size(78, 23);
             CBCoordinateSystem.TabIndex = 0;
+            CBCoordinateSystem.Text = "LLH";
             // 
             // TBCoordZ
             // 
-            TBCoordZ.Location = new Point(282, 316);
+            TBCoordZ.Location = new Point(314, 316);
             TBCoordZ.Name = "TBCoordZ";
-            TBCoordZ.Size = new Size(56, 23);
+            TBCoordZ.Size = new Size(72, 23);
             TBCoordZ.TabIndex = 23;
             TBCoordZ.Text = "0";
             // 
             // TBCoordY
             // 
-            TBCoordY.Location = new Point(220, 316);
+            TBCoordY.Location = new Point(236, 316);
             TBCoordY.Name = "TBCoordY";
-            TBCoordY.Size = new Size(56, 23);
+            TBCoordY.Size = new Size(72, 23);
             TBCoordY.TabIndex = 22;
-            TBCoordY.Text = "0";
+            TBCoordY.Text = "29.48159";
             // 
             // TBCoordX
             // 
             TBCoordX.Location = new Point(158, 316);
             TBCoordX.Name = "TBCoordX";
-            TBCoordX.Size = new Size(56, 23);
+            TBCoordX.Size = new Size(72, 23);
             TBCoordX.TabIndex = 21;
-            TBCoordX.Text = "0";
+            TBCoordX.Text = "40.682406";
             // 
             // label33
             // 
@@ -1252,16 +1253,16 @@ namespace ConsoleGUI
             TBLength.Name = "TBLength";
             TBLength.Size = new Size(56, 23);
             TBLength.TabIndex = 13;
-            TBLength.Text = "12000";
+            TBLength.Text = "0.108";
             // 
             // label29
             // 
             label29.AutoSize = true;
             label29.Location = new Point(16, 170);
             label29.Name = "label29";
-            label29.Size = new Size(63, 15);
+            label29.Size = new Size(72, 15);
             label29.TabIndex = 12;
-            label29.Text = "Length(m)";
+            label29.Text = "Length(deg)";
             // 
             // TBWidth
             // 
@@ -1269,16 +1270,16 @@ namespace ConsoleGUI
             TBWidth.Name = "TBWidth";
             TBWidth.Size = new Size(56, 23);
             TBWidth.TabIndex = 11;
-            TBWidth.Text = "12000";
+            TBWidth.Text = "0.108";
             // 
             // label28
             // 
             label28.AutoSize = true;
             label28.Location = new Point(16, 141);
             label28.Name = "label28";
-            label28.Size = new Size(58, 15);
+            label28.Size = new Size(67, 15);
             label28.TabIndex = 10;
-            label28.Text = "Width(m)";
+            label28.Text = "Width(deg)";
             // 
             // TBDMapTexture
             // 

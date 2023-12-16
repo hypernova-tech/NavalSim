@@ -32,7 +32,7 @@ protected:
 	TArray<int32> Triangles;
 	TArray<FVector2D> UVs;
 	TArray<FVector> Normals;
-	ECoordSystem CoordSystem = ECoordSystem::CoordSystemUNDEF;
+	ECoordSystem CoordSystem = ECoordSystem::CoordSystemLLH_WGS84;
 
 	UTexture2D* LoadPNGTextureFromFile(const FString& ImagePath, ERGBFormat format, INT32S bit_depth, EPixelFormat px_format);
 
@@ -58,16 +58,15 @@ protected:
 		double DepthMapMaxLevelMeter = TERRAIN_INVALID_VAL;
 
 	UPROPERTY(EditAnywhere)
-		double TerrainWidthMeter = TERRAIN_INVALID_VAL;
+		double TerrainWidthDeg = TERRAIN_INVALID_VAL;
 
 	UPROPERTY(EditAnywhere)
-		double TerrainLengthMeter = TERRAIN_INVALID_VAL;
+		double TerrainLengthDeg = TERRAIN_INVALID_VAL;
 
 	UPROPERTY(EditAnywhere)
 		FVector TerrainLowerLeftCornerLLH;
 
-	UPROPERTY(EditAnywhere)
-		FVector TerrainLowerLeftCornerXYZ;
+
 
 
 
@@ -77,7 +76,7 @@ protected:
 	bool IsDoubleUpdated(double val);
 	UTexture2D* LoadPNGAsTexture2D(const FString& ImagePath);
 	//void UpdateLandscapeHeightFromTexture(ALandscape* Landscape, UTexture2D* HeightmapTexture, FLOAT64 min_height_meter, FLOAT64 max_height_meter);
-	void BuildTerrain(FString png_path, FString depth_map, FLOAT64 min_height, FLOAT64 max_height, FLOAT64 max_width, FLOAT64 max_len, FVector center, FVector2D normalized_png);
+	void BuildTerrain(FString png_path, FString depth_map, FLOAT64 min_height, FLOAT64 max_height, FLOAT64 max_width, FLOAT64 max_len, FVector lower_left_corner);
 	//bool SetHeightmapData(ALandscapeProxy* Landscape, const TArray<uint16>& Data);
 	//void SetAll(float h);
 	//virtual void OnStepScenarioMode(float DeltaTime) override;
@@ -102,8 +101,7 @@ public:
 	UPROPERTY(EditAnywhere)
 		UMaterialInterface* pMaterial;
 
-	void SetTerrainLowerLeftCornerXYZ(FVector val);
-	FVector GetTerrainLowerLeftCornerXYZ();
+
 
 	void SetTerrainLowerLeftCornerLLH(FVector val);
 	FVector GetTerrainLowerLeftCornerLLH();

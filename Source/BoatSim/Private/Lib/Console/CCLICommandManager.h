@@ -91,6 +91,9 @@ public:
 	static FString IPAddr2;
 	static FString LocalPort2;
 	static FString RemotePort2;
+	static FString CamSpeed;
+	static FString PlatformSpeed;
+	static FString PlatformTurnRate;
 
 	static FString VericalFov;
 	static FString HorizontalFov;
@@ -137,8 +140,8 @@ public:
 	static FString TerrHMapMaxLvlMt;
 	static FString TerrDMapMinLvlMt;
 	static FString TerrDMapMaxLvlMt;
-	static FString TerrWidthMt;
-	static FString TerrLengthMt;
+	static FString TerrWidthDeg;
+	static FString TerrLengthDeg;
 	static FString TerrLowerLeftCornerXYZ;
 	static FString TerrLowerLeftCornerLLH;
 

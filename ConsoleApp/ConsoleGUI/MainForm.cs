@@ -1800,15 +1800,9 @@ namespace ConsoleGUI
             }
             else
             {
-                if (CBCoordinateSystem.SelectedIndex == 0)
-                {
-                    coord_sys = ECoordSystem.XYZ;
-                }
-                else
-                {
-                    coord_sys = ECoordSystem.LLH;
-                }
+                coord_sys = ECoordSystem.LLH;
             }
+            coord_sys = ECoordSystem.LLH;
             SystemAPIImplementor.CreateTerrain(TBTerrainName.Text, TBHMapName.Text, TBDMapTexture.Text, TBImaryTexture.Text,
                 hmap_min, hmap_max, dmap_min, dmap_max, width, lenght, x, y, z, coord_sys);
 

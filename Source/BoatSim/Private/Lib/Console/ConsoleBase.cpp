@@ -730,6 +730,16 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
 
     }
 
+    ret = CommandManager.GetValue(CCLICommandManager::CamSpeed, dbl);
+    if (ret) {
+        if (pSystemAPI->SetCamSpeed(nullptr, dbl)) {
+            return true;
+        }
+    }
+    else {
+
+    }
+
     ret = CommandManager.GetValue(CCLICommandManager::Selected, sret);
     if (ret) {
         auto selected = pSystemAPI->FindActor(sret);
@@ -961,9 +971,9 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
 
         }
 
-        ret = CommandManager.GetValue(CCLICommandManager::TerrWidthMt, dbl);
+        ret = CommandManager.GetValue(CCLICommandManager::TerrWidthDeg, dbl);
         if (ret) {
-            if (pSystemAPI->SetTerrainWidthMeter(p_actor, dbl)) {
+            if (pSystemAPI->SetTerrainWidthDeg(p_actor, dbl)) {
                 one_success = true;
             }
         }
@@ -971,19 +981,9 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
 
         }
 
-        ret = CommandManager.GetValue(CCLICommandManager::TerrLengthMt, dbl);
+        ret = CommandManager.GetValue(CCLICommandManager::TerrLengthDeg, dbl);
         if (ret) {
-            if (pSystemAPI->SetTerrainLengthMeter(p_actor, dbl)) {
-                one_success = true;
-            }
-        }
-        else {
-
-        }
-
-        ret = CommandManager.GetValue(CCLICommandManager::TerrLowerLeftCornerXYZ, vec);
-        if (ret) {
-            if (pSystemAPI->SetTerrainLowerLeftCornerCoordXYZ(p_actor, vec)) {
+            if (pSystemAPI->SetTerrainLengthDeg(p_actor, dbl)) {
                 one_success = true;
             }
         }

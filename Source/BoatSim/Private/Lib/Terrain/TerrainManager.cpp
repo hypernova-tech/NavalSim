@@ -18,9 +18,7 @@ ATerrainManager::ATerrainManager()
     TerrainLowerLeftCornerLLH.Y = TERRAIN_INVALID_VAL;
     TerrainLowerLeftCornerLLH.Z = TERRAIN_INVALID_VAL;
 
-    TerrainLowerLeftCornerXYZ.X = TERRAIN_INVALID_VAL;
-    TerrainLowerLeftCornerXYZ.Y = TERRAIN_INVALID_VAL;
-    TerrainLowerLeftCornerXYZ.Z = TERRAIN_INVALID_VAL;
+
     
 }
 
@@ -43,7 +41,7 @@ void ATerrainManager::EndPlay(const EEndPlayReason::Type EndPlayReason)
         ProceduralMesh = nullptr; // İşaretçiyi sıfırla
     }
 }
-void ATerrainManager::BuildTerrain(FString png_path, FString depth_map,  FLOAT64 min_height, FLOAT64 max_height, FLOAT64 max_width, FLOAT64 max_len, FVector center, FVector2D normalized_png)
+void ATerrainManager::BuildTerrain(FString png_path, FString depth_map,  FLOAT64 min_height, FLOAT64 max_height, FLOAT64 max_width, FLOAT64 max_len, FVector lower_left_corner)
 {
     FString hight_map_path = CUtil::GetFilePathProject(png_path);
     UTexture2D* HeightmapTexture = LoadPNGAsTexture2D(hight_map_path);
@@ -65,7 +63,7 @@ void ATerrainManager::BuildTerrain(FString png_path, FString depth_map,  FLOAT64
 
     GenerateTerrain(data, texture_size_x, texture_size_y, max_width, max_len, depth_data);
 
-    FVector location = TOUE(center) - FVector(TOUE(max_len * normalized_png.X), TOUE(max_width * normalized_png.Y), 0);
+    FVector location = TOUE(lower_left_corner);
     ProceduralMesh->SetWorldLocation(location);
 
 
@@ -178,22 +176,29 @@ void ATerrainManager::GenerateTerrain(const TArray<FLOAT64>& HeightMap, int32 Ma
 
 void ATerrainManager::CalculateVertices(const TArray<FLOAT64>& HeightMap, int32 MapWidth, int32 MapHeight, FLOAT64 max_width, FLOAT64 max_len, const TArray<FLOAT64>& depth_map, TArray<FVector>& OutVertices)
 {
+    AMapOrigin* p_origin = ASystemManagerBase::GetInstance()->GetMapOrigin();
     for (int32 x = 0; x < MapHeight  ; ++x)
     {
         for (int32 y = 0; y < MapWidth; ++y)
         {
             double Height = (double)HeightMap[y + x * MapWidth];
-            Height = TOUE(Height); // Scale to desired height range, e.g., 0-100 units
+            Height = (Height); // Scale to desired height range, e.g., 0-100 units
             
             if (Height == 0) {
                 if (depth_map.Num() != 0) {
-                    Height = TOUE(depth_map[y + x * MapWidth]);
+                    Height = (depth_map[y + x * MapWidth]);
                 }
                 else {
-                    Height = TOUE(CUtil::GetRandomRange(DepthMapMinLevelMeter, DepthMapMaxLevelMeter));
+                    Height = (CUtil::GetRandomRange(DepthMapMinLevelMeter, DepthMapMaxLevelMeter));
                 }
             }
-            OutVertices.Add(FVector(x / (FLOAT64)(MapHeight-1) * TOUE(max_len), y / (FLOAT64)(MapWidth - 1) * TOUE(max_width), Height));
+
+            FLOAT64 lat_deg = TerrainLowerLeftCornerLLH.X + x / (FLOAT64)(MapHeight - 1) * TerrainLengthDeg ;
+            FLOAT64 lon_deg = TerrainLowerLeftCornerLLH.Y + y / (FLOAT64)(MapWidth - 1) * TerrainWidthDeg;
+            FVector coord_llh = FVector(lat_deg, lon_deg, Height);
+            FVector coord_ue;
+            coord_ue = p_origin->ConvertLLHToUEXYZ(coord_llh);
+            OutVertices.Add(coord_ue);
         }
     }
 }
@@ -224,7 +229,7 @@ void ATerrainManager::CalculateUVs(int32 MapWidth, int32 MapHeight, TArray<FVect
     {
         for (int32 y = 0; y < MapWidth; ++y)
         {
-            FVector2D UV((FLOAT64)x / (MapHeight - 1), (FLOAT64)y / (MapWidth - 1));
+            FVector2D UV((FLOAT64)y / (MapWidth - 1), 1-((FLOAT64)x / (MapHeight - 1)));
             OutUVs.Add(UV);
         }
     }
@@ -387,33 +392,29 @@ void ATerrainManager::Bake()
         return;
     }
 
-    if (!IsDoubleUpdated(TerrainWidthMeter)) {
+    if (!IsDoubleUpdated(TerrainWidthDeg)) {
         p_api->SendConsoleResponse("Enter TerrainWidthMeter");
         return;
     }
 
-    if (!IsDoubleUpdated(TerrainLengthMeter)) {
+    if (!IsDoubleUpdated(TerrainLengthDeg)) {
         p_api->SendConsoleResponse("Enter TerrainLengthMeter");
         return;
+    }
+
+    FVector coord = FVector::Zero();
+    if (CoordSystem == ECoordSystem::CoordSystemLLH_WGS84) {
+        coord = TerrainLowerLeftCornerLLH;
     }
 
 
 
 
-    BuildTerrain(HeightMapPath, DepthMapPath, HeightMapMinLevelMeter, HeightMapMaxLevelMeter, TerrainWidthMeter, TerrainLengthMeter, FVector(0, 0, 0), FVector2D(0.5, 0.5));
+    BuildTerrain(HeightMapPath, DepthMapPath, HeightMapMinLevelMeter, HeightMapMaxLevelMeter, TerrainWidthDeg, TerrainLengthDeg, coord);
     SetBaseMap(BaseTexturePath);
 
 }
-void ATerrainManager::SetTerrainLowerLeftCornerXYZ(FVector val)
-{
-    TerrainLowerLeftCornerXYZ = val;
-    CoordSystem = ECoordSystem::CoordSystemXYZ;
-}
 
-FVector ATerrainManager::GetTerrainLowerLeftCornerXYZ()
-{
-    return TerrainLowerLeftCornerXYZ;
-}
 void ATerrainManager::Save(ISaveLoader* p_save_loader)
 {
     Super::Save(p_save_loader);
@@ -450,19 +451,14 @@ void ATerrainManager::Save(ISaveLoader* p_save_loader)
     p_save_loader->AddLine(line);
 
     line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
-    p_save_loader->AppendOption(line, CCLICommandManager::TerrWidthMt, (TerrainWidthMeter));
+    p_save_loader->AppendOption(line, CCLICommandManager::TerrWidthDeg, (TerrainWidthDeg));
     p_save_loader->AddLine(line);
 
     line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
-    p_save_loader->AppendOption(line, CCLICommandManager::TerrLengthMt, (TerrainLengthMeter));
+    p_save_loader->AppendOption(line, CCLICommandManager::TerrLengthDeg, (TerrainLengthDeg));
     p_save_loader->AddLine(line);
 
-    if (CoordSystem == ECoordSystem::CoordSystemXYZ) {
-        line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
-        p_save_loader->AppendOption(line, CCLICommandManager::TerrLowerLeftCornerXYZ, TerrainLowerLeftCornerXYZ);
-        p_save_loader->AddLine(line);
-    }
-    else if (CoordSystem == ECoordSystem::CoordSystemLLH_WGS84) {
+    if (CoordSystem == ECoordSystem::CoordSystemLLH_WGS84) {
       
         line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
         p_save_loader->AppendOption(line, CCLICommandManager::TerrLowerLeftCornerLLH, TerrainLowerLeftCornerLLH);
@@ -490,12 +486,9 @@ void ATerrainManager::SaveJSON(CJsonDataContainer& data)
     data.Add(CCLICommandManager::TerrHMapMaxLvlMt, (HeightMapMaxLevelMeter));
     data.Add(CCLICommandManager::TerrDMapMinLvlMt, (DepthMapMinLevelMeter));
     data.Add(CCLICommandManager::TerrDMapMaxLvlMt, (DepthMapMaxLevelMeter));
-    data.Add(CCLICommandManager::TerrWidthMt, (TerrainWidthMeter));
-    data.Add(CCLICommandManager::TerrLengthMt, (TerrainLengthMeter));
-    if (CoordSystem == ECoordSystem::CoordSystemXYZ) {
-        data.Add(CCLICommandManager::TerrLowerLeftCornerXYZ, TerrainLowerLeftCornerXYZ);
-    }
-    else if (CoordSystem == ECoordSystem::CoordSystemLLH_WGS84) {
+    data.Add(CCLICommandManager::TerrWidthDeg, (TerrainWidthDeg));
+    data.Add(CCLICommandManager::TerrLengthDeg, (TerrainLengthDeg));
+   if (CoordSystem == ECoordSystem::CoordSystemLLH_WGS84) {
         data.Add(CCLICommandManager::TerrLowerLeftCornerLLH, TerrainLowerLeftCornerLLH);
     }
     
@@ -510,288 +503,3 @@ FVector ATerrainManager::GetTerrainLowerLeftCornerLLH()
 {
     return TerrainLowerLeftCornerLLH;
 }
-#if false
-// Function to update landscape height from a texture
-void ATerrainManager::UpdateLandscapeHeightFromTexture(ALandscape* Landscape, UTexture2D* HeightmapTexture, FLOAT64 min_height_meter, FLOAT64 max_height_meter)
-{
-
-    FIntPoint size = GetLandscapeHeightmapSize(Landscape);
-
-
-    uint16 px_min_val;
-    uint16 px_max_val;
-
-    FLOAT64 h_min_scale = 1;
-    FLOAT64 h_max_scale = 1;
-
-    if (min_height_meter >= 200) {
-        h_min_scale = 200 / min_height_meter;
-    }
-
-    if (min_height_meter < -200) {
-        h_min_scale = 200 / FMath::Abs(min_height_meter);
-    }
-
-    if (max_height_meter >= 200) {
-        h_max_scale = 200 / max_height_meter;
-    }
-
-    if (max_height_meter < -200) {
-        h_max_scale = 200 / FMath::Abs(max_height_meter);
-    }
-
-    FLOAT64 scale = FMath::Min(h_min_scale, h_max_scale);
-
-    min_height_meter *= scale;
-    max_height_meter *= scale;
-     
-    FLOAT64 computed_scale = scale;
-
-    
-    
-
-    if (scale == 0) {
-        scale = 100;
-    }
-    else {
-        scale = 1.0f / scale;
-        scale *= 100; //tocm
-    }
-    
-   
-
-
-
-    CUtil::FindMinMaxPixelValue16Bit(HeightmapTexture, px_min_val, px_max_val);
-
-    TArray<uint16> height_data;
-
-    FTexture2DMipMap& Mip = HeightmapTexture->PlatformData->Mips[0];
-    void* Data = Mip.BulkData.Lock(LOCK_READ_ONLY);
-    uint16* Pixels = static_cast<uint16*>(Data);
-
-    int32 texture_size_x = HeightmapTexture->GetSizeX();
-    int32 texture_size_y = HeightmapTexture->GetSizeY();
-
-    auto delta_pix = (px_max_val - px_min_val);
-
-    FLOAT64 m;
-
-    if (delta_pix == 0) {
-        m = 0;
-    }
-    else {
-        m = (max_height_meter - min_height_meter) / (px_max_val - px_min_val);
-    }
-
-    FLOAT64 n = min_height_meter - m * px_min_val;
-
-    FVector landscape_scale = Landscape->GetActorScale3D();
-    landscape_scale.Z = scale;
-
-    Landscape->SetActorScale3D(landscape_scale);
-
-    for (int x = 0; x < size.X; x++) {
-        for (int y = 0; y < size.Y; y++) {
-            
-            INT32S curr_text_x = x/ (FLOAT64) size.X * texture_size_x;
-            INT32S curr_text_y = y / (FLOAT64)size.Y * texture_size_y;
-
-            auto val = Pixels[curr_text_x + curr_text_y * texture_size_x];
-            // convert to h;
-
-            auto new_h =  m* (val)+n;
-
-            if(new_h < 0) {
-                new_h = new_h;
-            }
-
-            // converto unreal
-
-            INT16U raw_val = (new_h) * LANDSCAPE_INV_ZSCALE +  32768;
-
-           
-            height_data.Add(raw_val);
-        
-           
-        }
-    }
-    Mip.BulkData.Unlock();
-    
-  
-    FLandscapeEditDataInterface LandscapeEdit(pLandscape->GetLandscapeInfo());
-    // Set the height data for the entire landscape
-    LandscapeEdit.SetHeightData(
-        0, 0, size.X, size.Y,             // Coordinates of the entire landscape
-        height_data.GetData(), size.X,        // Height data and stride
-        true, nullptr,                      // Calculate normals, no normal data
-        nullptr, nullptr,                   // No alpha blend data, no height flags data
-        false,                              // Do not create new components
-        nullptr, nullptr,                   // No heightmap or XY offset map textures
-        true, true,                         // Update bounds and collision
-        false                               // Do not generate mipmaps
-    );
-    //LandscapeEdit.RecalculateNormals();
-    // Flush the edits to apply changes
-   // for (auto comp : Landscape->GetLandscapeProxies()) {
-   //     comp->RecreateCollisionComponents();
-   // }
-   
-  
-    
-
-}
-
-bool ATerrainManager::SetHeightmapData(ALandscapeProxy* Landscape, const TArray<uint16>& Data)
-{
- 
-
-
-  
-    return false;
-}
-
-FIntPoint ATerrainManager::GetLandscapeHeightmapSize(ALandscape* Landscape)
-{
-    if (!pLandscape)
-    {
-        return FIntPoint(0, 0);
-    }
-
-    ULandscapeInfo* LandscapeInfo = pLandscape->GetLandscapeInfo();
-    if (!LandscapeInfo)
-    {
-        return FIntPoint(0, 0);
-    }
-
-    ///auto size = GetLandscapeHeightmapSize(pLandscape);
-
-    // Initialize Landscape Edit Data
-    FLandscapeEditDataInterface LandscapeEdit(pLandscape->GetLandscapeInfo());
-
-    // Get the size of the entire landscape
-   // Initialize Landscape Edit Data
-
-
-    // Get the overall bounds of the landscape
-    int32 MinX = INT32_MAX, MinY = INT32_MAX;
-    int32 MaxX = INT32_MIN, MaxY = INT32_MIN;
-    for (auto It = LandscapeInfo->XYtoComponentMap.CreateIterator(); It; ++It)
-    {
-        ULandscapeComponent* Component = It.Value();
-        if (Component)
-        {
-            int32 ComponentMinX = MinX, ComponentMinY = MinY, ComponentMaxX = MaxX, ComponentMaxY = MaxY;
-            Component->GetComponentExtent(MinX, MinY, MaxX, MaxY);
-            MinX = FMath::Min(MinX, ComponentMinX);
-            MinY = FMath::Min(MinY, ComponentMinY);
-            MaxX = FMath::Max(MaxX, ComponentMaxX);
-            MaxY = FMath::Max(MaxY, ComponentMaxY);
-        }
-    }
-
-    // Check if we have valid landscape bounds
-    if (MinX > MaxX || MinY > MaxY)
-    {
-        return FIntPoint(0,0); // No valid landscape bounds found
-    }
-
-    // Create an array to hold the new height data for the entire landscape
-    TArray<uint16> HeightData;
-    int32 SizeX = MaxX - MinX + 1;
-    int32 SizeY = MaxY - MinY + 1;
-
-
-    return FIntPoint(SizeX, SizeY);
-}
-
-
-void ATerrainManager::SetAll(float NewHeight)
-{
-    if (!pLandscape)
-    {
-        return;
-    }
-
-    ULandscapeInfo* LandscapeInfo = pLandscape->GetLandscapeInfo();
-    if (!LandscapeInfo)
-    {
-        return;
-    }
-
-    ///auto size = GetLandscapeHeightmapSize(pLandscape);
-
-    // Initialize Landscape Edit Data
-    FLandscapeEditDataInterface LandscapeEdit(pLandscape->GetLandscapeInfo());
-
-    // Get the size of the entire landscape
-   // Initialize Landscape Edit Data
-
-
-    // Get the overall bounds of the landscape
-    int32 MinX = INT32_MAX, MinY = INT32_MAX;
-    int32 MaxX = INT32_MIN, MaxY = INT32_MIN;
-    for (auto It = LandscapeInfo->XYtoComponentMap.CreateIterator(); It; ++It)
-    {
-        ULandscapeComponent* Component = It.Value();
-        if (Component)
-        {
-            int32 ComponentMinX= MinX, ComponentMinY= MinY, ComponentMaxX= MaxX, ComponentMaxY= MaxY;
-            Component->GetComponentExtent(MinX, MinY, MaxX, MaxY);
-            MinX = FMath::Min(MinX, ComponentMinX);
-            MinY = FMath::Min(MinY, ComponentMinY);
-            MaxX = FMath::Max(MaxX, ComponentMaxX);
-            MaxY = FMath::Max(MaxY, ComponentMaxY);
-        }
-    }
-
-    // Check if we have valid landscape bounds
-    if (MinX > MaxX || MinY > MaxY)
-    {
-        return; // No valid landscape bounds found
-    }
-
-    // Create an array to hold the new height data for the entire landscape
-    TArray<uint16> HeightData;
-    int32 SizeX = MaxX - MinX + 1;
-    int32 SizeY = MaxY - MinY + 1;
-
-    for (int i = 0; i < SizeX * SizeY; i++) {
-        HeightData.Add(NewHeight);
-    }
-    //HeightData.Init(FMath::RoundToInt(NewHeight), SizeX * SizeY);
-
-    // Set the height data for the entire landscape
-    LandscapeEdit.SetHeightData(
-        MinX, MinY, MaxX, MaxY,             // Coordinates of the entire landscape
-        HeightData.GetData(), SizeX,        // Height data and stride
-        true, nullptr,                      // Calculate normals, no normal data
-        nullptr, nullptr,                   // No alpha blend data, no height flags data
-        false,                              // Do not create new components
-        nullptr, nullptr,                   // No heightmap or XY offset map textures
-        true, true,                         // Update bounds and collision
-        false                               // Do not generate mipmaps
-    );
-    LandscapeEdit.RecalculateNormals();
-    // Flush the edits to apply changes
-    LandscapeEdit.Flush();
-   
-}
-
-void ATerrainManager::RebuildLandscape(FString png_path, FLOAT64 min_height, FLOAT64 max_height)
-{
-    FString ImagePath = FPaths::Combine(FPaths::ProjectDir(), *png_path);
-    UTexture2D* HeightmapTexture = LoadPNGAsTexture2D(ImagePath);
-    UpdateLandscapeHeightFromTexture(pLandscape, HeightmapTexture, min_height, max_height);
-    
-}
-
-float H = 0;
-void ATerrainManager::OnStepScenarioMode(float DeltaTime)
-{
-
-    if (GFrameCounter % 50 == 0) {
-    }
-}
-
-#endif
