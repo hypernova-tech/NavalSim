@@ -134,4 +134,10 @@ public class CSystemAPIImplementor
 
         CreateAndSendCommand(CLICommandManager.SetCommand, CLICommandManager.Name, terrain_name, CLICommandManager.Bake);
     }
+
+    internal void SetCameraSpeed(double multiplier)
+    {
+        double speed = multiplier * 100;
+        CreateAndSendCommand(CLICommandManager.SetCommand, CLICommandManager.CamSpeed, speed.ToString());
+    }
 }

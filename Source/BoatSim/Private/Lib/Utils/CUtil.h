@@ -153,7 +153,7 @@ public:
 	static bool GetIsActorVisible(AActor* p_actor);
 	static bool IsPossedByPlayerController(UWorld *p_world, APawn *p_pawn);
 	static void CameraLookAt(UCameraComponent* p_looker, AActor* p_target, FLOAT32 distance);
-
+	static void CameraLookAt(UCameraComponent* p_looker, FVector pos);
 	static void GetActorHierarchy(const AActor* Object, TArray<FString>& Hierarchy);
 	static TArray<uint8> HexStringToByteArray(const FString& HexString);
 	static FString CharToHexString(INT8U* p_data, INT32U len);

@@ -61,6 +61,8 @@ public:
 	
 
 	virtual void PostInitializeComponents() override;
+	AActor* pFocusedActor = nullptr;
+	const double FocusDistanceMeter = 20;
 
 protected:
 	// Called when the game starts or when spawned
@@ -71,11 +73,15 @@ protected:
 	void BindedRotationX(float val);
 	void BindedRotationY(float val);
 	void OnRightMousePressed();
-
 	void OnRightMouseReleased();
+	void OnLeftMousePressed();
+	void OnLeftMouseReleased();
 	void AdjustCameraDistance(float val);
 	void OnFocusEnter();
-	
+	void TopView();
+	void LeftView();
+	void RightView();
+	void Perpective();
 
 public:	
 	// Called every frame
@@ -91,6 +97,8 @@ public:
 	bool IsDirty;
 	void UpdateKinematicData();
 	FCriticalSection Mutex;
+	void SetCamView(ECamView view);
+	ECamView GetCamView();
 private:
 	UCameraComponent* BoatCam;
 	bool IsForward;

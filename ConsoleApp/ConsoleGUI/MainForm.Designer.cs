@@ -162,6 +162,17 @@ namespace ConsoleGUI
             clearAllToolStripMenuItem = new ToolStripMenuItem();
             showChartsToolStripMenuItem = new ToolStripMenuItem();
             hideChartsToolStripMenuItem = new ToolStripMenuItem();
+            cameaToolStripMenuItem = new ToolStripMenuItem();
+            speedToolStripMenuItem = new ToolStripMenuItem();
+            xToolStripMenuItem = new ToolStripMenuItem();
+            xToolStripMenuItem1 = new ToolStripMenuItem();
+            xToolStripMenuItem2 = new ToolStripMenuItem();
+            xToolStripMenuItem3 = new ToolStripMenuItem();
+            xToolStripMenuItem4 = new ToolStripMenuItem();
+            xToolStripMenuItem5 = new ToolStripMenuItem();
+            xToolStripMenuItem6 = new ToolStripMenuItem();
+            xToolStripMenuItem7 = new ToolStripMenuItem();
+            xToolStripMenuItem8 = new ToolStripMenuItem();
             simulationToolStripMenuItem = new ToolStripMenuItem();
             startToolStripMenuItem = new ToolStripMenuItem();
             pauseToolStripMenuItem = new ToolStripMenuItem();
@@ -1334,7 +1345,7 @@ namespace ConsoleGUI
             // 
             // menuStrip1
             // 
-            menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, viewToolStripMenuItem, simulationToolStripMenuItem });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, viewToolStripMenuItem, cameaToolStripMenuItem, simulationToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Size = new Size(516, 24);
@@ -1415,6 +1426,84 @@ namespace ConsoleGUI
             hideChartsToolStripMenuItem.Size = new Size(140, 22);
             hideChartsToolStripMenuItem.Text = "Hide Charts";
             hideChartsToolStripMenuItem.Click += hideChartsToolStripMenuItem_Click;
+            // 
+            // cameaToolStripMenuItem
+            // 
+            cameaToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { speedToolStripMenuItem });
+            cameaToolStripMenuItem.Name = "cameaToolStripMenuItem";
+            cameaToolStripMenuItem.Size = new Size(60, 20);
+            cameaToolStripMenuItem.Text = "Camera";
+            // 
+            // speedToolStripMenuItem
+            // 
+            speedToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { xToolStripMenuItem, xToolStripMenuItem1, xToolStripMenuItem2, xToolStripMenuItem3, xToolStripMenuItem4, xToolStripMenuItem5, xToolStripMenuItem6, xToolStripMenuItem7, xToolStripMenuItem8 });
+            speedToolStripMenuItem.Name = "speedToolStripMenuItem";
+            speedToolStripMenuItem.Size = new Size(180, 22);
+            speedToolStripMenuItem.Text = "Speed";
+            speedToolStripMenuItem.Click += speedToolStripMenuItem_Click;
+            // 
+            // xToolStripMenuItem
+            // 
+            xToolStripMenuItem.Name = "xToolStripMenuItem";
+            xToolStripMenuItem.Size = new Size(180, 22);
+            xToolStripMenuItem.Text = "1x";
+            xToolStripMenuItem.Click += xToolStripMenuItem_Click;
+            // 
+            // xToolStripMenuItem1
+            // 
+            xToolStripMenuItem1.Name = "xToolStripMenuItem1";
+            xToolStripMenuItem1.Size = new Size(180, 22);
+            xToolStripMenuItem1.Text = "1.5x";
+            xToolStripMenuItem1.Click += xToolStripMenuItem1_Click;
+            // 
+            // xToolStripMenuItem2
+            // 
+            xToolStripMenuItem2.Name = "xToolStripMenuItem2";
+            xToolStripMenuItem2.Size = new Size(180, 22);
+            xToolStripMenuItem2.Text = "2x";
+            xToolStripMenuItem2.Click += xToolStripMenuItem2_Click;
+            // 
+            // xToolStripMenuItem3
+            // 
+            xToolStripMenuItem3.Name = "xToolStripMenuItem3";
+            xToolStripMenuItem3.Size = new Size(180, 22);
+            xToolStripMenuItem3.Text = "3x";
+            xToolStripMenuItem3.Click += xToolStripMenuItem3_Click;
+            // 
+            // xToolStripMenuItem4
+            // 
+            xToolStripMenuItem4.Name = "xToolStripMenuItem4";
+            xToolStripMenuItem4.Size = new Size(180, 22);
+            xToolStripMenuItem4.Text = "5x";
+            xToolStripMenuItem4.Click += xToolStripMenuItem4_Click;
+            // 
+            // xToolStripMenuItem5
+            // 
+            xToolStripMenuItem5.Name = "xToolStripMenuItem5";
+            xToolStripMenuItem5.Size = new Size(180, 22);
+            xToolStripMenuItem5.Text = "10x";
+            xToolStripMenuItem5.Click += xToolStripMenuItem5_Click;
+            // 
+            // xToolStripMenuItem6
+            // 
+            xToolStripMenuItem6.Name = "xToolStripMenuItem6";
+            xToolStripMenuItem6.Size = new Size(180, 22);
+            xToolStripMenuItem6.Text = "15x";
+            xToolStripMenuItem6.Click += xToolStripMenuItem6_Click;
+            // 
+            // xToolStripMenuItem7
+            // 
+            xToolStripMenuItem7.Name = "xToolStripMenuItem7";
+            xToolStripMenuItem7.Size = new Size(180, 22);
+            xToolStripMenuItem7.Text = "25x";
+            xToolStripMenuItem7.Click += xToolStripMenuItem7_Click;
+            // 
+            // xToolStripMenuItem8
+            // 
+            xToolStripMenuItem8.Name = "xToolStripMenuItem8";
+            xToolStripMenuItem8.Size = new Size(180, 22);
+            xToolStripMenuItem8.Text = "50x";
+            xToolStripMenuItem8.Click += xToolStripMenuItem8_Click;
             // 
             // simulationToolStripMenuItem
             // 
@@ -1679,5 +1768,16 @@ namespace ConsoleGUI
         private Label label34;
         private TextBox TBDMapMinLevel;
         private Label label35;
+        private ToolStripMenuItem cameaToolStripMenuItem;
+        private ToolStripMenuItem speedToolStripMenuItem;
+        private ToolStripMenuItem xToolStripMenuItem;
+        private ToolStripMenuItem xToolStripMenuItem1;
+        private ToolStripMenuItem xToolStripMenuItem2;
+        private ToolStripMenuItem xToolStripMenuItem3;
+        private ToolStripMenuItem xToolStripMenuItem4;
+        private ToolStripMenuItem xToolStripMenuItem5;
+        private ToolStripMenuItem xToolStripMenuItem6;
+        private ToolStripMenuItem xToolStripMenuItem7;
+        private ToolStripMenuItem xToolStripMenuItem8;
     }
 }

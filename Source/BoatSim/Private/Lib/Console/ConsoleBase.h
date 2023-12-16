@@ -59,6 +59,8 @@ protected:
 	void SendActorBases();
 	void SendBlueprints();
 
+	bool SetCamView(FString cmd);
+
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;

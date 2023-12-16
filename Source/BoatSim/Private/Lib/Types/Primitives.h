@@ -57,4 +57,9 @@ enum ECoordAxis
 	CoordAxisZ,
 	
 };
-
+enum ECamView {
+	CamViewTop,
+	CamViewLeft,
+	CamViewRight,
+	CamViewPerspective
+};

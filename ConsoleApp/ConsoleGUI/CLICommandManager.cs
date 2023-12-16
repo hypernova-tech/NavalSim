@@ -65,6 +65,9 @@ public static class CLICommandManager
     [Modifiable] public const string RadarMaxSectorBlankingZoneCount = "radmaxsectorblankingzonecount";
     [Modifiable] public const string CamWidthPx = "widthpx";
     [Modifiable] public const string CamHeightPx = "heightpx";
+    [Modifiable] public const string CamSpeed = "camspeed";
+    [Modifiable] public const string PlatformSpeed = "pltspeed";
+    [Modifiable] public const string PlatformTurnRate = "pltturnrate";
 
     [Modifiable] public const string TimeOfDay = "timeofday";
     [Modifiable] public const string EnvTimeFlowScale = "envtimeflowscale";

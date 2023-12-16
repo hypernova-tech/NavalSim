@@ -90,9 +90,9 @@ void ASystemManagerBase::RegisterActor(AActor* p_actor)
 	if (p_platform) {
 		
 		Platforms.Add(p_platform);
-		if (Platforms.Num() == 1) {
+		//if (Platforms.Num() == 1) {
 			SetMainPlayerController(p_actor->GetName());
-		}
+		//}
 	}
 	
 
@@ -2212,6 +2212,26 @@ bool ASystemManagerBase::GetPathLineColor(AActor* p_actor, FColor& val)
 	 auto plt = GetPlatform();
 	 if (plt != nullptr) {
 		 val = plt->CamMovementSpeed;
+		 return true;
+	 }
+	 return false;
+ }
+
+ bool ASystemManagerBase::SetCamView(ECamView view)
+ {
+	 auto plt = GetPlatform();
+	 if (plt != nullptr) {
+		 plt->SetCamView(view);
+		 return true;
+	 }
+	 return false;
+ }
+
+ bool ASystemManagerBase::GetCamView(ECamView& view)
+ {
+	 auto plt = GetPlatform();
+	 if (plt != nullptr) {
+		 view = plt->GetCamView();
 		 return true;
 	 }
 	 return false;

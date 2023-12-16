@@ -13,5 +13,10 @@ UCLASS()
 class APlatformBase : public ACBoatBase
 {
 	GENERATED_BODY()
-	
+protected:
+
+	UPROPERTY(EditAnywhere)
+	bool AutoPosseses = false;
+public:
+	virtual void BeginPlay() override;
 };

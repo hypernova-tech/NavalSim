@@ -598,6 +598,22 @@ void UConsoleBase::SendBlueprints()
 
 
 }
+bool UConsoleBase::SetCamView(FString cmd)
+{
+    if (cmd == "top") {
+        return pSystemAPI->SetCamView(ECamView::CamViewTop);
+    
+    }else if (cmd == "right") {
+        return pSystemAPI->SetCamView(ECamView::CamViewRight);
+     
+    }else if (cmd == "left") {
+        return pSystemAPI->SetCamView(ECamView::CamViewLeft);
+   
+    }
+
+    return false;
+    
+}
 bool UConsoleBase::ProcessSimCommand(TMap<FString, FString>& options, FString& error_message)
 {
     error_message = "";
@@ -733,6 +749,16 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
     ret = CommandManager.GetValue(CCLICommandManager::CamSpeed, dbl);
     if (ret) {
         if (pSystemAPI->SetCamSpeed(nullptr, dbl)) {
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::CamView, sret);
+    if (ret) {
+        if (SetCamView(sret)) {
             return true;
         }
     }

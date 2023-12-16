@@ -1809,5 +1809,55 @@ namespace ConsoleGUI
 
 
         }
+
+        private void speedToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void xToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SystemAPIImplementor.SetCameraSpeed(1);
+        }
+
+        private void xToolStripMenuItem5_Click(object sender, EventArgs e)
+        {
+            SystemAPIImplementor.SetCameraSpeed(10);
+        }
+
+        private void xToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            SystemAPIImplementor.SetCameraSpeed(1.5);
+        }
+
+        private void xToolStripMenuItem2_Click(object sender, EventArgs e)
+        {
+            SystemAPIImplementor.SetCameraSpeed(2);
+        }
+
+        private void xToolStripMenuItem3_Click(object sender, EventArgs e)
+        {
+            SystemAPIImplementor.SetCameraSpeed(3);
+        }
+
+        private void xToolStripMenuItem4_Click(object sender, EventArgs e)
+        {
+            SystemAPIImplementor.SetCameraSpeed(5);
+        }
+
+        private void xToolStripMenuItem6_Click(object sender, EventArgs e)
+        {
+            SystemAPIImplementor.SetCameraSpeed(15);
+        }
+
+        private void xToolStripMenuItem7_Click(object sender, EventArgs e)
+        {
+            SystemAPIImplementor.SetCameraSpeed(25);
+        }
+
+        private void xToolStripMenuItem8_Click(object sender, EventArgs e)
+        {
+            SystemAPIImplementor.SetCameraSpeed(50);
+        }
     }
 }

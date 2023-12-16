@@ -19,6 +19,8 @@ enum EActorQueryArgs
 	ActorBases,
 	Platforms,
 };
+
+
 class UConsoleBase;
 class ISystemAPI
 {
@@ -292,7 +294,8 @@ public:
 	virtual bool SetCamSpeed(AActor* p_actor, FLOAT64 val) = 0;
 	virtual bool GetCamSpeed(AActor* p_actor, FLOAT64& val) = 0;
 
-	
+	virtual bool SetCamView(ECamView view) = 0;
+	virtual bool GetCamView(ECamView &view) = 0;
 
 
 };

@@ -249,6 +249,12 @@ void ACBoatBase::OnRightMouseReleased()
 {
 	bIsRightMousePressed = false;
 }
+void ACBoatBase::OnLeftMousePressed()
+{
+}
+void ACBoatBase::OnLeftMouseReleased()
+{
+}
 void ACBoatBase::AdjustCameraDistance(float val)
 {
 	FVector cam_forward = BoatCam->GetForwardVector();
@@ -265,9 +271,45 @@ void ACBoatBase::OnFocusEnter()
 		FocusCamera(p_selected);
 	}
 }
+void ACBoatBase::TopView()
+{
+	if (pFocusedActor) {
+		BoatCam->SetWorldLocation(pFocusedActor->GetActorLocation() + FVector::UpVector * TOUE(3*FocusDistanceMeter));
+		CUtil::CameraLookAt(BoatCam, BoatCam->GetComponentLocation() - FVector::UpVector * TOUE(FocusDistanceMeter));
+	}
+	else {
+		CUtil::CameraLookAt(BoatCam, BoatCam->GetComponentLocation() + FVector::UpVector * TOUE(FocusDistanceMeter));
+	}
+	
+
+}
+void ACBoatBase::LeftView()
+{
+	if (pFocusedActor) {
+		BoatCam->SetWorldLocation(FVector::UpVector * TOUE(5) + pFocusedActor->GetActorLocation() + FVector::LeftVector * TOUE(3 * FocusDistanceMeter));
+		CUtil::CameraLookAt(BoatCam, BoatCam->GetComponentLocation() - FVector::LeftVector * TOUE(FocusDistanceMeter));
+	}
+	else {
+		CUtil::CameraLookAt(BoatCam, BoatCam->GetComponentLocation() + FVector::LeftVector * TOUE(FocusDistanceMeter));
+	}
+}
+void ACBoatBase::RightView()
+{
+	if (pFocusedActor) {
+		BoatCam->SetWorldLocation(FVector::UpVector * TOUE(5) + pFocusedActor->GetActorLocation() + FVector::RightVector * TOUE(3 * FocusDistanceMeter));
+		CUtil::CameraLookAt(BoatCam, BoatCam->GetComponentLocation() - FVector::RightVector * TOUE(FocusDistanceMeter));
+	}
+	else {
+		CUtil::CameraLookAt(BoatCam, BoatCam->GetComponentLocation() + FVector::RightVector * TOUE(FocusDistanceMeter));
+	}
+}
+void ACBoatBase::Perpective()
+{
+}
 bool ACBoatBase::FocusCamera(AActor* p_actor)
 {
-	CUtil::CameraLookAt(BoatCam, p_actor,  TOUE(20));
+	CUtil::CameraLookAt(BoatCam, p_actor,  TOUE(FocusDistanceMeter));
+	pFocusedActor = p_actor;
 	return true;
 }
 // Called to bind functionality to input
@@ -344,6 +386,30 @@ void ACBoatBase::UpdateKinematicData()
 		//Mutex.Unlock();
 	}
 	
+}
+
+void ACBoatBase::SetCamView(ECamView view)
+{
+	switch (view) {
+	case ECamView::CamViewTop:
+		TopView();
+		break;
+
+
+	case ECamView::CamViewLeft:
+		LeftView();
+		break;
+
+	case ECamView::CamViewRight:
+		RightView();
+		break;
+	}
+
+}
+
+ECamView ACBoatBase::GetCamView()
+{
+	return ECamView();
 }
 
 void ACBoatBase::OnControllerChanged()

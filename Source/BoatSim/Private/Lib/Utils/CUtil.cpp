@@ -580,6 +580,32 @@ void  CUtil::CameraLookAt(UCameraComponent* p_looker, AActor* p_target, FLOAT32 
 
  }
 
+void CUtil::CameraLookAt(UCameraComponent* p_looker, FVector pos)
+{
+    if (!p_looker )
+    {
+        return;
+    }
+
+    // Get the direction from the target actor to the camera
+    FVector Direction = (p_looker->GetComponentLocation() - pos).GetSafeNormal();
+
+    // Calculate the new camera position: target position + direction * desired distance
+    FVector NewCameraLocation = pos + Direction * 100;
+
+    // Set the camera's new position
+    p_looker->SetWorldLocation(NewCameraLocation);
+
+    // Get the direction from the camera to the target actor (opposite of previous direction)
+    FVector LookAtDirection = (pos - NewCameraLocation).GetSafeNormal();
+
+    // Compute the rotation so the camera faces the target
+    FRotator NewRotation = LookAtDirection.Rotation();
+
+    // Set the camera's rotation
+    p_looker->SetWorldRotation(NewRotation);
+}
+
 FRotator CUtil::GetActorRelativeRotation(AActor* p_actor)
 {
    

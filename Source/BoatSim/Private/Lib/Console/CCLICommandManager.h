@@ -94,6 +94,7 @@ public:
 	static FString CamSpeed;
 	static FString PlatformSpeed;
 	static FString PlatformTurnRate;
+	static FString CamView;
 
 	static FString VericalFov;
 	static FString HorizontalFov;
