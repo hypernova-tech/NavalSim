@@ -58,15 +58,10 @@ protected:
 		double DepthMapMaxLevelMeter = TERRAIN_INVALID_VAL;
 
 	UPROPERTY(EditAnywhere)
-		double TerrainWidthDeg = TERRAIN_INVALID_VAL;
+		FVector TerrainTopLeftCornerLLH;
 
 	UPROPERTY(EditAnywhere)
-		double TerrainLengthDeg = TERRAIN_INVALID_VAL;
-
-	UPROPERTY(EditAnywhere)
-		FVector TerrainLowerLeftCornerLLH;
-
-
+		FVector TerrainBottomRightCornerLLH;
 
 
 
@@ -74,16 +69,18 @@ protected:
 	UProceduralMeshComponent* ProceduralMesh;
 	UMaterialInstanceDynamic* pDynamicMaterial;
 	bool IsDoubleUpdated(double val);
+	bool IsVectorUpdated(FVector vec);
+	
 	UTexture2D* LoadPNGAsTexture2D(const FString& ImagePath);
 	//void UpdateLandscapeHeightFromTexture(ALandscape* Landscape, UTexture2D* HeightmapTexture, FLOAT64 min_height_meter, FLOAT64 max_height_meter);
-	void BuildTerrain(FString png_path, FString depth_map, FLOAT64 min_height, FLOAT64 max_height, FLOAT64 max_width, FLOAT64 max_len, FVector lower_left_corner);
+	void BuildTerrain(FString png_path, FString depth_map, FLOAT64 min_height, FLOAT64 max_height, FVector top_left, FVector bottom_right);
 	//bool SetHeightmapData(ALandscapeProxy* Landscape, const TArray<uint16>& Data);
 	//void SetAll(float h);
 	//virtual void OnStepScenarioMode(float DeltaTime) override;
 	//FIntPoint GetLandscapeHeightmapSize(ALandscape* Landscape);
 	//FLOAT64 GetTextureValue(UTexture2D *p_text , FLOAT64 tf_x, FLOAT64 tf_y);
-	void GenerateTerrain(const TArray<FLOAT64>& HeightMap, int32 MapWidth, int32 MapHeight, FLOAT64 max_width, FLOAT64 max_len, const TArray<FLOAT64>& depth_map);
-	void CalculateVertices(const TArray<FLOAT64>& HeightMap, int32 MapWidth, int32 MapHeight, FLOAT64 max_width, FLOAT64 max_len, const TArray<FLOAT64>& depth_map, TArray<FVector>& OutVertices);
+	void GenerateTerrain(const TArray<FLOAT64>& HeightMap, int32 MapWidth, int32 MapHeight, FVector top_left, FVector bottom_right, const TArray<FLOAT64>& depth_map);
+	void CalculateVertices(const TArray<FLOAT64>& HeightMap, int32 MapWidth, int32 MapHeight, FVector top_left, FVector bottom_right, const TArray<FLOAT64>& depth_map, TArray<FVector>& OutVertices);
 	void CalculateTriangles(int32 MapWidth, int32 MapHeight, TArray<int32>& OutTriangles);
 	void CalculateUVs(int32 MapWidth, int32 MapHeight, TArray<FVector2D>& OutUVs);
 	void CalculateNormals(const TArray<FVector>& Vertices, int32 Width, int32 Height, TArray<FVector>& Normals);
@@ -95,6 +92,7 @@ protected:
 	// Example function that sets up texture and material for the mesh
 	void SetupMeshMaterial(const FString& texture_path, const FString& mat_path);
 	void SetBaseMap(const FString& text_path);
+	FVector GetTerrianCoordUE();
 public: 
 
 
@@ -103,8 +101,11 @@ public:
 
 
 
-	void SetTerrainLowerLeftCornerLLH(FVector val);
-	FVector GetTerrainLowerLeftCornerLLH();
+	void SetTerrainTopLeftCornerLLH(FVector val);
+	FVector GetTerrainTopLeftCornerLLH();
+
+	void SetTerrainRightBottomCornerLLH(FVector val);
+	FVector GetTerrainRightBottomCornerLLH();
 
 	virtual void Bake() override;
 	virtual void Save(ISaveLoader* p_save_loader) override;

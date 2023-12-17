@@ -1713,6 +1713,8 @@ namespace ConsoleGUI
 
         private void BTCreate_Click(object sender, EventArgs e)
         {
+
+#if true
             if (TBTerrainName.Text == "")
             {
                 MessageBox.Show("Enter TerrainName");
@@ -1741,7 +1743,8 @@ namespace ConsoleGUI
             double hmap_min, hmap_max;
             double dmap_min, dmap_max;
             double width, lenght;
-            double x, y, z;
+            FVector top_left_llh = new FVector();
+            FVector bottom_right_llh = new FVector();
             ECoordSystem coord_sys;
 
             if (!double.TryParse(TBHMapMinLevel.Text, out hmap_min))
@@ -1768,45 +1771,43 @@ namespace ConsoleGUI
                 return;
             }
 
-            if (!double.TryParse(TBWidth.Text, out width))
+            if (!double.TryParse(TBTTopLeftLat.Text, out top_left_llh.X))
             {
-                MessageBox.Show("Enter valid Width");
+                MessageBox.Show("Enter valid top left lat");
                 return;
             }
-            if (!double.TryParse(TBLength.Text, out lenght))
+            if (!double.TryParse(TBTTopLeftLon.Text, out top_left_llh.Y))
             {
-                MessageBox.Show("Enter valid Length");
+                MessageBox.Show("Enter valid top left lon");
                 return;
             }
-            if (!double.TryParse(TBCoordX.Text, out x))
+            if (!double.TryParse(TBTTopLeftH.Text, out top_left_llh.Z))
             {
-                MessageBox.Show("Enter valid X");
+                MessageBox.Show("Enter valid top left H");
                 return;
             }
-            if (!double.TryParse(TBCoordY.Text, out y))
+
+            if (!double.TryParse(TBTBottomRightLat.Text, out bottom_right_llh.X))
             {
-                MessageBox.Show("Enter valid Y");
+                MessageBox.Show("Enter valid bottom right lat");
                 return;
             }
-            if (!double.TryParse(TBCoordZ.Text, out z))
+            if (!double.TryParse(TBTBottomRightLon.Text, out bottom_right_llh.Y))
             {
-                MessageBox.Show("Enter valid Z");
+                MessageBox.Show("Enter valid bottom right lon");
                 return;
             }
-            if (CBCoordinateSystem.SelectedIndex < 0)
+            if (!double.TryParse(TBTBottomRightH.Text, out bottom_right_llh.Z))
             {
-                MessageBox.Show("Select Coordinate System");
+                MessageBox.Show("Enter valid bottom right H");
                 return;
             }
-            else
-            {
-                coord_sys = ECoordSystem.LLH;
-            }
-            coord_sys = ECoordSystem.LLH;
+
             SystemAPIImplementor.CreateTerrain(TBTerrainName.Text, TBHMapName.Text, TBDMapTexture.Text, TBImaryTexture.Text,
-                hmap_min, hmap_max, dmap_min, dmap_max, width, lenght, x, y, z, coord_sys);
+                hmap_min, hmap_max, dmap_min, dmap_max, ECoordSystem.LLH, top_left_llh, bottom_right_llh
+                );
 
-
+#endif
 
         }
 
@@ -1858,6 +1859,41 @@ namespace ConsoleGUI
         private void xToolStripMenuItem8_Click(object sender, EventArgs e)
         {
             SystemAPIImplementor.SetCameraSpeed(50);
+        }
+
+        private void topToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SystemAPIImplementor.SetCameraView(ECameraView.Top, Selected);
+        }
+
+        private void rightToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SystemAPIImplementor.SetCameraView(ECameraView.Right, Selected);
+        }
+
+        private void leftToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SystemAPIImplementor.SetCameraView(ECameraView.Left, Selected);
+        }
+
+        private void focusToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            SystemAPIImplementor.SetCameraView(ECameraView.Focus, Selected);
+        }
+
+        private void TBTTopLeftLat_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void TBTTopLeftLon_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void TBTTopLeftH_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

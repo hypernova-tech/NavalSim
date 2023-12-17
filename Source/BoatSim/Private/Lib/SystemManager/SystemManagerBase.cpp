@@ -2111,11 +2111,15 @@ bool ASystemManagerBase::GetPathLineColor(AActor* p_actor, FColor& val)
 	 return false;
  }
 
- bool ASystemManagerBase::SetTerrainWidthDeg(AActor* p_actor, FLOAT64 val)
+ 
+
+
+
+ bool ASystemManagerBase::SetTerrainTopLeftCornerCoordLLH(AActor* p_actor, FVector vec)
  {
 	 auto p_terr = ToTerrain(p_actor);
 	 if (p_terr) {
-		 p_terr->TerrainWidthDeg = val;
+		 p_terr->SetTerrainTopLeftCornerLLH(vec);
 		 return true;
 	 }
 	 else {
@@ -2125,39 +2129,11 @@ bool ASystemManagerBase::GetPathLineColor(AActor* p_actor, FColor& val)
 	 return false;
  }
 
- bool ASystemManagerBase::GetTerrainWidthDeg(AActor* p_actor, FLOAT64& val)
+ bool ASystemManagerBase::GetTerrainTopLeftCornerCoordLLH(AActor* p_actor, FVector& vec)
  {
 	 auto p_terr = ToTerrain(p_actor);
 	 if (p_terr) {
-		 val = p_terr->TerrainWidthDeg;
-		 return true;
-	 }
-	 else {
-
-	 }
-
-	 return false;
- }
-
- bool ASystemManagerBase::SetTerrainLengthDeg(AActor* p_actor, FLOAT64 val)
- {
-	 auto p_terr = ToTerrain(p_actor);
-	 if (p_terr) {
-		 p_terr->TerrainLengthDeg = val;
-		 return true;
-	 }
-	 else {
-
-	 }
-
-	 return false;
- }
-
- bool ASystemManagerBase::GetTerrainLengthDeg(AActor* p_actor, FLOAT64& val)
- {
-	 auto p_terr = ToTerrain(p_actor);
-	 if (p_terr) {
-		 val = p_terr->TerrainLengthDeg;
+		 vec = p_terr->GetTerrainTopLeftCornerLLH();
 		 return true;
 	 }
 	 else {
@@ -2168,12 +2144,11 @@ bool ASystemManagerBase::GetPathLineColor(AActor* p_actor, FColor& val)
  }
 
 
-
- bool ASystemManagerBase::SetTerrainLowerLeftCornerCoordLLH(AActor* p_actor, FVector vec)
+ bool ASystemManagerBase::SetTerrainBottomRightCornerCoordLLH(AActor* p_actor, FVector vec)
  {
 	 auto p_terr = ToTerrain(p_actor);
 	 if (p_terr) {
-		 p_terr->SetTerrainLowerLeftCornerLLH(vec);
+		 p_terr->SetTerrainRightBottomCornerLLH(vec);
 		 return true;
 	 }
 	 else {
@@ -2183,11 +2158,11 @@ bool ASystemManagerBase::GetPathLineColor(AActor* p_actor, FColor& val)
 	 return false;
  }
 
- bool ASystemManagerBase::GetTerrainLowerLeftCornerCoordLLH(AActor* p_actor, FVector& vec)
+ bool ASystemManagerBase::GetTerrainBottomRightCornerCoordLLH(AActor* p_actor, FVector& vec)
  {
 	 auto p_terr = ToTerrain(p_actor);
 	 if (p_terr) {
-		 vec = p_terr->GetTerrainLowerLeftCornerLLH();
+		 vec = p_terr->GetTerrainRightBottomCornerLLH();
 		 return true;
 	 }
 	 else {

@@ -9,4 +9,9 @@
     {
         return "\""+x.ToString() +" "+ y.ToString() + " "+z.ToString() + "\"" ;
     }
+
+    internal static string MakeVectorString(FVector vec)
+    {
+        return "\"" + vec.X.ToString() + " " + vec.Y.ToString() + " " + vec.Z.ToString() + "\"";
+    }
 }

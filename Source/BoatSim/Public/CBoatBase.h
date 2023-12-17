@@ -36,12 +36,6 @@ public:
 		void OnRightKey(bool pressed, bool released);
 
 	UFUNCTION(BlueprintCallable)
-	void OnUpKeyPressed(bool pressed, bool released);
-
-	UFUNCTION(BlueprintCallable)
-	void OnDownKeyPressed(bool pressed, bool released);
-
-	UFUNCTION(BlueprintCallable)
 		void StopPawn();
 
 	UPROPERTY(EditAnywhere)
@@ -70,12 +64,18 @@ protected:
 
 	void BindedMoveForward(float val);
 	void BindedMoveRight(float val);
-	void BindedRotationX(float val);
-	void BindedRotationY(float val);
+	void BindedMouseX(float val);
+	void BindedMouseY(float val);
 	void OnRightMousePressed();
 	void OnRightMouseReleased();
 	void OnLeftMousePressed();
 	void OnLeftMouseReleased();
+	void OnUpKeyPressed();
+	void OnUpKeyReleased();
+
+	void OnDownKeyPressed();
+	void OnDownKeyReleased();
+
 	void AdjustCameraDistance(float val);
 	void OnFocusEnter();
 	void TopView();
@@ -105,9 +105,10 @@ private:
 	bool IsBackward;
 	bool IsLeft;
 	bool IsRight;
-	bool IsUp;
-	bool IsDown;
 	bool bIsRightMousePressed;
+	bool bIsLeftMousePressed;
+	bool bUpKeyPressed;
+	bool bDownKeyPressed;
 	float TimeSec;
 	void Oscillate();
 	float AnglueSpeedDegPerSec = 5;;

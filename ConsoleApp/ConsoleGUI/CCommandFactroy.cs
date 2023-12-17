@@ -11,7 +11,8 @@
         string option8 = "", string value8 = "",
         string option9 = "", string value9 = "",
         string option10 = "", string value10 = "",
-        string option11 = "", string value11 = "")
+        string option11 = "", string value11 = "",
+        string option12 = "", string value12 = "")
     {
         string ret = cmd;
         if(option1 != "")
@@ -113,7 +114,14 @@
         {
             ret += " " + value11;
         }
-
+        if (option12 != "")
+        {
+            ret += " --" + option12;
+        }
+        if (value12 != "")
+        {
+            ret += " " + value12;
+        }
         return ret;
     }
 }

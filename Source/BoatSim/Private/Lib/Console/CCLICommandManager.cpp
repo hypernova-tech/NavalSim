@@ -93,10 +93,8 @@ FString CCLICommandManager::TerrHMapMinLvlMt = "terrhmapminlvl";
 FString CCLICommandManager::TerrHMapMaxLvlMt = "terrhmapmaxlvl";
 FString CCLICommandManager::TerrDMapMinLvlMt = "terrdmapminlvl";
 FString CCLICommandManager::TerrDMapMaxLvlMt = "terrdmapmaxlvl";
-FString CCLICommandManager::TerrWidthDeg = "terrwidth";
-FString CCLICommandManager::TerrLengthDeg = "terrlen";
-FString CCLICommandManager::TerrLowerLeftCornerXYZ = "terrlowerleftcornerxyz";
-FString CCLICommandManager::TerrLowerLeftCornerLLH = "terrlowerleftcornerllh";
+FString CCLICommandManager::TerrTopLeftLLH = "terrtopleftllh";
+FString CCLICommandManager::TerrBottomRightLLH = "terrbottomrightllh";
 
 FString CCLICommandManager::Wp = "wp";
 FString CCLICommandManager::WpPos = "wppos";

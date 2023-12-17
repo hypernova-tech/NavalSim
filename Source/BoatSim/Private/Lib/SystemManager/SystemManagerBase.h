@@ -396,17 +396,16 @@ public:
 	virtual bool SetTerrainDepthMapMaxLevelMeter(AActor* p_actor, FLOAT64 val);
 	virtual bool GetTerrainDepthMapMaxLevelMeter(AActor* p_actor, FLOAT64& val);
 
-	virtual bool SetTerrainWidthDeg(AActor* p_actor, FLOAT64 val);
-	virtual bool GetTerrainWidthDeg(AActor* p_actor, FLOAT64& val);
-
-	virtual bool SetTerrainLengthDeg(AActor* p_actor, FLOAT64 val);
-	virtual bool GetTerrainLengthDeg(AActor* p_actor, FLOAT64& val);
 
 
 
 
-	virtual bool SetTerrainLowerLeftCornerCoordLLH(AActor* p_actor, FVector vec);
-	virtual bool GetTerrainLowerLeftCornerCoordLLH(AActor* p_actor, FVector& vec);
+
+	virtual bool SetTerrainTopLeftCornerCoordLLH(AActor* p_actor, FVector vec);
+	virtual bool GetTerrainTopLeftCornerCoordLLH(AActor* p_actor, FVector& vec);
+
+	virtual bool SetTerrainBottomRightCornerCoordLLH(AActor* p_actor, FVector vec);
+	virtual bool GetTerrainBottomRightCornerCoordLLH(AActor* p_actor, FVector& vec);
 
 
 	virtual bool SetCamSpeed(AActor* p_actor, FLOAT64 val) ;

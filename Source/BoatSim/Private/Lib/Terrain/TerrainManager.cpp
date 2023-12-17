@@ -14,11 +14,13 @@ ATerrainManager::ATerrainManager()
 {
     ProceduralMesh = CreateDefaultSubobject<UProceduralMeshComponent>(TEXT("GeneratedMesh"));
     RootComponent = ProceduralMesh;
-    TerrainLowerLeftCornerLLH.X = TERRAIN_INVALID_VAL;
-    TerrainLowerLeftCornerLLH.Y = TERRAIN_INVALID_VAL;
-    TerrainLowerLeftCornerLLH.Z = TERRAIN_INVALID_VAL;
+    TerrainTopLeftCornerLLH.X = TERRAIN_INVALID_VAL;
+    TerrainTopLeftCornerLLH.Y = TERRAIN_INVALID_VAL;
+    TerrainTopLeftCornerLLH.Z = TERRAIN_INVALID_VAL;
 
-
+    TerrainBottomRightCornerLLH.X = TERRAIN_INVALID_VAL;
+    TerrainBottomRightCornerLLH.Y = TERRAIN_INVALID_VAL;
+    TerrainBottomRightCornerLLH.Z = TERRAIN_INVALID_VAL;
     
 }
 
@@ -41,7 +43,7 @@ void ATerrainManager::EndPlay(const EEndPlayReason::Type EndPlayReason)
         ProceduralMesh = nullptr; // İşaretçiyi sıfırla
     }
 }
-void ATerrainManager::BuildTerrain(FString png_path, FString depth_map,  FLOAT64 min_height, FLOAT64 max_height, FLOAT64 max_width, FLOAT64 max_len, FVector lower_left_corner)
+void ATerrainManager::BuildTerrain(FString png_path, FString depth_map,  FLOAT64 min_height, FLOAT64 max_height, FVector top_left, FVector bottom_right)
 {
     FString hight_map_path = CUtil::GetFilePathProject(png_path);
     UTexture2D* HeightmapTexture = LoadPNGAsTexture2D(hight_map_path);
@@ -61,10 +63,10 @@ void ATerrainManager::BuildTerrain(FString png_path, FString depth_map,  FLOAT64
     int32 texture_size_y = HeightmapTexture->GetSizeY();
 
 
-    GenerateTerrain(data, texture_size_x, texture_size_y, max_width, max_len, depth_data);
+    GenerateTerrain(data, texture_size_x, texture_size_y, top_left, bottom_right, depth_data);
 
-    FVector location = TOUE(lower_left_corner);
-    ProceduralMesh->SetWorldLocation(location);
+    FVector location = GetTerrianCoordUE();
+    //ProceduralMesh->SetWorldLocation(location);
 
 
 }
@@ -73,7 +75,10 @@ bool ATerrainManager::IsDoubleUpdated(double val)
 {
     return val != TERRAIN_INVALID_VAL;
 }
-
+bool ATerrainManager::IsVectorUpdated(FVector vec)
+{
+    return IsDoubleUpdated(vec.X) && IsDoubleUpdated(vec.Y) && IsDoubleUpdated(vec.Z);
+}
 UTexture2D* ATerrainManager::LoadPNGAsTexture2D(const FString& ImagePath)
 {
     if (ImagePath == "") {
@@ -161,11 +166,11 @@ UTexture2D* ATerrainManager::LoadPNGTextureFromFile(const FString& ImagePath, ER
     return nullptr;
 }
 
-void ATerrainManager::GenerateTerrain(const TArray<FLOAT64>& HeightMap, int32 MapWidth, int32 MapHeight, FLOAT64 max_width, FLOAT64 max_len, const TArray<FLOAT64>& depth_map)
+void ATerrainManager::GenerateTerrain(const TArray<FLOAT64>& HeightMap, int32 MapWidth, int32 MapHeight, FVector top_left, FVector bottom_right, const TArray<FLOAT64>& depth_map)
 {
 
 
-    CalculateVertices(HeightMap, MapWidth, MapHeight, max_width, max_len, depth_map, Vertices);
+    CalculateVertices(HeightMap, MapWidth, MapHeight, TerrainTopLeftCornerLLH, TerrainBottomRightCornerLLH, depth_map, Vertices);
     CalculateTriangles(MapWidth, MapHeight, Triangles);
     CalculateUVs(MapWidth, MapHeight, UVs);
     CalculateNormals(Vertices, MapWidth, MapHeight, Normals);
@@ -174,27 +179,35 @@ void ATerrainManager::GenerateTerrain(const TArray<FLOAT64>& HeightMap, int32 Ma
     ProceduralMesh->SetMaterial(0, pMaterial);
 }
 
-void ATerrainManager::CalculateVertices(const TArray<FLOAT64>& HeightMap, int32 MapWidth, int32 MapHeight, FLOAT64 max_width, FLOAT64 max_len, const TArray<FLOAT64>& depth_map, TArray<FVector>& OutVertices)
+void ATerrainManager::CalculateVertices(const TArray<FLOAT64>& HeightMap, int32 MapWidth, int32 MapHeight, FVector top_left, FVector bottom_right, const TArray<FLOAT64>& depth_map, TArray<FVector>& OutVertices)
 {
     AMapOrigin* p_origin = ASystemManagerBase::GetInstance()->GetMapOrigin();
+
+    FVector bottom_left = FVector(bottom_right.X, top_left.Y, 0);
+    FVector top_right =   FVector(top_left.X, bottom_right.Y, 0);
+
+
     for (int32 x = 0; x < MapHeight  ; ++x)
     {
         for (int32 y = 0; y < MapWidth; ++y)
         {
-            double Height = (double)HeightMap[y + x * MapWidth];
+            double Height = (double)HeightMap[y + (MapHeight-1 - x) * MapWidth];
             Height = (Height); // Scale to desired height range, e.g., 0-100 units
             
             if (Height == 0) {
                 if (depth_map.Num() != 0) {
-                    Height = (depth_map[y + x * MapWidth]);
+                    Height = (depth_map[y + (MapHeight - 1 - x) * MapWidth]);
                 }
                 else {
                     Height = (CUtil::GetRandomRange(DepthMapMinLevelMeter, DepthMapMaxLevelMeter));
                 }
             }
+            FLOAT64 tf_lat = x / (FLOAT64)(MapHeight - 1);
+            FLOAT64 tf_lon = y / (FLOAT64)(MapWidth - 1);
 
-            FLOAT64 lat_deg = TerrainLowerLeftCornerLLH.X + x / (FLOAT64)(MapHeight - 1) * TerrainLengthDeg ;
-            FLOAT64 lon_deg = TerrainLowerLeftCornerLLH.Y + y / (FLOAT64)(MapWidth - 1) * TerrainWidthDeg;
+
+            FLOAT64 lat_deg = FMath::Lerp(bottom_left.X, top_right.X, tf_lat);//TerrainTopLeftCornerLLH.X + x / (FLOAT64)(MapHeight - 1) * TerrainLengthDeg ;
+            FLOAT64 lon_deg = FMath::Lerp(bottom_left.Y, top_right.Y, tf_lon);//TerrainTopLeftCornerLLH.Y + y / (FLOAT64)(MapWidth - 1) * TerrainWidthDeg;
             FVector coord_llh = FVector(lat_deg, lon_deg, Height);
             FVector coord_ue;
             coord_ue = p_origin->ConvertLLHToUEXYZ(coord_llh);
@@ -361,6 +374,14 @@ void ATerrainManager::SetBaseMap(const FString& text_path)
     SetupMeshMaterial(path, (""));
 }
 
+FVector ATerrainManager::GetTerrianCoordUE()
+{
+    AMapOrigin *p_map = ASystemManagerBase::GetInstance()->GetMapOrigin();
+    FVector left_bottom = FVector(TerrainBottomRightCornerLLH.X, TerrainTopLeftCornerLLH.Y, 0);
+    FVector loc = p_map->ConvertLLHToUEXYZ(left_bottom);
+    return loc;
+}
+
 
 
 void ATerrainManager::Bake()
@@ -391,26 +412,34 @@ void ATerrainManager::Bake()
         p_api->SendConsoleResponse("Enter HeightMapMaxLevelMeter");
         return;
     }
-
-    if (!IsDoubleUpdated(TerrainWidthDeg)) {
-        p_api->SendConsoleResponse("Enter TerrainWidthMeter");
+    if (!IsDoubleUpdated(DepthMapMinLevelMeter)) {
+        p_api->SendConsoleResponse("Enter DepthMapMinLevelMeter");
         return;
     }
 
-    if (!IsDoubleUpdated(TerrainLengthDeg)) {
-        p_api->SendConsoleResponse("Enter TerrainLengthMeter");
+    if (!IsDoubleUpdated(DepthMapMaxLevelMeter)) {
+        p_api->SendConsoleResponse("Enter DepthMapMaxLevelMeter");
+        return;
+    }
+    if (!IsVectorUpdated(TerrainTopLeftCornerLLH)) {
+        p_api->SendConsoleResponse("Enter valid Top Left Coordinate in LLH(deg,deg,mt)");
+        return;
+    }
+
+    if (!IsVectorUpdated(TerrainBottomRightCornerLLH)) {
+        p_api->SendConsoleResponse("Enter valid Bottom Right Coordinate in LLH(deg,deg,mt)");
         return;
     }
 
     FVector coord = FVector::Zero();
     if (CoordSystem == ECoordSystem::CoordSystemLLH_WGS84) {
-        coord = TerrainLowerLeftCornerLLH;
+        coord = TerrainTopLeftCornerLLH;
     }
 
 
 
 
-    BuildTerrain(HeightMapPath, DepthMapPath, HeightMapMinLevelMeter, HeightMapMaxLevelMeter, TerrainWidthDeg, TerrainLengthDeg, coord);
+    BuildTerrain(HeightMapPath, DepthMapPath, HeightMapMinLevelMeter, HeightMapMaxLevelMeter, TerrainTopLeftCornerLLH, TerrainBottomRightCornerLLH);
     SetBaseMap(BaseTexturePath);
 
 }
@@ -450,20 +479,17 @@ void ATerrainManager::Save(ISaveLoader* p_save_loader)
     p_save_loader->AppendOption(line, CCLICommandManager::TerrDMapMaxLvlMt, (DepthMapMaxLevelMeter));
     p_save_loader->AddLine(line);
 
-    line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
-    p_save_loader->AppendOption(line, CCLICommandManager::TerrWidthDeg, (TerrainWidthDeg));
-    p_save_loader->AddLine(line);
 
-    line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
-    p_save_loader->AppendOption(line, CCLICommandManager::TerrLengthDeg, (TerrainLengthDeg));
-    p_save_loader->AddLine(line);
-
-    if (CoordSystem == ECoordSystem::CoordSystemLLH_WGS84) {
+   
       
-        line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
-        p_save_loader->AppendOption(line, CCLICommandManager::TerrLowerLeftCornerLLH, TerrainLowerLeftCornerLLH);
-        p_save_loader->AddLine(line);
-    }
+    line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
+    p_save_loader->AppendOption(line, CCLICommandManager::TerrTopLeftLLH, TerrainTopLeftCornerLLH);
+    p_save_loader->AddLine(line);
+
+    line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
+    p_save_loader->AppendOption(line, CCLICommandManager::TerrBottomRightLLH, TerrainBottomRightCornerLLH);
+    p_save_loader->AddLine(line);
+    
 
 
     line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
@@ -486,20 +512,30 @@ void ATerrainManager::SaveJSON(CJsonDataContainer& data)
     data.Add(CCLICommandManager::TerrHMapMaxLvlMt, (HeightMapMaxLevelMeter));
     data.Add(CCLICommandManager::TerrDMapMinLvlMt, (DepthMapMinLevelMeter));
     data.Add(CCLICommandManager::TerrDMapMaxLvlMt, (DepthMapMaxLevelMeter));
-    data.Add(CCLICommandManager::TerrWidthDeg, (TerrainWidthDeg));
-    data.Add(CCLICommandManager::TerrLengthDeg, (TerrainLengthDeg));
-   if (CoordSystem == ECoordSystem::CoordSystemLLH_WGS84) {
-        data.Add(CCLICommandManager::TerrLowerLeftCornerLLH, TerrainLowerLeftCornerLLH);
-    }
+    data.Add(CCLICommandManager::TerrTopLeftLLH, TerrainTopLeftCornerLLH);
+    data.Add(CCLICommandManager::TerrBottomRightLLH, TerrainBottomRightCornerLLH);
+    
     
     
 }
-void ATerrainManager::SetTerrainLowerLeftCornerLLH(FVector val)
+void ATerrainManager::SetTerrainTopLeftCornerLLH(FVector val)
 {
-    TerrainLowerLeftCornerLLH = val;
+    TerrainTopLeftCornerLLH = val;
     CoordSystem = ECoordSystem::CoordSystemLLH_WGS84;
 }
-FVector ATerrainManager::GetTerrainLowerLeftCornerLLH()
+FVector ATerrainManager::GetTerrainTopLeftCornerLLH()
 {
-    return TerrainLowerLeftCornerLLH;
+    return TerrainTopLeftCornerLLH;
 }
+
+void ATerrainManager::SetTerrainRightBottomCornerLLH(FVector val)
+{
+    TerrainBottomRightCornerLLH = val;
+    CoordSystem = ECoordSystem::CoordSystemLLH_WGS84;
+}
+FVector ATerrainManager::GetTerrainRightBottomCornerLLH()
+{
+    return TerrainBottomRightCornerLLH;
+}
+
+

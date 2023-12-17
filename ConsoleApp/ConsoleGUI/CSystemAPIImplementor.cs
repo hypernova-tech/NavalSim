@@ -3,7 +3,14 @@
     LLH
 
 }
+public enum ECameraView
+{
+    Top,
+    Right,
+    Left,
+    Focus
 
+}
 
 public class CSystemAPIImplementor
 {
@@ -19,32 +26,34 @@ public class CSystemAPIImplementor
         Connection = connection;
     }
 
-    void CreateAndSendCommand(string cmd, 
-        
-        string option1 = "", string value1 = "", 
-        string option2 = "", string value2 = "", 
-        string option3 = "", string value3 = "", 
-        string option4 = "", string value4 = "", 
+    void CreateAndSendCommand(string cmd,
+
+        string option1 = "", string value1 = "",
+        string option2 = "", string value2 = "",
+        string option3 = "", string value3 = "",
+        string option4 = "", string value4 = "",
         string option5 = "", string value5 = "",
         string option6 = "", string value6 = "",
         string option7 = "", string value7 = "",
         string option8 = "", string value8 = "",
         string option9 = "", string value9 = "",
         string option10 = "", string value10 = "",
-        string option11 = "", string value11 = "")
+        string option11 = "", string value11 = "",
+        string option12 = "", string value12 = "")
     {
-        string ret = CCommandFactroy.CreateCommands(cmd, 
-                                                    option1, value1, 
-                                                    option2, value2, 
-                                                    option3, value3, 
-                                                    option4, value4, 
+        string ret = CCommandFactroy.CreateCommands(cmd,
+                                                    option1, value1,
+                                                    option2, value2,
+                                                    option3, value3,
+                                                    option4, value4,
                                                     option5, value5,
                                                     option6, value6,
                                                     option7, value7,
                                                     option8, value8,
                                                     option9, value9,
                                                     option10, value10,
-                                                    option11, value11);
+                                                    option11, value11,
+                                                    option12, value12);
         Connection.SendData(ret);
     }
 
@@ -77,12 +86,12 @@ public class CSystemAPIImplementor
     {
 
         double tof = GetTimeOfDayHour(percent);
-        
+
         CreateAndSendCommand(CLICommandManager.SetCommand, CLICommandManager.Name, Env, CLICommandManager.TimeOfDay, tof.ToString());
     }
     internal void SetWindSpeed(double percent)
-    { 
-        CreateAndSendCommand(CLICommandManager.SetCommand, CLICommandManager.Name, Env, CLICommandManager.WindSpeed, (0.5*percent).ToString());
+    {
+        CreateAndSendCommand(CLICommandManager.SetCommand, CLICommandManager.Name, Env, CLICommandManager.WindSpeed, (0.5 * percent).ToString());
     }
 
     internal void SetWindDirection(double percent)
@@ -98,21 +107,18 @@ public class CSystemAPIImplementor
         return tof;
     }
 
-    internal void CreateTerrain(string terrain_name, 
-                                string hmap_name, string depth_texture_name, string imagery_texture_name, 
+    internal void CreateTerrain(string terrain_name,
+                                string hmap_name, string depth_texture_name, string imagery_texture_name,
                                 double hmap_min_level, double hmap_max_level,
                                 double dmap_min_level, double dmap_max_level,
-                                double width, double len,
-                                double x, double y, double z, ECoordSystem coord_system )
+                                ECoordSystem coord_system,
+                                FVector top_left, FVector top_right)
     {
 
-        string coord = CUtil.MakeVectorString(x, y, z);
-        string coord_cmd = CLICommandManager.TerrLowerLeftCornerXYZ;
+        string top_left_str = CUtil.MakeVectorString(top_left);
+        string bottom_right_str = CUtil.MakeVectorString(top_right);
 
-        if (coord_system == ECoordSystem.LLH)
-        {
-            coord_cmd = CLICommandManager.TerrLowerLeftCornerLLH;
-        }
+      
 
         CreateAndSendCommand(CLICommandManager.CreateCommand, CLICommandManager.Name, terrain_name, CLICommandManager.Bp, "TERRAIN");
 
@@ -125,9 +131,8 @@ public class CSystemAPIImplementor
                              CLICommandManager.TerrHMapMaxLvlMt, hmap_max_level.ToString(),
                              CLICommandManager.TerrDMapMinLvlMt, dmap_min_level.ToString(),
                              CLICommandManager.TerrDMapMaxLvlMt, dmap_max_level.ToString(),
-                             CLICommandManager.TerrWidthMt, width.ToString(),
-                             CLICommandManager.TerrLengthMt, len.ToString(),
-                             coord_cmd, coord
+                            CLICommandManager.TerrTopLeftLLH, top_left_str,
+                            CLICommandManager.TerrBottomRightLLH, bottom_right_str
 
                              );
         ;
@@ -139,5 +144,37 @@ public class CSystemAPIImplementor
     {
         double speed = multiplier * 100;
         CreateAndSendCommand(CLICommandManager.SetCommand, CLICommandManager.CamSpeed, speed.ToString());
+    }
+
+    internal void SetCameraView(ECameraView view, string selected)
+    {
+        string cmd = "";
+        if (view == ECameraView.Top)
+        {
+            cmd = "top";
+        }
+        else if (view == ECameraView.Left)
+        {
+            cmd = "left";
+        }
+        else if (view == ECameraView.Right)
+        {
+            cmd = "right";
+        }
+        else if (view == ECameraView.Focus)
+        {
+            if(selected != "")
+            {
+                CreateAndSendCommand(CLICommandManager.SetCommand, CLICommandManager.Name, selected, CLICommandManager.Focused);
+            }
+            else
+            {
+                MessageBox.Show("First Select an Actor");
+            }
+            
+            return;
+        }
+
+        CreateAndSendCommand(CLICommandManager.SetCommand, CLICommandManager.CamView, cmd);
     }
 }

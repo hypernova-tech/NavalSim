@@ -32,9 +32,9 @@ namespace ConsoleGUI
         {
             components = new System.ComponentModel.Container();
             TreeNode treeNode1 = new TreeNode("World");
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle9 = new DataGridViewCellStyle();
             OpenFileDialog = new OpenFileDialog();
             contextMenuStrip1 = new ContextMenuStrip(components);
             ActorListContextMenu = new ContextMenuStrip(components);
@@ -124,6 +124,13 @@ namespace ConsoleGUI
             label16 = new Label();
             TBCloud = new TrackBar();
             tabPage5 = new TabPage();
+            TBTTopLeftH = new TextBox();
+            TBTTopLeftLon = new TextBox();
+            TBTTopLeftLat = new TextBox();
+            TBTBottomRightH = new TextBox();
+            TBTBottomRightLon = new TextBox();
+            TBTBottomRightLat = new TextBox();
+            label30 = new Label();
             TBDMapMaxLevel = new TextBox();
             label34 = new Label();
             TBDMapMinLevel = new TextBox();
@@ -131,19 +138,11 @@ namespace ConsoleGUI
             TBTerrainName = new TextBox();
             label26 = new Label();
             BTCreate = new Button();
-            CBCoordinateSystem = new ComboBox();
-            TBCoordZ = new TextBox();
-            TBCoordY = new TextBox();
-            TBCoordX = new TextBox();
             label33 = new Label();
             TBHMapMaxLevel = new TextBox();
             label32 = new Label();
             TBHMapMinLevel = new TextBox();
             label31 = new Label();
-            TBLength = new TextBox();
-            label29 = new Label();
-            TBWidth = new TextBox();
-            label28 = new Label();
             TBDMapTexture = new TextBox();
             label27 = new Label();
             TBImaryTexture = new TextBox();
@@ -162,6 +161,11 @@ namespace ConsoleGUI
             clearAllToolStripMenuItem = new ToolStripMenuItem();
             showChartsToolStripMenuItem = new ToolStripMenuItem();
             hideChartsToolStripMenuItem = new ToolStripMenuItem();
+            camaraViewToolStripMenuItem = new ToolStripMenuItem();
+            topToolStripMenuItem = new ToolStripMenuItem();
+            rightToolStripMenuItem = new ToolStripMenuItem();
+            leftToolStripMenuItem = new ToolStripMenuItem();
+            focusToolStripMenuItem = new ToolStripMenuItem();
             cameaToolStripMenuItem = new ToolStripMenuItem();
             speedToolStripMenuItem = new ToolStripMenuItem();
             xToolStripMenuItem = new ToolStripMenuItem();
@@ -633,33 +637,33 @@ namespace ConsoleGUI
             // 
             // ModifyableDataGrid
             // 
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = SystemColors.Control;
-            dataGridViewCellStyle1.Font = new Font("Segoe UI", 1F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-            ModifyableDataGrid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle7.BackColor = SystemColors.Control;
+            dataGridViewCellStyle7.Font = new Font("Segoe UI", 1F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle7.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle7.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle7.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle7.WrapMode = DataGridViewTriState.True;
+            ModifyableDataGrid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle7;
             ModifyableDataGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = SystemColors.Window;
-            dataGridViewCellStyle2.Font = new Font("Segoe UI", 8F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle2.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
-            ModifyableDataGrid.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle8.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle8.BackColor = SystemColors.Window;
+            dataGridViewCellStyle8.Font = new Font("Segoe UI", 8F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle8.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle8.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle8.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle8.WrapMode = DataGridViewTriState.False;
+            ModifyableDataGrid.DefaultCellStyle = dataGridViewCellStyle8;
             ModifyableDataGrid.Location = new Point(3, 534);
             ModifyableDataGrid.Name = "ModifyableDataGrid";
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = SystemColors.Control;
-            dataGridViewCellStyle3.Font = new Font("Segoe UI", 6F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
-            ModifyableDataGrid.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle9.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle9.BackColor = SystemColors.Control;
+            dataGridViewCellStyle9.Font = new Font("Segoe UI", 6F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle9.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle9.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle9.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle9.WrapMode = DataGridViewTriState.True;
+            ModifyableDataGrid.RowHeadersDefaultCellStyle = dataGridViewCellStyle9;
             ModifyableDataGrid.RowHeadersVisible = false;
             ModifyableDataGrid.RowTemplate.Height = 25;
             ModifyableDataGrid.Size = new Size(202, 405);
@@ -1087,6 +1091,13 @@ namespace ConsoleGUI
             // 
             // tabPage5
             // 
+            tabPage5.Controls.Add(TBTTopLeftH);
+            tabPage5.Controls.Add(TBTTopLeftLon);
+            tabPage5.Controls.Add(TBTTopLeftLat);
+            tabPage5.Controls.Add(TBTBottomRightH);
+            tabPage5.Controls.Add(TBTBottomRightLon);
+            tabPage5.Controls.Add(TBTBottomRightLat);
+            tabPage5.Controls.Add(label30);
             tabPage5.Controls.Add(TBDMapMaxLevel);
             tabPage5.Controls.Add(label34);
             tabPage5.Controls.Add(TBDMapMinLevel);
@@ -1094,19 +1105,11 @@ namespace ConsoleGUI
             tabPage5.Controls.Add(TBTerrainName);
             tabPage5.Controls.Add(label26);
             tabPage5.Controls.Add(BTCreate);
-            tabPage5.Controls.Add(CBCoordinateSystem);
-            tabPage5.Controls.Add(TBCoordZ);
-            tabPage5.Controls.Add(TBCoordY);
-            tabPage5.Controls.Add(TBCoordX);
             tabPage5.Controls.Add(label33);
             tabPage5.Controls.Add(TBHMapMaxLevel);
             tabPage5.Controls.Add(label32);
             tabPage5.Controls.Add(TBHMapMinLevel);
             tabPage5.Controls.Add(label31);
-            tabPage5.Controls.Add(TBLength);
-            tabPage5.Controls.Add(label29);
-            tabPage5.Controls.Add(TBWidth);
-            tabPage5.Controls.Add(label28);
             tabPage5.Controls.Add(TBDMapTexture);
             tabPage5.Controls.Add(label27);
             tabPage5.Controls.Add(TBImaryTexture);
@@ -1120,9 +1123,69 @@ namespace ConsoleGUI
             tabPage5.Text = "Terrain";
             tabPage5.UseVisualStyleBackColor = true;
             // 
+            // TBTTopLeftH
+            // 
+            TBTTopLeftH.Location = new Point(314, 256);
+            TBTTopLeftH.Name = "TBTTopLeftH";
+            TBTTopLeftH.Size = new Size(72, 23);
+            TBTTopLeftH.TabIndex = 38;
+            TBTTopLeftH.Text = "0";
+            TBTTopLeftH.TextChanged += TBTTopLeftH_TextChanged;
+            // 
+            // TBTTopLeftLon
+            // 
+            TBTTopLeftLon.Location = new Point(236, 256);
+            TBTTopLeftLon.Name = "TBTTopLeftLon";
+            TBTTopLeftLon.Size = new Size(72, 23);
+            TBTTopLeftLon.TabIndex = 37;
+            TBTTopLeftLon.Text = "29.445356290";
+            TBTTopLeftLon.TextChanged += TBTTopLeftLon_TextChanged;
+            // 
+            // TBTTopLeftLat
+            // 
+            TBTTopLeftLat.Location = new Point(158, 256);
+            TBTTopLeftLat.Name = "TBTTopLeftLat";
+            TBTTopLeftLat.Size = new Size(72, 23);
+            TBTTopLeftLat.TabIndex = 36;
+            TBTTopLeftLat.Text = "40.82096524";
+            TBTTopLeftLat.TextChanged += TBTTopLeftLat_TextChanged;
+            // 
+            // TBTBottomRightH
+            // 
+            TBTBottomRightH.Location = new Point(314, 285);
+            TBTBottomRightH.Name = "TBTBottomRightH";
+            TBTBottomRightH.Size = new Size(72, 23);
+            TBTBottomRightH.TabIndex = 35;
+            TBTBottomRightH.Text = "0";
+            // 
+            // TBTBottomRightLon
+            // 
+            TBTBottomRightLon.Location = new Point(236, 285);
+            TBTBottomRightLon.Name = "TBTBottomRightLon";
+            TBTBottomRightLon.Size = new Size(72, 23);
+            TBTBottomRightLon.TabIndex = 34;
+            TBTBottomRightLon.Text = "29.65047026";
+            // 
+            // TBTBottomRightLat
+            // 
+            TBTBottomRightLat.Location = new Point(158, 285);
+            TBTBottomRightLat.Name = "TBTBottomRightLat";
+            TBTBottomRightLat.Size = new Size(72, 23);
+            TBTBottomRightLat.TabIndex = 33;
+            TBTBottomRightLat.Text = "40.6655628";
+            // 
+            // label30
+            // 
+            label30.AutoSize = true;
+            label30.Location = new Point(15, 288);
+            label30.Name = "label30";
+            label30.Size = new Size(116, 15);
+            label30.TabIndex = 32;
+            label30.Text = "Bottom Right(lt,ln,h)";
+            // 
             // TBDMapMaxLevel
             // 
-            TBDMapMaxLevel.Location = new Point(159, 285);
+            TBDMapMaxLevel.Location = new Point(159, 225);
             TBDMapMaxLevel.Name = "TBDMapMaxLevel";
             TBDMapMaxLevel.Size = new Size(56, 23);
             TBDMapMaxLevel.TabIndex = 31;
@@ -1131,7 +1194,7 @@ namespace ConsoleGUI
             // label34
             // 
             label34.AutoSize = true;
-            label34.Location = new Point(16, 288);
+            label34.Location = new Point(16, 228);
             label34.Name = "label34";
             label34.Size = new Size(132, 15);
             label34.TabIndex = 30;
@@ -1139,7 +1202,7 @@ namespace ConsoleGUI
             // 
             // TBDMapMinLevel
             // 
-            TBDMapMinLevel.Location = new Point(159, 256);
+            TBDMapMinLevel.Location = new Point(159, 196);
             TBDMapMinLevel.Name = "TBDMapMinLevel";
             TBDMapMinLevel.Size = new Size(56, 23);
             TBDMapMinLevel.TabIndex = 29;
@@ -1148,7 +1211,7 @@ namespace ConsoleGUI
             // label35
             // 
             label35.AutoSize = true;
-            label35.Location = new Point(16, 259);
+            label35.Location = new Point(16, 199);
             label35.Name = "label35";
             label35.Size = new Size(130, 15);
             label35.TabIndex = 28;
@@ -1173,7 +1236,7 @@ namespace ConsoleGUI
             // 
             // BTCreate
             // 
-            BTCreate.Location = new Point(179, 383);
+            BTCreate.Location = new Point(179, 323);
             BTCreate.Name = "BTCreate";
             BTCreate.Size = new Size(114, 34);
             BTCreate.TabIndex = 25;
@@ -1181,52 +1244,18 @@ namespace ConsoleGUI
             BTCreate.UseVisualStyleBackColor = true;
             BTCreate.Click += BTCreate_Click;
             // 
-            // CBCoordinateSystem
-            // 
-            CBCoordinateSystem.FormattingEnabled = true;
-            CBCoordinateSystem.Items.AddRange(new object[] { "LLH" });
-            CBCoordinateSystem.Location = new Point(392, 316);
-            CBCoordinateSystem.Name = "CBCoordinateSystem";
-            CBCoordinateSystem.Size = new Size(78, 23);
-            CBCoordinateSystem.TabIndex = 0;
-            CBCoordinateSystem.Text = "LLH";
-            // 
-            // TBCoordZ
-            // 
-            TBCoordZ.Location = new Point(314, 316);
-            TBCoordZ.Name = "TBCoordZ";
-            TBCoordZ.Size = new Size(72, 23);
-            TBCoordZ.TabIndex = 23;
-            TBCoordZ.Text = "0";
-            // 
-            // TBCoordY
-            // 
-            TBCoordY.Location = new Point(236, 316);
-            TBCoordY.Name = "TBCoordY";
-            TBCoordY.Size = new Size(72, 23);
-            TBCoordY.TabIndex = 22;
-            TBCoordY.Text = "29.48159";
-            // 
-            // TBCoordX
-            // 
-            TBCoordX.Location = new Point(158, 316);
-            TBCoordX.Name = "TBCoordX";
-            TBCoordX.Size = new Size(72, 23);
-            TBCoordX.TabIndex = 21;
-            TBCoordX.Text = "40.682406";
-            // 
             // label33
             // 
             label33.AutoSize = true;
-            label33.Location = new Point(15, 319);
+            label33.Location = new Point(15, 259);
             label33.Name = "label33";
-            label33.Size = new Size(104, 15);
+            label33.Size = new Size(87, 15);
             label33.TabIndex = 20;
-            label33.Text = "Center Coordinate";
+            label33.Text = "Top Left(lt,ln,h)";
             // 
             // TBHMapMaxLevel
             // 
-            TBHMapMaxLevel.Location = new Point(159, 227);
+            TBHMapMaxLevel.Location = new Point(159, 167);
             TBHMapMaxLevel.Name = "TBHMapMaxLevel";
             TBHMapMaxLevel.Size = new Size(56, 23);
             TBHMapMaxLevel.TabIndex = 19;
@@ -1235,7 +1264,7 @@ namespace ConsoleGUI
             // label32
             // 
             label32.AutoSize = true;
-            label32.Location = new Point(16, 230);
+            label32.Location = new Point(16, 170);
             label32.Name = "label32";
             label32.Size = new Size(136, 15);
             label32.TabIndex = 18;
@@ -1243,7 +1272,7 @@ namespace ConsoleGUI
             // 
             // TBHMapMinLevel
             // 
-            TBHMapMinLevel.Location = new Point(159, 198);
+            TBHMapMinLevel.Location = new Point(159, 138);
             TBHMapMinLevel.Name = "TBHMapMinLevel";
             TBHMapMinLevel.Size = new Size(56, 23);
             TBHMapMinLevel.TabIndex = 17;
@@ -1252,45 +1281,11 @@ namespace ConsoleGUI
             // label31
             // 
             label31.AutoSize = true;
-            label31.Location = new Point(16, 201);
+            label31.Location = new Point(16, 141);
             label31.Name = "label31";
             label31.Size = new Size(134, 15);
             label31.TabIndex = 16;
             label31.Text = "HeightMapMinLevel(m)";
-            // 
-            // TBLength
-            // 
-            TBLength.Location = new Point(159, 167);
-            TBLength.Name = "TBLength";
-            TBLength.Size = new Size(56, 23);
-            TBLength.TabIndex = 13;
-            TBLength.Text = "0.108";
-            // 
-            // label29
-            // 
-            label29.AutoSize = true;
-            label29.Location = new Point(16, 170);
-            label29.Name = "label29";
-            label29.Size = new Size(72, 15);
-            label29.TabIndex = 12;
-            label29.Text = "Length(deg)";
-            // 
-            // TBWidth
-            // 
-            TBWidth.Location = new Point(159, 138);
-            TBWidth.Name = "TBWidth";
-            TBWidth.Size = new Size(56, 23);
-            TBWidth.TabIndex = 11;
-            TBWidth.Text = "0.108";
-            // 
-            // label28
-            // 
-            label28.AutoSize = true;
-            label28.Location = new Point(16, 141);
-            label28.Name = "label28";
-            label28.Size = new Size(67, 15);
-            label28.TabIndex = 10;
-            label28.Text = "Width(deg)";
             // 
             // TBDMapTexture
             // 
@@ -1401,7 +1396,7 @@ namespace ConsoleGUI
             // 
             // viewToolStripMenuItem
             // 
-            viewToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { clearAllToolStripMenuItem, showChartsToolStripMenuItem, hideChartsToolStripMenuItem });
+            viewToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { clearAllToolStripMenuItem, showChartsToolStripMenuItem, hideChartsToolStripMenuItem, camaraViewToolStripMenuItem });
             viewToolStripMenuItem.Name = "viewToolStripMenuItem";
             viewToolStripMenuItem.Size = new Size(44, 20);
             viewToolStripMenuItem.Text = "View";
@@ -1409,23 +1404,58 @@ namespace ConsoleGUI
             // clearAllToolStripMenuItem
             // 
             clearAllToolStripMenuItem.Name = "clearAllToolStripMenuItem";
-            clearAllToolStripMenuItem.Size = new Size(140, 22);
+            clearAllToolStripMenuItem.Size = new Size(143, 22);
             clearAllToolStripMenuItem.Text = "Clear All";
             clearAllToolStripMenuItem.Click += clearAllToolStripMenuItem_Click;
             // 
             // showChartsToolStripMenuItem
             // 
             showChartsToolStripMenuItem.Name = "showChartsToolStripMenuItem";
-            showChartsToolStripMenuItem.Size = new Size(140, 22);
+            showChartsToolStripMenuItem.Size = new Size(143, 22);
             showChartsToolStripMenuItem.Text = "Show Charts";
             showChartsToolStripMenuItem.Click += showChartsToolStripMenuItem_Click;
             // 
             // hideChartsToolStripMenuItem
             // 
             hideChartsToolStripMenuItem.Name = "hideChartsToolStripMenuItem";
-            hideChartsToolStripMenuItem.Size = new Size(140, 22);
+            hideChartsToolStripMenuItem.Size = new Size(143, 22);
             hideChartsToolStripMenuItem.Text = "Hide Charts";
             hideChartsToolStripMenuItem.Click += hideChartsToolStripMenuItem_Click;
+            // 
+            // camaraViewToolStripMenuItem
+            // 
+            camaraViewToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { topToolStripMenuItem, rightToolStripMenuItem, leftToolStripMenuItem, focusToolStripMenuItem });
+            camaraViewToolStripMenuItem.Name = "camaraViewToolStripMenuItem";
+            camaraViewToolStripMenuItem.Size = new Size(143, 22);
+            camaraViewToolStripMenuItem.Text = "Camara View";
+            // 
+            // topToolStripMenuItem
+            // 
+            topToolStripMenuItem.Name = "topToolStripMenuItem";
+            topToolStripMenuItem.Size = new Size(105, 22);
+            topToolStripMenuItem.Text = "Top";
+            topToolStripMenuItem.Click += topToolStripMenuItem_Click;
+            // 
+            // rightToolStripMenuItem
+            // 
+            rightToolStripMenuItem.Name = "rightToolStripMenuItem";
+            rightToolStripMenuItem.Size = new Size(105, 22);
+            rightToolStripMenuItem.Text = "Right";
+            rightToolStripMenuItem.Click += rightToolStripMenuItem_Click;
+            // 
+            // leftToolStripMenuItem
+            // 
+            leftToolStripMenuItem.Name = "leftToolStripMenuItem";
+            leftToolStripMenuItem.Size = new Size(105, 22);
+            leftToolStripMenuItem.Text = "Left";
+            leftToolStripMenuItem.Click += leftToolStripMenuItem_Click;
+            // 
+            // focusToolStripMenuItem
+            // 
+            focusToolStripMenuItem.Name = "focusToolStripMenuItem";
+            focusToolStripMenuItem.Size = new Size(105, 22);
+            focusToolStripMenuItem.Text = "Focus";
+            focusToolStripMenuItem.Click += focusToolStripMenuItem_Click_1;
             // 
             // cameaToolStripMenuItem
             // 
@@ -1438,70 +1468,70 @@ namespace ConsoleGUI
             // 
             speedToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { xToolStripMenuItem, xToolStripMenuItem1, xToolStripMenuItem2, xToolStripMenuItem3, xToolStripMenuItem4, xToolStripMenuItem5, xToolStripMenuItem6, xToolStripMenuItem7, xToolStripMenuItem8 });
             speedToolStripMenuItem.Name = "speedToolStripMenuItem";
-            speedToolStripMenuItem.Size = new Size(180, 22);
+            speedToolStripMenuItem.Size = new Size(106, 22);
             speedToolStripMenuItem.Text = "Speed";
             speedToolStripMenuItem.Click += speedToolStripMenuItem_Click;
             // 
             // xToolStripMenuItem
             // 
             xToolStripMenuItem.Name = "xToolStripMenuItem";
-            xToolStripMenuItem.Size = new Size(180, 22);
+            xToolStripMenuItem.Size = new Size(95, 22);
             xToolStripMenuItem.Text = "1x";
             xToolStripMenuItem.Click += xToolStripMenuItem_Click;
             // 
             // xToolStripMenuItem1
             // 
             xToolStripMenuItem1.Name = "xToolStripMenuItem1";
-            xToolStripMenuItem1.Size = new Size(180, 22);
+            xToolStripMenuItem1.Size = new Size(95, 22);
             xToolStripMenuItem1.Text = "1.5x";
             xToolStripMenuItem1.Click += xToolStripMenuItem1_Click;
             // 
             // xToolStripMenuItem2
             // 
             xToolStripMenuItem2.Name = "xToolStripMenuItem2";
-            xToolStripMenuItem2.Size = new Size(180, 22);
+            xToolStripMenuItem2.Size = new Size(95, 22);
             xToolStripMenuItem2.Text = "2x";
             xToolStripMenuItem2.Click += xToolStripMenuItem2_Click;
             // 
             // xToolStripMenuItem3
             // 
             xToolStripMenuItem3.Name = "xToolStripMenuItem3";
-            xToolStripMenuItem3.Size = new Size(180, 22);
+            xToolStripMenuItem3.Size = new Size(95, 22);
             xToolStripMenuItem3.Text = "3x";
             xToolStripMenuItem3.Click += xToolStripMenuItem3_Click;
             // 
             // xToolStripMenuItem4
             // 
             xToolStripMenuItem4.Name = "xToolStripMenuItem4";
-            xToolStripMenuItem4.Size = new Size(180, 22);
+            xToolStripMenuItem4.Size = new Size(95, 22);
             xToolStripMenuItem4.Text = "5x";
             xToolStripMenuItem4.Click += xToolStripMenuItem4_Click;
             // 
             // xToolStripMenuItem5
             // 
             xToolStripMenuItem5.Name = "xToolStripMenuItem5";
-            xToolStripMenuItem5.Size = new Size(180, 22);
+            xToolStripMenuItem5.Size = new Size(95, 22);
             xToolStripMenuItem5.Text = "10x";
             xToolStripMenuItem5.Click += xToolStripMenuItem5_Click;
             // 
             // xToolStripMenuItem6
             // 
             xToolStripMenuItem6.Name = "xToolStripMenuItem6";
-            xToolStripMenuItem6.Size = new Size(180, 22);
+            xToolStripMenuItem6.Size = new Size(95, 22);
             xToolStripMenuItem6.Text = "15x";
             xToolStripMenuItem6.Click += xToolStripMenuItem6_Click;
             // 
             // xToolStripMenuItem7
             // 
             xToolStripMenuItem7.Name = "xToolStripMenuItem7";
-            xToolStripMenuItem7.Size = new Size(180, 22);
+            xToolStripMenuItem7.Size = new Size(95, 22);
             xToolStripMenuItem7.Text = "25x";
             xToolStripMenuItem7.Click += xToolStripMenuItem7_Click;
             // 
             // xToolStripMenuItem8
             // 
             xToolStripMenuItem8.Name = "xToolStripMenuItem8";
-            xToolStripMenuItem8.Size = new Size(180, 22);
+            xToolStripMenuItem8.Size = new Size(95, 22);
             xToolStripMenuItem8.Text = "50x";
             xToolStripMenuItem8.Click += xToolStripMenuItem8_Click;
             // 
@@ -1744,15 +1774,10 @@ namespace ConsoleGUI
         private TabPage tabPage5;
         private TextBox TBHMapName;
         private Label label25;
-        private Label label33;
         private TextBox TBHMapMaxLevel;
         private Label label32;
         private TextBox TBHMapMinLevel;
         private Label label31;
-        private TextBox TBLength;
-        private Label label29;
-        private TextBox TBWidth;
-        private Label label28;
         private TextBox TBDMapTexture;
         private Label label27;
         private TextBox TBImaryTexture;
@@ -1760,7 +1785,7 @@ namespace ConsoleGUI
         private ComboBox CBCoordinateSystem;
         private TextBox TBCoordZ;
         private TextBox TBCoordY;
-        private TextBox TBCoordX;
+        private TextBox TBTopLeftLat;
         private Button BTCreate;
         private TextBox TBTerrainName;
         private Label label26;
@@ -1779,5 +1804,18 @@ namespace ConsoleGUI
         private ToolStripMenuItem xToolStripMenuItem6;
         private ToolStripMenuItem xToolStripMenuItem7;
         private ToolStripMenuItem xToolStripMenuItem8;
+        private ToolStripMenuItem camaraViewToolStripMenuItem;
+        private ToolStripMenuItem topToolStripMenuItem;
+        private ToolStripMenuItem rightToolStripMenuItem;
+        private ToolStripMenuItem leftToolStripMenuItem;
+        private ToolStripMenuItem focusToolStripMenuItem;
+        private TextBox TBTTopLeftH;
+        private TextBox TBTTopLeftLon;
+        private TextBox TBTTopLeftLat;
+        private TextBox TBTBottomRightH;
+        private TextBox TBTBottomRightLon;
+        private TextBox TBTBottomRightLat;
+        private Label label30;
+        private Label label33;
     }
 }

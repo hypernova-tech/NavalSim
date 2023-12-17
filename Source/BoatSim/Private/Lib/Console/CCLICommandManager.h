@@ -141,10 +141,8 @@ public:
 	static FString TerrHMapMaxLvlMt;
 	static FString TerrDMapMinLvlMt;
 	static FString TerrDMapMaxLvlMt;
-	static FString TerrWidthDeg;
-	static FString TerrLengthDeg;
-	static FString TerrLowerLeftCornerXYZ;
-	static FString TerrLowerLeftCornerLLH;
+	static FString TerrTopLeftLLH;
+	static FString TerrBottomRightLLH;
 
 	static FString Wp;
 	static FString WpPos;

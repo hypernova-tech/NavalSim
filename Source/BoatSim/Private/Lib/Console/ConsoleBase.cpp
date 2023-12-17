@@ -997,29 +997,19 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
 
         }
 
-        ret = CommandManager.GetValue(CCLICommandManager::TerrWidthDeg, dbl);
+        
+        ret = CommandManager.GetValue(CCLICommandManager::TerrTopLeftLLH, vec);
         if (ret) {
-            if (pSystemAPI->SetTerrainWidthDeg(p_actor, dbl)) {
+            if (pSystemAPI->SetTerrainTopLeftCornerCoordLLH(p_actor, vec)) {
                 one_success = true;
             }
         }
         else {
 
         }
-
-        ret = CommandManager.GetValue(CCLICommandManager::TerrLengthDeg, dbl);
+        ret = CommandManager.GetValue(CCLICommandManager::TerrBottomRightLLH, vec);
         if (ret) {
-            if (pSystemAPI->SetTerrainLengthDeg(p_actor, dbl)) {
-                one_success = true;
-            }
-        }
-        else {
-
-        }
-
-        ret = CommandManager.GetValue(CCLICommandManager::TerrLowerLeftCornerLLH, vec);
-        if (ret) {
-            if (pSystemAPI->SetTerrainLowerLeftCornerCoordLLH(p_actor, vec)) {
+            if (pSystemAPI->SetTerrainBottomRightCornerCoordLLH(p_actor, vec)) {
                 one_success = true;
             }
         }

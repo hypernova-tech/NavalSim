@@ -68,7 +68,7 @@ public static class CLICommandManager
     [Modifiable] public const string CamSpeed = "camspeed";
     [Modifiable] public const string PlatformSpeed = "pltspeed";
     [Modifiable] public const string PlatformTurnRate = "pltturnrate";
-
+    [Modifiable] public const string CamView = "camview";
     [Modifiable] public const string TimeOfDay = "timeofday";
     [Modifiable] public const string EnvTimeFlowScale = "envtimeflowscale";
     [Modifiable] public const string RainPercent = "rain";
@@ -88,10 +88,8 @@ public static class CLICommandManager
     [Modifiable] public const string TerrHMapMaxLvlMt = "terrhmapmaxlvl";
     [Modifiable] public const string TerrDMapMinLvlMt = "terrdmapminlvl";
     [Modifiable] public const string TerrDMapMaxLvlMt = "terrdmapmaxlvl";
-    [Modifiable] public const string TerrWidthMt = "terrwidth";
-    [Modifiable] public const string TerrLengthMt = "terrlen";
-    [Modifiable] public const string TerrLowerLeftCornerXYZ = "terrlowerleftcornerxyz";
-    [Modifiable] public const string TerrLowerLeftCornerLLH = "terrlowerleftcornerllh";
+    [Modifiable] public const string TerrTopLeftLLH = "terrtopleftllh";
+    [Modifiable] public const string TerrBottomRightLLH = "terrbottomrightllh";
 
     public const string Wp = "wp";
     public const string WpPos = "wppos";
