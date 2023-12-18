@@ -182,6 +182,11 @@ public:
 	virtual bool GetRadarMaxSectorBlankingZoneCount(AActor* p_actor, INT32S& val) = 0;
 
 
+	virtual bool GetSpeedMeterPerSec(AActor* p_actor, FLOAT64& val) = 0;
+	virtual bool SetSpeedMeterPerSec(AActor* p_actor, FLOAT64 val) = 0;
+
+	virtual bool GetTurnRateDegPerSec(AActor* p_actor, FLOAT64& val) = 0;
+	virtual bool SetTurnRateDegPerSec(AActor* p_actor, FLOAT64 val) = 0;
 
 	virtual bool AddOrModifyWaypointToPath(AActor* p_actor, INT32S wp_ind, FVector position) = 0;
 	virtual bool Bake(AActor* p_actor) = 0;
@@ -253,6 +258,7 @@ public:
 	virtual bool SetEnvTimeFlowScale(INT32S region, FLOAT64 val) = 0;
 	virtual bool GetEnvTimeFlowScale(INT32S region, FLOAT64& val) = 0;
 
+	
 
 	/// <summary>
 	/// terrain managment
@@ -287,6 +293,13 @@ public:
 	virtual bool SetTerrainBottomRightCornerCoordLLH(AActor* p_actor, FVector vec) = 0;
 	virtual bool GetTerrainBottomRightCornerCoordLLH(AActor* p_actor, FVector& vec) = 0;
 
+
+	/// <summary>
+	/// Camera Management
+	/// </summary>
+	/// <param name="p_actor"></param>
+	/// <param name="val"></param>
+	/// <returns></returns>
 	virtual bool SetCamSpeed(AActor* p_actor, FLOAT64 val) = 0;
 	virtual bool GetCamSpeed(AActor* p_actor, FLOAT64& val) = 0;
 

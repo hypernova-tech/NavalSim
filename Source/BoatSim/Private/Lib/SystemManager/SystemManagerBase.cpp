@@ -1507,6 +1507,58 @@ bool ASystemManagerBase::GetRadarMaxSectorBlankingZoneCount(AActor* p_actor, INT
 	return false;
 }
 
+bool ASystemManagerBase::GetSpeedMeterPerSec(AActor* p_actor, FLOAT64& val)
+{
+	auto* p_plt = GetPlatform();
+
+	if (p_plt) {
+		val = p_plt->GetMaxSpeedMeterPerSec();
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+bool ASystemManagerBase::SetSpeedMeterPerSec(AActor* p_actor, FLOAT64 val)
+{
+	auto* p_plt = GetPlatform();
+
+	if (p_plt) {
+		p_plt->SetMaxSpeedMeterPerSec(val);
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+bool ASystemManagerBase::GetTurnRateDegPerSec(AActor* p_actor, FLOAT64& val)
+{
+	auto* p_plt = GetPlatform();
+
+	if (p_plt) {
+		val = p_plt->GetTurnRateDegPerSec();
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+bool ASystemManagerBase::SetTurnRateDegPerSec(AActor* p_actor, FLOAT64 val)
+{
+	auto* p_plt = GetPlatform();
+
+	if (p_plt) {
+		p_plt->SetTurnRateDegPerSec(val);
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
 bool ASystemManagerBase::AddOrModifyWaypointToPath(AActor* p_actor, INT32S wp_ind, FVector position)
 {
 	if (p_actor->IsA<APathController>()) {

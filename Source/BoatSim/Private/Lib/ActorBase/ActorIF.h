@@ -29,6 +29,5 @@ protected:
 
 public:
     virtual void SetBaseActor(AActor* p_actor) ;
-    virtual void SetEnabled(bool val);
-    virtual bool GetEnabled();
+  
 };

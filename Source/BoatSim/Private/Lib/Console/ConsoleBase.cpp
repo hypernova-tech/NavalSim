@@ -765,6 +765,25 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
     else {
 
     }
+    ret = CommandManager.GetValue(CCLICommandManager::PlatformSpeed, dbl);
+    if (ret) {
+        if (pSystemAPI->SetSpeedMeterPerSec(nullptr, dbl)) {
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::PlatformSpeed, dbl);
+    if (ret) {
+        if (pSystemAPI->SetTurnRateDegPerSec(nullptr, dbl)) {
+            return true;
+        }
+    }
+    else {
+
+    }
 
     ret = CommandManager.GetValue(CCLICommandManager::Selected, sret);
     if (ret) {

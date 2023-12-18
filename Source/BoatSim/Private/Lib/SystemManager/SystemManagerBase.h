@@ -304,6 +304,12 @@ public:
 	virtual bool GetRadarMaxGuardZoneCount(AActor* p_actor, INT32S& val) ;
 	virtual bool GetRadarMaxSectorBlankingZoneCount(AActor* p_actor, INT32S& val);
 
+	virtual bool GetSpeedMeterPerSec(AActor* p_actor, FLOAT64& val);
+	virtual bool SetSpeedMeterPerSec(AActor* p_actor, FLOAT64 val);
+
+	virtual bool GetTurnRateDegPerSec(AActor* p_actor, FLOAT64& val);
+	virtual bool SetTurnRateDegPerSec(AActor* p_actor, FLOAT64 val);
+
 	virtual bool AddOrModifyWaypointToPath(AActor* p_actor, INT32S wp_ind, FVector position);
 	virtual bool Bake(AActor* p_actor);
 	virtual bool SetPathClosed(AActor* p_actor, bool is_closed);
@@ -413,5 +419,7 @@ public:
 
 	virtual bool SetCamView(ECamView view);
 	virtual bool GetCamView(ECamView& view);
+
+
 
 };

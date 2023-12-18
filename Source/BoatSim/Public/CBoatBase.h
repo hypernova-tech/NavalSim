@@ -44,6 +44,9 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	float MovementSpeedUnitPerSec = 500;
 
+	UPROPERTY(BlueprintReadWrite)
+		float TurnRateDegPerSec = 720;
+
 	UPROPERTY(EditAnywhere)
 	float OscillationAmplitude = 1;
 	UPROPERTY(EditAnywhere)
@@ -115,10 +118,12 @@ private:
 	float R = 100;
 	float Theta = 0;
 
+public:
 	// Inherited via IPlatform
-	virtual void SetMaxSpeedMeterPerSec(FLOAT32 speed) override;
-
-	virtual FLOAT32 GetMaxSpeedMeterPerSec() override;
+	virtual void SetMaxSpeedMeterPerSec(FLOAT32 speed) ;
+	virtual FLOAT32 GetMaxSpeedMeterPerSec() ;
 	
+	virtual void SetTurnRateDegPerSec(FLOAT32 speed) ;
+	virtual FLOAT32 GetTurnRateDegPerSec() ;
 };
 

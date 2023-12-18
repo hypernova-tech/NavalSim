@@ -442,6 +442,16 @@ FLOAT32 ACBoatBase::GetMaxSpeedMeterPerSec()
 	return TOW(MovementSpeedUnitPerSec);
 }
 
+void ACBoatBase::SetTurnRateDegPerSec(FLOAT32 val)
+{
+	TurnRateDegPerSec = val;
+}
+
+FLOAT32 ACBoatBase::GetTurnRateDegPerSec()
+{
+	return TurnRateDegPerSec;
+}
+
 // Called to bind functionality to input
 void ACBoatBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {

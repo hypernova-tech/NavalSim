@@ -8,12 +8,3 @@ void IActorIF::SetBaseActor(AActor* p_actor)
 	pOwner = p_actor;
 }
 
-void IActorIF::SetEnabled(bool val)
-{
-	
-}
-
-bool IActorIF::GetEnabled()
-{
-	
-}

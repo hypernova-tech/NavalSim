@@ -67,8 +67,8 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	virtual void SetEnabled(bool val) override;
-	virtual bool GetEnabled() override;
+	virtual void SetEnabled(bool val) ;
+	virtual bool GetEnabled() ;
 	bool GetIsExternalUpdateScenarioMode();
 	void ExternalUpdate(float DeltaTime);
 	void ExternalUpdateScenarioMode(float DeltaTime);
