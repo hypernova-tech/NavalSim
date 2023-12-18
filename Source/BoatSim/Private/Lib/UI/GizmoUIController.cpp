@@ -160,6 +160,8 @@ FLOAT32 UGizmoUIController::ComputeAxisMovement(ECoordAxis curr_axis, FVector2D 
 	return delta;
 }
 
+
+
 void UGizmoUIController::OnCursorMove()
 {
 	if (pTrackedActor == nullptr) {
@@ -314,6 +316,8 @@ AActor* UGizmoUIController::FindGizmoAtClickPosition(int locationX, int location
 		// HitResult now contains information about what was hit
 		AActor* ClickedActor = HitResult.GetActor();
 		bool gizmo_tag = ClickedActor->ActorHasTag("Gizmo");
+
+	
 		if (ClickedActor && !gizmo_tag)
 		{
 			CurrAxis = pGizmoActor->GetAxis(HitResult.GetComponent());
@@ -322,6 +326,8 @@ AActor* UGizmoUIController::FindGizmoAtClickPosition(int locationX, int location
 
 
 		}
+		
+
 	}
 	else {
 

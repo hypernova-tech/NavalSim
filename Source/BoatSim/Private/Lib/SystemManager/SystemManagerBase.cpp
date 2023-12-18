@@ -1029,7 +1029,7 @@ bool ASystemManagerBase::GetSlotIndex(AActor* p_actor, INT32S& slot_index)
 
 bool ASystemManagerBase::GetConnectionInfo(AActor* p_actor, INT32S ind, SConnectionInfo& conn)
 {
-	auto p_obj = ToSensorBase(p_actor);
+	auto p_obj = ToActorBase(p_actor);
 	if (p_obj) {
 		return p_obj->GetConnnectionInfo(ind,conn);
 
@@ -1038,7 +1038,7 @@ bool ASystemManagerBase::GetConnectionInfo(AActor* p_actor, INT32S ind, SConnect
 }
 bool ASystemManagerBase::SetConnectionInfo(AActor* p_actor, INT32S ind, SConnectionInfo conn)
 {
-	auto p_obj = ToSensorBase(p_actor);
+	auto p_obj = ToActorBase(p_actor);
 	if (p_obj) {
 		return p_obj->SetConnnectionInfo(ind, conn);
 

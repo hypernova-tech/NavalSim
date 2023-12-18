@@ -96,6 +96,20 @@ FVector AMapOrigin::ConvertLLHToUEXYZ(FVector pos)
 	return ret;
 }
 
+FVector AMapOrigin::ConvertUEXYZToLLH(FVector xyz)
+{
+
+	FVector diff_xyz = xyz - GetActorLocation();
+
+	FVector llh = FVector::RightVector * diff_xyz.Y / 111e3 + FVector::ForwardVector / 111e3 * diff_xyz.X + FVector::UpVector * TOW(diff_xyz.Z);
+
+	llh += CenterLLH;
+
+	//pGeoReferencingSystem->GeographicToEngine(pos, ret);
+
+	return llh;
+}
+
 void AMapOrigin::ChangeCenterCoordinateOnce(FVector new_center_llh)
 {
 	if (!IsCenterChangedOnce) {

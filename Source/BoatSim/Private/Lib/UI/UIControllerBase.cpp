@@ -81,6 +81,11 @@ void AUIControllerBase::SetConsoleOutputTextWidget(UTextBlock* pwidget)
 	ConsoleText = pwidget;
 }
 
+void AUIControllerBase::SetCoordTextWidget(UTextBlock* pwidget)
+{
+	CoordText = pwidget;
+}
+
 void AUIControllerBase::OnMouseLeftButtonDown(int locationX, int locationY)
 {
 
@@ -99,7 +104,15 @@ void AUIControllerBase::OnMouseLeftButtonUp(int locationX, int locationY)
 	pGizmoUIController->OnMouseLeftButtonUp(locationX, locationY);
 }
 
-
+void AUIControllerBase::DisplayClickedCoord(const FHitResult& hit_res)
+{
+	auto p_uicontroller = ASystemManagerBase::GetInstance()->GetUIController();
+	auto p_map_origin = ASystemManagerBase::GetInstance()->GetMapOrigin();
+	FVector hit_loc = hit_res.Location;
+	auto llh = p_map_origin->ConvertUEXYZToLLH(hit_loc);
+	FString hit_coord = "LatLonH: " + CUtil::VectorToString(llh) + " UEXYZ: +" + CUtil::VectorToString(hit_loc);
+	p_uicontroller->SetCoordTextValue(hit_coord);
+}
 
 void AUIControllerBase::FindActorAtClickPosition(int locationX, int locationY)
 {
@@ -135,6 +148,7 @@ void AUIControllerBase::FindActorAtClickPosition(int locationX, int locationY)
 	if (bHit)
 	{
 		// HitResult now contains information about what was hit
+		DisplayClickedCoord(HitResult);
 		AActor* ClickedActor = HitResult.GetActor();
 		if (ClickedActor->ActorHasTag("Gizmo")) {
 			ClickedActor = CUtil::GetParentActor(ClickedActor);
@@ -174,6 +188,13 @@ void AUIControllerBase::SelectActor(AActor* p_actor)
 	pSelectedActor = p_actor;
 	ASystemManagerBase::GetInstance()->SetSelectedActor(pSelectedActor);
 	pGizmoUIController->SetTrackedActor(pSelectedActor);
+}
+
+void AUIControllerBase::SetCoordTextValue(FString val)
+{
+	if (CoordText) {
+		CoordText->SetText(FText::FromString(val));
+	}
 }
 
 UGizmoUIController* AUIControllerBase::GetGizmoController()

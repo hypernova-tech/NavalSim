@@ -8,13 +8,14 @@
 #include <Lib/SaveLoad/ISaveLoader.h>
 #include <Lib/JSON/CJsonDataContainer.h>
 #include <Lib/Sensor/GenericCommIF/GenericCommIF.h>
+#include <Lib/ActorBase/ActorIF.h>
 #include "ActorBase.generated.h"
 
 
 
 
 UCLASS()
-class AActorBase : public AActor
+class AActorBase : public AActor, public IActorIF
 {
 	GENERATED_BODY()
 	
@@ -66,8 +67,8 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	void SetEnabled(bool val);
-	bool GetEnabled();
+	virtual void SetEnabled(bool val) override;
+	virtual bool GetEnabled() override;
 	bool GetIsExternalUpdateScenarioMode();
 	void ExternalUpdate(float DeltaTime);
 	void ExternalUpdateScenarioMode(float DeltaTime);

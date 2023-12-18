@@ -46,6 +46,8 @@ public:
 	static AMapOrigin* GetMapOrigin();
 
 	FVector ConvertLLHToUEXYZ(FVector pos);
+	FVector ConvertUEXYZToLLH(FVector pos);
+	
 	void ChangeCenterCoordinateOnce(FVector new_center);
 
 

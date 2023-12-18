@@ -45,6 +45,9 @@ protected:
 	UGizmoUIController* pGizmoUIController;
 	bool IsUIVisible = false;
 
+	UPROPERTY(EditAnywhere)
+		UTextBlock* CoordText;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -71,6 +74,9 @@ public:
 		void SetConsoleOutputTextWidget(UTextBlock* pwidget);
 
 	UFUNCTION(BlueprintCallable)
+		void SetCoordTextWidget(UTextBlock* pwidget);
+
+	UFUNCTION(BlueprintCallable)
 		void OnMouseLeftButtonDown(int locationX, int locationY);
 
 	UFUNCTION(BlueprintCallable)
@@ -85,11 +91,13 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void SetIsUIVisible(bool val);
 
+
 	void FindActorAtClickPosition(int locationX, int locationY);
 
 
 	void SetConsoleOutputText(FString text);
 	void SelectActor(AActor* p_actor);
+	void SetCoordTextValue(FString val);
 
 	UGizmoUIController* GetGizmoController();
 
@@ -104,4 +112,6 @@ private:
 	AActor* pSelectedActor;
 	INT64U TotalFrameCount = 0;
 	FLOAT64 LastFrameTime;
+
+	void DisplayClickedCoord(const FHitResult& hit_res);
 };
