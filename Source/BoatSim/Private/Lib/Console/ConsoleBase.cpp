@@ -775,7 +775,7 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
 
     }
 
-    ret = CommandManager.GetValue(CCLICommandManager::PlatformSpeed, dbl);
+    ret = CommandManager.GetValue(CCLICommandManager::PlatformTurnRate, dbl);
     if (ret) {
         if (pSystemAPI->SetTurnRateDegPerSec(nullptr, dbl)) {
             return true;

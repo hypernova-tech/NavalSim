@@ -45,7 +45,7 @@ public:
 	float MovementSpeedUnitPerSec = 500;
 
 	UPROPERTY(BlueprintReadWrite)
-		float TurnRateDegPerSec = 720;
+		float TurnRateDegPerSec = 30;
 
 	UPROPERTY(EditAnywhere)
 	float OscillationAmplitude = 1;
@@ -67,8 +67,8 @@ protected:
 
 	void BindedMoveForward(float val);
 	void BindedMoveRight(float val);
-	void BindedMouseX(float val);
-	void BindedMouseY(float val);
+	void BindedMouseMoveX(float val);
+	void BindedMouseMoveY(float val);
 	void OnRightMousePressed();
 	void OnRightMouseReleased();
 	void OnLeftMousePressed();
@@ -103,7 +103,7 @@ public:
 	void SetCamView(ECamView view);
 	ECamView GetCamView();
 private:
-	UCameraComponent* BoatCam;
+	UCameraComponent* pCam;
 	bool IsForward;
 	bool IsBackward;
 	bool IsLeft;

@@ -29,9 +29,9 @@ void UGizmoUIController::BeginPlay()
 	if (APlayerController* PC = GetWorld()->GetFirstPlayerController())
 	{
 
-		PC->InputComponent->BindAxis("RotationX", this, &UGizmoUIController::HandleMouseX).bConsumeInput = false;
+		PC->InputComponent->BindAxis("PltRotationX", this, &UGizmoUIController::HandleMouseX).bConsumeInput = false;
 	
-		PC->InputComponent->BindAxis("RotationY", this, &UGizmoUIController::HandleMouseY).bConsumeInput = false;
+		PC->InputComponent->BindAxis("PltRotationY", this, &UGizmoUIController::HandleMouseY).bConsumeInput = false;
 
 
 		PC->InputComponent->BindAction("GizmoMove", IE_Repeat, this, &UGizmoUIController::HandleMove).bConsumeInput = false;

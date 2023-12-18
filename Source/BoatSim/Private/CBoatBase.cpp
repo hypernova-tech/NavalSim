@@ -30,7 +30,7 @@ void ACBoatBase::BeginPlay()
 	CMath::UnitTestVec();
 	Super::BeginPlay();
 	ASOAImplementor::GetInstance()->Subscribe(CommonSOAObservers::PlatformKinematicObserverId,this);
-	BoatCam = Cast<UCameraComponent>(GetComponentByClass<UCameraComponent>());
+	pCam = Cast<UCameraComponent>(GetComponentByClass<UCameraComponent>());
 	pLastData = NewObject< UPlatformKinematicData>();
 
 	
@@ -76,25 +76,27 @@ void ACBoatBase::Tick(float DeltaTime)
 		forward = rot_qua.RotateVector(forward); // Rotate the vector
 		FRotator new_rot = forward.Rotation();
 		SetActorRotation(new_rot);
+
+		
 	}
 
 #if true
-	if (BoatCam != nullptr) {
+	if (pCam != nullptr) {
 		if (bUpKeyPressed && bIsRightMousePressed) {
 
 		   
-			FVector cam_forward = BoatCam->GetForwardVector();
-			FVector cam_pos = BoatCam->GetComponentLocation();
+			FVector cam_forward = pCam->GetForwardVector();
+			FVector cam_pos = pCam->GetComponentLocation();
 
-			BoatCam->SetWorldLocation(cam_pos + cam_forward * DeltaTime * TOUE(CamMovementSpeed));
+			pCam->SetWorldLocation(cam_pos + cam_forward * DeltaTime * TOUE(CamMovementSpeed));
 
 
 		}
 		else if (bDownKeyPressed && bIsRightMousePressed) {
-			FVector cam_forward = BoatCam->GetForwardVector();
-			FVector cam_pos = BoatCam->GetComponentLocation();
+			FVector cam_forward = pCam->GetForwardVector();
+			FVector cam_pos = pCam->GetComponentLocation();
 
-			BoatCam->SetWorldLocation(cam_pos - cam_forward * DeltaTime * TOUE(CamMovementSpeed));
+			pCam->SetWorldLocation(cam_pos - cam_forward * DeltaTime * TOUE(CamMovementSpeed));
 		}
 	}
 #endif
@@ -182,26 +184,23 @@ void ACBoatBase::BindedMoveForward(float val)
 void ACBoatBase::BindedMoveRight(float val)
 {
 
-	
-
-	
-
-	
-
 }
-void ACBoatBase::BindedMouseX(float val)
+void ACBoatBase::BindedMouseMoveX(float val)
 {
 
-	if (BoatCam && bIsRightMousePressed)
+	if (pCam && bIsRightMousePressed)
 	{
-		
+	
+		auto p_attached = pCam->GetAttachParentActor();
+		CUtil::DebugLogScreen("Attached " + p_attached->GetName());
 
 		// Get the current rotation
-		FRotator NewRotation = BoatCam->GetComponentRotation();
-
+		FRotator parent_rot = GetActorRotation();
+		FRotator curr_rot = pCam->GetRelativeRotation();
+		FRotator abs_rot = pCam->GetComponentRotation();
 		// Adjust the yaw based on the rate of mouse movement
-		FLOAT64 new_ang = NewRotation.Yaw + val;
-
+		FLOAT64 new_ang = curr_rot.Yaw + val;
+		/*
 		if (new_ang > 360) {
 			new_ang = new_ang - 360;
 		}
@@ -209,34 +208,34 @@ void ACBoatBase::BindedMouseX(float val)
 		{
 			new_ang += 360;
 		}
-		NewRotation.Yaw = new_ang;
-
+		*/
+		curr_rot.Yaw = new_ang;
 		// Set the updated rotation to the camera
-		BoatCam->SetWorldRotation(NewRotation);
-
+		pCam->AddRelativeRotation(FRotator(0, 1.3*val, 0));
+		// Set the updated rotation to the camera
 		
-	}else if (BoatCam && bIsLeftMousePressed) {
-		FVector cam_right = BoatCam->GetRightVector();
-		FVector cam_pos = BoatCam->GetComponentLocation();
+		
+	}else if (pCam && bIsLeftMousePressed) {
+		FVector cam_right = pCam->GetRightVector();
+		FVector cam_pos = pCam->GetComponentLocation();
 
-		BoatCam->SetWorldLocation(cam_pos + cam_right * val * (CamMovementSpeed));
+		pCam->SetWorldLocation(cam_pos + cam_right * val * (CamMovementSpeed));
 	}
 	
 }
 
-void ACBoatBase::BindedMouseY(float val)
+void ACBoatBase::BindedMouseMoveY(float val)
 {
 
-	if (BoatCam && bIsRightMousePressed)
+	if (pCam && bIsRightMousePressed)
 	{
-		
-		
-		
-		FQuat QuatRotation = BoatCam->GetComponentQuat();
 
-		FQuat DeltaRotation = FQuat(FRotator(-val,0,0));
+	
+		FQuat QuatRotation = pCam->GetComponentQuat();
+
+		FQuat DeltaRotation = FQuat(FRotator(-1.3*val,0,0));
 		QuatRotation *= DeltaRotation;
-		BoatCam->SetRelativeRotation(QuatRotation.Rotator());
+		pCam->SetWorldRotation(QuatRotation.Rotator());
 
 		return;
 		
@@ -278,10 +277,10 @@ void ACBoatBase::OnDownKeyReleased()
 }
 void ACBoatBase::AdjustCameraDistance(float val)
 {
-	FVector cam_forward = BoatCam->GetForwardVector();
-	FVector cam_pos = BoatCam->GetComponentLocation();
+	FVector cam_forward = pCam->GetForwardVector();
+	FVector cam_pos = pCam->GetComponentLocation();
 
-	BoatCam->SetWorldLocation(cam_pos + cam_forward * val * CamMovementSpeed);
+	pCam->SetWorldLocation(cam_pos + cam_forward * val * CamMovementSpeed);
 }
 
 void ACBoatBase::OnFocusEnter()
@@ -295,11 +294,11 @@ void ACBoatBase::OnFocusEnter()
 void ACBoatBase::TopView()
 {
 	if (pFocusedActor) {
-		BoatCam->SetWorldLocation(pFocusedActor->GetActorLocation() + FVector::UpVector * TOUE(3*FocusDistanceMeter));
-		CUtil::CameraLookAt(BoatCam, BoatCam->GetComponentLocation() - FVector::UpVector * TOUE(FocusDistanceMeter));
+		pCam->SetWorldLocation(pFocusedActor->GetActorLocation() + FVector::UpVector * TOUE(3*FocusDistanceMeter));
+		CUtil::CameraLookAt(pCam, pCam->GetComponentLocation() - FVector::UpVector * TOUE(FocusDistanceMeter));
 	}
 	else {
-		CUtil::CameraLookAt(BoatCam, BoatCam->GetComponentLocation() - FVector::UpVector * TOUE(FocusDistanceMeter));
+		CUtil::CameraLookAt(pCam, pCam->GetComponentLocation() - FVector::UpVector * TOUE(FocusDistanceMeter));
 	}
 	
 
@@ -307,21 +306,21 @@ void ACBoatBase::TopView()
 void ACBoatBase::LeftView()
 {
 	if (pFocusedActor) {
-		BoatCam->SetWorldLocation(FVector::UpVector * TOUE(5) + pFocusedActor->GetActorLocation() + FVector::LeftVector * TOUE(3 * FocusDistanceMeter));
-		CUtil::CameraLookAt(BoatCam, BoatCam->GetComponentLocation() - FVector::LeftVector * TOUE(FocusDistanceMeter));
+		pCam->SetWorldLocation(FVector::UpVector * TOUE(5) + pFocusedActor->GetActorLocation() + FVector::LeftVector * TOUE(3 * FocusDistanceMeter));
+		CUtil::CameraLookAt(pCam, pCam->GetComponentLocation() - FVector::LeftVector * TOUE(FocusDistanceMeter));
 	}
 	else {
-		CUtil::CameraLookAt(BoatCam, BoatCam->GetComponentLocation() - FVector::LeftVector * TOUE(FocusDistanceMeter));
+		CUtil::CameraLookAt(pCam, pCam->GetComponentLocation() - FVector::LeftVector * TOUE(FocusDistanceMeter));
 	}
 }
 void ACBoatBase::RightView()
 {
 	if (pFocusedActor) {
-		BoatCam->SetWorldLocation(FVector::UpVector * TOUE(5) + pFocusedActor->GetActorLocation() + FVector::RightVector * TOUE(3 * FocusDistanceMeter));
-		CUtil::CameraLookAt(BoatCam, BoatCam->GetComponentLocation() - FVector::RightVector * TOUE(FocusDistanceMeter));
+		pCam->SetWorldLocation(FVector::UpVector * TOUE(5) + pFocusedActor->GetActorLocation() + FVector::RightVector * TOUE(3 * FocusDistanceMeter));
+		CUtil::CameraLookAt(pCam, pCam->GetComponentLocation() - FVector::RightVector * TOUE(FocusDistanceMeter));
 	}
 	else {
-		CUtil::CameraLookAt(BoatCam, BoatCam->GetComponentLocation() - FVector::RightVector * TOUE(FocusDistanceMeter));
+		CUtil::CameraLookAt(pCam, pCam->GetComponentLocation() - FVector::RightVector * TOUE(FocusDistanceMeter));
 	}
 }
 void ACBoatBase::Perpective()
@@ -329,7 +328,7 @@ void ACBoatBase::Perpective()
 }
 bool ACBoatBase::FocusCamera(AActor* p_actor)
 {
-	CUtil::CameraLookAt(BoatCam, p_actor,  TOUE(FocusDistanceMeter));
+	CUtil::CameraLookAt(pCam, p_actor,  TOUE(FocusDistanceMeter));
 	pFocusedActor = p_actor;
 	return true;
 }
@@ -419,7 +418,7 @@ ECamView ACBoatBase::GetCamView()
 
 void ACBoatBase::OnControllerChanged()
 {
-	BoatCam = Cast<UCameraComponent>(GetComponentByClass<UCameraComponent>());
+	pCam = Cast<UCameraComponent>(GetComponentByClass<UCameraComponent>());
 }
 
 void ACBoatBase::Oscillate()
@@ -462,8 +461,6 @@ void ACBoatBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &ACBoatBase::BindedMoveForward).bConsumeInput = false;
 	PlayerInputComponent->BindAxis("MoveRight", this, &ACBoatBase::BindedMoveRight).bConsumeInput = false;
-	PlayerInputComponent->BindAxis("RotationX", this, &ACBoatBase::BindedMouseX).bConsumeInput = false;
-	PlayerInputComponent->BindAxis("RotationY", this, &ACBoatBase::BindedMouseY).bConsumeInput = false;
 	PlayerInputComponent->BindAction("RightMouseButtonClick", IE_Pressed, this, &ACBoatBase::OnRightMousePressed).bConsumeInput = false;
 	PlayerInputComponent->BindAction("RightMouseButtonClick", IE_Released, this, &ACBoatBase::OnRightMouseReleased).bConsumeInput = false;
 	PlayerInputComponent->BindAction("LeftMouseButtonClick", IE_Pressed, this, &ACBoatBase::OnLeftMousePressed).bConsumeInput = false;
@@ -475,4 +472,8 @@ void ACBoatBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 
 	PlayerInputComponent->BindAction("Focus", IE_Pressed, this, &ACBoatBase::OnFocusEnter).bConsumeInput = false;
 	PlayerInputComponent->BindAxis("Zoom", this, &ACBoatBase::AdjustCameraDistance).bConsumeInput = false;
+	PlayerInputComponent->BindAxis("PltRotationX", this, &ACBoatBase::BindedMouseMoveX).bConsumeInput = false;
+	PlayerInputComponent->BindAxis("PltRotationY", this, &ACBoatBase::BindedMouseMoveY).bConsumeInput = false;
+
+
 }

@@ -15,7 +15,7 @@
 
 
 UCLASS()
-class AActorBase : public AActor, public IActorIF
+class AActorBase : public AActor
 {
 	GENERATED_BODY()
 	
