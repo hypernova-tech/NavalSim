@@ -351,6 +351,28 @@ bool ASystemManagerBase::GetActorSuppressed(AActor* p_actor, bool &val)
 	return false;
 }
 
+bool ASystemManagerBase::GetActorStandaloneModeEnabled(AActor* p_actor, bool& val)
+{
+	auto p_base = ToActorBase(p_actor);
+	if (p_base) {
+		val = p_base->GetStandaloneModeEnabled();
+		return true;
+	}
+
+	return false;
+}
+
+bool ASystemManagerBase::SetActorStandaloneModeEnabled(AActor* p_actor, bool val)
+{
+	auto p_base = ToActorBase(p_actor);
+	if (p_base) {
+		p_base->SetStandaloneModeEnabled(val);
+		return true;
+	}
+
+	return false;
+}
+
 INT64U ASystemManagerBase::GetTimeStamp()
 {
 	FLOAT64 time = FApp::GetGameTime();
@@ -2286,6 +2308,26 @@ bool ASystemManagerBase::GetPathLineColor(AActor* p_actor, FColor& val)
 	 auto plt = GetPlatform();
 	 if (plt != nullptr) {
 		 view = plt->GetCamView();
+		 return true;
+	 }
+	 return false;
+ }
+
+ bool ASystemManagerBase::GetBeamEnabled(AActor* p_actor, bool& val)
+ {
+	 auto obj = ToSensorBase(p_actor);
+	 if (obj != nullptr) {
+		 val = obj->ShowBeam;
+		 return true;
+	 }
+	 return false;
+ }
+
+ bool ASystemManagerBase::SetBeamEnabled(AActor* p_actor, bool val)
+ {
+	 auto obj = ToSensorBase(p_actor);
+	 if (obj != nullptr) {
+		 obj->ShowBeam = val;
 		 return true;
 	 }
 	 return false;

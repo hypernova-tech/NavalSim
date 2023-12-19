@@ -76,8 +76,12 @@ void AHalo24Radar::RadarStateMachine()
 		break;
 
 
-
-
+	case  EHalo24StateMachineStates::StandaloneModeEnter:
+		SetScanEnabled(true);
+		next_state = EHalo24StateMachineStates::StandaloneMode;
+		break;
+	case EHalo24StateMachineStates::StandaloneMode:
+		break;
 	default:
 		break;
 	}
@@ -373,6 +377,10 @@ void AHalo24Radar::InitSensor()
 	Super::InitSensor();
 	pHalo24CommIF = (UHalo24CommIF*)pCommIF;
 	pHalo24CommIF->SetHostIF(this);
+
+	if (StandaloneModeEnabled) {
+		Halo24StateMachine = EHalo24StateMachineStates::StandaloneModeEnter;
+	}
 }
 
 void AHalo24Radar::InitTracker()

@@ -59,6 +59,13 @@ public:
 	virtual ASensorBase* ToSensorBase(AActor* p_actor) = 0;
 	virtual bool IsBakable(AActor* p_actor) = 0;
 	
+	virtual bool GetBeamEnabled(AActor* p_actor, bool& val) = 0;
+	virtual bool SetBeamEnabled(AActor* p_actor, bool val) = 0;
+
+	virtual bool GetActorStandaloneModeEnabled(AActor* p_actor, bool& val) = 0;
+	virtual bool SetActorStandaloneModeEnabled(AActor* p_actor, bool val) = 0;
+	
+
 	virtual bool SetActorSuppressed(AActor* p_actor, bool val) = 0;
 	virtual bool GetActorSuppressed(AActor* p_actor, bool& val) = 0;
 

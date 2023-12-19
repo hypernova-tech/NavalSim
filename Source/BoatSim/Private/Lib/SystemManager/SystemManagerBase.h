@@ -196,6 +196,10 @@ public:
 	virtual void DisableAllActors();
 	virtual bool SetActorSuppressed(AActor* p_actor, bool val);
 	virtual bool GetActorSuppressed(AActor* p_actor, bool &val);
+
+	virtual bool GetActorStandaloneModeEnabled(AActor* p_actor, bool& val);
+	virtual bool SetActorStandaloneModeEnabled(AActor* p_actor, bool val);
+
 	virtual bool SetActorEnabled(AActor* p_actor, bool val);
 	virtual bool GetActorEnabled(AActor* p_actor);
 	virtual void SetSelectedActor(AActor* p_actor) ;
@@ -422,6 +426,9 @@ public:
 
 	virtual bool SetCamView(ECamView view);
 	virtual bool GetCamView(ECamView& view);
+
+	virtual bool GetBeamEnabled(AActor* p_actor, bool& val);
+	virtual bool SetBeamEnabled(AActor* p_actor, bool val);
 
 
 

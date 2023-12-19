@@ -22,6 +22,7 @@ public static class CLICommandManager
     [Modifiable] public const string Suppressed = "suppressed";
     [Modifiable] public const string Active = "active";
     [Modifiable] public const string Enabled = "enabled";
+    [Modifiable] public const string StandaloneModeEnabled = "standalone";
     public const string Instance = "instance";
     public const string Position = "position";
     public const string RelPosition = "relposition";

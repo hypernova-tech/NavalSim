@@ -1050,7 +1050,13 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
    
 
 
+    ret = CommandManager.GetValue(CCLICommandManager::StandaloneModeEnabled, is_enabled);
+    if (ret) {
+        if (pSystemAPI->SetActorStandaloneModeEnabled(p_actor, is_enabled)) {
+            one_success = true;
+        }
 
+    }
 
    
     ret = CommandManager.GetValue(CCLICommandManager::Suppressed, is_enabled);
@@ -1275,7 +1281,15 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
     else {
 
     }
+    ret = CommandManager.GetValue(CCLICommandManager::Beam, is_enabled);
+    if (ret) {
+        if (pSystemAPI->SetBeamEnabled(p_actor, is_enabled)) {
+            one_success = true;
+        }
+    }
+    else {
 
+    }
     ret = CommandManager.GetValue(CCLICommandManager::RangeMin, dbl);
     if (ret) {
         if (pSystemAPI->SetRangeMinMeter(p_actor, dbl)) {
@@ -1858,6 +1872,17 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
 
     }
 
+    ret = CommandManager.HasA(CCLICommandManager::StandaloneModeEnabled);
+    if (ret) {
+        if (pSystemAPI->SetActorStandaloneModeEnabled(p_actor, is_enabled)) {
+            SendConsoleResponse(name, CCLICommandManager::StandaloneModeEnabled, is_enabled);
+            return true;
+        }
+    }
+    else {
+
+    }
+
     ret = CommandManager.HasEnabled();
     if (ret) {
         is_enabled = pSystemAPI->GetActorEnabled(p_actor);
@@ -1989,6 +2014,17 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
     else {
 
     }
+    ret = CommandManager.HasA(CCLICommandManager::Beam);
+    if (ret) {
+        if (pSystemAPI->GetBeamEnabled(p_actor, is_enabled)) {
+            SendConsoleResponse(name, CCLICommandManager::Beam, is_enabled);
+            return true;
+        }
+    }
+    else {
+
+    }
+
 
     ret = CommandManager.HasA(CCLICommandManager::RangeMin);
     if (ret) {

@@ -49,6 +49,8 @@ protected:
 	UPROPERTY(EditAnywhere)
 		bool Enabled = false;
 
+	UPROPERTY(EditAnywhere)
+		bool StandaloneModeEnabled = false;
 
 	UPROPERTY(EditAnywhere)
 		int AffinityInstanceId = -1;
@@ -75,6 +77,9 @@ public:
 
 	virtual void SetSuppressed(bool val);
 	virtual bool GetSuppressed();
+
+	virtual void SetStandaloneModeEnabled(bool val);
+	virtual bool GetStandaloneModeEnabled();
 
 	bool GetIsExternalUpdateScenarioMode();
 	void ExternalUpdate(float DeltaTime);

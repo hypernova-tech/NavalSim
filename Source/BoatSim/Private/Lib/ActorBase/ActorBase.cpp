@@ -101,6 +101,16 @@ bool AActorBase::GetSuppressed()
 	return Suppressed;
 }
 
+void AActorBase::SetStandaloneModeEnabled(bool val)
+{
+	StandaloneModeEnabled = val;
+}
+
+bool AActorBase::GetStandaloneModeEnabled()
+{
+	return StandaloneModeEnabled;
+}
+
 bool AActorBase::GetIsExternalUpdateScenarioMode()
 {
 	return IsExternalUpdateScenarioMode;
@@ -144,6 +154,14 @@ void AActorBase::Save(ISaveLoader* p_save_loader)
 	p_save_loader->AppendOption(line, CCLICommandManager::Instance, AffinityInstanceId);
 	p_save_loader->AddLine(line);
 
+	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
+	p_save_loader->AppendOption(line, CCLICommandManager::Suppressed, Suppressed);
+	p_save_loader->AddLine(line);
+
+	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
+	p_save_loader->AppendOption(line, CCLICommandManager::StandaloneModeEnabled, StandaloneModeEnabled);
+	p_save_loader->AddLine(line);
+
 	if (pCommIF) {
 		auto connections = pCommIF->GetConnectionsInfo();
 		int ind = 0;
@@ -166,6 +184,7 @@ void AActorBase::SaveJSON(CJsonDataContainer& data)
 	data.Add(CCLICommandManager::Instance, (AffinityInstanceId));
 	data.Add(CCLICommandManager::Suppressed, (Suppressed));
 	data.Add(CCLICommandManager::Enabled, (Enabled));
+	data.Add(CCLICommandManager::StandaloneModeEnabled, (StandaloneModeEnabled));
 	data.Add(CCLICommandManager::Active, CUtil::GetIsActorTickEnabled(this));
 	data.Add(CCLICommandManager::Bp, BlueprintName);
 	auto parent = CUtil::GetParentActor(this);

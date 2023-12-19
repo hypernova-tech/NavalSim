@@ -28,6 +28,8 @@ enum EHalo24StateMachineStates
 	WaitPoweredOn,
 	WaitTransmit,
 	Transmitting,
+	StandaloneModeEnter,
+	StandaloneMode,
 
 
 };

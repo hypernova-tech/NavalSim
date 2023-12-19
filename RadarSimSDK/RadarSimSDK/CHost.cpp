@@ -482,7 +482,7 @@ void CHost::ThreadFunction()
 
 				for (INT32U i = 0; i < RadarCount; i++) {
 					auto* p_radar = tMultiRadarClient::GetInstance()->FindRadar(radars[i]);
-					p_radar->pImageClient->SetRange(10000 + 0*sin(2*3.14* 0.2f * time));
+					p_radar->pImageClient->SetRange(500 + 0*sin(2*3.14* 0.2f * time));
 				}
 				std::this_thread::sleep_for(std::chrono::milliseconds(10));
 				for (INT32U i = 0; i < RadarCount; i++) {

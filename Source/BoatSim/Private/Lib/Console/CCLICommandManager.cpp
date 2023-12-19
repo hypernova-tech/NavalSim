@@ -21,6 +21,7 @@ FString CCLICommandManager::DestroyCommand = "destroy";
 
 FString CCLICommandManager::SetCommand = "set";
 FString CCLICommandManager::Suppressed = "suppressed";
+FString CCLICommandManager::StandaloneModeEnabled = "standalone";
 FString CCLICommandManager::Active = "active";
 FString CCLICommandManager::Enabled = "enabled";
 
