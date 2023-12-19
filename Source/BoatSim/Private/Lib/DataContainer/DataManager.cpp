@@ -72,6 +72,12 @@ FString ADataManager::GetCategoryName(EBlueprintCategory category)
 		return "Human";
 	case EBlueprintCategory::CategoryAnimal:
 		return "Animal";
+	case EBlueprintCategory::CategoryEnvironment:
+		return "Environment";
+	case EBlueprintCategory::CategoryTerrain:
+		return "Terrain";
+	case EBlueprintCategory::CategoryPrimitives:
+		return "Primitives";
 	default:
 		return "Unkown";
 	}

@@ -8,12 +8,12 @@
  * 
  */
 
-
+// DONT FORGET TO UPDATE FString ADataManager::GetCategoryName(EBlueprintCategory category)
 UENUM(BlueprintType)
 enum class EBlueprintCategory : uint8
 {
 	CategoryUnknown = 0,
-	CategoryPrimitive = 1,
+	CategoryReserved1 = 1,
 	CategorySensor = 2,
 	CategoryPath = 3,
 	CategoryReserved2 = 4,
@@ -28,7 +28,9 @@ enum class EBlueprintCategory : uint8
 	CategoryHuman = 13,
 	CategoryAnimal = 14,
 	CategoryEnvironment = 15,
-	CategoryTerrain = 16
+	CategoryTerrain = 16,
+	CategoryPrimitives =17,
+	CategoryLast = 255
 };
 
 
