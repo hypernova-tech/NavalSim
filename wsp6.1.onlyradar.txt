@@ -67,6 +67,7 @@ set --name viscam1 --seasurfdetectprob 0.000000
 set --name viscam1 --maxsurfpenet 0.000000
 set --name viscam1 --widthpx 1920
 set --name viscam1 --heightpx 1080
+set --name viscam1 --suppressed 1
 
 create --name viscam2 --bp CAMVIS
 set --name viscam2 --parent gimbal2
@@ -90,6 +91,7 @@ set --name viscam2 --seasurfdetectprob 0.000000
 set --name viscam2 --maxsurfpenet 0.000000
 set --name viscam2 --widthpx 1920
 set --name viscam2 --heightpx 1080
+set --name viscam2 --suppressed 1
 
 create --name fls1 --bp FLSFARSOUNDER
 set --name fls1 --parent sidamir
@@ -111,6 +113,7 @@ set --name fls1 --subsurfacedetecten 1
 set --name fls1 --foamen 1
 set --name fls1 --seasurfdetectprob 0.001000
 set --name fls1 --maxsurfpenet 0.000000
+set --name fls1 --suppressed 1
 
 create --name haloradar1 --bp RADARHALO24
 set --name haloradar1 --parent sidamir
@@ -145,6 +148,7 @@ set --name haloradar1 --radseaclutautooffset 0
 set --name haloradar1 --radrainclutlevel 0
 set --name haloradar1 --radmaxguardzonecount 2
 set --name haloradar1 --radmaxsectorblankingzonecount 4
+set --name haloradar1 --suppressed 0
 
 create --name m1lidar1 --bp LIDARM1
 set --name m1lidar1 --parent sidamir
@@ -172,6 +176,7 @@ set --name m1lidar1 --subsurfacedetecten 0
 set --name m1lidar1 --foamen 1
 set --name m1lidar1 --seasurfdetectprob 0.050000
 set --name m1lidar1 --maxsurfpenet 1.000000
+set --name m1lidar1 --suppressed 1
 
 create --name viscam3 --bp CAMVIS
 set --name viscam3 --parent sidamir
@@ -195,6 +200,7 @@ set --name viscam3 --seasurfdetectprob 0.000000
 set --name viscam3 --maxsurfpenet 0.000000
 set --name viscam3 --widthpx 1920
 set --name viscam3 --heightpx 1080
+set --name viscam3 --suppressed 1
 
 create --name ircam1 --bp CAMIR
 set --name ircam1 --parent sidamir
@@ -218,6 +224,7 @@ set --name ircam1 --seasurfdetectprob 0.000000
 set --name ircam1 --maxsurfpenet 0.000000
 set --name ircam1 --widthpx 1920
 set --name ircam1 --heightpx 1080
+set --name ircam1 --suppressed 1
 
 create --name sidamirpath --bp PATH
 set --name sidamirpath --position "0.000000 0.000000 0.000000"

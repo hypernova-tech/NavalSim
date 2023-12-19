@@ -329,6 +329,28 @@ void ASystemManagerBase::DisableAllActors()
 
 }
 
+bool ASystemManagerBase::SetActorSuppressed(AActor* p_actor, bool val)
+{
+	auto p_base = ToActorBase(p_actor);
+	if (p_base) {
+		p_base->SetSuppressed(val);
+		return true;
+	}
+
+	return false;
+}
+
+bool ASystemManagerBase::GetActorSuppressed(AActor* p_actor, bool &val)
+{
+	auto p_base = ToActorBase(p_actor);
+	if (p_base) {
+		val = p_base->GetSuppressed();
+		return true;
+	}
+
+	return false;
+}
+
 INT64U ASystemManagerBase::GetTimeStamp()
 {
 	FLOAT64 time = FApp::GetGameTime();

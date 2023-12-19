@@ -151,6 +151,17 @@ public:
 
 private:
     tPPIControllerImpl *m_pImpl;
+
+    uint8_t *pFrame;
+    uint32_t Width, Height;
+    tRadarColourLookUpTable* pColorLookUpTable;
+    uint32_t XCentre;
+    uint32_t YCentre;
+
+    float MetersPerPixel = 50;
+
+    void ResetSpokeLineAtImage(int spoke_number, int spoke_count);
+    int Clamp(int val, int min, int max);
 };
 
 //-----------------------------------------------------------------------------

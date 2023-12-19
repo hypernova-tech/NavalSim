@@ -21,6 +21,11 @@
 /**
  *
  */
+
+#define RADTODEG							57.295779513082323 
+#define DEGTORAD							0.017453292519943
+
+
 typedef char INT8S;
 typedef unsigned char INT8U;
 

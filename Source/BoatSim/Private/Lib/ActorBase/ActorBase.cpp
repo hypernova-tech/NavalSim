@@ -70,7 +70,7 @@ void AActorBase::Tick(float DeltaTime)
 
 	Super::Tick(DeltaTime);
 	if (!IsExternalUpdate) {
-		if (CheckAffinity()) {
+		if (CheckAffinity() && !Suppressed) {
 			OnStep(DeltaTime);
 		}
 	}
@@ -91,6 +91,16 @@ bool AActorBase::GetEnabled()
 	return Enabled;
 }
 
+void AActorBase::SetSuppressed(bool val)
+{
+	Suppressed = val;
+}
+
+bool AActorBase::GetSuppressed()
+{
+	return Suppressed;
+}
+
 bool AActorBase::GetIsExternalUpdateScenarioMode()
 {
 	return IsExternalUpdateScenarioMode;
@@ -98,7 +108,8 @@ bool AActorBase::GetIsExternalUpdateScenarioMode()
 
 void AActorBase::ExternalUpdate(float DeltaTime)
 {
-	if (CheckAffinity()) {
+	
+	if (CheckAffinity() && !Suppressed) {
 		OnStep(DeltaTime);
 	}
 	
@@ -153,7 +164,9 @@ void AActorBase::SaveJSON(CJsonDataContainer& data)
 {
 	data.Add(CCLICommandManager::Name, GetName());
 	data.Add(CCLICommandManager::Instance, (AffinityInstanceId));
-
+	data.Add(CCLICommandManager::Suppressed, (Suppressed));
+	data.Add(CCLICommandManager::Enabled, (Enabled));
+	data.Add(CCLICommandManager::Active, CUtil::GetIsActorTickEnabled(this));
 	data.Add(CCLICommandManager::Bp, BlueprintName);
 	auto parent = CUtil::GetParentActor(this);
 	if (parent != nullptr) {

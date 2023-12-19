@@ -59,6 +59,9 @@ public:
 	virtual ASensorBase* ToSensorBase(AActor* p_actor) = 0;
 	virtual bool IsBakable(AActor* p_actor) = 0;
 	
+	virtual bool SetActorSuppressed(AActor* p_actor, bool val) = 0;
+	virtual bool GetActorSuppressed(AActor* p_actor, bool& val) = 0;
+
 	virtual bool SetActorEnabled(AActor* p_actor, bool val) = 0;
 	virtual bool GetActorEnabled(AActor* p_actor) = 0;
 	virtual void EnableAllActors() = 0;

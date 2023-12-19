@@ -31,10 +31,10 @@ namespace ConsoleGUI
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            TreeNode treeNode2 = new TreeNode("World");
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
+            TreeNode treeNode1 = new TreeNode("World");
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
             OpenFileDialog = new OpenFileDialog();
             contextMenuStrip1 = new ContextMenuStrip(components);
             ActorListContextMenu = new ContextMenuStrip(components);
@@ -162,6 +162,12 @@ namespace ConsoleGUI
             showChartsToolStripMenuItem = new ToolStripMenuItem();
             hideChartsToolStripMenuItem = new ToolStripMenuItem();
             cameaToolStripMenuItem = new ToolStripMenuItem();
+            viewToolStripMenuItem1 = new ToolStripMenuItem();
+            topToolStripMenuItem1 = new ToolStripMenuItem();
+            leftToolStripMenuItem1 = new ToolStripMenuItem();
+            rightToolStripMenuItem1 = new ToolStripMenuItem();
+            frontToolStripMenuItem = new ToolStripMenuItem();
+            backToolStripMenuItem = new ToolStripMenuItem();
             speedToolStripMenuItem = new ToolStripMenuItem();
             xToolStripMenuItem = new ToolStripMenuItem();
             xToolStripMenuItem1 = new ToolStripMenuItem();
@@ -172,12 +178,6 @@ namespace ConsoleGUI
             xToolStripMenuItem6 = new ToolStripMenuItem();
             xToolStripMenuItem7 = new ToolStripMenuItem();
             xToolStripMenuItem8 = new ToolStripMenuItem();
-            viewToolStripMenuItem1 = new ToolStripMenuItem();
-            topToolStripMenuItem1 = new ToolStripMenuItem();
-            leftToolStripMenuItem1 = new ToolStripMenuItem();
-            rightToolStripMenuItem1 = new ToolStripMenuItem();
-            frontToolStripMenuItem = new ToolStripMenuItem();
-            backToolStripMenuItem = new ToolStripMenuItem();
             simulationToolStripMenuItem = new ToolStripMenuItem();
             startToolStripMenuItem = new ToolStripMenuItem();
             pauseToolStripMenuItem = new ToolStripMenuItem();
@@ -292,7 +292,7 @@ namespace ConsoleGUI
             tabPage2.Location = new Point(4, 24);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new Padding(3);
-            tabPage2.Size = new Size(502, 650);
+            tabPage2.Size = new Size(548, 650);
             tabPage2.TabIndex = 1;
             tabPage2.Text = "Actors";
             tabPage2.UseVisualStyleBackColor = true;
@@ -302,9 +302,9 @@ namespace ConsoleGUI
             ObjectEditor.ContextMenuStrip = ObjectEditorContextMenu;
             ObjectEditor.Location = new Point(13, 11);
             ObjectEditor.Name = "ObjectEditor";
-            treeNode2.Name = "World";
-            treeNode2.Text = "World";
-            ObjectEditor.Nodes.AddRange(new TreeNode[] { treeNode2 });
+            treeNode1.Name = "World";
+            treeNode1.Text = "World";
+            ObjectEditor.Nodes.AddRange(new TreeNode[] { treeNode1 });
             ObjectEditor.Size = new Size(246, 633);
             ObjectEditor.TabIndex = 18;
             ObjectEditor.NodeMouseClick += ObjectEditor_NodeMouseClick;
@@ -355,7 +355,7 @@ namespace ConsoleGUI
             flowLayoutPanel1.Controls.Add(ModifyableDataGrid);
             flowLayoutPanel1.Location = new Point(265, 11);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
-            flowLayoutPanel1.Size = new Size(229, 633);
+            flowLayoutPanel1.Size = new Size(277, 633);
             flowLayoutPanel1.TabIndex = 17;
             // 
             // label10
@@ -383,7 +383,7 @@ namespace ConsoleGUI
             groupBox4.Controls.Add(CBEnable);
             groupBox4.Location = new Point(3, 32);
             groupBox4.Name = "groupBox4";
-            groupBox4.Size = new Size(202, 149);
+            groupBox4.Size = new Size(253, 149);
             groupBox4.TabIndex = 30;
             groupBox4.TabStop = false;
             groupBox4.Text = "Control";
@@ -439,7 +439,7 @@ namespace ConsoleGUI
             groupBox1.Controls.Add(TB_LocationX);
             groupBox1.Location = new Point(3, 187);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(202, 111);
+            groupBox1.Size = new Size(253, 111);
             groupBox1.TabIndex = 27;
             groupBox1.TabStop = false;
             groupBox1.Text = "Location";
@@ -475,7 +475,7 @@ namespace ConsoleGUI
             // 
             TB_LocationZ.Location = new Point(24, 80);
             TB_LocationZ.Name = "TB_LocationZ";
-            TB_LocationZ.Size = new Size(172, 23);
+            TB_LocationZ.Size = new Size(223, 23);
             TB_LocationZ.TabIndex = 9;
             TB_LocationZ.Text = "0";
             TB_LocationZ.KeyDown += TB_LocationZ_KeyDown;
@@ -484,7 +484,7 @@ namespace ConsoleGUI
             // 
             TB_LocationY.Location = new Point(24, 51);
             TB_LocationY.Name = "TB_LocationY";
-            TB_LocationY.Size = new Size(172, 23);
+            TB_LocationY.Size = new Size(223, 23);
             TB_LocationY.TabIndex = 8;
             TB_LocationY.Text = "0";
             TB_LocationY.KeyDown += TB_LocationY_KeyDown;
@@ -493,7 +493,7 @@ namespace ConsoleGUI
             // 
             TB_LocationX.Location = new Point(24, 23);
             TB_LocationX.Name = "TB_LocationX";
-            TB_LocationX.Size = new Size(172, 23);
+            TB_LocationX.Size = new Size(223, 23);
             TB_LocationX.TabIndex = 7;
             TB_LocationX.Text = "0";
             TB_LocationX.KeyDown += TB_LocationX_KeyDown;
@@ -508,7 +508,7 @@ namespace ConsoleGUI
             groupBox2.Controls.Add(TB_RotationX);
             groupBox2.Location = new Point(3, 304);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(202, 111);
+            groupBox2.Size = new Size(253, 111);
             groupBox2.TabIndex = 28;
             groupBox2.TabStop = false;
             groupBox2.Text = "Rotation";
@@ -544,7 +544,7 @@ namespace ConsoleGUI
             // 
             TB_RotationZ.Location = new Point(24, 80);
             TB_RotationZ.Name = "TB_RotationZ";
-            TB_RotationZ.Size = new Size(172, 23);
+            TB_RotationZ.Size = new Size(223, 23);
             TB_RotationZ.TabIndex = 9;
             TB_RotationZ.Text = "0";
             TB_RotationZ.KeyDown += TB_RotationZ_KeyDown;
@@ -553,7 +553,7 @@ namespace ConsoleGUI
             // 
             TB_RotationY.Location = new Point(24, 51);
             TB_RotationY.Name = "TB_RotationY";
-            TB_RotationY.Size = new Size(172, 23);
+            TB_RotationY.Size = new Size(223, 23);
             TB_RotationY.TabIndex = 8;
             TB_RotationY.Text = "0";
             TB_RotationY.KeyDown += TB_RotationY_KeyDown;
@@ -562,7 +562,7 @@ namespace ConsoleGUI
             // 
             TB_RotationX.Location = new Point(24, 23);
             TB_RotationX.Name = "TB_RotationX";
-            TB_RotationX.Size = new Size(172, 23);
+            TB_RotationX.Size = new Size(223, 23);
             TB_RotationX.TabIndex = 7;
             TB_RotationX.Text = "0";
             TB_RotationX.KeyDown += TB_RotationX_KeyDown;
@@ -577,7 +577,7 @@ namespace ConsoleGUI
             groupBox3.Controls.Add(TB_ScaleX);
             groupBox3.Location = new Point(3, 421);
             groupBox3.Name = "groupBox3";
-            groupBox3.Size = new Size(202, 107);
+            groupBox3.Size = new Size(253, 107);
             groupBox3.TabIndex = 29;
             groupBox3.TabStop = false;
             groupBox3.Text = "Scale";
@@ -613,7 +613,7 @@ namespace ConsoleGUI
             // 
             TB_ScaleZ.Location = new Point(24, 80);
             TB_ScaleZ.Name = "TB_ScaleZ";
-            TB_ScaleZ.Size = new Size(172, 23);
+            TB_ScaleZ.Size = new Size(223, 23);
             TB_ScaleZ.TabIndex = 9;
             TB_ScaleZ.Text = "1";
             TB_ScaleZ.KeyDown += TB_ScaleZ_KeyDown;
@@ -622,7 +622,7 @@ namespace ConsoleGUI
             // 
             TB_ScaleY.Location = new Point(24, 51);
             TB_ScaleY.Name = "TB_ScaleY";
-            TB_ScaleY.Size = new Size(172, 23);
+            TB_ScaleY.Size = new Size(223, 23);
             TB_ScaleY.TabIndex = 8;
             TB_ScaleY.Text = "1";
             TB_ScaleY.KeyDown += TB_ScaleY_KeyDown;
@@ -631,44 +631,45 @@ namespace ConsoleGUI
             // 
             TB_ScaleX.Location = new Point(24, 23);
             TB_ScaleX.Name = "TB_ScaleX";
-            TB_ScaleX.Size = new Size(172, 23);
+            TB_ScaleX.Size = new Size(223, 23);
             TB_ScaleX.TabIndex = 7;
             TB_ScaleX.Text = "1";
             TB_ScaleX.KeyDown += TB_ScaleX_KeyDown;
             // 
             // ModifyableDataGrid
             // 
-            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = SystemColors.Control;
-            dataGridViewCellStyle4.Font = new Font("Segoe UI", 1F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle4.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle4.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
-            ModifyableDataGrid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = SystemColors.Control;
+            dataGridViewCellStyle1.Font = new Font("Segoe UI", 1F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            ModifyableDataGrid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             ModifyableDataGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle5.BackColor = SystemColors.Window;
-            dataGridViewCellStyle5.Font = new Font("Segoe UI", 8F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle5.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle5.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle5.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle5.WrapMode = DataGridViewTriState.False;
-            ModifyableDataGrid.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = SystemColors.Window;
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 8F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle2.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
+            ModifyableDataGrid.DefaultCellStyle = dataGridViewCellStyle2;
             ModifyableDataGrid.Location = new Point(3, 534);
             ModifyableDataGrid.Name = "ModifyableDataGrid";
-            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle6.BackColor = SystemColors.Control;
-            dataGridViewCellStyle6.Font = new Font("Segoe UI", 6F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle6.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle6.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle6.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle6.WrapMode = DataGridViewTriState.True;
-            ModifyableDataGrid.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = SystemColors.Control;
+            dataGridViewCellStyle3.Font = new Font("Segoe UI", 6F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
+            ModifyableDataGrid.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             ModifyableDataGrid.RowHeadersVisible = false;
             ModifyableDataGrid.RowTemplate.Height = 25;
-            ModifyableDataGrid.Size = new Size(202, 405);
+            ModifyableDataGrid.Size = new Size(253, 405);
             ModifyableDataGrid.TabIndex = 34;
+            ModifyableDataGrid.CellContentClick += ModifyableDataGrid_CellContentClick;
             ModifyableDataGrid.CellEndEdit += ModifyableDataGrid_CellEndEdit;
             ModifyableDataGrid.CellEnter += ModifyableDataGrid_CellEnter;
             ModifyableDataGrid.CellValueChanged += ModifyableDataGrid_CellValueChanged;
@@ -686,7 +687,7 @@ namespace ConsoleGUI
             tabControl1.Location = new Point(6, 27);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
-            tabControl1.Size = new Size(510, 678);
+            tabControl1.Size = new Size(556, 678);
             tabControl1.TabIndex = 4;
             // 
             // tabPage1
@@ -696,7 +697,7 @@ namespace ConsoleGUI
             tabPage1.Location = new Point(4, 24);
             tabPage1.Name = "tabPage1";
             tabPage1.Padding = new Padding(3);
-            tabPage1.Size = new Size(502, 650);
+            tabPage1.Size = new Size(548, 650);
             tabPage1.TabIndex = 2;
             tabPage1.Text = "Console";
             tabPage1.UseVisualStyleBackColor = true;
@@ -718,7 +719,7 @@ namespace ConsoleGUI
             tabPage3.Controls.Add(WaypointGrid);
             tabPage3.Location = new Point(4, 24);
             tabPage3.Name = "tabPage3";
-            tabPage3.Size = new Size(502, 650);
+            tabPage3.Size = new Size(548, 650);
             tabPage3.TabIndex = 3;
             tabPage3.Text = "Path";
             tabPage3.UseVisualStyleBackColor = true;
@@ -904,7 +905,7 @@ namespace ConsoleGUI
             tabPage4.Controls.Add(TBCloud);
             tabPage4.Location = new Point(4, 24);
             tabPage4.Name = "tabPage4";
-            tabPage4.Size = new Size(502, 650);
+            tabPage4.Size = new Size(548, 650);
             tabPage4.TabIndex = 4;
             tabPage4.Text = "Environment";
             tabPage4.UseVisualStyleBackColor = true;
@@ -1119,7 +1120,7 @@ namespace ConsoleGUI
             tabPage5.Controls.Add(label25);
             tabPage5.Location = new Point(4, 24);
             tabPage5.Name = "tabPage5";
-            tabPage5.Size = new Size(502, 650);
+            tabPage5.Size = new Size(548, 650);
             tabPage5.TabIndex = 5;
             tabPage5.Text = "Terrain";
             tabPage5.UseVisualStyleBackColor = true;
@@ -1344,7 +1345,7 @@ namespace ConsoleGUI
             menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, viewToolStripMenuItem, cameaToolStripMenuItem, simulationToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(516, 24);
+            menuStrip1.Size = new Size(562, 24);
             menuStrip1.TabIndex = 5;
             menuStrip1.Text = "menuStrip1";
             // 
@@ -1405,21 +1406,21 @@ namespace ConsoleGUI
             // clearAllToolStripMenuItem
             // 
             clearAllToolStripMenuItem.Name = "clearAllToolStripMenuItem";
-            clearAllToolStripMenuItem.Size = new Size(180, 22);
+            clearAllToolStripMenuItem.Size = new Size(140, 22);
             clearAllToolStripMenuItem.Text = "Clear All";
             clearAllToolStripMenuItem.Click += clearAllToolStripMenuItem_Click;
             // 
             // showChartsToolStripMenuItem
             // 
             showChartsToolStripMenuItem.Name = "showChartsToolStripMenuItem";
-            showChartsToolStripMenuItem.Size = new Size(180, 22);
+            showChartsToolStripMenuItem.Size = new Size(140, 22);
             showChartsToolStripMenuItem.Text = "Show Charts";
             showChartsToolStripMenuItem.Click += showChartsToolStripMenuItem_Click;
             // 
             // hideChartsToolStripMenuItem
             // 
             hideChartsToolStripMenuItem.Name = "hideChartsToolStripMenuItem";
-            hideChartsToolStripMenuItem.Size = new Size(180, 22);
+            hideChartsToolStripMenuItem.Size = new Size(140, 22);
             hideChartsToolStripMenuItem.Text = "Hide Charts";
             hideChartsToolStripMenuItem.Click += hideChartsToolStripMenuItem_Click;
             // 
@@ -1430,118 +1431,118 @@ namespace ConsoleGUI
             cameaToolStripMenuItem.Size = new Size(60, 20);
             cameaToolStripMenuItem.Text = "Camera";
             // 
-            // speedToolStripMenuItem
-            // 
-            speedToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { xToolStripMenuItem, xToolStripMenuItem1, xToolStripMenuItem2, xToolStripMenuItem3, xToolStripMenuItem4, xToolStripMenuItem5, xToolStripMenuItem6, xToolStripMenuItem7, xToolStripMenuItem8 });
-            speedToolStripMenuItem.Name = "speedToolStripMenuItem";
-            speedToolStripMenuItem.Size = new Size(180, 22);
-            speedToolStripMenuItem.Text = "Speed";
-            speedToolStripMenuItem.Click += speedToolStripMenuItem_Click;
-            // 
-            // xToolStripMenuItem
-            // 
-            xToolStripMenuItem.Name = "xToolStripMenuItem";
-            xToolStripMenuItem.Size = new Size(180, 22);
-            xToolStripMenuItem.Text = "1x";
-            xToolStripMenuItem.Click += xToolStripMenuItem_Click;
-            // 
-            // xToolStripMenuItem1
-            // 
-            xToolStripMenuItem1.Name = "xToolStripMenuItem1";
-            xToolStripMenuItem1.Size = new Size(180, 22);
-            xToolStripMenuItem1.Text = "1.5x";
-            xToolStripMenuItem1.Click += xToolStripMenuItem1_Click;
-            // 
-            // xToolStripMenuItem2
-            // 
-            xToolStripMenuItem2.Name = "xToolStripMenuItem2";
-            xToolStripMenuItem2.Size = new Size(180, 22);
-            xToolStripMenuItem2.Text = "2x";
-            xToolStripMenuItem2.Click += xToolStripMenuItem2_Click;
-            // 
-            // xToolStripMenuItem3
-            // 
-            xToolStripMenuItem3.Name = "xToolStripMenuItem3";
-            xToolStripMenuItem3.Size = new Size(180, 22);
-            xToolStripMenuItem3.Text = "3x";
-            xToolStripMenuItem3.Click += xToolStripMenuItem3_Click;
-            // 
-            // xToolStripMenuItem4
-            // 
-            xToolStripMenuItem4.Name = "xToolStripMenuItem4";
-            xToolStripMenuItem4.Size = new Size(180, 22);
-            xToolStripMenuItem4.Text = "5x";
-            xToolStripMenuItem4.Click += xToolStripMenuItem4_Click;
-            // 
-            // xToolStripMenuItem5
-            // 
-            xToolStripMenuItem5.Name = "xToolStripMenuItem5";
-            xToolStripMenuItem5.Size = new Size(180, 22);
-            xToolStripMenuItem5.Text = "10x";
-            xToolStripMenuItem5.Click += xToolStripMenuItem5_Click;
-            // 
-            // xToolStripMenuItem6
-            // 
-            xToolStripMenuItem6.Name = "xToolStripMenuItem6";
-            xToolStripMenuItem6.Size = new Size(180, 22);
-            xToolStripMenuItem6.Text = "15x";
-            xToolStripMenuItem6.Click += xToolStripMenuItem6_Click;
-            // 
-            // xToolStripMenuItem7
-            // 
-            xToolStripMenuItem7.Name = "xToolStripMenuItem7";
-            xToolStripMenuItem7.Size = new Size(180, 22);
-            xToolStripMenuItem7.Text = "25x";
-            xToolStripMenuItem7.Click += xToolStripMenuItem7_Click;
-            // 
-            // xToolStripMenuItem8
-            // 
-            xToolStripMenuItem8.Name = "xToolStripMenuItem8";
-            xToolStripMenuItem8.Size = new Size(180, 22);
-            xToolStripMenuItem8.Text = "50x";
-            xToolStripMenuItem8.Click += xToolStripMenuItem8_Click;
-            // 
             // viewToolStripMenuItem1
             // 
             viewToolStripMenuItem1.DropDownItems.AddRange(new ToolStripItem[] { topToolStripMenuItem1, leftToolStripMenuItem1, rightToolStripMenuItem1, frontToolStripMenuItem, backToolStripMenuItem });
             viewToolStripMenuItem1.Name = "viewToolStripMenuItem1";
-            viewToolStripMenuItem1.Size = new Size(180, 22);
+            viewToolStripMenuItem1.Size = new Size(106, 22);
             viewToolStripMenuItem1.Text = "View";
             // 
             // topToolStripMenuItem1
             // 
             topToolStripMenuItem1.Name = "topToolStripMenuItem1";
-            topToolStripMenuItem1.Size = new Size(180, 22);
+            topToolStripMenuItem1.Size = new Size(102, 22);
             topToolStripMenuItem1.Text = "Top";
             topToolStripMenuItem1.Click += topToolStripMenuItem1_Click;
             // 
             // leftToolStripMenuItem1
             // 
             leftToolStripMenuItem1.Name = "leftToolStripMenuItem1";
-            leftToolStripMenuItem1.Size = new Size(180, 22);
+            leftToolStripMenuItem1.Size = new Size(102, 22);
             leftToolStripMenuItem1.Text = "Left";
             leftToolStripMenuItem1.Click += leftToolStripMenuItem1_Click;
             // 
             // rightToolStripMenuItem1
             // 
             rightToolStripMenuItem1.Name = "rightToolStripMenuItem1";
-            rightToolStripMenuItem1.Size = new Size(180, 22);
+            rightToolStripMenuItem1.Size = new Size(102, 22);
             rightToolStripMenuItem1.Text = "Right";
             rightToolStripMenuItem1.Click += rightToolStripMenuItem1_Click;
             // 
             // frontToolStripMenuItem
             // 
             frontToolStripMenuItem.Name = "frontToolStripMenuItem";
-            frontToolStripMenuItem.Size = new Size(180, 22);
+            frontToolStripMenuItem.Size = new Size(102, 22);
             frontToolStripMenuItem.Text = "Front";
             frontToolStripMenuItem.Click += frontToolStripMenuItem_Click;
             // 
             // backToolStripMenuItem
             // 
             backToolStripMenuItem.Name = "backToolStripMenuItem";
-            backToolStripMenuItem.Size = new Size(180, 22);
+            backToolStripMenuItem.Size = new Size(102, 22);
             backToolStripMenuItem.Text = "Back";
             backToolStripMenuItem.Click += backToolStripMenuItem_Click;
+            // 
+            // speedToolStripMenuItem
+            // 
+            speedToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { xToolStripMenuItem, xToolStripMenuItem1, xToolStripMenuItem2, xToolStripMenuItem3, xToolStripMenuItem4, xToolStripMenuItem5, xToolStripMenuItem6, xToolStripMenuItem7, xToolStripMenuItem8 });
+            speedToolStripMenuItem.Name = "speedToolStripMenuItem";
+            speedToolStripMenuItem.Size = new Size(106, 22);
+            speedToolStripMenuItem.Text = "Speed";
+            speedToolStripMenuItem.Click += speedToolStripMenuItem_Click;
+            // 
+            // xToolStripMenuItem
+            // 
+            xToolStripMenuItem.Name = "xToolStripMenuItem";
+            xToolStripMenuItem.Size = new Size(95, 22);
+            xToolStripMenuItem.Text = "1x";
+            xToolStripMenuItem.Click += xToolStripMenuItem_Click;
+            // 
+            // xToolStripMenuItem1
+            // 
+            xToolStripMenuItem1.Name = "xToolStripMenuItem1";
+            xToolStripMenuItem1.Size = new Size(95, 22);
+            xToolStripMenuItem1.Text = "1.5x";
+            xToolStripMenuItem1.Click += xToolStripMenuItem1_Click;
+            // 
+            // xToolStripMenuItem2
+            // 
+            xToolStripMenuItem2.Name = "xToolStripMenuItem2";
+            xToolStripMenuItem2.Size = new Size(95, 22);
+            xToolStripMenuItem2.Text = "2x";
+            xToolStripMenuItem2.Click += xToolStripMenuItem2_Click;
+            // 
+            // xToolStripMenuItem3
+            // 
+            xToolStripMenuItem3.Name = "xToolStripMenuItem3";
+            xToolStripMenuItem3.Size = new Size(95, 22);
+            xToolStripMenuItem3.Text = "3x";
+            xToolStripMenuItem3.Click += xToolStripMenuItem3_Click;
+            // 
+            // xToolStripMenuItem4
+            // 
+            xToolStripMenuItem4.Name = "xToolStripMenuItem4";
+            xToolStripMenuItem4.Size = new Size(95, 22);
+            xToolStripMenuItem4.Text = "5x";
+            xToolStripMenuItem4.Click += xToolStripMenuItem4_Click;
+            // 
+            // xToolStripMenuItem5
+            // 
+            xToolStripMenuItem5.Name = "xToolStripMenuItem5";
+            xToolStripMenuItem5.Size = new Size(95, 22);
+            xToolStripMenuItem5.Text = "10x";
+            xToolStripMenuItem5.Click += xToolStripMenuItem5_Click;
+            // 
+            // xToolStripMenuItem6
+            // 
+            xToolStripMenuItem6.Name = "xToolStripMenuItem6";
+            xToolStripMenuItem6.Size = new Size(95, 22);
+            xToolStripMenuItem6.Text = "15x";
+            xToolStripMenuItem6.Click += xToolStripMenuItem6_Click;
+            // 
+            // xToolStripMenuItem7
+            // 
+            xToolStripMenuItem7.Name = "xToolStripMenuItem7";
+            xToolStripMenuItem7.Size = new Size(95, 22);
+            xToolStripMenuItem7.Text = "25x";
+            xToolStripMenuItem7.Click += xToolStripMenuItem7_Click;
+            // 
+            // xToolStripMenuItem8
+            // 
+            xToolStripMenuItem8.Name = "xToolStripMenuItem8";
+            xToolStripMenuItem8.Size = new Size(95, 22);
+            xToolStripMenuItem8.Text = "50x";
+            xToolStripMenuItem8.Click += xToolStripMenuItem8_Click;
             // 
             // simulationToolStripMenuItem
             // 
@@ -1614,7 +1615,7 @@ namespace ConsoleGUI
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(516, 727);
+            ClientSize = new Size(562, 727);
             Controls.Add(menuStrip1);
             Controls.Add(tabControl1);
             Name = "MainForm";

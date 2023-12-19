@@ -20,8 +20,10 @@ FString CCLICommandManager::Model = "model";
 FString CCLICommandManager::DestroyCommand = "destroy";
 
 FString CCLICommandManager::SetCommand = "set";
+FString CCLICommandManager::Suppressed = "suppressed";
 FString CCLICommandManager::Active = "active";
 FString CCLICommandManager::Enabled = "enabled";
+
 FString CCLICommandManager::Instance = "instance";
 FString CCLICommandManager::Position = "position";
 FString CCLICommandManager::RelPosition = "relposition";

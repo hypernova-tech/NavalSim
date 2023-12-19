@@ -44,6 +44,9 @@ protected:
 		bool IsExternalUpdateScenarioMode = false;
 
 	UPROPERTY(EditAnywhere)
+		bool Suppressed = false;
+
+	UPROPERTY(EditAnywhere)
 		bool Enabled = false;
 
 
@@ -69,6 +72,10 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetEnabled(bool val) ;
 	virtual bool GetEnabled() ;
+
+	virtual void SetSuppressed(bool val);
+	virtual bool GetSuppressed();
+
 	bool GetIsExternalUpdateScenarioMode();
 	void ExternalUpdate(float DeltaTime);
 	void ExternalUpdateScenarioMode(float DeltaTime);

@@ -1099,6 +1099,12 @@ void CUtil::SetActorActive(AActor* p_actor, bool is_active)
     p_actor->SetActorEnableCollision(is_active);
 }
 
+bool CUtil::GetIsActorTickEnabled(AActor* p_actor)
+{
+   return  p_actor->IsActorTickEnabled();
+
+}
+
 bool CUtil::GetIsActorVisible(AActor* p_actor)
 {
     return !p_actor->IsHidden();

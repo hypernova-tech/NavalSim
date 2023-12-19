@@ -70,6 +70,7 @@ public:
 	static FString SetCommand;
 	static FString Active;
 	static FString Enabled;
+	static FString Suppressed;
 	static FString Instance;
 	static FString Position;
 	static FString RelPosition;

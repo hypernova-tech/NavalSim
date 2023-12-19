@@ -1053,7 +1053,13 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
 
 
    
+    ret = CommandManager.GetValue(CCLICommandManager::Suppressed, is_enabled);
+    if (ret) {
+        if (pSystemAPI->SetActorSuppressed(p_actor, is_enabled)) {
+            one_success = true;
+        }
 
+    }
 
     ret = CommandManager.GetActive(is_active);
     if (ret) {
@@ -1839,6 +1845,17 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
         
         SendConsoleResponse(name, CCLICommandManager::Scale, vec);
         return true;
+    }
+
+    ret = CommandManager.HasA(CCLICommandManager::Suppressed);
+    if (ret) {
+        if (pSystemAPI->GetActorSuppressed(p_actor, is_enabled)) {
+            SendConsoleResponse(name, CCLICommandManager::Suppressed, is_enabled);
+            return true;
+        }
+    }
+    else {
+
     }
 
     ret = CommandManager.HasEnabled();

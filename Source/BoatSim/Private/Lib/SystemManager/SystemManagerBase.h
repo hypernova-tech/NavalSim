@@ -194,6 +194,8 @@ public:
 	virtual bool IsBakable(AActor* p_actor);
 	virtual void EnableAllActors();
 	virtual void DisableAllActors();
+	virtual bool SetActorSuppressed(AActor* p_actor, bool val);
+	virtual bool GetActorSuppressed(AActor* p_actor, bool &val);
 	virtual bool SetActorEnabled(AActor* p_actor, bool val);
 	virtual bool GetActorEnabled(AActor* p_actor);
 	virtual void SetSelectedActor(AActor* p_actor) ;

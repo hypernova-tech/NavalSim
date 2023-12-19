@@ -91,10 +91,10 @@ void ARadarBase::InitSensor()
 {
 	Super::InitSensor();
 	pPointVisualizer->CreateRenderTarget(512, 512, ASystemManagerBase::GetInstance()->GetUIController()->GetSensorSlotImage(SensorSlotIndex));
-
-	ScanResultContainer.Init(1, 8);
+	INT32S sector_cnt = (int)(360.0 / HorizontalScanStepAngleDeg + 0.5);
+	ScanResultContainer.Init(1, sector_cnt, HorizontalScanStepAngleDeg);
 	pScanResult = ScanResultContainer.GetCircular();
-	BeamWidthDeg = 360.0 / pScanResult->SectorCount;
+	BeamWidthDeg = 18;//todo fixme
 	GuardZone.Init(MaxGuardZoneCount);
 	BlankingZone.Init(MaxSectorBlankingZoneCount);
 
@@ -258,8 +258,8 @@ void ARadarBase::Scan()
 
 
 	if (FApp::GetCurrentTime() >= NextScanTime) {
-		float start_azimuth = CurrentScanAzimuth;
-		float end_azimuth = BeamWidthDeg + start_azimuth;
+		FLOAT64 start_azimuth = CurrentScanAzimuth;
+		FLOAT64 end_azimuth = BeamWidthDeg + start_azimuth;
 
 		if (end_azimuth >= 359.99) {
 			end_azimuth = 359.99;

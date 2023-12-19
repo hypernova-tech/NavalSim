@@ -91,10 +91,10 @@ public:
 			INT32S order = byte_ind & 0x1;
 
 			if (order) {
-				p_out[byte_ind] = 0xF;
+				p_out[byte_ind] |= 0xF;
 			}
 			else {
-				p_out[byte_ind] = 0xF<<4;
+				p_out[byte_ind] |= 0xF<<4;
 			}
 			
 

@@ -150,6 +150,7 @@ public:
 	static FLOAT64 Tock(FLOAT64 start_time_sec);
 	static void SetParent(AActor* p_child, AActor* p_parent);
 	static void SetActorActive(AActor* p_actor, bool is_active);
+	static bool GetIsActorTickEnabled(AActor* p_actor);
 	static bool GetIsActorVisible(AActor* p_actor);
 	static bool IsPossedByPlayerController(UWorld *p_world, APawn *p_pawn);
 	static void CameraLookAt(UCameraComponent* p_looker, AActor* p_target, FLOAT32 distance);

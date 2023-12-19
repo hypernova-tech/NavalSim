@@ -1920,5 +1920,10 @@ namespace ConsoleGUI
         {
             SystemAPIImplementor.SetCameraView(ECameraView.Back, Selected);
         }
+
+        private void ModifyableDataGrid_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
     }
 }
