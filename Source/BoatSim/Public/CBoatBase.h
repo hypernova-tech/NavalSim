@@ -39,6 +39,9 @@ public:
 		void StopPawn();
 
 	UPROPERTY(EditAnywhere)
+		bool IsSaveEnabled = true;
+
+	UPROPERTY(EditAnywhere)
 		FString BlueprintName = "";
 
 	UPROPERTY(BlueprintReadWrite)
@@ -84,6 +87,8 @@ protected:
 	void TopView();
 	void LeftView();
 	void RightView();
+	void FrontView();
+	void BackView();
 	void Perpective();
 
 public:	
@@ -117,6 +122,7 @@ private:
 	float AnglueSpeedDegPerSec = 5;;
 	float R = 100;
 	float Theta = 0;
+	float FocusDistanceCamViewScale = 2;
 
 public:
 	// Inherited via IPlatform
@@ -125,5 +131,6 @@ public:
 	
 	virtual void SetTurnRateDegPerSec(FLOAT32 speed) ;
 	virtual FLOAT32 GetTurnRateDegPerSec() ;
+	void AdjustCamView(FVector view_dir);
 };
 

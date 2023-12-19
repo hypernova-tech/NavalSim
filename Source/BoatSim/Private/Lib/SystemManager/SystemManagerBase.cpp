@@ -233,6 +233,11 @@ void ASystemManagerBase::SetGizmoTrackedActor(AActor* p_actor)
 	pUIController->GetGizmoController()->SetTrackedActor(p_actor);
 }
 
+bool ASystemManagerBase::IsGizmoActorMoving()
+{
+	return pUIController->GetGizmoController()->IsGizmoActorMoving();
+}
+
 
 ASensorBase* ASystemManagerBase::ToSensorBase(AActor* p_actor)
 {

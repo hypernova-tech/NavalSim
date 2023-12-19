@@ -1863,7 +1863,7 @@ namespace ConsoleGUI
 
         private void topToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SystemAPIImplementor.SetCameraView(ECameraView.Top, Selected);
+
         }
 
         private void rightToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1894,6 +1894,31 @@ namespace ConsoleGUI
         private void TBTTopLeftH_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void topToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            SystemAPIImplementor.SetCameraView(ECameraView.Top, Selected);
+        }
+
+        private void leftToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            SystemAPIImplementor.SetCameraView(ECameraView.Left, Selected);
+        }
+
+        private void rightToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            SystemAPIImplementor.SetCameraView(ECameraView.Right, Selected);
+        }
+
+        private void frontToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SystemAPIImplementor.SetCameraView(ECameraView.Front, Selected);
+        }
+
+        private void backToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SystemAPIImplementor.SetCameraView(ECameraView.Back, Selected);
         }
     }
 }

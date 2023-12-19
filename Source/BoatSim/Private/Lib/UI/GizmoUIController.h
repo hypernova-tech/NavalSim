@@ -66,7 +66,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void SetGizmoMode(EGizmoMode mode);
 
-	
+	bool IsGizmoActorMoving();
 
 	void SetTrackedActor(AActor* p_actor);
 	void OnCursorMove();

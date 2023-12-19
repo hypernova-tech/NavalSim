@@ -8,7 +8,9 @@ public enum ECameraView
     Top,
     Right,
     Left,
-    Focus
+    Focus,
+    Back,
+    Front,
 
 }
 
@@ -160,6 +162,14 @@ public class CSystemAPIImplementor
         else if (view == ECameraView.Right)
         {
             cmd = "right";
+        }
+        else if (view == ECameraView.Front)
+        {
+            cmd = "front";
+        }
+        else if (view == ECameraView.Back)
+        {
+            cmd = "back";
         }
         else if (view == ECameraView.Focus)
         {

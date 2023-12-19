@@ -31,10 +31,10 @@ namespace ConsoleGUI
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            TreeNode treeNode1 = new TreeNode("World");
-            DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle9 = new DataGridViewCellStyle();
+            TreeNode treeNode2 = new TreeNode("World");
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
             OpenFileDialog = new OpenFileDialog();
             contextMenuStrip1 = new ContextMenuStrip(components);
             ActorListContextMenu = new ContextMenuStrip(components);
@@ -161,11 +161,6 @@ namespace ConsoleGUI
             clearAllToolStripMenuItem = new ToolStripMenuItem();
             showChartsToolStripMenuItem = new ToolStripMenuItem();
             hideChartsToolStripMenuItem = new ToolStripMenuItem();
-            camaraViewToolStripMenuItem = new ToolStripMenuItem();
-            topToolStripMenuItem = new ToolStripMenuItem();
-            rightToolStripMenuItem = new ToolStripMenuItem();
-            leftToolStripMenuItem = new ToolStripMenuItem();
-            focusToolStripMenuItem = new ToolStripMenuItem();
             cameaToolStripMenuItem = new ToolStripMenuItem();
             speedToolStripMenuItem = new ToolStripMenuItem();
             xToolStripMenuItem = new ToolStripMenuItem();
@@ -177,6 +172,12 @@ namespace ConsoleGUI
             xToolStripMenuItem6 = new ToolStripMenuItem();
             xToolStripMenuItem7 = new ToolStripMenuItem();
             xToolStripMenuItem8 = new ToolStripMenuItem();
+            viewToolStripMenuItem1 = new ToolStripMenuItem();
+            topToolStripMenuItem1 = new ToolStripMenuItem();
+            leftToolStripMenuItem1 = new ToolStripMenuItem();
+            rightToolStripMenuItem1 = new ToolStripMenuItem();
+            frontToolStripMenuItem = new ToolStripMenuItem();
+            backToolStripMenuItem = new ToolStripMenuItem();
             simulationToolStripMenuItem = new ToolStripMenuItem();
             startToolStripMenuItem = new ToolStripMenuItem();
             pauseToolStripMenuItem = new ToolStripMenuItem();
@@ -301,9 +302,9 @@ namespace ConsoleGUI
             ObjectEditor.ContextMenuStrip = ObjectEditorContextMenu;
             ObjectEditor.Location = new Point(13, 11);
             ObjectEditor.Name = "ObjectEditor";
-            treeNode1.Name = "World";
-            treeNode1.Text = "World";
-            ObjectEditor.Nodes.AddRange(new TreeNode[] { treeNode1 });
+            treeNode2.Name = "World";
+            treeNode2.Text = "World";
+            ObjectEditor.Nodes.AddRange(new TreeNode[] { treeNode2 });
             ObjectEditor.Size = new Size(246, 633);
             ObjectEditor.TabIndex = 18;
             ObjectEditor.NodeMouseClick += ObjectEditor_NodeMouseClick;
@@ -637,33 +638,33 @@ namespace ConsoleGUI
             // 
             // ModifyableDataGrid
             // 
-            dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle7.BackColor = SystemColors.Control;
-            dataGridViewCellStyle7.Font = new Font("Segoe UI", 1F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle7.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle7.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle7.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle7.WrapMode = DataGridViewTriState.True;
-            ModifyableDataGrid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = SystemColors.Control;
+            dataGridViewCellStyle4.Font = new Font("Segoe UI", 1F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle4.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
+            ModifyableDataGrid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
             ModifyableDataGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle8.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle8.BackColor = SystemColors.Window;
-            dataGridViewCellStyle8.Font = new Font("Segoe UI", 8F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle8.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle8.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle8.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle8.WrapMode = DataGridViewTriState.False;
-            ModifyableDataGrid.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = SystemColors.Window;
+            dataGridViewCellStyle5.Font = new Font("Segoe UI", 8F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle5.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle5.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle5.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle5.WrapMode = DataGridViewTriState.False;
+            ModifyableDataGrid.DefaultCellStyle = dataGridViewCellStyle5;
             ModifyableDataGrid.Location = new Point(3, 534);
             ModifyableDataGrid.Name = "ModifyableDataGrid";
-            dataGridViewCellStyle9.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle9.BackColor = SystemColors.Control;
-            dataGridViewCellStyle9.Font = new Font("Segoe UI", 6F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle9.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle9.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle9.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle9.WrapMode = DataGridViewTriState.True;
-            ModifyableDataGrid.RowHeadersDefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = SystemColors.Control;
+            dataGridViewCellStyle6.Font = new Font("Segoe UI", 6F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle6.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle6.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle6.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = DataGridViewTriState.True;
+            ModifyableDataGrid.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
             ModifyableDataGrid.RowHeadersVisible = false;
             ModifyableDataGrid.RowTemplate.Height = 25;
             ModifyableDataGrid.Size = new Size(202, 405);
@@ -1396,7 +1397,7 @@ namespace ConsoleGUI
             // 
             // viewToolStripMenuItem
             // 
-            viewToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { clearAllToolStripMenuItem, showChartsToolStripMenuItem, hideChartsToolStripMenuItem, camaraViewToolStripMenuItem });
+            viewToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { clearAllToolStripMenuItem, showChartsToolStripMenuItem, hideChartsToolStripMenuItem });
             viewToolStripMenuItem.Name = "viewToolStripMenuItem";
             viewToolStripMenuItem.Size = new Size(44, 20);
             viewToolStripMenuItem.Text = "View";
@@ -1404,62 +1405,27 @@ namespace ConsoleGUI
             // clearAllToolStripMenuItem
             // 
             clearAllToolStripMenuItem.Name = "clearAllToolStripMenuItem";
-            clearAllToolStripMenuItem.Size = new Size(143, 22);
+            clearAllToolStripMenuItem.Size = new Size(180, 22);
             clearAllToolStripMenuItem.Text = "Clear All";
             clearAllToolStripMenuItem.Click += clearAllToolStripMenuItem_Click;
             // 
             // showChartsToolStripMenuItem
             // 
             showChartsToolStripMenuItem.Name = "showChartsToolStripMenuItem";
-            showChartsToolStripMenuItem.Size = new Size(143, 22);
+            showChartsToolStripMenuItem.Size = new Size(180, 22);
             showChartsToolStripMenuItem.Text = "Show Charts";
             showChartsToolStripMenuItem.Click += showChartsToolStripMenuItem_Click;
             // 
             // hideChartsToolStripMenuItem
             // 
             hideChartsToolStripMenuItem.Name = "hideChartsToolStripMenuItem";
-            hideChartsToolStripMenuItem.Size = new Size(143, 22);
+            hideChartsToolStripMenuItem.Size = new Size(180, 22);
             hideChartsToolStripMenuItem.Text = "Hide Charts";
             hideChartsToolStripMenuItem.Click += hideChartsToolStripMenuItem_Click;
             // 
-            // camaraViewToolStripMenuItem
-            // 
-            camaraViewToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { topToolStripMenuItem, rightToolStripMenuItem, leftToolStripMenuItem, focusToolStripMenuItem });
-            camaraViewToolStripMenuItem.Name = "camaraViewToolStripMenuItem";
-            camaraViewToolStripMenuItem.Size = new Size(143, 22);
-            camaraViewToolStripMenuItem.Text = "Camara View";
-            // 
-            // topToolStripMenuItem
-            // 
-            topToolStripMenuItem.Name = "topToolStripMenuItem";
-            topToolStripMenuItem.Size = new Size(105, 22);
-            topToolStripMenuItem.Text = "Top";
-            topToolStripMenuItem.Click += topToolStripMenuItem_Click;
-            // 
-            // rightToolStripMenuItem
-            // 
-            rightToolStripMenuItem.Name = "rightToolStripMenuItem";
-            rightToolStripMenuItem.Size = new Size(105, 22);
-            rightToolStripMenuItem.Text = "Right";
-            rightToolStripMenuItem.Click += rightToolStripMenuItem_Click;
-            // 
-            // leftToolStripMenuItem
-            // 
-            leftToolStripMenuItem.Name = "leftToolStripMenuItem";
-            leftToolStripMenuItem.Size = new Size(105, 22);
-            leftToolStripMenuItem.Text = "Left";
-            leftToolStripMenuItem.Click += leftToolStripMenuItem_Click;
-            // 
-            // focusToolStripMenuItem
-            // 
-            focusToolStripMenuItem.Name = "focusToolStripMenuItem";
-            focusToolStripMenuItem.Size = new Size(105, 22);
-            focusToolStripMenuItem.Text = "Focus";
-            focusToolStripMenuItem.Click += focusToolStripMenuItem_Click_1;
-            // 
             // cameaToolStripMenuItem
             // 
-            cameaToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { speedToolStripMenuItem });
+            cameaToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { viewToolStripMenuItem1, speedToolStripMenuItem });
             cameaToolStripMenuItem.Name = "cameaToolStripMenuItem";
             cameaToolStripMenuItem.Size = new Size(60, 20);
             cameaToolStripMenuItem.Text = "Camera";
@@ -1468,72 +1434,114 @@ namespace ConsoleGUI
             // 
             speedToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { xToolStripMenuItem, xToolStripMenuItem1, xToolStripMenuItem2, xToolStripMenuItem3, xToolStripMenuItem4, xToolStripMenuItem5, xToolStripMenuItem6, xToolStripMenuItem7, xToolStripMenuItem8 });
             speedToolStripMenuItem.Name = "speedToolStripMenuItem";
-            speedToolStripMenuItem.Size = new Size(106, 22);
+            speedToolStripMenuItem.Size = new Size(180, 22);
             speedToolStripMenuItem.Text = "Speed";
             speedToolStripMenuItem.Click += speedToolStripMenuItem_Click;
             // 
             // xToolStripMenuItem
             // 
             xToolStripMenuItem.Name = "xToolStripMenuItem";
-            xToolStripMenuItem.Size = new Size(95, 22);
+            xToolStripMenuItem.Size = new Size(180, 22);
             xToolStripMenuItem.Text = "1x";
             xToolStripMenuItem.Click += xToolStripMenuItem_Click;
             // 
             // xToolStripMenuItem1
             // 
             xToolStripMenuItem1.Name = "xToolStripMenuItem1";
-            xToolStripMenuItem1.Size = new Size(95, 22);
+            xToolStripMenuItem1.Size = new Size(180, 22);
             xToolStripMenuItem1.Text = "1.5x";
             xToolStripMenuItem1.Click += xToolStripMenuItem1_Click;
             // 
             // xToolStripMenuItem2
             // 
             xToolStripMenuItem2.Name = "xToolStripMenuItem2";
-            xToolStripMenuItem2.Size = new Size(95, 22);
+            xToolStripMenuItem2.Size = new Size(180, 22);
             xToolStripMenuItem2.Text = "2x";
             xToolStripMenuItem2.Click += xToolStripMenuItem2_Click;
             // 
             // xToolStripMenuItem3
             // 
             xToolStripMenuItem3.Name = "xToolStripMenuItem3";
-            xToolStripMenuItem3.Size = new Size(95, 22);
+            xToolStripMenuItem3.Size = new Size(180, 22);
             xToolStripMenuItem3.Text = "3x";
             xToolStripMenuItem3.Click += xToolStripMenuItem3_Click;
             // 
             // xToolStripMenuItem4
             // 
             xToolStripMenuItem4.Name = "xToolStripMenuItem4";
-            xToolStripMenuItem4.Size = new Size(95, 22);
+            xToolStripMenuItem4.Size = new Size(180, 22);
             xToolStripMenuItem4.Text = "5x";
             xToolStripMenuItem4.Click += xToolStripMenuItem4_Click;
             // 
             // xToolStripMenuItem5
             // 
             xToolStripMenuItem5.Name = "xToolStripMenuItem5";
-            xToolStripMenuItem5.Size = new Size(95, 22);
+            xToolStripMenuItem5.Size = new Size(180, 22);
             xToolStripMenuItem5.Text = "10x";
             xToolStripMenuItem5.Click += xToolStripMenuItem5_Click;
             // 
             // xToolStripMenuItem6
             // 
             xToolStripMenuItem6.Name = "xToolStripMenuItem6";
-            xToolStripMenuItem6.Size = new Size(95, 22);
+            xToolStripMenuItem6.Size = new Size(180, 22);
             xToolStripMenuItem6.Text = "15x";
             xToolStripMenuItem6.Click += xToolStripMenuItem6_Click;
             // 
             // xToolStripMenuItem7
             // 
             xToolStripMenuItem7.Name = "xToolStripMenuItem7";
-            xToolStripMenuItem7.Size = new Size(95, 22);
+            xToolStripMenuItem7.Size = new Size(180, 22);
             xToolStripMenuItem7.Text = "25x";
             xToolStripMenuItem7.Click += xToolStripMenuItem7_Click;
             // 
             // xToolStripMenuItem8
             // 
             xToolStripMenuItem8.Name = "xToolStripMenuItem8";
-            xToolStripMenuItem8.Size = new Size(95, 22);
+            xToolStripMenuItem8.Size = new Size(180, 22);
             xToolStripMenuItem8.Text = "50x";
             xToolStripMenuItem8.Click += xToolStripMenuItem8_Click;
+            // 
+            // viewToolStripMenuItem1
+            // 
+            viewToolStripMenuItem1.DropDownItems.AddRange(new ToolStripItem[] { topToolStripMenuItem1, leftToolStripMenuItem1, rightToolStripMenuItem1, frontToolStripMenuItem, backToolStripMenuItem });
+            viewToolStripMenuItem1.Name = "viewToolStripMenuItem1";
+            viewToolStripMenuItem1.Size = new Size(180, 22);
+            viewToolStripMenuItem1.Text = "View";
+            // 
+            // topToolStripMenuItem1
+            // 
+            topToolStripMenuItem1.Name = "topToolStripMenuItem1";
+            topToolStripMenuItem1.Size = new Size(180, 22);
+            topToolStripMenuItem1.Text = "Top";
+            topToolStripMenuItem1.Click += topToolStripMenuItem1_Click;
+            // 
+            // leftToolStripMenuItem1
+            // 
+            leftToolStripMenuItem1.Name = "leftToolStripMenuItem1";
+            leftToolStripMenuItem1.Size = new Size(180, 22);
+            leftToolStripMenuItem1.Text = "Left";
+            leftToolStripMenuItem1.Click += leftToolStripMenuItem1_Click;
+            // 
+            // rightToolStripMenuItem1
+            // 
+            rightToolStripMenuItem1.Name = "rightToolStripMenuItem1";
+            rightToolStripMenuItem1.Size = new Size(180, 22);
+            rightToolStripMenuItem1.Text = "Right";
+            rightToolStripMenuItem1.Click += rightToolStripMenuItem1_Click;
+            // 
+            // frontToolStripMenuItem
+            // 
+            frontToolStripMenuItem.Name = "frontToolStripMenuItem";
+            frontToolStripMenuItem.Size = new Size(180, 22);
+            frontToolStripMenuItem.Text = "Front";
+            frontToolStripMenuItem.Click += frontToolStripMenuItem_Click;
+            // 
+            // backToolStripMenuItem
+            // 
+            backToolStripMenuItem.Name = "backToolStripMenuItem";
+            backToolStripMenuItem.Size = new Size(180, 22);
+            backToolStripMenuItem.Text = "Back";
+            backToolStripMenuItem.Click += backToolStripMenuItem_Click;
             // 
             // simulationToolStripMenuItem
             // 
@@ -1804,11 +1812,6 @@ namespace ConsoleGUI
         private ToolStripMenuItem xToolStripMenuItem6;
         private ToolStripMenuItem xToolStripMenuItem7;
         private ToolStripMenuItem xToolStripMenuItem8;
-        private ToolStripMenuItem camaraViewToolStripMenuItem;
-        private ToolStripMenuItem topToolStripMenuItem;
-        private ToolStripMenuItem rightToolStripMenuItem;
-        private ToolStripMenuItem leftToolStripMenuItem;
-        private ToolStripMenuItem focusToolStripMenuItem;
         private TextBox TBTTopLeftH;
         private TextBox TBTTopLeftLon;
         private TextBox TBTTopLeftLat;
@@ -1817,5 +1820,11 @@ namespace ConsoleGUI
         private TextBox TBTBottomRightLat;
         private Label label30;
         private Label label33;
+        private ToolStripMenuItem viewToolStripMenuItem1;
+        private ToolStripMenuItem topToolStripMenuItem1;
+        private ToolStripMenuItem leftToolStripMenuItem1;
+        private ToolStripMenuItem rightToolStripMenuItem1;
+        private ToolStripMenuItem frontToolStripMenuItem;
+        private ToolStripMenuItem backToolStripMenuItem;
     }
 }

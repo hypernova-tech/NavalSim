@@ -610,6 +610,13 @@ bool UConsoleBase::SetCamView(FString cmd)
         return pSystemAPI->SetCamView(ECamView::CamViewLeft);
    
     }
+    else if (cmd == "front") {
+        return pSystemAPI->SetCamView(ECamView::CamViewFront);
+
+    }
+    else if (cmd == "back") {
+        return pSystemAPI->SetCamView(ECamView::CamViewBack);
+    }
 
     return false;
     

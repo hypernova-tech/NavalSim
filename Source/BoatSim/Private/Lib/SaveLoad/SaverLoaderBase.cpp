@@ -133,6 +133,9 @@ FString USaverLoaderBase::CreateCommandWithName(FString cmd, FString name)
 
 void USaverLoaderBase::SavePlatform(ACBoatBase* p_platform, TArray<FString>& cli)
 {
+	if (!p_platform->IsSaveEnabled) {
+		return;
+	}
 
 	FString line = CreateCommand(pCLI->CreateCommand);
 	AppendOption(line, pCLI->Name, p_platform->GetName());

@@ -278,6 +278,11 @@ void UGizmoUIController::SetGizmoMode(EGizmoMode mode)
 	GizmoMode = mode;
 }
 
+bool UGizmoUIController::IsGizmoActorMoving()
+{
+	return GizmoState == GizmoStateMoving;
+}
+
 AActor* UGizmoUIController::FindGizmoAtClickPosition(int locationX, int locationY)
 {
 	APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();

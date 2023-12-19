@@ -2,41 +2,56 @@ create --name sidamir --bp MIR
 set --controller sidamir
 set --name sidamir --position "0.000000 0.000000 0.000000"
 set --name sidamir --rotation "0.000000 0.000000 0.000000"
-set --name sidamir --scale "0.300000 0.300000 0.300000"
+set --name sidamir --scale "1.000000 1.000000 1.000000"
 
-create --name BP_Vessel_C_1 --bp CRUISER
-set --name BP_Vessel_C_1 --position "5187.021512 -1834.525683 -57.165104"
-set --name BP_Vessel_C_1 --rotation "0.000000 0.000000 0.000000"
-set --name BP_Vessel_C_1 --scale "1.000000 1.000000 1.000000"
-set --name BP_Vessel_C_1 --instance -1
 
-create --name BP_GeneticAgent_C_1 --bp 
-set --name BP_GeneticAgent_C_1 --position "-338.572255 -1729.419315 -254.829670"
-set --name BP_GeneticAgent_C_1 --rotation "0.000000 0.000000 0.000000"
-set --name BP_GeneticAgent_C_1 --scale "1.000000 1.000000 1.000000"
-set --name BP_GeneticAgent_C_1 --instance -1
+create --name env --bp 
+set --name env --position "324.600000 284.200000 4.600000"
+set --name env --rotation "0.000000 0.000000 0.000000"
+set --name env --scale "1.000000 1.000000 1.000000"
+set --name env --instance -1
+set --name env --timeofday 12.000000
+set --name env --envtimeflowscale 1.000000
+set --name env --rain 0.000000
+set --name env --cloud 0.000000
+set --name env --snow 0.000000
+set --name env --dust 0.000000
+set --name env --fog 0.000000
+set --name env --thunder 0.000000
+set --name env --envsoundfx 1
+set --name env --wind 3.000000
+set --name env --winddir 0.000000
+
+create --name hostif --bp HOSTIF
+set --name hostif --position "0.000000 0.000000 0.000000"
+set --name hostif --rotation "0.000000 0.000000 0.000000"
+set --name hostif --scale "1.000000 1.000000 1.000000"
+set --name hostif --instance -1
+set --name hostif --ipaddr1 15.0.70.85
+set --name hostif --localport1 22333
+set --name hostif --remoteport 54001
 
 create --name gimbal1 --bp GIMBAL2DOF
 set --name gimbal1 --parent sidamir
-set --name gimbal1 --position "0.000000 0.000000 0.000000"
+set --name gimbal1 --position "9.223836 0.000000 2.519886"
 set --name gimbal1 --rotation "0.000000 45.000000 0.000000"
 set --name gimbal1 --scale "1.000000 1.000000 1.000000"
 set --name gimbal1 --instance -1
 
 create --name gimbal2 --bp GIMBAL2DOF
 set --name gimbal2 --parent sidamir
-set --name gimbal2 --position "0.000000 0.000000 0.000000"
+set --name gimbal2 --position "5.336146 0.000000 3.237998"
 set --name gimbal2 --rotation "0.000000 45.000000 0.000000"
 set --name gimbal2 --scale "1.000000 1.000000 1.000000"
 set --name gimbal2 --instance -1
 
 create --name viscam1 --bp CAMVIS
 set --name viscam1 --parent gimbal1
-set --name viscam1 --position "-5.229231 0.000000 4.756321"
-set --name viscam1 --rotation "0.000000 90.000000 0.000000"
+set --name viscam1 --position "8.838996 0.000000 2.707430"
+set --name viscam1 --rotation "0.000000 45.000000 0.000000"
 set --name viscam1 --scale "1.000000 1.000000 1.000000"
 set --name viscam1 --instance -1
-set --name viscam1 --slotindex 2
+set --name viscam1 --slotindex 0
 set --name viscam1 --rangemin 5.000000
 set --name viscam1 --rangemax 100.000000
 set --name viscam1 --vfov 0.000000
@@ -55,11 +70,11 @@ set --name viscam1 --heightpx 1080
 
 create --name viscam2 --bp CAMVIS
 set --name viscam2 --parent gimbal2
-set --name viscam2 --position "-5.308550 1.907922 2.836402"
-set --name viscam2 --rotation "0.000000 7.201151 50.753635"
+set --name viscam2 --position "5.090726 0.307307 3.192372"
+set --name viscam2 --rotation "-180.000000 45.000000 180.000000"
 set --name viscam2 --scale "0.300000 0.300000 0.300000"
 set --name viscam2 --instance -1
-set --name viscam2 --slotindex 3
+set --name viscam2 --slotindex 1
 set --name viscam2 --rangemin 5.000000
 set --name viscam2 --rangemax 100.000000
 set --name viscam2 --vfov 0.000000
@@ -78,11 +93,11 @@ set --name viscam2 --heightpx 1080
 
 create --name fls1 --bp FLSFARSOUNDER
 set --name fls1 --parent sidamir
-set --name fls1 --position "6.550326 0.000000 0.000000"
+set --name fls1 --position "14.113080 0.000000 0.622578"
 set --name fls1 --rotation "-0.000000 -21.571529 0.000000"
 set --name fls1 --scale "0.300000 0.300000 0.300000"
 set --name fls1 --instance -1
-set --name fls1 --slotindex 0
+set --name fls1 --slotindex 9
 set --name fls1 --rangemin 5.000000
 set --name fls1 --rangemax 100.000000
 set --name fls1 --vfov 45.000000
@@ -99,14 +114,14 @@ set --name fls1 --maxsurfpenet 0.000000
 
 create --name haloradar1 --bp RADARHALO24
 set --name haloradar1 --parent sidamir
-set --name haloradar1 --position "2.296332 0.000000 4.063767"
+set --name haloradar1 --position "6.430789 0.000000 4.208139"
 set --name haloradar1 --rotation "0.000000 1.999909 0.000000"
 set --name haloradar1 --scale "0.300000 0.300000 0.300000"
 set --name haloradar1 --instance -1
-set --name haloradar1 --slotindex 0
 set --name haloradar1 --ipaddr1 127.0.0.1
 set --name haloradar1 --localport1 13080
 set --name haloradar1 --remoteport 13081
+set --name haloradar1 --slotindex 5
 set --name haloradar1 --rangemin 5.000000
 set --name haloradar1 --rangemax 100.000000
 set --name haloradar1 --vfov 10.000000
@@ -133,17 +148,17 @@ set --name haloradar1 --radmaxsectorblankingzonecount 4
 
 create --name m1lidar1 --bp LIDARM1
 set --name m1lidar1 --parent sidamir
-set --name m1lidar1 --position "0.623725 -0.183834 3.687766"
-set --name m1lidar1 --rotation "-0.000000 -10.000000 -16.422134"
+set --name m1lidar1 --position "14.014242 0.178959 2.597729"
+set --name m1lidar1 --rotation "0.000000 10.000000 0.000000"
 set --name m1lidar1 --scale "0.300000 0.300000 0.300000"
 set --name m1lidar1 --instance -1
-set --name m1lidar1 --slotindex 0
 set --name m1lidar1 --ipaddr1 192.168.1.102
 set --name m1lidar1 --localport1 2000
 set --name m1lidar1 --remoteport 2023
 set --name m1lidar1 --ipaddr2 192.168.1.102
 set --name m1lidar1 --localport2 54001
 set --name m1lidar1 --remoteport2 2024
+set --name m1lidar1 --slotindex 6
 set --name m1lidar1 --rangemin 5.000000
 set --name m1lidar1 --rangemax 100.000000
 set --name m1lidar1 --vfov 10.000000
@@ -160,11 +175,11 @@ set --name m1lidar1 --maxsurfpenet 1.000000
 
 create --name viscam3 --bp CAMVIS
 set --name viscam3 --parent sidamir
-set --name viscam3 --position "0.000000 0.000000 1.964447"
+set --name viscam3 --position "0.788963 1.944994 1.964447"
 set --name viscam3 --rotation "-0.000000 0.000000 67.920670"
 set --name viscam3 --scale "0.300000 0.300000 0.300000"
 set --name viscam3 --instance -1
-set --name viscam3 --slotindex 0
+set --name viscam3 --slotindex 2
 set --name viscam3 --rangemin 5.000000
 set --name viscam3 --rangemax 100.000000
 set --name viscam3 --vfov 0.000000
@@ -183,11 +198,11 @@ set --name viscam3 --heightpx 1080
 
 create --name ircam1 --bp CAMIR
 set --name ircam1 --parent sidamir
-set --name ircam1 --position "-5.172829 0.000000 1.444506"
+set --name ircam1 --position "-0.233262 -0.000000 1.444506"
 set --name ircam1 --rotation "-0.000000 0.000000 180.000000"
 set --name ircam1 --scale "0.300000 0.300000 0.300000"
 set --name ircam1 --instance -1
-set --name ircam1 --slotindex 1
+set --name ircam1 --slotindex 3
 set --name ircam1 --rangemin 5.000000
 set --name ircam1 --rangemax 100.000000
 set --name ircam1 --vfov 0.000000

@@ -199,6 +199,7 @@ public:
 	virtual void SetSelectedActor(AActor* p_actor) ;
 	virtual AActor* GetSelectedActor();
 	virtual void SetGizmoTrackedActor(AActor* p_actor);
+	virtual bool IsGizmoActorMoving();
 	virtual INT64U GetTimeStamp();
 	virtual AActor* GetVisibleActorAt(const TArray<AActor*>& ignore_list, FVector from, FVector to, FLOAT64 tolerance_meter);
 

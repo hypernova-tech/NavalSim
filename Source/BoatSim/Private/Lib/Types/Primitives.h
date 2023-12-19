@@ -61,5 +61,7 @@ enum ECamView {
 	CamViewTop,
 	CamViewLeft,
 	CamViewRight,
+	CamViewFront,
+	CamViewBack,
 	CamViewPerspective
 };

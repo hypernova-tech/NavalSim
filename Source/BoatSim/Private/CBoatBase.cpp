@@ -192,12 +192,9 @@ void ACBoatBase::BindedMouseMoveX(float val)
 	{
 	
 		auto p_attached = pCam->GetAttachParentActor();
-		CUtil::DebugLogScreen("Attached " + p_attached->GetName());
-
+		
 		// Get the current rotation
-		FRotator parent_rot = GetActorRotation();
 		FRotator curr_rot = pCam->GetRelativeRotation();
-		FRotator abs_rot = pCam->GetComponentRotation();
 		// Adjust the yaw based on the rate of mouse movement
 		FLOAT64 new_ang = curr_rot.Yaw + val;
 		/*
@@ -216,10 +213,14 @@ void ACBoatBase::BindedMouseMoveX(float val)
 		
 		
 	}else if (pCam && bIsLeftMousePressed) {
-		FVector cam_right = pCam->GetRightVector();
-		FVector cam_pos = pCam->GetComponentLocation();
 
-		pCam->SetWorldLocation(cam_pos + cam_right * val * (CamMovementSpeed));
+		if (!ASystemManagerBase::GetInstance()->IsGizmoActorMoving()) {
+			FVector cam_right = pCam->GetRightVector();
+			FVector cam_pos = pCam->GetComponentLocation();
+
+			pCam->SetWorldLocation(cam_pos + cam_right * val * (CamMovementSpeed));
+		}
+	
 	}
 	
 }
@@ -239,6 +240,16 @@ void ACBoatBase::BindedMouseMoveY(float val)
 
 		return;
 		
+	}
+	else if (pCam && bIsLeftMousePressed) {
+
+		if (!ASystemManagerBase::GetInstance()->IsGizmoActorMoving()) {
+			FVector cam_vec = pCam->GetUpVector();
+			FVector cam_pos = pCam->GetComponentLocation();
+
+			pCam->SetWorldLocation(cam_pos + cam_vec * val * (CamMovementSpeed));
+		}
+
 	}
 }
 
@@ -291,37 +302,45 @@ void ACBoatBase::OnFocusEnter()
 		FocusCamera(p_selected);
 	}
 }
-void ACBoatBase::TopView()
+
+void ACBoatBase::AdjustCamView(FVector view_dir)
 {
 	if (pFocusedActor) {
-		pCam->SetWorldLocation(pFocusedActor->GetActorLocation() + FVector::UpVector * TOUE(3*FocusDistanceMeter));
-		CUtil::CameraLookAt(pCam, pCam->GetComponentLocation() - FVector::UpVector * TOUE(FocusDistanceMeter));
+		pCam->SetWorldLocation(pFocusedActor->GetActorLocation() - view_dir * TOUE(FocusDistanceCamViewScale * FocusDistanceMeter));
+		CUtil::CameraLookAt(pCam, pCam->GetComponentLocation() + view_dir * TOUE(FocusDistanceMeter));
 	}
 	else {
-		CUtil::CameraLookAt(pCam, pCam->GetComponentLocation() - FVector::UpVector * TOUE(FocusDistanceMeter));
+		CUtil::CameraLookAt(pCam, pCam->GetComponentLocation() + view_dir * TOUE(FocusDistanceMeter));
 	}
+}
+void ACBoatBase::TopView()
+{
+
+
+	AdjustCamView(-FVector::UpVector);
 	
 
 }
 void ACBoatBase::LeftView()
 {
-	if (pFocusedActor) {
-		pCam->SetWorldLocation(FVector::UpVector * TOUE(5) + pFocusedActor->GetActorLocation() + FVector::LeftVector * TOUE(3 * FocusDistanceMeter));
-		CUtil::CameraLookAt(pCam, pCam->GetComponentLocation() - FVector::LeftVector * TOUE(FocusDistanceMeter));
-	}
-	else {
-		CUtil::CameraLookAt(pCam, pCam->GetComponentLocation() - FVector::LeftVector * TOUE(FocusDistanceMeter));
-	}
+	AdjustCamView(-FVector::LeftVector);
+
+
 }
 void ACBoatBase::RightView()
 {
-	if (pFocusedActor) {
-		pCam->SetWorldLocation(FVector::UpVector * TOUE(5) + pFocusedActor->GetActorLocation() + FVector::RightVector * TOUE(3 * FocusDistanceMeter));
-		CUtil::CameraLookAt(pCam, pCam->GetComponentLocation() - FVector::RightVector * TOUE(FocusDistanceMeter));
-	}
-	else {
-		CUtil::CameraLookAt(pCam, pCam->GetComponentLocation() - FVector::RightVector * TOUE(FocusDistanceMeter));
-	}
+	AdjustCamView(-FVector::RightVector);
+
+
+}
+
+void ACBoatBase::FrontView()
+{
+	AdjustCamView(-FVector::ForwardVector);
+}
+void ACBoatBase::BackView()
+{
+	AdjustCamView(FVector::ForwardVector);
 }
 void ACBoatBase::Perpective()
 {
@@ -406,6 +425,12 @@ void ACBoatBase::SetCamView(ECamView view)
 
 	case ECamView::CamViewRight:
 		RightView();
+		break;
+	case ECamView::CamViewFront:
+		FrontView();
+		break;
+	case ECamView::CamViewBack:
+		BackView();
 		break;
 	}
 
