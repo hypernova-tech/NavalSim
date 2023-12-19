@@ -13,7 +13,7 @@ UENUM(BlueprintType)
 enum class EBlueprintCategory : uint8
 {
 	CategoryUnknown = 0,
-	CategoryReserved1 = 1,
+	CategoryPrimitive = 1,
 	CategorySensor = 2,
 	CategoryPath = 3,
 	CategoryReserved2 = 4,
