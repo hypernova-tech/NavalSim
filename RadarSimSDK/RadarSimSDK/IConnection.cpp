@@ -6,7 +6,7 @@ bool IConnection::Create(SConnectionArgs* p_args)
 	return false;
 }
 
-bool IConnection::SendData(INT8U* p_data, INT32U count, INT16U remote_port)
+bool IConnection::SendData(INT8U* p_data, INT32U count, INT16U remote_port, bool broadcast)
 {
 	return false;
 }

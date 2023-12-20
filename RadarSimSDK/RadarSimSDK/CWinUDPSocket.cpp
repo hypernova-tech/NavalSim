@@ -53,20 +53,33 @@ bool CWinUDPSocket::Create(SConnectionArgs* p_args) {
     return true;
 }
 
-bool CWinUDPSocket::SendData(INT8U* p_data, INT32U count, INT16U remote_port) {
+bool CWinUDPSocket::SendData(INT8U* p_data, INT32U count, INT16U remote_port, bool broadcast) {
     struct sockaddr_in dest_address;
     dest_address.sin_family = AF_INET;
     dest_address.sin_port = htons(remote_port);
-    dest_address.sin_addr = m_address.sin_addr; // Use the same IP as before.
 
-#if false
-    int sendResult = sendto(m_socket, reinterpret_cast<const char*>(p_data), count, 0,
-        (struct sockaddr*)&dest_address, sizeof(dest_address));
-    if (sendResult == SOCKET_ERROR) {
-        std::cerr << "Data send failed: " << WSAGetLastError() << std::endl;
-        return false;
+    if (broadcast) {
+        // Set broadcast address
+        const char* broadcastAddr = "255.255.255.255"; // Replace with your broadcast address if needed
+
+        // Use inet_pton for converting the IP address
+        if (inet_pton(AF_INET, broadcastAddr, &dest_address.sin_addr) <= 0) {
+            perror("inet_pton() failed");
+            return false;
+        }
+
+        // Enable broadcast on the socket
+        int broadcastPermission = 1;
+        if (setsockopt(m_socket, SOL_SOCKET, SO_BROADCAST, (char*)&broadcastPermission, sizeof(broadcastPermission)) < 0) {
+            perror("setsockopt() for SO_BROADCAST failed");
+            return false;
+        }
     }
-#endif
+
+    else {
+        dest_address.sin_addr = m_address.sin_addr; // Use the same IP as before.
+    }
+
 
 
     // send the message

@@ -209,7 +209,10 @@ void AHalo24Radar::Save(ISaveLoader* p_save_load)
 }
 void AHalo24Radar::OnRecievedMessage(SRadarSimSDKPacket* p_pack)
 {
-	if (p_pack->Header.PacketType == ESimSDKDataIDS::UnlockKeys) {
+	if (p_pack->Header.PacketType == ESimSDKDataIDS::QueryRadars) {
+		SendSerial();
+	}
+	else if (p_pack->Header.PacketType == ESimSDKDataIDS::UnlockKeys) {
 		SUnlockKeysPayload* p_keys = (SUnlockKeysPayload*)p_pack->Payload;
 		ValidateKeys(p_keys->UnlockKey, p_keys->UnlockKeyLen);
 	}

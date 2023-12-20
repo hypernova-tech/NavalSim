@@ -79,7 +79,7 @@ void CHost::ThreadFunction()
 
 	int RadarCount = 0;
 
-	EHostState HostState = EHostState::GetRadars;
+	EHostState HostState = EHostState::QueryRadarsInitial;
 
 	while (true) {
 
@@ -92,6 +92,10 @@ void CHost::ThreadFunction()
 		auto next_state = curr_state;
 
 		switch (HostState) {
+			case EHostState::QueryRadarsInitial:
+				RadarCount = tMultiRadarClient::GetInstance()->QueryRadars();
+				next_state = EHostState::GetRadars;
+				break;
 			case EHostState::GetRadars:
 				{
 					RadarCount = tMultiRadarClient::GetInstance()->GetRadars(radars, 2);
@@ -527,4 +531,9 @@ CHost* CHost::GetInstance()
 
 	return pInstance;
 
+}
+
+IConnection* CHost::GetConnection()
+{
+	return pRadarStreamConnection;
 }

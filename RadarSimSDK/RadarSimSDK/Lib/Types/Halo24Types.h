@@ -601,7 +601,18 @@ public:
 	}
 }BYTE_ALIGNED_END;
 
+BYTE_ALIGNED_BEGIN
+struct SQueryRadars {
+	SSerialData SerialData;
 
+
+
+public:
+	SQueryRadars()
+	{
+		memset(this, 0, sizeof(SQueryRadars));
+	}
+}BYTE_ALIGNED_END;
 
 
 

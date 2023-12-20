@@ -25,7 +25,12 @@ bool CLinuxUDPSocket::Create(SConnectionArgs* p_args) {
 	return true;
 }
 
-bool CLinuxUDPSocket::SendData(INT8U* p_data, INT32U count, INT16U remote_port) {
+bool CLinuxUDPSocket::SendData(INT8U* p_data, INT32U count, INT16U remote_port, bool broadcast) {
+
+	if (broadcast) {
+		//////
+		
+	}
 	if (!simComm_->transmitPackage(p_data, count))
 		std::cout << "CWinUDPSocket failed." << std::endl;
 	else

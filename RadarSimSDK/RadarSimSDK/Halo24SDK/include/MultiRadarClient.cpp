@@ -12,12 +12,14 @@ tMultiRadarClient* tMultiRadarClient::pInstance = nullptr;
 tMultiRadarClient::tMultiRadarClient()
 {
     pUnlockKeySupplier = nullptr;
+    
 }
 
 tMultiRadarClient* tMultiRadarClient::GetInstance()
 {
     if (pInstance == nullptr) {
         pInstance = new tMultiRadarClient();
+        CHost::GetInstance()->Init();
     }
 
     return pInstance;
@@ -25,7 +27,7 @@ tMultiRadarClient* tMultiRadarClient::GetInstance()
 
 int tMultiRadarClient::Connect()
 {
-    CHost::GetInstance()->Init();
+    
     return 1;
 }
 
@@ -197,7 +199,15 @@ void tMultiRadarClient::ClearRadars()
 
 bool tMultiRadarClient::QueryRadars()
 {
-    return false;
+    SRadarSimSDKPacket* p_pack = new SRadarSimSDKPacket();
+    SQueryRadars* p_payload = (SQueryRadars*)p_pack->Payload;
+
+ 
+    p_pack->SetID(ESimSDKDataIDS::QueryRadars);
+    p_pack->SetPayloadSize(sizeof(SUnlockKeysPayload));
+    CHost::GetInstance()->GetConnection()->SendData((INT8U*)p_pack, p_pack->GetTransmitSize(), CHost::GetInstance()->GetConnection()->GetRemotePort());
+
+    return true;
 }
 
 int tMultiRadarClient::GetImageStreamCount(const char* pSerialNumber)
@@ -286,6 +296,7 @@ void Navico::Protocol::tMultiRadarClient::HandleReponse(IConnection* p_conn, SCo
 
     switch (p_res->Id)
     {
+
     case ESimSDKDataIDS::UnlockKeys:
         if (p_res->Result == 1) {
             p_radar->SetIsUnlocked(true);

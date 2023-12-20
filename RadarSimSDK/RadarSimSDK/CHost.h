@@ -21,6 +21,7 @@ using namespace  Navico::Protocol;
 
 enum EHostState
 {
+	QueryRadarsInitial,
 	GetRadars,
 	UnlockRadars,
 	InitImageClients,
@@ -72,6 +73,8 @@ public:
 	void StateMachine();
 
 	static CHost* GetInstance();
+
+	IConnection* GetConnection();
 	
 };
 
