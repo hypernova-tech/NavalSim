@@ -1,0 +1,50 @@
+create --name env --bp 
+set --name env --position "324.600000 284.200000 4.600000"
+set --name env --rotation "0.000000 0.000000 0.000000"
+set --name env --scale "1.000000 1.000000 1.000000"
+set --name env --instance -1
+set --name env --suppressed 0
+set --name env --standalone 0
+set --name env --timeofday 12.000000
+set --name env --envtimeflowscale 1.000000
+set --name env --rain 0.000000
+set --name env --cloud 0.000000
+set --name env --snow 0.000000
+set --name env --dust 0.000000
+set --name env --fog 0.000000
+set --name env --thunder 0.000000
+set --name env --envsoundfx 1
+set --name env --wind 3.000000
+set --name env --winddir 0.000000
+
+create --name c1 --bp CRUISER
+set --name c1 --position "10.000000 -125.430430 0.000000"
+set --name c1 --rotation "0.000000 0.000000 0.000000"
+set --name c1 --scale "1.000000 1.000000 1.000000"
+set --name c1 --instance -1
+set --name c1 --suppressed 0
+set --name c1 --standalone 0
+
+create --name kruvazor --bp 
+set --name kruvazor --position "10.000000 -61.360507 0.000000"
+set --name kruvazor --rotation "0.000000 0.000000 0.000000"
+set --name kruvazor --scale "1.000000 1.000000 1.000000"
+set --name kruvazor --instance -1
+set --name kruvazor --suppressed 0
+set --name kruvazor --standalone 0
+
+create --name tanker --bp TANKERSHIP
+set --name tanker --position "10.000000 -21.217062 0.000000"
+set --name tanker --rotation "0.000000 0.000000 0.000000"
+set --name tanker --scale "1.000000 1.000000 1.000000"
+set --name tanker --instance -1
+set --name tanker --suppressed 0
+set --name tanker --standalone 0
+
+create --name buoy --bp BUOY
+set --name buoy --position "10.000000 -21.217062 0.000000"
+set --name buoy --rotation "0.000000 0.000000 0.000000"
+set --name buoy --scale "1.000000 1.000000 1.000000"
+set --name buoy --instance -1
+set --name buoy --suppressed 0
+set --name buoy --standalone 0
