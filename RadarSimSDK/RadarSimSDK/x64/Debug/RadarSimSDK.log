@@ -1,2 +1,4 @@
-﻿  CLinuxUDPSocket.cpp
+﻿  PPIController.cpp
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\Halo24SDK\include\PPIController.cpp(40,51): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\Halo24SDK\include\PPIController.cpp(42,20): warning C4018: '<': signed/unsigned mismatch
   RadarSimSDK.vcxproj -> C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\x64\Debug\RadarSimSDK.exe

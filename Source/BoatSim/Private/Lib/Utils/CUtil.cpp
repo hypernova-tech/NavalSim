@@ -61,7 +61,7 @@ bool CUtil::Trace(const STraceArgs& args, SScanResult* pscan_result)
     }
 
 
-    look_dir.Normalize();
+
 
     pscan_result->ScanCenter = start_pos;
 
@@ -100,11 +100,11 @@ bool CUtil::Trace(const STraceArgs& args, SScanResult* pscan_result)
     pscan_result->ScanCenter = args.scan_center;
     pscan_result->ScanRPYWorld = args.scan_rpy_world_deg;
 
-    for (float azimuth = args.azimuth_start_deg; azimuth <= args.azimuth_end_deg; azimuth += args.azimuth_angle_step_deg) {
+    for (double azimuth = args.azimuth_start_deg; azimuth <= args.azimuth_end_deg; azimuth += args.azimuth_angle_step_deg) {
         vertical_ind = 0;
-        float azimuth_rad = azimuth * DEGTORAD;
+        double azimuth_rad = azimuth * DEGTORAD;
         FVector new_dir;
-        for (float elevation = args.elevation_start_deg; elevation <= args.elevation_end_deg; elevation += args.elevation_angle_step_deg) {
+        for (double elevation = args.elevation_start_deg; elevation <= args.elevation_end_deg; elevation += args.elevation_angle_step_deg) {
             FLOAT64 filtered_range_meter = args.range_meter;
             FLOAT32 error_meter = args.measurement_error_mean + args.measurement_error_std * 0.33f * GetRandomRange(-1.0f, 1.0f);
 

@@ -159,7 +159,7 @@ void USaverLoaderBase::SavePlatform(ACBoatBase* p_platform, TArray<FString>& cli
 	}
 	
 	line = CreateCommandWithName(pCLI->SetCommand, p_platform->GetName());
-	AppendOption(line, pCLI->Position, p_platform->GetActorLocation());
+	AppendOption(line, pCLI->Position,TOW( p_platform->GetActorLocation()));
 	AddLine(line);
 
 	line = CreateCommandWithName(pCLI->SetCommand, p_platform->GetName());

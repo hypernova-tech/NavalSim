@@ -24,6 +24,8 @@ public:
     CLinuxUDPSocket();
 
     NetworkComm* simComm_;
+    NetworkComm* bcastComm_;
+
     void					receivePackage(NetworkComm* networkComm, uint8_t data[], uint16_t len, const portIP& senderPortIP);
 
 

@@ -4,13 +4,57 @@
 #include "Halo24SDK/include/TargetTrackingClient.h"
 #include <math.h>
 #include "CUtil.h"
+#include <opencv2/opencv.hpp>
+#include "Halo24SDK/include/PPIController.h"
+using namespace Navico::Image;
 using namespace Navico::Protocol::NRP;
 
 #define DEBUG_HOST
 
 CHost* CHost::pInstance = nullptr;
 
+class CImageClientObserver :public iImageClientSpokeObserver {
+	// Inherited via iImageClientSpokeObserver
 
+private:
+	tPPIController* pPPIController;
+	cv::Mat* pImage;
+	thread *pThreadOpenCV;
+
+public:
+	void Init()
+	{
+		pPPIController = new tPPIController();
+		pThreadOpenCV = new std::thread(&CImageClientObserver::OpenCVThread, this);
+
+	}
+
+	void OpenCVThread()
+	{
+		pImage = new cv::Mat();
+		*pImage = cv::Mat::zeros(1024, 1024, CV_8UC4);
+
+		// Draw a circle
+		//cv::circle(*pImage, cv::Point(320, 240), 50, cv::Scalar(0, 0, 255), -1);
+
+		// Create a window
+		cv::namedWindow("Window", cv::WINDOW_AUTOSIZE);
+
+		// Show our image inside it
+		cv::imshow("Window", *pImage);
+		pPPIController->SetFrameBuffer((intptr_t)pImage->data, 1024, 1024, nullptr, 512, 512);
+
+		while (true) {
+			cv::imshow("Window", *pImage);
+			cv::waitKey(20);
+		}
+		
+	}
+	virtual void UpdateSpoke(const Spoke::tSpokeV9174* pSpoke) override
+	{
+		pPPIController->Process(pSpoke);
+	}
+};
 
 void CHost::Init()
 {
@@ -55,7 +99,7 @@ void CHost::ThreadFunction()
 	tMultiRadarClient::GetInstance()->AddUnlockStateObserver(this);
 	char radars[2][MAX_SERIALNUMBER_SIZE];
 	char radars_unlockkey[2][MAX_UNLOCKKEY_SIZE+1];
-
+	
 	
 
 
@@ -64,8 +108,8 @@ void CHost::ThreadFunction()
 	strcpy(radars_unlockkey[0], RADAR1_UNLOCK_KEY);
 	strcpy(radars_unlockkey[1], RADAR2_UNLOCK_KEY);
 
-
-
+	CImageClientObserver* pSpokeObserver = new CImageClientObserver();
+	pSpokeObserver->Init();
 
 #if true
 
@@ -83,7 +127,7 @@ void CHost::ThreadFunction()
 
 	while (true) {
 
-		std::this_thread::sleep_for(std::chrono::milliseconds(10));
+		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 		tMultiRadarClient::GetInstance()->ExternalUpdate();
 		time += 10e-3;
 
@@ -152,7 +196,7 @@ void CHost::ThreadFunction()
 #endif
 
 					ImageClients[0] = new tImageClient();
-
+					ImageClients[0]->AddSpokeObserver(pSpokeObserver);
 					next_state = EHostState::ConnectRadars;
 				}
 				break;
@@ -281,10 +325,13 @@ void CHost::ThreadFunction()
 					p_radar->pImageClient->SetTransmit(true);
 				}
 
-				next_state = EHostState::SetGain;
+				next_state = EHostState::WaitAfterTransmit; // EHostState::SetGain;
 				std::this_thread::sleep_for(std::chrono::milliseconds(10));
 			}
 			break;
+
+			case EHostState::WaitAfterTransmit:
+				break;
 
 			case EHostState::SetGain:
 			{

@@ -65,7 +65,8 @@ void CMath::UnitTestVec()
 
 void CMath::SetActorRotation(AActor* p_actor, FVector rpy_deg)
 {
-    FQuat Quat = FQuat::MakeFromEuler(rpy_deg);
+    FVector v = FVector(rpy_deg.X, rpy_deg.Y, rpy_deg.Z);
+    FQuat Quat = FQuat::MakeFromEuler(v);
 
     // Set the actor's rotation
     p_actor->SetActorRotation(Quat);
@@ -73,7 +74,8 @@ void CMath::SetActorRotation(AActor* p_actor, FVector rpy_deg)
 
 void CMath::SetActorRelativeRotation(AActor* p_actor, FVector rpy_deg)
 {
-    FQuat Quat = FQuat::MakeFromEuler(rpy_deg);
+    FVector v = FVector(rpy_deg.X, rpy_deg.Y, rpy_deg.Z);
+    FQuat Quat = FQuat::MakeFromEuler(v);
     p_actor->SetActorRelativeRotation(Quat);
 }
 

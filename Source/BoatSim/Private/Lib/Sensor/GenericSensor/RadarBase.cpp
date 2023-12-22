@@ -5,6 +5,7 @@
 #include "Lib/Utils/CUtil.h"
 #include <Lib/SystemManager/SystemManagerBase.h>
 #include "Lib/Tracker/RadarBasedTracker/RadarBasedTracker.h"
+#include <Lib/Math/CMath.h>
 
 
 class FRaycastSensorTask
@@ -91,10 +92,11 @@ void ARadarBase::InitSensor()
 {
 	Super::InitSensor();
 	pPointVisualizer->CreateRenderTarget(512, 512, ASystemManagerBase::GetInstance()->GetUIController()->GetSensorSlotImage(SensorSlotIndex));
-	INT32S sector_cnt = (int)(360.0 / HorizontalScanStepAngleDeg + 0.5);
-	ScanResultContainer.Init(1, sector_cnt, HorizontalScanStepAngleDeg);
+	BeamWidthDeg = 45;//todo fixme
+	INT32S sector_cnt = (int)(360.0 / BeamWidthDeg);
+	ScanResultContainer.Init(16, sector_cnt, HorizontalScanStepAngleDeg);
 	pScanResult = ScanResultContainer.GetCircular();
-	BeamWidthDeg = 18;//todo fixme
+	
 	GuardZone.Init(MaxGuardZoneCount);
 	BlankingZone.Init(MaxSectorBlankingZoneCount);
 
@@ -259,14 +261,13 @@ void ARadarBase::Scan()
 
 	if (FApp::GetCurrentTime() >= NextScanTime) {
 		FLOAT64 start_azimuth = CurrentScanAzimuth;
-		FLOAT64 end_azimuth = BeamWidthDeg + start_azimuth;
+		FLOAT64 end_azimuth = BeamWidthDeg + start_azimuth - HorizontalScanStepAngleDeg;
 
-		if (end_azimuth >= 359.99) {
-			end_azimuth = 359.99;
-			IsFullScaned = true;
-		}
+	
 
 		STraceArgs args;
+
+		FLOAT64 elev = CMath::GetActorEulerAnglesRPY(this).Y;
 
 		args.p_actor = this;
 		args.is_world = true;
@@ -274,8 +275,8 @@ void ARadarBase::Scan()
 		args.min_range_meter = RangeMinMeter;
 		args.azimuth_start_deg = start_azimuth;
 		args.azimuth_end_deg = end_azimuth;
-		args.elevation_start_deg = 0;
-		args.elevation_end_deg = FovVerticalDeg;
+		args.elevation_start_deg = elev - FovVerticalDeg ;
+		args.elevation_end_deg = elev;
 		args.azimuth_angle_step_deg = HorizontalScanStepAngleDeg;
 		args.elevation_angle_step_deg = VerticalScanStepAngleDeg;
 		args.measurement_error_mean = MeasurementErrorMean;
@@ -325,7 +326,7 @@ void ARadarBase::Scan()
 
 			Visualize(pScanResult, GetActorLocation(), GetActorForwardVector(), GetActorRightVector(), RangeMaxMeter, (void*)pTracker);
 
-			NextScanTime = FApp::GetCurrentTime() + 0.1;
+			
 
 			CUtil::DebugLog("Scanning");
 		}
@@ -336,9 +337,13 @@ void ARadarBase::Scan()
 			p_current_sektor->Reset();
 
 			CurrentScanAzimuth = end_azimuth;
-			NextScanTime = FApp::GetCurrentTime() + 0.125;
+			
 		}
-
+		NextScanTime = FApp::GetCurrentTime() + 0.95 / ScanResultContainer.GetSectorCount();
+		if (CurrentScanAzimuth >= 360) {
+			
+			IsFullScaned = true;
+		}
 	
 	}
 

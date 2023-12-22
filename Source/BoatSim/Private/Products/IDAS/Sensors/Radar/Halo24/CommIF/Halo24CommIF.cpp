@@ -3,6 +3,7 @@
 
 #include "Products/IDAS/Sensors/Radar/Halo24/CommIF/Halo24CommIF.h"
 #include "HAL/PlatformNamedPipe.h"
+#include <Lib/Utils/CUtil.h>
 
 
 UHalo24CommIF::~UHalo24CommIF()
@@ -15,24 +16,30 @@ UHalo24CommIF::~UHalo24CommIF()
 
 void UHalo24CommIF::SendData(void* p_data, uint32 size_in_bytes)
 {
+	Mutex.Lock();
 	HasNewData = true;
 	SScanResult* p_in = (SScanResult*)p_data;
 	SScanResult* p_new = p_in;
 
 	CurrentRequest.Add(p_new);
-
+	Mutex.Unlock();
 }
 
 
 
 uint32 UHalo24CommIF::Run()
 {
+
+
 	while (!IsStoped) {
 		FPlatformProcess::Sleep(0.02);
-
-		if (CurrentRequest.Num() > 0) {
+		Mutex.Lock();
+		bool has_data = CurrentRequest.Num() > 0;
+		Mutex.Unlock();
+		if (has_data) {
 			SendRadarTrack();
 		}
+
 	}
 	return uint32();
 }
@@ -47,7 +54,7 @@ void UHalo24CommIF::SendSerial(INT8U* p_data, INT32U count)
 	pack->SetPayload(ESimSDKDataIDS::Serials, p_data, count);
 
 	pUDPConnection->SendUDPData((INT8U*)pack, pack->GetTransmitSize());
-	
+
 	RestorePacket(pack);
 }
 
@@ -61,29 +68,33 @@ void UHalo24CommIF::BeginPlay()
 
 	SenderThread = FRunnableThread::Create(this, *(GetOwner()->GetName()));
 	RegisterConnectionInfo(0, pUDPConnection->GetConnectionInfo(), pUDPConnection);
-	
+
 }
 SRadarSimSDKPacket packspoke;
 void UHalo24CommIF::SendRadarTrack()
 {
+	Mutex.Lock();
 	SScanResult* p_current = CurrentRequest[0];
+
+
 	FLOAT32 each_spoke_step = 360.0f / 4096;
 	FLOAT32 each_cell_size = p_current->ScanRangeMeter / 1024.0f;
 	CurrentRequest.RemoveAt(0);
 
-	
+
 	auto* p_current_sector = p_current->GetSectorContainer()->GetSector(p_current->CurrentSector);
 
-	
+
 	int SpokeCountPerSector = 4096 / p_current->SectorCount;
 
 	if (p_current->CurrentSector == 0 && SpokeSequanceNumber != 0) {
 		SpokeSequanceNumber = 0;
 	}
 
-	
+	Mutex.Unlock();
 
 	for (int i = 0; i < SpokeCountPerSector; i++) {
+
 
 		//SRadarSimSDKPacket pack;
 		memset(&packspoke, 0, sizeof(SRadarSimSDKPacket));
@@ -96,14 +107,16 @@ void UHalo24CommIF::SendRadarTrack()
 		p_hdr->sampleEncoding = 0;
 		p_hdr->nOfSamples = 1024;
 		p_hdr->bitsPerSample = 4;
-		p_hdr->rangeCellSize_mm = (each_cell_size)*1000;
-		p_hdr->spokeAzimuth = p_current->AzimuthRange.X;
+		p_hdr->rangeCellSize_mm = (each_cell_size) * 1000;
+		p_hdr->spokeAzimuth = SpokeSequanceNumber; // 360 / p_current->AzimuthRange.X;
 		p_hdr->bearingZeroError = 0;
 		p_hdr->spokeCompass = p_current->ScanRPYWorld.Z / 4096.0f;
 		p_hdr->trueNorth = 1;
 		p_hdr->rangeCellsDiv2 = p_current->ScanRangeMeter / (each_cell_size) * 0.5f;
 
-		bool ret = p_current_sector->MapSpoke4Bits(p_current->ScanCenter,p_current_sector->StartAzimuthDeg +  i * each_spoke_step, each_cell_size, p_spoke_payload->SpokeData.Data);
+		auto azim_deg = p_hdr->spokeAzimuth * 360.0 / 4096;
+
+		bool ret = p_current_sector->MapSpoke4Bits(p_current->ScanCenter, p_current_sector->StartAzimuthDeg + i * each_spoke_step, each_cell_size, 512, p_spoke_payload->SpokeData.Data);
 
 		if (ret) {
 			packspoke.SetID(ESimSDKDataIDS::SpokeData);
@@ -111,18 +124,27 @@ void UHalo24CommIF::SendRadarTrack()
 			packspoke.SetPayload(ESimSDKDataIDS::SpokeData, (INT8U*)packspoke.Payload, sizeof(SHalo24SpokePayload));
 			//pack.SetPayloadSize(sizeof(SHalo24SpokePayload));
 			pUDPConnection->SendUDPData((const INT8U*)&packspoke, packspoke.GetTransmitSize());
+
+		
 		}
 		else {
 			break;
 		}
-
-
+		
+		CUtil::DebugLog("SpokeSequanceNumber: " + CUtil::IntToString(SpokeSequanceNumber)+ "azim: "+ CUtil::FloatToString(azim_deg));
 		SpokeSequanceNumber++;
+
+		if (PrevSequenceNumber >= 0) {
+			if ((SpokeSequanceNumber - PrevSequenceNumber) != 1) {
+				CUtil::DebugLog("Spoke Sequenc Error prev" + CUtil::IntToString(PrevSequenceNumber) + " curr: " + CUtil::IntToString(SpokeSequanceNumber));
+			}
+		}
 
 		if (SpokeSequanceNumber >= 4096) {
 			SpokeSequanceNumber = 0;
 		}
-		
+
+		PrevSequenceNumber = SpokeSequanceNumber;
 
 	}
 

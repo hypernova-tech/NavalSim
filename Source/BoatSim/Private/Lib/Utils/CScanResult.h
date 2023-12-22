@@ -64,9 +64,31 @@ public:
 			ScanLines[azimuth_scan_ind]->Add(vec);
 		}
 	}
+	void DepthSet(INT32S sample_ind, INT32S depth, FLOAT32 cell_size_meter, INT32S total_byte_count, INT8U* p_out)
+	{
+		for (INT32S j = 1; j < depth; j++) {
 
+			INT32S byte_ind ;
+			INT32S order ;
+			auto depth_ind = (sample_ind + j);
+			byte_ind = depth_ind / 2;
+			order = depth_ind & 0x1;
 
-	bool MapSpoke4Bits(FVector own_ship_pos, FLOAT32 azimuth_deg, FLOAT32 cell_size_meter, INT8U *p_out)
+			if (byte_ind >= total_byte_count) {
+				break;
+			}
+
+			if (order) {
+				p_out[byte_ind] |= 0xF;
+			}
+			else {
+				p_out[byte_ind] |= 0xF << 4;
+			}
+
+		}
+	}
+
+	bool MapSpoke4Bits(FVector own_ship_pos, FLOAT32 azimuth_deg, FLOAT32 cell_size_meter, INT32S total_byte_count, INT8U *p_out)
 	{
 		if (azimuth_deg >= EndAzimuthDeg) {
 			return false;
@@ -80,7 +102,19 @@ public:
 
 		TArray<FVector>* p_data = ScanLines[ind];
 
-	
+		FLOAT32 max_h = -1;
+
+		for (INT32S i = 0; i < p_data->Num(); i++) {
+			FVector pos = (*p_data)[i];
+
+			FLOAT32 h = TOW(FMath::Abs((pos - own_ship_pos).Z));
+			
+			if (max_h < h) {
+				max_h = h;
+			}
+
+		}
+		max_h *= 2;
 		for (INT32S i = 0; i < p_data->Num(); i++) {
 			FVector pos = (*p_data)[i];
 
@@ -88,7 +122,8 @@ public:
 			INT32S sample_ind = dist / cell_size_meter;
 
 			INT32S byte_ind = sample_ind / 2;
-			INT32S order = byte_ind & 0x1;
+			INT32S order = sample_ind & 0x1;
+			INT32S depth = (INT32S)(max_h / cell_size_meter+0.5);
 
 			if (order) {
 				p_out[byte_ind] |= 0xF;
@@ -96,14 +131,16 @@ public:
 			else {
 				p_out[byte_ind] |= 0xF<<4;
 			}
-			
 
+			DepthSet(sample_ind, depth, cell_size_meter, total_byte_count, p_out);
 		}
 
 		return true;
 	}
 
 };
+
+
 
 struct SSectorContainer
 {
@@ -265,19 +302,26 @@ class CScanResultContainer
 {
 	TArray<SScanResult*> ScanResults;
 	INT32U CircularAccessInd = 0;
+	INT32U SectorCount;
 
 
 public:
-	void Init(INT32S cnt, INT32U sector_cnt, FLOAT64 azimuth_res = 0.087890625)
+	void Init(INT32S buff_cnt, INT32U sector_cnt, FLOAT64 azimuth_res = 0.087890625)
 	{
 
-		for (INT32S i = 0; i < cnt; i++) {
+		for (INT32S i = 0; i < buff_cnt; i++) {
 			SScanResult* p_res = new SScanResult();
 			p_res->Init(sector_cnt, azimuth_res);
 			ScanResults.Add(p_res);
+			SectorCount = sector_cnt;
 		}
 
 		
+	}
+
+	INT32U GetSectorCount()
+	{
+		return SectorCount;
 	}
 
 	SScanResult* GetCircular()

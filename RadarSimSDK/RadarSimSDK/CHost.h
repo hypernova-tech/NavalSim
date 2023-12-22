@@ -42,6 +42,7 @@ enum EHostState
 	CancalAll,
 	OwnShipNavigationData,
 	PeriodicUpdate,
+	WaitAfterTransmit
 };
 
 

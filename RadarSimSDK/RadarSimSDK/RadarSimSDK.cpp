@@ -1,26 +1,60 @@
 // RadarSimSDK.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
+#include "RadarSimSdkConfig.h"
+#if SIMULATE_HOST > 0
 
 #include <iostream>
 #include "CHost.h"
-#include "RadarSimSdkConfig.h"
+#include <opencv2/opencv.hpp>
+
+#include <PPIController.h>
+
+
 
 CHost* pHost;
 
-#if SIMULATE_HOST > 0
+
+
+
+
+
+
 int main()
 {
+#if 0
+
+
+
+		cv::Mat Image;
+		Image = cv::Mat::zeros(1024, 1024, CV_8UC4);
+
+		// Draw a circle
+		cv::circle(Image, cv::Point(320, 240), 50, cv::Scalar(0, 0, 255), -1);
+
+		// Create a window
+		cv::namedWindow("Window", cv::WINDOW_AUTOSIZE);
+
+		// Show our image inside it
+		cv::imshow("Window", Image);
+
+    // Wait for a keystroke in the window
+    //
+
+
+
+		int n;
+		while (true) {
+			cv::waitKey(25);
+		}
+
+#endif
 
     tMultiRadarClient::GetInstance()->Connect();
-  
-
-
-
-   
 
     
     while (true) {
-
+		int n;
+		std::cin >> n;
     }
 
     std::cout << "Hello World!\n";

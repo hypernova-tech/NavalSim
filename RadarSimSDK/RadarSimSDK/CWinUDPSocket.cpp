@@ -94,6 +94,8 @@ bool CWinUDPSocket::SendData(INT8U* p_data, INT32U count, INT16U remote_port, bo
 }
 
 bool CWinUDPSocket::ReceivedData(INT8U* p_dest, INT32U dest_size, INT32U& read_count) {
+   
+
     int addrLength = sizeof(m_address);
 
 
@@ -106,8 +108,9 @@ bool CWinUDPSocket::ReceivedData(INT8U* p_dest, INT32U dest_size, INT32U& read_c
         return false;
     }
     else {
-        read_count = recv_len;
-        std::cout << (char*)p_dest;
+        AddPacket(p_dest, recv_len);
+        ReadPacket(p_dest, dest_size, read_count);
+        return true;
     }
     return true;
 }

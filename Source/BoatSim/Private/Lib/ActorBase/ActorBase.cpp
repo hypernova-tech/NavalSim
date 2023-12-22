@@ -196,7 +196,7 @@ void AActorBase::SaveJSON(CJsonDataContainer& data)
 	}
 	
 	data.Add(CCLICommandManager::Position, TOW(GetActorLocation()));
-	data.Add(CCLICommandManager::Rotation, (GetActorRotation().Euler()));
+	data.Add(CCLICommandManager::Rotation, (CMath::GetActorEulerAnglesRPY(this)));
 	data.Add(CCLICommandManager::Scale, (GetActorScale3D()));
 
 	if (pCommIF) {

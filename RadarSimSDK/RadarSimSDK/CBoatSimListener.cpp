@@ -37,7 +37,7 @@ void CBoatSimListener::ThreadFunction() {
         if (ret) {
             if (bytes_read > 0) {
                 ProcessData(RadarChannelDataProvider[0], p_buffer, bytes_read);
-                std::cout << "Data Received " << bytes_read << std::endl;
+                //std::cout << "Data Received " << bytes_read << std::endl;
             }
         }
 

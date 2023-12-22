@@ -62,7 +62,7 @@ private:
 	TArray< SScanResult*> CurrentRequest;
 
 	IHalo24HostIF* pHostIF;
-
+	FCriticalSection Mutex;
 
 protected:
 	UPROPERTY(BlueprintReadWrite)
@@ -77,6 +77,8 @@ protected:
 	
 	void RestorePacket(SRadarSimSDKPacket* p_pack);
 	int SpokeSequanceNumber = 0;
+	int PrevSequenceNumber = -1;
 	char SerialKey[32];
+	
 	
 };

@@ -120,9 +120,10 @@ void APathController::GenerateDrawablePathSegments()
 		// Get the location and tangent at the start and end distances
 		FVector StartLocation = pspline_comp->GetLocationAtDistanceAlongSpline(startDist, ESplineCoordinateSpace::Local);
 		FVector StartTangent = pspline_comp->GetTangentAtDistanceAlongSpline(startDist, ESplineCoordinateSpace::Local);
+		StartTangent.Normalize();
 		FVector EndLocation = pspline_comp->GetLocationAtDistanceAlongSpline(endDist, ESplineCoordinateSpace::Local);
 		FVector EndTangent = pspline_comp->GetTangentAtDistanceAlongSpline(endDist, ESplineCoordinateSpace::Local);
-
+		EndTangent.Normalize();
 		// ... (the rest of your loop creating the USplineMeshComponent instances remains unchanged)
 		SplineMesh = NewObject<USplineMeshComponent>(this);
 
@@ -134,8 +135,8 @@ void APathController::GenerateDrawablePathSegments()
 		auto pset = SplineMesh->GetMaterial(0);
 		// Set the start and end points for this mesh segment
 		SplineMesh->SetStartAndEnd(
-			StartLocation, StartTangent * step_distance,  // You might need to adjust the tangent's length based on your step_distance
-			EndLocation, EndTangent * step_distance,
+			StartLocation, StartTangent /* step_distance */,  // You might need to adjust the tangent's length based on your step_distance
+			EndLocation, EndTangent /* step_distance*/,
 			true);
 		SplineMesh->RegisterComponent();
 

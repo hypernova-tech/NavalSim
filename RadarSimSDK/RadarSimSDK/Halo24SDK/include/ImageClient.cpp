@@ -597,10 +597,6 @@ void Navico::Protocol::NRP::tImageClient::OnReceivedRadarSpoke( SHalo24SpokePayl
     p_spoke->SpokeData.Header.rangeCellsDiv2 = p_spoke->HeaderNoneBitField.rangeCellsDiv2;
 
     for (auto* p_obs : CientSpokeObservers) {
-
-
-
-
         p_obs->UpdateSpoke((Spoke::tSpokeV9174*)&p_spoke->SpokeData);
     }
 }

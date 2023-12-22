@@ -205,7 +205,7 @@ bool tMultiRadarClient::QueryRadars()
  
     p_pack->SetID(ESimSDKDataIDS::QueryRadars);
     p_pack->SetPayloadSize(sizeof(SUnlockKeysPayload));
-    CHost::GetInstance()->GetConnection()->SendData((INT8U*)p_pack, p_pack->GetTransmitSize(), CHost::GetInstance()->GetConnection()->GetRemotePort());
+    CHost::GetInstance()->GetConnection()->SendData((INT8U*)p_pack, p_pack->GetTransmitSize(), CHost::GetInstance()->GetConnection()->GetRemotePort(), true);
 
     return true;
 }
@@ -367,6 +367,8 @@ void Navico::Protocol::tMultiRadarClient::HandleTrackingStatus(IConnection* p_co
     }
     p_radar->pTargetTrackingClient->OnReceivedTrackingStatus(p_res);
 }
+
+
 
 void Navico::Protocol::tMultiRadarClient::StateMachine()
 {

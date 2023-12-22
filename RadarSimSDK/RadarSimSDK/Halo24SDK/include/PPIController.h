@@ -153,7 +153,7 @@ private:
     tPPIControllerImpl *m_pImpl;
 
     uint8_t *pFrame;
-    uint32_t Width, Height;
+    int32_t Width, Height;
     tRadarColourLookUpTable* pColorLookUpTable;
     uint32_t XCentre;
     uint32_t YCentre;

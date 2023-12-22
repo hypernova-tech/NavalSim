@@ -1,6 +1,10 @@
 #include "PPIController.h"
 #include "../../Lib/Types/Primitives.h"
 #include <RadarColourLookUpTable.h>
+#include "math.h"
+#include <iostream>
+using namespace std;
+
 
 
 Navico::Image::tPPIController::tPPIController()
@@ -33,7 +37,7 @@ void Navico::Image::tPPIController::Process(const Protocol::NRP::Spoke::t9174Spo
 
 	double spoke_ang = spoke_azimuth * 360.0 / 4096;
 
-	
+	MetersPerPixel = pSpoke->header.rangeCellSize_mm * 0.001;
 
 	for (int i = 0; i < pSpoke->header.nOfSamples; i++) {
 		int byte_ind = i / 2;
@@ -51,30 +55,43 @@ void Navico::Image::tPPIController::Process(const Protocol::NRP::Spoke::t9174Spo
 
 	
 		
-		double distance = i * pSpoke->header.rangeCellSize_mm * 1000;
+		double distance = i * pSpoke->header.rangeCellSize_mm * 0.001;
 
-		double x = sin(spoke_azimuth * DEGTORAD)* distance;
-		double y = cos(spoke_azimuth * DEGTORAD) * distance;
+		double x = sin(spoke_ang * DEGTORAD)* distance;
+		double y = cos(spoke_ang * DEGTORAD) * distance;
 
 		int px = (int)(x / MetersPerPixel);
 		int py = (int)(y / MetersPerPixel);
 
-		px = Clamp(px, -1023, 1023);
-		py = Clamp(py, -1023, 1023);
+		px = Clamp(px, -Width/2+1, Width/2-1);
+		py = Clamp(py, -Height/2+1, Height/2-1);
 
 		// center to left top
 
-		int addr = (1024 + px) * 1024 + (py - 1024) * sizeof(tColor);
+		int px_cart = Width/2 + px;
+		int py_cart = (Height/2 - py);
 
+		int addr = (py_cart) * Width + px_cart;
 		tColor* p_color = (tColor*)pFrame;
+
 
 		if (data != 0) {
 			
-			p_color[addr] = 0x000000FF; // green
+			p_color[addr] = 0x00FF00FF; // green
 		}
 		else {
-			pFrame[addr] = 0;
+			p_color[addr] = 0;
 		}
+
+		/*
+		for (int pix = 100; pix < 600; pix++) {
+			for (int piy = 850; piy < 925; piy++) {
+				addr = (piy)*Width + pix;
+				p_color[addr] = 0x00FF00FF;
+			}
+		}
+		*/
+			
 	}
 
 
@@ -113,7 +130,7 @@ Navico::Image::tPPIRangeInterpolation Navico::Image::tPPIController::GetRangeInt
 
 void Navico::Image::tPPIController::SetRangeResolution(float metersPerPixel)
 {
-	MetersPerPixel = metersPerPixel;
+	//MetersPerPixel = metersPerPixel;
 }
 
 float Navico::Image::tPPIController::GetRangeResolution() const
