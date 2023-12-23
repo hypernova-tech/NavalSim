@@ -108,7 +108,7 @@ void UHalo24CommIF::SendRadarTrack()
 		p_hdr->nOfSamples = 1024;
 		p_hdr->bitsPerSample = 4;
 		p_hdr->rangeCellSize_mm = (each_cell_size) * 1000;
-		p_hdr->spokeAzimuth = SpokeSequanceNumber; // 360 / p_current->AzimuthRange.X;
+		p_hdr->spokeAzimuth = SpokeSequanceNumber;
 		p_hdr->bearingZeroError = 0;
 		p_hdr->spokeCompass = p_current->ScanRPYWorld.Z / 4096.0f;
 		p_hdr->trueNorth = 1;

@@ -13,12 +13,23 @@
 #define VERTICAL_SCAN_SIZE 1080
 
 #include <Lib/Types/Primitives.h>
+enum EScanObjectType
+{
+	ScanObjectTypeUnknown = -1,
+	ScanObjectTypeTerrain = 0,
+	ScanObjectTypeMovable = 1
 
+};
 
 struct SScanInfo
 {
 	
 	
+};
+
+struct SScanLineEntry {
+	FVector Pos;
+	EScanObjectType  ObjectType;
 };
 
 struct SSectorInfo
@@ -28,7 +39,9 @@ struct SSectorInfo
 	FLOAT64 AzimuthStepDeg;
 	INT32S ScanLineCount;
 	TArray<FVector> SectorData;
-	TArray<TArray<FVector>*> ScanLines;
+	TArray<TArray<SScanLineEntry>*> ScanLines;
+
+
 
 
 public:
@@ -40,7 +53,7 @@ public:
 		EndAzimuthDeg = end_azimuth_deg;
 		AzimuthStepDeg = (EndAzimuthDeg - StartAzimuthDeg)/(scan_line_count);
 		for (INT32S i = 0; i < scan_line_count; i++) {
-			ScanLines.Add(new TArray<FVector>());
+			ScanLines.Add(new TArray<SScanLineEntry>());
 		}
 	}
 	void Reset() {
@@ -57,11 +70,14 @@ public:
 		SectorData.Add(vec);
 	
 	}
-	void Add(FVector& vec, INT32S azimuth_scan_ind)
+	void Add(FVector& vec, INT32S azimuth_scan_ind, EScanObjectType object_type = EScanObjectType::ScanObjectTypeUnknown)
 	{
 		SectorData.Add(vec);
 		if (azimuth_scan_ind < ScanLines.Num()) {
-			ScanLines[azimuth_scan_ind]->Add(vec);
+			SScanLineEntry entry;
+			entry.Pos = vec;
+			entry.ObjectType = object_type;
+			ScanLines[azimuth_scan_ind]->Add(entry);
 		}
 	}
 	void DepthSet(INT32S sample_ind, INT32S depth, FLOAT32 cell_size_meter, INT32S total_byte_count, INT8U* p_out)
@@ -73,6 +89,33 @@ public:
 			auto depth_ind = (sample_ind + j);
 			byte_ind = depth_ind / 2;
 			order = depth_ind & 0x1;
+
+			if (byte_ind >= total_byte_count) {
+				break;
+			}
+
+			if (order) {
+				p_out[byte_ind] |= 0xF;
+			}
+			else {
+				p_out[byte_ind] |= 0xF << 4;
+			}
+
+		}
+	}
+
+	void DepthSetRanged(FLOAT64 start, FLOAT64 end, FLOAT32 cell_size_meter, INT32S total_byte_count, INT8U* p_out)
+	{
+		INT32S start_ind = start / cell_size_meter;
+		INT32S end_ind   = end / cell_size_meter+0.5;
+
+		for (INT32S j = start_ind; j < end_ind; j++) {
+
+			INT32S byte_ind;
+			INT32S order;
+			INT32S sample_ind = j;
+			byte_ind = sample_ind / 2;
+			order = sample_ind & 0x1;
 
 			if (byte_ind >= total_byte_count) {
 				break;
@@ -100,23 +143,57 @@ public:
 			return false;
 		}
 
-		TArray<FVector>* p_data = ScanLines[ind];
+		TArray<SScanLineEntry>* p_data = ScanLines[ind];
 
-		FLOAT32 max_h = -1;
+		FLOAT64 max_h = -1;
+		FLOAT64 max_dist_xy = -1;
+		FLOAT64 min_dist_xy_terr = 1e38;
+		FLOAT64 max_dist_xy_terr = -1;
+		bool has_terrain = false;
 
 		for (INT32S i = 0; i < p_data->Num(); i++) {
-			FVector pos = (*p_data)[i];
+			SScanLineEntry* p_entry = &(*p_data)[i];
+			FVector pos = p_entry->Pos;
 
-			FLOAT32 h = TOW(FMath::Abs((pos - own_ship_pos).Z));
-			
+			FLOAT64 h = TOW(FMath::Abs((pos - own_ship_pos).Z));
+			FLOAT64 dist_xy = TOW(FVector::DistXY(pos,own_ship_pos));
 			if (max_h < h) {
 				max_h = h;
 			}
 
+			if (max_dist_xy < dist_xy) {
+				max_dist_xy = dist_xy;
+			}
+
+			if (p_entry->ObjectType == EScanObjectType::ScanObjectTypeTerrain) {
+				if (max_dist_xy_terr < dist_xy) {
+					max_dist_xy_terr = dist_xy;
+				}
+				if (min_dist_xy_terr > dist_xy) {
+					min_dist_xy_terr = dist_xy;
+				}
+				has_terrain = true;
+			}
+
 		}
-		max_h *= 2;
+		
+		max_h *= 1.5;
+		if (max_h > 0 && max_h < 2) {
+			max_h = 2;
+		}
+
+		
+
+		if (has_terrain) {
+			if (max_dist_xy_terr - min_dist_xy_terr < 20) {
+				max_dist_xy_terr = min_dist_xy_terr + 20;
+			}
+
+			DepthSetRanged(min_dist_xy_terr, max_dist_xy_terr, cell_size_meter, total_byte_count, p_out);
+		}
+
 		for (INT32S i = 0; i < p_data->Num(); i++) {
-			FVector pos = (*p_data)[i];
+			FVector pos = (*p_data)[i].Pos;
 
 			FLOAT32 dist = TOW( FVector::DistXY(pos, own_ship_pos));
 			INT32S sample_ind = dist / cell_size_meter;
@@ -222,6 +299,7 @@ struct SScanResult
 
 	FLOAT64 TotalTimeSec;
 	FLOAT64 TotalRaycastTimeSec;
+	BOOLEAN IsTrueNorth = false;
 
 public:
 

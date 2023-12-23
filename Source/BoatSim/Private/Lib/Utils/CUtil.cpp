@@ -102,6 +102,7 @@ bool CUtil::Trace(const STraceArgs& args, SScanResult* pscan_result)
 
     for (double azimuth = args.azimuth_start_deg; azimuth <= args.azimuth_end_deg; azimuth += args.azimuth_angle_step_deg) {
         vertical_ind = 0;
+        
         double azimuth_rad = azimuth * DEGTORAD;
         FVector new_dir;
         for (double elevation = args.elevation_start_deg; elevation <= args.elevation_end_deg; elevation += args.elevation_angle_step_deg) {
@@ -173,7 +174,10 @@ bool CUtil::Trace(const STraceArgs& args, SScanResult* pscan_result)
             }
             else {
                 auto raytick = CUtil::Tick();
+              
                 ret = args.p_actor->GetWorld()->LineTraceSingleByChannel(result, start_pos, end, ECollisionChannel::ECC_Visibility, query_params, FCollisionResponseParams());
+          
+                
                 auto ray_elp = CUtil::Tock(raytick);
 
                 pscan_result->TotalRaycastTimeSec += ray_elp;
@@ -196,9 +200,21 @@ bool CUtil::Trace(const STraceArgs& args, SScanResult* pscan_result)
 
                 pscan_result->AddTrackPoint3DList(detected_pos_error, range_errored_meter);
 
+                auto actor = result.GetActor();
+                auto comp = result.GetComponent();
+                EScanObjectType object_type = EScanObjectType::ScanObjectTypeUnknown;
+                if (actor != nullptr) {
+                    if (actor->ActorHasTag("TagTerrain")) {
+                        object_type = EScanObjectType::ScanObjectTypeTerrain;
+                    }
+                    if (comp->ComponentHasTag("TagTerrain")) {
+                        object_type = EScanObjectType::ScanObjectTypeTerrain;
+                    }
+                }
+
 
                 if (args.create_scan_line) {
-                    p_current_sektor->Add(detected_pos_error, horizantal_ind);
+                    p_current_sektor->Add(detected_pos_error, horizantal_ind, object_type);
                 }
                 else {
                     p_current_sektor->Add(detected_pos_error);

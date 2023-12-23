@@ -335,7 +335,7 @@ void ARadarBase::Scan()
 			int sector_ind = start_azimuth / (360.0 / pScanResult->SectorCount);
 			SSectorInfo* p_current_sektor = pScanResult->GetSectorContainer()->GetSector(sector_ind);
 			p_current_sektor->Reset();
-
+			OnDataReady();
 			CurrentScanAzimuth = end_azimuth;
 			
 		}

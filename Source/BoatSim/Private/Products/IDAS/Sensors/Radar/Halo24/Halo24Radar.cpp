@@ -5,6 +5,7 @@
 #include "Products/IDAS/Sensors/Radar/Halo24/CommIF/Halo24CommIF.h"
 #include <Lib/Utils/CUtil.h>
 #include <Products/IDAS/Sensors/Radar/Halo24/Tracker/Halo24RadarTracker.h>
+#include <Lib/Math/CMath.h>
 
 void AHalo24Radar::BeginPlay()
 {
@@ -338,7 +339,15 @@ void AHalo24Radar::OnRecievedMessage(SRadarSimSDKPacket* p_pack)
 	else	if (p_pack->Header.PacketType == ESimSDKDataIDS::TrackingAcquire) {
 		STrackingAcquireTarget* p_args = (STrackingAcquireTarget*)p_pack->Payload;
 		if (strcmp((char*)p_args->SerialData.SerialKey, Serial) == 0) {
-			bool ret = pTracker->TryTrack(p_args->Id, GetActorLocation(), 360-(INT32S)p_args->BearingDeg, p_args->RangeMeter);
+			FLOAT64 bearing_deg = 0;
+			if (p_args->BearingType == 1) {
+				bearing_deg = 360 - (INT32S)p_args->BearingDeg;
+			}
+			else {
+				auto rpy = CMath::GetActorEulerAnglesRPY(GetOwner());
+				bearing_deg = FMath::Fmod(rpy.Z + (INT32S)p_args->BearingDeg, 360.0);
+			}
+			bool ret = pTracker->TryTrack(p_args->Id, GetActorLocation(), bearing_deg, p_args->RangeMeter);
 			pHalo24CommIF->SendResponseAckNack(ESimSDKDataIDS::TrackingAcquire, Serial, ret);
 		}
 	}
