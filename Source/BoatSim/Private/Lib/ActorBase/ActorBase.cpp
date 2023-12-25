@@ -150,6 +150,13 @@ FString AActorBase::GetBlueprintName()
 void AActorBase::Save(ISaveLoader* p_save_loader)
 {
 	FString line;
+
+	line = p_save_loader->CreateCommand(CCLICommandManager::CreateCommand);
+	p_save_loader->AppendOption(line, CCLICommandManager::Name, GetName());
+	p_save_loader->AppendOption(line, CCLICommandManager::Bp, GetBlueprintName());
+	p_save_loader->AddLine(line);
+
+
 	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
 	p_save_loader->AppendOption(line, CCLICommandManager::Instance, AffinityInstanceId);
 	p_save_loader->AddLine(line);
@@ -161,6 +168,25 @@ void AActorBase::Save(ISaveLoader* p_save_loader)
 	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
 	p_save_loader->AppendOption(line, CCLICommandManager::StandaloneModeEnabled, StandaloneModeEnabled);
 	p_save_loader->AddLine(line);
+
+	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
+	p_save_loader->AppendOption(line, CCLICommandManager::Position, TOW(GetActorLocation()));
+	p_save_loader->AddLine(line);
+
+	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
+	p_save_loader->AppendOption(line, CCLICommandManager::Rotation, CMath::GetActorEulerAnglesRPY(this));
+	p_save_loader->AddLine(line);
+
+	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
+	p_save_loader->AppendOption(line, CCLICommandManager::Scale, GetActorScale3D());
+	p_save_loader->AddLine(line);
+
+	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
+	auto parent = CUtil::GetParentActor(this);
+	if (parent != nullptr) {
+		p_save_loader->AppendOption(line, CCLICommandManager::Parent, parent->GetName());
+		p_save_loader->AddLine(line);
+	}
 
 	if (pCommIF) {
 		auto connections = pCommIF->GetConnectionsInfo();

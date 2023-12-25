@@ -9,6 +9,7 @@
 #include "UObject/UnrealType.h"
 #include <UObject/UnrealTypePrivate.h>
 #include <Lib/Sensor/SensorBase.h>
+#include <Lib/Math/CMath.h>
 
 // Sets default values for this component's properties
 USaverLoaderBase::USaverLoaderBase()
@@ -163,7 +164,7 @@ void USaverLoaderBase::SavePlatform(ACBoatBase* p_platform, TArray<FString>& cli
 	AddLine(line);
 
 	line = CreateCommandWithName(pCLI->SetCommand, p_platform->GetName());
-	AppendOption(line, pCLI->Rotation, p_platform->GetActorRotation().Euler());
+	AppendOption(line, pCLI->Rotation, CMath::GetActorEulerAnglesRPY(p_platform));
 	AddLine(line);
 
 	line = CreateCommandWithName(pCLI->SetCommand, p_platform->GetName());
@@ -175,68 +176,19 @@ void USaverLoaderBase::SavePlatform(ACBoatBase* p_platform, TArray<FString>& cli
 
 void USaverLoaderBase::SaveSensor(ASensorBase* p_sensor, TArray<FString>& cli)
 {
+	p_sensor->Save(this);
+
 	FString line = CreateCommand(pCLI->CreateCommand);
 	AppendOption(line, pCLI->Name, p_sensor->GetName());
 	AppendOption(line, pCLI->Bp, p_sensor->GetBlueprintName());
 	AddLine(line);
-	
-
-	line = CreateCommandWithName(pCLI->SetCommand, p_sensor->GetName());
-
-	auto parent = CUtil::GetParentActor(p_sensor);
-	if (parent != nullptr) {
-		AppendOption(line, pCLI->Parent, parent->GetName());
-		AddLine(line);
-	}
-	
-	line = CreateCommandWithName(pCLI->SetCommand, p_sensor->GetName());
-	AppendOption(line, pCLI->Position, TOW(p_sensor->GetActorLocation()));
-	AddLine(line);
-
-	line = CreateCommandWithName(pCLI->SetCommand, p_sensor->GetName());
-	AppendOption(line, pCLI->Rotation, p_sensor->GetActorRotation().Euler());
-	AddLine(line);
-	
-	line = CreateCommandWithName(pCLI->SetCommand, p_sensor->GetName());
-	AppendOption(line, pCLI->Scale, p_sensor->GetActorScale3D());
-	AddLine(line);
-
-	p_sensor->Save(this);
-
-
-
 }
 
 
 void USaverLoaderBase::SaveActor(AActorBase* p_actor, TArray<FString>& cli)
 {
-	FString line = CreateCommand(pCLI->CreateCommand);
-	AppendOption(line, pCLI->Name, p_actor->GetName());
-	AppendOption(line, pCLI->Bp, p_actor->GetBlueprintName());
-	AddLine(line);
-
-
-	line = CreateCommandWithName(pCLI->SetCommand, p_actor->GetName());
-
-	auto parent = CUtil::GetParentActor(p_actor);
-	if (parent != nullptr) {
-		AppendOption(line, pCLI->Parent, parent->GetName());
-		AddLine(line);
-	}
-
-	line = CreateCommandWithName(pCLI->SetCommand, p_actor->GetName());
-	AppendOption(line, pCLI->Position, TOW(p_actor->GetActorLocation()));
-	AddLine(line);
-
-	line = CreateCommandWithName(pCLI->SetCommand, p_actor->GetName());
-	AppendOption(line, pCLI->Rotation, p_actor->GetActorRotation().Euler());
-	AddLine(line);
-
-	line = CreateCommandWithName(pCLI->SetCommand, p_actor->GetName());
-	AppendOption(line, pCLI->Scale, p_actor->GetActorScale3D());
-	AddLine(line);
-
 	p_actor->Save(this);
+	
 }
 
 bool USaverLoaderBase::Save(ISystemAPI* p_api, FString file_name)
