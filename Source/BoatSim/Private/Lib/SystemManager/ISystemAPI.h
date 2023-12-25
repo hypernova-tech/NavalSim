@@ -18,6 +18,8 @@ enum EActorQueryArgs
 	ActorBasesOnlyPaths,
 	ActorBases,
 	Platforms,
+	OnlyAgents
+	
 };
 
 

@@ -44,7 +44,7 @@ struct STraceArgs
 	bool create_scan_line;
 	bool use_render_target = false;
 
-	TArray<AActor*> include_actor_list;
+	TArray<AActor*> *include_actor_list;
 };
 
 class CUtil
@@ -56,10 +56,9 @@ public:
 
 public:
 	static bool DoesExist(FString name, UWorld* p_world);
-	static bool Trace(AActor* p_actor, bool is_world, float min_range_meter, float range_meter, float azimuth_start_deg, float azimuth_end_deg, float elevation_start_deg, float elevation_end_deg, float azimuth_angle_step_deg, float elevation_angle_step_deg, 
-						float measurement_error_mean, float measurement_error_std, const SClutterParams& clutter_params,
-						bool show_radar_beam, TArray<AActor*> &ignore_list, bool create_scan_line,  SScanResult* pscan_result);
 	static bool Trace(const STraceArgs &args, SScanResult* pscan_result);
+
+	static inline void ScanPie(const STraceArgs& args, double azimuth, double elevation, FVector& look_dir, FVector& start_loc, FVector& end, const FVector& right_vec, const FVector& up_vec, bool& ret, FHitResult& result, FCollisionQueryParams& query_params, SScanResult* pscan_result, int horizantal_ind, int vertical_ind, SSectorInfo* p_current_sektor, int& success_count);
 
 
 	static void DrawDebugRay(UWorld* p_world, const FVector& Start, const FVector& End, FColor Color, float Duration, float Thickness);

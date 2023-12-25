@@ -175,13 +175,10 @@ bool CMath::IsZero(FVector vec, FLOAT64 tolerance)
 {
     return (FMath::Abs(vec.X)<= tolerance) && (FMath::Abs(vec.Y) <= tolerance) && (FMath::Abs(vec.Z) <= tolerance);
 }
-bool CMath::IsPointInsideVolume(const FVector& origin, const FVector& point, FLOAT64 min_elevation_deg, FLOAT64 max_elevation_deg, FLOAT64 min_azimuth, FLOAT64 max_azimuth_deg, FLOAT64 min_range_meter, FLOAT64 max_range_meter)
+bool CMath::IsPointInsideVolume(const FVector& origin, const FVector& point, FLOAT64 min_elevation_deg, FLOAT64 max_elevation_deg, FLOAT64 min_azimuth_deg, FLOAT64 max_azimuth_deg, FLOAT64 min_range_meter, FLOAT64 max_range_meter)
 {
     // Convert elevation and azimuth ranges from degrees to radians
-    min_elevation_deg = FMath::DegreesToRadians(min_elevation_deg);
-    max_elevation_deg = FMath::DegreesToRadians(max_elevation_deg);
-    min_azimuth = FMath::DegreesToRadians(min_azimuth);
-    max_azimuth_deg = FMath::DegreesToRadians(max_azimuth_deg);
+
 
     // Calculate vector from origin to point
     FVector direction_to_pt = point - origin;
@@ -197,8 +194,11 @@ bool CMath::IsPointInsideVolume(const FVector& origin, const FVector& point, FLO
     direction_to_pt.Normalize();
 
     // Calculate elevation and azimuth angles for the point
-    float elev_ang = FMath::Asin(direction_to_pt.Z);
-    float azim_angle = FMath::Atan2(direction_to_pt.Y, direction_to_pt.X);
+    float elev_ang = -FMath::Asin(direction_to_pt.Z)*RADTODEG;
+    float azim_angle = FMath::Atan2(direction_to_pt.Y, direction_to_pt.X) * RADTODEG;
+    if (azim_angle < 0) {
+        azim_angle += 360;
+    }
 
     // Check if the point is within the elevation range
     if (elev_ang < min_elevation_deg || elev_ang > max_elevation_deg)
@@ -207,14 +207,14 @@ bool CMath::IsPointInsideVolume(const FVector& origin, const FVector& point, FLO
     }
 
     // Check if the point is within the azimuth range
-    if (azim_angle < min_azimuth || azim_angle > max_azimuth_deg)
+    if (azim_angle < min_azimuth_deg || azim_angle > max_azimuth_deg)
     {
         return false;
     }
 
     return true;
 }
-bool CMath::CheckBoxIndideVolume(const FBox& box, FVector& origin, FLOAT64 min_elevation_deg, FLOAT64 max_elevation_deg, FLOAT64 min_azimuth_deg, FLOAT64 max_azimuth_deg, FLOAT64 min_range_meter, FLOAT64 max_range_meter)
+bool CMath::CheckBoxInsideVolume(const FBox& box, FVector& origin, FLOAT64 min_elevation_deg, FLOAT64 max_elevation_deg, FLOAT64 min_azimuth_deg, FLOAT64 max_azimuth_deg, FLOAT64 min_range_meter, FLOAT64 max_range_meter)
 {
     auto corners = GetBoxCornersAndCenter(box);
 
@@ -227,38 +227,51 @@ bool CMath::CheckBoxIndideVolume(const FBox& box, FVector& origin, FLOAT64 min_e
     
     return true;
 }
-FLOAT64 CMath::GetAngleFromXAxisInDegrees(const FVector& Vector)
+
+FVector CMath::GetEulerAnglesRPYDeg(const FVector& dir)
 {
-    // Calculate the angle in radians from the X-axis
-    FLOAT64 AngleRadians = FMath::Atan2(Vector.Y, Vector.X);
 
-    // Convert to degrees
-    FLOAT64 AngleDegrees = FMath::RadiansToDegrees(AngleRadians);
 
-    // Adjust the angle to be within the 0-360 range
-    if (AngleDegrees < 0.0f)
-    {
-        AngleDegrees += 360.0f;
+    // Calculate elevation and azimuth angles for the point
+    FLOAT64 elev_ang = -FMath::Asin(dir.Z) * RADTODEG;
+    FLOAT64 azim_angle = FMath::Atan2(dir.Y, dir.X) * RADTODEG;
+    if (azim_angle < 0) {
+        azim_angle += 360;
     }
+    return FVector(0, elev_ang , azim_angle);
 
-    return AngleDegrees;
 }
+
+
+
+
 TArray<FVector> CMath:: GetBoxCornersAndCenter(const FBox& Box)
 {
     TArray<FVector> Points;
 
     // Adding the corners
-    Points.Add(FVector(Box.Max.X, Box.Max.Y, Box.Max.Z)); // top_right_front
-    Points.Add(FVector(Box.Min.X, Box.Max.Y, Box.Max.Z)); // top_left_front
-    Points.Add(FVector(Box.Max.X, Box.Min.Y, Box.Max.Z)); // bottom_right_front
-    Points.Add(FVector(Box.Min.X, Box.Min.Y, Box.Max.Z)); // bottom_left_front
-    Points.Add(FVector(Box.Max.X, Box.Max.Y, Box.Min.Z)); // top_right_back
-    Points.Add(FVector(Box.Min.X, Box.Max.Y, Box.Min.Z)); // top_left_back
-    Points.Add(FVector(Box.Max.X, Box.Min.Y, Box.Min.Z)); // bottom_right_back
-    Points.Add(FVector(Box.Min.X, Box.Min.Y, Box.Min.Z)); // bottom_left_back
+    FVector top_right_front     = (FVector(Box.Max.X, Box.Max.Y, Box.Max.Z)); // 
+    FVector top_left_front      = (FVector(Box.Min.X, Box.Max.Y, Box.Max.Z)); // 
+    FVector bottom_right_front  = (FVector(Box.Max.X, Box.Min.Y, Box.Max.Z)); // 
+    FVector bottom_left_front   = (FVector(Box.Min.X, Box.Min.Y, Box.Max.Z)); // 
+    FVector top_right_back      = (FVector(Box.Max.X, Box.Max.Y, Box.Min.Z)); // 
+    FVector top_left_back       = (FVector(Box.Min.X, Box.Max.Y, Box.Min.Z)); // 
+    FVector bottom_right_back   = (FVector(Box.Max.X, Box.Min.Y, Box.Min.Z)); // 
+    FVector bottom_left_back    = (FVector(Box.Min.X, Box.Min.Y, Box.Min.Z)); // 
 
     // Adding the center
     Points.Add((Box.Min + Box.Max) * 0.5f); // center
+
+    Points.Add(top_right_front);
+    Points.Add(top_left_front);
+    Points.Add(bottom_right_front);
+    Points.Add(bottom_left_front);
+    Points.Add(top_right_back);
+    Points.Add(top_left_back);
+    Points.Add(bottom_right_back);
+    Points.Add(bottom_left_back);
+
+  
 
     return Points;
 }

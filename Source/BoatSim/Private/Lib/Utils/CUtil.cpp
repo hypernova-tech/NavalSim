@@ -45,7 +45,7 @@ bool CUtil::Trace(const STraceArgs& args, SScanResult* pscan_result)
 
     if (args.is_world) {
         look_dir = FVector::ForwardVector;
-        look_dir.Z = args.p_actor->GetActorForwardVector().Z;
+        //look_dir.Z = args.p_actor->GetActorForwardVector().Z;
         look_dir.Normalize();
     }
     else {
@@ -100,137 +100,70 @@ bool CUtil::Trace(const STraceArgs& args, SScanResult* pscan_result)
     pscan_result->ScanCenter = args.scan_center;
     pscan_result->ScanRPYWorld = args.scan_rpy_world_deg;
 
+    
+
     for (double azimuth = args.azimuth_start_deg; azimuth <= args.azimuth_end_deg; azimuth += args.azimuth_angle_step_deg) {
         vertical_ind = 0;
         
-        double azimuth_rad = azimuth * DEGTORAD;
-        FVector new_dir;
-        for (double elevation = args.elevation_start_deg; elevation <= args.elevation_end_deg; elevation += args.elevation_angle_step_deg) {
-            FLOAT64 filtered_range_meter = args.range_meter;
-            FLOAT32 error_meter = args.measurement_error_mean + args.measurement_error_std * 0.33f * GetRandomRange(-1.0f, 1.0f);
-
-
-            if (args.is_world) {
-                /**
-
-                unreal engine pitch ve roll eksenleri sol el kuralının tersine oluyor, normalde -pitch yapmamız gerekirken bu özellikden
-                dolayı pozitif pitch veriyoruz.
-                */
-                FRotator euler_yaw(0, azimuth, 0);
-                FRotator euler_pitch(-elevation, 0, 0);
-
-                FVector temp_dir = euler_pitch.RotateVector(look_dir);
-                new_dir = euler_yaw.RotateVector(temp_dir);
-
-                start_pos = start_loc + new_dir * TOUE(args.min_range_meter);
-
-                if (!args.clutter_params.EnableSubsurfaceScan) {
-                    FLOAT64 visible_range_meter = CMath::GetVisibleDistanceOverSurfaceMeter(start_pos, new_dir, args.clutter_params.MaxSurfacePenetrationMeter);
-                    if (visible_range_meter >= 0) {
-                        filtered_range_meter = FMath::Min(visible_range_meter, filtered_range_meter);
-                    }
-                }
-                end = start_pos + new_dir * TOUE(filtered_range_meter);
-
-            }
-            else {
-                // quat pitch etrafinda rotasyonu tamamen sol el kuralına göre, FRotatoreden farklı olarak
-                FQuat QuatPitch(right_vec,   elevation * DEGTORAD);
-                new_dir = QuatPitch.RotateVector(look_dir);
-                FVector new_up = QuatPitch.RotateVector(up_vec);
-
-                FQuat Yaw(new_up, azimuth * DEGTORAD);
-                new_dir = Yaw.RotateVector(new_dir);
-                
-                //FVector temp = QuatPitch * (look_dir);
-                //new_dir = Yaw * temp;
-
-                start_pos = start_loc + new_dir * TOUE(args.min_range_meter);
-
-                if (!args.clutter_params.EnableSubsurfaceScan) {
-                    float visible_range_meter = CMath::GetVisibleDistanceOverSurfaceMeter(start_pos, new_dir, args.clutter_params.MaxSurfacePenetrationMeter);
-                    if (visible_range_meter >= 0) {
-                        filtered_range_meter = FMath::Min(visible_range_meter, filtered_range_meter);
-                    }
-                    else {
-                        filtered_range_meter = filtered_range_meter;
-                    }
-                }
-                end = start_pos + new_dir * TOUE(filtered_range_meter);
-            }
-
-            if (args.use_render_target) {
-                if (CUtil::GetRandomRange(0.0f, 1.0f) > 0.8) {
-                    ret = true;
-                    result.Distance = (start_pos - end).Length();
-                    result.Location = end;
-                    result.ImpactNormal = FVector::ForwardVector;
-                }
-                else {
-                    ret = false;
-                }
-                
-               
-            }
-            else {
-                auto raytick = CUtil::Tick();
-              
-                ret = args.p_actor->GetWorld()->LineTraceSingleByChannel(result, start_pos, end, ECollisionChannel::ECC_Visibility, query_params, FCollisionResponseParams());
-          
-                
-                auto ray_elp = CUtil::Tock(raytick);
-
-                pscan_result->TotalRaycastTimeSec += ray_elp;
-
-                
-            }
-           if (args.show_radar_beam) {
-                DrawDebugLine(args.p_actor->GetWorld(), start_pos, end, FColor::Green, false, 0.2f);
-            }
-
-            if (ret) {
-                //DrawDebugLine(p_actor->GetWorld(), start_pos,start_pos + new_dir * result.Distance,FColor::Red,false, 0.2f);
-
-                FLOAT32 range_errored_meter = TOW(result.Distance) + error_meter;
-                pscan_result->RangeMeter[horizantal_ind][vertical_ind] = range_errored_meter;
-                pscan_result->NormalStrength[horizantal_ind][vertical_ind] = new_dir.Dot(-result.ImpactNormal.GetSafeNormal());
-                FVector detected_pos_error = result.Location + TOUE(error_meter) * new_dir;
-                pscan_result->Point3D[horizantal_ind][vertical_ind] = detected_pos_error;
-
-
-                pscan_result->AddTrackPoint3DList(detected_pos_error, range_errored_meter);
-
-                auto actor = result.GetActor();
-                auto comp = result.GetComponent();
-                EScanObjectType object_type = EScanObjectType::ScanObjectTypeUnknown;
-                if (actor != nullptr) {
-                    if (actor->ActorHasTag("TagTerrain")) {
-                        object_type = EScanObjectType::ScanObjectTypeTerrain;
-                    }
-                    if (comp->ComponentHasTag("TagTerrain")) {
-                        object_type = EScanObjectType::ScanObjectTypeTerrain;
-                    }
-                }
-
-
-                if (args.create_scan_line) {
-                    p_current_sektor->Add(detected_pos_error, horizantal_ind, object_type);
-                }
-                else {
-                    p_current_sektor->Add(detected_pos_error);
-                }
-                int pos_err = 0;
-                if (detected_pos_error.Z < 0) {
-                    pos_err++;
-                }
-
-
-                success_count++;
-            }
+        
+        for (double elevation = args.elevation_start_deg; elevation <= args.elevation_end_deg; elevation += args.elevation_angle_step_deg)
+        {
+            ScanPie(args, azimuth, elevation, 
+                    look_dir,
+                    start_loc, end, 
+                    right_vec, up_vec, 
+                    ret, result, query_params, 
+                    pscan_result, 
+                    horizantal_ind, vertical_ind, 
+                    p_current_sektor, success_count);
             vertical_ind++;
         }
+
+        
+
         horizantal_ind++;
     }
+
+    TArray<AActor*>* p_include_actor_list = (args.include_actor_list);
+
+    for (auto pactor : *p_include_actor_list) {
+        FBox actor_bound = pactor->GetComponentsBoundingBox();
+        
+        TArray<FVector> corners = CMath::GetBoxCornersAndCenter(actor_bound);
+        FVector center = corners[0];
+
+     
+        for (auto corner : corners) {
+            if (CMath::IsPointInsideVolume(start_loc, corner, args.elevation_start_deg, args.elevation_end_deg, args.azimuth_start_deg, args.azimuth_end_deg, args.min_range_meter, args.range_meter))
+            {
+                corner = (center + corner) * 0.5f;
+                INT32S corner_horizantal_ind = 0;
+                INT32S corner_vertical_ind = 0;
+
+                FVector corner_dir = (corner - start_loc);
+                corner_dir.Normalize();
+
+                FVector corner_rpy = CMath::GetEulerAnglesRPYDeg(corner_dir);
+
+                corner_horizantal_ind = (corner_rpy.Z - args.azimuth_start_deg) / args.azimuth_angle_step_deg;
+                corner_vertical_ind = (corner_rpy.Y - args.elevation_start_deg) / args.elevation_angle_step_deg;
+
+                    
+                ScanPie(args, corner_rpy.Z, corner_rpy.Y,
+                    look_dir,
+                    start_loc, end,
+                    right_vec, up_vec,
+                    ret, result, query_params,
+                    pscan_result,
+                    corner_horizantal_ind, corner_vertical_ind,
+                    p_current_sektor, success_count);
+            }
+               
+        }
+    }
+    
+
+   
 
     pscan_result->HorizontalCount = horizantal_ind;
     pscan_result->VeriticalCount = vertical_ind;
@@ -246,6 +179,140 @@ bool CUtil::Trace(const STraceArgs& args, SScanResult* pscan_result)
 
 #endif
     return false;
+}
+
+void inline CUtil::ScanPie(const STraceArgs& args, double azimuth, double elevation,
+                    FVector& look_dir, 
+                    FVector& start_loc, 
+                    FVector& end, 
+                    const FVector& right_vec, const FVector& up_vec, 
+                    bool& ret, FHitResult& result, FCollisionQueryParams& query_params, 
+                    SScanResult* pscan_result, 
+                    int horizantal_ind, int vertical_ind, 
+                    SSectorInfo* p_current_sektor, int& success_count)
+{
+    FLOAT64 filtered_range_meter = args.range_meter;
+    FLOAT32 error_meter = args.measurement_error_mean + args.measurement_error_std * 0.33f * GetRandomRange(-1.0f, 1.0f);
+    FVector start_pos;
+    FVector new_dir;
+
+    if (args.is_world) {
+        /**
+
+        unreal engine pitch ve roll eksenleri sol el kuralının tersine oluyor, normalde -pitch yapmamız gerekirken bu özellikden
+        dolayı pozitif pitch veriyoruz.
+        */
+        FRotator euler_yaw(0, azimuth, 0);
+        FRotator euler_pitch(-elevation, 0, 0);
+
+        FVector temp_dir = euler_pitch.RotateVector(look_dir);
+        new_dir = euler_yaw.RotateVector(temp_dir);
+
+        start_pos = start_loc + new_dir * TOUE(args.min_range_meter);
+
+        if (!args.clutter_params.EnableSubsurfaceScan) {
+            FLOAT64 visible_range_meter = CMath::GetVisibleDistanceOverSurfaceMeter(start_pos, new_dir, args.clutter_params.MaxSurfacePenetrationMeter);
+            if (visible_range_meter >= 0) {
+                filtered_range_meter = FMath::Min(visible_range_meter, filtered_range_meter);
+            }
+        }
+        end = start_pos + new_dir * TOUE(filtered_range_meter);
+
+    }
+    else {
+        // quat pitch etrafinda rotasyonu tamamen sol el kuralına göre, FRotatoreden farklı olarak
+        FQuat QuatPitch(right_vec, elevation * DEGTORAD);
+        new_dir = QuatPitch.RotateVector(look_dir);
+        FVector new_up = QuatPitch.RotateVector(up_vec);
+
+        FQuat Yaw(new_up, azimuth * DEGTORAD);
+        new_dir = Yaw.RotateVector(new_dir);
+
+        //FVector temp = QuatPitch * (look_dir);
+        //new_dir = Yaw * temp;
+
+        start_pos = start_loc + new_dir * TOUE(args.min_range_meter);
+
+        if (!args.clutter_params.EnableSubsurfaceScan) {
+            float visible_range_meter = CMath::GetVisibleDistanceOverSurfaceMeter(start_pos, new_dir, args.clutter_params.MaxSurfacePenetrationMeter);
+            if (visible_range_meter >= 0) {
+                filtered_range_meter = FMath::Min(visible_range_meter, filtered_range_meter);
+            }
+            else {
+                filtered_range_meter = filtered_range_meter;
+            }
+        }
+        end = start_pos + new_dir * TOUE(filtered_range_meter);
+    }
+
+    if (args.use_render_target) {
+        if (CUtil::GetRandomRange(0.0f, 1.0f) > 0.8) {
+            ret = true;
+            result.Distance = (start_pos - end).Length();
+            result.Location = end;
+            result.ImpactNormal = FVector::ForwardVector;
+        }
+        else {
+            ret = false;
+        }
+
+
+    }
+    else {
+        auto raytick = CUtil::Tick();
+
+        ret = args.p_actor->GetWorld()->LineTraceSingleByChannel(result, start_pos, end, ECollisionChannel::ECC_Visibility, query_params, FCollisionResponseParams());
+
+
+        auto ray_elp = CUtil::Tock(raytick);
+
+        pscan_result->TotalRaycastTimeSec += ray_elp;
+
+
+    }
+    if (args.show_radar_beam) {
+        DrawDebugLine(args.p_actor->GetWorld(), start_pos, end, FColor::Green, false, 0.2f);
+    }
+
+    if (ret) {
+        //DrawDebugLine(p_actor->GetWorld(), start_pos,start_pos + new_dir * result.Distance,FColor::Red,false, 0.2f);
+
+        FLOAT32 range_errored_meter = TOW(result.Distance) + error_meter;
+        pscan_result->RangeMeter[horizantal_ind][vertical_ind] = range_errored_meter;
+        pscan_result->NormalStrength[horizantal_ind][vertical_ind] = new_dir.Dot(-result.ImpactNormal.GetSafeNormal());
+        FVector detected_pos_error = result.Location + TOUE(error_meter) * new_dir;
+        pscan_result->Point3D[horizantal_ind][vertical_ind] = detected_pos_error;
+
+
+        pscan_result->AddTrackPoint3DList(detected_pos_error, range_errored_meter);
+
+        auto actor = result.GetActor();
+        auto comp = result.GetComponent();
+        EScanObjectType object_type = EScanObjectType::ScanObjectTypeUnknown;
+        if (actor != nullptr) {
+            if (actor->ActorHasTag("TagTerrain")) {
+                object_type = EScanObjectType::ScanObjectTypeTerrain;
+            }
+            if (comp->ComponentHasTag("TagTerrain")) {
+                object_type = EScanObjectType::ScanObjectTypeTerrain;
+            }
+        }
+
+
+        if (args.create_scan_line) {
+            p_current_sektor->Add(detected_pos_error, horizantal_ind, object_type);
+        }
+        else {
+            p_current_sektor->Add(detected_pos_error);
+        }
+        int pos_err = 0;
+        if (detected_pos_error.Z < 0) {
+            pos_err++;
+        }
+
+
+        success_count++;
+    }
 }
 
 bool CUtil::DoesExist(FString name, UWorld* p_world)
@@ -264,173 +331,6 @@ bool CUtil::DoesExist(FString name, UWorld* p_world)
 
 }
 
-bool CUtil::Trace(AActor * p_actor, bool is_world, float min_range_meter, float range_meter, float azimuth_start_deg, float azimuth_end_deg,
-                                                                          float elevation_start_deg, float elevation_end_deg, float azimuth_angle_step_deg, float elevation_angle_step_deg,
-                                                                          float measurement_error_mean, float measurement_error_std, const SClutterParams& clutter_params,
-                                                                          bool show_radar_beam, TArray<AActor*>& ignore_list, bool create_scan_line, 
-                                                                          SScanResult* pscan_result)
-{
-#if true
-
-
-
-    FVector start_pos = p_actor->GetActorLocation();
-    FVector look_dir;
-    FVector right_vec;
-
-    FVector end;
-    FHitResult result;
-    bool ret = false;
-    int horizantal_ind = 0;
-    int vertical_ind = 0;
-
-    int success_count = 0;
-    
-    if (is_world) {
-        look_dir = FVector::ForwardVector;
-        look_dir.Z = p_actor->GetActorForwardVector().Z;
-        look_dir.Normalize();
-    }
-    else {
-        look_dir = p_actor->GetActorForwardVector();
-        look_dir.Normalize();
-        right_vec = p_actor->GetActorRightVector();
-        right_vec.Z = 0;
-        right_vec.Normalize();
-
-    }
-  
-
-    look_dir.Normalize();
-
-    pscan_result->ScanCenter = start_pos;
-
-    FCollisionQueryParams query_params;
-    query_params.AddIgnoredActor(p_actor);
-
-    for (AActor* p_temp : ignore_list) {
-        query_params.AddIgnoredActor(p_temp);
-    }
-    query_params.bTraceComplex = false;
-
-
-
-
-    pscan_result->ResetTrackPoint3DList();
-  
-    int sector_ind = azimuth_start_deg / (360.0 / pscan_result->SectorCount);
-    SSectorInfo* p_current_sektor = pscan_result->GetSectorContainer()->GetSector(sector_ind);
-    p_current_sektor->Reset();
-    pscan_result->CurrentSector = sector_ind;
-
-    FVector start_loc = p_actor->GetActorLocation();
-  
-    BOOLEAN is_on_surface = false;
-
-    pscan_result->AzimuthRange.X = azimuth_start_deg;
-    pscan_result->AzimuthRange.Y = azimuth_end_deg;
-    pscan_result->ScanAzimuthStepDeg = azimuth_angle_step_deg;
-
-    pscan_result->ElevationRange.X = elevation_start_deg;
-    pscan_result->ElevationRange.Y = elevation_end_deg;
-    pscan_result->ScanElevationStepDeg = elevation_angle_step_deg;
-
-    pscan_result->ScanRangeMeter = range_meter;
-
-    for (float azimuth = azimuth_start_deg; azimuth <= azimuth_end_deg; azimuth += azimuth_angle_step_deg) {
-        vertical_ind = 0;
-        float azimuth_rad = azimuth * DEGTORAD;
-        FVector new_dir;
-        for (float elevation = elevation_start_deg; elevation <= elevation_end_deg; elevation += elevation_angle_step_deg) {
-            FLOAT64 filtered_range_meter = range_meter;
-            FLOAT32 error_meter = measurement_error_mean + measurement_error_std * 0.33f * GetRandomRange(-1.0f, 1.0f);
-            
-
-            if (is_world) {
-                /**
-                
-                unreal engine pitch ve roll eksenleri sol el kuralının tersine oluyor, normalde -pitch yapmamız gerekirken bu özellikden
-                dolayı pozitif pitch veriyoruz.
-                */
-                FRotator euler_yaw(0, azimuth, 0);
-                FRotator euler_pitch(elevation, 0, 0);
-
-                FVector temp_dir = euler_pitch.RotateVector(look_dir);
-                new_dir = euler_yaw.RotateVector(temp_dir);
-
-                start_pos = start_loc + new_dir * TOUE(min_range_meter);
-
-                if (!clutter_params.EnableSubsurfaceScan) {
-                    FLOAT64 visible_range_meter = CMath::GetVisibleDistanceOverSurfaceMeter(start_pos, new_dir, clutter_params.MaxSurfacePenetrationMeter);
-                    if (visible_range_meter >= 0) {
-                        filtered_range_meter = FMath::Min(visible_range_meter, filtered_range_meter);
-                    }
-                }
-                end = start_pos + new_dir * TOUE(filtered_range_meter);
-
-            }
-            else {
-                // quat pitch etrafinda rotasyonu tamamen sol el kuralına göre, FRotatoreden farklı olarak
-                FQuat QuatPitch(right_vec, -elevation * DEGTORAD);
-                FQuat Yaw(FVector::UpVector, azimuth * DEGTORAD);
-              
-                FVector temp = QuatPitch * (look_dir);
-                new_dir = Yaw * temp;
-
-                start_pos = start_loc + new_dir * TOUE(min_range_meter);
-
-                if (!clutter_params.EnableSubsurfaceScan) {
-                    float visible_range_meter = CMath::GetVisibleDistanceOverSurfaceMeter(start_pos, new_dir, clutter_params.MaxSurfacePenetrationMeter);
-                    if (visible_range_meter >= 0) {
-                        filtered_range_meter = FMath::Min(visible_range_meter, filtered_range_meter);
-                    }
-                }
-                end = start_pos + new_dir * TOUE(filtered_range_meter);
-            }
-
-
-            ret = p_actor->GetWorld()->LineTraceSingleByChannel(result, start_pos, end, ECollisionChannel::ECC_Visibility, query_params, FCollisionResponseParams());
-            if (show_radar_beam) {
-                DrawDebugLine(p_actor->GetWorld(), start_pos, end, FColor::Green, false, 0.2f);
-            }
-            
-            if(ret){
-                //DrawDebugLine(p_actor->GetWorld(), start_pos,start_pos + new_dir * result.Distance,FColor::Red,false, 0.2f);
-                
-                FLOAT32 range_errored_meter = TOW(result.Distance) + error_meter;
-                pscan_result->RangeMeter[horizantal_ind][vertical_ind] = range_errored_meter;
-                pscan_result->NormalStrength[horizantal_ind][vertical_ind] = new_dir.Dot(-result.ImpactNormal.GetSafeNormal());
-                FVector detected_pos_error = result.Location + TOUE(error_meter) * new_dir;
-                pscan_result->Point3D[horizantal_ind][vertical_ind] = detected_pos_error;
-              
-
-                pscan_result->AddTrackPoint3DList(detected_pos_error, range_errored_meter);
-
-                
-                if (create_scan_line) {
-                    p_current_sektor->Add(detected_pos_error, horizantal_ind);
-                }
-                else {
-                    p_current_sektor->Add(detected_pos_error);
-                }
-                
-            
-                success_count++;
-            }
-            vertical_ind++;
-        }
-        horizantal_ind++;
-    }
-
-    pscan_result->HorizontalCount = horizantal_ind;
-    pscan_result->VeriticalCount = vertical_ind;
-
-
-    return success_count > 0;
-
-#endif
-    return false;
-}
 float CUtil::ConvertToFloat(const char* p_str)
 {
     const char* textValue = p_str;

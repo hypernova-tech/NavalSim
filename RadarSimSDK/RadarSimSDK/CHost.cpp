@@ -43,7 +43,7 @@ public:
 		// Show our image inside it
 		cv::imshow("Window", *pImage);
 		pPPIController->SetFrameBuffer((intptr_t)pImage->data, 1024, 1024, nullptr, 512, 512);
-
+		pPPIController->SetRangeResolution(1.5);
 		while (true) {
 			cv::imshow("Window", *pImage);
 			cv::waitKey(20);

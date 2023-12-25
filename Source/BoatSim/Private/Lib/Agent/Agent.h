@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Pawn.h"
+
 #include "Lib/ActorBase/ActorBase.h"
 #include "Agent.generated.h"
 

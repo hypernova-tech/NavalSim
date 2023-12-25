@@ -18,6 +18,7 @@
 #include <Lib/DataContainer/DataManager.h>
 #include <Lib/Environment/EnvManager.h>
 #include <Lib/Terrain/TerrainManager.h>
+#include <Lib/Agent/Agent.h>
 #include "SystemManagerBase.generated.h"
 
 
@@ -188,6 +189,7 @@ public:
 	APlatformBase* ToPlatform(AActor* p_actor);
 	AWaypointActor* ToWaypoint(AActor* p_actor);
 	ATerrainManager* ToTerrain(AActor* p_actor);
+	AAgent* ToAgent(AActor* p_actor);
 	template <typename T>
 	T* To(AActor* p_actor);
 
@@ -242,6 +244,8 @@ public:
 	virtual TArray<ESensorType> GetAllSensorTypes();
 	virtual TArray<ASensorBase*> GetAllSensors() ;
 	virtual TArray<ASensorBase*> GetSensorsOfType(ESensorType sensor_type);
+
+
 
 	virtual void RegisterConnection(UConnectionBase* p_connection);
 

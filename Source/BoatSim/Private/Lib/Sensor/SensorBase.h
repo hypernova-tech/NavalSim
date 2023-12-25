@@ -142,9 +142,10 @@ protected:
 	virtual void FinalizeSensor();
 	virtual void PauseSensor();
 	virtual void ResumeSensor();
+	virtual TArray<AActor*>* GetScanAdditionalIncludes();
 	SClutterParams GetClutterParams();
 	FLOAT64 CaptureStartTimeRef;
-
+	TArray<AActor*> ScanAdditionalIncludes;
 	virtual void OnStep(float DeltaTime) override;
 
 public:	

@@ -9,6 +9,7 @@
 #include <Lib/Math/CMath.h>
 #include "EngineUtils.h"
 
+
 // Sets default values
 ASystemManagerBase* ASystemManagerBase::pInstance = nullptr;
 
@@ -136,8 +137,16 @@ TArray<AActor*> ASystemManagerBase::GetAllActorInWorld()
 
 void ASystemManagerBase::QueryActors(EActorQueryArgs args, TArray<AActor*>& actors)
 {
-	
-	 if (args == EActorQueryArgs::ActorBasesExceptSensorsAndPaths) {
+	if (args == EActorQueryArgs::OnlyAgents) {
+		for (auto pactor : ActorList) {
+			if (ToAgent(pactor)) {
+				
+				actors.Add(pactor);
+				
+			}
+
+		}
+	}else if (args == EActorQueryArgs::ActorBasesExceptSensorsAndPaths) {
 		 for (auto pactor : ActorList) {
 			 if (ToActorBase(pactor)) {
 				 if (!ToSensorBase(pactor) && !ToPath(pactor)) {
@@ -184,7 +193,14 @@ void ASystemManagerBase::QueryActors(EActorQueryArgs args, TArray<AActor*>& acto
 	 
 	
 }
+AAgent* ASystemManagerBase::ToAgent(AActor* p_actor)
+{
+	if (p_actor->IsA<AAgent>()) {
+		return (AAgent*)p_actor;
+	}
 
+	return nullptr;
+}
 AActorBase* ASystemManagerBase::ToActorBase(AActor* p_actor)
 {
 	if (p_actor->IsA<AActorBase>()) {

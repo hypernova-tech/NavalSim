@@ -174,6 +174,14 @@ void ASensorBase::ResumeSensor()
 {
 }
 
+TArray<AActor*>* ASensorBase::GetScanAdditionalIncludes()
+{
+	ScanAdditionalIncludes.Reset();
+
+	ASystemManagerBase::GetInstance()->QueryActors(EActorQueryArgs::OnlyAgents, ScanAdditionalIncludes);
+	return &ScanAdditionalIncludes;
+}
+
 void ASensorBase::PauseSensor()
 {
 }

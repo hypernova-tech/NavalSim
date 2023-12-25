@@ -292,7 +292,8 @@ void ARadarBase::Scan()
 		if (p_parent != nullptr) {
 			args.additional_ignore_list.Add(p_parent);
 		}
-		args.use_render_target = UseRenderTargetForDepthCalculation;
+		args.use_render_target	= UseRenderTargetForDepthCalculation;
+		args.include_actor_list = GetScanAdditionalIncludes();
 
 		if (!BlankingZone.CheckAnyActiveZone(start_azimuth, end_azimuth)) {
 			//bool ret = CUtil::Trace(this, true, RangeMeter.X, RangeMeter.Y, start_azimuth, end_azimuth, 0, FovVerticalDeg, HorizontalScanStepAngleDeg, VerticalScanStepAngleDeg, 

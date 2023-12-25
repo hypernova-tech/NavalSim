@@ -176,7 +176,7 @@ set --name fls1 --maxsurfpenet 0.000000
 create --name haloradar1 --bp RADARHALO24
 set --name haloradar1 --parent sidamir
 set --name haloradar1 --position "1006.432068 0.000000 4.208139"
-set --name haloradar1 --rotation "-0.000000 2.000000 0.000000"
+set --name haloradar1 --rotation "-0.000000 -2.000000 0.000000"
 set --name haloradar1 --scale "0.300000 0.300000 0.300000"
 set --name haloradar1 --instance -1
 set --name haloradar1 --suppressed 0

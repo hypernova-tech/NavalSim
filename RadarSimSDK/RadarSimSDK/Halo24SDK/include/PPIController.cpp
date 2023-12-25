@@ -36,9 +36,9 @@ void Navico::Image::tPPIController::Process(const Protocol::NRP::Spoke::t9174Spo
 	int spoke_azimuth = pSpoke->header.spokeAzimuth;
 
 	double spoke_ang = spoke_azimuth * 360.0 / 4096;
-
+#if USE_PIXEL_SIZE_FROM_HEADER > 0
 	MetersPerPixel = pSpoke->header.rangeCellSize_mm * 0.001;
-
+#endif
 	for (int i = 0; i < pSpoke->header.nOfSamples; i++) {
 		int byte_ind = i / 2;
 		int order = i & 0x1;
@@ -130,7 +130,7 @@ Navico::Image::tPPIRangeInterpolation Navico::Image::tPPIController::GetRangeInt
 
 void Navico::Image::tPPIController::SetRangeResolution(float metersPerPixel)
 {
-	//MetersPerPixel = metersPerPixel;
+	MetersPerPixel = metersPerPixel;
 }
 
 float Navico::Image::tPPIController::GetRangeResolution() const
