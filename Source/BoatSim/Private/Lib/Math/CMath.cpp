@@ -175,7 +175,7 @@ bool CMath::IsZero(FVector vec, FLOAT64 tolerance)
 {
     return (FMath::Abs(vec.X)<= tolerance) && (FMath::Abs(vec.Y) <= tolerance) && (FMath::Abs(vec.Z) <= tolerance);
 }
-bool CMath::IsPointInsideVolume(const FVector& origin, const FVector& point, FLOAT64 min_elevation_deg, FLOAT64 max_elevation_deg, FLOAT64 min_azimuth, FLOAT64 max_azimuth_deg, FLOAT64 max_range_meter)
+bool CMath::IsPointInsideVolume(const FVector& origin, const FVector& point, FLOAT64 min_elevation_deg, FLOAT64 max_elevation_deg, FLOAT64 min_azimuth, FLOAT64 max_azimuth_deg, FLOAT64 min_range_meter, FLOAT64 max_range_meter)
 {
     // Convert elevation and azimuth ranges from degrees to radians
     min_elevation_deg = FMath::DegreesToRadians(min_elevation_deg);
@@ -188,7 +188,7 @@ bool CMath::IsPointInsideVolume(const FVector& origin, const FVector& point, FLO
     float dist_to_pt = TOW(direction_to_pt.Size());
 
     // Check if the point is within the range
-    if (dist_to_pt > max_range_meter)
+    if (dist_to_pt< min_range_meter || dist_to_pt > max_range_meter)
     {
         return false;
     }
@@ -214,12 +214,12 @@ bool CMath::IsPointInsideVolume(const FVector& origin, const FVector& point, FLO
 
     return true;
 }
-bool CMath::CheckBoxIndideVolume(const FBox& box, FVector& origin, FLOAT64 min_elevation_deg, FLOAT64 max_elevation_deg, FLOAT64 min_azimuth_deg, FLOAT64 max_azimuth_deg, FLOAT64 max_range_meter)
+bool CMath::CheckBoxIndideVolume(const FBox& box, FVector& origin, FLOAT64 min_elevation_deg, FLOAT64 max_elevation_deg, FLOAT64 min_azimuth_deg, FLOAT64 max_azimuth_deg, FLOAT64 min_range_meter, FLOAT64 max_range_meter)
 {
     auto corners = GetBoxCornersAndCenter(box);
 
     for (auto corner : corners) {
-        bool ret = CMath::IsPointInsideVolume(origin, corner, min_elevation_deg, max_elevation_deg, min_azimuth_deg, max_azimuth_deg, max_range_meter);
+        bool ret = CMath::IsPointInsideVolume(origin, corner, min_elevation_deg, max_elevation_deg, min_azimuth_deg, max_azimuth_deg, min_range_meter, max_range_meter);
         if (!ret) {
             return false;
         }

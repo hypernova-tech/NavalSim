@@ -44,6 +44,7 @@ struct STraceArgs
 	bool create_scan_line;
 	bool use_render_target = false;
 
+	TArray<AActor*> include_actor_list;
 };
 
 class CUtil
