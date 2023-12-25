@@ -73,9 +73,6 @@ bool CUtil::Trace(const STraceArgs& args, SScanResult* pscan_result)
     }
     query_params.bTraceComplex = false;
 
-
-
-
     pscan_result->ResetTrackPoint3DList();
 
     int sector_ind = args.azimuth_start_deg / (360.0 / pscan_result->SectorCount);
@@ -134,9 +131,11 @@ bool CUtil::Trace(const STraceArgs& args, SScanResult* pscan_result)
 
      
         for (auto corner : corners) {
+            corner = (center + corner) * 0.5f;
+
             if (CMath::IsPointInsideVolume(start_loc, corner, args.elevation_start_deg, args.elevation_end_deg, args.azimuth_start_deg, args.azimuth_end_deg, args.min_range_meter, args.range_meter))
             {
-                corner = (center + corner) * 0.5f;
+                
                 INT32S corner_horizantal_ind = 0;
                 INT32S corner_vertical_ind = 0;
 

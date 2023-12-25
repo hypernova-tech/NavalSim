@@ -39,6 +39,9 @@ void Navico::Image::tPPIController::Process(const Protocol::NRP::Spoke::t9174Spo
 #if USE_PIXEL_SIZE_FROM_HEADER > 0
 	MetersPerPixel = pSpoke->header.rangeCellSize_mm * 0.001;
 #endif
+
+
+
 	for (int i = 0; i < pSpoke->header.nOfSamples; i++) {
 		int byte_ind = i / 2;
 		int order = i & 0x1;
@@ -78,23 +81,31 @@ void Navico::Image::tPPIController::Process(const Protocol::NRP::Spoke::t9174Spo
 		if (data != 0) {
 			
 			p_color[addr] = 0x00FF00FF; // green
+			//FillAround(p_color, px_cart, py_cart, 5);
 		}
 		else {
 			p_color[addr] = 0;
 		}
 
-		/*
-		for (int pix = 100; pix < 600; pix++) {
-			for (int piy = 850; piy < 925; piy++) {
-				addr = (piy)*Width + pix;
-				p_color[addr] = 0x00FF00FF;
-			}
-		}
-		*/
+	
 			
 	}
 
 
+}
+
+void Navico::Image::tPPIController::FillAround(tColor* p_color, int px, int py, int radius)
+{
+	int i, j;
+
+	for (i = (px - radius); i <= (px + radius); i++) {
+		for (j = (py - radius); j <= (py + radius); j++) {
+			if (i >= 0 && i < Width && j >= 0 && j < Height) {
+				p_color[j*Width + i] = 0x00FF00FF;
+			}
+		}
+
+	}
 }
 void Navico::Image::tPPIController::ResetSpokeLineAtImage(int spoke_number, int spoke_count)
 {
