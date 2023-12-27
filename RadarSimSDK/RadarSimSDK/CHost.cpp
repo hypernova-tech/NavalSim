@@ -4,7 +4,9 @@
 #include "Halo24SDK/include/TargetTrackingClient.h"
 #include <math.h>
 #include "CUtil.h"
+#if SHOW_SPOKE_IMAGE > 0
 #include <opencv2/opencv.hpp>
+#endif
 #include "Halo24SDK/include/PPIController.h"
 using namespace Navico::Image;
 using namespace Navico::Protocol::NRP;
@@ -18,19 +20,24 @@ class CImageClientObserver :public iImageClientSpokeObserver {
 
 private:
 	tPPIController* pPPIController;
+#if SHOW_SPOKE_IMAGE > 0
 	cv::Mat* pImage;
+#endif
 	thread *pThreadOpenCV;
 
 public:
 	void Init()
 	{
 		pPPIController = new tPPIController();
+#if SHOW_SPOKE_IMAGE > 0
 		pThreadOpenCV = new std::thread(&CImageClientObserver::OpenCVThread, this);
+#endif
 
 	}
-
+#if SHOW_SPOKE_IMAGE > 0
 	void OpenCVThread()
 	{
+
 		pImage = new cv::Mat();
 		*pImage = cv::Mat::zeros(1024, 1024, CV_8UC4);
 
@@ -48,8 +55,8 @@ public:
 			cv::imshow("Window", *pImage);
 			cv::waitKey(20);
 		}
-		
 	}
+#endif
 	virtual void UpdateSpoke(const Spoke::tSpokeV9174* pSpoke) override
 	{
 		pPPIController->Process(pSpoke);

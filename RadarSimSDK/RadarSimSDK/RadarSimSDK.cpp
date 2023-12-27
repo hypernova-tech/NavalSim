@@ -5,8 +5,6 @@
 
 #include <iostream>
 #include "CHost.h"
-#include <opencv2/opencv.hpp>
-
 #include <PPIController.h>
 
 

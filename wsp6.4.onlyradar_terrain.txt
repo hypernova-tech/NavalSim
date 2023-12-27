@@ -207,7 +207,7 @@ set --name haloradar1 --scale "0.300000 0.300000 0.300000"
 set --name haloradar1 --instance -1
 set --name haloradar1 --suppressed 0
 set --name haloradar1 --standalone 0
-set --name haloradar1 --ipaddr1 127.0.0.1
+set --name haloradar1 --ipaddr1 15.0.83.83
 set --name haloradar1 --localport1 13080
 set --name haloradar1 --remoteport 13081
 set --name haloradar1 --slotindex 5

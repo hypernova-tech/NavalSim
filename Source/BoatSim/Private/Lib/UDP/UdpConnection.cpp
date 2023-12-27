@@ -116,17 +116,20 @@ uint32 UUdpConnection::Run()
 			//ReceivedData.SetNumUninitialized(FMath::Min(Size, 65507u));
 			Socket->RecvFrom(ReceivedData.GetData(), ReceivedData.Num(), BytesRead, *targetAddr);
 
-	
-			if (IsPublishPacketEnabled) {
-				ASystemManagerBase::GetInstance()->GetSOAImplementor()->OnReceivedNewMessage(ReceivedData, BytesRead);
-			}
-			
+			if (BytesRead > 0) {
+				if (IsPublishPacketEnabled) {
+					ASystemManagerBase::GetInstance()->GetSOAImplementor()->OnReceivedNewMessage(ReceivedData, BytesRead);
+				}
 
-			for (auto connection : ConnectionDataReceivers) {
-				auto pdata = ReceivedData.GetData();
-				pdata[BytesRead] = 0;
-				connection->OnReceivedConnectionData(this, pdata, BytesRead);
+
+				for (auto connection : ConnectionDataReceivers) {
+					auto pdata = ReceivedData.GetData();
+					pdata[BytesRead] = 0;
+					connection->OnReceivedConnectionData(this, pdata, BytesRead);
+				}
 			}
+	
+	
 		}
 	}
 	

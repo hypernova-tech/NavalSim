@@ -36,8 +36,9 @@ void Navico::Image::tPPIController::Process(const Protocol::NRP::Spoke::t9174Spo
 	int spoke_azimuth = pSpoke->header.spokeAzimuth;
 
 	double spoke_ang = spoke_azimuth * 360.0 / 4096;
-#if USE_PIXEL_SIZE_FROM_HEADER > 0
 	MetersPerPixel = pSpoke->header.rangeCellSize_mm * 0.001;
+#if USE_PIXEL_SIZE_FROM_HEADER > 0
+	
 #endif
 
 

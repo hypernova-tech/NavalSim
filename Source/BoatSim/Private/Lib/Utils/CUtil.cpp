@@ -122,44 +122,46 @@ bool CUtil::Trace(const STraceArgs& args, SScanResult* pscan_result)
     }
 
     TArray<AActor*>* p_include_actor_list = (args.include_actor_list);
+    if (p_include_actor_list) {
+        for (auto pactor : *p_include_actor_list) {
+            FBox actor_bound = pactor->GetComponentsBoundingBox();
 
-    for (auto pactor : *p_include_actor_list) {
-        FBox actor_bound = pactor->GetComponentsBoundingBox();
-        
-        TArray<FVector> corners = CMath::GetBoxCornersAndCenter(actor_bound);
-        FVector center = corners[0];
+            TArray<FVector> corners = CMath::GetBoxCornersAndCenter(actor_bound);
+            FVector center = corners[0];
 
-     
-        for (auto corner : corners) {
-            corner = (center + corner) * 0.5f;
 
-            if (CMath::IsPointInsideVolume(start_loc, corner, args.elevation_start_deg, args.elevation_end_deg, args.azimuth_start_deg, args.azimuth_end_deg, args.min_range_meter, args.range_meter))
-            {
-                
-                INT32S corner_horizantal_ind = 0;
-                INT32S corner_vertical_ind = 0;
+            for (auto corner : corners) {
+                corner = (center + corner) * 0.5f;
 
-                FVector corner_dir = (corner - start_loc);
-                corner_dir.Normalize();
+                if (CMath::IsPointInsideVolume(start_loc, corner, args.elevation_start_deg, args.elevation_end_deg, args.azimuth_start_deg, args.azimuth_end_deg, args.min_range_meter, args.range_meter))
+                {
 
-                FVector corner_rpy = CMath::GetEulerAnglesRPYDeg(corner_dir);
+                    INT32S corner_horizantal_ind = 0;
+                    INT32S corner_vertical_ind = 0;
 
-                corner_horizantal_ind = (corner_rpy.Z - args.azimuth_start_deg) / args.azimuth_angle_step_deg;
-                corner_vertical_ind = (corner_rpy.Y - args.elevation_start_deg) / args.elevation_angle_step_deg;
+                    FVector corner_dir = (corner - start_loc);
+                    corner_dir.Normalize();
 
-                    
-                ScanPie(args, corner_rpy.Z, corner_rpy.Y,
-                    look_dir,
-                    start_loc, end,
-                    right_vec, up_vec,
-                    ret, result, query_params,
-                    pscan_result,
-                    corner_horizantal_ind, corner_vertical_ind,
-                    p_current_sektor, success_count);
+                    FVector corner_rpy = CMath::GetEulerAnglesRPYDeg(corner_dir);
+
+                    corner_horizantal_ind = (corner_rpy.Z - args.azimuth_start_deg) / args.azimuth_angle_step_deg;
+                    corner_vertical_ind = (corner_rpy.Y - args.elevation_start_deg) / args.elevation_angle_step_deg;
+
+
+                    ScanPie(args, corner_rpy.Z, corner_rpy.Y,
+                        look_dir,
+                        start_loc, end,
+                        right_vec, up_vec,
+                        ret, result, query_params,
+                        pscan_result,
+                        corner_horizantal_ind, corner_vertical_ind,
+                        p_current_sektor, success_count);
+                }
+
             }
-               
         }
     }
+    
     
 
    

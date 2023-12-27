@@ -14,6 +14,12 @@
 
 struct STraceArgs
 {
+
+public:
+	STraceArgs()
+	{
+		include_actor_list = nullptr;
+	}
 	AActor* p_actor;
 	FVector scan_center;
 	FVector scan_rpy_world_deg;
