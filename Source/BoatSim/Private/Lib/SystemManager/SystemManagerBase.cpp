@@ -609,6 +609,17 @@ UConsoleBase* ASystemManagerBase::GetConsole()
 	return pConsole;
 }
 
+APlayerCameraManager* ASystemManagerBase::GetCameraManager()
+{
+	APlayerController* player_controller = GetWorld()->GetFirstPlayerController();
+	return player_controller->PlayerCameraManager;
+}
+
+FLOAT64 ASystemManagerBase::ComputeCameraDistToActorMeter(AActor* p_actor)
+{
+	return TOW((GetCameraManager()->GetCameraLocation() - p_actor->GetActorLocation()).Length());
+}
+
 bool ASystemManagerBase::LoadConfig()
 {
 #if false

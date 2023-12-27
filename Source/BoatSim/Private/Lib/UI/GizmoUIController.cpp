@@ -88,8 +88,16 @@ void UGizmoUIController::TickComponent(float DeltaTime, ELevelTick TickType, FAc
 void UGizmoUIController::UpdateGizmoPose()
 {
 	if (pTrackedActor != nullptr) {
-		pGizmoActor->SetActorLocation(pTrackedActor->GetActorLocation());
+		auto pos = pTrackedActor->GetActorLocation();
+		pGizmoActor->SetActorLocation(pos);
 		pGizmoActor->SetActorRotation(pTrackedActor->GetActorRotation());
+		auto cam_manager = ASystemManagerBase::GetInstance()->GetCameraManager();
+		auto dist = TOW((pos - cam_manager->GetCameraLocation()).Length());
+		auto tf = dist / 25;
+		if (tf < 1) {
+			tf = 1;
+		}
+		pGizmoActor->SetActorScale3D(FVector::OneVector * tf);
 	}
 	
 }
@@ -134,25 +142,30 @@ FLOAT32 UGizmoUIController::ComputeAxisMovement(ECoordAxis curr_axis, FVector2D 
 	FLOAT32 delta = 0;
 	
 	FVector screen_space_dir;
+	FLOAT64 tf = ASystemManagerBase::GetInstance()->ComputeCameraDistToActorMeter(pTrackedActor) / 50;
+	if (tf < 1) {
+		tf = 1;
+
+	}
 	switch (curr_axis) {
 	case ECoordAxis::CoordAxisX:
 		screen_space_dir = CMath::ProjectWorldDirectionToScreenSpace(pc, pTrackedActor->GetActorForwardVector());
 		screen_space_dir.Normalize();
-		delta = screen_space_dir.Dot(mouse_drag * disp * move_strength);
+		delta = screen_space_dir.Dot(mouse_drag * disp * move_strength* tf);
 		dir = pTrackedActor->GetActorForwardVector();
 		break;
 
 	case ECoordAxis::CoordAxisY:
 		screen_space_dir = CMath::ProjectWorldDirectionToScreenSpace(pc, pTrackedActor->GetActorRightVector());
 		screen_space_dir.Normalize();
-		delta = screen_space_dir.Dot(mouse_drag * disp * move_strength);
+		delta = screen_space_dir.Dot(mouse_drag * disp * move_strength* tf);
 		dir =  pTrackedActor->GetActorRightVector();
 		break;
 
 	case ECoordAxis::CoordAxisZ:
 		screen_space_dir = CMath::ProjectWorldDirectionToScreenSpace(pc, pTrackedActor->GetActorUpVector());
 		screen_space_dir.Normalize();
-		delta = screen_space_dir.Dot(mouse_drag * disp * move_strength);
+		delta = screen_space_dir.Dot(mouse_drag * disp * move_strength* tf);
 		dir = pTrackedActor->GetActorUpVector();
 		break;
 	}
@@ -303,7 +316,7 @@ AActor* UGizmoUIController::FindGizmoAtClickPosition(int locationX, int location
 
 	// Define start and end points of the ray
 	FVector Start = WorldLocation;
-	FVector End = Start + (WorldDirection * TOUE(1000));  // MaxTraceDistance is up to you, e.g., 10000.0f
+	FVector End = Start + (WorldDirection * TOUE(20000));  // MaxTraceDistance is up to you, e.g., 10000.0f
 
 	//CUtil::DrawDebugRay(GetWorld(), Start, End, FColor::Red, 10, 0.75);
 

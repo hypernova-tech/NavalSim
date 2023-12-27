@@ -35,6 +35,7 @@ public:
 	virtual bool Load(FString fname) = 0;
 
 	virtual  UConsoleBase* GetConsole() = 0;
+	virtual  APlayerCameraManager* GetCameraManager() = 0;
 
 	virtual TArray<AActor*>& GetSensorGlobalIgnoreList() = 0;
 	virtual AActor* GetFloor() = 0;

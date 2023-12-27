@@ -170,6 +170,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual	UConsoleBase* GetConsole();
 
+	virtual  APlayerCameraManager* GetCameraManager();
+	virtual FLOAT64 ComputeCameraDistToActorMeter(AActor* p_actor);
+
 	virtual TArray<AActor*>& GetSensorGlobalIgnoreList();
 	virtual AActor* GetFloor();
 	virtual TArray<AActor*>& GetMoveableActorList();
