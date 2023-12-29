@@ -56,6 +56,7 @@ public:
 	virtual TArray<AActor*> GetAllActorInWorld() = 0;
 
 	virtual void QueryActors(EActorQueryArgs args, TArray<AActor*> &actors) = 0;
+	virtual UObject* FindObject(FString obj_name) = 0;
 	virtual AActor* FindActor(FString actor_name) = 0;
 	virtual bool DestroyActor(FString name) = 0;
 	virtual AActorBase* ToActorBase(AActor* p_actor) = 0;

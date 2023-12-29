@@ -479,6 +479,11 @@ bool ASystemManagerBase::DestroyActor(FString name)
 	}
 }
 
+UObject* ASystemManagerBase::FindObject(FString obj_name)
+{
+	return nullptr;
+}
+
 
 AActor* ASystemManagerBase::FindActor(FString actor_name)
 {
@@ -502,8 +507,7 @@ AActor* ASystemManagerBase::FindActor(FString actor_name)
 	}
 
 	return nullptr;
-		
-	
+
 	
 }
 
@@ -607,6 +611,12 @@ UConsoleBase* ASystemManagerBase::GetConsole()
 		pConsole = pConsoleActor->FindComponentByClass<UConsoleBase>();
 	}
 	return pConsole;
+}
+
+FString ASystemManagerBase::GenerateUniqueName(FString prefix)
+{
+	UniqueId++;
+	return prefix + CUtil::IntToString(UniqueId);
 }
 
 APlayerCameraManager* ASystemManagerBase::GetCameraManager()

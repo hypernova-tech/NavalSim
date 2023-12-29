@@ -160,7 +160,7 @@ private:
 	TArray< UConnectionBase*> Connections;
 	AActor* pSelectedActor;
 	USaverLoaderBase* pSaverLoader;
-
+	INT64U UniqueId;
 	/// <summary>
 	///  system API
 	/// </summary>
@@ -169,6 +169,7 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	virtual	UConsoleBase* GetConsole();
+	virtual FString GenerateUniqueName(FString prefix);
 
 	virtual  APlayerCameraManager* GetCameraManager();
 	virtual FLOAT64 ComputeCameraDistToActorMeter(AActor* p_actor);
@@ -184,6 +185,7 @@ public:
 	virtual TArray<AActor*> GetAllActorInWorld();
 	virtual void QueryActors(EActorQueryArgs args, TArray<AActor*>& actors);
 	virtual AActor* FindActor(FString actor_name);
+	virtual UObject* FindObject(FString obj_name);
 	virtual bool DestroyActor(FString name);
 
 	virtual AActorBase* ToActorBase(AActor* p_actor);

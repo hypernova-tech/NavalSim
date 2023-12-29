@@ -173,8 +173,30 @@ public:
 	static FString Pause;
 	static FString Resume;
 
+	static FString ExecCommand;
+	static FString Func;
+	static FString FuncCategory;
+	static FString FuncParam1;
+	static FString FuncParam2;
+	static FString FuncParam3;
+	static FString FuncParam4;
+	static FString FuncParam5;
+	static FString FuncParam6;
+	static FString FuncParam7;
+	static FString FuncParam8;
+	static FString FuncParam9;
+	static FString FuncParam10;
 
-
+	static FString FuncValue1;
+	static FString FuncValue2;
+	static FString FuncValue3;
+	static FString FuncValue4;
+	static FString FuncValue5;
+	static FString FuncValue6;
+	static FString FuncValue7;
+	static FString FuncValue8;
+	static FString FuncValue9;
+	static FString FuncValue10;
 	SCommandOptionInfo* FindCommandOptionInfo(FString option);
 
 	TMap<FString, TArray<SCommandOptionInfo>> CommandInfo;

@@ -131,6 +131,30 @@ FString CCLICommandManager::Pause = "pause";
 FString CCLICommandManager::Resume = "resume";
 
 
+FString CCLICommandManager::ExecCommand = "exec";
+FString CCLICommandManager::Func = "func";
+FString CCLICommandManager::FuncCategory = "funccategory";
+FString CCLICommandManager::FuncParam1	= "param1";
+FString CCLICommandManager::FuncParam2	= "param2";
+FString CCLICommandManager::FuncParam3	= "param3";
+FString CCLICommandManager::FuncParam4	= "param4";
+FString CCLICommandManager::FuncParam5	= "param5";
+FString CCLICommandManager::FuncParam6	= "param6";
+FString CCLICommandManager::FuncParam7	= "param7";
+FString CCLICommandManager::FuncParam8	= "param8";
+FString CCLICommandManager::FuncParam9	= "param9";
+FString CCLICommandManager::FuncParam10 = "param10";
+
+FString CCLICommandManager::FuncValue1 = "value1";
+FString CCLICommandManager::FuncValue2 = "value2";
+FString CCLICommandManager::FuncValue3 = "value3";
+FString CCLICommandManager::FuncValue4 = "value4";
+FString CCLICommandManager::FuncValue5 = "value5";
+FString CCLICommandManager::FuncValue6 = "value6";
+FString CCLICommandManager::FuncValue7 = "value7";
+FString CCLICommandManager::FuncValue8 = "value8";
+FString CCLICommandManager::FuncValue9 = "value9";
+FString CCLICommandManager::FuncValue10 = "value10";
 
 CCLICommandManager::CCLICommandManager()
 {
