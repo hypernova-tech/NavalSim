@@ -117,7 +117,8 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	void SetCommand(float roll_angle_deg, float pitch_angle_deg, float yaw_angle_deg);
+	UFUNCTION(BlueprintCallable)
+	void SetCommand_(float roll_angle_deg, float pitch_angle_deg, float yaw_angle_deg);
 	UFUNCTION(BlueprintCallable)
 	void UpdateAttachedActors();
 };

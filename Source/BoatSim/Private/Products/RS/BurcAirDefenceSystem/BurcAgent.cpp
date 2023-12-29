@@ -7,6 +7,7 @@
 
 void ABurcAgent::BeginPlay()
 {
+	Super::BeginPlay();
 }
 
 void ABurcAgent::Fire_()

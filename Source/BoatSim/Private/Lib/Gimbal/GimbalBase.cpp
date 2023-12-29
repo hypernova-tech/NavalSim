@@ -98,7 +98,7 @@ float AGimbalBase::GetAxisAngleDeg(EGimbalAxis axis)
 
 
 
-void AGimbalBase::SetCommand(float roll_angle_deg, float pitch_angle_deg, float yaw_angle_deg)
+void AGimbalBase::SetCommand_(float roll_angle_deg, float pitch_angle_deg, float yaw_angle_deg)
 {
 	GetAxis(EGimbalAxis::Roll)->SetCommandAngleDeg(roll_angle_deg);
 	GetAxis(EGimbalAxis::Pitch)->SetCommandAngleDeg(pitch_angle_deg);
