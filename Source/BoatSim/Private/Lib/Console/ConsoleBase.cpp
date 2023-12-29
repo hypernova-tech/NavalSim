@@ -367,7 +367,21 @@ void UConsoleBase::SendConsoleResponse(FString name, FString option, INT32S ind,
 
     //pSystemAPI->SendConsoleResponse("--name " + name + " --" + option + " " + "\""+ retstr + "\"");
 }
+void UConsoleBase::SendConsoleResponse(FString name, FString option, FString prop, FString val)
+{
+   
+    TMap<FString, FString> data;
 
+    if (name != "") {
+        data.Add("name", name);
+    }
+
+    data.Add("option", option);
+    data.Add("property", prop);
+    data.Add("value", val);
+    auto ret_json = CreateAndSerializeJson(data);
+    pSystemAPI->SendConsoleResponse(ret_json);
+}
 
 void UConsoleBase::SendConsoleResponse(FString name, FString option, FVector ret)
 {
@@ -584,7 +598,14 @@ void UConsoleBase::SendFunctions(AActor* p_actor, FString category)
         pSystemAPI->SendConsoleResponse("<func>" + func);
     }
 }
+void UConsoleBase::SendProperies(AActor* p_actor)
+{
+    auto ret = GetProperties(p_actor);
+    for (FString prop : ret) {
+        pSystemAPI->SendConsoleResponse("<property>" + prop);
+    }
 
+}
 void UConsoleBase::SendBlueprints()
 {
     auto bp_info = ASystemManagerBase::GetInstance()->GetDataManager()->GetBlueprintInfo();
@@ -1157,6 +1178,28 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
     else {
 
     }
+
+    ret = CommandManager.GetValue(CCLICommandManager::Property, sret);
+    if (ret) {
+        FString prop_value;
+        ret = CommandManager.GetValue(CCLICommandManager::PropertyValue, prop_value);
+        if (ret) {
+            if (SetPropertyValue(p_actor, sret, prop_value)) {
+                one_success = true;
+            }
+        }
+        else {
+            error_message += " value not defined";
+            return false;
+        }
+      
+    }
+    else {
+
+    }
+
+  
+
     
     ret = CommandManager.GetValue(CCLICommandManager::IPAddr1, sret);
     if (ret) {
@@ -1871,19 +1914,36 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
 
     ret = CommandManager.HasA(CCLICommandManager::Func);
     if (ret) {
-        ret = CommandManager.GetValue(CCLICommandManager::FuncCategory, sret);
-        if (ret) {
-            SendFunctions(p_actor, sret);
-            return true;
-        }
-        else {
-            error_message += "enter category";
-            return false;
-        }
-       
+     
+        SendFunctions(p_actor,   "");
+        return true;
     }
     else {
        
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::Property, sret);
+    if (ret) {
+        FString prop_val;
+        if (GetPropertyValue(p_actor, sret, prop_val)) {
+            SendConsoleResponse(name, CCLICommandManager::Property, sret, prop_val);
+        }
+        else {
+            error_message += " property not found";
+        }
+        
+    }
+    else {
+
+    }
+
+    ret = CommandManager.HasA(CCLICommandManager::Properties);
+    if (ret) {
+
+        SendProperies(p_actor);
+    }
+    else {
+
     }
 
     ret = CommandManager.HasA(CCLICommandManager::Suppressed);
@@ -2467,22 +2527,23 @@ bool UConsoleBase::ProcessExecCommand(TMap<FString, FString>& options, FString& 
                              CCLICommandManager::FuncParam6,CCLICommandManager::FuncParam7, CCLICommandManager::FuncParam8, CCLICommandManager::FuncParam9, CCLICommandManager::FuncParam10 };
     
     
-    FString value_name[] = { CCLICommandManager::FuncValue1,CCLICommandManager::FuncValue2, CCLICommandManager::FuncValue3, CCLICommandManager::FuncValue4, CCLICommandManager::FuncValue5,
-                             CCLICommandManager::FuncValue6,CCLICommandManager::FuncValue7, CCLICommandManager::FuncValue8, CCLICommandManager::FuncValue9, CCLICommandManager::FuncValue10 };
-
-    TMap<FString, FString> param_map;
+     TMap<FString, FString> param_map;
     for (int i = 0; i < 10; i++) {
         ret = CommandManager.GetValue(param_name[i], params[i]);
-        if (ret) {
-            ret = CommandManager.GetValue(value_name[i], values[i]);
-            if (ret) {
-                param_map.Add(params[i], values[i]);
-            }
-            
-        }
     }
-    ret = InvokeFunctionByNameWithParameters(p_actor, FName(func), param_map);
-    return true;
+
+    TArray<FString> param_array;
+
+    for (int32 i = 0; i < 10; ++i)
+    {
+        if (params[i] != "") {
+            param_array.Add(params[i]);
+        }
+        
+    }
+
+    ret = InvokeFunctionByNameWithParameters(p_actor, FName(func), param_array);
+    return ret;
 }
 
 bool UConsoleBase::ProcessCommands(FString command, TMap<FString, FString>& options, FString& error_message)
@@ -2563,6 +2624,57 @@ bool UConsoleBase::InvokeFunctionByNameWithParameters(UObject *p_obj, const FNam
     return true;
 }
 
+
+bool UConsoleBase::InvokeFunctionByNameWithParameters(UObject* p_obj, const FName& FunctionName,  TArray<FString>& Parameters)
+{
+    UFunction* Function = p_obj->GetClass()->FindFunctionByName(FunctionName);
+    if (Function == nullptr)
+    {
+        return false;
+    }
+
+    // Create a struct on scope based on the function's parameters
+    FStructOnScope FuncParams(Function);
+
+    // Initialize an index to track the position in the Parameters array
+    int32 ParamIndex = 0;
+
+    // Iterate over the function's properties
+    for (TFieldIterator<FProperty> It(Function); It; ++It)
+    {
+        FProperty* Property = *It;
+        if (Parameters.IsValidIndex(ParamIndex))
+        {
+            const FString& ParamValue = Parameters[ParamIndex];
+            if (!SetFunctionParameter(Function, FuncParams.GetStructMemory(), Property, ParamValue))
+            {
+                return false; // Failed to set a parameter, return early
+            }
+            ParamIndex++;
+
+            
+        }
+        else
+        {
+            // Not enough parameters provided
+            return false;
+        }
+
+        if (ParamIndex == Parameters.Num()) {
+            break;
+        }
+    }
+
+    // Ensure all parameters were used
+    if (ParamIndex != Parameters.Num())
+    {
+        return false; // Extra parameters were provided
+    }
+
+    p_obj->ProcessEvent(Function, FuncParams.GetStructMemory());
+
+    return true;
+}
 bool UConsoleBase::SetFunctionParameter(UFunction* Function, void* Params, FProperty* Param, const FString& Value)
 {
     if (FNumericProperty* NumericProperty = CastField<FNumericProperty>(Param))
@@ -2631,9 +2743,13 @@ TArray<FString> UConsoleBase::GetCallableFunctions(UObject* p_obj, FString categ
     for (TFieldIterator<UFunction> FuncIt(p_obj->GetClass()); FuncIt; ++FuncIt)
     {
         UFunction* Function = *FuncIt;
+        FString func_name = Function->GetName();
+        if (!func_name.EndsWith(TEXT("_"))){
+            continue;
+        }
 
         // Check the category of the function
-#if 1
+#if 0
         const FString FunctionCategory = Function->GetMetaData(TEXT("Category"));
         if (Category != "" && FunctionCategory != Category)
         {
@@ -2689,4 +2805,155 @@ TArray<FString> UConsoleBase::GetCallableFunctions(UObject* p_obj, FString categ
     }
 
     return FunctionSignatures;
+}
+TArray<FString> UConsoleBase::GetProperties(UObject* p_obj)
+{
+    TArray<FString> PropertiesList;
+
+    if (!p_obj)
+    {
+        return PropertiesList;
+    }
+
+    for (TFieldIterator<FProperty> PropIt(p_obj->GetClass()); PropIt; ++PropIt)
+    {
+        FProperty* Property = *PropIt;
+     
+
+        FString PropertyType = Property->GetCPPType();
+        FString PropertyName = Property->GetName();
+
+        if (PropertyName.EndsWith("_")) {
+            PropertiesList.Add(FString::Printf(TEXT("%s %s"), *PropertyType, *PropertyName));
+        }
+
+        
+    }
+
+    return PropertiesList;
+}
+bool UConsoleBase::SetPropertyValue(UObject* p_obj, const FString& property_name, const FString& value)
+{
+    if (!p_obj)
+    {
+        return false;
+    }
+    if (!property_name.EndsWith(TEXT("_"))) {
+        return false;
+    }
+    // Find the property by name
+    FProperty* Property = FindFProperty<FProperty>(p_obj->GetClass(), FName(property_name));
+    if (!Property)
+    {
+        return false; // Property not found
+    }
+
+    // Check property type and set value accordingly
+    if (FStrProperty* StrProperty = CastField<FStrProperty>(Property))
+    {
+        StrProperty->SetPropertyValue_InContainer(p_obj, value);
+    }
+    else if (FNumericProperty* NumProperty = CastField<FNumericProperty>(Property))
+    {
+        if (NumProperty->IsFloatingPoint())
+        {
+            
+                double DoubleValue = FCString::Atod(*value);
+                NumProperty->SetFloatingPointPropertyValue(NumProperty->ContainerPtrToValuePtr<void>(p_obj), DoubleValue);
+            
+           
+        }
+        else if (NumProperty->IsInteger())
+        {
+            
+                int64 Int64Value = FCString::Atoi64(*value);
+                NumProperty->SetIntPropertyValue(NumProperty->ContainerPtrToValuePtr<void>(p_obj), Int64Value);
+            
+           
+        }
+        else if (FBoolProperty* BoolProperty = CastField<FBoolProperty>(Property))
+        {
+            bool BoolValue = value.ToBool();
+            BoolProperty->SetPropertyValue_InContainer(p_obj, BoolValue);
+        }
+    }
+    else if (FStructProperty* StructProperty = CastField<FStructProperty>(Property))
+    {
+        if (StructProperty->Struct->GetFName() == NAME_Vector)
+        {
+            FVector VecValue;
+            VecValue.InitFromString(value);
+            StructProperty->ContainerPtrToValuePtr<FVector>(p_obj)->operator=(VecValue);
+        }
+        else if (StructProperty->Struct->GetFName() == NAME_Vector2D)
+        {
+            FVector2D Vec2DValue;
+            Vec2DValue.InitFromString(value);
+            StructProperty->ContainerPtrToValuePtr<FVector2D>(p_obj)->operator=(Vec2DValue);
+        }
+    }
+    else
+    {
+        return false; // Unsupported property type
+    }
+
+    return true;
+}
+
+bool UConsoleBase::GetPropertyValue(UObject* p_obj, const FString& property_name, FString& value)
+{
+    if (!p_obj)
+    {
+        return false;
+    }
+
+    // Find the property by name
+    FProperty* Property = FindFProperty<FProperty>(p_obj->GetClass(), FName(*property_name));
+    if (!Property)
+    {
+        return false; // Property not found
+    }
+
+    // Check property type and get value accordingly
+    if (FStrProperty* StrProperty = CastField<FStrProperty>(Property))
+    {
+        value = StrProperty->GetPropertyValue_InContainer(p_obj);
+    }
+    else if (FBoolProperty* BoolProperty = CastField<FBoolProperty>(Property))
+    {
+        bool BoolValue = BoolProperty->GetPropertyValue_InContainer(p_obj);
+        value = BoolValue ? TEXT("true") : TEXT("false");
+    }
+    else if (FNumericProperty* NumProperty = CastField<FNumericProperty>(Property))
+    {
+        if (NumProperty->IsFloatingPoint())
+        {
+            double NumValue = NumProperty->GetFloatingPointPropertyValue(NumProperty->ContainerPtrToValuePtr<void>(p_obj));
+            value = FString::Printf(TEXT("%f"), NumValue);
+        }
+        else if (NumProperty->IsInteger())
+        {
+            int64 NumValue = NumProperty->GetSignedIntPropertyValue(NumProperty->ContainerPtrToValuePtr<void>(p_obj));
+            value = FString::Printf(TEXT("%lld"), NumValue);
+        }
+    }
+    else if (FStructProperty* StructProperty = CastField<FStructProperty>(Property))
+    {
+        if (StructProperty->Struct->GetFName() == NAME_Vector)
+        {
+            FVector VecValue = *StructProperty->ContainerPtrToValuePtr<FVector>(p_obj);
+            value = VecValue.ToString();
+        }
+        else if (StructProperty->Struct->GetFName() == NAME_Vector2D)
+        {
+            FVector2D Vec2DValue = *StructProperty->ContainerPtrToValuePtr<FVector2D>(p_obj);
+            value = Vec2DValue.ToString();
+        }
+    }
+    else
+    {
+        return false; // Unsupported property type
+    }
+
+    return true;
 }

@@ -174,6 +174,9 @@ public:
 	static FString Resume;
 
 	static FString ExecCommand;
+	static FString Property;
+	static FString Properties;
+	static FString PropertyValue;
 	static FString Func;
 	static FString FuncCategory;
 	static FString FuncParam1;

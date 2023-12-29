@@ -9,16 +9,17 @@ void ABurcAgent::BeginPlay()
 {
 }
 
-void ABurcAgent::Fire()
+void ABurcAgent::Fire_()
 {
 }
 
-void ABurcAgent::AimGun(FVector pos)
+void ABurcAgent::AimGun_(FVector pos)
 {
 }
 
-bool ABurcAgent::AssignTarget(FString target_name, double duration)
+bool ABurcAgent::AssignTarget_(FString target_name, double duration)
 {
+	TargetNameName_ = target_name;
 	ASystemManagerBase::GetInstance()->SendConsoleResponse("AssignTarget called target_name: "+ target_name+" duration: "+CUtil::FloatToString(duration));
 	return false;
 }

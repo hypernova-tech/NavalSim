@@ -9,6 +9,7 @@
 /**
  * 
  */
+
 UCLASS()
 class ABurcAgent : public AAgent
 {
@@ -17,16 +18,18 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 	UFUNCTION(BlueprintCallable)
-		void Fire();
+		void Fire_();
 
 	UFUNCTION(BlueprintCallable)
-		void AimGun(FVector pos);
+		void AimGun_(FVector pos);
 
 	UPROPERTY(EditAnywhere)
-		FString BulletAgentName;
+		FString BulletAgentName_;
 
-	UFUNCTION(BlueprintCallable,Category = "Console")
-		bool AssignTarget(FString target_name, double duration);
+	UPROPERTY(EditAnywhere)
+		FString TargetNameName_;
+	UFUNCTION(BlueprintCallable)
+		bool AssignTarget_(FString target_name, double duration);
 
 	UStaticMeshComponent* pGun;
 	AActor* pTarget;

@@ -132,6 +132,10 @@ FString CCLICommandManager::Resume = "resume";
 
 
 FString CCLICommandManager::ExecCommand = "exec";
+FString CCLICommandManager::Property = "property";
+FString CCLICommandManager::Properties = "properties";
+FString CCLICommandManager::PropertyValue = "value";
+
 FString CCLICommandManager::Func = "func";
 FString CCLICommandManager::FuncCategory = "funccategory";
 FString CCLICommandManager::FuncParam1	= "param1";

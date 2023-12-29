@@ -53,6 +53,7 @@ protected:
 	void SendConsoleResponse(FString name, FString option, FColor ret);
 	void SendConsoleResponse(FString name, FString option, FVector4 ret);
 	void SendConsoleResponse(FString name, FString option, INT32S ind, FVector ret);
+	void SendConsoleResponse(FString name, FString option, FString prop, FString val);
 	FString CreateAndSerializeJson(TMap<FString, FString> &data);
 
 	void SendSensors();
@@ -60,6 +61,7 @@ protected:
 	void SendActorBases();
 	void SendBlueprints();
 	void SendFunctions(AActor *p_actor, FString category);
+	void SendProperies(AActor* p_actor);
 
 	bool SetCamView(FString cmd);
 
@@ -75,6 +77,10 @@ public:
 
 	void SendActorTransform(AActor* p_actor);
 	TArray<FString> GetCallableFunctions(UObject* p_obj, FString category);
+	TArray<FString> GetProperties(UObject* p_obj);
+	bool SetPropertyValue(UObject* p_obj, const FString& property_name, const FString &value);
+	bool GetPropertyValue(UObject* p_obj, const FString& property_name, FString &value);
 	bool InvokeFunctionByNameWithParameters(UObject* p_obj, const FName& FunctionName, const TMap<FString, FString>& Parameters);
+	bool InvokeFunctionByNameWithParameters(UObject* p_obj, const FName& FunctionName,  TArray<FString>& Parameters);
 	bool SetFunctionParameter(UFunction* Function, void* Params, FProperty* Param, const FString& Value);
 };
