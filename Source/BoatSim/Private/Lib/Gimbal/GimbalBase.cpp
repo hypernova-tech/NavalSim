@@ -12,8 +12,6 @@ AGimbalBase::AGimbalBase()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	
-
 }
 
 // Called when the game starts or when spawned
@@ -23,31 +21,6 @@ void AGimbalBase::BeginPlay()
 
 	GetRootComponent()->SetMobility(EComponentMobility::Movable);
 
-#if false
-	TArray<AActor*> Actors;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AActor::StaticClass(), Actors);
-	
-	for (AActor* Actor : Actors) {
-		if (Actor->GetClass()->GetFName() == "CBoatBase") {
-			Actor->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform);
-			break;
-		}
-	}
-
-	for (TActorIterator<AActor> It(GetWorld()); It; ++It)
-	{
-		// It->GetClass() returns the UClass of the actor
-		if (It->GetClass()->GetName() == "ACBoatBase")
-		{
-			// You now have a pointer to the actor you were looking for
-			AActor* FoundActor = *It;
-
-			FoundActor->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform);
-			break;
-		}
-	}
-
-#endif
 }
 
 
@@ -59,9 +32,6 @@ void AGimbalBase::InitGimbal()
 
 void AGimbalBase::Run(float delta_time_sec)
 {
-
-
-
 	UpdateAxis(EGimbalAxis::Roll, delta_time_sec);
 	UpdateAxis(EGimbalAxis::Pitch, delta_time_sec);
 	UpdateAxis(EGimbalAxis::Yaw, delta_time_sec);
@@ -131,9 +101,21 @@ void AGimbalBase::UpdateAttachedActors()
 	
 	FRotator rot(GetAxisAngleDeg(EGimbalAxis::Pitch), GetAxisAngleDeg(EGimbalAxis::Yaw), GetAxisAngleDeg(EGimbalAxis::Roll));
 	SetActorRelativeRotation(rot);
+}
 
+void AGimbalBase::AttachActor_(AActor* p_actor)
+{
+	AttachedActors.Add(p_actor);
+}
 
-	
+void AGimbalBase::RemoveAttachedActor_(AActor* p_actor)
+{
+	AttachedActors.Remove(p_actor);
+}
+
+TArray<AActor*>& AGimbalBase::GetAttachedActor_()
+{
+	return AttachedActors;
 }
 
 
@@ -163,9 +145,9 @@ void AGimbalBase::GimbalStateMachine(float delta_time_sec)
 	GimbalState = next_state;
 }
 // Called every frame
-void AGimbalBase::Tick(float DeltaTime)
+void AGimbalBase::OnStep(float DeltaTime)
 {
-	Super::Tick(DeltaTime);
+	Super::OnStep(DeltaTime);
 	GimbalStateMachine(DeltaTime);
 
 }

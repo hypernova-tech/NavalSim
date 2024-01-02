@@ -4,6 +4,7 @@
 #include "Products/RS/BurcAirDefenceSystem/BurcAgent.h"
 #include <Lib/Utils/CUtil.h>
 #include <Lib/SystemManager/SystemManagerBase.h>
+#include <Lib/Agent/Misc/BulletBase.h>
 
 void ABurcAgent::BeginPlay()
 {
@@ -12,6 +13,17 @@ void ABurcAgent::BeginPlay()
 
 void ABurcAgent::Fire_()
 {
+	auto p_bullet = (ABulletBase*)CloneBullet();
+	p_bullet->SetLinearVelocity(TOUE(p_bullet->GetInitialSpeedMetersPerSec_()) * GetAimDirection());
+	StartShake();
+}
+
+void ABurcAgent::FireSerial_(int count, double time_interval)
+{
+	Fire_();
+	RemainingSerialFire += count-1;
+	SerialFireTimeInterval = time_interval;
+	GetWorld()->GetTimerManager().SetTimer(SerialFireTimerHandle, this, &ABurcAgent::SerialFireNext, time_interval);
 }
 
 void ABurcAgent::AimGun_(FVector pos)
@@ -23,4 +35,72 @@ bool ABurcAgent::AssignTarget_(FString target_name, double duration)
 	TargetNameName_ = target_name;
 	ASystemManagerBase::GetInstance()->SendConsoleResponse("AssignTarget called target_name: "+ target_name+" duration: "+CUtil::FloatToString(duration));
 	return false;
+}
+
+FVector ABurcAgent::GetAimDirection()
+{
+	return FVector(pGunTip->GetForwardVector());
+}
+
+AActor* ABurcAgent::CloneBullet()
+{
+	FString bullet_name = ASystemManagerBase::GetInstance()->GenerateUniqueName("bullet");
+	
+	ABulletBase* p_bullet = (ABulletBase*)(ASystemManagerBase::GetInstance()->CreateActor(BulletAgentName_, bullet_name,
+		pGunTip->GetComponentLocation(),
+		FVector::ZeroVector,
+		FVector::OneVector,3));
+
+	return p_bullet;
+}
+
+void ABurcAgent::SerialFireNext()
+{
+	RemainingSerialFire--;
+	Fire_();
+	if (RemainingSerialFire > 0) {
+		GetWorld()->GetTimerManager().SetTimer(SerialFireTimerHandle, this, &ABurcAgent::SerialFireNext, SerialFireTimeInterval);
+	}
+}
+void ABurcAgent::StartShake()
+{
+	ShakeTimer = ShakeDuration;
+	bIsShaking = true;
+}
+
+void ABurcAgent::ApplyShake()
+{
+	if (pGun)  // Assuming pGunTip is your nozzle component
+	{
+		// Create a random offset and rotation
+		FVector Offset(FMath::RandRange(-ShakeIntensity, ShakeIntensity),
+			FMath::RandRange(-ShakeIntensity, ShakeIntensity),
+			FMath::RandRange(-ShakeIntensity, ShakeIntensity));
+		FRotator RotationOffset(FMath::RandRange(-ShakeRotationIntensity, ShakeRotationIntensity),
+			FMath::RandRange(-ShakeRotationIntensity, ShakeRotationIntensity),
+			FMath::RandRange(-ShakeRotationIntensity, ShakeRotationIntensity));
+
+		// Apply the offset and rotation to the nozzle
+		pGun->AddLocalOffset(Offset);
+		pGun->AddLocalRotation(RotationOffset);
+	}
+}
+
+void ABurcAgent::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	if (bIsShaking)
+	{
+		ShakeTimer -= DeltaTime;
+		if (ShakeTimer <= 0.0f)
+		{
+			bIsShaking = false;
+			// Reset nozzle position/rotation if needed
+		}
+		else
+		{
+			ApplyShake();
+		}
+	}
 }

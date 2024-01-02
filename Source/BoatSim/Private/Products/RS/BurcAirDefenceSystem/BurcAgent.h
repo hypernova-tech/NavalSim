@@ -17,11 +17,17 @@ class ABurcAgent : public AAgent
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
+	virtual void Tick(float DeltaTime) override;
 	UFUNCTION(BlueprintCallable)
 		void Fire_();
 
 	UFUNCTION(BlueprintCallable)
+		void FireSerial_(int count, double time_interval);
+
+	UFUNCTION(BlueprintCallable)
 		void AimGun_(FVector pos);
+
+
 
 	UPROPERTY(EditAnywhere)
 		FString BulletAgentName_;
@@ -31,6 +37,41 @@ protected:
 	UFUNCTION(BlueprintCallable)
 		bool AssignTarget_(FString target_name, double duration);
 
-	UStaticMeshComponent* pGun;
+
+	FVector GetAimDirection();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		UStaticMeshComponent* pGunTip;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		UStaticMeshComponent* pGun;
+
+	FTimerHandle SerialFireTimerHandle;
+
 	AActor* pTarget;
+
+
+	AActor* CloneBullet();
+	void SerialFireNext();
+	INT32S RemainingSerialFire = 0;
+	FLOAT64 SerialFireTimeInterval;
+
+
+	UPROPERTY(EditAnywhere, Category = "Shake")
+		float ShakeDuration = 0.5f;  // Duration of the shake in seconds
+
+	UPROPERTY(EditAnywhere, Category = "Shake")
+		float ShakeIntensity = 0.0f;  // Intensity of the shake
+	UPROPERTY(EditAnywhere, Category = "Shake")
+		float ShakeRotationIntensity = 0.5f;
+
+	UPROPERTY(EditAnywhere, Category = "Shake")
+		float ShakeFrequency = 0.05f;  // Time between each shake update
+
+	float ShakeTimer = 0.0f;
+	bool bIsShaking = false;
+
+
+	void StartShake();
+	void ApplyShake();
 };

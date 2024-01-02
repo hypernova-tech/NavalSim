@@ -58,6 +58,9 @@ protected:
 	UPROPERTY(EditAnywhere)
 		AActor* ActorGizmo;
 
+
+protected:
+
 	 virtual void OnStep(float DeltaTime);
 	 virtual void OnStepScenarioMode(float DeltaTime);
 	 bool CheckAffinity();

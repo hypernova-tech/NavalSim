@@ -49,7 +49,7 @@ public:
 	/// <param name="world_rot"></param>
 	/// <param name="scale"></param>
 	/// <returns></returns>
-	virtual AActor* CreateActor(FString model_name, FString boat_name, FVector world_pos, FVector world_rot, FVector scale)=0;
+	virtual AActor* CreateActor(FString model_name, FString boat_name, FVector world_pos, FVector world_rot, FVector scale, FLOAT64 life_time_sec = 0)=0;
 	virtual void RegisterActor(AActor* p_actor) = 0;
 	virtual bool RemoveActor(AActor* p_actor) = 0;
 	virtual TArray<AActor*> GetRegisteredActors() = 0;

@@ -845,7 +845,7 @@ T* CUtil::FindComponent(AActor* p_parent)
 }
 
 template<typename T>
-T* CUtil::FindChildComponent(AActor* p_parent)
+T* CUtil::FindChildActor(AActor* p_parent)
 {
     TArray<AActor*> child_actors;
     p_parent->GetAllChildActors(child_actors, true);
@@ -864,6 +864,7 @@ T* CUtil::FindChildComponent(AActor* p_parent)
 
     return nullptr;
 }
+
 
 AActor* CUtil::SpawnObjectFromBlueprint(AActor *p_template, FString blueprint_path, UWorld *p_world, AActor *p_owner, FString name, FVector pos, FVector rot_rpy, FVector scale)
 {

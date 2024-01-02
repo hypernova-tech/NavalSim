@@ -81,8 +81,7 @@ protected:
 		void AddObjectDef(FString name, UObject *p_part);
 	
 public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override; 
+
 
 
 	UFUNCTION(BlueprintCallable)

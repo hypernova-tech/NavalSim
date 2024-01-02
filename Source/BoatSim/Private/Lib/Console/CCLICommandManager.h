@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include <Lib/Types/Primitives.h>
 
 /**
  * 

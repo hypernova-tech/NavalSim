@@ -45,6 +45,21 @@ enum ESystemState
 };
 
 
+UCLASS(BlueprintType)
+class ULifeTimeEntryObject:public UObject
+{
+	GENERATED_BODY()
+
+public:
+	ULifeTimeEntryObject()
+	{
+		pActor = nullptr;
+	}
+	AActor *pActor;
+	FLOAT32 CurrentLifeTimeSec;
+
+
+};
 
 
 UCLASS()
@@ -104,6 +119,7 @@ protected:
 	virtual void UpdateActors(float deltatime);
 	virtual void UpdateActorsScenarioMode(float deltatime);
 	virtual void StateMachine(float deltatime);
+	virtual void UpdateLifeTime(float deltatime);
 
 	ESystemState SystemState = ESystemState::SystemStateJustLaunched;
 	bool CanLoadConfig = false;
@@ -148,6 +164,7 @@ private:
 	static ASystemManagerBase* pInstance;
 	TMap<FString,  AActor*> AllActors;
 	TArray<AActor*> ActorList;
+	TArray<ULifeTimeEntryObject*> LifeTimeEntries;
 	TArray<ASensorBase*> Sensors;
 	TArray<APlatformBase*> Platforms;
 	TMap<ESensorType, TArray<ASensorBase*> > SensorsOfType;
@@ -178,7 +195,7 @@ public:
 	virtual AActor* GetFloor();
 	virtual TArray<AActor*>& GetMoveableActorList();
 
-	virtual AActor* CreateActor(FString model_name, FString boat_name, FVector world_pos, FVector world_rot, FVector scale);
+	virtual AActor* CreateActor(FString model_name, FString boat_name, FVector world_pos, FVector world_rot, FVector scale, FLOAT64 life_time_sec = 0);
 	virtual void RegisterActor(AActor* p_actor);
 	virtual bool RemoveActor(AActor* p_actor);
 	virtual TArray<AActor*> GetRegisteredActors();
@@ -187,6 +204,7 @@ public:
 	virtual AActor* FindActor(FString actor_name);
 	virtual UObject* FindObject(FString obj_name);
 	virtual bool DestroyActor(FString name);
+	virtual bool DestroyActor(AActor* p_actor);
 
 	virtual AActorBase* ToActorBase(AActor* p_actor);
 	virtual ASensorBase* ToSensorBase(AActor* p_actor);

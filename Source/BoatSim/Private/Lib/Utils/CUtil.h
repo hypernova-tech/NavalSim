@@ -79,7 +79,35 @@ public:
 	template <typename T>
 	static T* FindComponent(AActor* p_parent);
 	template <typename T>
-	static T* FindChildComponent(AActor* p_parent);
+	static T* FindChildActor(AActor* p_parent);
+	
+
+	template<typename T>
+	static T* FindChildComponent(AActor* Parent)
+	{
+		if (Parent == nullptr)
+		{
+			return nullptr;
+		}
+
+		// Iterate over all components of the parent actor
+		TArray<UActorComponent*> Components;
+		Parent->GetComponents(Components);
+
+		for (UActorComponent* Component : Components)
+		{
+			// Check if the component is of the desired class
+			T* DesiredComponent = Cast<T>(Component);
+			if (DesiredComponent != nullptr)
+			{
+				// Found the component, return it
+				return DesiredComponent;
+			}
+		}
+
+		// Component not found
+		return nullptr;
+	};
 
 	static void LookAt(AActor* p_actor, FVector& look_dir, FLOAT32 distance = 5);
 	
@@ -166,5 +194,7 @@ public:
 	static FString CharToHexString(INT8U* p_data, INT32U len);
 	static void FindMinMaxPixelValue16Bit(UTexture2D* Texture, uint16& MinValue, uint16& MaxValue);
 	static FString GetFilePathProject(FString file_path);
+
+
 };
 

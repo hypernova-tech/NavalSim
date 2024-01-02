@@ -1,0 +1,79 @@
+create --name env --bp 
+set --name env --instance -1
+set --name env --suppressed 0
+set --name env --standalone 0
+set --name env --position "324.600000 284.200000 4.600000"
+set --name env --rotation "-0.000000 -0.000000 0.000000"
+set --name env --scale "1.000000 1.000000 1.000000"
+set --name env --timeofday 12.000000
+set --name env --envtimeflowscale 1.000000
+set --name env --rain 0.000000
+set --name env --cloud 0.000000
+set --name env --snow 0.000000
+set --name env --dust 0.000000
+set --name env --fog 0.000000
+set --name env --thunder 0.000000
+set --name env --envsoundfx 1
+set --name env --wind 3.000000
+set --name env --winddir 0.000000
+
+create --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_0 --bp GIMBAL2DOF
+set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_0 --instance -1
+set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_0 --suppressed 0
+set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_0 --standalone 0
+set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_0 --position "-4.900000 0.000000 5.200000"
+set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_0 --rotation "-0.000000 -0.000000 0.000000"
+set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_0 --scale "1.000000 1.000000 1.000000"
+set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_0 --parent b1
+
+create --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_1 --bp GIMBAL2DOF
+set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_1 --instance -1
+set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_1 --suppressed 0
+set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_1 --standalone 0
+set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_1 --position "-2.100000 0.100000 5.800000"
+set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_1 --rotation "-0.000000 -0.000000 0.000000"
+set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_1 --scale "1.000000 1.000000 1.000000"
+set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_1 --parent b1
+
+create --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_2 --bp GIMBAL2DOF
+set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_2 --instance -1
+set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_2 --suppressed 0
+set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_2 --standalone 0
+set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_2 --position "-3.874266 0.005027 4.890010"
+set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_2 --rotation "-0.000000 -0.000000 0.000000"
+set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_2 --scale "1.000000 1.000000 1.000000"
+set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_2 --parent b1
+
+create --name b1 --bp BURC
+set --name b1 --instance -1
+set --name b1 --suppressed 0
+set --name b1 --standalone 0
+set --name b1 --position "0.000000 0.000000 0.000000"
+set --name b1 --rotation "-0.000000 -0.000000 0.000000"
+set --name b1 --scale "1.000000 1.000000 1.000000"
+
+create --name BP_GenericCameraIR_GEN_VARIABLE_BP_GenericCameraIR_C_CAT_0 --bp CAMIR
+set --name BP_GenericCameraIR_GEN_VARIABLE_BP_GenericCameraIR_C_CAT_0 --instance -1
+set --name BP_GenericCameraIR_GEN_VARIABLE_BP_GenericCameraIR_C_CAT_0 --suppressed 0
+set --name BP_GenericCameraIR_GEN_VARIABLE_BP_GenericCameraIR_C_CAT_0 --standalone 0
+set --name BP_GenericCameraIR_GEN_VARIABLE_BP_GenericCameraIR_C_CAT_0 --position "-3.874266 0.905027 6.990010"
+set --name BP_GenericCameraIR_GEN_VARIABLE_BP_GenericCameraIR_C_CAT_0 --rotation "-0.000000 -20.000000 0.000000"
+set --name BP_GenericCameraIR_GEN_VARIABLE_BP_GenericCameraIR_C_CAT_0 --scale "1.000000 1.000000 1.000000"
+set --name BP_GenericCameraIR_GEN_VARIABLE_BP_GenericCameraIR_C_CAT_0 --parent b1
+set --name BP_GenericCameraIR_GEN_VARIABLE_BP_GenericCameraIR_C_CAT_0 --slotindex 0
+set --name BP_GenericCameraIR_GEN_VARIABLE_BP_GenericCameraIR_C_CAT_0 --rangemin 5.000000
+set --name BP_GenericCameraIR_GEN_VARIABLE_BP_GenericCameraIR_C_CAT_0 --rangemax 100.000000
+set --name BP_GenericCameraIR_GEN_VARIABLE_BP_GenericCameraIR_C_CAT_0 --vfov 90.000000
+set --name BP_GenericCameraIR_GEN_VARIABLE_BP_GenericCameraIR_C_CAT_0 --hfov 90.000000
+set --name BP_GenericCameraIR_GEN_VARIABLE_BP_GenericCameraIR_C_CAT_0 --hscanstepang 0.000000
+set --name BP_GenericCameraIR_GEN_VARIABLE_BP_GenericCameraIR_C_CAT_0 --vscanstepang 36.000000
+set --name BP_GenericCameraIR_GEN_VARIABLE_BP_GenericCameraIR_C_CAT_0 --merrormean 0.000000
+set --name BP_GenericCameraIR_GEN_VARIABLE_BP_GenericCameraIR_C_CAT_0 --merrorstd 0.000000
+set --name BP_GenericCameraIR_GEN_VARIABLE_BP_GenericCameraIR_C_CAT_0 --surfacedetecten 0
+set --name BP_GenericCameraIR_GEN_VARIABLE_BP_GenericCameraIR_C_CAT_0 --subsurfacedetecten 0
+set --name BP_GenericCameraIR_GEN_VARIABLE_BP_GenericCameraIR_C_CAT_0 --foamen 0
+set --name BP_GenericCameraIR_GEN_VARIABLE_BP_GenericCameraIR_C_CAT_0 --seasurfdetectprob 0.000000
+set --name BP_GenericCameraIR_GEN_VARIABLE_BP_GenericCameraIR_C_CAT_0 --maxsurfpenet 0.000000
+set --name BP_GenericCameraIR_GEN_VARIABLE_BP_GenericCameraIR_C_CAT_0 --widthpx 1920
+set --name BP_GenericCameraIR_GEN_VARIABLE_BP_GenericCameraIR_C_CAT_0 --heightpx 1080
+create --name BP_GenericCameraIR_GEN_VARIABLE_BP_GenericCameraIR_C_CAT_0 --bp CAMIR

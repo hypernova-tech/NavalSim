@@ -95,6 +95,9 @@ protected:
 	UPROPERTY(EditAnywhere)
 		FSGimbalAxisInfo YawAxis;
 
+
+	
+
 	UPROPERTY(EditAnywhere)
 		TArray<AActor*> AttachedActors;
 
@@ -116,9 +119,21 @@ protected:
 
 public:	
 	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+
+	virtual void OnStep(float DeltaTime) override;
+
 	UFUNCTION(BlueprintCallable)
-	void SetCommand_(float roll_angle_deg, float pitch_angle_deg, float yaw_angle_deg);
+		void SetCommand_(float roll_angle_deg, float pitch_angle_deg, float yaw_angle_deg);
+	
 	UFUNCTION(BlueprintCallable)
-	void UpdateAttachedActors();
+		void UpdateAttachedActors();
+	
+	UFUNCTION(BlueprintCallable)
+		void AttachActor_(AActor* p_actor);
+
+	UFUNCTION(BlueprintCallable)
+		void RemoveAttachedActor_(AActor* p_actor);
+
+	UFUNCTION(BlueprintCallable)
+		TArray<AActor*>& GetAttachedActor_();
 };

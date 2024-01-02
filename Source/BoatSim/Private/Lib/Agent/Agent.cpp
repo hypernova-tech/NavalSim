@@ -22,11 +22,6 @@ void AAgent::AddObjectDef(FString name, UObject* p_part)
 	AgentObjectDefContainer.Add(name, p_part);
 }
 
-// Called every frame
-void AAgent::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-}
 
 FAgentObjectDefEntry AAgent::FindDef(FString name)
 {

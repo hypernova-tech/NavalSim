@@ -450,6 +450,12 @@ void ASystemManagerBase::ForceExit()
 bool ASystemManagerBase::DestroyActor(FString name)
 {
 	auto p_actor = FindActor(name);
+	return DestroyActor(p_actor);
+}
+
+bool ASystemManagerBase::DestroyActor(AActor *p_actor)
+{
+
 	if (p_actor) {
 
 		auto p_actor_base = ToActorBase(p_actor);
@@ -469,7 +475,7 @@ bool ASystemManagerBase::DestroyActor(FString name)
 			}
 		}
 
-		
+
 		p_actor->Destroy();
 		RemoveActor(p_actor);
 		return true;
@@ -583,6 +589,7 @@ void ASystemManagerBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	StateMachine(DeltaTime);
+	UpdateLifeTime(DeltaTime);
 }
 
 AMapOrigin* ASystemManagerBase::GetMapOrigin()
@@ -667,7 +674,7 @@ bool ASystemManagerBase::LoadConfig()
 }
 
 
-AActor* ASystemManagerBase::CreateActor(FString model_name, FString boat_name, FVector world_pos, FVector world_rot, FVector scale)
+AActor* ASystemManagerBase::CreateActor(FString model_name, FString boat_name, FVector world_pos, FVector world_rot, FVector scale, FLOAT64 life_time_sec)
 {
 
 	if (CUtil::DoesExist(boat_name, GetWorld())) {
@@ -677,7 +684,7 @@ AActor* ASystemManagerBase::CreateActor(FString model_name, FString boat_name, F
 	auto info = pDataManager->FindBlueprintInfo(model_name);
 	
 	auto path = info.BlueprintAsset.ToSoftObjectPath().GetAssetPathString();
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, path);
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, path);
 	CUtil::DebugLog("blueprint path: " + path);
 
 
@@ -688,11 +695,15 @@ AActor* ASystemManagerBase::CreateActor(FString model_name, FString boat_name, F
 	if (ret != nullptr) {
 		RegisterActor(ret);
 
-	
-		
-		
+		if (life_time_sec > 0) {
+			ULifeTimeEntryObject* p_entry = NewObject< ULifeTimeEntryObject>();
+			p_entry->pActor = ret;
+			p_entry->CurrentLifeTimeSec = life_time_sec;
+			LifeTimeEntries.Add(p_entry);
+		}
 	}
 
+	
 	return ret;
 }
 
@@ -910,6 +921,22 @@ void ASystemManagerBase::StateMachine(float deltatime)
 
 
 	SystemState = next_state;
+}
+
+void ASystemManagerBase::UpdateLifeTime(float deltatime)
+{
+	for (int i = 0; i < LifeTimeEntries.Num(); i++) {
+		auto entry = LifeTimeEntries[i];
+		entry->CurrentLifeTimeSec -= deltatime;
+		if (entry->CurrentLifeTimeSec <=0) {
+			CUtil::DebugLog("Actor is being destroyed " + entry->pActor->GetName());
+			DestroyActor(entry->pActor);
+			LifeTimeEntries.RemoveAt(i);
+			entry->MarkPendingKill();
+			
+			i--;
+		}
+	}
 }
 
 ////
