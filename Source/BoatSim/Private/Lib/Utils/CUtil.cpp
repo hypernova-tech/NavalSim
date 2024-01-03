@@ -923,8 +923,6 @@ AActor* CUtil::SpawnObjectFromBlueprint(AActor *p_template, FString blueprint_pa
     SpawnedActor->SetActorScale3D(scale);
     return SpawnedActor;
 
-    
-  
 }
 
 FLOAT64 CUtil::GetTimeSeconds()
@@ -932,12 +930,7 @@ FLOAT64 CUtil::GetTimeSeconds()
     return FApp::GetCurrentTime();
 }
 
-
-
-
-
-
-FLOAT32 CUtil::GetRandomRange(FLOAT32 min_inclusive, FLOAT32 max_inclusive)
+FLOAT64  CUtil::GetRandomRange(FLOAT64 min_inclusive, FLOAT64 max_inclusive)
 {
     return FMath::RandRange(min_inclusive, max_inclusive);
 }

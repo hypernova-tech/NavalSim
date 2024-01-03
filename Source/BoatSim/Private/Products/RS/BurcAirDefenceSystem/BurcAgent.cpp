@@ -14,16 +14,19 @@ void ABurcAgent::BeginPlay()
 void ABurcAgent::Fire_()
 {
 	auto p_bullet = (ABulletBase*)CloneBullet();
-	p_bullet->SetLinearVelocity(TOUE(p_bullet->GetInitialSpeedMetersPerSec_()) * GetAimDirection());
+	p_bullet->SetLinearVelocity(TOUE(p_bullet->GetSpeed()) * GetAimDirection());
 	StartShake();
 }
 
 void ABurcAgent::FireSerial_(int count, double time_interval)
 {
 	Fire_();
-	RemainingSerialFire += count-1;
 	SerialFireTimeInterval = time_interval;
-	GetWorld()->GetTimerManager().SetTimer(SerialFireTimerHandle, this, &ABurcAgent::SerialFireNext, time_interval);
+	NextFireTime = CUtil::GetTimeSeconds() + SerialFireTimeInterval;
+	
+	IsSerialFiring = true;
+
+	
 }
 
 void ABurcAgent::AimGun_(FVector pos)
@@ -49,7 +52,7 @@ AActor* ABurcAgent::CloneBullet()
 	ABulletBase* p_bullet = (ABulletBase*)(ASystemManagerBase::GetInstance()->CreateActor(BulletAgentName_, bullet_name,
 		pGunTip->GetComponentLocation(),
 		FVector::ZeroVector,
-		FVector::OneVector,3));
+		FVector::OneVector, BulletLifeTimeSec_));
 
 	return p_bullet;
 }
@@ -102,5 +105,20 @@ void ABurcAgent::Tick(float DeltaTime)
 		{
 			ApplyShake();
 		}
+	}
+
+	if (IsSerialFiring) {
+		if (CUtil::GetTimeSeconds() >= NextFireTime) {
+			Fire_();
+			NextFireTime = CUtil::GetTimeSeconds()+ SerialFireTimeInterval;
+			RemainingSerialFire--;
+
+			if (RemainingSerialFire == 0) {
+				IsSerialFiring = false;
+			}
+		}
+		
+		
+		
 	}
 }

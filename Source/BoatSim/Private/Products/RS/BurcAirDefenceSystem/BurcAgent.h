@@ -34,6 +34,10 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 		FString TargetNameName_;
+
+	UPROPERTY(EditAnywhere)
+		double BulletLifeTimeSec_ = 1;;
+
 	UFUNCTION(BlueprintCallable)
 		bool AssignTarget_(FString target_name, double duration);
 
@@ -70,7 +74,8 @@ protected:
 
 	float ShakeTimer = 0.0f;
 	bool bIsShaking = false;
-
+	bool IsSerialFiring = false;
+	FLOAT64 NextFireTime;
 
 	void StartShake();
 	void ApplyShake();

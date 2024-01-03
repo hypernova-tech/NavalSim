@@ -18,7 +18,9 @@ class ABulletBase : public AAgent
 protected:
 
 	UPROPERTY(EditAnywhere)
-		double InitialSpeedMetersPerSec_ = 50;
+		double MaxInitialSpeedMetersPerSec_ = 50;
+	UPROPERTY(EditAnywhere)
+		double MinInitialSpeedMetersPerSec_ = 50;
 	virtual void BeginPlay() override;
 	virtual void OnStep(float DeltaTime) override;
 
@@ -31,6 +33,5 @@ public:
 	void SetLinearVelocity(FVector val);
 	FVector GetLinearVelocity();
 
-	void SetInitialSpeedMetersPerSec_(double val);
-	double GetInitialSpeedMetersPerSec_();
+	double GetSpeed();
 };

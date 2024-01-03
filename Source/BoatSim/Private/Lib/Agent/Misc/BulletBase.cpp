@@ -6,6 +6,7 @@
 
 void ABulletBase::BeginPlay()
 {
+	Super::BeginPlay();
 	UStaticMeshComponent *p_comp = CUtil::FindChildComponent<UStaticMeshComponent>(this);
 	if (p_comp) {
 		pBody = p_comp;
@@ -34,12 +35,8 @@ FVector ABulletBase::GetLinearVelocity()
 	return FVector::ZeroVector;
 }
 
-void ABulletBase::SetInitialSpeedMetersPerSec_(double val)
-{
-	InitialSpeedMetersPerSec_ = val;
-}
 
-double ABulletBase::GetInitialSpeedMetersPerSec_()
+double ABulletBase::GetSpeed()
 {
-	return InitialSpeedMetersPerSec_;
+	return CUtil::GetRandomRange(MinInitialSpeedMetersPerSec_, MaxInitialSpeedMetersPerSec_);
 }

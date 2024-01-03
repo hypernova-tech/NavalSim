@@ -176,7 +176,7 @@ public:
 			p_dest[i] = p_src[len - 1 - i];
 		}
 	}
-	static inline FLOAT32 GetRandomRange(FLOAT32 min_inclusive, FLOAT32 max_inclusive);
+	static FLOAT64 GetRandomRange(FLOAT64 min_inclusive, FLOAT64 max_inclusive);
 	static FVector GetActorRPY(AActor* p_actor);
 	static AActor* GetParentActor(AActor *p_child);
 	static void GetOwnAndParents(AActor* p_child, TArray<AActor*> &ret);
