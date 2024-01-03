@@ -73,7 +73,7 @@ enum EGimbalAxis
 };
 
 
-UCLASS()
+UCLASS(Blueprintable)
 class AGimbalBase : public AActorBase
 {
 	GENERATED_BODY()

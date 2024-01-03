@@ -31,6 +31,23 @@ void ABurcAgent::FireSerial_(int count, double time_interval)
 
 void ABurcAgent::AimGun_(FVector pos)
 {
+	FVector target_dir = pos - pTaretGimbal->GetActorLocation();
+	target_dir.Normalize();
+
+	
+	// Convert to local space
+	FVector local_target_dir = pTaretGimbal->GetTransform().InverseTransformVectorNoScale(target_dir);
+
+	// Calculate yaw and pitch
+	float yaw = FMath::Atan2(local_target_dir.Y, local_target_dir.X);
+	float pitch = FMath::Atan2(local_target_dir.Z, local_target_dir.X);
+
+	// Convert radians to degrees
+	yaw = FMath::RadiansToDegrees(Yaw);
+	pitch = FMath::RadiansToDegrees(Pitch);
+
+	pTaretGimbal->SetCommand_(0, pitch, yaw);
+
 }
 
 bool ABurcAgent::AssignTarget_(FString target_name, double duration)

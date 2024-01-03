@@ -4,7 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "Lib/Agent/Agent.h"
+#include <Lib/Gimbal/GimbalBase.h>
 #include "BurcAgent.generated.h"
+
 
 /**
  * 
@@ -49,6 +51,15 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		UStaticMeshComponent* pGun;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		AGimbalBase* pTaretGimbal;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		AGimbalBase* pEOGimbal;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		AGimbalBase* pGunGimbal;
 
 	FTimerHandle SerialFireTimerHandle;
 
