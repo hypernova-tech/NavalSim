@@ -10,6 +10,7 @@
 #include "EngineUtils.h"
 
 
+
 // Sets default values
 ASystemManagerBase* ASystemManagerBase::pInstance = nullptr;
 
@@ -146,7 +147,17 @@ void ASystemManagerBase::QueryActors(EActorQueryArgs args, TArray<AActor*>& acto
 			}
 
 		}
-	}else if (args == EActorQueryArgs::ActorBasesExceptSensorsAndPaths) {
+	}else if (args == EActorQueryArgs::Gimbals) {
+		for (auto pactor : ActorList) {
+			if (ToGimbal(pactor)) {
+
+				actors.Add(pactor);
+
+			}
+
+		}
+	}
+	else if (args == EActorQueryArgs::ActorBasesExceptSensorsAndPaths) {
 		 for (auto pactor : ActorList) {
 			 if (ToActorBase(pactor)) {
 				 if (!ToSensorBase(pactor) && !ToPath(pactor)) {
@@ -156,7 +167,19 @@ void ASystemManagerBase::QueryActors(EActorQueryArgs args, TArray<AActor*>& acto
 			
 		 }
 
-	 }else if (args == EActorQueryArgs::ActorBasesOnlyPaths) {
+	 }
+	else if (args == EActorQueryArgs::ActorBasesExceptSensorsAndPathsAndGimbals) {
+		for (auto pactor : ActorList) {
+			if (ToActorBase(pactor)) {
+				if (!ToSensorBase(pactor) && !ToGimbal(pactor)) {
+					actors.Add(pactor);
+				}
+			}
+
+		}
+
+	}
+	else if (args == EActorQueryArgs::ActorBasesOnlyPaths) {
 		 for (auto pactor : ActorList) {
 			 if (ToActorBase(pactor)) {
 				 if (ToPath(pactor)) {
@@ -280,7 +303,14 @@ APathController* ASystemManagerBase::ToPath(AActor* p_actor)
 
 	return nullptr;
 }
+AGimbalBase* ASystemManagerBase::ToGimbal(AActor* p_actor)
+{
+	if (p_actor->IsA<AGimbalBase>()) {
+		return (AGimbalBase*)p_actor;
+	}
 
+	return nullptr;
+}
 APlatformBase* ASystemManagerBase::ToPlatform(AActor* p_actor)
 {
 	if (p_actor->IsA<APlatformBase>()) {

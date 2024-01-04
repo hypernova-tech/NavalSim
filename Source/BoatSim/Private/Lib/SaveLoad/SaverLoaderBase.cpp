@@ -138,10 +138,15 @@ void USaverLoaderBase::SavePlatform(ACBoatBase* p_platform, TArray<FString>& cli
 		return;
 	}
 
-	FString line = CreateCommand(pCLI->CreateCommand);
-	AppendOption(line, pCLI->Name, p_platform->GetName());
-	AppendOption(line, pCLI->Bp, p_platform->BlueprintName);
-	AddLine(line);
+	FString line;
+
+	if (p_platform->IsSaveLoadCreateEnabled) {
+		line = CreateCommand(pCLI->CreateCommand);
+		AppendOption(line, pCLI->Name, p_platform->GetName());
+		AppendOption(line, pCLI->Bp, p_platform->BlueprintName);
+		AddLine(line);
+	}
+	
 
 	line = CreateCommand(pCLI->SetCommand);
 
@@ -176,12 +181,15 @@ void USaverLoaderBase::SavePlatform(ACBoatBase* p_platform, TArray<FString>& cli
 
 void USaverLoaderBase::SaveSensor(ASensorBase* p_sensor, TArray<FString>& cli)
 {
+
 	p_sensor->Save(this);
 
+#if false
 	FString line = CreateCommand(pCLI->CreateCommand);
 	AppendOption(line, pCLI->Name, p_sensor->GetName());
 	AppendOption(line, pCLI->Bp, p_sensor->GetBlueprintName());
 	AddLine(line);
+#endif
 }
 
 
@@ -205,13 +213,26 @@ bool USaverLoaderBase::Save(ISystemAPI* p_api, FString file_name)
 	}
 
 	TArray<AActor*> non_sensors;
-	p_api->QueryActors(EActorQueryArgs::ActorBasesExceptSensorsAndPaths, non_sensors);
+	p_api->QueryActors(EActorQueryArgs::ActorBasesExceptSensorsAndPathsAndGimbals, non_sensors);
 
 	for (auto p_actor : non_sensors) {
 		AActorBase* p_actor_base = (AActorBase*)p_actor;
 
 		if (p_actor_base && p_actor_base->GetIsSaveEnabled()) {
 			SaveActor((AActorBase*)p_actor, CLIList);
+			NewLine();
+		}
+
+	}
+
+	TArray<AActor*> gimbals;
+	p_api->QueryActors(EActorQueryArgs::Gimbals, gimbals);
+
+	for (auto p_gimbal : gimbals) {
+		AActorBase* p_actor_base = (AActorBase*)p_gimbal;
+
+		if (p_actor_base && p_actor_base->GetIsSaveEnabled()) {
+			SaveActor(p_actor_base, CLIList);
 			NewLine();
 		}
 

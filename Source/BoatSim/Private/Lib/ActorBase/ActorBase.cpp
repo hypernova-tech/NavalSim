@@ -150,11 +150,13 @@ FString AActorBase::GetBlueprintName()
 void AActorBase::Save(ISaveLoader* p_save_loader)
 {
 	FString line;
+	if (IsSaveLoadCreateEnabled) {
+		line = p_save_loader->CreateCommand(CCLICommandManager::CreateCommand);
+		p_save_loader->AppendOption(line, CCLICommandManager::Name, GetName());
+		p_save_loader->AppendOption(line, CCLICommandManager::Bp, GetBlueprintName());
+		p_save_loader->AddLine(line);
+	}
 
-	line = p_save_loader->CreateCommand(CCLICommandManager::CreateCommand);
-	p_save_loader->AppendOption(line, CCLICommandManager::Name, GetName());
-	p_save_loader->AppendOption(line, CCLICommandManager::Bp, GetBlueprintName());
-	p_save_loader->AddLine(line);
 
 
 	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());

@@ -1158,3 +1158,11 @@ FString CUtil::GetFilePathProject(FString file_path)
     return proj_path;
 }
 
+bool CUtil::IsObjectCreatedAtRuntime(UObject* Object)
+{
+    if (Object)
+    {
+        return Object->HasAnyFlags(RF_Transient);
+    }
+    return false;
+}

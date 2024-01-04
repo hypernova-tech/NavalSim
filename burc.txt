@@ -17,56 +17,29 @@ set --name env --envsoundfx 1
 set --name env --wind 3.000000
 set --name env --winddir 0.000000
 
-create --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_0 --bp GIMBAL2DOF
 set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_0 --instance -1
 set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_0 --suppressed 0
 set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_0 --standalone 0
 set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_0 --position "-4.900000 0.000000 5.200000"
 set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_0 --rotation "-0.000000 -0.000000 0.000000"
 set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_0 --scale "1.000000 1.000000 1.000000"
+set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_0 --parent b1
 
-create --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_1 --bp GIMBAL2DOF
 set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_1 --instance -1
 set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_1 --suppressed 0
 set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_1 --standalone 0
 set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_1 --position "-2.100000 0.100000 5.800000"
 set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_1 --rotation "-0.000000 -0.000000 0.000000"
 set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_1 --scale "1.000000 1.000000 1.000000"
+set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_1 --parent b1
 
-create --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_2 --bp GIMBAL2DOF
 set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_2 --instance -1
 set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_2 --suppressed 0
 set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_2 --standalone 0
 set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_2 --position "-3.874266 0.005027 4.890010"
 set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_2 --rotation "-0.000000 -0.000000 0.000000"
 set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_2 --scale "1.000000 1.000000 1.000000"
-
-create --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_3 --bp GIMBAL2DOF
-set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_3 --instance -1
-set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_3 --suppressed 0
-set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_3 --standalone 0
-set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_3 --position "-4.900000 0.000000 5.200000"
-set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_3 --rotation "-0.000000 -0.000000 0.000000"
-set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_3 --scale "1.000000 1.000000 1.000000"
-set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_3 --parent b1
-
-create --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_4 --bp GIMBAL2DOF
-set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_4 --instance -1
-set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_4 --suppressed 0
-set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_4 --standalone 0
-set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_4 --position "-2.100000 0.100000 5.800000"
-set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_4 --rotation "-0.000000 -0.000000 0.000000"
-set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_4 --scale "1.000000 1.000000 1.000000"
-set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_4 --parent b1
-
-create --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_5 --bp GIMBAL2DOF
-set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_5 --instance -1
-set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_5 --suppressed 0
-set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_5 --standalone 0
-set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_5 --position "-3.874266 0.005027 4.890010"
-set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_5 --rotation "-0.000000 -0.000000 0.000000"
-set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_5 --scale "1.000000 1.000000 1.000000"
-set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_5 --parent b1
+set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_2 --parent b1
 
 create --name b1 --bp BURC
 set --name b1 --instance -1
@@ -76,15 +49,6 @@ set --name b1 --position "0.000000 0.000000 0.000000"
 set --name b1 --rotation "-0.000000 -0.000000 0.000000"
 set --name b1 --scale "1.000000 1.000000 1.000000"
 
-create --name su25 --bp SU25
-set --name su25 --instance -1
-set --name su25 --suppressed 0
-set --name su25 --standalone 0
-set --name su25 --position "324.600006 284.200012 4.600000"
-set --name su25 --rotation "-0.000000 -0.000000 0.000000"
-set --name su25 --scale "1.000000 1.000000 1.000000"
-
-create --name BP_GenericCameraIR_GEN_VARIABLE_BP_GenericCameraIR_C_CAT_0 --bp CAMIR
 set --name BP_GenericCameraIR_GEN_VARIABLE_BP_GenericCameraIR_C_CAT_0 --instance -1
 set --name BP_GenericCameraIR_GEN_VARIABLE_BP_GenericCameraIR_C_CAT_0 --suppressed 0
 set --name BP_GenericCameraIR_GEN_VARIABLE_BP_GenericCameraIR_C_CAT_0 --standalone 0
@@ -108,26 +72,3 @@ set --name BP_GenericCameraIR_GEN_VARIABLE_BP_GenericCameraIR_C_CAT_0 --seasurfd
 set --name BP_GenericCameraIR_GEN_VARIABLE_BP_GenericCameraIR_C_CAT_0 --maxsurfpenet 0.000000
 set --name BP_GenericCameraIR_GEN_VARIABLE_BP_GenericCameraIR_C_CAT_0 --widthpx 1920
 set --name BP_GenericCameraIR_GEN_VARIABLE_BP_GenericCameraIR_C_CAT_0 --heightpx 1080
-create --name BP_GenericCameraIR_GEN_VARIABLE_BP_GenericCameraIR_C_CAT_0 --bp CAMIR
-
-create --name su25path --bp PATH
-set --name su25path --instance -1
-set --name su25path --suppressed 0
-set --name su25path --standalone 0
-set --name su25path --position "0.000000 0.000000 0.000000"
-set --name su25path --rotation "-0.000000 -0.000000 0.000000"
-set --name su25path --scale "1.000000 1.000000 1.000000"
-set --name su25path --wp 0 --wppos "5000.000000 -5000.000000 500.000000"
-set --name su25pathwp0 --parent su25path
-set --name su25path --wp 1 --wppos "0.000000 0.000000 500.000000"
-set --name su25pathwp1 --parent su25path
-set --name su25path --wp 2 --wppos "-5000.000000 5000.000000 0.000000"
-set --name su25pathwp2 --parent su25path
-set --name su25path --speed 500.000000
-set --name su25path --closed 1
-set --name su25path --attach su25
-set --name su25path --color "255 0 0 255"
-set --name su25path --segment 50
-set --name su25path --straight 0
-set --name su25path --turnrate 100.000000
-set --name su25path --bake 

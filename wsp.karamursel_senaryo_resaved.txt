@@ -1,7 +1,7 @@
 create --name sidamir --bp MIR
 set --controller sidamir
 set --name sidamir --position "-30.713003 74.190262 0.000000"
-set --name sidamir --rotation "-0.000000 -0.000000 68.399888"
+set --name sidamir --rotation "-0.000000 -0.000000 68.399887"
 set --name sidamir --scale "1.000000 1.000000 1.000000"
 
 create --name env --bp 
@@ -33,24 +33,6 @@ set --name hostif --scale "1.000000 1.000000 1.000000"
 set --name hostif --ipaddr1 15.0.70.85
 set --name hostif --localport1 22333
 set --name hostif --remoteport 54001
-
-create --name gimbal1 --bp GIMBAL2DOF
-set --name gimbal1 --instance -1
-set --name gimbal1 --suppressed 0
-set --name gimbal1 --standalone 0
-set --name gimbal1 --position "-27.317008 82.767531 2.519886"
-set --name gimbal1 --rotation "-0.000000 -45.000000 68.399888"
-set --name gimbal1 --scale "1.000000 1.000000 1.000000"
-set --name gimbal1 --parent sidamir
-
-create --name gimbal2 --bp GIMBAL2DOF
-set --name gimbal2 --instance -1
-set --name gimbal2 --suppressed 0
-set --name gimbal2 --standalone 0
-set --name gimbal2 --position "-28.748170 79.152852 3.237998"
-set --name gimbal2 --rotation "-0.000000 -45.000000 68.399888"
-set --name gimbal2 --scale "1.000000 1.000000 1.000000"
-set --name gimbal2 --parent sidamir
 
 create --name b1 --bp BUOY
 set --name b1 --instance -1
@@ -174,12 +156,66 @@ set --name tanker3 --position "500.000000 2000.000000 1.000000"
 set --name tanker3 --rotation "-0.000000 -0.000000 0.000000"
 set --name tanker3 --scale "1.000000 1.000000 1.000000"
 
+create --name sidamirpath --bp PATH
+set --name sidamirpath --instance -1
+set --name sidamirpath --suppressed 0
+set --name sidamirpath --standalone 0
+set --name sidamirpath --position "0.000000 0.000000 0.000000"
+set --name sidamirpath --rotation "-0.000000 -0.000000 0.000000"
+set --name sidamirpath --scale "1.000000 1.000000 1.000000"
+set --name sidamirpath --wp 0 --wppos "0.000000 0.000000 0.000000"
+set --name sidamirpath --wp 1 --wppos "50.000000 0.000000 0.000000"
+set --name sidamirpath --wp 2 --wppos "50.000000 50.000000 10.000000"
+set --name sidamirpath --wp 3 --wppos "0.000000 50.000000 0.000000"
+set --name sidamirpath --speed 5.000000
+set --name sidamirpath --closed 1
+set --name sidamirpath --attach 
+set --name sidamirpath --color "0 0 255 255"
+set --name sidamirpath --segment 50
+set --name sidamirpath --straight 0
+set --name sidamirpath --turnrate 90.000000
+set --name sidamirpath --bake 
+
+create --name tcg --bp TCGANADOLU
+set --name tcg --instance -1
+set --name tcg --suppressed 0
+set --name tcg --standalone 0
+set --name tcg --position "1082.788330 2004.103027 1.000000"
+set --name tcg --rotation "-0.000000 -0.000000 0.000000"
+set --name tcg --scale "1.000000 1.000000 1.000000"
+
+create --name bridge_osman_gazi --bp BRIDGEOSMANGAZI
+set --name bridge_osman_gazi --instance -1
+set --name bridge_osman_gazi --suppressed 0
+set --name bridge_osman_gazi --standalone 0
+set --name bridge_osman_gazi --position "5865.689453 -3407.993408 -5.671072"
+set --name bridge_osman_gazi --rotation "-0.000000 -0.000000 9.106705"
+set --name bridge_osman_gazi --scale "1.000000 1.000000 1.000000"
+
+create --name gimbal1 --bp GIMBAL2DOF
+set --name gimbal1 --instance -1
+set --name gimbal1 --suppressed 0
+set --name gimbal1 --standalone 0
+set --name gimbal1 --position "-27.317007 82.767532 2.519886"
+set --name gimbal1 --rotation "-0.000000 -45.000000 68.399887"
+set --name gimbal1 --scale "1.000000 1.000000 1.000000"
+set --name gimbal1 --parent sidamir
+
+create --name gimbal2 --bp GIMBAL2DOF
+set --name gimbal2 --instance -1
+set --name gimbal2 --suppressed 0
+set --name gimbal2 --standalone 0
+set --name gimbal2 --position "-28.748171 79.152855 3.237998"
+set --name gimbal2 --rotation "-0.000000 -45.000000 68.399887"
+set --name gimbal2 --scale "1.000000 1.000000 1.000000"
+set --name gimbal2 --parent sidamir
+
 create --name viscam1 --bp CAMVIS
 set --name viscam1 --instance -1
 set --name viscam1 --suppressed 1
 set --name viscam1 --standalone 0
-set --name viscam1 --position "-27.247966 82.941923 2.904719"
-set --name viscam1 --rotation "0.000000 -45.000000 68.399888"
+set --name viscam1 --position "-27.247967 82.941925 2.904719"
+set --name viscam1 --rotation "-0.000000 -45.000000 68.399887"
 set --name viscam1 --scale "1.000000 1.000000 1.000000"
 set --name viscam1 --parent gimbal1
 set --name viscam1 --slotindex 0
@@ -199,13 +235,12 @@ set --name viscam1 --maxsurfpenet 0.000000
 set --name viscam1 --widthpx 1920
 set --name viscam1 --heightpx 1080
 
-
 create --name viscam2 --bp CAMVIS
 set --name viscam2 --instance -1
 set --name viscam2 --suppressed 0
 set --name viscam2 --standalone 0
-set --name viscam2 --position "-29.050716 79.223536 3.483420"
-set --name viscam2 --rotation "-0.000005 45.000000 68.399888"
+set --name viscam2 --position "-29.050716 79.223534 3.483420"
+set --name viscam2 --rotation "-0.000005 45.000000 68.399887"
 set --name viscam2 --scale "0.300000 0.300000 0.300000"
 set --name viscam2 --parent gimbal2
 set --name viscam2 --slotindex 1
@@ -225,13 +260,12 @@ set --name viscam2 --maxsurfpenet 0.000000
 set --name viscam2 --widthpx 1920
 set --name viscam2 --heightpx 1080
 
-
 create --name fls1 --bp FLSFARSOUNDER
 set --name fls1 --instance -1
 set --name fls1 --suppressed 1
 set --name fls1 --standalone 0
-set --name fls1 --position "-25.517146 87.313478 0.622578"
-set --name fls1 --rotation "0.000000 -21.571529 68.399888"
+set --name fls1 --position "-25.517145 87.313477 0.622578"
+set --name fls1 --rotation "-0.000000 -21.571529 68.399887"
 set --name fls1 --scale "0.300000 0.300000 0.300000"
 set --name fls1 --parent sidamir
 set --name fls1 --slotindex 9
@@ -249,13 +283,12 @@ set --name fls1 --foamen 1
 set --name fls1 --seasurfdetectprob 0.001000
 set --name fls1 --maxsurfpenet 0.000000
 
-
 create --name haloradar1 --bp RADARHALO24
 set --name haloradar1 --instance -1
 set --name haloradar1 --suppressed 0
 set --name haloradar1 --standalone 0
-set --name haloradar1 --position "-28.345192 80.170645 4.208139"
-set --name haloradar1 --rotation "0.000000 -0.000000 68.399888"
+set --name haloradar1 --position "-28.345192 80.170647 4.208139"
+set --name haloradar1 --rotation "0.000000 -0.000000 68.399887"
 set --name haloradar1 --scale "0.300000 0.300000 0.300000"
 set --name haloradar1 --parent sidamir
 set --name haloradar1 --ipaddr1 127.0.0.1
@@ -286,13 +319,12 @@ set --name haloradar1 --radrainclutlevel 41
 set --name haloradar1 --radmaxguardzonecount 2
 set --name haloradar1 --radmaxsectorblankingzonecount 4
 
-
 create --name m1lidar1 --bp LIDARM1
 set --name m1lidar1 --instance -1
 set --name m1lidar1 --suppressed 0
 set --name m1lidar1 --standalone 0
 set --name m1lidar1 --position "-25.719936 87.287430 2.597729"
-set --name m1lidar1 --rotation "-0.000000 10.000000 68.399888"
+set --name m1lidar1 --rotation "-0.000000 10.000000 68.399887"
 set --name m1lidar1 --scale "0.300000 0.300000 0.300000"
 set --name m1lidar1 --parent sidamir
 set --name m1lidar1 --ipaddr1 192.168.1.102
@@ -316,13 +348,12 @@ set --name m1lidar1 --foamen 1
 set --name m1lidar1 --seasurfdetectprob 0.050000
 set --name m1lidar1 --maxsurfpenet 1.000000
 
-
 create --name viscam3 --bp CAMVIS
 set --name viscam3 --instance -1
 set --name viscam3 --suppressed 1
 set --name viscam3 --standalone 0
-set --name viscam3 --position "-32.230529 75.641010 1.964447"
-set --name viscam3 --rotation "0.000000 -0.000000 136.320554"
+set --name viscam3 --position "-32.230530 75.641006 1.964447"
+set --name viscam3 --rotation "0.000000 -0.000000 136.320557"
 set --name viscam3 --scale "0.300000 0.300000 0.300000"
 set --name viscam3 --parent sidamir
 set --name viscam3 --slotindex 2
@@ -342,13 +373,12 @@ set --name viscam3 --maxsurfpenet 0.000000
 set --name viscam3 --widthpx 1920
 set --name viscam3 --heightpx 1080
 
-
 create --name ircam1 --bp CAMIR
 set --name ircam1 --instance -1
 set --name ircam1 --suppressed 1
 set --name ircam1 --standalone 0
-set --name ircam1 --position "-30.798412 73.974567 1.444506"
-set --name ircam1 --rotation "-0.000000 0.000000 -111.600108"
+set --name ircam1 --position "-30.798412 73.974564 1.444506"
+set --name ircam1 --rotation "-0.000000 0.000000 -111.600105"
 set --name ircam1 --scale "0.300000 0.300000 0.300000"
 set --name ircam1 --parent sidamir
 set --name ircam1 --slotindex 3
@@ -367,7 +397,6 @@ set --name ircam1 --seasurfdetectprob 0.000000
 set --name ircam1 --maxsurfpenet 0.000000
 set --name ircam1 --widthpx 1920
 set --name ircam1 --heightpx 1080
-
 
 create --name sidamirpath --bp PATH
 set --name sidamirpath --instance -1

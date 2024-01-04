@@ -17,6 +17,8 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	bool AutoPosseses = false;
+
+
 public:
 	virtual void BeginPlay() override;
 };

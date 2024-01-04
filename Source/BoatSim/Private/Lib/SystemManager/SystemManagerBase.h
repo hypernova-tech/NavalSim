@@ -19,6 +19,7 @@
 #include <Lib/Environment/EnvManager.h>
 #include <Lib/Terrain/TerrainManager.h>
 #include <Lib/Agent/Agent.h>
+#include <Lib/Gimbal/GimbalBase.h>
 #include "SystemManagerBase.generated.h"
 
 
@@ -209,6 +210,7 @@ public:
 	virtual AActorBase* ToActorBase(AActor* p_actor);
 	virtual ASensorBase* ToSensorBase(AActor* p_actor);
 	APathController* ToPath(AActor* p_actor);
+	AGimbalBase* ToGimbal(AActor* p_actor);
 	APlatformBase* ToPlatform(AActor* p_actor);
 	AWaypointActor* ToWaypoint(AActor* p_actor);
 	ATerrainManager* ToTerrain(AActor* p_actor);

@@ -42,6 +42,9 @@ public:
 		bool IsSaveEnabled = true;
 
 	UPROPERTY(EditAnywhere)
+		bool IsSaveLoadCreateEnabled = true;
+
+	UPROPERTY(EditAnywhere)
 		FString BlueprintName = "";
 
 	UPROPERTY(BlueprintReadWrite)
