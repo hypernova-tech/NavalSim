@@ -38,7 +38,7 @@ protected:
 		FString TargetNameName_;
 
 	UPROPERTY(EditAnywhere)
-		double BulletLifeTimeSec_ = 1;;
+		double BulletLifeTimeSec_ = 1;
 
 	UFUNCTION(BlueprintCallable)
 		bool AssignTarget_(FString target_name, double duration);
@@ -64,7 +64,7 @@ protected:
 	FTimerHandle SerialFireTimerHandle;
 
 	AActor* pTarget;
-
+	
 
 	AActor* CloneBullet();
 	void SerialFireNext();

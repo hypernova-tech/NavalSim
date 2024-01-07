@@ -18,7 +18,7 @@ using System.Reflection;
 using Microsoft.VisualBasic.Logging;
 using Newtonsoft.Json.Linq;
 using TrackBar = System.Windows.Forms.TrackBar;
-
+using System.Windows.Forms;
 namespace ConsoleGUI
 {
     public partial class MainForm : Form, IConnection
@@ -41,6 +41,8 @@ namespace ConsoleGUI
 
         CJsonParser mJsonParser = new CJsonParser();
         string Selected = "";
+        string ObjectPath = "";
+
         List<string> MessageList = new List<string>();
         private readonly object _lockObject = new object();
         CTreeViewManager TreeViewManager = new CTreeViewManager();
@@ -59,6 +61,8 @@ namespace ConsoleGUI
             PopulateDataGridView();
             SystemAPIImplementor.SetConnection(this);
             LBTimeValue.Text = SystemAPIImplementor.GetTimeOfDayHour(TBTimeOfDay.Value).ToString();
+            ObjectEditor.AllowDrop = true;
+
         }
         private void PopulateDataGridView()
         {
@@ -195,6 +199,12 @@ namespace ConsoleGUI
 
 
             }
+            else if (item.Contains("<allsent>"))
+            {
+
+
+            }
+
 
 
         }
@@ -1017,7 +1027,7 @@ namespace ConsoleGUI
 
         }
 
-        void CreateFromSelected(string parent = "")
+        void CreateFromSelected(string parent = "", string full_path = "")
         {
             if (HasSelected())
             {
@@ -1054,9 +1064,6 @@ namespace ConsoleGUI
                         // The user clicked Cancel or closed the dialog.
                         MessageBox.Show("Operation canceled.");
                     }
-
-
-
 
                 }
             }
@@ -1146,7 +1153,20 @@ namespace ConsoleGUI
         {
 
         }
+        private TreeNode FindTopNode(TreeNode node)
+        {
+            // Start with the clicked node
+            TreeNode currentNode = node;
 
+            // Keep going up the hierarchy until a node with no parent is found
+            while (currentNode.Parent != null)
+            {
+                currentNode = currentNode.Parent;
+            }
+
+            // Return the top-most node
+            return currentNode;
+        }
         private void ObjectEditor_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
             if (e.Node == null)
@@ -1155,8 +1175,8 @@ namespace ConsoleGUI
             }
 
             string selected = e.Node.Text;
-
-            SelectObject(selected);
+            string actor = FindTopNode(e.Node).Text;
+            SelectObject(selected, actor);
         }
 
         void ClearActorGrid()
@@ -1173,11 +1193,12 @@ namespace ConsoleGUI
 
         }
 
-        public void SelectObject(string selected)
+        public void SelectObject(string selected, string objpath)
         {
             ClearActorGrid();
             Selected = selected;
-            string command = string.Format("set --selected {0}", selected);
+            ObjectPath = objpath;
+            string command = string.Format("set --selected {0} --objpath {1}", selected, ObjectPath);
             SendData(command);
             RequestTransform(selected, false);
             RequestAll();
@@ -1379,7 +1400,49 @@ namespace ConsoleGUI
 
             }
         }
+        private string GetFullPathToTop(TreeNode selectedNode)
+        {
+            if (selectedNode == null)
+                return "";
 
+            if (selectedNode.Text == "World")
+            {
+                return "";
+
+            }
+            StringBuilder fullPath;
+
+            fullPath = new StringBuilder(selectedNode.Name);
+
+
+
+
+            TreeNode currentNode = selectedNode.Parent;
+
+            while (currentNode != null)
+            {
+                if (currentNode.Parent != null)
+                {
+                    if (currentNode.Text == "World")
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        fullPath.Insert(0, $"{currentNode.Name}/");
+                    }
+                    currentNode = currentNode.Parent;
+                }
+                else
+                {
+                    break;
+                }
+
+
+            }
+
+            return fullPath.ToString();
+        }
         // Event handler for sub-menu item clicks
         private void MenuItem_Click(object sender, EventArgs e)
         {
@@ -1391,11 +1454,13 @@ namespace ConsoleGUI
                 {
                     Selected = clickedItem.Text;
                     string parent = "";
+                    string full_path = "";
                     if (ObjectEditor.SelectedNode != null)
                     {
+                        full_path = GetFullPathToTop(ObjectEditor.SelectedNode);
                         parent = ObjectEditor.SelectedNode.Text;
                     }
-                    CreateFromSelected(parent);
+                    CreateFromSelected(parent, full_path);
                 }
             }
         }
@@ -1924,6 +1989,54 @@ namespace ConsoleGUI
         private void ModifyableDataGrid_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
+        }
+
+        TreeNode StartNode;
+        TreeNode DestinationNode;
+        private void ObjectEditor_DragDrop(object sender, DragEventArgs e)
+        {
+            System.Windows.Forms.TreeView treeView = (System.Windows.Forms.TreeView)sender;
+            Point pt = treeView.PointToClient(new Point(e.X, e.Y));
+            DestinationNode = treeView.GetNodeAt(pt);
+
+            if (StartNode != null && DestinationNode != null)
+            {
+                string dest_actor = DestinationNode.Text;
+
+
+                if (DestinationNode.Parent == null){
+                    dest_actor = "null";
+                }
+                SystemAPIImplementor.SetParent(StartNode.Text, dest_actor);
+            }
+
+            StartNode = null;
+            DestinationNode = null;
+        }
+
+        private void ObjectEditor_DragEnter(object sender, DragEventArgs e)
+        {
+            System.Windows.Forms.TreeView treeView = (System.Windows.Forms.TreeView)sender;
+            Point pt = treeView.PointToClient(new Point(e.X, e.Y));
+            StartNode = treeView.GetNodeAt(pt);
+        }
+
+        private void ObjectEditor_DragLeave(object sender, EventArgs e)
+        {
+     
+       
+        }
+
+        private void ObjectEditor_DragOver(object sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.Move;
+      
+        }
+
+        private void ObjectEditor_ItemDrag(object sender, ItemDragEventArgs e)
+        {
+            System.Windows.Forms.TreeView treeView = (System.Windows.Forms.TreeView)sender;
+            treeView.DoDragDrop(e.Item, DragDropEffects.Move);
         }
     }
 }

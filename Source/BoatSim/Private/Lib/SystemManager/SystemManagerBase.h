@@ -203,6 +203,7 @@ public:
 	virtual TArray<AActor*> GetAllActorInWorld();
 	virtual void QueryActors(EActorQueryArgs args, TArray<AActor*>& actors);
 	virtual AActor* FindActor(FString actor_name);
+	virtual USceneComponent* FindComponent(FString path);
 	virtual UObject* FindObject(FString obj_name);
 	virtual bool DestroyActor(FString name);
 	virtual bool DestroyActor(AActor* p_actor);

@@ -110,7 +110,8 @@ void AUIControllerBase::DisplayClickedCoord(const FHitResult& hit_res)
 	auto p_map_origin = ASystemManagerBase::GetInstance()->GetMapOrigin();
 	FVector hit_loc = hit_res.Location;
 	auto llh = p_map_origin->ConvertUEXYZToLLH(hit_loc);
-	FString hit_coord = "LatLonH: " + CUtil::VectorToString(llh) + " UEXYZ: +" + CUtil::VectorToString(hit_loc);
+	auto world_meter = TOW(hit_loc);
+	FString hit_coord = "LatLonH: " + CUtil::VectorToString(llh) + " UEXYZ: +" + CUtil::VectorToString(world_meter,3);
 	p_uicontroller->SetCoordTextValue(hit_coord);
 }
 

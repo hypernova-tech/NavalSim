@@ -68,7 +68,7 @@ void UConsoleBase::SendActorTransform(AActor* p_actor)
 
 }
 
-void UConsoleBase::Command(FString command)
+void UConsoleBase::Command(FString command, int& delay_tick)
 {
 
   
@@ -82,7 +82,7 @@ void UConsoleBase::Command(FString command)
 
     if (ret) {
         FString command_process_error_message = "";
-        auto command_ret = ProcessCommands(outcommand, outopt, command_process_error_message);
+        auto command_ret = ProcessCommands(outcommand, outopt, command_process_error_message, delay_tick);
 
         if (pUDPConnection != nullptr) {
             if (command_ret) {
@@ -110,7 +110,8 @@ void UConsoleBase::OnReceivedConnectionData(void* connection, INT8U* p_data, INT
 
             // Update the actor's location
             auto cmd = CUtil::CharToFString((char*)p_data);
-            Command(cmd);
+            int tick_delay = 0;
+            Command(cmd, tick_delay);
 
         }, TStatId(), nullptr, ENamedThreads::GameThread);
 
@@ -539,9 +540,14 @@ void UConsoleBase::SendSensors()
 }
 void UConsoleBase::SendActors()
 {
+    
+#if true
     auto all_actors = ASystemManagerBase::GetInstance()->GetAllActorInWorld();
     for (auto p_act : all_actors)
     {
+       if (p_act->IsA<AActorBase>()) {
+            continue;
+       }
        auto full_name =  p_act->GetFullName();
        TArray<FString> hier;
        CUtil::GetActorHierarchy(p_act, hier);
@@ -556,6 +562,9 @@ void UConsoleBase::SendActors()
 
         pSystemAPI->SendConsoleResponse("<actor>" + path);
     }
+#endif
+
+    SendActorBases();
 }
 
 void UConsoleBase::SendActorBases()
@@ -563,12 +572,19 @@ void UConsoleBase::SendActorBases()
     TArray<AActor*> all_actors;
     ASystemManagerBase::GetInstance()->QueryActors(EActorQueryArgs::ActorBases, all_actors);
     ASystemManagerBase::GetInstance()->QueryActors(EActorQueryArgs::Platforms, all_actors);
+
+    FString path = "";
+
+#if true
     for (auto p_act : all_actors)
     {
         auto full_name = p_act->GetFullName();
         TArray<FString> hier;
+        TArray<FString> hiercomp;
         CUtil::GetActorHierarchy(p_act, hier);
-        FString path = "";
+        //CUtil::GetComponentHierarchy(p_act->GetRootComponent(), hiercomp);
+        //CUtil::GetActorAndComponentHierarchy(p_act, hierall);
+        path = "";
         for (INT32S i = hier.Num() - 1; i >= 0; i--) {
             path += hier[i];
             if (i != 0) {
@@ -576,10 +592,71 @@ void UConsoleBase::SendActorBases()
             }
 
         }
-
         pSystemAPI->SendConsoleResponse("<actor>" + path);
-    }
 
+    }
+#endif
+
+
+#if false
+    for (auto p_act : all_actors)
+    {
+        if (CUtil::GetParentActor(p_act) != nullptr) {
+            continue; // its info will we sent owners paths
+        }
+        TArray<FString> actor_comp_paths = CUtil::GetAllComponentPaths(p_act);
+
+        for (auto comp_path : actor_comp_paths) {
+            pSystemAPI->SendConsoleResponse("<actor>" + comp_path);
+        }
+
+#endif
+#if false
+        TArray<USceneComponent*> static_mesh_componnets;
+        p_act->GetComponents<USceneComponent>(static_mesh_componnets);
+        USceneComponent* p_root = p_act->GetRootComponent();
+        
+        if (!static_mesh_componnets.Contains(p_root)) {
+            static_mesh_componnets.Insert(p_root, 0);
+        }
+
+        for (auto p_comp : static_mesh_componnets) {
+            TArray<UActorComponent*> ret = CUtil::GetComponentHierarchyToTop(p_comp);
+
+            path = p_act->GetName()+"/";
+            
+            for (INT32S i = ret.Num() - 1; i >= 0; i--) {
+   
+                path += ret[i]->GetName();
+                if (i != 0) {
+                    path += "/";
+                }
+                if (CUtil::IsDefaultSceneComponent((USceneComponent*)ret[i])) {
+                    if (ret[i]->GetOwner() != p_act) {
+                        path += ret[i]->GetOwner()->GetName();
+
+                        if (i != 0) {
+                            path += "/";
+                        }
+                    }
+                }
+
+
+            }
+            
+
+
+            
+            
+
+        }
+    
+  
+
+
+       
+    }
+#endif
     TArray<AActor*> paths;
     ASystemManagerBase::GetInstance()->QueryActors(EActorQueryArgs::ActorBasesOnlyPaths, paths);
 
@@ -588,6 +665,8 @@ void UConsoleBase::SendActorBases()
     {
         pSystemAPI->SendConsoleResponse("<path>" + p_act->GetName());
     }
+
+    pSystemAPI->SendConsoleResponse("<allsent>");
 }
 
 void UConsoleBase::SendFunctions(AActor* p_actor, FString category)
@@ -687,7 +766,7 @@ bool UConsoleBase::ProcessSimCommand(TMap<FString, FString>& options, FString& e
     return false;
 }
 
-bool UConsoleBase::ProcessCreateCommand(TMap<FString, FString>& options, FString& error_message)
+bool UConsoleBase::ProcessCreateCommand(TMap<FString, FString>& options, FString& error_message, INT32S &delay_tick)
 {
     error_message = "";
     FString name;
@@ -704,12 +783,18 @@ bool UConsoleBase::ProcessCreateCommand(TMap<FString, FString>& options, FString
 
     auto bp = CommandManager.GetBP();
     if (bp != "") {
+        FString parent="", fullpath="";
 
+        CommandManager.GetValue(CCLICommandManager::Parent, parent);
+        CommandManager.GetValue(CCLICommandManager::FullPath, fullpath);
+        CommandManager.GetValue(CCLICommandManager::Tick, delay_tick);
         auto actor_created = ASystemManagerBase::GetInstance()->CreateActor(bp, name, FVector::ZeroVector, FVector::ZeroVector, FVector::OneVector);
         if (actor_created == nullptr) {
             error_message = "object cannot created";
             return false;
         }
+        SetParent(actor_created, parent, fullpath);
+
         SendActorBases();
 
     }
@@ -747,6 +832,27 @@ bool UConsoleBase::ProcessDestroyCommand(TMap<FString, FString>& options, FStrin
     return false;
 }
 
+bool UConsoleBase::SetParent(AActor *p_actor, FString parent, FString full_path)
+{
+    if (full_path != "" && parent != full_path) {
+        auto p_comp = ASystemManagerBase::GetInstance()->FindComponent(full_path);
+        bool ret_parenting = CUtil::SetParentComponent(p_actor, p_comp);
+        return true;
+    }
+    else {
+        if (parent == "null") {
+            
+            p_actor->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+        }
+        else {
+
+            AActor* p_parent = ASystemManagerBase::GetInstance()->FindActor(parent);
+            CUtil::SetParent(p_actor, p_parent);
+        }
+        return true;
+    }
+}
+
 bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& error_message)
 {
     error_message = "";
@@ -756,6 +862,7 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
     FString sret;
     FString name;
     AActor* p_actor;
+    USceneComponent* p_scene_comp;
     FVector vec;
     bool is_enabled;
     bool is_active;
@@ -970,8 +1077,14 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
         return one_success;
     }
     p_actor = ASystemManagerBase::GetInstance()->FindActor(name);
-
+    
     if (p_actor == nullptr) {
+        p_scene_comp = ASystemManagerBase::GetInstance()->FindComponent(name);
+        if (p_scene_comp != nullptr) {
+            p_actor = p_scene_comp->GetOwner();
+        }
+    }
+    if (p_actor == nullptr ) {
         error_message += (("cannot find actor "));
         return false;
     }
@@ -1154,9 +1267,15 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
     FString parent;
     ret = CommandManager.GetParent(parent);
     if (ret) {
-        AActor* p_parent = ASystemManagerBase::GetInstance()->FindActor(parent);
-        CUtil::SetParent(p_actor, p_parent);
-        SendActorBases();
+        FString full_path = "";
+        CommandManager.GetValue(CCLICommandManager::FullPath, full_path);
+
+        if (p_actor != nullptr) {
+            if (SetParent(p_actor, parent, full_path)) {
+                SendActorBases();
+            }
+        }
+        
     }
 
     ret = CommandManager.GetValue(CCLICommandManager::SensorSlotIndex, sint);
@@ -2455,9 +2574,7 @@ bool UConsoleBase::ProcessWorkspaceCommand(TMap<FString, FString>& options, FStr
     ret = CommandManager.GetValue(CCLICommandManager::LoadFile, path);
     if (ret) {
         if (pSystemAPI->Load(path)) {
-            SendBlueprints();
-            //SendSensors();
-            SendActorBases();
+
             return true;
         }
         else {
@@ -2546,10 +2663,10 @@ bool UConsoleBase::ProcessExecCommand(TMap<FString, FString>& options, FString& 
     return ret;
 }
 
-bool UConsoleBase::ProcessCommands(FString command, TMap<FString, FString>& options, FString& error_message)
+bool UConsoleBase::ProcessCommands(FString command, TMap<FString, FString>& options, FString& error_message, INT32S &delay_tick)
 {
 
-
+    delay_tick = 0;
 
     CommandManager.SetCommandOptions(&options);
 
@@ -2575,7 +2692,7 @@ bool UConsoleBase::ProcessCommands(FString command, TMap<FString, FString>& opti
 
     }
     else if (command == CommandManager.CreateCommand) {
-        return  ProcessCreateCommand(options, error_message);
+        return  ProcessCreateCommand(options, error_message, delay_tick);
     }
     else if (command == CommandManager.DestroyCommand) {
         return ProcessDestroyCommand(options, error_message);

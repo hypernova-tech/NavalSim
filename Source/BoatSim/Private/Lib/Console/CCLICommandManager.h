@@ -65,6 +65,7 @@ public:
 	static  FString Name;
 	static  FString Bp;
 	static  FString Model;
+	static  FString Actor;
 
 	static FString DestroyCommand ;
 
@@ -80,6 +81,8 @@ public:
 	static FString RelRotation;
 	static FString Scale;
 	static FString Parent;
+	static FString FullPath;
+	static FString Tick;
 	static FString Controller;
 	static FString SensorSlotIndex;
 	static FString Beam;

@@ -299,6 +299,7 @@ namespace ConsoleGUI
             // 
             // ObjectEditor
             // 
+            ObjectEditor.AllowDrop = true;
             ObjectEditor.ContextMenuStrip = ObjectEditorContextMenu;
             ObjectEditor.Location = new Point(13, 11);
             ObjectEditor.Name = "ObjectEditor";
@@ -307,8 +308,13 @@ namespace ConsoleGUI
             ObjectEditor.Nodes.AddRange(new TreeNode[] { treeNode1 });
             ObjectEditor.Size = new Size(246, 633);
             ObjectEditor.TabIndex = 18;
+            ObjectEditor.ItemDrag += ObjectEditor_ItemDrag;
             ObjectEditor.NodeMouseClick += ObjectEditor_NodeMouseClick;
             ObjectEditor.NodeMouseDoubleClick += ObjectEditor_NodeMouseDoubleClick;
+            ObjectEditor.DragDrop += ObjectEditor_DragDrop;
+            ObjectEditor.DragEnter += ObjectEditor_DragEnter;
+            ObjectEditor.DragOver += ObjectEditor_DragOver;
+            ObjectEditor.DragLeave += ObjectEditor_DragLeave;
             ObjectEditor.MouseClick += ObjectEditor_MouseClick;
             // 
             // ObjectEditorContextMenu

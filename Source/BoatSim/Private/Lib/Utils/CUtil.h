@@ -143,9 +143,9 @@ public:
 	static FVector2D StringToFVector2D(FString& value) ;
 	static FVector StringToFVector(FString& value) ;
 
-	static FString VectorToString(FVector& value);
-	static FString VectorToString(FVector2D& value);
-	static FString VectorToString(FVector4& value);
+	static FString VectorToString(FVector& value, INT32S digit = -1);
+	static FString VectorToString(FVector2D& value, INT32S digit = -1);
+	static FString VectorToString(FVector4& value, INT32S digit = -1);
 
 	/// <summary>
 	/// Byte operations
@@ -179,10 +179,12 @@ public:
 	static FLOAT64 GetRandomRange(FLOAT64 min_inclusive, FLOAT64 max_inclusive);
 	static FVector GetActorRPY(AActor* p_actor);
 	static AActor* GetParentActor(AActor *p_child);
+	static FString GetActorFullComponentPath(AActor* p_actor);
 	static void GetOwnAndParents(AActor* p_child, TArray<AActor*> &ret);
 	static FLOAT64 Tick();
 	static FLOAT64 Tock(FLOAT64 start_time_sec);
-	static void SetParent(AActor* p_child, AActor* p_parent);
+	static bool SetParent(AActor* p_child, AActor* p_parent);
+	static bool SetParentComponent(AActor* p_child, USceneComponent* p_parent);
 	static void SetActorActive(AActor* p_actor, bool is_active);
 	static bool GetIsActorTickEnabled(AActor* p_actor);
 	static bool GetIsActorVisible(AActor* p_actor);
@@ -190,11 +192,23 @@ public:
 	static void CameraLookAt(UCameraComponent* p_looker, AActor* p_target, FLOAT32 distance);
 	static void CameraLookAt(UCameraComponent* p_looker, FVector pos);
 	static void GetActorHierarchy(const AActor* Object, TArray<FString>& Hierarchy);
+	static void GetActorAndComponentHierarchy(const AActor* Actor, TArray<FString>& Hierarchy);
+	static void GetComponentHierarchy(const USceneComponent* Component, TArray<FString>& Hierarchy);
 	static TArray<uint8> HexStringToByteArray(const FString& HexString);
 	static FString CharToHexString(INT8U* p_data, INT32U len);
 	static void FindMinMaxPixelValue16Bit(UTexture2D* Texture, uint16& MinValue, uint16& MaxValue);
 	static FString GetFilePathProject(FString file_path);
 	static bool IsObjectCreatedAtRuntime(UObject* Object);
+	static TArray<UActorComponent*> GetComponentHierarchyToTop(UActorComponent* StartComponent);
+	static void AddComponentsToHierarchyArray(USceneComponent* Component, TArray<UActorComponent*>& HierarchyArray);
+		
+	static USceneComponent* FindComponentByPath(USceneComponent* RootComponent, const TArray<FString>& Parts, int32 PartIndex);
+	static USceneComponent* FindComponentByPath(AActor* RootActor, const FString& Path);
+	static bool IsDefaultSceneComponent(USceneComponent* p_comp);
 
+
+	static void BuildComponentPaths(USceneComponent* Component, const FString& BasePath, TArray<FString>& OutPaths);
+	static TArray<FString> GetAllComponentPaths(AActor* Actor);
+		
 };
 

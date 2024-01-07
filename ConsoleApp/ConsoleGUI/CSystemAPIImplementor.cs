@@ -187,4 +187,9 @@ public class CSystemAPIImplementor
 
         CreateAndSendCommand(CLICommandManager.SetCommand, CLICommandManager.CamView, cmd);
     }
+
+    internal void SetParent(string child, string parent_node)
+    {
+        CreateAndSendCommand(CLICommandManager.SetCommand, CLICommandManager.Name, child, CLICommandManager.Parent, parent_node);
+    }
 }

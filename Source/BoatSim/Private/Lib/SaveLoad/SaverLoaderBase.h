@@ -12,7 +12,14 @@
 
 
 
-
+enum ELoaderStateMachine
+{
+	LoaderStateMachineIdle,
+	LoaderStateMachineProcess,
+	LoaderStateMachineDelay,
+	LoaderStateMachineLoadComplete,
+	LoaderStateMachineWait
+};
 
 UCLASS(meta=(BlueprintSpawnableComponent) )
 class USaverLoaderBase : public UActorComponent, public ISaveLoader
@@ -26,19 +33,24 @@ public:
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	virtual void SavePlatform(ACBoatBase* p_boat, TArray<FString> &cli);
 	virtual void SaveSensor(ASensorBase* p_sensor, TArray<FString>& cli);
 	virtual void SaveActor(AActorBase *p_actor, TArray<FString>& cli);
 	
 	
 	TArray<FString> CLIList;
-
-	
-
+	ELoaderStateMachine State = ELoaderStateMachine::LoaderStateMachineIdle;
+	virtual void StateMachine();
+	void ProcessCurrentCommand(INT32S &tick_delay);
+	TArray<FString> CommandLines;
+	INT32S CurrentCommandIndex;
+	INT64S DelayStartRef;
+	INT32S TickDelayCount;
 	
 public:	
 	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
 	virtual bool Save(ISystemAPI *p_api, FString file_name);
 	virtual bool Load(ISystemAPI* p_api, FString file_name);
 

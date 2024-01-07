@@ -804,17 +804,30 @@ FVector CUtil::StringToFVector(FString& value)
     return FVector::ZeroVector;
 }
 
-FString CUtil::VectorToString(FVector& value)
+FString CUtil::VectorToString(FVector& value, INT32S digit)
 {
-    return CUtil::FloatToString(value.X) + " " + CUtil::FloatToString(value.Y) + " " + CUtil::FloatToString(value.Z);
+    if (digit< 0) {
+        return CUtil::FloatToString(value.X) + " " + CUtil::FloatToString(value.Y) + " " + CUtil::FloatToString(value.Z);
+    }
+    else {
+        FString ret = FString::Printf(TEXT("%.3f"), value.X) + " " + FString::Printf(TEXT("%.3f"), value.Y) + " " + FString::Printf(TEXT("%.3f"), value.Z);
+        return ret;
+    }
+    
 }
 
-FString CUtil::VectorToString(FVector2D& value)
+FString CUtil::VectorToString(FVector2D& value, INT32S digit)
 {
-    return CUtil::FloatToString(value.X) + " " + CUtil::FloatToString(value.Y);
+    if (digit < 0) {
+        return CUtil::FloatToString(value.X) + " " + CUtil::FloatToString(value.Y);
+    }
+    else {
+        FString ret = FString::Printf(TEXT("%.3f"), value.X) + " " + FString::Printf(TEXT("%.3f"), value.Y);
+        return ret;
+    }
 }
 
-FString CUtil::VectorToString(FVector4& value)
+FString CUtil::VectorToString(FVector4& value, INT32S digit)
 {
     return CUtil::FloatToString(value.X) + " " + CUtil::FloatToString(value.Y) + " " + CUtil::FloatToString(value.Z) + " " + CUtil::FloatToString(value.W);
 }
@@ -959,6 +972,40 @@ AActor* CUtil::GetParentActor(AActor* p_child)
 
 }
 
+FString CUtil::GetActorFullComponentPath(AActor* p_actor)
+{
+    FString Path = "";
+    USceneComponent* CurrentComponent = p_actor->GetRootComponent();
+    // Traverse up the hierarchy until reaching the root component
+    while (CurrentComponent != nullptr)
+    {
+        CurrentComponent = CurrentComponent->GetAttachParent(); // exclude itself
+        // Prepend the current component's name to the path
+        if (CurrentComponent != nullptr) {
+            Path = CurrentComponent->GetName() + "/" + Path;
+            if (CUtil::IsDefaultSceneComponent(CurrentComponent)) {
+                Path = CurrentComponent->GetOwner()->GetName() + "/" + Path;
+            }
+        }
+
+        
+        
+        // Move up to the parent component
+        
+
+    }
+  
+        
+
+    // Remove the trailing '/' from the path
+    if (!Path.IsEmpty())
+    {
+        Path.RemoveAt(Path.Len() - 1);
+    }
+
+    return Path;
+}
+
 void  CUtil::GetOwnAndParents(AActor* p_child, TArray<AActor*>& ret)
 {
     if (p_child != nullptr) {
@@ -989,7 +1036,7 @@ FLOAT64 CUtil::Tock(FLOAT64 ref)
     return FPlatformTime::Seconds() - ref;
 }
 
-void CUtil::SetParent(AActor* p_child, AActor* p_parent)
+bool CUtil::SetParent(AActor* p_child, AActor* p_parent)
 {
     if (p_child && p_parent)
     {
@@ -999,8 +1046,26 @@ void CUtil::SetParent(AActor* p_child, AActor* p_parent)
         if (p_parent_root && p_child_root)
         {
             p_child_root->AttachToComponent(p_parent_root, FAttachmentTransformRules::KeepWorldTransform);
+            return true;
         }
     }
+
+    return false;
+}
+
+bool CUtil::SetParentComponent(AActor* p_child, USceneComponent* p_parent)
+{
+    if (p_child && p_parent)
+    {
+        USceneComponent* p_child_root = p_child->GetRootComponent();
+
+        if (p_parent && p_child_root)
+        {
+            return p_child_root->AttachToComponent(p_parent, FAttachmentTransformRules::KeepWorldTransform);
+        }
+    }
+
+    return false;
 }
 
 void CUtil::SetActorActive(AActor* p_actor, bool is_active)
@@ -1076,10 +1141,48 @@ void CUtil::GetActorHierarchy(const AActor* Object, TArray<FString>& Hierarchy)
     // Add the object's name to the hierarchy array
     Hierarchy.Add(Object->GetName());
 
+
+
     // Recursively process the object's outer
     GetActorHierarchy(CUtil::GetParentActor((AActor*)Object), Hierarchy);
 }
 
+void CUtil::GetActorAndComponentHierarchy(const AActor* Actor, TArray<FString>& Hierarchy)
+{
+    if (!Actor || Actor->GetName() == "PersistentLevel")
+    {
+        return;
+    }
+
+    // Add the actor's name to the hierarchy array
+    Hierarchy.Add(Actor->GetName());
+
+    // Process the actor's root component and its child components
+    const USceneComponent* RootComponent = Actor->GetRootComponent();
+    if (RootComponent)
+    {
+        GetComponentHierarchy(RootComponent, Hierarchy);
+    }
+
+    // Recursively process the parent actor (outer)
+    GetActorAndComponentHierarchy(Actor->GetAttachParentActor(), Hierarchy);
+}
+void CUtil::GetComponentHierarchy(const USceneComponent* Component, TArray<FString>& Hierarchy)
+{
+    if (!Component)
+    {
+        return;
+    }
+
+    // Add the component's name to the hierarchy array
+    Hierarchy.Add(Component->GetName());
+
+    // Recursively process each child component
+    for (const USceneComponent* ChildComponent : Component->GetAttachChildren())
+    {
+        GetComponentHierarchy(ChildComponent, Hierarchy);
+    }
+}
 TArray<uint8> CUtil::HexStringToByteArray(const FString& HexString)
 {
     TArray<uint8> ByteArray;
@@ -1165,4 +1268,128 @@ bool CUtil::IsObjectCreatedAtRuntime(UObject* Object)
         return Object->HasAnyFlags(RF_Transient);
     }
     return false;
+}
+void CUtil::AddComponentsToHierarchyArray(USceneComponent* Component, TArray<UActorComponent*>& HierarchyArray)
+{
+    if (!Component)
+        return;
+
+    // Add the current component to the array
+    HierarchyArray.Add(Component);
+
+    // Recursively add parent components
+    AddComponentsToHierarchyArray(Component->GetAttachParent(), HierarchyArray);
+}
+
+// Function to get the component hierarchy from the given component to the top
+TArray<UActorComponent*> CUtil::GetComponentHierarchyToTop(UActorComponent* StartComponent)
+{
+    TArray<UActorComponent*> HierarchyArray;
+
+    if (!StartComponent)
+        return HierarchyArray;
+
+    // Cast to USceneComponent, as we need hierarchy information
+    USceneComponent* SceneComponent = Cast<USceneComponent>(StartComponent);
+    if (SceneComponent)
+    {
+        AddComponentsToHierarchyArray(SceneComponent, HierarchyArray);
+    }
+
+    return HierarchyArray;
+}
+USceneComponent* CUtil::FindComponentByPath(USceneComponent* RootComponent, const TArray<FString>& Parts, int32 PartIndex)
+{
+
+
+    if (Parts.Num() == 1) {
+        if (RootComponent->GetName() == Parts[0]) {
+            return RootComponent;
+        }
+    }
+    if (!RootComponent || PartIndex >= Parts.Num())
+    return nullptr;
+
+    // Iterate through all child components
+    auto children = RootComponent->GetAttachChildren();
+    
+    for (USceneComponent* ChildComponent : children)
+    {
+        if (ChildComponent && ChildComponent->GetName() == Parts[PartIndex])
+        {
+            // If this is the final part of the path, return this component
+            if (PartIndex == Parts.Num() - 1)
+                return ChildComponent;
+
+            // Otherwise, continue searching down the hierarchy
+            return FindComponentByPath(ChildComponent, Parts, PartIndex + 1);
+        }
+    }
+
+    return nullptr; // Component not found in this branch
+}
+
+USceneComponent* CUtil::FindComponentByPath(AActor* RootActor, const FString& Path)
+{
+    TArray<FString> Parts;
+    Path.ParseIntoArray(Parts, TEXT("/"), true);
+
+    if (Parts.Num() == 0)
+        return nullptr;
+
+    // Start searching from the root component
+    return FindComponentByPath(RootActor->GetRootComponent(), Parts, 1);
+}
+bool CUtil::IsDefaultSceneComponent(USceneComponent* p_comp)
+{
+    if (p_comp != nullptr) {
+        return p_comp->GetOwner()->GetRootComponent() == p_comp;
+    }
+
+    return false;
+    
+}
+
+void CUtil::BuildComponentPaths(USceneComponent* Component, const FString& BasePath, TArray<FString>& OutPaths)
+{
+    if (!Component)
+    {
+        return;
+    }
+
+    FString ComponentPath = Component->GetName();
+    // Check if this component is a root component of its owner
+    if (Component == Component->GetOwner()->GetRootComponent())
+    {
+        ComponentPath = Component->GetOwner()->GetName() + "/" + ComponentPath;
+    }
+
+    // Construct the path for the current component
+    FString CurrentPath = BasePath.IsEmpty() ? ComponentPath : BasePath + "/" + ComponentPath;
+    OutPaths.Add(CurrentPath);
+
+    // Iterate over all child components and build their paths
+    for (USceneComponent* ChildComponent : Component->GetAttachChildren())
+    {
+        BuildComponentPaths(ChildComponent, CurrentPath, OutPaths);
+    }
+}
+
+TArray<FString> CUtil::GetAllComponentPaths(AActor* Actor)
+{
+    TArray<FString> Paths;
+
+    if (!Actor)
+    {
+        return Paths;
+    }
+
+    // Start the recursive path building with the root component
+    USceneComponent* RootComponent = Actor->GetRootComponent();
+    if (RootComponent)
+    {
+        BuildComponentPaths(RootComponent, "", Paths);
+    }
+
+    return Paths;
 }

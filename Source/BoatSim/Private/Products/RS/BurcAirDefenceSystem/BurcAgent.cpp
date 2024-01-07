@@ -53,6 +53,8 @@ void ABurcAgent::AimGun_(FVector pos)
 bool ABurcAgent::AssignTarget_(FString target_name, double duration)
 {
 	TargetNameName_ = target_name;
+	pTarget = ASystemManagerBase::GetInstance()->FindActor(target_name);
+
 	ASystemManagerBase::GetInstance()->SendConsoleResponse("AssignTarget called target_name: "+ target_name+" duration: "+CUtil::FloatToString(duration));
 	return false;
 }
@@ -127,15 +129,17 @@ void ABurcAgent::Tick(float DeltaTime)
 	if (IsSerialFiring) {
 		if (CUtil::GetTimeSeconds() >= NextFireTime) {
 			Fire_();
-			NextFireTime = CUtil::GetTimeSeconds()+ SerialFireTimeInterval;
+			NextFireTime = CUtil::GetTimeSeconds() + SerialFireTimeInterval;
 			RemainingSerialFire--;
 
 			if (RemainingSerialFire == 0) {
 				IsSerialFiring = false;
 			}
 		}
-		
-		
-		
 	}
+
+	if (pTarget) {
+		AimGun_(pTarget->GetActorLocation());
+	}
+	
 }

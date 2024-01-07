@@ -1,4 +1,4 @@
-create --name env --bp 
+create --name env --bp  --tick 0
 set --name env --instance -1
 set --name env --suppressed 0
 set --name env --standalone 0
@@ -17,58 +17,194 @@ set --name env --envsoundfx 1
 set --name env --wind 3.000000
 set --name env --winddir 0.000000
 
-set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_0 --instance -1
-set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_0 --suppressed 0
-set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_0 --standalone 0
-set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_0 --position "-4.900000 0.000000 5.200000"
-set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_0 --rotation "-0.000000 -0.000000 0.000000"
-set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_0 --scale "1.000000 1.000000 1.000000"
-set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_0 --parent b1
+create --name burc1 --bp BURC --tick 3
+set --name burc1 --instance -1
+set --name burc1 --suppressed 0
+set --name burc1 --standalone 0
+set --name burc1 --position "0.000000 16.827248 0.000000"
+set --name burc1 --rotation "-0.000000 -0.000000 0.000000"
+set --name burc1 --scale "1.000000 1.000000 1.000000"
 
-set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_1 --instance -1
-set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_1 --suppressed 0
-set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_1 --standalone 0
-set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_1 --position "-2.100000 0.100000 5.800000"
-set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_1 --rotation "-0.000000 -0.000000 0.000000"
-set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_1 --scale "1.000000 1.000000 1.000000"
-set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_1 --parent b1
+create --name burc1_Kasa --bp EMPTY --tick 0 --parent burc1 --fullpath burc1/ChildActor
+set --name burc1_Kasa --instance -1
+set --name burc1_Kasa --suppressed 0
+set --name burc1_Kasa --standalone 0
+set --name burc1_Kasa --position "0.000000 16.827248 0.000000"
+set --name burc1_Kasa --rotation "-0.000000 -0.000000 0.000000"
+set --name burc1_Kasa --scale "1.000000 1.000000 1.000000"
 
-set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_2 --instance -1
-set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_2 --suppressed 0
-set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_2 --standalone 0
-set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_2 --position "-3.874266 0.005027 4.890010"
-set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_2 --rotation "-0.000000 -0.000000 0.000000"
-set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_2 --scale "1.000000 1.000000 1.000000"
-set --name BP_GenericGimbal_GEN_VARIABLE_BP_GenericGimbal_C_CAT_2 --parent b1
+create --name burc1_On_Teker_2 --bp EMPTY --tick 0 --parent burc1 --fullpath burc1/ChildActor
+set --name burc1_On_Teker_2 --instance -1
+set --name burc1_On_Teker_2 --suppressed 0
+set --name burc1_On_Teker_2 --standalone 0
+set --name burc1_On_Teker_2 --position "5.359144 15.364433 1.316809"
+set --name burc1_On_Teker_2 --rotation "-0.000000 -0.000000 0.000000"
+set --name burc1_On_Teker_2 --scale "1.000000 1.000000 1.000000"
 
-create --name b1 --bp BURC
-set --name b1 --instance -1
-set --name b1 --suppressed 0
-set --name b1 --standalone 0
-set --name b1 --position "0.000000 0.000000 0.000000"
-set --name b1 --rotation "-0.000000 -0.000000 0.000000"
-set --name b1 --scale "1.000000 1.000000 1.000000"
+create --name burc1_Teker_6 --bp EMPTY --tick 0 --parent burc1 --fullpath burc1/ChildActor
+set --name burc1_Teker_6 --instance -1
+set --name burc1_Teker_6 --suppressed 0
+set --name burc1_Teker_6 --standalone 0
+set --name burc1_Teker_6 --position "-2.117985 14.969268 1.318341"
+set --name burc1_Teker_6 --rotation "-0.000000 -0.000000 0.000000"
+set --name burc1_Teker_6 --scale "1.000000 1.000000 1.000000"
 
-set --name BP_GenericCameraIR_GEN_VARIABLE_BP_GenericCameraIR_C_CAT_0 --instance -1
-set --name BP_GenericCameraIR_GEN_VARIABLE_BP_GenericCameraIR_C_CAT_0 --suppressed 0
-set --name BP_GenericCameraIR_GEN_VARIABLE_BP_GenericCameraIR_C_CAT_0 --standalone 0
-set --name BP_GenericCameraIR_GEN_VARIABLE_BP_GenericCameraIR_C_CAT_0 --position "-3.874266 0.905027 6.990010"
-set --name BP_GenericCameraIR_GEN_VARIABLE_BP_GenericCameraIR_C_CAT_0 --rotation "-0.000000 -20.000000 0.000000"
-set --name BP_GenericCameraIR_GEN_VARIABLE_BP_GenericCameraIR_C_CAT_0 --scale "1.000000 1.000000 1.000000"
-set --name BP_GenericCameraIR_GEN_VARIABLE_BP_GenericCameraIR_C_CAT_0 --parent b1
-set --name BP_GenericCameraIR_GEN_VARIABLE_BP_GenericCameraIR_C_CAT_0 --slotindex 0
-set --name BP_GenericCameraIR_GEN_VARIABLE_BP_GenericCameraIR_C_CAT_0 --rangemin 5.000000
-set --name BP_GenericCameraIR_GEN_VARIABLE_BP_GenericCameraIR_C_CAT_0 --rangemax 100.000000
-set --name BP_GenericCameraIR_GEN_VARIABLE_BP_GenericCameraIR_C_CAT_0 --vfov 90.000000
-set --name BP_GenericCameraIR_GEN_VARIABLE_BP_GenericCameraIR_C_CAT_0 --hfov 90.000000
-set --name BP_GenericCameraIR_GEN_VARIABLE_BP_GenericCameraIR_C_CAT_0 --hscanstepang 0.000000
-set --name BP_GenericCameraIR_GEN_VARIABLE_BP_GenericCameraIR_C_CAT_0 --vscanstepang 36.000000
-set --name BP_GenericCameraIR_GEN_VARIABLE_BP_GenericCameraIR_C_CAT_0 --merrormean 0.000000
-set --name BP_GenericCameraIR_GEN_VARIABLE_BP_GenericCameraIR_C_CAT_0 --merrorstd 0.000000
-set --name BP_GenericCameraIR_GEN_VARIABLE_BP_GenericCameraIR_C_CAT_0 --surfacedetecten 0
-set --name BP_GenericCameraIR_GEN_VARIABLE_BP_GenericCameraIR_C_CAT_0 --subsurfacedetecten 0
-set --name BP_GenericCameraIR_GEN_VARIABLE_BP_GenericCameraIR_C_CAT_0 --foamen 0
-set --name BP_GenericCameraIR_GEN_VARIABLE_BP_GenericCameraIR_C_CAT_0 --seasurfdetectprob 0.000000
-set --name BP_GenericCameraIR_GEN_VARIABLE_BP_GenericCameraIR_C_CAT_0 --maxsurfpenet 0.000000
-set --name BP_GenericCameraIR_GEN_VARIABLE_BP_GenericCameraIR_C_CAT_0 --widthpx 1920
-set --name BP_GenericCameraIR_GEN_VARIABLE_BP_GenericCameraIR_C_CAT_0 --heightpx 1080
+create --name burc1_Teker_3 --bp EMPTY --tick 0 --parent burc1 --fullpath burc1/ChildActor
+set --name burc1_Teker_3 --instance -1
+set --name burc1_Teker_3 --suppressed 0
+set --name burc1_Teker_3 --standalone 0
+set --name burc1_Teker_3 --position "2.040197 18.685227 1.318341"
+set --name burc1_Teker_3 --rotation "-0.000000 -0.000000 0.000000"
+set --name burc1_Teker_3 --scale "1.000000 1.000000 1.000000"
+
+create --name burc1_Teker_4 --bp EMPTY --tick 0 --parent burc1 --fullpath burc1/ChildActor
+set --name burc1_Teker_4 --instance -1
+set --name burc1_Teker_4 --suppressed 0
+set --name burc1_Teker_4 --standalone 0
+set --name burc1_Teker_4 --position "2.040197 14.969268 1.318341"
+set --name burc1_Teker_4 --rotation "-0.000000 -0.000000 0.000000"
+set --name burc1_Teker_4 --scale "1.000000 1.000000 1.000000"
+
+create --name burc1_Teker_8 --bp EMPTY --tick 0 --parent burc1 --fullpath burc1/ChildActor
+set --name burc1_Teker_8 --instance -1
+set --name burc1_Teker_8 --suppressed 0
+set --name burc1_Teker_8 --standalone 0
+set --name burc1_Teker_8 --position "-5.343490 14.969269 1.318341"
+set --name burc1_Teker_8 --rotation "-0.000000 -0.000000 0.000000"
+set --name burc1_Teker_8 --scale "1.000000 1.000000 1.000000"
+
+create --name burc1_Teker_7 --bp EMPTY --tick 0 --parent burc1 --fullpath burc1/ChildActor
+set --name burc1_Teker_7 --instance -1
+set --name burc1_Teker_7 --suppressed 0
+set --name burc1_Teker_7 --standalone 0
+set --name burc1_Teker_7 --position "-5.343490 18.685228 1.318341"
+set --name burc1_Teker_7 --rotation "-0.000000 -0.000000 0.000000"
+set --name burc1_Teker_7 --scale "1.000000 1.000000 1.000000"
+
+create --name burc1_Teker_5 --bp EMPTY --tick 0 --parent burc1 --fullpath burc1/ChildActor
+set --name burc1_Teker_5 --instance -1
+set --name burc1_Teker_5 --suppressed 0
+set --name burc1_Teker_5 --standalone 0
+set --name burc1_Teker_5 --position "-2.117985 18.685227 1.318341"
+set --name burc1_Teker_5 --rotation "-0.000000 -0.000000 0.000000"
+set --name burc1_Teker_5 --scale "1.000000 1.000000 1.000000"
+
+create --name burc1_On_Teker_1 --bp EMPTY --tick 0 --parent burc1 --fullpath burc1/ChildActor
+set --name burc1_On_Teker_1 --instance -1
+set --name burc1_On_Teker_1 --suppressed 0
+set --name burc1_On_Teker_1 --standalone 0
+set --name burc1_On_Teker_1 --position "5.359144 18.290061 1.316809"
+set --name burc1_On_Teker_1 --rotation "-0.000000 -0.000000 0.000000"
+set --name burc1_On_Teker_1 --scale "1.000000 1.000000 1.000000"
+
+create --name burc1_Radar --bp EMPTY --tick 0 --parent burc1 --fullpath burc1/ChildActor
+set --name burc1_Radar --instance -1
+set --name burc1_Radar --suppressed 0
+set --name burc1_Radar --standalone 0
+set --name burc1_Radar --position "-0.843641 16.814682 4.859927"
+set --name burc1_Radar --rotation "-0.000000 -0.000000 0.000000"
+set --name burc1_Radar --scale "1.000000 1.000000 1.000000"
+
+create --name burc1_Silah --bp EMPTY --tick 0 --parent burc1 --fullpath burc1/ChildActor
+set --name burc1_Silah --instance -1
+set --name burc1_Silah --suppressed 0
+set --name burc1_Silah --standalone 0
+set --name burc1_Silah --position "0.000000 16.827248 5.500000"
+set --name burc1_Silah --rotation "-0.000000 -0.000000 0.000000"
+set --name burc1_Silah --scale "1.000000 1.000000 1.000000"
+
+create --name burc2 --bp BURC --tick 3
+set --name burc2 --instance -1
+set --name burc2 --suppressed 0
+set --name burc2 --standalone 0
+set --name burc2 --position "0.000000 -7.728916 0.000000"
+set --name burc2 --rotation "-0.000000 -0.000000 0.000000"
+set --name burc2 --scale "1.000000 1.000000 1.000000"
+
+create --name burc2_Kasa --bp EMPTY --tick 0 --parent burc2 --fullpath burc2/ChildActor
+set --name burc2_Kasa --instance -1
+set --name burc2_Kasa --suppressed 0
+set --name burc2_Kasa --standalone 0
+set --name burc2_Kasa --position "0.000000 -7.728916 0.000000"
+set --name burc2_Kasa --rotation "-0.000000 -0.000000 0.000000"
+set --name burc2_Kasa --scale "1.000000 1.000000 1.000000"
+
+create --name burc2_On_Teker_2 --bp EMPTY --tick 0 --parent burc2 --fullpath burc2/ChildActor
+set --name burc2_On_Teker_2 --instance -1
+set --name burc2_On_Teker_2 --suppressed 0
+set --name burc2_On_Teker_2 --standalone 0
+set --name burc2_On_Teker_2 --position "5.359144 -9.191730 1.316809"
+set --name burc2_On_Teker_2 --rotation "-0.000000 -0.000000 0.000000"
+set --name burc2_On_Teker_2 --scale "1.000000 1.000000 1.000000"
+
+create --name burc2_Teker_6 --bp EMPTY --tick 0 --parent burc2 --fullpath burc2/ChildActor
+set --name burc2_Teker_6 --instance -1
+set --name burc2_Teker_6 --suppressed 0
+set --name burc2_Teker_6 --standalone 0
+set --name burc2_Teker_6 --position "-2.117985 -9.586895 1.318341"
+set --name burc2_Teker_6 --rotation "-0.000000 -0.000000 0.000000"
+set --name burc2_Teker_6 --scale "1.000000 1.000000 1.000000"
+
+create --name burc2_Teker_3 --bp EMPTY --tick 0 --parent burc2 --fullpath burc2/ChildActor
+set --name burc2_Teker_3 --instance -1
+set --name burc2_Teker_3 --suppressed 0
+set --name burc2_Teker_3 --standalone 0
+set --name burc2_Teker_3 --position "2.040197 -5.870936 1.318341"
+set --name burc2_Teker_3 --rotation "-0.000000 -0.000000 0.000000"
+set --name burc2_Teker_3 --scale "1.000000 1.000000 1.000000"
+
+create --name burc2_Teker_4 --bp EMPTY --tick 0 --parent burc2 --fullpath burc2/ChildActor
+set --name burc2_Teker_4 --instance -1
+set --name burc2_Teker_4 --suppressed 0
+set --name burc2_Teker_4 --standalone 0
+set --name burc2_Teker_4 --position "2.040197 -9.586895 1.318341"
+set --name burc2_Teker_4 --rotation "-0.000000 -0.000000 0.000000"
+set --name burc2_Teker_4 --scale "1.000000 1.000000 1.000000"
+
+create --name burc2_Teker_8 --bp EMPTY --tick 0 --parent burc2 --fullpath burc2/ChildActor
+set --name burc2_Teker_8 --instance -1
+set --name burc2_Teker_8 --suppressed 0
+set --name burc2_Teker_8 --standalone 0
+set --name burc2_Teker_8 --position "-5.343490 -9.586895 1.318341"
+set --name burc2_Teker_8 --rotation "-0.000000 -0.000000 0.000000"
+set --name burc2_Teker_8 --scale "1.000000 1.000000 1.000000"
+
+create --name burc2_Teker_7 --bp EMPTY --tick 0 --parent burc2 --fullpath burc2/ChildActor
+set --name burc2_Teker_7 --instance -1
+set --name burc2_Teker_7 --suppressed 0
+set --name burc2_Teker_7 --standalone 0
+set --name burc2_Teker_7 --position "-5.343490 -5.870935 1.318341"
+set --name burc2_Teker_7 --rotation "-0.000000 -0.000000 0.000000"
+set --name burc2_Teker_7 --scale "1.000000 1.000000 1.000000"
+
+create --name burc2_Teker_5 --bp EMPTY --tick 0 --parent burc2 --fullpath burc2/ChildActor
+set --name burc2_Teker_5 --instance -1
+set --name burc2_Teker_5 --suppressed 0
+set --name burc2_Teker_5 --standalone 0
+set --name burc2_Teker_5 --position "-2.117985 -5.870936 1.318341"
+set --name burc2_Teker_5 --rotation "-0.000000 -0.000000 0.000000"
+set --name burc2_Teker_5 --scale "1.000000 1.000000 1.000000"
+
+create --name burc2_On_Teker_1 --bp EMPTY --tick 0 --parent burc2 --fullpath burc2/ChildActor
+set --name burc2_On_Teker_1 --instance -1
+set --name burc2_On_Teker_1 --suppressed 0
+set --name burc2_On_Teker_1 --standalone 0
+set --name burc2_On_Teker_1 --position "5.359144 -6.266102 1.316809"
+set --name burc2_On_Teker_1 --rotation "-0.000000 -0.000000 0.000000"
+set --name burc2_On_Teker_1 --scale "1.000000 1.000000 1.000000"
+
+create --name burc2_Radar --bp EMPTY --tick 0 --parent burc2 --fullpath burc2/ChildActor
+set --name burc2_Radar --instance -1
+set --name burc2_Radar --suppressed 0
+set --name burc2_Radar --standalone 0
+set --name burc2_Radar --position "-0.843641 -7.741481 4.859927"
+set --name burc2_Radar --rotation "-0.000000 -0.000000 0.000000"
+set --name burc2_Radar --scale "1.000000 1.000000 1.000000"
+
+create --name burc2_Silah --bp EMPTY --tick 0 --parent burc2 --fullpath burc2/ChildActor
+set --name burc2_Silah --instance -1
+set --name burc2_Silah --suppressed 0
+set --name burc2_Silah --standalone 0
+set --name burc2_Silah --position "0.000000 -7.728916 5.500000"
+set --name burc2_Silah --rotation "-0.000000 -0.000000 0.000000"
+set --name burc2_Silah --scale "1.000000 1.000000 1.000000"

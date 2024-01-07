@@ -30,6 +30,7 @@ public static class CLICommandManager
     public const string RelRotation = "relrotation";
     public const string Scale = "scale";
     [Modifiable] public const string Parent = "parent";
+     public const string FullPath = "fullpath";
     public const string Controller = "controller";
     [Modifiable] public const string SensorSlotIndex = "slotindex";
     [Modifiable] public const string Beam = "beam";

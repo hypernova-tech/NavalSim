@@ -523,6 +523,7 @@ UObject* ASystemManagerBase::FindObject(FString obj_name)
 
 AActor* ASystemManagerBase::FindActor(FString actor_name)
 {
+	
 
 	auto p_actor = AllActors.Find(actor_name);
 
@@ -548,6 +549,43 @@ AActor* ASystemManagerBase::FindActor(FString actor_name)
 }
 
 
+
+USceneComponent* ASystemManagerBase::FindComponent(FString path)
+{
+
+	TArray<FString> Parts;
+	path.ParseIntoArray(Parts, TEXT("/"), true);
+
+	if (Parts.Num() == 0){
+
+		return nullptr;
+	}
+
+	for (int i = Parts.Num()-1; i >= 0; i--) {
+		FString name = Parts[i];
+		auto p_actor = FindActor(name);
+
+		if (p_actor) {
+			FString comp_path = "";
+			
+			for (int j = i+1 ; j < Parts.Num(); j++) {
+				if (comp_path != "") {
+					comp_path += "/" + Parts[j];
+				}
+				else {
+					comp_path += Parts[j];
+				}
+				
+			}
+
+			USceneComponent *p_comp = CUtil::FindComponentByPath(p_actor, comp_path);
+
+			return p_comp;
+		}
+	}
+
+	return nullptr;
+}
 
 void ASystemManagerBase::DetectInstance()
 {

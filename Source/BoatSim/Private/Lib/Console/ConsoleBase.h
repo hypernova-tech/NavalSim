@@ -28,7 +28,7 @@ protected:
 
 	
 	bool ParseCommandLine(TCHAR* CommandLine, FString& Outcommand, TMap<FString, FString>& OutOptions, FString& OutErrorMessage);
-	bool ProcessCommands(FString command, TMap<FString, FString>& options, FString &error_message);
+	bool ProcessCommands(FString command, TMap<FString, FString>& options, FString &error_message, INT32S& delay_tick);
 	CCLICommandManager CommandManager;
 	ISystemAPI* pSystemAPI;
 
@@ -37,7 +37,7 @@ protected:
 	bool ProcessProcessCommand(TMap<FString, FString>& options, FString& error_message);
 	bool ProcessPrintCommand(TMap<FString, FString>& options, FString& error_message);
 	bool ProcessSimCommand(TMap<FString, FString>& options, FString& error_message);
-	bool ProcessCreateCommand(TMap<FString, FString>& options, FString& error_message);
+	bool ProcessCreateCommand(TMap<FString, FString>& options, FString& error_message, INT32S& delay_tick);
 	bool ProcessDestroyCommand(TMap<FString, FString>& options, FString& error_message);
 	bool ProcessSetCommand(TMap<FString, FString>& options, FString& error_message);
 	bool ProcessGetCommand(TMap<FString, FString>& options, FString& error_message);
@@ -55,13 +55,8 @@ protected:
 	void SendConsoleResponse(FString name, FString option, INT32S ind, FVector ret);
 	void SendConsoleResponse(FString name, FString option, FString prop, FString val);
 	FString CreateAndSerializeJson(TMap<FString, FString> &data);
-
-	void SendSensors();
-	void SendActors();
-	void SendActorBases();
-	void SendBlueprints();
-	void SendFunctions(AActor *p_actor, FString category);
-	void SendProperies(AActor* p_actor);
+	bool SetParent(AActor* p_actor, FString parent, FString full_path);
+	
 
 	bool SetCamView(FString cmd);
 
@@ -70,7 +65,7 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	UFUNCTION(BlueprintCallable)
-	virtual void Command(FString command);
+	virtual void Command(FString command, int &delay_tick);
 	virtual void OnReceivedConnectionData(void* connection, INT8U* p_data, INT32U count);
 	void SendToConsole(FString val);
 	CCLICommandManager* GetCommandManager();
@@ -83,4 +78,11 @@ public:
 	bool InvokeFunctionByNameWithParameters(UObject* p_obj, const FName& FunctionName, const TMap<FString, FString>& Parameters);
 	bool InvokeFunctionByNameWithParameters(UObject* p_obj, const FName& FunctionName,  TArray<FString>& Parameters);
 	bool SetFunctionParameter(UFunction* Function, void* Params, FProperty* Param, const FString& Value);
+
+	void SendSensors();
+	void SendActors();
+	void SendActorBases();
+	void SendBlueprints();
+	void SendFunctions(AActor* p_actor, FString category);
+	void SendProperies(AActor* p_actor);
 };

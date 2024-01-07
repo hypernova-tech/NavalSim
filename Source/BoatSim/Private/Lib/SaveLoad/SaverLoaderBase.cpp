@@ -116,7 +116,7 @@ void USaverLoaderBase::AddLine(FString line)
 void USaverLoaderBase::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
+	StateMachine();
 	// ...
 }
 
@@ -198,6 +198,8 @@ void USaverLoaderBase::SaveActor(AActorBase* p_actor, TArray<FString>& cli)
 	p_actor->Save(this);
 	
 }
+
+
 
 bool USaverLoaderBase::Save(ISystemAPI* p_api, FString file_name)
 {
@@ -285,52 +287,74 @@ bool USaverLoaderBase::Load(ISystemAPI* p_api, FString file_name)
 {
 	pSystemApi = p_api;
 	pCLI = p_api->GetConsole()->GetCommandManager();
-	TArray<FString> lines;
-
-	FString test = "1,2,3";
-	char dest[128];
-	CUtil::FStringToAsciiChar(test, dest, sizeof(dest));
-
-	test = "set --name viscam1 --parent gimbal1 --position \" - 80690.000000 - 40990.000000 1970.000000\"";// --rotation "0.000000 45.000000 0.000000" --scale "1.000000 1.000000 1.000000"";
-	memset(dest, 0, sizeof(dest));
-	CUtil::FStringToAsciiChar(test, dest, sizeof(dest));
-
-
-
-	test = "set --name viscam1 --parent gimbal1 --position \" - 80690.000000 - 40990.000000 1970.000000\" --rotation \"0.000000 45.000000 0.000000\"";
-	memset(dest, 0, sizeof(dest));
-
-	// Convert FString to UTF-8 encoded string
-	FString Utf8Str = test.ReplaceEscapedCharWithChar();
-
-	// Wrap the converted string in double quotes
 	
-	CUtil::FStringToAsciiChar(Utf8Str, dest, sizeof(dest));
-
-	test = "set --name viscam1 --parent gimbal1 --position \" - 80690.000000 - 40990.000000 1970.000000\" --rotation \"0.000000 45.000000 0.000000\" --scale \"1.000000 1.000000 1.000000\"";
-	memset(dest, 0, sizeof(dest));
-	CUtil::FStringToAsciiChar(test, dest, sizeof(dest));
-
 	FString FilePath = FPaths::Combine(FPaths::ProjectDir(), *file_name);
 
-	if (FFileHelper::LoadFileToStringArray(lines, *FilePath))
+	if (FFileHelper::LoadFileToStringArray(CommandLines, *FilePath))
 	{
-		// Successfully loaded the file
-		for (const FString& line : lines)
-		{
-			if (line == "") {
-				continue;
-			}
-			FString inp = line;
-			p_api->SendConsoleResponse(inp);
-			p_api->GetConsole()->Command(inp);
-			CUtil::DebugLog(inp);
-		}
-
+		State = LoaderStateMachineProcess;
+		CurrentCommandIndex = 0;
 		return true;
 	}
 
 	return false;
+}
+
+void USaverLoaderBase::ProcessCurrentCommand(INT32S& tick_delay)
+{
+	auto curr_cmd = CommandLines[CurrentCommandIndex];
+	pSystemApi->SendConsoleResponse(curr_cmd);
+	pSystemApi->GetConsole()->Command(curr_cmd, tick_delay);
+	CUtil::DebugLog(curr_cmd);
+}
+
+void USaverLoaderBase::StateMachine()
+{
+	auto curr_state = State;
+	auto next_state = curr_state;
+	INT32S tick_delay = 0;
+
+	switch (curr_state)
+	{
+	case LoaderStateMachineIdle:
+		break;
+	case LoaderStateMachineProcess:
+		while (true) {
+			ProcessCurrentCommand(tick_delay);
+			CurrentCommandIndex++;
+
+			if (CurrentCommandIndex >= CommandLines.Num()) {
+				next_state = LoaderStateMachineLoadComplete;
+				break;
+			}
+			else {
+				if (tick_delay > 0) {
+					next_state = LoaderStateMachineDelay;
+					TickDelayCount = tick_delay;
+					break;
+				}
+			}
+		}
+	
+		break;
+	case LoaderStateMachineDelay:
+		TickDelayCount--;
+		if (TickDelayCount == 0) {
+			next_state = LoaderStateMachineProcess;
+		}
+		break;
+	case LoaderStateMachineLoadComplete:
+		pSystemApi->GetConsole()->SendBlueprints();
+		pSystemApi->GetConsole()->SendActorBases();
+		next_state = LoaderStateMachineWait;
+		break;
+	case LoaderStateMachineWait:
+		break;
+	default:
+		break;
+	}
+
+	State = next_state;
 }
 
 

@@ -17,10 +17,12 @@ AGimbalBase::AGimbalBase()
 // Called when the game starts or when spawned
 void AGimbalBase::BeginPlay()
 {
+	
 	Super::BeginPlay();
-
-	GetRootComponent()->SetMobility(EComponentMobility::Movable);
-
+	auto owner = GetOwner();
+	auto parent = CUtil::GetParentActor(this);
+	auto attach = GetAttachParentActor();
+	UChildActorComponent* MyChildActorComponent = GetComponentByClass< UChildActorComponent>();
 }
 
 
@@ -150,4 +152,15 @@ void AGimbalBase::OnStep(float DeltaTime)
 	Super::OnStep(DeltaTime);
 	GimbalStateMachine(DeltaTime);
 
+
+	float RotationSpeed = 10.0f; // 10 degrees per second
+
+	// Calculate the rotation amount for this frame
+	float DeltaRotation = RotationSpeed * DeltaTime;
+
+	// Create a rotation quaternion around the up axis (Z-axis)
+	FQuat QuatRotation = FQuat(FRotator(0.0f, DeltaRotation, 0.0f));
+
+	// Apply the rotation to the actor
+	AddActorLocalRotation(QuatRotation);
 }

@@ -16,7 +16,7 @@ FString CCLICommandManager::CreateCommand = "create";
 FString CCLICommandManager::Name = "name";
 FString CCLICommandManager::Bp = "bp";
 FString CCLICommandManager::Model = "model";
-
+FString CCLICommandManager::Actor = "actor";
 FString CCLICommandManager::DestroyCommand = "destroy";
 
 FString CCLICommandManager::SetCommand = "set";
@@ -32,6 +32,8 @@ FString CCLICommandManager::Rotation = "rotation";
 FString CCLICommandManager::RelRotation = "relrotation";
 FString CCLICommandManager::Scale = "scale";
 FString CCLICommandManager::Parent = "parent";
+FString CCLICommandManager::FullPath = "fullpath";
+FString CCLICommandManager::Tick = "tick";
 FString CCLICommandManager::Controller = "controller";
 FString CCLICommandManager::SensorSlotIndex = "slotindex";
 FString CCLICommandManager::Beam = "beam";

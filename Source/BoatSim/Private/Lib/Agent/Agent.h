@@ -72,6 +72,11 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	virtual void PostInitializeComponents() override;
+	virtual void OnConstruction(const FTransform& Transform) override;
+	virtual void Tick(float DeltaTime) override;
+	UPROPERTY(EditAnywhere)
+		bool EncapsulateStaticMeshAsActor = false;
 
 
 	UPROPERTY(EditAnywhere)
@@ -79,6 +84,12 @@ protected:
 
 	UFUNCTION(BlueprintCallable)
 		void AddObjectDef(FString name, UObject *p_part);
+
+
+	void CreateActorsForStaticMeshes(USceneComponent* Component, TMap<USceneComponent*, AActor*>& ComponentToActorMap, UWorld* World);
+	void ProcessActor(AActor* OriginalActor, UWorld* World);
+	
+	bool BuiltOnce = false;
 	
 public:	
 
@@ -86,4 +97,6 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		FAgentObjectDefEntry FindDef(FString name);
+
+
 };

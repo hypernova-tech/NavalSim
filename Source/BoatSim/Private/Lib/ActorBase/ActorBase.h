@@ -23,6 +23,8 @@ public:
 	// Sets default values for this actor's properties
 	AActorBase();
 
+	UPROPERTY(EditAnywhere)
+		bool IsSaveLoadCreateEnabled = true;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -30,12 +32,18 @@ protected:
 	UPROPERTY(EditAnywhere)
 		bool IsSaveEnabled = true;
 
+
 	UPROPERTY(EditAnywhere)
-		bool IsSaveLoadCreateEnabled = true;
+		bool UsePrefixName = false;
+
+	UPROPERTY(EditAnywhere)
+		FString PrefixName = "";
 
 	UPROPERTY(EditAnywhere)
 		FString BlueprintName = "";
 
+	UPROPERTY(EditAnywhere)
+		int TickRequiredForCreation = 0;
 
 	UPROPERTY(EditAnywhere)
 		int ActorId;
@@ -61,7 +69,8 @@ protected:
 	UPROPERTY(EditAnywhere)
 		AActor* ActorGizmo;
 
-
+	UPROPERTY(EditAnywhere)
+		TArray<USceneComponent*> ManuallyAttachComponents;
 protected:
 
 	 virtual void OnStep(float DeltaTime);
@@ -73,10 +82,12 @@ protected:
 
 	 UGenericCommIF* pCommIF;
 
-
+	 UFUNCTION(BlueprintCallable)
+		 void AddManuallyAttach(USceneComponent* p_comp);
 
 public:	
 	// Called every frame
+	virtual void OnConstruction(const FTransform& Transform) override;
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetEnabled(bool val) ;
 	virtual bool GetEnabled() ;
@@ -110,4 +121,6 @@ public:
 	bool SetConnnectionInfo(INT32S ind, SConnectionInfo info);
 	void SaveConnection(FString& line, FString ip_addr_param, FString local_port_param, FString remote_port_param, ISaveLoader* p_save_loader, SConnectionInfo& conn);
 	
+	UFUNCTION(BlueprintCallable)
+	void AddChild(USceneComponent* p_comp);
 };
