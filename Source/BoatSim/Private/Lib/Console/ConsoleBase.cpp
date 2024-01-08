@@ -843,6 +843,7 @@ bool UConsoleBase::SetParent(AActor *p_actor, FString parent, FString full_path)
         if (parent == "null") {
             
             p_actor->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+            p_actor->SetOwner(nullptr);
         }
         else {
 

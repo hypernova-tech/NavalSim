@@ -1995,11 +1995,13 @@ namespace ConsoleGUI
         TreeNode DestinationNode;
         private void ObjectEditor_DragDrop(object sender, DragEventArgs e)
         {
+
+          
             System.Windows.Forms.TreeView treeView = (System.Windows.Forms.TreeView)sender;
             Point pt = treeView.PointToClient(new Point(e.X, e.Y));
             DestinationNode = treeView.GetNodeAt(pt);
-
-            if (StartNode != null && DestinationNode != null)
+            TreeNode draggedNode = (TreeNode)e.Data.GetData(typeof(TreeNode));
+            if (draggedNode != null && DestinationNode != null)
             {
                 string dest_actor = DestinationNode.Text;
 
@@ -2007,7 +2009,7 @@ namespace ConsoleGUI
                 if (DestinationNode.Parent == null){
                     dest_actor = "null";
                 }
-                SystemAPIImplementor.SetParent(StartNode.Text, dest_actor);
+                SystemAPIImplementor.SetParent(draggedNode.Text, dest_actor);
             }
 
             StartNode = null;
@@ -2018,7 +2020,8 @@ namespace ConsoleGUI
         {
             System.Windows.Forms.TreeView treeView = (System.Windows.Forms.TreeView)sender;
             Point pt = treeView.PointToClient(new Point(e.X, e.Y));
-            StartNode = treeView.GetNodeAt(pt);
+            var node = treeView.GetNodeAt(pt);
+            //StartNode = (TreeNode)e.Data; //
         }
 
         private void ObjectEditor_DragLeave(object sender, EventArgs e)
