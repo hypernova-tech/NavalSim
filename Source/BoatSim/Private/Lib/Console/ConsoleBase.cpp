@@ -569,104 +569,116 @@ void UConsoleBase::SendActors()
 
 void UConsoleBase::SendActorBases()
 {
-    TArray<AActor*> all_actors;
-    ASystemManagerBase::GetInstance()->QueryActors(EActorQueryArgs::ActorBases, all_actors);
-    ASystemManagerBase::GetInstance()->QueryActors(EActorQueryArgs::Platforms, all_actors);
+    pSystemAPI->SendConsoleResponse("<sendstarted>");
+    GetWorld()->GetTimerManager().SetTimer(
+        TimerHandle, // This will hold the reference to the timer, it's a member variable: FTimerHandle TimerHandle;
+        [this]() // Lambda expression begins
+        {
+            TArray<AActor*> all_actors;
+            ASystemManagerBase::GetInstance()->QueryActors(EActorQueryArgs::ActorBases, all_actors);
+            ASystemManagerBase::GetInstance()->QueryActors(EActorQueryArgs::Platforms, all_actors);
 
-    FString path = "";
+            FString path = "";
 
 #if true
-    for (auto p_act : all_actors)
-    {
-        auto full_name = p_act->GetFullName();
-        TArray<FString> hier;
-        TArray<FString> hiercomp;
-        CUtil::GetActorHierarchy(p_act, hier);
-        //CUtil::GetComponentHierarchy(p_act->GetRootComponent(), hiercomp);
-        //CUtil::GetActorAndComponentHierarchy(p_act, hierall);
-        path = "";
-        for (INT32S i = hier.Num() - 1; i >= 0; i--) {
-            path += hier[i];
-            if (i != 0) {
-                path += "/";
-            }
+            for (auto p_act : all_actors)
+            {
+                auto full_name = p_act->GetFullName();
+                TArray<FString> hier;
+                TArray<FString> hiercomp;
+                CUtil::GetActorHierarchy(p_act, hier);
+                //CUtil::GetComponentHierarchy(p_act->GetRootComponent(), hiercomp);
+                //CUtil::GetActorAndComponentHierarchy(p_act, hierall);
+                path = "";
+                for (INT32S i = hier.Num() - 1; i >= 0; i--) {
+                    path += hier[i];
+                    if (i != 0) {
+                        path += "/";
+                    }
 
-        }
-        pSystemAPI->SendConsoleResponse("<actor>" + path);
-
-    }
-#endif
-
-
-#if false
-    for (auto p_act : all_actors)
-    {
-        if (CUtil::GetParentActor(p_act) != nullptr) {
-            continue; // its info will we sent owners paths
-        }
-        TArray<FString> actor_comp_paths = CUtil::GetAllComponentPaths(p_act);
-
-        for (auto comp_path : actor_comp_paths) {
-            pSystemAPI->SendConsoleResponse("<actor>" + comp_path);
-        }
-
-#endif
-#if false
-        TArray<USceneComponent*> static_mesh_componnets;
-        p_act->GetComponents<USceneComponent>(static_mesh_componnets);
-        USceneComponent* p_root = p_act->GetRootComponent();
-        
-        if (!static_mesh_componnets.Contains(p_root)) {
-            static_mesh_componnets.Insert(p_root, 0);
-        }
-
-        for (auto p_comp : static_mesh_componnets) {
-            TArray<UActorComponent*> ret = CUtil::GetComponentHierarchyToTop(p_comp);
-
-            path = p_act->GetName()+"/";
-            
-            for (INT32S i = ret.Num() - 1; i >= 0; i--) {
-   
-                path += ret[i]->GetName();
-                if (i != 0) {
-                    path += "/";
                 }
-                if (CUtil::IsDefaultSceneComponent((USceneComponent*)ret[i])) {
-                    if (ret[i]->GetOwner() != p_act) {
-                        path += ret[i]->GetOwner()->GetName();
+                pSystemAPI->SendConsoleResponse("<actor>" + path);
 
+            }
+#endif
+
+
+#if false
+            for (auto p_act : all_actors)
+            {
+                if (CUtil::GetParentActor(p_act) != nullptr) {
+                    continue; // its info will we sent owners paths
+                }
+                TArray<FString> actor_comp_paths = CUtil::GetAllComponentPaths(p_act);
+
+                for (auto comp_path : actor_comp_paths) {
+                    pSystemAPI->SendConsoleResponse("<actor>" + comp_path);
+                }
+
+#endif
+#if false
+                TArray<USceneComponent*> static_mesh_componnets;
+                p_act->GetComponents<USceneComponent>(static_mesh_componnets);
+                USceneComponent* p_root = p_act->GetRootComponent();
+
+                if (!static_mesh_componnets.Contains(p_root)) {
+                    static_mesh_componnets.Insert(p_root, 0);
+                }
+
+                for (auto p_comp : static_mesh_componnets) {
+                    TArray<UActorComponent*> ret = CUtil::GetComponentHierarchyToTop(p_comp);
+
+                    path = p_act->GetName() + "/";
+
+                    for (INT32S i = ret.Num() - 1; i >= 0; i--) {
+
+                        path += ret[i]->GetName();
                         if (i != 0) {
                             path += "/";
                         }
+                        if (CUtil::IsDefaultSceneComponent((USceneComponent*)ret[i])) {
+                            if (ret[i]->GetOwner() != p_act) {
+                                path += ret[i]->GetOwner()->GetName();
+
+                                if (i != 0) {
+                                    path += "/";
+                                }
+                            }
+                        }
+
+
                     }
+
+
+
+
+
+
                 }
 
 
+
+
+
             }
-            
-
-
-            
-            
-
-        }
-    
-  
-
-
-       
-    }
 #endif
-    TArray<AActor*> paths;
-    ASystemManagerBase::GetInstance()->QueryActors(EActorQueryArgs::ActorBasesOnlyPaths, paths);
+            TArray<AActor*> paths;
+            ASystemManagerBase::GetInstance()->QueryActors(EActorQueryArgs::ActorBasesOnlyPaths, paths);
 
 
-    for (auto p_act : paths)
-    {
-        pSystemAPI->SendConsoleResponse("<path>" + p_act->GetName());
-    }
+            for (auto p_act : paths)
+            {
+                pSystemAPI->SendConsoleResponse("<path>" + p_act->GetName());
+            }
 
-    pSystemAPI->SendConsoleResponse("<allsent>");
+            pSystemAPI->SendConsoleResponse("<sendfinished>");
+
+        }, // Lambda expression ends
+        0.05, // Time in seconds before the timer fires
+        false // Set to 'true' if you want the timer to loop
+    );
+
+
 }
 
 void UConsoleBase::SendFunctions(AActor* p_actor, FString category)

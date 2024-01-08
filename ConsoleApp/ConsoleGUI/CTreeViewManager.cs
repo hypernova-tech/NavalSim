@@ -47,6 +47,8 @@
             }
         }
 
+       // RemoveFirstLevelDuplicates(rootNode);
+
         //treeView.CollapseAll(); // Expand all nodes to show the full hierarchy.
     }
 
@@ -170,8 +172,48 @@
     }
 
 
+    public void RemoveFirstLevelDuplicates(TreeNode rootNode)
+    {
+        // Step 1: Find all unique names at the first level
+        HashSet<string> firstLevelNodeNames = new HashSet<string>();
+        foreach (TreeNode firstLevelNode in rootNode.Nodes)
+        {
+            firstLevelNodeNames.Add(firstLevelNode.Text);
+        }
 
-  
+        // Step 2: Find duplicates in deeper levels and mark for removal
+        HashSet<string> duplicates = new HashSet<string>();
+        FindDuplicatesInDeeperLevels(rootNode, firstLevelNodeNames, duplicates, 0);
+
+        // Step 3: Remove the duplicates from the first level
+        for (int i = rootNode.Nodes.Count - 1; i >= 0; i--)
+        {
+            TreeNode firstLevelNode = rootNode.Nodes[i];
+            if (duplicates.Contains(firstLevelNode.Text))
+            {
+                rootNode.Nodes.RemoveAt(i);
+            }
+        }
+    }
+
+    void FindDuplicatesInDeeperLevels(TreeNode node, HashSet<string> firstLevelNodeNames, HashSet<string> duplicates, int level)
+    {
+        foreach (TreeNode childNode in node.Nodes)
+        {
+            // If we're past the first level and the node name is in the set, it's a duplicate
+            if (level > 0 && firstLevelNodeNames.Contains(childNode.Text))
+            {
+                duplicates.Add(childNode.Text);
+            }
+
+            // Recursively check children
+            FindDuplicatesInDeeperLevels(childNode, firstLevelNodeNames, duplicates, level + 1);
+        }
+    }
+
+
+
+
 
 
 }

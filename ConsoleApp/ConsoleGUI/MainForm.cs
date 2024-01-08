@@ -167,8 +167,9 @@ namespace ConsoleGUI
 
                     ActorsReceived.Add(item_striped);
                     is_added = true;
-                    IsActorGridDirty = true;
+                    
                 }
+                IsActorGridDirty = true;
 
             }
 
@@ -199,9 +200,25 @@ namespace ConsoleGUI
 
 
             }
-            else if (item.Contains("<allsent>"))
+            else if (item.Contains("<sendstarted>"))
             {
+                ActorsReceived.Clear();
+                /*
+                if(ObjectEditor.Nodes != null && ObjectEditor.Nodes[0] != null)
+                {
+                    TreeViewManager.RemoveFirstLevelDuplicates(ObjectEditor.Nodes[0]);
+                }
+               */
 
+            }
+            else if (item.Contains("<sendfinished>"))
+            {
+                /*
+                if(ObjectEditor.Nodes != null && ObjectEditor.Nodes[0] != null)
+                {
+                    TreeViewManager.RemoveFirstLevelDuplicates(ObjectEditor.Nodes[0]);
+                }
+               */
 
             }
 
@@ -239,6 +256,7 @@ namespace ConsoleGUI
 
                 TreeViewManager.AddHierarchyToTreeView(ObjectEditor, obj);
             }
+            SelectActor();
             SelectActor();
         }
 
@@ -2001,6 +2019,7 @@ namespace ConsoleGUI
             Point pt = treeView.PointToClient(new Point(e.X, e.Y));
             DestinationNode = treeView.GetNodeAt(pt);
             TreeNode draggedNode = (TreeNode)e.Data.GetData(typeof(TreeNode));
+            
             if (draggedNode != null && DestinationNode != null)
             {
                 string dest_actor = DestinationNode.Text;
@@ -2009,6 +2028,7 @@ namespace ConsoleGUI
                 if (DestinationNode.Parent == null){
                     dest_actor = "null";
                 }
+                ObjectEditor.Nodes.Remove(draggedNode);
                 SystemAPIImplementor.SetParent(draggedNode.Text, dest_actor);
             }
 
