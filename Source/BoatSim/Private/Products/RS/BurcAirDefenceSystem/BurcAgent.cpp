@@ -61,7 +61,7 @@ bool ABurcAgent::AssignTarget_(FString target_name, double duration)
 
 FVector ABurcAgent::GetAimDirection()
 {
-	return FVector(pGunTip->GetForwardVector());
+	return FVector(pGunTip->GetActorForwardVector());
 }
 
 AActor* ABurcAgent::CloneBullet()
@@ -69,7 +69,7 @@ AActor* ABurcAgent::CloneBullet()
 	FString bullet_name = ASystemManagerBase::GetInstance()->GenerateUniqueName("bullet");
 	
 	ABulletBase* p_bullet = (ABulletBase*)(ASystemManagerBase::GetInstance()->CreateActor(BulletAgentName_, bullet_name,
-		pGunTip->GetComponentLocation(),
+		pGunTip->GetActorLocation(),
 		FVector::ZeroVector,
 		FVector::OneVector, BulletLifeTimeSec_));
 
@@ -103,12 +103,21 @@ void ABurcAgent::ApplyShake()
 			FMath::RandRange(-ShakeRotationIntensity, ShakeRotationIntensity));
 
 		// Apply the offset and rotation to the nozzle
-		pGun->AddLocalOffset(Offset);
-		pGun->AddLocalRotation(RotationOffset);
+		pGun->AddActorLocalOffset(Offset);
+		pGun->AddActorLocalRotation(RotationOffset);
 	}
 }
+void ABurcAgent::OnPreStep(float DeltaTime)
+{
+	Super::OnPreStep(DeltaTime);
+	pGunTip = ASystemManagerBase::GetInstance()->FindActor(GunTipName_);
+	pGun = ASystemManagerBase::GetInstance()->FindActor(GunName_);
+	pTaretGimbal = (AGimbalBase*)ASystemManagerBase::GetInstance()->FindActor(TaretGimbalName_);
+	pEOGimbal = (AGimbalBase*)ASystemManagerBase::GetInstance()->FindActor(EOGimbalName_);
+	pGunGimbal = (AGimbalBase*)ASystemManagerBase::GetInstance()->FindActor(GunGimbalName_);
+}
 
-void ABurcAgent::Tick(float DeltaTime)
+void ABurcAgent::OnStep(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
@@ -143,3 +152,4 @@ void ABurcAgent::Tick(float DeltaTime)
 	}
 	
 }
+

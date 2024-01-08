@@ -43,7 +43,9 @@ protected:
 	ELoaderStateMachine State = ELoaderStateMachine::LoaderStateMachineIdle;
 	virtual void StateMachine();
 	void ProcessCurrentCommand(INT32S &tick_delay);
+	void ProcessParentingCommands();
 	TArray<FString> CommandLines;
+	TArray<FString> ParentingCommands;
 	INT32S CurrentCommandIndex;
 	INT64S DelayStartRef;
 	INT32S TickDelayCount;

@@ -303,11 +303,26 @@ bool USaverLoaderBase::Load(ISystemAPI* p_api, FString file_name)
 void USaverLoaderBase::ProcessCurrentCommand(INT32S& tick_delay)
 {
 	auto curr_cmd = CommandLines[CurrentCommandIndex];
-	pSystemApi->SendConsoleResponse(curr_cmd);
-	pSystemApi->GetConsole()->Command(curr_cmd, tick_delay);
-	CUtil::DebugLog(curr_cmd);
-}
+	if (curr_cmd.Contains("--" + CCLICommandManager::Parent)) {
+		ParentingCommands.Add(curr_cmd);
+	}
+	else {
+		pSystemApi->SendConsoleResponse(curr_cmd);
+		pSystemApi->GetConsole()->Command(curr_cmd, tick_delay);
+		CUtil::DebugLog(curr_cmd);
+	}
 
+}
+void USaverLoaderBase::ProcessParentingCommands()
+{
+	INT32S curr_delay = 0;
+	for (auto cmd : ParentingCommands) {
+		pSystemApi->SendConsoleResponse(cmd);
+		pSystemApi->GetConsole()->Command(cmd, curr_delay);
+		CUtil::DebugLog(cmd);
+	}
+	ParentingCommands.Reset();
+}
 void USaverLoaderBase::StateMachine()
 {
 	auto curr_state = State;
@@ -344,6 +359,7 @@ void USaverLoaderBase::StateMachine()
 		}
 		break;
 	case LoaderStateMachineLoadComplete:
+		ProcessParentingCommands();
 		pSystemApi->GetConsole()->SendBlueprints();
 		pSystemApi->GetConsole()->SendActorBases();
 		next_state = LoaderStateMachineWait;

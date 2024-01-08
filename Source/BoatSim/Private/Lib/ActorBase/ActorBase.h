@@ -71,10 +71,15 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 		TArray<USceneComponent*> ManuallyAttachComponents;
+
+	INT64U ExternalUpdateCount = 0;
+	INT64U ExternalUpdateCountScenarioMode = 0;
 protected:
 
+	 virtual void OnPreStep(float DeltaTime);
 	 virtual void OnStep(float DeltaTime);
 	 virtual void OnStepScenarioMode(float DeltaTime);
+	 virtual void OnPreStepScenarioMode(float DeltaTime);
 	 bool CheckAffinity();
 
 	 virtual void OnActorDisabled();
@@ -101,8 +106,13 @@ public:
 	bool GetIsExternalUpdateScenarioMode();
 	void ExternalUpdate(float DeltaTime);
 	void ExternalUpdateScenarioMode(float DeltaTime);
+
+
+
 	void SetAffinityInstanceId(int val);
 	int GetAffinityInstanceId();
+
+
 	FString GetBlueprintName();
 	virtual void Save(ISaveLoader* p_save_loader);
 	virtual void SaveJSON(CJsonDataContainer &data);

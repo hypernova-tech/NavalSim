@@ -1,0 +1,7 @@
+19inçlik endüstriyel
+
+set --name burc1 --property GunTipName_ --value burc1_guntip
+set --name burc1 --property GunName_ --value burc1_Silah
+set --name burc1 --property TaretGimbalName_ --value burc1_gimbaltaret
+set --name burc1 --property EOGimbalName_ --value burc1_eogimbal
+set --name burc1 --property GunGimbalName_ --value burc1_gun_gimbal

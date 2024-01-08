@@ -53,12 +53,19 @@ void AActorBase::AddManuallyAttach(USceneComponent* p_comp)
 void AActorBase::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
 }
-
-void AActorBase::OnStep(float DeltaTime)
+void AActorBase:: OnPreStep(float DeltaTime)
 {
 
 }
+void AActorBase::OnStep(float DeltaTime)
+{
 
+
+}
+void AActorBase::OnPreStepScenarioMode(float DeltaTime)
+{
+
+}
 void AActorBase::OnStepScenarioMode(float DeltaTime)
 {
 }
@@ -89,6 +96,7 @@ void AActorBase::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	if (!IsExternalUpdate) {
 		if (CheckAffinity() && !Suppressed) {
+			
 			OnStep(DeltaTime);
 		}
 	}
@@ -138,7 +146,14 @@ void AActorBase::ExternalUpdate(float DeltaTime)
 {
 	
 	if (CheckAffinity() && !Suppressed) {
-		OnStep(DeltaTime);
+		if (ExternalUpdateCount == 0) {
+			OnPreStep(DeltaTime);
+		}
+		else {
+			OnStep(DeltaTime);
+		}
+		ExternalUpdateCount++;
+		
 	}
 	
 }
@@ -146,7 +161,13 @@ void AActorBase::ExternalUpdate(float DeltaTime)
 void AActorBase::ExternalUpdateScenarioMode(float DeltaTime)
 {
 	if (CheckAffinity()) {
-		OnStepScenarioMode(DeltaTime);
+		if (ExternalUpdateCountScenarioMode == 0) {
+			OnPreStepScenarioMode(DeltaTime);
+		}
+		else {
+			OnStepScenarioMode(DeltaTime);
+		}
+		ExternalUpdateCountScenarioMode++;
 	}
 }
 
@@ -174,18 +195,17 @@ void AActorBase::Save(ISaveLoader* p_save_loader)
 		p_save_loader->AppendOption(line, CCLICommandManager::Bp, GetBlueprintName());
 		p_save_loader->AppendOption(line, CCLICommandManager::Tick, TickRequiredForCreation);
 
-		
-		auto parent = CUtil::GetParentActor(this);
-		if (parent != nullptr) {
-			p_save_loader->AppendOption(line, CCLICommandManager::Parent, parent->GetName());
-			FString parent_path = CUtil::GetActorFullComponentPath(this);
-			p_save_loader->AppendOption(line, CCLICommandManager::FullPath, parent_path);
-		}
-	
 		p_save_loader->AddLine(line);
 	}
 
+	auto parent = CUtil::GetParentActor(this);
 
+	if (parent != nullptr) {
+		line = p_save_loader->CreateCommand(CCLICommandManager::SetCommand);
+		p_save_loader->AppendOption(line, CCLICommandManager::Name, GetName());
+		p_save_loader->AppendOption(line, CCLICommandManager::Parent, parent->GetName());
+		p_save_loader->AddLine(line);
+	}
 
 	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
 	p_save_loader->AppendOption(line, CCLICommandManager::Instance, AffinityInstanceId);

@@ -119,7 +119,7 @@ set --name burc1_guntip --instance -1
 set --name burc1_guntip --suppressed 0
 set --name burc1_guntip --standalone 0
 set --name burc1_guntip --position "5.273835 0.001949 6.698273"
-set --name burc1_guntip --rotation "-0.000000 -0.000000 0.000000"
+set --name burc1_guntip --rotation "0.000000 -0.000000 0.000000"
 set --name burc1_guntip --scale "0.010000 0.010000 0.010000"
 
 create --name burc_gimbaltaret --bp GIMBAL2DOF --tick 0
@@ -137,7 +137,7 @@ set --name burc1_gun_gimbal --instance -1
 set --name burc1_gun_gimbal --suppressed 0
 set --name burc1_gun_gimbal --standalone 0
 set --name burc1_gun_gimbal --position "-0.037085 -0.010616 6.575760"
-set --name burc1_gun_gimbal --rotation "0.000000 -0.000000 0.000000"
+set --name burc1_gun_gimbal --rotation "-0.000000 -0.000000 0.000000"
 set --name burc1_gun_gimbal --scale "1.000000 1.000000 1.000000"
 
 create --name burc1_eogimbal --bp GIMBAL2DOF --tick 0
@@ -146,7 +146,7 @@ set --name burc1_eogimbal --instance -1
 set --name burc1_eogimbal --suppressed 0
 set --name burc1_eogimbal --standalone 0
 set --name burc1_eogimbal --position "-0.138372 0.000324 6.951919"
-set --name burc1_eogimbal --rotation "0.000000 -0.000000 0.000000"
+set --name burc1_eogimbal --rotation "-0.000000 -0.000000 0.000000"
 set --name burc1_eogimbal --scale "1.000000 1.000000 1.000000"
 
 create --name burc1_ir_cam1 --bp CAMIR --tick 0
@@ -155,7 +155,7 @@ set --name burc1_ir_cam1 --instance -1
 set --name burc1_ir_cam1 --suppressed 0
 set --name burc1_ir_cam1 --standalone 0
 set --name burc1_ir_cam1 --position "-0.138372 -0.871962 6.951918"
-set --name burc1_ir_cam1 --rotation "0.000000 -0.000000 0.000000"
+set --name burc1_ir_cam1 --rotation "-0.000000 -0.000000 0.000000"
 set --name burc1_ir_cam1 --scale "1.000000 1.000000 1.000000"
 set --name burc1_ir_cam1 --slotindex 0
 set --name burc1_ir_cam1 --rangemin 5.000000

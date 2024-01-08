@@ -72,9 +72,9 @@ void AAgent::CreateActorsForStaticMeshes(USceneComponent* Component, TMap<UScene
         if (UStaticMeshComponent* MeshComponent = Cast<UStaticMeshComponent>(Child))
         {
             // Create a new actor for this mesh
-            AActor* NewActor = ASystemManagerBase::GetInstance()->CreateActor("EMPTY", GetName() +"_"+ MeshComponent->GetName(), MeshComponent->GetComponentLocation(), MeshComponent->GetComponentRotation().Euler(), FVector::OneVector, 0);
+            AActorBase* NewActor = (AActorBase*)ASystemManagerBase::GetInstance()->CreateActor("EMPTY", GetName() +"_"+ MeshComponent->GetName(), MeshComponent->GetComponentLocation(), MeshComponent->GetComponentRotation().Euler(), FVector::OneVector, 0);
             //NewActor->IsSaveLoadCreateEnabled = false
-      
+            NewActor->IsSaveLoadCreateEnabled = false;
             MeshComponent->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
           
 

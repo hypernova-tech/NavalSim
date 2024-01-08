@@ -19,7 +19,8 @@ class ABurcAgent : public AAgent
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
-	virtual void Tick(float DeltaTime) override;
+	virtual void OnStep(float DeltaTime) override;
+	virtual void OnPreStep(float DeltaTime);
 	UFUNCTION(BlueprintCallable)
 		void Fire_();
 
@@ -30,6 +31,11 @@ protected:
 		void AimGun_(FVector pos);
 
 
+	UPROPERTY(EditAnywhere)
+		FString GunTipName_;
+
+	UPROPERTY(EditAnywhere)
+		FString GunName_;
 
 	UPROPERTY(EditAnywhere)
 		FString BulletAgentName_;
@@ -40,6 +46,15 @@ protected:
 	UPROPERTY(EditAnywhere)
 		double BulletLifeTimeSec_ = 1;
 
+	UPROPERTY(EditAnywhere)
+		FString TaretGimbalName_;
+
+	UPROPERTY(EditAnywhere)
+		FString EOGimbalName_;
+
+	UPROPERTY(EditAnywhere)
+		FString GunGimbalName_;
+
 	UFUNCTION(BlueprintCallable)
 		bool AssignTarget_(FString target_name, double duration);
 
@@ -47,10 +62,10 @@ protected:
 	FVector GetAimDirection();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		UStaticMeshComponent* pGunTip;
+		AActor* pGunTip;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		UStaticMeshComponent* pGun;
+		AActor* pGun;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		AGimbalBase* pTaretGimbal;
