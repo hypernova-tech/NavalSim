@@ -1,0 +1,53 @@
+create --name env --bp  --tick 0
+set --name env --instance -1
+set --name env --suppressed 0
+set --name env --standalone 0
+set --name env --position "324.600000 284.200000 4.600000"
+set --name env --rotation "-0.000000 -0.000000 0.000000"
+set --name env --scale "1.000000 1.000000 1.000000"
+set --name env --timeofday 12.016653
+set --name env --envtimeflowscale 1.000000
+set --name env --rain 0.000000
+set --name env --cloud 0.000000
+set --name env --snow 0.000000
+set --name env --dust 0.000000
+set --name env --fog 0.000000
+set --name env --thunder 0.000000
+set --name env --envsoundfx 1
+set --name env --wind 3.000000
+set --name env --winddir 0.000000
+
+create --name c1 --bp CUBE --tick 0
+set --name c1 --instance -1
+set --name c1 --suppressed 0
+set --name c1 --standalone 0
+set --name c1 --position "0.000000 0.000000 6.514585"
+set --name c1 --rotation "-0.000000 -0.000000 0.000000"
+set --name c1 --scale "0.100000 0.100000 0.100000"
+
+create --name ax --bp CUBE --tick 0
+set --name ax --parent gimbal
+set --name ax --instance -1
+set --name ax --suppressed 0
+set --name ax --standalone 0
+set --name ax --position "0.000000 1.049799 7.166044"
+set --name ax --rotation "-0.000000 -0.000000 0.000000"
+set --name ax --scale "0.030000 0.020000 0.010000"
+
+create --name cone1 --bp CONE --tick 0
+set --name cone1 --parent ax
+set --name cone1 --instance -1
+set --name cone1 --suppressed 0
+set --name cone1 --standalone 0
+set --name cone1 --position "1.246319 2.296118 7.166044"
+set --name cone1 --rotation "-0.000000 -0.000000 0.000000"
+set --name cone1 --scale "0.100000 0.100000 0.100000"
+
+create --name gimbal --bp GIMBAL3DOF --tick 2
+set --name gimbal --parent c1
+set --name gimbal --instance -1
+set --name gimbal --suppressed 0
+set --name gimbal --standalone 0
+set --name gimbal --position "0.000000 0.000000 7.166044"
+set --name gimbal --rotation "-0.000000 -0.000000 0.000000"
+set --name gimbal --scale "0.010000 0.010000 0.010000"

@@ -30,6 +30,7 @@ enum class EBlueprintCategory : uint8
 	CategoryEnvironment = 15,
 	CategoryTerrain = 16,
 	CategoryPrimitives =17,
+	CategoryGimbal = 18,
 	CategoryLast = 255
 };
 

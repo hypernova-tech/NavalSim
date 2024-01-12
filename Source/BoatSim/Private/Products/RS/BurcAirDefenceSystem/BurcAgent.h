@@ -105,4 +105,5 @@ protected:
 
 	void StartShake();
 	void ApplyShake();
+	void AimGimbal(AGimbalBase* p_gimbal, FVector target);
 };

@@ -22,7 +22,7 @@ public:
 	static FVector ToVec3(const FVector2D& vec2d);
 	static bool IsZero(FVector vec, FLOAT64 tolerance);
 	static bool IsPointInsideVolume(const FVector& origin, const FVector& point, FLOAT64 min_elevation_deg, FLOAT64 max_elevation_deg, FLOAT64 min_azimuth_deg, FLOAT64 max_azimuth_deg, FLOAT64 min_range_meter, FLOAT64 max_range_meter);
-
+	static void RotateRelative(AActor* p_actor, USceneComponent* p_comp, const FTransform& p_comp_initial_rel_transform, const FVector& rpy_deg);
 
 	static TArray<FVector> GetBoxCornersAndCenter(const FBox& Box);
 	static bool CheckBoxInsideVolume(const FBox& box, FVector& origin, FLOAT64 min_elevation_deg, FLOAT64 max_elevation_deg, FLOAT64 min_azimuth_deg, FLOAT64 max_azimuth_deg, FLOAT64 min_range_meter, FLOAT64 max_range_meter);

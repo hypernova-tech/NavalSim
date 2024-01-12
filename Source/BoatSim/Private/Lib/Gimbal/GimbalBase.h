@@ -13,8 +13,14 @@ struct FSGimbalAxisInfo {
 	GENERATED_BODY()
 
 public:
+
+
+
+
 	UPROPERTY(EditAnywhere)
 		bool Enabled;
+
+
 
 	UPROPERTY(EditAnywhere)
 		double InitialAngleDeg;
@@ -72,6 +78,13 @@ enum EGimbalAxis
 	Yaw
 };
 
+USTRUCT()
+struct FCompEntry {
+	GENERATED_BODY()
+public:
+	USceneComponent* pComp;
+	FTransform InitialTransform;
+};
 
 UCLASS(Blueprintable)
 class AGimbalBase : public AActorBase
@@ -84,7 +97,12 @@ public:
 
 protected:
 	// Called when the game starts or when spawned
+	virtual void OnConstruction(const FTransform& Transform) override;
 	virtual void BeginPlay() override;
+	virtual void OnPreStep(float DeltaTime) override;
+
+	UPROPERTY(BlueprintReadWrite)
+		AActorBase* pHandle;
 
 	UPROPERTY(EditAnywhere)
 		FSGimbalAxisInfo RollAxis;
@@ -99,7 +117,7 @@ protected:
 	
 
 	UPROPERTY(EditAnywhere)
-		TArray<AActor*> AttachedActors;
+		TArray<FCompEntry> AttachedComps;
 
 
 	EGimbalState GimbalState = EGimbalState::GimbalInit;
@@ -113,9 +131,9 @@ protected:
 
 	virtual void UpdateAxis(EGimbalAxis axis, float delta_time_sec);
 	FSGimbalAxisInfo* GetAxis(EGimbalAxis axis);
-	float GetAxisAngleDeg(EGimbalAxis axis);
-	
-	
+	double GetAxisAngleDeg(EGimbalAxis axis);
+	FVector GetRPYDeg();
+	void UpdateAttachedActors();
 
 public:	
 	// Called every frame
@@ -123,17 +141,20 @@ public:
 	virtual void OnStep(float DeltaTime) override;
 
 	UFUNCTION(BlueprintCallable)
-		void SetCommand_(float roll_angle_deg, float pitch_angle_deg, float yaw_angle_deg);
-	
-	UFUNCTION(BlueprintCallable)
-		void UpdateAttachedActors();
-	
-	UFUNCTION(BlueprintCallable)
-		void AttachActor_(AActor* p_actor);
+		void SetCommand_(FVector rpy_deg);
 
 	UFUNCTION(BlueprintCallable)
-		void RemoveAttachedActor_(AActor* p_actor);
+		void EnableAxis_(FVector rpy_en);
 
 	UFUNCTION(BlueprintCallable)
-		TArray<AActor*>& GetAttachedActor_();
+		void SetAxisRateDegPerSec_(FVector rpy_en);
+	
+	UFUNCTION(BlueprintCallable)
+		void AttachComp_(USceneComponent* p_comp);
+
+	UFUNCTION(BlueprintCallable)
+		void RemoveAttachedComp_(USceneComponent* p_comp);
+
+
+	
 };

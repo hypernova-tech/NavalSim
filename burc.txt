@@ -97,7 +97,7 @@ set --name burc1_On_Teker_1 --position "5.024362 -2.302791 1.258581"
 set --name burc1_On_Teker_1 --rotation "-0.000000 -0.000000 0.000000"
 set --name burc1_On_Teker_1 --scale "1.000000 1.000000 1.000000"
 
-set --name burc1_Radar --parent burc_gimbaltaret
+set --name burc1_Radar --parent burc1_taret_gimbal
 set --name burc1_Radar --instance -1
 set --name burc1_Radar --suppressed 0
 set --name burc1_Radar --standalone 0
@@ -114,7 +114,7 @@ set --name burc1_Silah --rotation "0.000000 30.000000 0.000000"
 set --name burc1_Silah --scale "1.000000 1.000000 1.000000"
 
 create --name burc1_guntip --bp CUBE --tick 0
-set --name burc1_guntip --parent burc1_Silah
+set --name burc1_guntip --parent burc1_gun_gimbal
 set --name burc1_guntip --instance -1
 set --name burc1_guntip --suppressed 0
 set --name burc1_guntip --standalone 0
@@ -122,54 +122,53 @@ set --name burc1_guntip --position "5.273835 0.001949 6.698273"
 set --name burc1_guntip --rotation "-0.000000 -0.000000 0.000000"
 set --name burc1_guntip --scale "0.010000 0.010000 0.010000"
 
-create --name burc_gimbaltaret --bp GIMBAL2DOF --tick 0
-set --name burc_gimbaltaret --parent burc1
-set --name burc_gimbaltaret --instance -1
-set --name burc_gimbaltaret --suppressed 0
-set --name burc_gimbaltaret --standalone 0
-set --name burc_gimbaltaret --position "0.000000 0.000673 5.504570"
-set --name burc_gimbaltaret --rotation "-0.100000 0.000000 0.000000"
-set --name burc_gimbaltaret --scale "1.000000 1.000000 1.000000"
+create --name burc1_target --bp CUBE --tick 0
+set --name burc1_target --instance -1
+set --name burc1_target --suppressed 0
+set --name burc1_target --standalone 0
+set --name burc1_target --position "20.000000 0.000000 10.000000"
+set --name burc1_target --rotation "-0.000000 -0.000000 0.000000"
+set --name burc1_target --scale "0.100000 0.100000 0.100000"
 
-create --name burc1_gun_gimbal --bp GIMBAL2DOF --tick 0
+create --name burc1_taret_gimbal --bp GIMBAL3DOF --tick 2
+set --name burc1_taret_gimbal --parent burc1
+set --name burc1_taret_gimbal --instance -1
+set --name burc1_taret_gimbal --suppressed 0
+set --name burc1_taret_gimbal --standalone 0
+set --name burc1_taret_gimbal --position "-0.574280 0.000000 5.094238"
+set --name burc1_taret_gimbal --rotation "-0.000000 -0.000000 0.000000"
+set --name burc1_taret_gimbal --scale "1.000000 1.000000 1.000000"
+
+create --name burc1_gun_gimbal --bp GIMBAL3DOF --tick 2
 set --name burc1_gun_gimbal --parent burc1_Radar
 set --name burc1_gun_gimbal --instance -1
 set --name burc1_gun_gimbal --suppressed 0
 set --name burc1_gun_gimbal --standalone 0
-set --name burc1_gun_gimbal --position "-0.037085 -0.010616 6.575760"
-set --name burc1_gun_gimbal --rotation "0.000000 -0.000000 0.000000"
+set --name burc1_gun_gimbal --position "0.456592 0.001949 6.698273"
+set --name burc1_gun_gimbal --rotation "-0.000000 -0.000000 0.000000"
 set --name burc1_gun_gimbal --scale "1.000000 1.000000 1.000000"
 
-create --name burc1_eogimbal --bp GIMBAL2DOF --tick 0
-set --name burc1_eogimbal --parent burc_gimbaltaret
-set --name burc1_eogimbal --instance -1
-set --name burc1_eogimbal --suppressed 0
-set --name burc1_eogimbal --standalone 0
-set --name burc1_eogimbal --position "-0.138372 0.000324 6.951919"
-set --name burc1_eogimbal --rotation "0.000000 -0.000000 0.000000"
-set --name burc1_eogimbal --scale "1.000000 1.000000 1.000000"
-
-create --name burc1_ir_cam1 --bp CAMIR --tick 0
-set --name burc1_ir_cam1 --parent burc1_eogimbal
-set --name burc1_ir_cam1 --instance -1
-set --name burc1_ir_cam1 --suppressed 0
-set --name burc1_ir_cam1 --standalone 0
-set --name burc1_ir_cam1 --position "-0.138372 -0.871962 6.951918"
-set --name burc1_ir_cam1 --rotation "0.000000 -0.000000 0.000000"
-set --name burc1_ir_cam1 --scale "1.000000 1.000000 1.000000"
-set --name burc1_ir_cam1 --slotindex 0
-set --name burc1_ir_cam1 --rangemin 5.000000
-set --name burc1_ir_cam1 --rangemax 100.000000
-set --name burc1_ir_cam1 --vfov 90.000000
-set --name burc1_ir_cam1 --hfov 90.000000
-set --name burc1_ir_cam1 --hscanstepang 90.000000
-set --name burc1_ir_cam1 --vscanstepang 36.000000
-set --name burc1_ir_cam1 --merrormean 0.000000
-set --name burc1_ir_cam1 --merrorstd 0.000000
-set --name burc1_ir_cam1 --surfacedetecten 0
-set --name burc1_ir_cam1 --subsurfacedetecten 0
-set --name burc1_ir_cam1 --foamen 0
-set --name burc1_ir_cam1 --seasurfdetectprob 0.000000
-set --name burc1_ir_cam1 --maxsurfpenet 0.000000
-set --name burc1_ir_cam1 --widthpx 1920
-set --name burc1_ir_cam1 --heightpx 1080
+create --name burc1_eo_camera --bp CAMIR --tick 0
+set --name burc1_eo_camera --parent burc1_gun_gimbal
+set --name burc1_eo_camera --instance -1
+set --name burc1_eo_camera --suppressed 0
+set --name burc1_eo_camera --standalone 0
+set --name burc1_eo_camera --position "0.277051 -1.073089 7.013144"
+set --name burc1_eo_camera --rotation "-0.000000 -2.000000 0.000000"
+set --name burc1_eo_camera --scale "1.000000 1.000000 1.000000"
+set --name burc1_eo_camera --slotindex 0
+set --name burc1_eo_camera --rangemin 5.000000
+set --name burc1_eo_camera --rangemax 100.000000
+set --name burc1_eo_camera --vfov 90.000000
+set --name burc1_eo_camera --hfov 90.000000
+set --name burc1_eo_camera --hscanstepang 0.000000
+set --name burc1_eo_camera --vscanstepang 36.000000
+set --name burc1_eo_camera --merrormean 0.000000
+set --name burc1_eo_camera --merrorstd 0.000000
+set --name burc1_eo_camera --surfacedetecten 0
+set --name burc1_eo_camera --subsurfacedetecten 0
+set --name burc1_eo_camera --foamen 0
+set --name burc1_eo_camera --seasurfdetectprob 0.000000
+set --name burc1_eo_camera --maxsurfpenet 0.000000
+set --name burc1_eo_camera --widthpx 1920
+set --name burc1_eo_camera --heightpx 1080

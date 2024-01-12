@@ -18,6 +18,15 @@ UCLASS()
 class AActorBase : public AActor
 {
 	GENERATED_BODY()
+
+
+protected:
+
+	virtual void OnPreStep(float DeltaTime);
+	virtual void OnStep(float DeltaTime);
+	virtual void OnStepScenarioMode(float DeltaTime);
+	virtual void OnPreStepScenarioMode(float DeltaTime);
+	bool CheckAffinity();
 	
 public:	
 	// Sets default values for this actor's properties
@@ -27,6 +36,7 @@ public:
 		bool IsSaveLoadCreateEnabled = true;
 protected:
 	// Called when the game starts or when spawned
+	virtual void OnConstruction(const FTransform& Transform) override;
 	virtual void BeginPlay() override;
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 	UPROPERTY(EditAnywhere)
@@ -74,13 +84,7 @@ protected:
 
 	INT64U ExternalUpdateCount = 0;
 	INT64U ExternalUpdateCountScenarioMode = 0;
-protected:
 
-	 virtual void OnPreStep(float DeltaTime);
-	 virtual void OnStep(float DeltaTime);
-	 virtual void OnStepScenarioMode(float DeltaTime);
-	 virtual void OnPreStepScenarioMode(float DeltaTime);
-	 bool CheckAffinity();
 
 	 virtual void OnActorDisabled();
 	 virtual void OnActorEnabled();
@@ -92,7 +96,7 @@ protected:
 
 public:	
 	// Called every frame
-	virtual void OnConstruction(const FTransform& Transform) override;
+	
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetEnabled(bool val) ;
 	virtual bool GetEnabled() ;

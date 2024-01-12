@@ -6,6 +6,7 @@
 #include "EngineUtils.h"
 #include <Kismet/GameplayStatics.h>
 #include "CBoatBase.h"
+#include <Lib/Math/CMath.h>
 // Sets default values
 AGimbalBase::AGimbalBase()
 {
@@ -14,15 +15,40 @@ AGimbalBase::AGimbalBase()
 
 }
 
+void AGimbalBase::OnConstruction(const FTransform& Transform)
+{
+	Super::OnConstruction(Transform);
+	
+}
+
 // Called when the game starts or when spawned
 void AGimbalBase::BeginPlay()
 {
 	
 	Super::BeginPlay();
+
 	auto owner = GetOwner();
 	auto parent = CUtil::GetParentActor(this);
 	auto attach = GetAttachParentActor();
 	UChildActorComponent* MyChildActorComponent = GetComponentByClass< UChildActorComponent>();
+}
+
+void AGimbalBase::OnPreStep(float DeltaTime)
+{
+	Super::OnPreStep(DeltaTime);
+		TArray<USceneComponent*> AttachedComponents;
+	this->GetRootComponent()->GetChildrenComponents(true, AttachedComponents);
+
+	for (USceneComponent* ChildComponent : AttachedComponents)
+	{
+		if (ChildComponent && ChildComponent->GetAttachParent() == this->GetRootComponent())
+		{
+			
+			AttachComp_(ChildComponent);
+			// Apply rotation
+			
+		}
+	}
 }
 
 
@@ -37,8 +63,8 @@ void AGimbalBase::Run(float delta_time_sec)
 	UpdateAxis(EGimbalAxis::Roll, delta_time_sec);
 	UpdateAxis(EGimbalAxis::Pitch, delta_time_sec);
 	UpdateAxis(EGimbalAxis::Yaw, delta_time_sec);
-
 	UpdateAttachedActors();
+	
 }
 
 void AGimbalBase::FinalizeGimbal()
@@ -63,19 +89,40 @@ FSGimbalAxisInfo* AGimbalBase::GetAxis(EGimbalAxis axis)
 	return nullptr;
 }
 
-float AGimbalBase::GetAxisAngleDeg(EGimbalAxis axis)
+double AGimbalBase::GetAxisAngleDeg(EGimbalAxis axis)
 {
 	return GetAxis(axis)->GetCurrentAngleDeg();
 }
-
-
-
-void AGimbalBase::SetCommand_(float roll_angle_deg, float pitch_angle_deg, float yaw_angle_deg)
+FVector AGimbalBase::GetRPYDeg()
 {
-	GetAxis(EGimbalAxis::Roll)->SetCommandAngleDeg(roll_angle_deg);
-	GetAxis(EGimbalAxis::Pitch)->SetCommandAngleDeg(pitch_angle_deg);
-	GetAxis(EGimbalAxis::Yaw)->SetCommandAngleDeg(yaw_angle_deg);
+	FVector ret;
+	ret.X = GetAxis(EGimbalAxis::Roll)->GetCurrentAngleDeg();
+	ret.Y = GetAxis(EGimbalAxis::Pitch)->GetCurrentAngleDeg();
+	ret.Z = GetAxis(EGimbalAxis::Yaw)->GetCurrentAngleDeg();
+
+	return ret;
 }
+
+
+void AGimbalBase::SetCommand_(FVector rpy_deg)
+{
+	GetAxis(EGimbalAxis::Roll)->SetCommandAngleDeg(rpy_deg.X);
+	GetAxis(EGimbalAxis::Pitch)->SetCommandAngleDeg(rpy_deg.Y);
+	GetAxis(EGimbalAxis::Yaw)->SetCommandAngleDeg(rpy_deg.Z);
+}
+void AGimbalBase::EnableAxis_(FVector rpy_en)
+{
+	GetAxis(EGimbalAxis::Roll)->Enabled = rpy_en.X > 0.5;
+	GetAxis(EGimbalAxis::Pitch)->Enabled = rpy_en.Y > 0.5;
+	GetAxis(EGimbalAxis::Yaw)->Enabled = rpy_en.Z > 0.5;
+}
+void AGimbalBase::SetAxisRateDegPerSec_(FVector rpy_en)
+{
+	GetAxis(EGimbalAxis::Roll)->AngleSpeedDegPerSec = rpy_en.X ;
+	GetAxis(EGimbalAxis::Pitch)->AngleSpeedDegPerSec = rpy_en.Y ;
+	GetAxis(EGimbalAxis::Yaw)->AngleSpeedDegPerSec = rpy_en.Z ;
+}
+
 
 
 void AGimbalBase::UpdateAxis(EGimbalAxis axis, float delta_time_sec)
@@ -84,44 +131,48 @@ void AGimbalBase::UpdateAxis(EGimbalAxis axis, float delta_time_sec)
 
 	if (p_axis->Enabled) {
 		double current_angle_deg = p_axis->GetCurrentAngleDeg();
-		double error = p_axis->GetCommandAngleDeg() - current_angle_deg;
-		double kp = 1.0;
-		if (FMath::Abs(error) < 1) {
-			kp = 0;
+		double cmd = p_axis->GetCommandAngleDeg();
+
+		if (FMath::Abs(current_angle_deg - cmd) > 1e-6) {
+			double error = cmd - current_angle_deg;
+			double kp = 1.0;
+
+
+			if (error < 0) {
+				kp = -1;
+			}
+
+
+			double next_angle_deg = current_angle_deg + kp * p_axis->AngleSpeedDegPerSec * delta_time_sec;
+			next_angle_deg = FMath::Clamp(next_angle_deg, p_axis->MinLimitAngleDeg, p_axis->MaxLimitAngleDeg);
+
+			if (((next_angle_deg - cmd) * (current_angle_deg - cmd)) < 0) {
+				next_angle_deg = cmd;
+			}
+
+			p_axis->SetCurrentAngleDeg(next_angle_deg);
 		}
-		else if (error < 0) {
-			kp = -1;
+		else {
+			p_axis->SetCurrentAngleDeg(cmd);
 		}
-	    current_angle_deg = current_angle_deg + kp * p_axis->AngleSpeedDegPerSec * delta_time_sec;
-		current_angle_deg = FMath::Clamp(current_angle_deg, p_axis->MinLimitAngleDeg, p_axis->MaxLimitAngleDeg);
-		p_axis->SetCurrentAngleDeg(current_angle_deg);
+	
 	}
 }
 
-void AGimbalBase::UpdateAttachedActors()
+
+void AGimbalBase::AttachComp_(USceneComponent* p_comp)
 {
-	
-	FRotator rot(GetAxisAngleDeg(EGimbalAxis::Pitch), GetAxisAngleDeg(EGimbalAxis::Yaw), GetAxisAngleDeg(EGimbalAxis::Roll));
-	SetActorRelativeRotation(rot);
+	FCompEntry entry;
+	entry.pComp = p_comp;
+	entry.InitialTransform = p_comp->GetRelativeTransform();
+
+	AttachedComps.Add(entry);
 }
 
-void AGimbalBase::AttachActor_(AActor* p_actor)
+void AGimbalBase::RemoveAttachedComp_(USceneComponent* p_comp)
 {
-	AttachedActors.Add(p_actor);
+	//AttachedComps.Remove(p_comp);
 }
-
-void AGimbalBase::RemoveAttachedActor_(AActor* p_actor)
-{
-	AttachedActors.Remove(p_actor);
-}
-
-TArray<AActor*>& AGimbalBase::GetAttachedActor_()
-{
-	return AttachedActors;
-}
-
-
-
 
 void AGimbalBase::GimbalStateMachine(float delta_time_sec)
 {
@@ -153,14 +204,22 @@ void AGimbalBase::OnStep(float DeltaTime)
 	GimbalStateMachine(DeltaTime);
 
 
-	float RotationSpeed = 10.0f; // 10 degrees per second
+}
+void AGimbalBase::UpdateAttachedActors()
+{
+	FVector rpy = GetRPYDeg();
+	FQuat QuatRoll(FVector::ForwardVector, rpy.X * DEGTORAD);
+	FQuat QuatPitch(FVector::RightVector, rpy.Y * DEGTORAD);
+	FQuat QuatYaw(FVector::UpVector, rpy.Z * DEGTORAD);
+	FQuat additional_quat =  QuatYaw * QuatPitch * QuatRoll;
 
-	// Calculate the rotation amount for this frame
-	float DeltaRotation = RotationSpeed * DeltaTime;
+	for (FCompEntry& child_entry : AttachedComps)
+	{
+		FQuat final_quat = /*child_entry.InitialTransform.GetRotation() * */additional_quat;
+		CMath::RotateRelative(this, child_entry.pComp, child_entry.InitialTransform, final_quat.Euler());
+		//child_entry.pComp->SetRelativeRotation(final_quat.Rotator());
+		
+	}
 
-	// Create a rotation quaternion around the up axis (Z-axis)
-	FQuat QuatRotation = FQuat(FRotator(0.0f, DeltaRotation, 0.0f));
 
-	// Apply the rotation to the actor
-	AddActorLocalRotation(QuatRotation);
 }

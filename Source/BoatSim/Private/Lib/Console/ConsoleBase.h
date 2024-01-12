@@ -57,7 +57,8 @@ protected:
 	FString CreateAndSerializeJson(TMap<FString, FString> &data);
 	bool SetParent(AActor* p_actor, FString parent, FString full_path);
 	
-
+	bool ParseVectorFromString(const FString& InString, FVector& OutVector);
+	bool ParseVectorFromString(const FString& InString, FVector2D& OutVector);
 	bool SetCamView(FString cmd);
 	FTimerHandle TimerHandle;
 public:	

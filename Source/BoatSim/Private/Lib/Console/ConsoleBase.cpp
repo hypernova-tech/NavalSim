@@ -2631,10 +2631,10 @@ bool UConsoleBase::ProcessExecCommand(TMap<FString, FString>& options, FString& 
 
     ret = CommandManager.GetValue(CCLICommandManager::Name, name);
     if (ret) {
-        error_message += (("enter a valid name "));
+        
     }
     else {
-
+        error_message += (("enter a valid name "));
     }
 
     p_actor = ASystemManagerBase::GetInstance()->FindActor(name);
@@ -2805,6 +2805,31 @@ bool UConsoleBase::InvokeFunctionByNameWithParameters(UObject* p_obj, const FNam
 
     return true;
 }
+
+#include <sstream>
+
+bool UConsoleBase::ParseVectorFromString(const FString& InString, FVector& OutVector) 
+{
+    std::istringstream iss(TCHAR_TO_ANSI(*InString));
+    double x, y, z;
+
+    if (iss >> x >> y >> z) {
+        OutVector = FVector(x, y, z);
+        return true;
+    }
+    return false;
+}
+bool UConsoleBase::ParseVectorFromString(const FString& InString, FVector2D& OutVector)
+{
+    std::istringstream iss(TCHAR_TO_ANSI(*InString));
+    double x, y;
+
+    if (iss >> x >> y) {
+        OutVector = FVector2D(x, y);
+        return true;
+    }
+    return false;
+}
 bool UConsoleBase::SetFunctionParameter(UFunction* Function, void* Params, FProperty* Param, const FString& Value)
 {
     if (FNumericProperty* NumericProperty = CastField<FNumericProperty>(Param))
@@ -2844,14 +2869,17 @@ bool UConsoleBase::SetFunctionParameter(UFunction* Function, void* Params, FProp
     {
         if (StructProperty->Struct == TBaseStructure<FVector>::Get())
         {
+
             FVector VectorValue;
-            VectorValue.InitFromString(Value);
+            ParseVectorFromString(Value, VectorValue);
+            //VectorValue.InitFromString(Value);
             StructProperty->CopyCompleteValue(StructProperty->ContainerPtrToValuePtr<void>(Params), &VectorValue);
         }
         else if (StructProperty->Struct == TBaseStructure<FVector2D>::Get())
         {
             FVector2D Vector2DValue;
-            Vector2DValue.InitFromString(Value);
+            ParseVectorFromString(Value, Vector2DValue);
+            //Vector2DValue.InitFromString(Value);
             StructProperty->CopyCompleteValue(StructProperty->ContainerPtrToValuePtr<void>(Params), &Vector2DValue);
         }
         // Add other struct types as needed

@@ -275,3 +275,22 @@ TArray<FVector> CMath:: GetBoxCornersAndCenter(const FBox& Box)
 
     return Points;
 }
+
+void CMath::RotateRelative(AActor* p_actor, USceneComponent* p_comp, const FTransform& p_comp_initial_rel_transform, const FVector& rpy_deg)
+{
+    if (!p_actor || !p_comp)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("RotateRelative: Actor or Component is null"));
+        return;
+    }
+
+    FRotator RotationDelta(rpy_deg.Y, rpy_deg.Z, rpy_deg.X);
+
+
+    FTransform final_trasform = p_comp_initial_rel_transform * FTransform(RotationDelta.Quaternion())  ;
+
+   
+    // Apply the final transform to the child component
+    p_comp->SetRelativeTransform(final_trasform);
+   
+}
