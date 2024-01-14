@@ -3,7 +3,13 @@ set --name burc1 --property GunName_ --value burc1_Silah
 set --name burc1 --property TaretGimbalName_ --value burc1_taret_gimbal
 set --name burc1 --property EOGimbalName_ --value burc1_eo_gimbal
 set --name burc1 --property GunGimbalName_ --value burc1_gun_gimbal
-exec --name burc1 --func AssignTarget_ --param1 burc1_target 0
+
+set --name burc1 --property MaxFireDistanceMeter_ --value 500
+set --name burc1 --property MinFireDistanceMeter_ --value 0
+set --name burc1 --property SerialFireCount_ --value 1000
+set --name burc1 --property SerialFireTimeIntervalSec_ --value 0.05
+
+exec --name burc1 --func AssignTarget_ --param1 su25 0
 exec --name burc1_taret_gimbal --func EnableAxis_ --param1 "0 0 1"
 exec --name burc1_eo_gimbal --func EnableAxis_ --param1 "0 0 0"
 exec --name burc1_gun_gimbal --func EnableAxis_ --param1 "0 1 0"

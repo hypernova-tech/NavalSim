@@ -31,14 +31,17 @@ void AActorBase::BeginPlay()
 	Super::BeginPlay();
 	AActor *p_owner = CUtil::GetTopParent(this);
 
-	if (p_owner == nullptr) {
-		ASystemManagerBase::GetInstance()->RegisterActor(this);
-	}
-	else {
+	if (IsRegisterEnabled) {
+		if (p_owner == nullptr) {
+			ASystemManagerBase::GetInstance()->RegisterActor(this);
+		}
+		else {
 
-		ASystemManagerBase::GetInstance()->RegisterActor(this); //todo fixme
+			ASystemManagerBase::GetInstance()->RegisterActor(this); //todo fixme
 
+		}
 	}
+	
 
 	pCommIF = GetComponentByClass<UGenericCommIF>();
 

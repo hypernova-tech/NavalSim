@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<heightmapData>
+<heightmapName>karapinar.png</heightmapName>
+<satelliteName>karapinar-Satellite.png</satelliteName>
+<longitude>33.62997</longitude>
+<latitude>37.67989</latitude>
+<minHeight>985</minHeight>
+<maxHeight>1789.4</maxHeight>
+<waterContours>false</waterContours>
+<heightContours>false</heightContours>
+<zoom>11.645163154537117</zoom>
+<topLeftLat>37.75755474067999</topLeftLat>
+<topLeftLon>33.53168553853492</topLeftLon>
+<bottomRightLat>37.60215231470239</bottomRightLat>
+<bottomRightLon>33.72804046811612</bottomRightLon>
+</heightmapData>

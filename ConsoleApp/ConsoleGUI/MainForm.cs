@@ -19,6 +19,7 @@ using Microsoft.VisualBasic.Logging;
 using Newtonsoft.Json.Linq;
 using TrackBar = System.Windows.Forms.TrackBar;
 using System.Windows.Forms;
+
 namespace ConsoleGUI
 {
     public partial class MainForm : Form, IConnection
@@ -48,8 +49,11 @@ namespace ConsoleGUI
         CTreeViewManager TreeViewManager = new CTreeViewManager();
         Dictionary<string, string> Modifyables = new Dictionary<string, string>();
         CSystemAPIImplementor SystemAPIImplementor = new CSystemAPIImplementor();
+        CConsoleConfig ConsoleConfig;
         public MainForm()
         {
+            CConsoleConfigReader config_reader = new CConsoleConfigReader();
+            ConsoleConfig = config_reader.ReadXml("consoleconfig.xml");
             mJsonParser.SetMainForm(this);
             InitializeComponent();
             InitUDPConnection();
@@ -167,7 +171,7 @@ namespace ConsoleGUI
 
                     ActorsReceived.Add(item_striped);
                     is_added = true;
-                    
+
                 }
                 IsActorGridDirty = true;
 
@@ -2014,18 +2018,19 @@ namespace ConsoleGUI
         private void ObjectEditor_DragDrop(object sender, DragEventArgs e)
         {
 
-          
+
             System.Windows.Forms.TreeView treeView = (System.Windows.Forms.TreeView)sender;
             Point pt = treeView.PointToClient(new Point(e.X, e.Y));
             DestinationNode = treeView.GetNodeAt(pt);
             TreeNode draggedNode = (TreeNode)e.Data.GetData(typeof(TreeNode));
-            
+
             if (draggedNode != null && DestinationNode != null)
             {
                 string dest_actor = DestinationNode.Text;
 
 
-                if (DestinationNode.Parent == null){
+                if (DestinationNode.Parent == null)
+                {
                     dest_actor = "null";
                 }
                 ObjectEditor.Nodes.Remove(draggedNode);
@@ -2046,14 +2051,14 @@ namespace ConsoleGUI
 
         private void ObjectEditor_DragLeave(object sender, EventArgs e)
         {
-     
-       
+
+
         }
 
         private void ObjectEditor_DragOver(object sender, DragEventArgs e)
         {
             e.Effect = DragDropEffects.Move;
-      
+
         }
 
         private void ObjectEditor_ItemDrag(object sender, ItemDragEventArgs e)
@@ -2061,5 +2066,55 @@ namespace ConsoleGUI
             System.Windows.Forms.TreeView treeView = (System.Windows.Forms.TreeView)sender;
             treeView.DoDragDrop(e.Item, DragDropEffects.Move);
         }
+
+
+        public  string GetRelativePath(string baseFolderPath, string fullPath)
+        {
+            Uri baseFolderUri = new Uri(Path.Combine(baseFolderPath, "a")); // Adding a trailing slash
+            Uri fullUri = new Uri(fullPath);
+
+            if (!baseFolderUri.IsBaseOf(fullUri))
+            {
+                throw new InvalidOperationException("The full path is not based on the base folder path.");
+            }
+
+            Uri relativeUri = baseFolderUri.MakeRelativeUri(fullUri);
+            string relativePath = Uri.UnescapeDataString(relativeUri.ToString()).Replace('/', Path.DirectorySeparatorChar);
+
+            // Return the directory path without the filename
+            return Path.GetDirectoryName(relativePath);
+        }
+
+        private void BtnLoadInfo_Click(object sender, EventArgs e)
+        {
+            CTerrainInfoReader reader = new CTerrainInfoReader();
+            if (OpenFileDialog.ShowDialog() == DialogResult.OK)
+            {
+
+               
+                string filePath = OpenFileDialog.FileName;
+                string fileName = Path.GetFileName(filePath);
+                var terrain_info = reader.ReadXml(filePath);
+
+           
+
+                string base_folder = GetRelativePath(ConsoleConfig.RootFolder, filePath); ;
+                TBHMapName.Text = base_folder +"/"+terrain_info.HeightmapName;
+                TBImaryTexture.Text = base_folder + "/" + terrain_info.SatelliteName;
+                TBHMapMinLevel.Text = terrain_info.MinHeight.ToString();
+                TBHMapMaxLevel.Text = terrain_info.MaxHeight.ToString();
+
+                TBTTopLeftLat.Text = terrain_info.TopLeftLat.ToString();
+                TBTTopLeftLon.Text = terrain_info.TopLeftLon.ToString();
+
+                TBTBottomRightLat.Text = terrain_info.BottomRightLat.ToString();
+                TBTBottomRightLon.Text = terrain_info.BottomRightLon.ToString();
+
+            }
+        }
     }
 }
+
+
+
+

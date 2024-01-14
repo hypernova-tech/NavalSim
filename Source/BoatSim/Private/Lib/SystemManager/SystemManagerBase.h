@@ -215,6 +215,7 @@ public:
 	APlatformBase* ToPlatform(AActor* p_actor);
 	AWaypointActor* ToWaypoint(AActor* p_actor);
 	ATerrainManager* ToTerrain(AActor* p_actor);
+	AMapOrigin* ToMapOrigin(AActor* p_actor);
 	AAgent* ToAgent(AActor* p_actor);
 	template <typename T>
 	T* To(AActor* p_actor);
@@ -460,6 +461,7 @@ public:
 	virtual bool GetBeamEnabled(AActor* p_actor, bool& val);
 	virtual bool SetBeamEnabled(AActor* p_actor, bool val);
 
-
+	virtual bool SetMapOrigin(AActor* p_actor, FVector llh) ;
+	virtual bool GetMapOrigin(AActor* p_actor, FVector& llh);
 
 };

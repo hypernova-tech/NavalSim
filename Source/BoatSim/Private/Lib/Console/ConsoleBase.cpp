@@ -1663,6 +1663,45 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
 
     }
 
+    ret = CommandManager.GetValue(CCLICommandManager::MapOriginLat, dbl);
+    if (ret) {
+        FVector origin;
+        pSystemAPI->GetMapOrigin(p_actor, origin);
+        origin.X = dbl;
+        if (pSystemAPI->SetMapOrigin(p_actor, origin)) {
+            one_success = true;;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::MapOriginLon, dbl);
+    if (ret) {
+        FVector origin;
+        pSystemAPI->GetMapOrigin(p_actor, origin);
+        origin.Y = dbl;
+        if (pSystemAPI->SetMapOrigin(p_actor, origin)) {
+            one_success = true;;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::MapOriginHeight, dbl);
+    if (ret) {
+        FVector origin;
+        pSystemAPI->GetMapOrigin(p_actor, origin);
+        origin.Z = dbl;
+        if (pSystemAPI->SetMapOrigin(p_actor, origin)) {
+            one_success = true;;
+        }
+    }
+    else {
+
+    }
+
     ret = CommandManager.GetValue(CCLICommandManager::Closed, is_enabled);
     if (ret) {
         if (pSystemAPI->SetPathClosed(p_actor, is_enabled)) {

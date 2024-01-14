@@ -12,6 +12,16 @@
  * 
  */
 
+enum EBurcState
+{
+	BurcStateIdle,
+	BurcStateWaitTargetDetection,
+	BurcStateWaitRange,
+	BurcStateFire,
+	BurcStateFiring,
+	BurcStateFinished,
+};
+
 UCLASS()
 class ABurcAgent : public AAgent
 {
@@ -38,7 +48,7 @@ protected:
 		FString GunName_;
 
 	UPROPERTY(EditAnywhere)
-		FString BulletAgentName_;
+		FString BulletAgentName_ = "BULLET";
 
 	UPROPERTY(EditAnywhere)
 		FString TargetNameName_;
@@ -54,6 +64,21 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 		FString GunGimbalName_;
+
+	UPROPERTY(EditAnywhere)
+		double MaxFireDistanceMeter_;
+
+	UPROPERTY(EditAnywhere)
+		double MinFireDistanceMeter_;
+
+
+	UPROPERTY(EditAnywhere)
+		int SerialFireCount_;
+
+	UPROPERTY(EditAnywhere)
+		double SerialFireTimeIntervalSec_;
+
+
 
 	UFUNCTION(BlueprintCallable)
 		bool AssignTarget_(FString target_name, double duration);
@@ -83,8 +108,8 @@ protected:
 
 	AActor* CloneBullet();
 	void SerialFireNext();
-	INT32S RemainingSerialFire = 0;
-	FLOAT64 SerialFireTimeInterval;
+
+	
 
 
 	UPROPERTY(EditAnywhere, Category = "Shake")
@@ -101,9 +126,13 @@ protected:
 	float ShakeTimer = 0.0f;
 	bool bIsShaking = false;
 	bool IsSerialFiring = false;
+	INT32S RemainingSerialFire = 0;
 	FLOAT64 NextFireTime;
-
+	EBurcState BurcState = EBurcState::BurcStateIdle;
 	void StartShake();
 	void ApplyShake();
 	void AimGimbal(AGimbalBase* p_gimbal, FVector target);
+	void StateMachine();
+	double GetTargetRange();
+	bool IsInFireRange();
 };

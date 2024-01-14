@@ -122,13 +122,13 @@ set --name burc1_guntip --position "5.273835 0.001949 6.698273"
 set --name burc1_guntip --rotation "-0.000000 -0.000000 0.000000"
 set --name burc1_guntip --scale "0.010000 0.010000 0.010000"
 
-create --name burc1_target --bp CUBE --tick 0
-set --name burc1_target --instance -1
-set --name burc1_target --suppressed 0
-set --name burc1_target --standalone 0
-set --name burc1_target --position "20.000000 0.000000 10.000000"
-set --name burc1_target --rotation "-0.000000 -0.000000 0.000000"
-set --name burc1_target --scale "0.100000 0.100000 0.100000"
+create --name su25 --bp SU25 --tick 0
+set --name su25 --instance -1
+set --name su25 --suppressed 0
+set --name su25 --standalone 0
+set --name su25 --position "1000.000000 -200.000000 300.000000"
+set --name su25 --rotation "-0.000000 -0.000000 0.000000"
+set --name su25 --scale "2.000000 2.000000 2.000000"
 
 create --name burc1_taret_gimbal --bp GIMBAL3DOF --tick 2
 set --name burc1_taret_gimbal --parent burc1
@@ -160,7 +160,7 @@ set --name burc1_eo_camera --slotindex 0
 set --name burc1_eo_camera --rangemin 5.000000
 set --name burc1_eo_camera --rangemax 100.000000
 set --name burc1_eo_camera --vfov 90.000000
-set --name burc1_eo_camera --hfov 90.000000
+set --name burc1_eo_camera --hfov 25.000000
 set --name burc1_eo_camera --hscanstepang 0.000000
 set --name burc1_eo_camera --vscanstepang 36.000000
 set --name burc1_eo_camera --merrormean 0.000000
@@ -172,3 +172,25 @@ set --name burc1_eo_camera --seasurfdetectprob 0.000000
 set --name burc1_eo_camera --maxsurfpenet 0.000000
 set --name burc1_eo_camera --widthpx 1920
 set --name burc1_eo_camera --heightpx 1080
+
+create --name path1 --bp PATH --tick 0
+set --name path1 --instance -1
+set --name path1 --suppressed 0
+set --name path1 --standalone 0
+set --name path1 --position "0.000000 0.000000 0.000000"
+set --name path1 --rotation "-0.000000 -0.000000 0.000000"
+set --name path1 --scale "1.000000 1.000000 1.000000"
+set --name path1 --wp 0 --wppos "2000.000000 -200.000000 300.000000"
+set --name path1wp0 --parent path1
+set --name path1 --wp 1 --wppos "0.000000 100.000000 300.000000"
+set --name path1wp1 --parent path1
+set --name path1 --wp 2 --wppos "-200.000000 200.000000 300.000000"
+set --name path1wp2 --parent path1
+set --name path1 --speed 200.000000
+set --name path1 --closed 1
+set --name path1 --attach su25
+set --name path1 --color "255 0 0 255"
+set --name path1 --segment 50
+set --name path1 --straight 0
+set --name path1 --turnrate 360.000000
+set --name path1 --bake 

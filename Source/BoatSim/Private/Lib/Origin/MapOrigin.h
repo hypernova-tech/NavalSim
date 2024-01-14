@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "GeoReferencingSystem.h"
+#include <Lib/ActorBase/ActorBase.h>
 #include "MapOrigin.generated.h"
 
 enum ECoordSystem {
@@ -16,7 +17,7 @@ enum ECoordSystem {
 
 
 UCLASS()
-class AMapOrigin : public AActor
+class AMapOrigin : public AActorBase
 {
 	GENERATED_BODY()
 	
@@ -24,10 +25,13 @@ public:
 	// Sets default values for this actor's properties
 	AMapOrigin();
 
-	UPROPERTY(EditAnywhere)
-		FVector CenterLLH;
-	UPROPERTY(EditAnywhere)
-		int Speed;
+
+
+	UFUNCTION(BlueprintCallable)
+		FVector GetMapOriginLLH();
+
+	UFUNCTION(BlueprintCallable)
+		void SetMapOriginLLH(FVector llh);
 
 	AGeoReferencingSystem* pGeoReferencingSystem;
 private:
@@ -39,6 +43,9 @@ protected:
 	bool IsCenterChangedOnce = false;
 	void UpdateGeoreferencingCenter();
 	void Test();
+
+
+	FVector CenterLLH_;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -50,6 +57,7 @@ public:
 	
 	void ChangeCenterCoordinateOnce(FVector new_center);
 
-
+	virtual void Save(ISaveLoader* p_save_loader) override;
+	virtual void SaveJSON(CJsonDataContainer& data) override;
 
 };

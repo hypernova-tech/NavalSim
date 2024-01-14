@@ -21,8 +21,8 @@ void ABurcAgent::Fire_()
 void ABurcAgent::FireSerial_(int count, double time_interval)
 {
 	Fire_();
-	SerialFireTimeInterval = time_interval;
-	NextFireTime = CUtil::GetTimeSeconds() + SerialFireTimeInterval;
+	SerialFireTimeIntervalSec_ = time_interval;
+	NextFireTime = CUtil::GetTimeSeconds() + SerialFireTimeIntervalSec_;
 	
 	IsSerialFiring = true;
 
@@ -87,7 +87,7 @@ void ABurcAgent::SerialFireNext()
 	RemainingSerialFire--;
 	Fire_();
 	if (RemainingSerialFire > 0) {
-		GetWorld()->GetTimerManager().SetTimer(SerialFireTimerHandle, this, &ABurcAgent::SerialFireNext, SerialFireTimeInterval);
+		GetWorld()->GetTimerManager().SetTimer(SerialFireTimerHandle, this, &ABurcAgent::SerialFireNext, SerialFireTimeIntervalSec_);
 	}
 }
 void ABurcAgent::StartShake()
@@ -95,6 +95,8 @@ void ABurcAgent::StartShake()
 	ShakeTimer = ShakeDuration;
 	bIsShaking = true;
 }
+
+
 
 void ABurcAgent::ApplyShake()
 {
@@ -144,7 +146,7 @@ void ABurcAgent::OnStep(float DeltaTime)
 	if (IsSerialFiring) {
 		if (CUtil::GetTimeSeconds() >= NextFireTime) {
 			Fire_();
-			NextFireTime = CUtil::GetTimeSeconds() + SerialFireTimeInterval;
+			NextFireTime = CUtil::GetTimeSeconds() + SerialFireTimeIntervalSec_;
 			RemainingSerialFire--;
 
 			if (RemainingSerialFire == 0) {
@@ -156,6 +158,62 @@ void ABurcAgent::OnStep(float DeltaTime)
 	if (pTarget) {
 		AimGun_(pTarget->GetActorLocation());
 	}
+	StateMachine();
+
+
 	
 }
+double ABurcAgent::GetTargetRange()
+{
+	FVector dist = GetActorLocation() - pTarget->GetActorLocation();
+	return dist.Length();
+}
+bool  ABurcAgent::IsInFireRange()
+{
+	return (GetTargetRange() >= MinFireDistanceMeter_ && GetTargetRange() >= MaxFireDistanceMeter_);
+}
+void ABurcAgent::StateMachine()
+{
+	auto curr_state = BurcState;
+	auto next_state = curr_state;
 
+	switch (curr_state)
+	{
+	case BurcStateIdle:
+		next_state = BurcStateWaitTargetDetection;
+		break;
+	case BurcStateWaitTargetDetection:
+		if (pTarget) {
+			next_state = BurcStateWaitRange;
+		}
+		break;
+	case BurcStateWaitRange:
+		if (IsInFireRange()) {
+			next_state = BurcStateFire;
+		}
+		break;
+	case BurcStateFire:
+		IsSerialFiring = true;
+		RemainingSerialFire = SerialFireCount_;
+		break;
+	case BurcStateFiring:
+		if (!IsInFireRange()) {
+			IsSerialFiring = false;
+			next_state = BurcStateWaitRange;
+		}
+
+		if (RemainingSerialFire <= 0) {
+			next_state = BurcStateFinished;
+		}
+
+		break;
+	case BurcStateFinished:
+		IsSerialFiring = false;
+		break;
+	default:
+		break;
+	}
+
+	BurcState = next_state;
+	
+}

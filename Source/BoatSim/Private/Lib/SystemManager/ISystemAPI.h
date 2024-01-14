@@ -308,7 +308,15 @@ public:
 
 	virtual bool SetTerrainBottomRightCornerCoordLLH(AActor* p_actor, FVector vec) = 0;
 	virtual bool GetTerrainBottomRightCornerCoordLLH(AActor* p_actor, FVector& vec) = 0;
+	 
 
+
+	/// map origin
+
+	virtual bool SetMapOrigin(AActor* p_actor, FVector vec) = 0;
+	virtual bool GetMapOrigin(AActor* p_actor, FVector &vec) = 0;
+
+	
 
 	/// <summary>
 	/// Camera Management

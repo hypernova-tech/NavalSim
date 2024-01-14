@@ -59,6 +59,10 @@ protected:
 		int ActorId;
 
 	UPROPERTY(EditAnywhere)
+		bool IsRegisterEnabled = true;
+	
+
+	UPROPERTY(EditAnywhere)
 		bool IsExternalUpdate = true;
 
 	UPROPERTY(EditAnywhere)

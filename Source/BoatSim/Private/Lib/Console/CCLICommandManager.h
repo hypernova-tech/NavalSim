@@ -161,6 +161,10 @@ public:
 	static FString LineColor;
 	static FString SegmentCount;
 	static FString TurnRate;
+	static FString MapOriginLat;
+	static FString MapOriginLon;
+	static FString MapOriginHeight;
+
 
 	static FString GetCommand;
 	static FString All;

@@ -189,6 +189,7 @@ namespace ConsoleGUI
             ConsoeListBoxContextMenu = new ContextMenuStrip(components);
             clearToolStripMenuItem = new ToolStripMenuItem();
             FileSaver = new SaveFileDialog();
+            BtnLoadInfo = new Button();
             ActorListContextMenu.SuspendLayout();
             contextMenuConsoleListBox.SuspendLayout();
             tabPage2.SuspendLayout();
@@ -1099,6 +1100,7 @@ namespace ConsoleGUI
             // 
             // tabPage5
             // 
+            tabPage5.Controls.Add(BtnLoadInfo);
             tabPage5.Controls.Add(TBTTopLeftH);
             tabPage5.Controls.Add(TBTTopLeftLon);
             tabPage5.Controls.Add(TBTTopLeftLat);
@@ -1133,7 +1135,7 @@ namespace ConsoleGUI
             // 
             // TBTTopLeftH
             // 
-            TBTTopLeftH.Location = new Point(314, 256);
+            TBTTopLeftH.Location = new Point(312, 286);
             TBTTopLeftH.Name = "TBTTopLeftH";
             TBTTopLeftH.Size = new Size(72, 23);
             TBTTopLeftH.TabIndex = 38;
@@ -1142,7 +1144,7 @@ namespace ConsoleGUI
             // 
             // TBTTopLeftLon
             // 
-            TBTTopLeftLon.Location = new Point(236, 256);
+            TBTTopLeftLon.Location = new Point(234, 286);
             TBTTopLeftLon.Name = "TBTTopLeftLon";
             TBTTopLeftLon.Size = new Size(72, 23);
             TBTTopLeftLon.TabIndex = 37;
@@ -1151,7 +1153,7 @@ namespace ConsoleGUI
             // 
             // TBTTopLeftLat
             // 
-            TBTTopLeftLat.Location = new Point(158, 256);
+            TBTTopLeftLat.Location = new Point(156, 286);
             TBTTopLeftLat.Name = "TBTTopLeftLat";
             TBTTopLeftLat.Size = new Size(72, 23);
             TBTTopLeftLat.TabIndex = 36;
@@ -1160,7 +1162,7 @@ namespace ConsoleGUI
             // 
             // TBTBottomRightH
             // 
-            TBTBottomRightH.Location = new Point(314, 285);
+            TBTBottomRightH.Location = new Point(312, 315);
             TBTBottomRightH.Name = "TBTBottomRightH";
             TBTBottomRightH.Size = new Size(72, 23);
             TBTBottomRightH.TabIndex = 35;
@@ -1168,7 +1170,7 @@ namespace ConsoleGUI
             // 
             // TBTBottomRightLon
             // 
-            TBTBottomRightLon.Location = new Point(236, 285);
+            TBTBottomRightLon.Location = new Point(234, 315);
             TBTBottomRightLon.Name = "TBTBottomRightLon";
             TBTBottomRightLon.Size = new Size(72, 23);
             TBTBottomRightLon.TabIndex = 34;
@@ -1176,7 +1178,7 @@ namespace ConsoleGUI
             // 
             // TBTBottomRightLat
             // 
-            TBTBottomRightLat.Location = new Point(158, 285);
+            TBTBottomRightLat.Location = new Point(156, 315);
             TBTBottomRightLat.Name = "TBTBottomRightLat";
             TBTBottomRightLat.Size = new Size(72, 23);
             TBTBottomRightLat.TabIndex = 33;
@@ -1185,7 +1187,7 @@ namespace ConsoleGUI
             // label30
             // 
             label30.AutoSize = true;
-            label30.Location = new Point(15, 288);
+            label30.Location = new Point(13, 318);
             label30.Name = "label30";
             label30.Size = new Size(116, 15);
             label30.TabIndex = 32;
@@ -1193,7 +1195,7 @@ namespace ConsoleGUI
             // 
             // TBDMapMaxLevel
             // 
-            TBDMapMaxLevel.Location = new Point(159, 225);
+            TBDMapMaxLevel.Location = new Point(157, 255);
             TBDMapMaxLevel.Name = "TBDMapMaxLevel";
             TBDMapMaxLevel.Size = new Size(56, 23);
             TBDMapMaxLevel.TabIndex = 31;
@@ -1202,7 +1204,7 @@ namespace ConsoleGUI
             // label34
             // 
             label34.AutoSize = true;
-            label34.Location = new Point(16, 228);
+            label34.Location = new Point(14, 258);
             label34.Name = "label34";
             label34.Size = new Size(132, 15);
             label34.TabIndex = 30;
@@ -1210,7 +1212,7 @@ namespace ConsoleGUI
             // 
             // TBDMapMinLevel
             // 
-            TBDMapMinLevel.Location = new Point(159, 196);
+            TBDMapMinLevel.Location = new Point(157, 226);
             TBDMapMinLevel.Name = "TBDMapMinLevel";
             TBDMapMinLevel.Size = new Size(56, 23);
             TBDMapMinLevel.TabIndex = 29;
@@ -1219,7 +1221,7 @@ namespace ConsoleGUI
             // label35
             // 
             label35.AutoSize = true;
-            label35.Location = new Point(16, 199);
+            label35.Location = new Point(14, 229);
             label35.Name = "label35";
             label35.Size = new Size(130, 15);
             label35.TabIndex = 28;
@@ -1227,7 +1229,7 @@ namespace ConsoleGUI
             // 
             // TBTerrainName
             // 
-            TBTerrainName.Location = new Point(159, 22);
+            TBTerrainName.Location = new Point(157, 52);
             TBTerrainName.Name = "TBTerrainName";
             TBTerrainName.Size = new Size(312, 23);
             TBTerrainName.TabIndex = 27;
@@ -1236,7 +1238,7 @@ namespace ConsoleGUI
             // label26
             // 
             label26.AutoSize = true;
-            label26.Location = new Point(16, 25);
+            label26.Location = new Point(14, 55);
             label26.Name = "label26";
             label26.Size = new Size(77, 15);
             label26.TabIndex = 26;
@@ -1244,7 +1246,7 @@ namespace ConsoleGUI
             // 
             // BTCreate
             // 
-            BTCreate.Location = new Point(179, 323);
+            BTCreate.Location = new Point(177, 353);
             BTCreate.Name = "BTCreate";
             BTCreate.Size = new Size(114, 34);
             BTCreate.TabIndex = 25;
@@ -1255,7 +1257,7 @@ namespace ConsoleGUI
             // label33
             // 
             label33.AutoSize = true;
-            label33.Location = new Point(15, 259);
+            label33.Location = new Point(13, 289);
             label33.Name = "label33";
             label33.Size = new Size(87, 15);
             label33.TabIndex = 20;
@@ -1263,7 +1265,7 @@ namespace ConsoleGUI
             // 
             // TBHMapMaxLevel
             // 
-            TBHMapMaxLevel.Location = new Point(159, 167);
+            TBHMapMaxLevel.Location = new Point(157, 197);
             TBHMapMaxLevel.Name = "TBHMapMaxLevel";
             TBHMapMaxLevel.Size = new Size(56, 23);
             TBHMapMaxLevel.TabIndex = 19;
@@ -1272,7 +1274,7 @@ namespace ConsoleGUI
             // label32
             // 
             label32.AutoSize = true;
-            label32.Location = new Point(16, 170);
+            label32.Location = new Point(14, 200);
             label32.Name = "label32";
             label32.Size = new Size(136, 15);
             label32.TabIndex = 18;
@@ -1280,7 +1282,7 @@ namespace ConsoleGUI
             // 
             // TBHMapMinLevel
             // 
-            TBHMapMinLevel.Location = new Point(159, 138);
+            TBHMapMinLevel.Location = new Point(157, 168);
             TBHMapMinLevel.Name = "TBHMapMinLevel";
             TBHMapMinLevel.Size = new Size(56, 23);
             TBHMapMinLevel.TabIndex = 17;
@@ -1289,7 +1291,7 @@ namespace ConsoleGUI
             // label31
             // 
             label31.AutoSize = true;
-            label31.Location = new Point(16, 141);
+            label31.Location = new Point(14, 171);
             label31.Name = "label31";
             label31.Size = new Size(134, 15);
             label31.TabIndex = 16;
@@ -1297,7 +1299,7 @@ namespace ConsoleGUI
             // 
             // TBDMapTexture
             // 
-            TBDMapTexture.Location = new Point(159, 109);
+            TBDMapTexture.Location = new Point(157, 139);
             TBDMapTexture.Name = "TBDMapTexture";
             TBDMapTexture.Size = new Size(312, 23);
             TBDMapTexture.TabIndex = 9;
@@ -1306,7 +1308,7 @@ namespace ConsoleGUI
             // label27
             // 
             label27.AutoSize = true;
-            label27.Location = new Point(16, 112);
+            label27.Location = new Point(14, 142);
             label27.Name = "label27";
             label27.Size = new Size(66, 15);
             label27.TabIndex = 8;
@@ -1314,7 +1316,7 @@ namespace ConsoleGUI
             // 
             // TBImaryTexture
             // 
-            TBImaryTexture.Location = new Point(159, 80);
+            TBImaryTexture.Location = new Point(157, 110);
             TBImaryTexture.Name = "TBImaryTexture";
             TBImaryTexture.Size = new Size(312, 23);
             TBImaryTexture.TabIndex = 7;
@@ -1323,7 +1325,7 @@ namespace ConsoleGUI
             // LBImaryTexture
             // 
             LBImaryTexture.AutoSize = true;
-            LBImaryTexture.Location = new Point(16, 83);
+            LBImaryTexture.Location = new Point(14, 113);
             LBImaryTexture.Name = "LBImaryTexture";
             LBImaryTexture.Size = new Size(91, 15);
             LBImaryTexture.TabIndex = 6;
@@ -1331,7 +1333,7 @@ namespace ConsoleGUI
             // 
             // TBHMapName
             // 
-            TBHMapName.Location = new Point(159, 51);
+            TBHMapName.Location = new Point(157, 81);
             TBHMapName.Name = "TBHMapName";
             TBHMapName.Size = new Size(312, 23);
             TBHMapName.TabIndex = 5;
@@ -1340,7 +1342,7 @@ namespace ConsoleGUI
             // label25
             // 
             label25.AutoSize = true;
-            label25.Location = new Point(16, 54);
+            label25.Location = new Point(14, 84);
             label25.Name = "label25";
             label25.Size = new Size(67, 15);
             label25.TabIndex = 4;
@@ -1617,6 +1619,16 @@ namespace ConsoleGUI
             clearToolStripMenuItem.Size = new Size(101, 22);
             clearToolStripMenuItem.Text = "Clear";
             // 
+            // BtnLoadInfo
+            // 
+            BtnLoadInfo.Location = new Point(16, 17);
+            BtnLoadInfo.Name = "BtnLoadInfo";
+            BtnLoadInfo.Size = new Size(174, 23);
+            BtnLoadInfo.TabIndex = 39;
+            BtnLoadInfo.Text = "Load Terrain from MXL";
+            BtnLoadInfo.UseVisualStyleBackColor = true;
+            BtnLoadInfo.Click += BtnLoadInfo_Click;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1833,5 +1845,6 @@ namespace ConsoleGUI
         private ToolStripMenuItem rightToolStripMenuItem1;
         private ToolStripMenuItem frontToolStripMenuItem;
         private ToolStripMenuItem backToolStripMenuItem;
+        private Button BtnLoadInfo;
     }
 }

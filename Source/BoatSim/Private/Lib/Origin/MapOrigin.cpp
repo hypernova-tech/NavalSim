@@ -3,6 +3,7 @@
 
 #include "Lib/Origin/MapOrigin.h"
 #include <Lib/Math/CMath.h>
+#include <Lib/Console/CCLICommandManager.h>
 
 // Sets default values
 AMapOrigin::AMapOrigin()
@@ -14,10 +15,21 @@ AMapOrigin::AMapOrigin()
 
 }
 
+FVector AMapOrigin::GetMapOriginLLH()
+{
+	return CenterLLH_;
+}
+
+void AMapOrigin::SetMapOriginLLH(FVector llh)
+{
+	CenterLLH_ = llh;
+}
+
 // Called when the game starts or when spawned
 void AMapOrigin::BeginPlay()
 {
 	Super::BeginPlay();
+	Rename(TEXT("jeoref"));
 	pGeoReferencingSystem = AGeoReferencingSystem::GetGeoReferencingSystem(GetWorld());
 	//UpdateGeoreferencingCenter();
 	//Test();
@@ -25,9 +37,9 @@ void AMapOrigin::BeginPlay()
 
 void AMapOrigin::UpdateGeoreferencingCenter()
 {
-	pGeoReferencingSystem->OriginLatitude = CenterLLH.X;
-	pGeoReferencingSystem->OriginLongitude = CenterLLH.Y;
-	pGeoReferencingSystem->OriginAltitude = CenterLLH.Z;
+	pGeoReferencingSystem->OriginLatitude = CenterLLH_.X;
+	pGeoReferencingSystem->OriginLongitude = CenterLLH_.Y;
+	pGeoReferencingSystem->OriginAltitude = CenterLLH_.Z;
 }
 
 void AMapOrigin::Test()
@@ -85,7 +97,7 @@ FVector AMapOrigin::ConvertLLHToUEXYZ(FVector pos)
 {
 	FVector ret = FVector::Zero();
 
-	FVector diff_vec = pos - CenterLLH;
+	FVector diff_vec = pos - CenterLLH_;
 	FVector xyz = FVector::RightVector * diff_vec.Y * 111e3 + FVector::ForwardVector * 111e3 * diff_vec.X + FVector::UpVector * diff_vec.Z;
 	xyz = TOUE(xyz);
 	ret = GetActorLocation() + xyz;
@@ -103,7 +115,7 @@ FVector AMapOrigin::ConvertUEXYZToLLH(FVector xyz)
 
 	FVector llh = FVector::RightVector * diff_xyz.Y / 111e3 + FVector::ForwardVector / 111e3 * diff_xyz.X + FVector::UpVector * TOW(diff_xyz.Z);
 
-	llh += CenterLLH;
+	llh += CenterLLH_;
 
 	//pGeoReferencingSystem->GeographicToEngine(pos, ret);
 
@@ -114,9 +126,40 @@ void AMapOrigin::ChangeCenterCoordinateOnce(FVector new_center_llh)
 {
 	if (!IsCenterChangedOnce) {
 		if (!CMath::IsZero(new_center_llh, 1e-6)) {
-			CenterLLH = new_center_llh;
+			CenterLLH_ = new_center_llh;
 			IsCenterChangedOnce = true;
 		}
 	}
+}
+
+void AMapOrigin::Save(ISaveLoader* p_save_loader)
+{
+	Super::Save(p_save_loader);
+
+	FString line;
+	line = p_save_loader->CreateCommand(CCLICommandManager::SetCommand);
+	p_save_loader->AppendOption(line, CCLICommandManager::Name, GetName());
+	p_save_loader->AppendOption(line, CCLICommandManager::MapOriginLat, CenterLLH_.X);
+	p_save_loader->AddLine(line);
+
+	line = p_save_loader->CreateCommand(CCLICommandManager::SetCommand);
+	p_save_loader->AppendOption(line, CCLICommandManager::Name, GetName());
+	p_save_loader->AppendOption(line, CCLICommandManager::MapOriginLon, CenterLLH_.Y);
+	p_save_loader->AddLine(line);
+
+	line = p_save_loader->CreateCommand(CCLICommandManager::SetCommand);
+	p_save_loader->AppendOption(line, CCLICommandManager::Name, GetName());
+	p_save_loader->AppendOption(line, CCLICommandManager::MapOriginHeight, CenterLLH_.Z);
+	p_save_loader->AddLine(line);
+	
+}
+
+void AMapOrigin::SaveJSON(CJsonDataContainer& data)
+{
+	Super::SaveJSON(data);
+
+	data.Add(CCLICommandManager::MapOriginLat, CenterLLH_.X);
+	data.Add(CCLICommandManager::MapOriginLon, CenterLLH_.Y);
+	data.Add(CCLICommandManager::MapOriginHeight, CenterLLH_.Z);
 }
 

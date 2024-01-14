@@ -114,6 +114,11 @@ FString CCLICommandManager::Straight = "straight";
 FString CCLICommandManager::LineColor = "color";
 FString CCLICommandManager::SegmentCount = "segment";
 FString CCLICommandManager::TurnRate = "turnrate";
+FString CCLICommandManager::MapOriginLat = "maporiginlat";
+FString CCLICommandManager::MapOriginLon = "maporiginlon";
+FString CCLICommandManager::MapOriginHeight = "maporiginh";
+
+
 
 FString CCLICommandManager::GetCommand = "get";
 FString CCLICommandManager::All = "all";

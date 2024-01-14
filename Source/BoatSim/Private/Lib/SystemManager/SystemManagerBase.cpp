@@ -171,7 +171,7 @@ void ASystemManagerBase::QueryActors(EActorQueryArgs args, TArray<AActor*>& acto
 	else if (args == EActorQueryArgs::ActorBasesExceptSensorsAndPathsAndGimbals) {
 		for (auto pactor : ActorList) {
 			if (ToActorBase(pactor)) {
-				if (!ToSensorBase(pactor) && !ToGimbal(pactor)) {
+				if (!ToSensorBase(pactor) && !ToGimbal(pactor) && !ToPath(pactor)) {
 					actors.Add(pactor);
 				}
 			}
@@ -332,6 +332,15 @@ ATerrainManager* ASystemManagerBase::ToTerrain(AActor* p_actor)
 {
 	if (p_actor->IsA<ATerrainManager>()) {
 		return (ATerrainManager*)p_actor;
+	}
+
+	return nullptr;
+}
+
+AMapOrigin* ASystemManagerBase::ToMapOrigin(AActor* p_actor)
+{
+	if (p_actor->IsA<AMapOrigin>()) {
+		return (AMapOrigin*)p_actor;
 	}
 
 	return nullptr;
@@ -885,7 +894,8 @@ void ASystemManagerBase::StartRuntimeConnections()
 
 void ASystemManagerBase::UpdateActorsScenarioMode(float deltatime)
 {
-	for (auto* p_actor : ActorList) {
+	for (int i = 0; i < ActorList.Num(); i++) {
+		auto p_actor = ActorList[i];
 		if (p_actor->IsA<AActorBase>()) {
 			AActorBase* p_base = (AActorBase*)(p_actor);
 			if(p_base->GetIsExternalUpdateScenarioMode())
@@ -896,7 +906,8 @@ void ASystemManagerBase::UpdateActorsScenarioMode(float deltatime)
 
 void ASystemManagerBase::UpdateActors(float deltatime)
 {
-	for (auto* p_actor : ActorList) {
+	for (int i = 0; i < ActorList.Num();i++ ) {
+		auto p_actor = ActorList[i];
 		if (p_actor->IsA<AActorBase>()) {
 			AActorBase* p_base = (AActorBase*) (p_actor);
 			p_base->ExternalUpdate(deltatime);
@@ -2460,6 +2471,26 @@ bool ASystemManagerBase::GetPathLineColor(AActor* p_actor, FColor& val)
 	 auto obj = ToSensorBase(p_actor);
 	 if (obj != nullptr) {
 		 obj->ShowBeam = val;
+		 return true;
+	 }
+	 return false;
+ }
+
+ bool ASystemManagerBase::SetMapOrigin(AActor* p_actor, FVector llh)
+ {
+	 auto obj = ToMapOrigin(p_actor);
+	 if (obj != nullptr) {
+		 obj->SetMapOriginLLH(llh);
+		 return true;
+	 }
+	 return false;
+ }
+
+ bool ASystemManagerBase::GetMapOrigin(AActor* p_actor, FVector& llh)
+ {
+	 auto obj = ToMapOrigin(p_actor);
+	 if (obj != nullptr) {
+		 llh = obj->GetMapOriginLLH();
 		 return true;
 	 }
 	 return false;

@@ -105,6 +105,10 @@ public static class CLICommandManager
     public const string LineColor = "color";
     public const string SegmentCount = "segment";
     public const string TurnRate = "turnrate";
+
+    [Modifiable] public const string MapOriginLat = "maporiginlat";
+    [Modifiable] public const string MapOriginLon = "maporiginlon";
+    [Modifiable] public const string MapOriginHeight = "maporiginh";
     public const string GetCommand = "get";
     public const string All = "all";
     

@@ -1,0 +1,29 @@
+create --name env --bp  --tick 0
+set --name env --instance -1
+set --name env --suppressed 0
+set --name env --standalone 0
+set --name env --position "324.600000 284.200000 4.600000"
+set --name env --rotation "-0.000000 -0.000000 0.000000"
+set --name env --scale "1.000000 1.000000 1.000000"
+set --name env --timeofday 12.000000
+set --name env --envtimeflowscale 1.000000
+set --name env --rain 0.000000
+set --name env --cloud 0.000000
+set --name env --snow 0.000000
+set --name env --dust 0.000000
+set --name env --fog 0.000000
+set --name env --thunder 0.000000
+set --name env --envsoundfx 1
+set --name env --wind 3.000000
+set --name env --winddir 0.000000
+
+create --name jeoref --bp  --tick 0
+set --name jeoref --instance -1
+set --name jeoref --suppressed 0
+set --name jeoref --standalone 0
+set --name jeoref --position "0.000000 0.000000 0.000000"
+set --name jeoref --rotation "-0.000000 -0.000000 0.000000"
+set --name jeoref --scale "1.000000 1.000000 1.000000"
+set --name jeoref --maporiginlat 33.000000
+set --name jeoref --maporiginlon 45.000000
+set --name jeoref --maporiginh 45.000000
