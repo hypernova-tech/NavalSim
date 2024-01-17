@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "NiagaraSystem.h"
 #include "CoreMinimal.h"
 #include "Lib/Agent/Agent.h"
 #include <Lib/Gimbal/GimbalBase.h>
@@ -123,11 +124,20 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Shake")
 		float ShakeFrequency = 0.05f;  // Time between each shake update
 
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Effects")
+		UNiagaraSystem* MuzzleEffect;
+
+
+	void SpawnMuzzleVFX();
+
 	float ShakeTimer = 0.0f;
 	bool bIsShaking = false;
 	bool IsSerialFiring = false;
 	INT32S RemainingSerialFire = 0;
 	FLOAT64 NextFireTime;
+	FRotator TotalAddedRotation;
+	FVector TotalAddedOffset;
 	EBurcState BurcState = EBurcState::BurcStateIdle;
 	void StartShake();
 	void ApplyShake();

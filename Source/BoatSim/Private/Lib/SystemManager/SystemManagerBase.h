@@ -20,12 +20,8 @@
 #include <Lib/Terrain/TerrainManager.h>
 #include <Lib/Agent/Agent.h>
 #include <Lib/Gimbal/GimbalBase.h>
+#include <Lib/Annotation/AnnotationManager.h>
 #include "SystemManagerBase.generated.h"
-
-
-
-
-
 
 enum ESystemState
 {
@@ -102,14 +98,15 @@ protected:
 	UPROPERTY(EditAnywhere)
 		AEnvManager* pEnvManager;
 
+	UPROPERTY(EditAnywhere)
+		AAnnotationManager* pAnnotationManager;
+
 
 	UConsoleBase* pConsole = nullptr;
 		
 
 	UPROPERTY(EditAnywhere)
 		AUIControllerBase* pUIController;
-
-
 
 	UPROPERTY(EditAnywhere)
 		TArray<AActor*> SensorGlobalIgnoreList;
@@ -150,6 +147,10 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	ADataManager* GetDataManager();
+
+
+	UFUNCTION(BlueprintCallable)
+		AAnnotationManager* GetAnnotationManager();
 
 
 	ARadarBase* ToRadarBase(AActor* p_actor);

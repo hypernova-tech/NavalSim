@@ -5,7 +5,7 @@
 #include <Lib/Utils/CUtil.h>
 #include <Lib/SystemManager/SystemManagerBase.h>
 #include <Lib/Agent/Misc/BulletBase.h>
-
+#include "NiagaraFunctionLibrary.h"
 void ABurcAgent::BeginPlay()
 {
 	Super::BeginPlay();
@@ -16,6 +16,7 @@ void ABurcAgent::Fire_()
 	auto p_bullet = (ABulletBase*)CloneBullet();
 	p_bullet->SetLinearVelocity(TOUE(p_bullet->GetSpeed()) * GetAimDirection());
 	StartShake();
+	SpawnMuzzleVFX();
 }
 
 void ABurcAgent::FireSerial_(int count, double time_interval)
@@ -111,6 +112,9 @@ void ABurcAgent::ApplyShake()
 			FMath::RandRange(-ShakeRotationIntensity, ShakeRotationIntensity));
 
 		// Apply the offset and rotation to the nozzle
+
+		TotalAddedRotation += RotationOffset;
+		TotalAddedOffset += Offset;
 		pGun->AddActorLocalOffset(Offset);
 		pGun->AddActorLocalRotation(RotationOffset);
 	}
@@ -136,6 +140,7 @@ void ABurcAgent::OnStep(float DeltaTime)
 		{
 			bIsShaking = false;
 			// Reset nozzle position/rotation if needed
+	
 		}
 		else
 		{
@@ -166,11 +171,20 @@ void ABurcAgent::OnStep(float DeltaTime)
 double ABurcAgent::GetTargetRange()
 {
 	FVector dist = GetActorLocation() - pTarget->GetActorLocation();
-	return dist.Length();
+	return TOW(dist.Length());
 }
 bool  ABurcAgent::IsInFireRange()
 {
-	return (GetTargetRange() >= MinFireDistanceMeter_ && GetTargetRange() >= MaxFireDistanceMeter_);
+	return (GetTargetRange() >= MinFireDistanceMeter_ && GetTargetRange() <= MaxFireDistanceMeter_);
+}
+void ABurcAgent::SpawnMuzzleVFX()
+{
+	if (MuzzleEffect)
+	{
+		FVector Location = pGunTip->GetActorLocation();
+		FRotator Rotation = pGunTip->GetActorRotation();
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), MuzzleEffect, Location, Rotation);
+	}
 }
 void ABurcAgent::StateMachine()
 {

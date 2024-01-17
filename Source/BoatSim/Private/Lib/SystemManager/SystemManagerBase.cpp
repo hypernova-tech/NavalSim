@@ -507,16 +507,17 @@ bool ASystemManagerBase::DestroyActor(AActor *p_actor)
 
 		for (AActor* ChildActor : AttachedActors)
 		{
-			if (ChildActor)
+			if (ToActorBase(ChildActor))
 			{
-				ChildActor->Destroy();
 				RemoveActor(ChildActor);
+				ChildActor->Destroy();
+				
 			}
 		}
 
-
-		p_actor->Destroy();
 		RemoveActor(p_actor);
+		p_actor->Destroy();
+		
 		return true;
 	}
 	else {
@@ -687,6 +688,10 @@ AUIControllerBase* ASystemManagerBase::GetUIController()
 ADataManager* ASystemManagerBase::GetDataManager()
 {
 	return pDataManager;
+}
+AAnnotationManager* ASystemManagerBase::GetAnnotationManager()
+{
+	return pAnnotationManager;
 }
 UConsoleBase* ASystemManagerBase::GetConsole()
 {
@@ -1004,18 +1009,27 @@ void ASystemManagerBase::StateMachine(float deltatime)
 
 void ASystemManagerBase::UpdateLifeTime(float deltatime)
 {
+	TArray<ULifeTimeEntryObject*> remove_list;
 	for (int i = 0; i < LifeTimeEntries.Num(); i++) {
 		auto entry = LifeTimeEntries[i];
 		entry->CurrentLifeTimeSec -= deltatime;
 		if (entry->CurrentLifeTimeSec <=0) {
-			CUtil::DebugLog("Actor is being destroyed " + entry->pActor->GetName());
-			DestroyActor(entry->pActor);
-			LifeTimeEntries.RemoveAt(i);
-			entry->MarkPendingKill();
+			if (entry->pActor) {
+				//CUtil::DebugLog("Actor is being destroyed " + entry->pActor->GetName());
+				DestroyActor(entry->pActor);
+				
+			}
+			remove_list.Add(entry);
 			
-			i--;
 		}
 	}
+
+
+	for (auto ent : remove_list) {
+		LifeTimeEntries.Remove(ent);
+	}
+
+	
 }
 
 ////
