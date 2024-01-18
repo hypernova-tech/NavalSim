@@ -40,7 +40,7 @@ create --name burc1 --bp BURC --tick 3
 set --name burc1 --instance -1
 set --name burc1 --suppressed 0
 set --name burc1 --standalone 0
-set --name burc1 --position "0.000000 0.000000 0.000000"
+set --name burc1 --position "100.078789 0.000000 0.000000"
 set --name burc1 --rotation "-0.000000 -0.000000 0.000000"
 set --name burc1 --scale "1.000000 1.000000 1.000000"
 
@@ -48,7 +48,7 @@ set --name burc1_Kasa --parent burc1
 set --name burc1_Kasa --instance -1
 set --name burc1_Kasa --suppressed 0
 set --name burc1_Kasa --standalone 0
-set --name burc1_Kasa --position "0.000000 0.000000 0.000000"
+set --name burc1_Kasa --position "100.078789 0.000000 0.000000"
 set --name burc1_Kasa --rotation "-0.000000 -0.000000 0.000000"
 set --name burc1_Kasa --scale "1.000000 1.000000 1.000000"
 
@@ -56,7 +56,7 @@ set --name burc1_On_Teker_2 --parent burc1
 set --name burc1_On_Teker_2 --instance -1
 set --name burc1_On_Teker_2 --suppressed 0
 set --name burc1_On_Teker_2 --standalone 0
-set --name burc1_On_Teker_2 --position "5.359144 2.206958 1.316809"
+set --name burc1_On_Teker_2 --position "105.437935 2.206958 1.316809"
 set --name burc1_On_Teker_2 --rotation "-0.000000 -0.000000 0.000000"
 set --name burc1_On_Teker_2 --scale "1.000000 1.000000 1.000000"
 
@@ -64,7 +64,7 @@ set --name burc1_Teker_6 --parent burc1
 set --name burc1_Teker_6 --instance -1
 set --name burc1_Teker_6 --suppressed 0
 set --name burc1_Teker_6 --standalone 0
-set --name burc1_Teker_6 --position "-2.117985 -1.857980 1.318341"
+set --name burc1_Teker_6 --position "97.960808 -1.857980 1.318341"
 set --name burc1_Teker_6 --rotation "-0.000000 -0.000000 0.000000"
 set --name burc1_Teker_6 --scale "1.000000 1.000000 1.000000"
 
@@ -72,7 +72,7 @@ set --name burc1_Teker_3 --parent burc1
 set --name burc1_Teker_3 --instance -1
 set --name burc1_Teker_3 --suppressed 0
 set --name burc1_Teker_3 --standalone 0
-set --name burc1_Teker_3 --position "2.040197 1.857980 1.318341"
+set --name burc1_Teker_3 --position "102.118996 1.857980 1.318341"
 set --name burc1_Teker_3 --rotation "-0.000000 -0.000000 0.000000"
 set --name burc1_Teker_3 --scale "1.000000 1.000000 1.000000"
 
@@ -80,7 +80,7 @@ set --name burc1_Teker_4 --parent burc1
 set --name burc1_Teker_4 --instance -1
 set --name burc1_Teker_4 --suppressed 0
 set --name burc1_Teker_4 --standalone 0
-set --name burc1_Teker_4 --position "2.040197 -1.857980 1.318341"
+set --name burc1_Teker_4 --position "102.118996 -1.857980 1.318341"
 set --name burc1_Teker_4 --rotation "-0.000000 -0.000000 0.000000"
 set --name burc1_Teker_4 --scale "1.000000 1.000000 1.000000"
 
@@ -88,7 +88,7 @@ set --name burc1_Teker_8 --parent burc1
 set --name burc1_Teker_8 --instance -1
 set --name burc1_Teker_8 --suppressed 0
 set --name burc1_Teker_8 --standalone 0
-set --name burc1_Teker_8 --position "-5.343490 -1.857979 1.318341"
+set --name burc1_Teker_8 --position "94.735299 -1.857979 1.318341"
 set --name burc1_Teker_8 --rotation "-0.000000 -0.000000 0.000000"
 set --name burc1_Teker_8 --scale "1.000000 1.000000 1.000000"
 
@@ -96,7 +96,7 @@ set --name burc1_Teker_7 --parent burc1
 set --name burc1_Teker_7 --instance -1
 set --name burc1_Teker_7 --suppressed 0
 set --name burc1_Teker_7 --standalone 0
-set --name burc1_Teker_7 --position "-5.343490 1.857980 1.318341"
+set --name burc1_Teker_7 --position "94.735299 1.857980 1.318341"
 set --name burc1_Teker_7 --rotation "-0.000000 -0.000000 0.000000"
 set --name burc1_Teker_7 --scale "1.000000 1.000000 1.000000"
 
@@ -104,7 +104,7 @@ set --name burc1_Teker_5 --parent burc1
 set --name burc1_Teker_5 --instance -1
 set --name burc1_Teker_5 --suppressed 0
 set --name burc1_Teker_5 --standalone 0
-set --name burc1_Teker_5 --position "-2.117985 1.857980 1.318341"
+set --name burc1_Teker_5 --position "97.960808 1.857980 1.318341"
 set --name burc1_Teker_5 --rotation "-0.000000 -0.000000 0.000000"
 set --name burc1_Teker_5 --scale "1.000000 1.000000 1.000000"
 
@@ -112,7 +112,7 @@ set --name burc1_On_Teker_1 --parent burc1
 set --name burc1_On_Teker_1 --instance -1
 set --name burc1_On_Teker_1 --suppressed 0
 set --name burc1_On_Teker_1 --standalone 0
-set --name burc1_On_Teker_1 --position "5.024362 -2.302791 1.258581"
+set --name burc1_On_Teker_1 --position "105.103157 -2.302791 1.258581"
 set --name burc1_On_Teker_1 --rotation "-0.000000 -0.000000 0.000000"
 set --name burc1_On_Teker_1 --scale "1.000000 1.000000 1.000000"
 
@@ -120,7 +120,7 @@ set --name burc1_Radar --parent burc1_taret_gimbal
 set --name burc1_Radar --instance -1
 set --name burc1_Radar --suppressed 0
 set --name burc1_Radar --standalone 0
-set --name burc1_Radar --position "-0.413501 -0.013365 4.725015"
+set --name burc1_Radar --position "99.665291 -0.013365 4.725015"
 set --name burc1_Radar --rotation "-0.000000 -0.000000 0.000000"
 set --name burc1_Radar --scale "1.000000 1.000000 1.000000"
 
@@ -128,7 +128,7 @@ set --name burc1_Silah --parent burc1_gun_gimbal
 set --name burc1_Silah --instance -1
 set --name burc1_Silah --suppressed 0
 set --name burc1_Silah --standalone 0
-set --name burc1_Silah --position "-0.768286 0.001949 6.173325"
+set --name burc1_Silah --position "99.310509 0.001949 6.173325"
 set --name burc1_Silah --rotation "0.000000 30.000000 0.000000"
 set --name burc1_Silah --scale "1.000000 1.000000 1.000000"
 
@@ -137,7 +137,7 @@ set --name burc1_guntip --parent burc1_gun_gimbal
 set --name burc1_guntip --instance -1
 set --name burc1_guntip --suppressed 0
 set --name burc1_guntip --standalone 0
-set --name burc1_guntip --position "5.273835 0.001949 6.698273"
+set --name burc1_guntip --position "105.352623 0.001949 6.698273"
 set --name burc1_guntip --rotation "-0.000000 -0.000000 0.000000"
 set --name burc1_guntip --scale "0.010000 0.010000 0.010000"
 
@@ -149,12 +149,30 @@ set --name su25 --position "1000.000000 -200.000000 300.000000"
 set --name su25 --rotation "-0.000000 -0.000000 0.000000"
 set --name su25 --scale "2.000000 2.000000 2.000000"
 
+create --name terrain1 --bp TERRAIN --tick 0
+set --name terrain1 --instance -1
+set --name terrain1 --suppressed 0
+set --name terrain1 --standalone 0
+set --name terrain1 --position "0.000000 0.000000 0.000000"
+set --name terrain1 --rotation "-0.000000 -0.000000 0.000000"
+set --name terrain1 --scale "1.000000 1.000000 1.000000"
+set --name terrain1 --terrhmap hmap.png
+set --name terrain1 --terrdmap dmap.png
+set --name terrain1 --terrbasetexture hmaptexturesat.png
+set --name terrain1 --terrhmapminlvl 0.000000
+set --name terrain1 --terrhmapmaxlvl 500.000000
+set --name terrain1 --terrdmapminlvl -30.000000
+set --name terrain1 --terrdmapmaxlvl -100.000000
+set --name terrain1 --terrtopleftllh "40.820965 29.445356 0.000000"
+set --name terrain1 --terrbottomrightllh "40.665562 29.650471 0.000000"
+set --name terrain1 --bake 
+
 create --name burc1_taret_gimbal --bp GIMBAL3DOF --tick 2
 set --name burc1_taret_gimbal --parent burc1
 set --name burc1_taret_gimbal --instance -1
 set --name burc1_taret_gimbal --suppressed 0
 set --name burc1_taret_gimbal --standalone 0
-set --name burc1_taret_gimbal --position "-0.574280 0.000000 5.094238"
+set --name burc1_taret_gimbal --position "99.504509 0.000000 5.094238"
 set --name burc1_taret_gimbal --rotation "-0.000000 -0.000000 0.000000"
 set --name burc1_taret_gimbal --scale "1.000000 1.000000 1.000000"
 
@@ -163,7 +181,7 @@ set --name burc1_gun_gimbal --parent burc1_Radar
 set --name burc1_gun_gimbal --instance -1
 set --name burc1_gun_gimbal --suppressed 0
 set --name burc1_gun_gimbal --standalone 0
-set --name burc1_gun_gimbal --position "0.456592 0.001949 6.698273"
+set --name burc1_gun_gimbal --position "100.535377 0.001949 6.698273"
 set --name burc1_gun_gimbal --rotation "-0.000000 -0.000000 0.000000"
 set --name burc1_gun_gimbal --scale "1.000000 1.000000 1.000000"
 
@@ -172,7 +190,7 @@ set --name burc1_eo_camera --parent burc1_gun_gimbal
 set --name burc1_eo_camera --instance -1
 set --name burc1_eo_camera --suppressed 0
 set --name burc1_eo_camera --standalone 0
-set --name burc1_eo_camera --position "0.258939 -1.073089 7.544043"
+set --name burc1_eo_camera --position "100.337730 -1.073089 7.544043"
 set --name burc1_eo_camera --rotation "-0.000000 -2.000000 0.000000"
 set --name burc1_eo_camera --scale "1.000000 1.000000 1.000000"
 set --name burc1_eo_camera --slotindex 0
