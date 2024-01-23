@@ -24,6 +24,8 @@ enum EActorQueryArgs
 };
 
 
+
+
 class UConsoleBase;
 class ISystemAPI
 {
@@ -330,5 +332,10 @@ public:
 	virtual bool SetCamView(ECamView view) = 0;
 	virtual bool GetCamView(ECamView &view) = 0;
 
+	//Thermal Managment
+	virtual bool SetThermalMode(AActor* p_actor, INT32S mode) = 0;
+	virtual bool GetThermalMode(AActor* p_actor, INT32S&mode) = 0;
 
+	virtual bool SetTempratureKelvin(AActor* p_actor, FLOAT64 temp) = 0;
+	virtual bool GetTempratureKelvin(AActor* p_actor, FLOAT64& mode) = 0;
 };

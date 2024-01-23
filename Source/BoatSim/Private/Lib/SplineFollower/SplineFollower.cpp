@@ -18,7 +18,8 @@ USplineFollower::USplineFollower()
 void USplineFollower::BeginPlay()
 {
 	Super::BeginPlay();
-	pSplineComponent = CUtil::FindComponent< USplineComponent>(GetOwner());
+
+	pSplineComponent = GetOwner()->GetComponentByClass<USplineComponent>(); // CUtil::FindComponent< USplineComponent>(GetOwner());
 
 	
 

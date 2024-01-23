@@ -1311,6 +1311,26 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
 
     }
 
+    ret = CommandManager.GetValue(CCLICommandManager::ThermalMode, sint);
+    if (ret) {
+        if (pSystemAPI->SetThermalMode(p_actor, sint)) {
+            one_success = true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::TempratureKelvin, dbl);
+    if (ret) {
+        if (pSystemAPI->SetTempratureKelvin(p_actor, dbl)) {
+            one_success = true;
+        }
+    }
+    else {
+
+    }
+
     ret = CommandManager.GetValue(CCLICommandManager::Property, sret);
     if (ret) {
         FString prop_value;
@@ -2081,6 +2101,24 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
         
         SendConsoleResponse(name, CCLICommandManager::Scale, vec);
         return true;
+    }
+
+    ret = CommandManager.HasA(CCLICommandManager::ThermalMode);
+    if (ret) {
+        INT32S thermal_mode;
+        if (pSystemAPI->GetThermalMode(p_actor, thermal_mode)) {
+            SendConsoleResponse(name, CCLICommandManager::ThermalMode, (INT32S)thermal_mode);
+            return true;
+        }
+    }
+
+    ret = CommandManager.HasA(CCLICommandManager::TempratureKelvin);
+    if (ret) {
+        double temp_kelvin;
+        if (pSystemAPI->GetTempratureKelvin(p_actor, temp_kelvin)) {
+            SendConsoleResponse(name, CCLICommandManager::TempratureKelvin, temp_kelvin);
+            return true;
+        }
     }
 
     ret = CommandManager.HasA(CCLICommandManager::Func);

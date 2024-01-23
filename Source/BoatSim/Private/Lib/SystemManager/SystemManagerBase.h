@@ -21,7 +21,9 @@
 #include <Lib/Agent/Agent.h>
 #include <Lib/Gimbal/GimbalBase.h>
 #include <Lib/Annotation/AnnotationManager.h>
+#include <Lib/Thermal/ThermalMaterialManager.h>
 #include "SystemManagerBase.generated.h"
+
 
 enum ESystemState
 {
@@ -101,6 +103,8 @@ protected:
 	UPROPERTY(EditAnywhere)
 		AAnnotationManager* pAnnotationManager;
 
+	UPROPERTY(EditAnywhere)
+		AThermalMaterialManager* pThermalMaterialManager;
 
 	UConsoleBase* pConsole = nullptr;
 		
@@ -151,6 +155,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		AAnnotationManager* GetAnnotationManager();
+
+	UFUNCTION(BlueprintCallable)
+		AThermalMaterialManager* GetThermalMaterialManager();
 
 
 	ARadarBase* ToRadarBase(AActor* p_actor);
@@ -218,6 +225,7 @@ public:
 	ATerrainManager* ToTerrain(AActor* p_actor);
 	AMapOrigin* ToMapOrigin(AActor* p_actor);
 	AAgent* ToAgent(AActor* p_actor);
+	AThermalMaterialManager* ToThermalMaterialManager(AActor* p_actor);
 	template <typename T>
 	T* To(AActor* p_actor);
 
@@ -465,4 +473,10 @@ public:
 	virtual bool SetMapOrigin(AActor* p_actor, FVector llh) ;
 	virtual bool GetMapOrigin(AActor* p_actor, FVector& llh);
 
+
+	virtual bool SetThermalMode(AActor* p_actor, INT32S mode);
+	virtual bool GetThermalMode(AActor* p_actor, INT32S& mode);
+
+	virtual bool SetTempratureKelvin(AActor* p_actor, FLOAT64 temp);
+	virtual bool GetTempratureKelvin(AActor* p_actor, FLOAT64& mode);
 };

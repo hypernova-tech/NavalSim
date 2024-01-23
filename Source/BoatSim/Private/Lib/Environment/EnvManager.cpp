@@ -3,6 +3,7 @@
 
 #include "Lib/Environment/EnvManager.h"
 #include <Lib/Console/CCLICommandManager.h>
+#include <Lib/SystemManager/SystemManagerBase.h>
 
 AEnvManager::AEnvManager()
 {
@@ -51,7 +52,40 @@ double AEnvManager::GetFogLevelPercent()
 {
 	return FogPercent;
 }
+FVector2D AEnvManager::GetFogColorIntensity()
+{
+	
+	auto pthermal_manager = ASystemManagerBase::GetInstance()->GetThermalMaterialManager();
+	if (pthermal_manager->GetIsVisibleThermalMode()) {
+		return FogColorIntensityVisible;
+	}
+	else {
+		return FogColorIntensityIR;
+	}
 
+}
+
+FLinearColor AEnvManager::GetFogInScatteringSunColor()
+{
+	auto pthermal_manager = ASystemManagerBase::GetInstance()->GetThermalMaterialManager();
+	if (pthermal_manager->GetIsVisibleThermalMode()) {
+		return FogInScatteringSunVisible;
+	}
+	else {
+		return FogInScatteringSunIR;
+	}
+}
+
+FLinearColor AEnvManager::GetRayleighScatteringColorDay()
+{
+	auto pthermal_manager = ASystemManagerBase::GetInstance()->GetThermalMaterialManager();
+	if (pthermal_manager->GetIsVisibleThermalMode()) {
+		return RayleighScatteringColorDay.VisColor;
+	}
+	else {
+		return RayleighScatteringColorDay.LWIRColor;
+	}
+}
 void AEnvManager::SeRainLevelPercent(double level)
 {
 	RainPercent = level;

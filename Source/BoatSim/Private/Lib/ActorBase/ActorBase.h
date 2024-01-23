@@ -84,6 +84,9 @@ protected:
 		AActor* ActorGizmo;
 
 	UPROPERTY(EditAnywhere)
+		double TempratureKelvin = 300;
+
+	UPROPERTY(EditAnywhere)
 		TArray<USceneComponent*> ManuallyAttachComponents;
 
 	INT64U ExternalUpdateCount = 0;
@@ -121,9 +124,7 @@ public:
 	int GetAffinityInstanceId();
 
 
-	FString GetBlueprintName();
-	virtual void Save(ISaveLoader* p_save_loader);
-	virtual void SaveJSON(CJsonDataContainer &data);
+
 	void ShowActorGizmo(bool val);
 	virtual void Bake();
 	virtual void OnActorPredestroy();
@@ -141,4 +142,15 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	void AddChild(USceneComponent* p_comp);
+
+	double	GetTempratureKelvin();
+	void	SetTempratureKelvin(double val);
+
+	/// <summary>
+	/// save load
+	/// </summary>
+public:
+	FString GetBlueprintName();
+	virtual void Save(ISaveLoader* p_save_loader);
+	virtual void SaveJSON(CJsonDataContainer& data);
 };

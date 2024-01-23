@@ -83,6 +83,8 @@ FString CCLICommandManager::CamHeightPx = "heightpx";
 
 FString CCLICommandManager::TimeOfDayHour = "timeofday";
 FString CCLICommandManager::EnvTimeFlowScale = "envtimeflowscale";
+FString CCLICommandManager::ThermalMode ="thermalmode";
+FString CCLICommandManager::TempratureKelvin = "tempkelvin";
 FString CCLICommandManager::RainPercent = "rain";
 FString CCLICommandManager::CloudPercent = "cloud";
 FString CCLICommandManager::SnowPercent = "snow";

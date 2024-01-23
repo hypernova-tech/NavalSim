@@ -6,7 +6,22 @@
 #include "Lib/ActorBase/ActorBase.h"
 #include "EnvManager.generated.h"
 
+USTRUCT(BlueprintType)
+struct FThermalColor
+{
+	GENERATED_BODY()
 
+public:
+	UPROPERTY(EditAnywhere)
+		FLinearColor VisColor;
+	UPROPERTY(EditAnywhere)
+		FLinearColor SWIRColor;
+	UPROPERTY(EditAnywhere)
+		FLinearColor MWIRColor;
+	UPROPERTY(EditAnywhere)
+		FLinearColor LWIRColor;
+
+};
 
 /**
  * 
@@ -33,6 +48,22 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 		double FogPercent = 0;
+
+
+	UPROPERTY(EditAnywhere)
+		FVector2D FogColorIntensityVisible;
+
+	UPROPERTY(EditAnywhere)
+		FVector2D FogColorIntensityIR;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FLinearColor  FogInScatteringSunVisible;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FLinearColor  FogInScatteringSunIR;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FThermalColor RayleighScatteringColorDay;
 
 	UPROPERTY(EditAnywhere)
 		double RainPercent = 0;
@@ -83,6 +114,17 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		double GetFogLevelPercent();
+
+	UFUNCTION(BlueprintCallable)
+		FVector2D GetFogColorIntensity();
+
+	UFUNCTION(BlueprintCallable)
+		FLinearColor GetFogInScatteringSunColor();
+
+
+	UFUNCTION(BlueprintCallable)
+		FLinearColor GetRayleighScatteringColorDay();
+
 
 	UFUNCTION(BlueprintCallable)
 		void SeRainLevelPercent(double level);

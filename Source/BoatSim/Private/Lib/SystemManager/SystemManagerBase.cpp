@@ -345,7 +345,14 @@ AMapOrigin* ASystemManagerBase::ToMapOrigin(AActor* p_actor)
 
 	return nullptr;
 }
+AThermalMaterialManager* ASystemManagerBase::ToThermalMaterialManager(AActor* p_actor)
+{
+	if (p_actor->IsA<AThermalMaterialManager>()) {
+		return (AThermalMaterialManager*)p_actor;
+	}
 
+	return nullptr;
+}
 
 template <typename T>
 T* ASystemManagerBase::To(AActor* p_actor)
@@ -692,6 +699,10 @@ ADataManager* ASystemManagerBase::GetDataManager()
 AAnnotationManager* ASystemManagerBase::GetAnnotationManager()
 {
 	return pAnnotationManager;
+}
+AThermalMaterialManager* ASystemManagerBase::GetThermalMaterialManager()
+{
+	return pThermalMaterialManager;
 }
 UConsoleBase* ASystemManagerBase::GetConsole()
 {
@@ -2505,6 +2516,46 @@ bool ASystemManagerBase::GetPathLineColor(AActor* p_actor, FColor& val)
 	 auto obj = ToMapOrigin(p_actor);
 	 if (obj != nullptr) {
 		 llh = obj->GetMapOriginLLH();
+		 return true;
+	 }
+	 return false;
+ }
+
+ bool ASystemManagerBase::SetThermalMode(AActor* p_actor, INT32S mode)
+ {
+	 auto thermal = ToThermalMaterialManager(p_actor);
+	 if (thermal != nullptr) {
+		 thermal->SetThermalMode((EThermalMode)mode);
+		 return true;
+	 }
+	 return false;
+ }
+
+ bool ASystemManagerBase::GetThermalMode(AActor* p_actor, INT32S& mode)
+ {
+	 auto thermal = ToThermalMaterialManager(p_actor);
+	 if (thermal != nullptr) {
+		 mode = (INT32S)thermal->GetThermalMode();
+		 return true;
+	 }
+	 return false;
+ }
+
+ bool ASystemManagerBase::SetTempratureKelvin(AActor* p_actor, FLOAT64 temp)
+ {
+	 auto actor = ToActorBase(p_actor);
+	 if (actor) {
+		 actor->SetTempratureKelvin(temp);
+		 return true;
+	 }
+	 return false;
+ }
+
+ bool ASystemManagerBase::GetTempratureKelvin(AActor* p_actor, FLOAT64& temp)
+ {
+	 auto actor = ToActorBase(p_actor);
+	 if (actor) {
+		 temp = actor->GetTempratureKelvin();
 		 return true;
 	 }
 	 return false;

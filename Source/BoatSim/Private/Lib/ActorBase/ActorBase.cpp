@@ -234,7 +234,9 @@ void AActorBase::Save(ISaveLoader* p_save_loader)
 	p_save_loader->AppendOption(line, CCLICommandManager::Scale, GetActorScale3D());
 	p_save_loader->AddLine(line);
 
-	
+	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
+	p_save_loader->AppendOption(line, CCLICommandManager::TempratureKelvin, TempratureKelvin);
+	p_save_loader->AddLine(line);
 
 
 	if (pCommIF) {
@@ -273,7 +275,7 @@ void AActorBase::SaveJSON(CJsonDataContainer& data)
 	data.Add(CCLICommandManager::Position, TOW(GetActorLocation()));
 	data.Add(CCLICommandManager::Rotation, (CMath::GetActorEulerAnglesRPY(this)));
 	data.Add(CCLICommandManager::Scale, (GetActorScale3D()));
-
+	data.Add(CCLICommandManager::TempratureKelvin, TempratureKelvin);
 	if (pCommIF) {
 		auto connections = pCommIF->GetConnectionsInfo();
 		int ind = 0;
@@ -394,4 +396,14 @@ void AActorBase::AddChild(USceneComponent* p_comp)
 	
 	
 
+}
+
+double AActorBase::GetTempratureKelvin()
+{
+	return TempratureKelvin;
+}
+
+void AActorBase::SetTempratureKelvin(double val)
+{
+	TempratureKelvin = val;
 }
