@@ -245,6 +245,12 @@ public:
 	virtual bool SetTimeOfDayHr(INT32S region, FLOAT64 val) = 0;
 	virtual bool GetTimeOfDayHr(INT32S region, FLOAT64& val) = 0;
 
+	virtual bool SetTimeOfDuskHr(INT32S region, FLOAT64 val) = 0;
+	virtual bool GetTimeOfDuskHr(INT32S region, FLOAT64& val) = 0;
+
+	virtual bool SetTimeOfSunSetHr(INT32S region, FLOAT64 val) = 0;
+	virtual bool GetTimeOfSunSetHr(INT32S region, FLOAT64& val) = 0;
+
 	virtual bool SetEnvSoundEnabled(INT32S region, bool val) = 0;
 	virtual bool GetEnvSoundEnabled(INT32S region, bool& val) = 0;
 

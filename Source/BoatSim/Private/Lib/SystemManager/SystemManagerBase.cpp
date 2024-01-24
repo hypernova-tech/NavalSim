@@ -2171,6 +2171,32 @@ bool ASystemManagerBase::GetPathLineColor(AActor* p_actor, FColor& val)
 	 return true;
  }
 
+ bool ASystemManagerBase::SetTimeOfDuskHr(INT32S region, FLOAT64 val)
+ {
+	//todo fixme
+	 return true;
+ }
+
+ bool ASystemManagerBase::GetTimeOfDuskHr(INT32S region, FLOAT64& val)
+ {
+	 //todo fixme
+	 val = 6;
+	 return true;
+ }
+
+ bool ASystemManagerBase::SetTimeOfSunSetHr(INT32S region, FLOAT64 val)
+ {
+	 //todo fixme
+	 return true;
+ }
+
+ bool ASystemManagerBase::GetTimeOfSunSetHr(INT32S region, FLOAT64& val)
+ {
+	 //todo fixme
+	 val = 18;
+	 return true;
+ }
+
  bool ASystemManagerBase::SetEnvTimeFlowScale(INT32S region, FLOAT64 val)
  {
 	 pEnvManager->SetEnvTimeFlowScale(val);

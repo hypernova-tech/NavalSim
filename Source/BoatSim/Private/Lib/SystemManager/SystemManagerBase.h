@@ -424,6 +424,12 @@ public:
 	virtual bool SetTimeOfDayHr(INT32S region, FLOAT64 val) ;
 	virtual bool GetTimeOfDayHr(INT32S region, FLOAT64& val);
 
+	virtual bool SetTimeOfDuskHr(INT32S region, FLOAT64 val);
+	virtual bool GetTimeOfDuskHr(INT32S region, FLOAT64& val);
+
+	virtual bool SetTimeOfSunSetHr(INT32S region, FLOAT64 val);
+	virtual bool GetTimeOfSunSetHr(INT32S region, FLOAT64& val);
+
 	virtual bool SetEnvTimeFlowScale(INT32S region, FLOAT64 val) ;
 	virtual bool GetEnvTimeFlowScale(INT32S region, FLOAT64& val) ;
 

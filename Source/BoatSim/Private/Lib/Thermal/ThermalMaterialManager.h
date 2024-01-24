@@ -6,6 +6,8 @@
 #include "Lib/ActorBase/ActorBase.h"
 #include <Engine/PostProcessVolume.h>
 #include <Components/VolumetricCloudComponent.h>
+#include "Materials/MaterialParameterCollection.h"
+#include "Materials/MaterialParameterCollectionInstance.h"
 #include "ThermalMaterialManager.generated.h"
 
 
@@ -36,8 +38,11 @@ class AThermalMaterialManager : public AActorBase
 private:
 	const FString ParamNameEnableIR = "EnableIR";
 	const FString ParamNameTempratureKelvin = "TempratureKelvin";
-	
-
+	const FString ParamNameEnableTimeOfDaySim = "EnableTimeOfDaySim";
+	const FString ParamNameTimeOfDayHr = "TimeOfDay";
+	const FString ParamNameTimeOfDuskHr = "TimeOfDusk";
+	const FString ParamNameTimeOfSunSetHr = "TimeOfSunSet";
+	const FString ParamNameTimedLightScale = "TimedLightScale";
 protected:
 	virtual void BeginPlay() override;
 
@@ -54,7 +59,14 @@ protected:
 	UPROPERTY(EditAnywhere)
 		TArray<UMaterialInterface*> SpecialMaterials;
 
+	UPROPERTY(EditAnywhere)
+		UMaterialParameterCollection* ThermalMaterialParameterCollection;
 
+	UPROPERTY(EditAnywhere)
+		double EmissiveOverride_ = 0;
+
+
+	
 
 	void UpdateGlobalMaterial();
 
@@ -64,9 +76,11 @@ protected:
 
 	void UpdateVolumeticCloudThermalBehaviour();
 
+	void UpdateMaterialCollections();
+
 	void UpdateActorThermalBehaviour(AActor* Actor);
 
-	void SetMaterialParams(UMaterialInstanceDynamic* p_ins, double temprature_kelvin);
+	void SetMaterialParams(UMaterialInstanceDynamic* p_ins, double temprature_kelvin, bool enable_timeofday_sim);
 
 	void UpdateSpecialMaterials();
 	bool DoesScalarParameterExist(UMaterialInterface* MaterialInterface, FName ParameterName);

@@ -4,6 +4,7 @@
 #include "Lib/Thermal/ThermalMaterialManager.h"
 #include <Lib/Console/CCLICommandManager.h>
 #include "EngineUtils.h"
+#include <Lib/SystemManager/SystemManagerBase.h>
 
 void AThermalMaterialManager::BeginPlay()
 {
@@ -58,7 +59,7 @@ void AThermalMaterialManager::UpdateGlobalMaterial()
 	bool ocean_found = false;
 	bool param_exists = false;
 
-
+	//UpdateMaterialCollections();
 	UpdateSkyMaterialThermalBehaviour();
 	UpdateVolumeticCloudThermalBehaviour();
 	UpdateActorsThermelBehaviour();
@@ -94,12 +95,37 @@ void AThermalMaterialManager::UpdateVolumeticCloudThermalBehaviour()
 		if (dyn_mat)
 		{
 			// Now you can modify parameters of the dynamic material instance
-			SetMaterialParams(dyn_mat, GetTempratureKelvin());
+			SetMaterialParams(dyn_mat, GetTempratureKelvin(), true);
 			// ... and then apply it back to the post process settings
 			pVolumeticCloudComp->SetMaterial(dyn_mat);
 		}
 	}
 
+}
+
+void AThermalMaterialManager::UpdateMaterialCollections()
+{
+	UMaterialParameterCollectionInstance* p_collection_instance = GetWorld()->GetParameterCollectionInstance(ThermalMaterialParameterCollection);
+
+	if (p_collection_instance)
+	{
+		FName ParameterName = "YourScalarParameterName"; // Replace with your parameter's name
+		float NewValue = 1.0f; // Replace with the value you want to set
+		auto p_sys = ASystemManagerBase::GetInstance();
+		double dbl;
+		p_sys->GetTimeOfDayHr(0, dbl);
+		
+		p_collection_instance->SetScalarParameterValue(FName(*ParamNameTimeOfDayHr), dbl);
+
+		
+		p_sys->GetTimeOfDuskHr(0, dbl);
+		p_collection_instance->SetScalarParameterValue(FName(*ParamNameTimeOfDuskHr), dbl);
+
+		p_sys->GetTimeOfSunSetHr(0, dbl);
+		p_collection_instance->SetScalarParameterValue(FName(*ParamNameTimeOfSunSetHr), dbl);
+
+
+	}
 }
 
 void AThermalMaterialManager::UpdateSkyMaterialThermalBehaviour()
@@ -125,7 +151,7 @@ void AThermalMaterialManager::UpdateSkyMaterialThermalBehaviour()
 			if (dyn_mat)
 			{
 				// Now you can modify parameters of the dynamic material instance
-				SetMaterialParams(dyn_mat, GetTempratureKelvin());
+				SetMaterialParams(dyn_mat, GetTempratureKelvin(), false);
 				// ... and then apply it back to the post process settings
 				Blendable.Object = dyn_mat;
 			}
@@ -182,7 +208,7 @@ void AThermalMaterialManager::UpdateActorThermalBehaviour(AActor* Actor)
 						if (DynMaterial)
 						{
 							{
-								SetMaterialParams(DynMaterial, temp_kelvin);
+								SetMaterialParams(DynMaterial, temp_kelvin, false);
 								if (new_material) {
 									MeshComp->SetMaterial(i, DynMaterial);
 								}
@@ -195,13 +221,14 @@ void AThermalMaterialManager::UpdateActorThermalBehaviour(AActor* Actor)
 	}
 }
 
-void AThermalMaterialManager::SetMaterialParams(UMaterialInstanceDynamic* p_ins, double temprature_kelvin)
+void AThermalMaterialManager::SetMaterialParams(UMaterialInstanceDynamic* p_ins, double temprature_kelvin, bool enable_timeofday_sim)
 {
 
 
 	switch (ThermalMode_) {
 	case 	EThermalMode::ThermalModeVis:
 		p_ins->SetScalarParameterValue(FName(*ParamNameEnableIR), 0);
+		p_ins->SetScalarParameterValue(FName(*ParamNameEnableTimeOfDaySim), 0);
 		break;
 	case	EThermalMode::ThermalModeNIR:
 	case	EThermalMode::ThermalModeSWIR:
@@ -209,8 +236,65 @@ void AThermalMaterialManager::SetMaterialParams(UMaterialInstanceDynamic* p_ins,
 	case	EThermalMode::ThermalModeLWIR:
 		p_ins->SetScalarParameterValue(FName(*ParamNameEnableIR), 1);
 		p_ins->SetScalarParameterValue(FName(*ParamNameTempratureKelvin), temprature_kelvin);
+		p_ins->SetScalarParameterValue(FName(*ParamNameEnableTimeOfDaySim), enable_timeofday_sim ? 1 : 0);
 		break;
 	}
+
+	double timeofdayhr;
+	auto p_sys = ASystemManagerBase::GetInstance();
+	p_sys->GetTimeOfDayHr(0, timeofdayhr);
+
+
+	
+	
+	//p_ins->SetScalarParameterValue(FName(*ParamNameTimeOfDayHr), timeofdayhr);
+
+	double timeofduskhr;
+	p_sys->GetTimeOfDuskHr(0, timeofduskhr);
+	//p_ins->SetScalarParameterValue(FName(*ParamNameTimeOfDuskHr), timeofduskhr);
+
+	double timeofsunsethr;
+	p_sys->GetTimeOfSunSetHr(0, timeofsunsethr);
+	//p_ins->SetScalarParameterValue(FName(*ParamNameTimeOfSunSetHr), timeofsunsethr);
+
+
+	float emissive_scale = 1;
+	float tf = 0;
+	float extinction_scale = 1;
+
+	double mid_hour = 16;
+
+	if (timeofdayhr >= 0 && timeofdayhr <= timeofduskhr) {
+		tf = timeofdayhr / timeofduskhr;
+		emissive_scale = FMath::Lerp(0.0002, 0.0001, tf);
+		extinction_scale = FMath::Lerp(0.01, 0.1, tf);
+		
+	}
+	else if (timeofdayhr >= timeofduskhr && timeofdayhr <= mid_hour) {
+		tf = (timeofdayhr - timeofduskhr) / (mid_hour - timeofduskhr);
+		emissive_scale = FMath::Lerp(0.0001, 0.005, tf);
+		extinction_scale = FMath::Lerp(0.1, 0.5, tf);
+	}
+	else if (timeofdayhr >= mid_hour && timeofdayhr <= timeofsunsethr) {
+		tf = (timeofdayhr - mid_hour) / (timeofsunsethr - mid_hour);
+		emissive_scale = FMath::Lerp(0.005, 0.002, tf);
+		extinction_scale = FMath::Lerp(0.5, 1, tf);
+	}
+	else if (timeofdayhr >= timeofsunsethr && timeofdayhr <= 24) {
+		tf = (timeofdayhr - timeofsunsethr) / (24 - timeofsunsethr);
+		emissive_scale = FMath::Lerp(0.002, 0.0002, tf);
+		extinction_scale = FMath::Lerp(1, 0.01, tf);
+	}
+	if (EmissiveOverride_ == 0) {
+		p_ins->SetScalarParameterValue(FName(*ParamNameTimedLightScale), 1 * emissive_scale);
+	}
+	else {
+		p_ins->SetScalarParameterValue(FName(*ParamNameTimedLightScale), (float)EmissiveOverride_);
+	}
+
+
+	
+
 }
 
 void AThermalMaterialManager::UpdateSpecialMaterials()
