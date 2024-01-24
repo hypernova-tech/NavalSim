@@ -5,7 +5,9 @@
 #include "CoreMinimal.h"
 #include "Lib/ActorBase/ActorBase.h"
 #include <Engine/PostProcessVolume.h>
+#include <Components/VolumetricCloudComponent.h>
 #include "ThermalMaterialManager.generated.h"
+
 
 
 
@@ -46,6 +48,9 @@ protected:
 	UPROPERTY(EditAnywhere)
 		APostProcessVolume* pPostProcessVolume;
 
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+		UVolumetricCloudComponent* pVolumeticCloudComp = nullptr;
+
 	UPROPERTY(EditAnywhere)
 		TArray<UMaterialInterface*> SpecialMaterials;
 
@@ -53,7 +58,11 @@ protected:
 
 	void UpdateGlobalMaterial();
 
+	void UpdateActorsThermelBehaviour();
+
 	void UpdateSkyMaterialThermalBehaviour();
+
+	void UpdateVolumeticCloudThermalBehaviour();
 
 	void UpdateActorThermalBehaviour(AActor* Actor);
 

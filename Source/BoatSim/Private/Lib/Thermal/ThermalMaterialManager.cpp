@@ -60,12 +60,46 @@ void AThermalMaterialManager::UpdateGlobalMaterial()
 
 
 	UpdateSkyMaterialThermalBehaviour();
-	
+	UpdateVolumeticCloudThermalBehaviour();
+	UpdateActorsThermelBehaviour();
+}
+void AThermalMaterialManager::UpdateActorsThermelBehaviour()
+{
 	for (TActorIterator<AActor> ActorItr(GetWorld()); ActorItr; ++ActorItr)
 	{
 		AActor* Actor = *ActorItr;
 		UpdateActorThermalBehaviour(Actor);
 	}
+}
+void AThermalMaterialManager::UpdateVolumeticCloudThermalBehaviour()
+{
+
+	if (pVolumeticCloudComp)
+	{
+		auto owner = pVolumeticCloudComp->GetOwner();
+		UMaterialInterface* CloudMaterialInterface = pVolumeticCloudComp->Material; // Assuming the cloud material is at index 0
+		bool param_exists = false;
+		if (DoesScalarParameterExist(CloudMaterialInterface, FName(*ParamNameEnableIR))) {
+			param_exists = true;
+
+		}
+
+	
+		UMaterialInstanceDynamic* dyn_mat = Cast<UMaterialInstanceDynamic>(CloudMaterialInterface);
+		if (dyn_mat == nullptr) {
+			dyn_mat = UMaterialInstanceDynamic::Create(CloudMaterialInterface, this);
+
+		}
+
+		if (dyn_mat)
+		{
+			// Now you can modify parameters of the dynamic material instance
+			SetMaterialParams(dyn_mat, GetTempratureKelvin());
+			// ... and then apply it back to the post process settings
+			pVolumeticCloudComp->SetMaterial(dyn_mat);
+		}
+	}
+
 }
 
 void AThermalMaterialManager::UpdateSkyMaterialThermalBehaviour()
@@ -76,6 +110,9 @@ void AThermalMaterialManager::UpdateSkyMaterialThermalBehaviour()
 	{
 		if (UMaterialInterface* MaterialInterface = Cast<UMaterialInterface>(Blendable.Object))
 		{
+
+		
+
 			// Now you have a reference to the material interface
 			// You can cast it to UMaterialInstance or UMaterialInstanceDynamic if needed
 
