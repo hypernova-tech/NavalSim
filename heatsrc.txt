@@ -1,0 +1,84 @@
+create --name BP_Annotation_C_1 --bp  --tick 0
+set --name BP_Annotation_C_1 --instance -1
+set --name BP_Annotation_C_1 --suppressed 0
+set --name BP_Annotation_C_1 --standalone 0
+set --name BP_Annotation_C_1 --position "-20.097436 6.361075 10.299538"
+set --name BP_Annotation_C_1 --rotation "-0.000000 -0.000000 0.000000"
+set --name BP_Annotation_C_1 --scale "1.000000 1.000000 1.000000"
+set --name BP_Annotation_C_1 --tempkelvin 300.000000
+set --name BP_Annotation_C_1 --property IsHeatSource_ --value 0
+
+create --name env --bp  --tick 0
+set --name env --instance -1
+set --name env --suppressed 0
+set --name env --standalone 0
+set --name env --position "324.600000 284.200000 4.600000"
+set --name env --rotation "-0.000000 -0.000000 0.000000"
+set --name env --scale "1.000000 1.000000 1.000000"
+set --name env --tempkelvin 300.000000
+set --name env --property IsHeatSource_ --value 0
+set --name env --timeofday 12.000000
+set --name env --envtimeflowscale 1.000000
+set --name env --rain 0.000000
+set --name env --cloud 0.000000
+set --name env --snow 0.000000
+set --name env --dust 0.000000
+set --name env --fog 0.000000
+set --name env --thunder 0.000000
+set --name env --envsoundfx 1
+set --name env --wind 3.000000
+set --name env --winddir 0.000000
+
+create --name jeoref --bp  --tick 0
+set --name jeoref --instance -1
+set --name jeoref --suppressed 0
+set --name jeoref --standalone 0
+set --name jeoref --position "0.000000 0.000000 0.000000"
+set --name jeoref --rotation "-0.000000 -0.000000 0.000000"
+set --name jeoref --scale "1.000000 1.000000 1.000000"
+set --name jeoref --tempkelvin 300.000000
+set --name jeoref --property IsHeatSource_ --value 0
+set --name jeoref --maporiginlat 0.000000
+set --name jeoref --maporiginlon 0.000000
+set --name jeoref --maporiginh 0.000000
+
+create --name thermal --bp  --tick 0
+set --name thermal --instance -1
+set --name thermal --suppressed 0
+set --name thermal --standalone 0
+set --name thermal --position "0.000000 0.000000 0.000000"
+set --name thermal --rotation "-0.000000 -0.000000 0.000000"
+set --name thermal --scale "1.000000 1.000000 1.000000"
+set --name thermal --tempkelvin 300.000000
+set --name thermal --property IsHeatSource_ --value 0
+set --name thermal --thermalmode 1
+
+create --name Wall --bp CUBE --tick 0
+set --name Wall --instance -1
+set --name Wall --suppressed 0
+set --name Wall --standalone 0
+set --name Wall --position "0.000000 -26.091698 0.000000"
+set --name Wall --rotation "-0.000000 -0.000000 0.000000"
+set --name Wall --scale "10.000000 1.000000 10.000000"
+set --name Wall --tempkelvin 300.000000
+set --name Wall --property IsHeatSource_ --value 0
+
+create --name heatsrc1 --bp CUBE --tick 0
+set --name heatsrc1 --instance -1
+set --name heatsrc1 --suppressed 0
+set --name heatsrc1 --standalone 0
+set --name heatsrc1 --position "0.000000 18.762035 0.000000"
+set --name heatsrc1 --rotation "-0.000000 -0.000000 0.000000"
+set --name heatsrc1 --scale "1.000000 1.000000 1.000000"
+set --name heatsrc1 --tempkelvin 300.000000
+set --name heatsrc1 --property IsHeatSource_ --value 1
+
+create --name heatsource2 --bp SPHERE --tick 0
+set --name heatsource2 --instance -1
+set --name heatsource2 --suppressed 0
+set --name heatsource2 --standalone 0
+set --name heatsource2 --position "-41.010723 53.729473 11.116637"
+set --name heatsource2 --rotation "-0.000000 -0.000000 0.000000"
+set --name heatsource2 --scale "3.000000 3.000000 3.000000"
+set --name heatsource2 --tempkelvin 300.000000
+set --name heatsource2 --property IsHeatSource_ --value 1

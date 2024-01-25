@@ -177,6 +177,8 @@ private:
 	TArray<ASensorBase*> Sensors;
 	TArray<APlatformBase*> Platforms;
 	TMap<ESensorType, TArray<ASensorBase*> > SensorsOfType;
+	TSet<AActor*> HeatSources;
+
 	bool IsStartReceived = false;
 	bool IsResumeReceived = false;
 	bool IsPauseReceived = false;
@@ -228,6 +230,7 @@ public:
 	AThermalMaterialManager* ToThermalMaterialManager(AActor* p_actor);
 	template <typename T>
 	T* To(AActor* p_actor);
+	
 
 	virtual bool IsBakable(AActor* p_actor);
 	virtual void EnableAllActors();
@@ -280,7 +283,7 @@ public:
 	virtual TArray<ESensorType> GetAllSensorTypes();
 	virtual TArray<ASensorBase*> GetAllSensors() ;
 	virtual TArray<ASensorBase*> GetSensorsOfType(ESensorType sensor_type);
-
+	virtual TArray<AActorBase*> GetHeatSources();
 
 
 	virtual void RegisterConnection(UConnectionBase* p_connection);

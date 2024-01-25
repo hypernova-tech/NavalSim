@@ -4,6 +4,20 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 [AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
 public class ModifiableAttribute : Attribute
 {
+    // Property to indicate if the field can be modified via CLI
+    public bool IsProperty { get; set; }
+
+    // Constructor
+    public ModifiableAttribute(bool is_property = false)
+    {
+        IsProperty = is_property;
+    }
+}
+
+public class COptionInfo
+{
+    public Dictionary<string, string> OptionNameContants = new Dictionary<string, string>();
+    public HashSet<string> OptionWithPropertyEnabled = new HashSet<string>();
 }
 
 public static class CLICommandManager
@@ -74,6 +88,7 @@ public static class CLICommandManager
     [Modifiable] public const string CamView = "camview";
     [Modifiable] public const string ThermalMode = "thermalmode";
     [Modifiable] public const string TempratureKelvin = "tempkelvin";
+    [Modifiable(IsProperty = true)] public const string IsHeatSource = "heatsource";
     [Modifiable] public const string TimeOfDay = "timeofday";
     [Modifiable] public const string EnvTimeFlowScale = "envtimeflowscale";
     [Modifiable] public const string RainPercent = "rain";
@@ -123,6 +138,34 @@ public static class CLICommandManager
     public const string Start = "start";
     public const string Pause = "pause";
     public const string Resume = "resume";
+    public const string ExecCommand = "exec";
+    public const string Property = "property";
+    public const string Properties = "properties";
+    public const string PropertyValue = "value";
+
+    public const string Func = "func";
+    public const string FuncCategory = "funccategory";
+    public const string FuncParam1 = "param1";
+    public const string FuncParam2 = "param2";
+    public const string FuncParam3 = "param3";
+    public const string FuncParam4 = "param4";
+    public const string FuncParam5 = "param5";
+    public const string FuncParam6 = "param6";
+    public const string FuncParam7 = "param7";
+    public const string FuncParam8 = "param8";
+    public const string FuncParam9 = "param9";
+    public const string FuncParam10 = "param10";
+
+    public const string FuncValue1 = "value1";
+    public const string FuncValue2 = "value2";
+    public const string FuncValue3 = "value3";
+    public const string FuncValue4 = "value4";
+    public const string FuncValue5 = "value5";
+    public const string FuncValue6 = "value6";
+    public const string FuncValue7 = "value7";
+    public const string FuncValue8 = "value8";
+    public const string FuncValue9 = "value9";
+    public const string FuncValue10 = "value10";
 
     public static Dictionary<string, string> GetModifiableConstants()
     {
@@ -143,9 +186,12 @@ public static class CLICommandManager
 
         return modifiableFields;
     }
-    public static Dictionary<string, string> GetOptionNameContants()
+    public static COptionInfo GetOptionNameContants()
     {
+        COptionInfo option_info = new COptionInfo();
         var modifiableFields = new Dictionary<string, string>();
+
+        var properties = new HashSet<string>();
 
         // Using reflection to get all public static fields
         var fields = typeof(CLICommandManager).GetFields(BindingFlags.Public | BindingFlags.Static);
@@ -155,11 +201,18 @@ public static class CLICommandManager
             var attributes = field.GetCustomAttributes(typeof(ModifiableAttribute), false);
             if (attributes.Length > 0)
             {
+                var modifiable = (ModifiableAttribute)attributes[0];
+
                 // If the field has the ModifiableAttribute, we add it to the dictionary
                 modifiableFields.Add((string)field.GetValue(null), field.Name);
+                if (modifiable.IsProperty)
+                {
+                    properties.Add(field.Name);
+                }
             }
         }
-
-        return modifiableFields;
+        option_info.OptionNameContants = modifiableFields;
+        option_info.OptionWithPropertyEnabled = properties;
+        return option_info;
     }
 }

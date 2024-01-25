@@ -1212,6 +1212,20 @@ TArray<ASensorBase*> ASystemManagerBase::GetSensorsOfType(ESensorType sensor_typ
 
 
 }
+TArray<AActorBase*> ASystemManagerBase::GetHeatSources()
+{
+	TArray<AActorBase*> ret;
+	for (auto actor : ActorList) {
+		auto actor_base = ToActorBase(actor);
+		if (actor_base) {
+			if (actor_base->GetIsHeatSource()) {
+				ret.Add(actor_base);
+			}
+		}
+	}
+
+	return ret;
+}
 bool ASystemManagerBase::Save(FString fname)
 {
 	return pSaverLoader->Save(this, fname);

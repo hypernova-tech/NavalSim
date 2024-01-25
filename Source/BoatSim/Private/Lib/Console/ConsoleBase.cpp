@@ -3088,6 +3088,10 @@ bool UConsoleBase::SetPropertyValue(UObject* p_obj, const FString& property_name
     {
         StrProperty->SetPropertyValue_InContainer(p_obj, value);
     }
+    else if (FBoolProperty* BoolProperty = CastField<FBoolProperty>(Property)) {
+        bool BoolValue = value.ToBool();
+        BoolProperty->SetPropertyValue_InContainer(p_obj, BoolValue);
+    }
     else if (FNumericProperty* NumProperty = CastField<FNumericProperty>(Property))
     {
         if (NumProperty->IsFloatingPoint())
@@ -3106,11 +3110,7 @@ bool UConsoleBase::SetPropertyValue(UObject* p_obj, const FString& property_name
             
            
         }
-        else if (FBoolProperty* BoolProperty = CastField<FBoolProperty>(Property))
-        {
-            bool BoolValue = value.ToBool();
-            BoolProperty->SetPropertyValue_InContainer(p_obj, BoolValue);
-        }
+       
     }
     else if (FStructProperty* StructProperty = CastField<FStructProperty>(Property))
     {

@@ -43,9 +43,9 @@ private:
 	const FString ParamNameTimeOfDuskHr = "TimeOfDusk";
 	const FString ParamNameTimeOfSunSetHr = "TimeOfSunSet";
 	const FString ParamNameTimedLightScale = "TimedLightScale";
+	const FString ParamNameHeatSourceBase = "HeatSource";
 protected:
 	virtual void BeginPlay() override;
-
 
 	UPROPERTY(EditAnywhere)
 		EThermalMode ThermalMode_ = EThermalMode::ThermalModeVis;
@@ -79,9 +79,11 @@ protected:
 
 	void UpdateMaterialCollections();
 
+	void UpdateHeatSources(UMaterialInstanceDynamic *p_inst);
+
 	void UpdateActorThermalBehaviour(AActor* Actor);
 
-	void SetMaterialParams(UMaterialInstanceDynamic* p_ins, double temprature_kelvin, bool enable_timeofday_sim);
+	void SetMaterialParams(UMaterialInstanceDynamic* p_ins, double temprature_kelvin, bool enable_timeofday_sim, bool update_heat_source);
 
 	void UpdateSpecialMaterials();
 	bool DoesScalarParameterExist(UMaterialInterface* MaterialInterface, FName ParameterName);
@@ -100,4 +102,6 @@ public:
 
 	void SetThermalMode(EThermalMode mode);
 	EThermalMode GetThermalMode();
+
+	TArray<AActorBase*> HeatSources;
 };

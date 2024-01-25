@@ -8,7 +8,7 @@ public class CJsonParser
 {
     MainForm mMainForm;
     Dictionary<string, string> Options;
-    Dictionary<string, string> OptionParamMap = new Dictionary<string, string>();
+    COptionInfo OptionParamMap;
     public CJsonParser( ) 
     {
         Options = CLICommandManager.GetModifiableConstants();
@@ -177,9 +177,11 @@ public class CJsonParser
                 }
                 else
                 {
-                    if (OptionParamMap.TryGetValue(option_str, out string param_name))
+                    if (OptionParamMap.OptionNameContants.TryGetValue(option_str, out string param_name))
                     {
-                        mMainForm.SetOptionValue(param_name, option_value);
+                       
+                           mMainForm.SetOptionValue(param_name, option_value);
+                        
                     }
 
                 }
@@ -225,7 +227,7 @@ public class CJsonParser
                 }
                 else
                 {
-                    if(OptionParamMap.TryGetValue(option_str, out string param_name))
+                    if(OptionParamMap.OptionNameContants.TryGetValue(option_str, out string param_name))
                     {
                         mMainForm.SetOptionValue(param_name, option_value);
                     }

@@ -5,6 +5,7 @@
 #include <Lib/Console/CCLICommandManager.h>
 #include "EngineUtils.h"
 #include <Lib/SystemManager/SystemManagerBase.h>
+#include <Lib/Utils/CUtil.h>
 
 void AThermalMaterialManager::BeginPlay()
 {
@@ -95,7 +96,7 @@ void AThermalMaterialManager::UpdateVolumeticCloudThermalBehaviour()
 		if (dyn_mat)
 		{
 			// Now you can modify parameters of the dynamic material instance
-			SetMaterialParams(dyn_mat, GetTempratureKelvin(), true);
+			SetMaterialParams(dyn_mat, GetTempratureKelvin(), true, false);
 			// ... and then apply it back to the post process settings
 			pVolumeticCloudComp->SetMaterial(dyn_mat);
 		}
@@ -128,6 +129,24 @@ void AThermalMaterialManager::UpdateMaterialCollections()
 	}
 }
 
+void AThermalMaterialManager::UpdateHeatSources(UMaterialInstanceDynamic *p_inst)
+{
+
+	for (int i = 0; i < HeatSources.Num(); i++) {
+		if (i <= 4) {
+			auto heat_src = HeatSources[i];
+			FVector4 vec4;
+			auto loc = HeatSources[i]->GetActorLocation();
+			vec4.X = loc.X;
+			vec4.Y = loc.Y;
+			vec4.Z = loc.Z;
+			
+			vec4.W = heat_src->GetTempratureKelvin();
+			p_inst->SetVectorParameterValue(FName(*(ParamNameHeatSourceBase + CUtil::IntToString(i+1))), vec4);
+		}
+	}
+}
+
 void AThermalMaterialManager::UpdateSkyMaterialThermalBehaviour()
 {
 	FPostProcessSettings& PostProcessSettings = pPostProcessVolume->Settings;
@@ -151,7 +170,7 @@ void AThermalMaterialManager::UpdateSkyMaterialThermalBehaviour()
 			if (dyn_mat)
 			{
 				// Now you can modify parameters of the dynamic material instance
-				SetMaterialParams(dyn_mat, GetTempratureKelvin(), false);
+				SetMaterialParams(dyn_mat, GetTempratureKelvin(), false, false);
 				// ... and then apply it back to the post process settings
 				Blendable.Object = dyn_mat;
 			}
@@ -167,8 +186,6 @@ void AThermalMaterialManager::UpdateActorThermalBehaviour(AActor* Actor)
 		AActorBase* p_actor_base = (AActorBase*)Actor;
 		temp_kelvin = p_actor_base->GetTempratureKelvin();
 	}
-
-	
 
 	// Now check for static mesh components in this actor
 	TArray<UStaticMeshComponent*> StaticMeshComponents;
@@ -208,7 +225,7 @@ void AThermalMaterialManager::UpdateActorThermalBehaviour(AActor* Actor)
 						if (DynMaterial)
 						{
 							{
-								SetMaterialParams(DynMaterial, temp_kelvin, false);
+								SetMaterialParams(DynMaterial, temp_kelvin, false, true);
 								if (new_material) {
 									MeshComp->SetMaterial(i, DynMaterial);
 								}
@@ -221,7 +238,7 @@ void AThermalMaterialManager::UpdateActorThermalBehaviour(AActor* Actor)
 	}
 }
 
-void AThermalMaterialManager::SetMaterialParams(UMaterialInstanceDynamic* p_ins, double temprature_kelvin, bool enable_timeofday_sim)
+void AThermalMaterialManager::SetMaterialParams(UMaterialInstanceDynamic* p_ins, double temprature_kelvin, bool enable_timeofday_sim, bool update_heat_source)
 {
 
 
@@ -237,6 +254,7 @@ void AThermalMaterialManager::SetMaterialParams(UMaterialInstanceDynamic* p_ins,
 		p_ins->SetScalarParameterValue(FName(*ParamNameEnableIR), 1);
 		p_ins->SetScalarParameterValue(FName(*ParamNameTempratureKelvin), temprature_kelvin);
 		p_ins->SetScalarParameterValue(FName(*ParamNameEnableTimeOfDaySim), enable_timeofday_sim ? 1 : 0);
+		
 		break;
 	}
 
@@ -291,7 +309,7 @@ void AThermalMaterialManager::SetMaterialParams(UMaterialInstanceDynamic* p_ins,
 	else {
 		p_ins->SetScalarParameterValue(FName(*ParamNameTimedLightScale), (float)EmissiveOverride_);
 	}
-
+	UpdateHeatSources(p_ins);
 
 	
 	//p_ins->SetScalarParameterValue("ExtinctionScale", (float)ExtinctionOverride_);
@@ -313,7 +331,7 @@ void AThermalMaterialManager::UpdateSpecialMaterials()
 void AThermalMaterialManager::OnPreStep(float DeltaTime)
 {
 	Super::OnPreStep(DeltaTime);
-
+	HeatSources = ASystemManagerBase::GetInstance()->GetHeatSources();
 }
 
 bool AThermalMaterialManager::GetIsVisibleThermalMode()

@@ -19,6 +19,7 @@ using Microsoft.VisualBasic.Logging;
 using Newtonsoft.Json.Linq;
 using TrackBar = System.Windows.Forms.TrackBar;
 using System.Windows.Forms;
+using System.Diagnostics.Eventing.Reader;
 
 namespace ConsoleGUI
 {
@@ -50,6 +51,7 @@ namespace ConsoleGUI
         Dictionary<string, string> Modifyables = new Dictionary<string, string>();
         CSystemAPIImplementor SystemAPIImplementor = new CSystemAPIImplementor();
         CConsoleConfig ConsoleConfig;
+        COptionInfo OptionParamMap;
         public MainForm()
         {
             CConsoleConfigReader config_reader = new CConsoleConfigReader();
@@ -66,7 +68,7 @@ namespace ConsoleGUI
             SystemAPIImplementor.SetConnection(this);
             LBTimeValue.Text = SystemAPIImplementor.GetTimeOfDayHour(TBTimeOfDay.Value).ToString();
             ObjectEditor.AllowDrop = true;
-
+            OptionParamMap = CLICommandManager.GetOptionNameContants();
         }
         private void PopulateDataGridView()
         {
@@ -1016,6 +1018,16 @@ namespace ConsoleGUI
             string ret = CCommandFactroy.CreateCommands(cmd, option1, value1, option2, value2, option3, value3, option4, value4, option5, value5);
             SendData(ret);
         }
+        void SendPropertySetCommand(string property_name, string value1 = "")
+        {
+            string ret = CCommandFactroy.CreateCommands(CLICommandManager.SetCommand, CLICommandManager.Name, Selected, CLICommandManager.Property, property_name, CLICommandManager.PropertyValue, value1);
+            SendData(ret);
+        }
+        void SendPropertyGetCommand(string property_name)
+        {
+            string ret = CCommandFactroy.CreateCommands(CLICommandManager.GetCommand, CLICommandManager.Name, Selected, CLICommandManager.Property, property_name);
+            SendData(ret);
+        }
         void SendSetCommand(string option1, string value1 = "")
         {
             string ret = CCommandFactroy.CreateCommands(CLICommandManager.SetCommand, CLICommandManager.Name, Selected, option1, value1);
@@ -1605,8 +1617,17 @@ namespace ConsoleGUI
 
                 if (Modifyables.TryGetValue(param, out string option))
                 {
-                    SendSetCommand(option, val);
-                    SendGetCommand(option);
+                    if(OptionParamMap.OptionWithPropertyEnabled.Contains(param)){
+                        SendPropertySetCommand(param+"_", val);
+                        SendPropertyGetCommand(param + "_");
+                    }
+                    else
+                    {
+                        SendSetCommand(option, val);
+                        SendGetCommand(option);
+                    }
+                    
+                 
                 }
             }
         }

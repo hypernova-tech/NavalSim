@@ -238,6 +238,13 @@ void AActorBase::Save(ISaveLoader* p_save_loader)
 	p_save_loader->AppendOption(line, CCLICommandManager::TempratureKelvin, TempratureKelvin);
 	p_save_loader->AddLine(line);
 
+	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
+	p_save_loader->AppendOption(line, CCLICommandManager::Property, GET_MEMBER_NAME_CHECKED(AActorBase, IsHeatSource_).ToString());
+	p_save_loader->AppendOption(line, CCLICommandManager::PropertyValue, IsHeatSource_);
+	p_save_loader->AddLine(line);
+
+
+
 
 	if (pCommIF) {
 		auto connections = pCommIF->GetConnectionsInfo();
@@ -276,6 +283,7 @@ void AActorBase::SaveJSON(CJsonDataContainer& data)
 	data.Add(CCLICommandManager::Rotation, (CMath::GetActorEulerAnglesRPY(this)));
 	data.Add(CCLICommandManager::Scale, (GetActorScale3D()));
 	data.Add(CCLICommandManager::TempratureKelvin, TempratureKelvin);
+	data.Add(CCLICommandManager::IsHeatSource, IsHeatSource_);
 	if (pCommIF) {
 		auto connections = pCommIF->GetConnectionsInfo();
 		int ind = 0;
@@ -396,6 +404,11 @@ void AActorBase::AddChild(USceneComponent* p_comp)
 	
 	
 
+}
+
+bool AActorBase::GetIsHeatSource()
+{
+	return IsHeatSource_;
 }
 
 double AActorBase::GetTempratureKelvin()

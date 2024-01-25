@@ -84,6 +84,9 @@ protected:
 		AActor* ActorGizmo;
 
 	UPROPERTY(EditAnywhere)
+		bool IsHeatSource_ = false;
+
+	UPROPERTY(EditAnywhere)
 		double TempratureKelvin = 300;
 
 	UPROPERTY(EditAnywhere)
@@ -143,6 +146,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void AddChild(USceneComponent* p_comp);
 
+	bool GetIsHeatSource();
+
 	double	GetTempratureKelvin();
 	void	SetTempratureKelvin(double val);
 
@@ -153,4 +158,5 @@ public:
 	FString GetBlueprintName();
 	virtual void Save(ISaveLoader* p_save_loader);
 	virtual void SaveJSON(CJsonDataContainer& data);
+
 };
