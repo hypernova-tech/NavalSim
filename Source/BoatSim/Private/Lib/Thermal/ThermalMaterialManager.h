@@ -65,7 +65,8 @@ protected:
 	UPROPERTY(EditAnywhere)
 		double EmissiveOverride_ = 0;
 
-
+	UPROPERTY(EditAnywhere)
+		double ExtinctionOverride_ = 1;
 	
 
 	void UpdateGlobalMaterial();

@@ -266,23 +266,23 @@ void AThermalMaterialManager::SetMaterialParams(UMaterialInstanceDynamic* p_ins,
 
 	if (timeofdayhr >= 0 && timeofdayhr <= timeofduskhr) {
 		tf = timeofdayhr / timeofduskhr;
-		emissive_scale = FMath::Lerp(0.0002, 0.0001, tf);
+		emissive_scale = FMath::Lerp(0.0001, 0.00001, tf);
 		extinction_scale = FMath::Lerp(0.01, 0.1, tf);
 		
 	}
 	else if (timeofdayhr >= timeofduskhr && timeofdayhr <= mid_hour) {
 		tf = (timeofdayhr - timeofduskhr) / (mid_hour - timeofduskhr);
-		emissive_scale = FMath::Lerp(0.0001, 0.005, tf);
+		emissive_scale = FMath::Lerp(0.0001, 0.01, tf);
 		extinction_scale = FMath::Lerp(0.1, 0.5, tf);
 	}
 	else if (timeofdayhr >= mid_hour && timeofdayhr <= timeofsunsethr) {
 		tf = (timeofdayhr - mid_hour) / (timeofsunsethr - mid_hour);
-		emissive_scale = FMath::Lerp(0.005, 0.002, tf);
+		emissive_scale = FMath::Lerp(0.01, 0.002, tf);
 		extinction_scale = FMath::Lerp(0.5, 1, tf);
 	}
 	else if (timeofdayhr >= timeofsunsethr && timeofdayhr <= 24) {
 		tf = (timeofdayhr - timeofsunsethr) / (24 - timeofsunsethr);
-		emissive_scale = FMath::Lerp(0.002, 0.0002, tf);
+		emissive_scale = FMath::Lerp(0.002, 0.0001, tf);
 		extinction_scale = FMath::Lerp(1, 0.01, tf);
 	}
 	if (EmissiveOverride_ == 0) {
@@ -293,6 +293,8 @@ void AThermalMaterialManager::SetMaterialParams(UMaterialInstanceDynamic* p_ins,
 	}
 
 
+	
+	//p_ins->SetScalarParameterValue("ExtinctionScale", (float)ExtinctionOverride_);
 	
 
 }
