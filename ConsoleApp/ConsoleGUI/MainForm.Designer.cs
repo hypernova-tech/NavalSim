@@ -124,6 +124,7 @@ namespace ConsoleGUI
             label16 = new Label();
             TBCloud = new TrackBar();
             tabPage5 = new TabPage();
+            BtnLoadInfo = new Button();
             TBTTopLeftH = new TextBox();
             TBTTopLeftLon = new TextBox();
             TBTTopLeftLat = new TextBox();
@@ -182,6 +183,9 @@ namespace ConsoleGUI
             startToolStripMenuItem = new ToolStripMenuItem();
             pauseToolStripMenuItem = new ToolStripMenuItem();
             resumeToolStripMenuItem = new ToolStripMenuItem();
+            annotationToolStripMenuItem = new ToolStripMenuItem();
+            enableToolStripMenuItem = new ToolStripMenuItem();
+            disableToolStripMenuItem = new ToolStripMenuItem();
             contextObjectEditor = new ContextMenuStrip(components);
             focusToolStripMenuItem1 = new ToolStripMenuItem();
             destroyToolStripMenuItem1 = new ToolStripMenuItem();
@@ -189,7 +193,6 @@ namespace ConsoleGUI
             ConsoeListBoxContextMenu = new ContextMenuStrip(components);
             clearToolStripMenuItem = new ToolStripMenuItem();
             FileSaver = new SaveFileDialog();
-            BtnLoadInfo = new Button();
             ActorListContextMenu.SuspendLayout();
             contextMenuConsoleListBox.SuspendLayout();
             tabPage2.SuspendLayout();
@@ -1133,6 +1136,16 @@ namespace ConsoleGUI
             tabPage5.Text = "Terrain";
             tabPage5.UseVisualStyleBackColor = true;
             // 
+            // BtnLoadInfo
+            // 
+            BtnLoadInfo.Location = new Point(16, 17);
+            BtnLoadInfo.Name = "BtnLoadInfo";
+            BtnLoadInfo.Size = new Size(174, 23);
+            BtnLoadInfo.TabIndex = 39;
+            BtnLoadInfo.Text = "Load Terrain from MXL";
+            BtnLoadInfo.UseVisualStyleBackColor = true;
+            BtnLoadInfo.Click += BtnLoadInfo_Click;
+            // 
             // TBTTopLeftH
             // 
             TBTTopLeftH.Location = new Point(312, 286);
@@ -1350,7 +1363,7 @@ namespace ConsoleGUI
             // 
             // menuStrip1
             // 
-            menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, viewToolStripMenuItem, cameaToolStripMenuItem, simulationToolStripMenuItem });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, viewToolStripMenuItem, cameaToolStripMenuItem, simulationToolStripMenuItem, annotationToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Size = new Size(562, 24);
@@ -1580,6 +1593,27 @@ namespace ConsoleGUI
             resumeToolStripMenuItem.Text = "Resume";
             resumeToolStripMenuItem.Click += resumeToolStripMenuItem_Click;
             // 
+            // annotationToolStripMenuItem
+            // 
+            annotationToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { enableToolStripMenuItem, disableToolStripMenuItem });
+            annotationToolStripMenuItem.Name = "annotationToolStripMenuItem";
+            annotationToolStripMenuItem.Size = new Size(79, 20);
+            annotationToolStripMenuItem.Text = "Annotation";
+            // 
+            // enableToolStripMenuItem
+            // 
+            enableToolStripMenuItem.Name = "enableToolStripMenuItem";
+            enableToolStripMenuItem.Size = new Size(180, 22);
+            enableToolStripMenuItem.Text = "Enable";
+            enableToolStripMenuItem.Click += enableToolStripMenuItem_Click_1;
+            // 
+            // disableToolStripMenuItem
+            // 
+            disableToolStripMenuItem.Name = "disableToolStripMenuItem";
+            disableToolStripMenuItem.Size = new Size(180, 22);
+            disableToolStripMenuItem.Text = "Disable";
+            disableToolStripMenuItem.Click += disableToolStripMenuItem_Click;
+            // 
             // contextObjectEditor
             // 
             contextObjectEditor.Items.AddRange(new ToolStripItem[] { focusToolStripMenuItem1, destroyToolStripMenuItem1, clearToolStripMenuItem1 });
@@ -1618,16 +1652,6 @@ namespace ConsoleGUI
             clearToolStripMenuItem.Name = "clearToolStripMenuItem";
             clearToolStripMenuItem.Size = new Size(101, 22);
             clearToolStripMenuItem.Text = "Clear";
-            // 
-            // BtnLoadInfo
-            // 
-            BtnLoadInfo.Location = new Point(16, 17);
-            BtnLoadInfo.Name = "BtnLoadInfo";
-            BtnLoadInfo.Size = new Size(174, 23);
-            BtnLoadInfo.TabIndex = 39;
-            BtnLoadInfo.Text = "Load Terrain from MXL";
-            BtnLoadInfo.UseVisualStyleBackColor = true;
-            BtnLoadInfo.Click += BtnLoadInfo_Click;
             // 
             // MainForm
             // 
@@ -1846,5 +1870,8 @@ namespace ConsoleGUI
         private ToolStripMenuItem frontToolStripMenuItem;
         private ToolStripMenuItem backToolStripMenuItem;
         private Button BtnLoadInfo;
+        private ToolStripMenuItem annotationToolStripMenuItem;
+        private ToolStripMenuItem enableToolStripMenuItem;
+        private ToolStripMenuItem disableToolStripMenuItem;
     }
 }

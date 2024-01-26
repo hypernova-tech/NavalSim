@@ -90,6 +90,7 @@ protected:
 	void ProcessActor(AActor* OriginalActor, UWorld* World);
 	
 	bool BuiltOnce = false;
+	TArray< AActor*> SpawnedActors;
 	
 public:	
 
@@ -98,5 +99,5 @@ public:
 	UFUNCTION(BlueprintCallable)
 		FAgentObjectDefEntry FindDef(FString name);
 
-
+	virtual void UpdateAnnotation(bool is_enabled) override;
 };

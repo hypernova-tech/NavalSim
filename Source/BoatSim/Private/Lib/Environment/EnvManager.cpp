@@ -287,4 +287,13 @@ void AEnvManager::OnStepScenarioMode(float DeltaTime)
 	HandleDynamicOcean();
 }
 
-
+void AEnvManager::UpdateAnnotation(bool is_enabled)
+{
+	Super::UpdateAnnotation(is_enabled);
+	if (pSea) {
+		AActorBase::HandleAnnotation(pSea, is_enabled, EReservedAnnotationId::Sea);
+	}
+	if (pSky) {
+		AActorBase::HandleAnnotation(pSky, is_enabled, EReservedAnnotationId::Sky);
+	}
+}

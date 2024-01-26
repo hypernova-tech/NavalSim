@@ -37,6 +37,8 @@ public:
 	virtual void BeginPlay() override;
 protected:
 
+
+
 	UPROPERTY(EditAnywhere)
 		double TimeOfDayHour = 12;
 
@@ -86,6 +88,12 @@ protected:
 	UPROPERTY(EditAnywhere) // azimuth from north in deg
 		double WindDirectionDeg = 0;
 	
+	UPROPERTY(EditAnywhere)
+		AActor* pSea;
+
+	UPROPERTY(EditAnywhere)
+		AActor* pSky;
+
 
 	
 	bool IsOceanDynamicsDirty = false;
@@ -190,4 +198,5 @@ public:
 	virtual void Save(ISaveLoader* p_save_loader);
 	virtual void OnStep(float DeltaTime) override;
 	virtual void OnStepScenarioMode(float DeltaTime) override;
+	virtual void UpdateAnnotation(bool is_enabled) override;
 };

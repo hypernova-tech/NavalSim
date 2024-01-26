@@ -22,6 +22,14 @@ enum EAnnotationMode
 	AnnotationModeEnable,
 	AnnotationModeDisable,
 };
+
+enum EReservedAnnotationId
+{
+	Sea = 1,
+	Sky = 2,
+	Land = 3,
+	Unassigned = 255
+};
 /**
  * 
  */
@@ -39,14 +47,17 @@ private:
 
 protected:
 	EAnnotationState State = EAnnotationState::AnnotationStateIdle;
+	virtual void BeginPlay() override;
 	virtual void StateMachine();
 	virtual void EnableAnnotation();
+	void UpdateAnnotation();
 	virtual void DisableAnnotation();
 
 	UFUNCTION(BlueprintCallable)
 		virtual void SetAnnotationEnabled_(bool val);
 
 public:
+	virtual void OnStepScenarioMode(float DeltaTime) override;
 	virtual void OnStep(float DeltaTime) override;
 	bool GetIsAnnotationEnabled();
 

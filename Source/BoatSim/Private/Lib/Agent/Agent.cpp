@@ -53,6 +53,14 @@ FAgentObjectDefEntry AAgent::FindDef(FString name)
 	return AgentObjectDefContainer.Find(name);
 }
 
+void AAgent::UpdateAnnotation(bool is_enabled)
+{
+    Super::UpdateAnnotation(is_enabled);
+    for (auto spawned : SpawnedActors) {
+        AActorBase::HandleAnnotation(spawned, is_enabled, AnnotationId_);
+    }
+}
+
 
 void AAgent::CreateActorsForStaticMeshes(USceneComponent* Component, TMap<USceneComponent*, AActor*>& MapComponentToActor, UWorld* World)
 {
@@ -93,6 +101,7 @@ void AAgent::CreateActorsForStaticMeshes(USceneComponent* Component, TMap<UScene
 
 
             actors.Add(NewActor);
+            SpawnedActors.Add(NewActor);
             CUtil::SetParent(NewActor, Component->GetOwner());
 
 

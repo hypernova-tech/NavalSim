@@ -90,6 +90,9 @@ protected:
 		double TempratureKelvin = 300;
 
 	UPROPERTY(EditAnywhere)
+		int AnnotationId_ = 0;
+
+	UPROPERTY(EditAnywhere)
 		TArray<USceneComponent*> ManuallyAttachComponents;
 
 	INT64U ExternalUpdateCount = 0;
@@ -103,7 +106,7 @@ protected:
 
 	 UFUNCTION(BlueprintCallable)
 		 void AddManuallyAttach(USceneComponent* p_comp);
-
+	 static  void HandleAnnotation(AActor* p_actor, bool is_enabled, int annotation_id);
 public:	
 	// Called every frame
 	
@@ -150,6 +153,14 @@ public:
 
 	double	GetTempratureKelvin();
 	void	SetTempratureKelvin(double val);
+
+	UFUNCTION(BlueprintCallable)
+	int GetAnnotationId_();
+	UFUNCTION(BlueprintCallable)
+	void  SetAnnotationId_(int val);
+
+	virtual void UpdateAnnotation(bool is_enabled);
+	
 
 	/// <summary>
 	/// save load

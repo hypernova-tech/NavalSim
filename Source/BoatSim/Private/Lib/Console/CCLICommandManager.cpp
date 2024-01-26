@@ -86,6 +86,7 @@ FString CCLICommandManager::EnvTimeFlowScale = "envtimeflowscale";
 FString CCLICommandManager::ThermalMode ="thermalmode";
 FString CCLICommandManager::TempratureKelvin = "tempkelvin";
 FString CCLICommandManager::IsHeatSource = "heatsource";
+FString CCLICommandManager::AnnotationId = "annotationid";
 FString CCLICommandManager::RainPercent = "rain";
 FString CCLICommandManager::CloudPercent = "cloud";
 FString CCLICommandManager::SnowPercent = "snow";

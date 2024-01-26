@@ -110,7 +110,7 @@ public:
 	virtual void Bake() override;
 	virtual void Save(ISaveLoader* p_save_loader) override;
 	virtual void SaveJSON(CJsonDataContainer& data) override;
-
+	virtual void UpdateAnnotation(bool is_enabled) override;
 
 
 	

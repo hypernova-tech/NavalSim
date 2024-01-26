@@ -2938,6 +2938,9 @@ bool UConsoleBase::SetFunctionParameter(UFunction* Function, void* Params, FProp
         }
         // Handle other integer types (int64, uint64, etc.) similarly
     }
+    else if (FBoolProperty* BoolProperty = CastField<FBoolProperty>(Param)) {
+        BoolProperty->SetPropertyValue(Param->ContainerPtrToValuePtr<void>(Params), CUtil::StringToBool((FString&)Value));
+    }
     else if (FStrProperty* StringProperty = CastField<FStrProperty>(Param))
     {
         StringProperty->SetPropertyValue(Param->ContainerPtrToValuePtr<void>(Params), Value);

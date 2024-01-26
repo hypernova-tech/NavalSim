@@ -142,6 +142,7 @@ public:
 	static FString ThermalMode;
 	static FString TempratureKelvin;
 	static FString IsHeatSource;
+	static FString AnnotationId;
 	static FString TerrHMap;
 	static FString TerrDMap;
 	static FString TerrBaseTexture;

@@ -8,6 +8,7 @@
 #include "Modules/ModuleManager.h"
 #include <Lib/Utils/CUtil.h>
 #include <Lib/SystemManager/ISystemAPI.h>
+#include <Lib/Annotation/AnnotationManager.h>
 
 
 ATerrainManager::ATerrainManager()
@@ -27,6 +28,7 @@ ATerrainManager::ATerrainManager()
 void ATerrainManager::BeginPlay()
 {
     Super::BeginPlay();
+    SetAnnotationId_(EReservedAnnotationId::Land);
    // RebuildLandscape("hmap.png", 0, 50);
 
     
@@ -519,6 +521,7 @@ void ATerrainManager::SaveJSON(CJsonDataContainer& data)
     
     
 }
+
 void ATerrainManager::SetTerrainTopLeftCornerLLH(FVector val)
 {
     TerrainTopLeftCornerLLH = val;
@@ -538,5 +541,9 @@ FVector ATerrainManager::GetTerrainRightBottomCornerLLH()
 {
     return TerrainBottomRightCornerLLH;
 }
+void ATerrainManager::UpdateAnnotation(bool is_enabled)
+{
+    Super::UpdateAnnotation(is_enabled);
 
+}
 

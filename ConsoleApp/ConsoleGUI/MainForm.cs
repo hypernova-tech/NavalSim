@@ -1617,17 +1617,23 @@ namespace ConsoleGUI
 
                 if (Modifyables.TryGetValue(param, out string option))
                 {
-                    if(OptionParamMap.OptionWithPropertyEnabled.Contains(param)){
-                        SendPropertySetCommand(param+"_", val);
+                    if (OptionParamMap.OptionWithPropertyEnabled.Contains(param))
+                    {
+                        SendPropertySetCommand(param + "_", val);
                         SendPropertyGetCommand(param + "_");
                     }
                     else
                     {
+
+
+
+
+
                         SendSetCommand(option, val);
                         SendGetCommand(option);
                     }
-                    
-                 
+
+
                 }
             }
         }
@@ -2089,7 +2095,7 @@ namespace ConsoleGUI
         }
 
 
-        public  string GetRelativePath(string baseFolderPath, string fullPath)
+        public string GetRelativePath(string baseFolderPath, string fullPath)
         {
             Uri baseFolderUri = new Uri(Path.Combine(baseFolderPath, "a")); // Adding a trailing slash
             Uri fullUri = new Uri(fullPath);
@@ -2112,15 +2118,15 @@ namespace ConsoleGUI
             if (OpenFileDialog.ShowDialog() == DialogResult.OK)
             {
 
-               
+
                 string filePath = OpenFileDialog.FileName;
                 string fileName = Path.GetFileName(filePath);
                 var terrain_info = reader.ReadXml(filePath);
 
-           
+
 
                 string base_folder = GetRelativePath(ConsoleConfig.RootFolder, filePath); ;
-                TBHMapName.Text = base_folder +"/"+terrain_info.HeightmapName;
+                TBHMapName.Text = base_folder + "/" + terrain_info.HeightmapName;
                 TBImaryTexture.Text = base_folder + "/" + terrain_info.SatelliteName;
                 TBHMapMinLevel.Text = terrain_info.MinHeight.ToString();
                 TBHMapMaxLevel.Text = terrain_info.MaxHeight.ToString();
@@ -2132,6 +2138,22 @@ namespace ConsoleGUI
                 TBTBottomRightLon.Text = terrain_info.BottomRightLon.ToString();
 
             }
+        }
+
+        private void enableToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void enableToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            SystemAPIImplementor.EnableAnnotation(true);
+
+        }
+
+        private void disableToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SystemAPIImplementor.EnableAnnotation(false);
         }
     }
 }

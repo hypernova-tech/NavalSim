@@ -110,7 +110,6 @@ void AThermalMaterialManager::UpdateMaterialCollections()
 
 	if (p_collection_instance)
 	{
-		FName ParameterName = "YourScalarParameterName"; // Replace with your parameter's name
 		float NewValue = 1.0f; // Replace with the value you want to set
 		auto p_sys = ASystemManagerBase::GetInstance();
 		double dbl;
@@ -198,6 +197,8 @@ void AThermalMaterialManager::UpdateActorThermalBehaviour(AActor* Actor)
 		if (MeshComp)
 		{
 			int32 NumMaterials = MeshComp->GetNumMaterials();
+
+			
 			for (int32 i = 0; i < NumMaterials; ++i)
 			{
 				UMaterialInterface* Material_if = MeshComp->GetMaterial(i);

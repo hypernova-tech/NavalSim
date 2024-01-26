@@ -192,4 +192,9 @@ public class CSystemAPIImplementor
     {
         CreateAndSendCommand(CLICommandManager.SetCommand, CLICommandManager.Name, child, CLICommandManager.Parent, parent_node);
     }
+
+    internal void EnableAnnotation(bool v)
+    {
+        CreateAndSendCommand(CLICommandManager.ExecCommand, CLICommandManager.Name, "annotation", CLICommandManager.Func, "SetAnnotationEnabled_", CLICommandManager.FuncParam1, v.ToString());
+    }
 }

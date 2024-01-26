@@ -53,6 +53,7 @@ void AActorBase::AddManuallyAttach(USceneComponent* p_comp)
 	p_comp->AttachToComponent(GetRootComponent(), FAttachmentTransformRules::KeepRelativeTransform);
 	ManuallyAttachComponents.Add(p_comp);
 }
+
 void AActorBase::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
 }
@@ -243,7 +244,10 @@ void AActorBase::Save(ISaveLoader* p_save_loader)
 	p_save_loader->AppendOption(line, CCLICommandManager::PropertyValue, IsHeatSource_);
 	p_save_loader->AddLine(line);
 
-
+	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
+	p_save_loader->AppendOption(line, CCLICommandManager::Property, GET_MEMBER_NAME_CHECKED(AActorBase, AnnotationId_).ToString());
+	p_save_loader->AppendOption(line, CCLICommandManager::PropertyValue, AnnotationId_);
+	p_save_loader->AddLine(line);
 
 
 	if (pCommIF) {
@@ -284,6 +288,7 @@ void AActorBase::SaveJSON(CJsonDataContainer& data)
 	data.Add(CCLICommandManager::Scale, (GetActorScale3D()));
 	data.Add(CCLICommandManager::TempratureKelvin, TempratureKelvin);
 	data.Add(CCLICommandManager::IsHeatSource, IsHeatSource_);
+	data.Add(CCLICommandManager::AnnotationId, AnnotationId_);
 	if (pCommIF) {
 		auto connections = pCommIF->GetConnectionsInfo();
 		int ind = 0;
@@ -419,4 +424,39 @@ double AActorBase::GetTempratureKelvin()
 void AActorBase::SetTempratureKelvin(double val)
 {
 	TempratureKelvin = val;
+}
+
+int AActorBase::GetAnnotationId_()
+{
+	return AnnotationId_;
+}
+
+void AActorBase::SetAnnotationId_(int val)
+{
+	AnnotationId_ = val;
+}
+void AActorBase::HandleAnnotation(AActor* p_actor, bool is_enabled, int annotation_id)
+{
+	TArray<UMeshComponent*> mesh_components;
+	p_actor->GetComponents<UMeshComponent>(mesh_components);
+
+	for (UMeshComponent* pcomp : mesh_components)
+	{
+		if (is_enabled) {
+
+			pcomp->SetCustomDepthStencilValue(annotation_id);
+			pcomp->SetRenderCustomDepth(true);
+
+		}
+		else {
+			pcomp->SetRenderCustomDepth(false);
+			pcomp->SetCustomDepthStencilValue(annotation_id);
+		}
+
+
+	}
+}
+void AActorBase::UpdateAnnotation(bool is_enabled)
+{
+	AActorBase::HandleAnnotation(this, is_enabled, AnnotationId_);
 }
