@@ -2693,6 +2693,49 @@ bool UConsoleBase::ProcessWorkspaceCommand(TMap<FString, FString>& options, FStr
 
 }
 
+bool UConsoleBase::ProcessAnnotationCommand(TMap<FString, FString>& options, FString& error_message)
+{
+    bool ret;
+    bool en;
+    CommandManager.SetCommandOptions(&options);
+    FString path;
+    bool one_success = false;
+
+    ret = CommandManager.GetValue(CCLICommandManager::Enabled, en);
+    if (ret) {
+        pSystemAPI->SetAnnotationModeEnabled(en);
+        one_success =  true;
+    
+    }
+    else {
+
+    }
+    ret = CommandManager.HasA(CCLICommandManager::Query);
+    if (ret) {
+        en = pSystemAPI->GetAnnotationModeEnabled();
+   
+        SendConsoleResponse("AnnotationEnabled", CCLICommandManager::Query, en);
+        en = pSystemAPI->GetAnnotationSaveEnabled();
+        SendConsoleResponse("AnnotationSaveEnabled", CCLICommandManager::Enabled, en);
+        one_success = true;
+    }
+    else {
+
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::SaveEnabled, en);
+    if (ret) {
+        pSystemAPI->SetAnnotationSaveEnabled(en);
+        one_success = true;
+      
+    }
+    else {
+
+    }
+    return one_success;
+
+}
+
 bool UConsoleBase::ProcessExecCommand(TMap<FString, FString>& options, FString& error_message)
 {
     error_message = "";
@@ -2753,6 +2796,8 @@ bool UConsoleBase::ProcessExecCommand(TMap<FString, FString>& options, FString& 
     return ret;
 }
 
+
+
 bool UConsoleBase::ProcessCommands(FString command, TMap<FString, FString>& options, FString& error_message, INT32S &delay_tick)
 {
 
@@ -2766,6 +2811,11 @@ bool UConsoleBase::ProcessCommands(FString command, TMap<FString, FString>& opti
     else if (command == CommandManager.WorkspaceCommand) {
 
         return ProcessWorkspaceCommand(options, error_message);
+
+    }
+    else if (command == CommandManager.AnnotationCommand) {
+
+        return ProcessAnnotationCommand(options, error_message);
 
     }
     else if (command == CommandManager.ProcessCommand) {

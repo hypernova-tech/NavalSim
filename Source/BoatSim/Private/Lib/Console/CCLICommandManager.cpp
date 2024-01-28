@@ -12,6 +12,10 @@ FString CCLICommandManager::LoadFile = ("load");
 FString CCLICommandManager::ProcessCommand = "process";
 FString CCLICommandManager::ProcessKill = "kill";
 
+FString CCLICommandManager::AnnotationCommand = "annotation";
+FString CCLICommandManager::Query = "query";
+FString CCLICommandManager::SaveEnabled = "saveen";
+
 FString CCLICommandManager::CreateCommand = "create";
 FString CCLICommandManager::Name = "name";
 FString CCLICommandManager::Bp = "bp";
@@ -24,6 +28,7 @@ FString CCLICommandManager::Suppressed = "suppressed";
 FString CCLICommandManager::StandaloneModeEnabled = "standalone";
 FString CCLICommandManager::Active = "active";
 FString CCLICommandManager::Enabled = "enabled";
+
 
 FString CCLICommandManager::Instance = "instance";
 FString CCLICommandManager::Position = "position";

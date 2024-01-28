@@ -344,4 +344,10 @@ public:
 
 	virtual bool SetTempratureKelvin(AActor* p_actor, FLOAT64 temp) = 0;
 	virtual bool GetTempratureKelvin(AActor* p_actor, FLOAT64& mode) = 0;
+
+	virtual void SetAnnotationModeEnabled(bool val) = 0;
+	virtual bool GetAnnotationModeEnabled() = 0;
+
+	virtual void SetAnnotationSaveEnabled(bool val) = 0;
+	virtual bool GetAnnotationSaveEnabled() = 0;
 };

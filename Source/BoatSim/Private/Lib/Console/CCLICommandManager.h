@@ -61,6 +61,10 @@ public:
 	static  FString ProcessCommand;
 	static  FString ProcessKill;
 
+	static  FString AnnotationCommand;
+	static  FString Query;
+	static  FString SaveEnabled;
+
 	static  FString CreateCommand;
 	static  FString Name;
 	static  FString Bp;

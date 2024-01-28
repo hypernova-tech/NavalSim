@@ -89,10 +89,10 @@ public:
 		double NoiseStdDeviation;
 
 	UPROPERTY(EditAnywhere)
-		double FovVerticalDeg;
+		double FovVerticalDeg = 10;
 
 	UPROPERTY(EditAnywhere)
-		double FovHorizontalDeg;
+		double FovHorizontalDeg = 90;
 
 	UPROPERTY(EditAnywhere)
 		float HorizontalScanStepAngleDeg;

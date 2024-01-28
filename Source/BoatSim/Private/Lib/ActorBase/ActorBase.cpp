@@ -29,6 +29,7 @@ void AActorBase::OnConstruction(const FTransform& Transform)
 void AActorBase::BeginPlay()
 {
 	Super::BeginPlay();
+	pSys = ASystemManagerBase::GetInstance();
 	AActor *p_owner = CUtil::GetTopParent(this);
 
 	if (IsRegisterEnabled) {
@@ -450,7 +451,7 @@ void AActorBase::HandleAnnotation(AActor* p_actor, bool is_enabled, int annotati
 		}
 		else {
 			pcomp->SetRenderCustomDepth(false);
-			pcomp->SetCustomDepthStencilValue(annotation_id);
+			pcomp->SetCustomDepthStencilValue(0);
 		}
 
 

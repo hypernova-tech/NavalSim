@@ -184,8 +184,12 @@ namespace ConsoleGUI
             pauseToolStripMenuItem = new ToolStripMenuItem();
             resumeToolStripMenuItem = new ToolStripMenuItem();
             annotationToolStripMenuItem = new ToolStripMenuItem();
-            enableToolStripMenuItem = new ToolStripMenuItem();
-            disableToolStripMenuItem = new ToolStripMenuItem();
+            controlToolStripMenuItem = new ToolStripMenuItem();
+            enableToolStripMenuItem1 = new ToolStripMenuItem();
+            disableToolStripMenuItem1 = new ToolStripMenuItem();
+            saveToolStripMenuItem = new ToolStripMenuItem();
+            enabledToolStripMenuItem = new ToolStripMenuItem();
+            disabledToolStripMenuItem = new ToolStripMenuItem();
             contextObjectEditor = new ContextMenuStrip(components);
             focusToolStripMenuItem1 = new ToolStripMenuItem();
             destroyToolStripMenuItem1 = new ToolStripMenuItem();
@@ -1595,24 +1599,52 @@ namespace ConsoleGUI
             // 
             // annotationToolStripMenuItem
             // 
-            annotationToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { enableToolStripMenuItem, disableToolStripMenuItem });
+            annotationToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { controlToolStripMenuItem, saveToolStripMenuItem });
             annotationToolStripMenuItem.Name = "annotationToolStripMenuItem";
             annotationToolStripMenuItem.Size = new Size(79, 20);
             annotationToolStripMenuItem.Text = "Annotation";
             // 
-            // enableToolStripMenuItem
+            // controlToolStripMenuItem
             // 
-            enableToolStripMenuItem.Name = "enableToolStripMenuItem";
-            enableToolStripMenuItem.Size = new Size(180, 22);
-            enableToolStripMenuItem.Text = "Enable";
-            enableToolStripMenuItem.Click += enableToolStripMenuItem_Click_1;
+            controlToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { enableToolStripMenuItem1, disableToolStripMenuItem1 });
+            controlToolStripMenuItem.Name = "controlToolStripMenuItem";
+            controlToolStripMenuItem.Size = new Size(180, 22);
+            controlToolStripMenuItem.Text = "Control";
             // 
-            // disableToolStripMenuItem
+            // enableToolStripMenuItem1
             // 
-            disableToolStripMenuItem.Name = "disableToolStripMenuItem";
-            disableToolStripMenuItem.Size = new Size(180, 22);
-            disableToolStripMenuItem.Text = "Disable";
-            disableToolStripMenuItem.Click += disableToolStripMenuItem_Click;
+            enableToolStripMenuItem1.Name = "enableToolStripMenuItem1";
+            enableToolStripMenuItem1.Size = new Size(180, 22);
+            enableToolStripMenuItem1.Text = "Enable";
+            enableToolStripMenuItem1.Click += enableToolStripMenuItem1_Click;
+            // 
+            // disableToolStripMenuItem1
+            // 
+            disableToolStripMenuItem1.Name = "disableToolStripMenuItem1";
+            disableToolStripMenuItem1.Size = new Size(180, 22);
+            disableToolStripMenuItem1.Text = "Disable";
+            disableToolStripMenuItem1.Click += disableToolStripMenuItem1_Click;
+            // 
+            // saveToolStripMenuItem
+            // 
+            saveToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { enabledToolStripMenuItem, disabledToolStripMenuItem });
+            saveToolStripMenuItem.Name = "saveToolStripMenuItem";
+            saveToolStripMenuItem.Size = new Size(180, 22);
+            saveToolStripMenuItem.Text = "Save";
+            // 
+            // enabledToolStripMenuItem
+            // 
+            enabledToolStripMenuItem.Name = "enabledToolStripMenuItem";
+            enabledToolStripMenuItem.Size = new Size(180, 22);
+            enabledToolStripMenuItem.Text = "Enabled";
+            enabledToolStripMenuItem.Click += enabledToolStripMenuItem_Click;
+            // 
+            // disabledToolStripMenuItem
+            // 
+            disabledToolStripMenuItem.Name = "disabledToolStripMenuItem";
+            disabledToolStripMenuItem.Size = new Size(180, 22);
+            disabledToolStripMenuItem.Text = "Disabled";
+            disabledToolStripMenuItem.Click += disabledToolStripMenuItem_Click;
             // 
             // contextObjectEditor
             // 
@@ -1661,7 +1693,7 @@ namespace ConsoleGUI
             Controls.Add(menuStrip1);
             Controls.Add(tabControl1);
             Name = "MainForm";
-            Text = "IDAS-Console";
+            Text = "JVIS-Console";
             TopMost = true;
             ActorListContextMenu.ResumeLayout(false);
             contextMenuConsoleListBox.ResumeLayout(false);
@@ -1871,7 +1903,11 @@ namespace ConsoleGUI
         private ToolStripMenuItem backToolStripMenuItem;
         private Button BtnLoadInfo;
         private ToolStripMenuItem annotationToolStripMenuItem;
-        private ToolStripMenuItem enableToolStripMenuItem;
-        private ToolStripMenuItem disableToolStripMenuItem;
+        private ToolStripMenuItem controlToolStripMenuItem;
+        private ToolStripMenuItem enableToolStripMenuItem1;
+        private ToolStripMenuItem disableToolStripMenuItem1;
+        private ToolStripMenuItem saveToolStripMenuItem;
+        private ToolStripMenuItem enabledToolStripMenuItem;
+        private ToolStripMenuItem disabledToolStripMenuItem;
     }
 }

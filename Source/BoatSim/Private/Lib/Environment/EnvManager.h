@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Lib/ActorBase/ActorBase.h"
+#include "Engine/PostProcessVolume.h"
 #include "EnvManager.generated.h"
 
 USTRUCT(BlueprintType)
@@ -88,6 +89,9 @@ protected:
 	UPROPERTY(EditAnywhere) // azimuth from north in deg
 		double WindDirectionDeg = 0;
 	
+	UPROPERTY(EditAnywhere)
+		APostProcessVolume* pPostProcessVolume;
+
 	UPROPERTY(EditAnywhere)
 		AActor* pSea;
 
@@ -199,4 +203,6 @@ public:
 	virtual void OnStep(float DeltaTime) override;
 	virtual void OnStepScenarioMode(float DeltaTime) override;
 	virtual void UpdateAnnotation(bool is_enabled) override;
+
+	APostProcessVolume* GetPostProcessVolume();
 };

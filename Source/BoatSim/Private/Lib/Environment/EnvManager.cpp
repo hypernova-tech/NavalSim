@@ -297,3 +297,8 @@ void AEnvManager::UpdateAnnotation(bool is_enabled)
 		AActorBase::HandleAnnotation(pSky, is_enabled, EReservedAnnotationId::Sky);
 	}
 }
+
+APostProcessVolume* AEnvManager::GetPostProcessVolume()
+{
+	return pPostProcessVolume;
+}

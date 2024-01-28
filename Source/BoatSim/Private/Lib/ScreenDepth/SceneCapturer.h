@@ -33,11 +33,13 @@ protected:
 
 	void StartReadPixelsAsync();
 	void OnReadbackComplete();
+	void ExportAsPNG(UTextureRenderTarget2D* RenderTarget, FString file_name);
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	void CreateRenderTexture(void *ownersensor, INT32U width_px, INT32U height_px, EPixelFormat pixel_format);
 	virtual void Capture();
 	virtual void ReadPixels();
-
+	void SaveAsPNG(UTextureRenderTarget2D* RenderTarget, FString image_name);
+	void SetRenderTarget(UTextureRenderTarget2D* p_tgt);
 };

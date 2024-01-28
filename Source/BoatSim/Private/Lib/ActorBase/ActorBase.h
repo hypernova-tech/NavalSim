@@ -12,7 +12,7 @@
 #include "ActorBase.generated.h"
 
 
-
+class ASystemManagerBase;
 
 UCLASS()
 class AActorBase : public AActor
@@ -107,6 +107,8 @@ protected:
 	 UFUNCTION(BlueprintCallable)
 		 void AddManuallyAttach(USceneComponent* p_comp);
 	 static  void HandleAnnotation(AActor* p_actor, bool is_enabled, int annotation_id);
+
+	 ASystemManagerBase* pSys;
 public:	
 	// Called every frame
 	

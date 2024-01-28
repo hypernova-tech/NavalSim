@@ -8,6 +8,7 @@
 #include <Lib/PathController/PathController.h>
 #include <Lib/Math/CMath.h>
 #include "EngineUtils.h"
+#include <Kismet/GameplayStatics.h>
 
 
 
@@ -19,10 +20,6 @@ ASystemManagerBase::ASystemManagerBase()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	pInstance = this;
-	
-
-	
-
 }
 
 ASystemManagerBase* ASystemManagerBase::GetInstance()
@@ -865,8 +862,18 @@ void ASystemManagerBase::SetPlatform(APlatformBase* p_platform)
 	pPlatform->OnControllerChanged();
 
 }
+
+bool ASystemManagerBase::GetIsSimulationMode()
+{
+	return IsSimulationMode;
+}
+bool ASystemManagerBase::GetIsSceneraioMode()
+{
+	return !IsSimulationMode;
+}
 void ASystemManagerBase::StartSimulation()
 {
+	IsSimulationMode = true;
 	IsStartReceived = true;
 }
 void ASystemManagerBase::PauseSimulation()
@@ -918,6 +925,8 @@ void ASystemManagerBase::UpdateActorsScenarioMode(float deltatime)
 			p_base->ExternalUpdateScenarioMode(deltatime);
 		}
 	}
+	SimTimeUs += ((double)deltatime * 1000000);
+	SystemFrameNo++;
 }
 
 void ASystemManagerBase::UpdateActors(float deltatime)
@@ -929,13 +938,15 @@ void ASystemManagerBase::UpdateActors(float deltatime)
 			p_base->ExternalUpdate(deltatime);
 		}
 	}
+	SimTimeUs += ((double)deltatime * 1000000);
+	SystemFrameNo++;
 }
 void ASystemManagerBase::StateMachine(float deltatime)
 {
 
 	auto curr_state = SystemState;
 	auto next_state = curr_state;
-
+	bool is_annot = false;
 	switch (curr_state)
 	{
 	case ESystemState::SystemStateJustLaunched:
@@ -980,8 +991,72 @@ void ASystemManagerBase::StateMachine(float deltatime)
 			next_state = ESystemState::SystemStatePauseSimulation;
 			IsPauseReceived = false;
 		}
+		
+		if (GetAnnotationModeEnabled() && GetAnnotationSaveEnabled()) {
+	
+			next_state = ESystemState::SystemStateAnnotationNormalRenderEnter;
+		
+		}
 		UpdateActors(deltatime);
 		break;
+
+	case ESystemState::SystemStateAnnotationNormalRenderEnter:
+		
+		UpdateActors(deltatime);
+		AnnotationFrameNo++;
+
+		if (GetAnnotationModeEnabled() && GetAnnotationSaveEnabled()) {
+			next_state = ESystemState::SystemStateAnnotationTakeRenderNormal;
+			pAnnotationManager->SetAnnotationEnabled_(false);
+			UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 0);
+		}
+		else {
+
+			next_state = ESystemState::SystemStateRunning;
+			UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1);
+
+		}
+		break;
+
+	case ESystemState::SystemStateAnnotationTakeRenderNormal:
+		ScreenMode = EScreenMode::ScreenModeCaptureNormalInAnnotatedMode;
+		UpdateActors(0);
+		
+		next_state = ESystemState::SystemStateAnnotationAnnotatedRenderEnter;
+		break;
+
+	case ESystemState::SystemStateAnnotationAnnotatedRenderEnter:
+		ScreenMode = EScreenMode::ScreenModeCaptureAnnotatedInAnnotatedMode;
+		//UpdateActors(0);
+		next_state = ESystemState::SystemStateAnnotationTakeRenderAnnotated;
+		pAnnotationManager->SetAnnotationEnabled_(true);
+		break;
+
+	case ESystemState::SystemStateAnnotationTakeRenderAnnotated:
+		
+		UpdateActors(0);
+		UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1);
+		AnnotationEndFrame = AnnotationFrameWait_;
+		if (AnnotationFrameWait_ == 0) {
+			next_state = ESystemState::SystemStateAnnotationNormalRenderEnter;
+		}
+		else {
+			next_state = ESystemState::SystemStateAnnotationWaitFrame;
+		}
+		
+		break;
+
+
+	case ESystemState::SystemStateAnnotationWaitFrame:
+		ScreenMode = EScreenMode::ScreenModeNormal;
+		AnnotationEndFrame--;
+		if (AnnotationEndFrame <= 0) {
+			next_state = ESystemState::SystemStateAnnotationNormalRenderEnter;
+			pAnnotationManager->SetAnnotationEnabled_(false);
+		}
+		UpdateActors(0);
+		break;
+
 
 	case ESystemState::SystemStatePauseSimulation:
 
@@ -1046,6 +1121,50 @@ void ASystemManagerBase::UpdateLifeTime(float deltatime)
 ////
 ////
 /// System API
+
+EScreenMode ASystemManagerBase::GetScreenMode()
+{
+	return ScreenMode;
+}
+
+INT64U ASystemManagerBase::GetSystemFrameNo()
+{
+	return SystemFrameNo;
+}
+
+INT64U ASystemManagerBase::GetAnnotionFrameNo()
+{
+	return AnnotationFrameNo;
+}
+bool ASystemManagerBase::CanSaveAnnotationFrame()
+{
+
+
+	if (ScreenMode == EScreenMode::ScreenModeCaptureNormalInAnnotatedMode || ScreenMode == EScreenMode::ScreenModeCaptureAnnotatedInAnnotatedMode) {
+		return true;
+	}
+	
+
+	return false;
+}
+FString ASystemManagerBase::GetAnnotionFrameInfo()
+{
+	auto mode = GetScreenMode();
+	FString suffix = "";
+	bool save = false;
+
+	if (mode == EScreenMode::ScreenModeCaptureNormalInAnnotatedMode) {
+		suffix = "n";
+	}
+	else if (mode == EScreenMode::ScreenModeCaptureAnnotatedInAnnotatedMode) {
+		suffix = "a";
+	}
+
+	FString ret = "_frame_"+ suffix+"_" + CUtil::IntToString(AnnotationFrameNo);
+
+	return ret;
+}
+
 
 ISystemAPI* ASystemManagerBase::GetSystemAPI()
 {
@@ -2601,7 +2720,38 @@ bool ASystemManagerBase::GetPathLineColor(AActor* p_actor, FColor& val)
 	 return false;
  }
 
+ APostProcessVolume* ASystemManagerBase::GetMainPostProcessVolume()
+ {
+	 return pEnvManager->GetPostProcessVolume();
+ }
 
+ void ASystemManagerBase::SetAnnotationModeEnabled(bool val)
+ {
+	 IsAnnotationModeEnabled = val;
+	 pAnnotationManager->SetAnnotationEnabled_(IsAnnotationModeEnabled);
+
+ }
+
+ bool ASystemManagerBase::GetAnnotationModeEnabled()
+ {
+	
+	 return IsAnnotationModeEnabled;
+
+ }
+
+ void ASystemManagerBase::SetAnnotationSaveEnabled(bool val)
+ {
+	 IsAnnotationSaveEnabled = val;
+	
+
+ }
+
+ bool ASystemManagerBase::GetAnnotationSaveEnabled()
+ {
+
+	 return IsAnnotationSaveEnabled;
+
+ }
 
 
 bool ASystemManagerBase::GetPathSpeed(AActor* p_actor, FLOAT64& val)

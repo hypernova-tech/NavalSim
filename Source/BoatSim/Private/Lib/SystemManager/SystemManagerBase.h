@@ -35,11 +35,24 @@ enum ESystemState
 	SystemStateWaitingRun,
 	SystemStateRunSimulation,
 	SystemStateRunning,
+	SystemStateAnnotationNormalRenderEnter,
+	SystemStateAnnotationTakeRenderNormal,
+	SystemStateAnnotationAnnotatedRenderEnter,
+	SystemStateAnnotationTakeRenderAnnotated,
+	SystemStateAnnotationWaitFrame,
 	SystemStatePauseSimulation,
 	SystemStatePaused,
 	SystemStateResumeSimulation,
 	SystemStateResumed,
 	SystemStateConfigLoadError,
+
+};
+
+enum EScreenMode
+{
+	ScreenModeNormal,
+	ScreenModeCaptureNormalInAnnotatedMode,
+	ScreenModeCaptureAnnotatedInAnnotatedMode,
 
 };
 
@@ -115,6 +128,9 @@ protected:
 	UPROPERTY(EditAnywhere)
 		TArray<AActor*> SensorGlobalIgnoreList;
 
+	UPROPERTY(EditAnywhere)
+		int AnnotationFrameWait_ = 100;
+
 	UConfigManager* pConfigManager;
 	virtual bool LoadConfig();
 
@@ -128,7 +144,11 @@ protected:
 
 	INT32S InstanceNo = -1;
 	INT32S TotalInstanceCount = 1;
-
+	FLOAT32 AnnotationDeltaTimeSec;
+	bool IsAnnotationModeEnabled = false;
+	bool IsAnnotationSaveEnabled = false;
+	bool IsSimulationMode = false;
+	INT64U AnnotationEndFrame;
 	virtual void HandleSimulationStart();
 	virtual void HandleSimulationPause();
 	virtual void HandleSimulationResume();
@@ -165,9 +185,12 @@ public:
 
 	static  ASystemManagerBase* GetInstance();
 
-	void OnActorMoved(AActor* p_actor);
-
-	
+	void OnActorMoved(AActor* p_actor); 
+	EScreenMode GetScreenMode();
+	INT64U GetSystemFrameNo();
+	INT64U GetAnnotionFrameNo();
+	FString GetAnnotionFrameInfo();
+	bool CanSaveAnnotationFrame();
 private:
 
 	static ASystemManagerBase* pInstance;
@@ -189,9 +212,15 @@ private:
 	AActor* pSelectedActor;
 	USaverLoaderBase* pSaverLoader;
 	INT64U UniqueId;
+	EScreenMode ScreenMode;
+	INT64U SystemFrameNo = 0;
+	INT64U AnnotationFrameNo = 0;
+	INT64U SimTimeUs = 0;
 	/// <summary>
 	///  system API
 	/// </summary>
+	/// 
+	
 public:
 	virtual ISystemAPI* GetSystemAPI();
 
@@ -271,7 +300,8 @@ public:
 	virtual void StartSimulation();
 	virtual void ResumeSimulation();
 	virtual void PauseSimulation();
-
+	virtual bool GetIsSimulationMode();
+	virtual bool GetIsSceneraioMode();
 
 	virtual bool SetActorInstanceNo(AActor *p_actor, INT32S instance_no);
 	virtual int GetActorInstanceNo(AActor* p_actor);
@@ -488,4 +518,14 @@ public:
 
 	virtual bool SetTempratureKelvin(AActor* p_actor, FLOAT64 temp);
 	virtual bool GetTempratureKelvin(AActor* p_actor, FLOAT64& mode);
+
+	virtual void SetAnnotationModeEnabled(bool val);
+	virtual bool GetAnnotationModeEnabled();
+
+	virtual void SetAnnotationSaveEnabled(bool val);
+	virtual bool GetAnnotationSaveEnabled();
+
+
+	virtual APostProcessVolume *GetMainPostProcessVolume();
+
 };

@@ -195,6 +195,20 @@ public class CSystemAPIImplementor
 
     internal void EnableAnnotation(bool v)
     {
-        CreateAndSendCommand(CLICommandManager.ExecCommand, CLICommandManager.Name, "annotation", CLICommandManager.Func, "SetAnnotationEnabled_", CLICommandManager.FuncParam1, v.ToString());
+        CreateAndSendCommand(CLICommandManager.AnnotationCommand, CLICommandManager.Enabled, v?"1":"0");
+        QueryAnnotation();
     }
+
+    internal void QueryAnnotation()
+    {
+        CreateAndSendCommand(CLICommandManager.AnnotationCommand, CLICommandManager.Query);
+       
+    }
+    internal void EnableAnnotationSave(bool v)
+    {
+        CreateAndSendCommand(CLICommandManager.AnnotationCommand, CLICommandManager.SaveEnabled, v ? "1" : "0");
+        QueryAnnotation();
+    }
+
+    
 }

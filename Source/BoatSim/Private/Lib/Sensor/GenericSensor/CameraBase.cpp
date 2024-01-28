@@ -3,17 +3,32 @@
 
 #include "Lib/Sensor/GenericSensor/CameraBase.h"
 #include <Lib/SystemManager/SystemManagerBase.h>
+#include <Lib/Utils/CUtil.h>
 
 void ACameraBase::InitSensor()
 {
 	Super::InitSensor();
 	pSceneCapture = GetComponentByClass<USceneCaptureComponent2D>();
 
-	UTextureRenderTarget2D *p_render_target = pPointVisualizer->CreateRenderTarget(SensorWidth, SensorHeight, ASystemManagerBase::GetInstance()->GetUIController()->GetSensorSlotImage(SensorSlotIndex));
+	UTextureRenderTarget2D* p_render_target = pPointVisualizer->CreateRenderTarget(SensorWidth, SensorHeight, ASystemManagerBase::GetInstance()->GetUIController()->GetSensorSlotImage(SensorSlotIndex));
 	pSceneCapture->TextureTarget = p_render_target;
-
 	pSceneCapture->FOVAngle = FovHorizontalDeg;
-	
+
+	auto pppv = ASystemManagerBase::GetInstance()->GetMainPostProcessVolume();
+	pSceneCapture->PostProcessBlendWeight = 1;
+	pSceneCapture->PostProcessSettings = pppv->Settings;
+	//bool ret;
+	//if (ASystemManagerBase::GetInstance()->GetAnnotationModeEnabled(ret)) {
+	//	if (ret) {
+			pSceneCapture->bAlwaysPersistRenderingState = true;
+			pSceneCapture->CaptureSource = ESceneCaptureSource::SCS_FinalColorLDR;
+			pSceneCapturer->SetRenderTarget(pPointVisualizer->pRenderTarget);
+			
+
+	//	}
+		
+	//}
+
 }
 
 void ACameraBase::ResumeSensor()
@@ -22,8 +37,41 @@ void ACameraBase::ResumeSensor()
 	if (pSceneCapture != nullptr) {
 		pSceneCapture->Activate();
 	}
-	
+
 }
+
+void ACameraBase::Run(float delta_time_sec)
+{
+	Super::Run(delta_time_sec);
+
+	if (pSys->GetIsSimulationMode()) {
+	
+		if(pSys->GetAnnotationModeEnabled()){
+			
+			CaptureScreen();
+			
+		}
+		
+	}
+
+
+}
+void ACameraBase::CaptureScreen()
+{
+
+	bool save = pSys->CanSaveAnnotationFrame();
+
+
+	if (save) {
+		auto frame_info = pSys->GetAnnotionFrameInfo();
+		FString name = GetName() + frame_info + ".png";
+		pSceneCapturer->Capture();
+		pSceneCapturer->SaveAsPNG(pSceneCapture->TextureTarget, name);
+
+	}
+
+}
+
 
 void ACameraBase::PauseSensor()
 {

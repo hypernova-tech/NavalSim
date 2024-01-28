@@ -53,10 +53,13 @@ protected:
 	void UpdateAnnotation();
 	virtual void DisableAnnotation();
 
+
+
+public:
+
 	UFUNCTION(BlueprintCallable)
 		virtual void SetAnnotationEnabled_(bool val);
 
-public:
 	virtual void OnStepScenarioMode(float DeltaTime) override;
 	virtual void OnStep(float DeltaTime) override;
 	bool GetIsAnnotationEnabled();

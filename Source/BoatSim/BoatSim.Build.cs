@@ -10,7 +10,7 @@ public class BoatSim : ModuleRules
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
 
-        PublicDependencyModuleNames.AddRange(new string[] { "Core", "RenderCore", "CoreUObject", "Engine", "InputCore", "GeoReferencing", "Networking","Sockets","ProceduralMeshComponent","UMG","Slate","SlateCore","RHI","Json", "Niagara" });
+        PublicDependencyModuleNames.AddRange(new string[] { "Core", "RenderCore", "CoreUObject", "Engine", "InputCore", "GeoReferencing", "Networking","Sockets","ProceduralMeshComponent","UMG","Slate","SlateCore","RHI","Json", "Niagara", "ImageWrapper" });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
         // Uncomment if you are using Slate UI

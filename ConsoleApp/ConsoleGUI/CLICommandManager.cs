@@ -27,6 +27,9 @@ public static class CLICommandManager
     public const string LoadFile = "load";
     public const string ProcessCommand = "process";
     public const string ProcessKill = "kill";
+    public const string AnnotationCommand = "annotation";
+    public const string Query = "query";
+    public const string SaveEnabled = "saveen";
     public const string CreateCommand = "create";
     public const string Name = "name";
     public const string Bp = "bp";

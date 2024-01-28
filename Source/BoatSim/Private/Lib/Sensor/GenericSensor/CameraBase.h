@@ -37,7 +37,10 @@ protected:
 
 	void PauseSensor() override ;
 	void ResumeSensor() override;
+	virtual void Run(float delta_time_sec) override;
+	void CaptureScreen();
 
+	INT64U CaptureIndex = 0;
 public:
 	void SetFovDeg(double fov_deg);
 	virtual void Save(ISaveLoader* p_save_loader) override;

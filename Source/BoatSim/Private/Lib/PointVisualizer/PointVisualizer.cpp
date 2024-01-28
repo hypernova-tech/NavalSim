@@ -239,6 +239,8 @@ UTextureRenderTarget2D* APointVisualizer::CreateRenderTarget(int width, int heig
 
     pRenderTarget = NewObject<UTextureRenderTarget2D>(this);
     pRenderTarget->InitAutoFormat(width, height);
+    //pRenderTarget->InitCustomFormat(width, height,EPixelFormat::PF_R8G8B8A8, true);
+ 
     CreateMaterialInstanceWithTexture(this, pBaseMaterial, pRenderTarget, p_image);
     return pRenderTarget;
 }

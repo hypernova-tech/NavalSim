@@ -42,6 +42,7 @@ protected:
 	bool ProcessSetCommand(TMap<FString, FString>& options, FString& error_message);
 	bool ProcessGetCommand(TMap<FString, FString>& options, FString& error_message);
 	bool ProcessExecCommand(TMap<FString, FString>& options, FString& error_message);
+	bool ProcessAnnotationCommand(TMap<FString, FString>& options, FString& error_message);
 
 	void SendConsoleResponse(AActor *p_actor);
 	void SendConsoleResponse(FString name, FString option, INT32S ret);

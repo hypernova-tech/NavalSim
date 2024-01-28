@@ -2155,6 +2155,26 @@ namespace ConsoleGUI
         {
             SystemAPIImplementor.EnableAnnotation(false);
         }
+
+        private void enableToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            SystemAPIImplementor.EnableAnnotation(true);
+        }
+
+        private void disableToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            SystemAPIImplementor.EnableAnnotation(false);
+        }
+
+        private void enabledToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SystemAPIImplementor.EnableAnnotationSave(true);
+        }
+
+        private void disabledToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SystemAPIImplementor.EnableAnnotationSave(false);
+        }
     }
 }
 

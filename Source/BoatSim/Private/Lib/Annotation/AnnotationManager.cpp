@@ -13,6 +13,8 @@ void AAnnotationManager::BeginPlay()
 
 void AAnnotationManager::StateMachine()
 {
+
+	return;
 	auto curr_state = State;
 	auto next_state = curr_state;
 
@@ -89,22 +91,32 @@ void AAnnotationManager::DisableAnnotation()
 void AAnnotationManager::SetAnnotationEnabled_(bool val)
 {
 	if (val) {
+		EnableAnnotation();
+		UpdateAnnotation();
 		AnnotationModeRequest = EAnnotationMode::AnnotationModeEnable;
 	}
 	else {
+		DisableAnnotation();
+		UpdateAnnotation();
 		AnnotationModeRequest = EAnnotationMode::AnnotationModeDisable;
 	}
 }
 
+
+
 void AAnnotationManager::OnStepScenarioMode(float DeltaTime)
 {
 	Super::OnStepScenarioMode(DeltaTime);
+	StateMachine();
+	StateMachine();
 	StateMachine();
 }
 
 void AAnnotationManager::OnStep(float DeltaTime)
 {
 	Super::OnStep(DeltaTime);
+	StateMachine();
+	StateMachine();
 	StateMachine();
 }
 
