@@ -31,6 +31,7 @@ enum class EBlueprintCategory : uint8
 	CategoryTerrain = 16,
 	CategoryPrimitives =17,
 	CategoryGimbal = 18,
+	CategoryVFX = 19,
 	CategoryLast = 255
 };
 

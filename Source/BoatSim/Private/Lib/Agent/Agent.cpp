@@ -57,7 +57,28 @@ void AAgent::UpdateAnnotation(bool is_enabled)
 {
     Super::UpdateAnnotation(is_enabled);
     for (auto spawned : SpawnedActors) {
+
         AActorBase::HandleAnnotation(spawned, is_enabled, AnnotationId_);
+    }
+}
+
+void AAgent::SetAnnotationId_(int val)
+{
+    Super::SetAnnotationId_(val);
+    for (auto spawned : SpawnedActors) {
+        if (AnnotateChildrenActors_) {
+            spawned->SetAnnotationId_(AnnotationId_);
+        }
+    }
+}
+
+void AAgent::SetTempratureKelvin(double val)
+{
+    Super::SetTempratureKelvin(val);
+    for (auto spawned : SpawnedActors) {
+        if (AnnotateChildrenActors_) {
+            spawned->SetTempratureKelvin(val);
+        }
     }
 }
 

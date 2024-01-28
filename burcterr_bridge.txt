@@ -1,0 +1,346 @@
+create --name jeoref --bp  --tick 0
+set --name jeoref --instance -1
+set --name jeoref --suppressed 0
+set --name jeoref --standalone 0
+set --name jeoref --position "0.000000 0.000000 0.000000"
+set --name jeoref --rotation "-0.000000 -0.000000 0.000000"
+set --name jeoref --scale "1.000000 1.000000 1.000000"
+set --name jeoref --tempkelvin 300.000000
+set --name jeoref --heatsource 0
+set --name jeoref --annotationid 0
+set --name jeoref --annotatechildren 0
+set --name jeoref --maporiginlat 40.701450
+set --name jeoref --maporiginlon 29.545760
+set --name jeoref --maporiginh 0.000000
+
+create --name thermal --bp  --tick 0
+set --name thermal --instance -1
+set --name thermal --suppressed 0
+set --name thermal --standalone 0
+set --name thermal --position "0.000000 0.000000 0.000000"
+set --name thermal --rotation "-0.000000 -0.000000 0.000000"
+set --name thermal --scale "1.000000 1.000000 1.000000"
+set --name thermal --tempkelvin 300.000000
+set --name thermal --heatsource 0
+set --name thermal --annotationid 0
+set --name thermal --annotatechildren 0
+set --name thermal --thermalmode 0
+
+create --name env --bp  --tick 0
+set --name env --instance -1
+set --name env --suppressed 0
+set --name env --standalone 0
+set --name env --position "324.600000 284.200000 4.600000"
+set --name env --rotation "-0.000000 -0.000000 0.000000"
+set --name env --scale "1.000000 1.000000 1.000000"
+set --name env --tempkelvin 300.000000
+set --name env --heatsource 0
+set --name env --annotationid 0
+set --name env --annotatechildren 0
+set --name env --timeofday 12.023061
+set --name env --envtimeflowscale 1.000000
+set --name env --rain 0.000000
+set --name env --cloud 0.000000
+set --name env --snow 0.000000
+set --name env --dust 0.000000
+set --name env --fog 0.000000
+set --name env --thunder 0.000000
+set --name env --envsoundfx 1
+set --name env --wind 3.000000
+set --name env --winddir 0.000000
+
+create --name annotation --bp  --tick 0
+set --name annotation --instance -1
+set --name annotation --suppressed 0
+set --name annotation --standalone 0
+set --name annotation --position "-20.097436 6.361075 10.299538"
+set --name annotation --rotation "-0.000000 -0.000000 0.000000"
+set --name annotation --scale "1.000000 1.000000 1.000000"
+set --name annotation --tempkelvin 300.000000
+set --name annotation --heatsource 0
+set --name annotation --annotationid 0
+set --name annotation --annotatechildren 0
+
+create --name burc1 --bp BURC --tick 3
+set --name burc1 --instance -1
+set --name burc1 --suppressed 0
+set --name burc1 --standalone 0
+set --name burc1 --position "100.078789 0.000000 0.000000"
+set --name burc1 --rotation "-0.000000 -0.000000 0.000000"
+set --name burc1 --scale "1.000000 1.000000 1.000000"
+set --name burc1 --tempkelvin 300.000000
+set --name burc1 --heatsource 0
+set --name burc1 --annotationid 0
+set --name burc1 --annotatechildren 0
+
+set --name burc1_Kasa --parent burc1
+set --name burc1_Kasa --instance -1
+set --name burc1_Kasa --suppressed 0
+set --name burc1_Kasa --standalone 0
+set --name burc1_Kasa --position "100.078789 0.000000 0.000000"
+set --name burc1_Kasa --rotation "-0.000000 -0.000000 0.000000"
+set --name burc1_Kasa --scale "1.000000 1.000000 1.000000"
+set --name burc1_Kasa --tempkelvin 300.000000
+set --name burc1_Kasa --heatsource 0
+set --name burc1_Kasa --annotationid 0
+set --name burc1_Kasa --annotatechildren 0
+
+set --name burc1_On_Teker_2 --parent burc1
+set --name burc1_On_Teker_2 --instance -1
+set --name burc1_On_Teker_2 --suppressed 0
+set --name burc1_On_Teker_2 --standalone 0
+set --name burc1_On_Teker_2 --position "105.437935 2.206958 1.316809"
+set --name burc1_On_Teker_2 --rotation "-0.000000 -0.000000 0.000000"
+set --name burc1_On_Teker_2 --scale "1.000000 1.000000 1.000000"
+set --name burc1_On_Teker_2 --tempkelvin 300.000000
+set --name burc1_On_Teker_2 --heatsource 0
+set --name burc1_On_Teker_2 --annotationid 0
+set --name burc1_On_Teker_2 --annotatechildren 0
+
+set --name burc1_Teker_6 --parent burc1
+set --name burc1_Teker_6 --instance -1
+set --name burc1_Teker_6 --suppressed 0
+set --name burc1_Teker_6 --standalone 0
+set --name burc1_Teker_6 --position "97.960808 -1.857980 1.318341"
+set --name burc1_Teker_6 --rotation "-0.000000 -0.000000 0.000000"
+set --name burc1_Teker_6 --scale "1.000000 1.000000 1.000000"
+set --name burc1_Teker_6 --tempkelvin 300.000000
+set --name burc1_Teker_6 --heatsource 0
+set --name burc1_Teker_6 --annotationid 0
+set --name burc1_Teker_6 --annotatechildren 0
+
+set --name burc1_Teker_3 --parent burc1
+set --name burc1_Teker_3 --instance -1
+set --name burc1_Teker_3 --suppressed 0
+set --name burc1_Teker_3 --standalone 0
+set --name burc1_Teker_3 --position "102.118996 1.857980 1.318341"
+set --name burc1_Teker_3 --rotation "-0.000000 -0.000000 0.000000"
+set --name burc1_Teker_3 --scale "1.000000 1.000000 1.000000"
+set --name burc1_Teker_3 --tempkelvin 300.000000
+set --name burc1_Teker_3 --heatsource 0
+set --name burc1_Teker_3 --annotationid 0
+set --name burc1_Teker_3 --annotatechildren 0
+
+set --name burc1_Teker_4 --parent burc1
+set --name burc1_Teker_4 --instance -1
+set --name burc1_Teker_4 --suppressed 0
+set --name burc1_Teker_4 --standalone 0
+set --name burc1_Teker_4 --position "102.118996 -1.857980 1.318341"
+set --name burc1_Teker_4 --rotation "-0.000000 -0.000000 0.000000"
+set --name burc1_Teker_4 --scale "1.000000 1.000000 1.000000"
+set --name burc1_Teker_4 --tempkelvin 300.000000
+set --name burc1_Teker_4 --heatsource 0
+set --name burc1_Teker_4 --annotationid 0
+set --name burc1_Teker_4 --annotatechildren 0
+
+set --name burc1_Teker_8 --parent burc1
+set --name burc1_Teker_8 --instance -1
+set --name burc1_Teker_8 --suppressed 0
+set --name burc1_Teker_8 --standalone 0
+set --name burc1_Teker_8 --position "94.735299 -1.857979 1.318341"
+set --name burc1_Teker_8 --rotation "-0.000000 -0.000000 0.000000"
+set --name burc1_Teker_8 --scale "1.000000 1.000000 1.000000"
+set --name burc1_Teker_8 --tempkelvin 300.000000
+set --name burc1_Teker_8 --heatsource 0
+set --name burc1_Teker_8 --annotationid 0
+set --name burc1_Teker_8 --annotatechildren 0
+
+set --name burc1_Teker_7 --parent burc1
+set --name burc1_Teker_7 --instance -1
+set --name burc1_Teker_7 --suppressed 0
+set --name burc1_Teker_7 --standalone 0
+set --name burc1_Teker_7 --position "94.735299 1.857980 1.318341"
+set --name burc1_Teker_7 --rotation "-0.000000 -0.000000 0.000000"
+set --name burc1_Teker_7 --scale "1.000000 1.000000 1.000000"
+set --name burc1_Teker_7 --tempkelvin 300.000000
+set --name burc1_Teker_7 --heatsource 0
+set --name burc1_Teker_7 --annotationid 0
+set --name burc1_Teker_7 --annotatechildren 0
+
+set --name burc1_Teker_5 --parent burc1
+set --name burc1_Teker_5 --instance -1
+set --name burc1_Teker_5 --suppressed 0
+set --name burc1_Teker_5 --standalone 0
+set --name burc1_Teker_5 --position "97.960808 1.857980 1.318341"
+set --name burc1_Teker_5 --rotation "-0.000000 -0.000000 0.000000"
+set --name burc1_Teker_5 --scale "1.000000 1.000000 1.000000"
+set --name burc1_Teker_5 --tempkelvin 300.000000
+set --name burc1_Teker_5 --heatsource 0
+set --name burc1_Teker_5 --annotationid 0
+set --name burc1_Teker_5 --annotatechildren 0
+
+set --name burc1_On_Teker_1 --parent burc1
+set --name burc1_On_Teker_1 --instance -1
+set --name burc1_On_Teker_1 --suppressed 0
+set --name burc1_On_Teker_1 --standalone 0
+set --name burc1_On_Teker_1 --position "105.103157 -2.302791 1.258581"
+set --name burc1_On_Teker_1 --rotation "-0.000000 -0.000000 0.000000"
+set --name burc1_On_Teker_1 --scale "1.000000 1.000000 1.000000"
+set --name burc1_On_Teker_1 --tempkelvin 300.000000
+set --name burc1_On_Teker_1 --heatsource 0
+set --name burc1_On_Teker_1 --annotationid 0
+set --name burc1_On_Teker_1 --annotatechildren 0
+
+set --name burc1_Radar --parent burc1_taret_gimbal
+set --name burc1_Radar --instance -1
+set --name burc1_Radar --suppressed 0
+set --name burc1_Radar --standalone 0
+set --name burc1_Radar --position "99.665291 -0.013365 4.725015"
+set --name burc1_Radar --rotation "-0.000000 -0.000000 0.000000"
+set --name burc1_Radar --scale "1.000000 1.000000 1.000000"
+set --name burc1_Radar --tempkelvin 300.000000
+set --name burc1_Radar --heatsource 0
+set --name burc1_Radar --annotationid 0
+set --name burc1_Radar --annotatechildren 0
+
+set --name burc1_Silah --parent burc1_gun_gimbal
+set --name burc1_Silah --instance -1
+set --name burc1_Silah --suppressed 0
+set --name burc1_Silah --standalone 0
+set --name burc1_Silah --position "99.310509 0.001949 6.173325"
+set --name burc1_Silah --rotation "0.000000 30.000000 0.000000"
+set --name burc1_Silah --scale "1.000000 1.000000 1.000000"
+set --name burc1_Silah --tempkelvin 300.000000
+set --name burc1_Silah --heatsource 0
+set --name burc1_Silah --annotationid 0
+set --name burc1_Silah --annotatechildren 0
+
+create --name burc1_guntip --bp CUBE --tick 0
+set --name burc1_guntip --parent burc1_gun_gimbal
+set --name burc1_guntip --instance -1
+set --name burc1_guntip --suppressed 0
+set --name burc1_guntip --standalone 0
+set --name burc1_guntip --position "105.352623 0.001949 6.698273"
+set --name burc1_guntip --rotation "-0.000000 -0.000000 0.000000"
+set --name burc1_guntip --scale "0.010000 0.010000 0.010000"
+set --name burc1_guntip --tempkelvin 300.000000
+set --name burc1_guntip --heatsource 0
+set --name burc1_guntip --annotationid 0
+set --name burc1_guntip --annotatechildren 0
+
+create --name su25 --bp SU25 --tick 0
+set --name su25 --instance -1
+set --name su25 --suppressed 0
+set --name su25 --standalone 0
+set --name su25 --position "1000.000000 -200.000000 300.000000"
+set --name su25 --rotation "-0.000000 -0.000000 0.000000"
+set --name su25 --scale "2.000000 2.000000 2.000000"
+set --name su25 --tempkelvin 300.000000
+set --name su25 --heatsource 0
+set --name su25 --annotationid 0
+set --name su25 --annotatechildren 0
+
+create --name terrain1 --bp TERRAIN --tick 0
+set --name terrain1 --instance -1
+set --name terrain1 --suppressed 0
+set --name terrain1 --standalone 0
+set --name terrain1 --position "0.000000 0.000000 0.000000"
+set --name terrain1 --rotation "-0.000000 -0.000000 0.000000"
+set --name terrain1 --scale "1.000000 1.000000 1.000000"
+set --name terrain1 --tempkelvin 300.000000
+set --name terrain1 --heatsource 0
+set --name terrain1 --annotationid 3
+set --name terrain1 --annotatechildren 0
+set --name terrain1 --terrhmap hmap.png
+set --name terrain1 --terrdmap dmap.png
+set --name terrain1 --terrbasetexture hmaptexturesat.png
+set --name terrain1 --terrhmapminlvl 0.000000
+set --name terrain1 --terrhmapmaxlvl 500.000000
+set --name terrain1 --terrdmapminlvl -30.000000
+set --name terrain1 --terrdmapmaxlvl -100.000000
+set --name terrain1 --terrtopleftllh "40.820965 29.445356 0.000000"
+set --name terrain1 --terrbottomrightllh "40.665562 29.650471 0.000000"
+set --name terrain1 --bake 
+
+create --name bridge --bp BRIDGEOSMANGAZI --tick 0
+set --name bridge --instance -1
+set --name bridge --suppressed 0
+set --name bridge --standalone 0
+set --name bridge --position "5706.374261 -3159.529746 -16.954233"
+set --name bridge --rotation "-0.000000 -0.000000 3.000000"
+set --name bridge --scale "1.500000 1.500000 1.500000"
+set --name bridge --tempkelvin 300.000000
+set --name bridge --heatsource 0
+set --name bridge --annotationid 0
+set --name bridge --annotatechildren 0
+
+create --name burc1_taret_gimbal --bp GIMBAL3DOF --tick 2
+set --name burc1_taret_gimbal --parent burc1
+set --name burc1_taret_gimbal --instance -1
+set --name burc1_taret_gimbal --suppressed 0
+set --name burc1_taret_gimbal --standalone 0
+set --name burc1_taret_gimbal --position "99.504509 0.000000 5.094238"
+set --name burc1_taret_gimbal --rotation "-0.000000 -0.000000 0.000000"
+set --name burc1_taret_gimbal --scale "1.000000 1.000000 1.000000"
+set --name burc1_taret_gimbal --tempkelvin 300.000000
+set --name burc1_taret_gimbal --heatsource 0
+set --name burc1_taret_gimbal --annotationid 0
+set --name burc1_taret_gimbal --annotatechildren 0
+
+create --name burc1_gun_gimbal --bp GIMBAL3DOF --tick 2
+set --name burc1_gun_gimbal --parent burc1_Radar
+set --name burc1_gun_gimbal --instance -1
+set --name burc1_gun_gimbal --suppressed 0
+set --name burc1_gun_gimbal --standalone 0
+set --name burc1_gun_gimbal --position "100.535378 0.001949 6.698273"
+set --name burc1_gun_gimbal --rotation "-0.000000 -0.000000 0.000000"
+set --name burc1_gun_gimbal --scale "1.000000 1.000000 1.000000"
+set --name burc1_gun_gimbal --tempkelvin 300.000000
+set --name burc1_gun_gimbal --heatsource 0
+set --name burc1_gun_gimbal --annotationid 0
+set --name burc1_gun_gimbal --annotatechildren 0
+
+create --name burc1_eo_camera --bp CAMIR --tick 0
+set --name burc1_eo_camera --parent burc1_gun_gimbal
+set --name burc1_eo_camera --instance -1
+set --name burc1_eo_camera --suppressed 0
+set --name burc1_eo_camera --standalone 0
+set --name burc1_eo_camera --position "100.337730 -1.073089 7.544043"
+set --name burc1_eo_camera --rotation "-0.000000 -2.000000 0.000000"
+set --name burc1_eo_camera --scale "1.000000 1.000000 1.000000"
+set --name burc1_eo_camera --tempkelvin 300.000000
+set --name burc1_eo_camera --heatsource 0
+set --name burc1_eo_camera --annotationid 0
+set --name burc1_eo_camera --annotatechildren 0
+set --name burc1_eo_camera --slotindex 0
+set --name burc1_eo_camera --rangemin 5.000000
+set --name burc1_eo_camera --rangemax 100.000000
+set --name burc1_eo_camera --vfov 90.000000
+set --name burc1_eo_camera --hfov 25.000000
+set --name burc1_eo_camera --hscanstepang 0.000000
+set --name burc1_eo_camera --vscanstepang 36.000000
+set --name burc1_eo_camera --merrormean 0.000000
+set --name burc1_eo_camera --merrorstd 0.000000
+set --name burc1_eo_camera --surfacedetecten 0
+set --name burc1_eo_camera --subsurfacedetecten 0
+set --name burc1_eo_camera --foamen 0
+set --name burc1_eo_camera --seasurfdetectprob 0.000000
+set --name burc1_eo_camera --maxsurfpenet 0.000000
+set --name burc1_eo_camera --widthpx 1920
+set --name burc1_eo_camera --heightpx 1080
+
+create --name path1 --bp PATH --tick 0
+set --name path1 --instance -1
+set --name path1 --suppressed 0
+set --name path1 --standalone 0
+set --name path1 --position "0.000000 0.000000 0.000000"
+set --name path1 --rotation "-0.000000 -0.000000 0.000000"
+set --name path1 --scale "1.000000 1.000000 1.000000"
+set --name path1 --tempkelvin 300.000000
+set --name path1 --heatsource 0
+set --name path1 --annotationid 0
+set --name path1 --annotatechildren 0
+set --name path1 --wp 0 --wppos "2000.000000 -520.308960 300.000000"
+set --name path1wp0 --parent path1
+set --name path1 --wp 1 --wppos "488.443787 100.000000 300.000000"
+set --name path1wp1 --parent path1
+set --name path1 --wp 2 --wppos "992.096741 334.021912 300.000000"
+set --name path1wp2 --parent path1
+set --name path1 --speed 200.000000
+set --name path1 --closed 1
+set --name path1 --attach su25
+set --name path1 --color "255 0 0 255"
+set --name path1 --segment 50
+set --name path1 --straight 0
+set --name path1 --turnrate 360.000000
+set --name path1 --bake 

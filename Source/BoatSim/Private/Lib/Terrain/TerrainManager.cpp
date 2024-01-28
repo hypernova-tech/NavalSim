@@ -3,12 +3,12 @@
 
 #include "Lib/Terrain/TerrainManager.h"
 #include <ImageUtils.h>
-
 #include "IImageWrapperModule.h"
 #include "Modules/ModuleManager.h"
 #include <Lib/Utils/CUtil.h>
-#include <Lib/SystemManager/ISystemAPI.h>
 #include <Lib/Annotation/AnnotationManager.h>
+#include <Lib/Console/CCLICommandManager.h>
+#include <Lib/SystemManager/SystemManagerBase.h>
 
 
 ATerrainManager::ATerrainManager()
@@ -184,7 +184,8 @@ void ATerrainManager::GenerateTerrain(const TArray<FLOAT64>& HeightMap, int32 Ma
 
 void ATerrainManager::CalculateVertices(const TArray<FLOAT64>& HeightMap, int32 MapWidth, int32 MapHeight, FVector top_left, FVector bottom_right, const TArray<FLOAT64>& depth_map, TArray<FVector>& OutVertices)
 {
-    AMapOrigin* p_origin = ASystemManagerBase::GetInstance()->GetMapOrigin();
+    auto pSys = ASystemManagerBase::GetInstance();
+    AMapOrigin* p_origin = pSys->GetMapOrigin();
 
     FVector bottom_left = FVector(bottom_right.X, top_left.Y, 0);
     FVector top_right =   FVector(top_left.X, bottom_right.Y, 0);
@@ -379,7 +380,8 @@ void ATerrainManager::SetBaseMap(const FString& text_path)
 
 FVector ATerrainManager::GetTerrianCoordUE()
 {
-    AMapOrigin *p_map = ASystemManagerBase::GetInstance()->GetMapOrigin();
+    auto pSys = ASystemManagerBase::GetInstance();
+    AMapOrigin *p_map = pSys->GetMapOrigin();
     FVector left_bottom = FVector(TerrainBottomRightCornerLLH.X, TerrainTopLeftCornerLLH.Y, 0);
     FVector loc = p_map->ConvertLLHToUEXYZ(left_bottom);
     return loc;
@@ -389,48 +391,47 @@ FVector ATerrainManager::GetTerrianCoordUE()
 
 void ATerrainManager::Bake()
 {
-    ISystemAPI* p_api = ASystemManagerBase::GetInstance()->GetSystemAPI();
-
-    if(HeightMapPath == ""){
-        p_api->SendConsoleResponse("Enter valid HeightMapPath");
+    auto pSys = ASystemManagerBase::GetInstance();
+     if(HeightMapPath == ""){
+        pSys->SendConsoleResponse("Enter valid HeightMapPath");
         return;
     }
 
     if (DepthMapPath == "") {
-        p_api->SendConsoleResponse("Enter valid DepthMapPath");
+        pSys->SendConsoleResponse("Enter valid DepthMapPath");
         return;
     }
 
     if (BaseTexturePath == "") {
-        p_api->SendConsoleResponse("Enter valid Base Map Texture");
+        pSys->SendConsoleResponse("Enter valid Base Map Texture");
         return;
     }
 
     if (!IsDoubleUpdated(HeightMapMinLevelMeter)) {
-        p_api->SendConsoleResponse("Enter HeightMapMinLevelMeter");
+        pSys->SendConsoleResponse("Enter HeightMapMinLevelMeter");
         return;
     }
 
     if (!IsDoubleUpdated(HeightMapMaxLevelMeter)) {
-        p_api->SendConsoleResponse("Enter HeightMapMaxLevelMeter");
+        pSys->SendConsoleResponse("Enter HeightMapMaxLevelMeter");
         return;
     }
     if (!IsDoubleUpdated(DepthMapMinLevelMeter)) {
-        p_api->SendConsoleResponse("Enter DepthMapMinLevelMeter");
+        pSys->SendConsoleResponse("Enter DepthMapMinLevelMeter");
         return;
     }
 
     if (!IsDoubleUpdated(DepthMapMaxLevelMeter)) {
-        p_api->SendConsoleResponse("Enter DepthMapMaxLevelMeter");
+        pSys->SendConsoleResponse("Enter DepthMapMaxLevelMeter");
         return;
     }
     if (!IsVectorUpdated(TerrainTopLeftCornerLLH)) {
-        p_api->SendConsoleResponse("Enter valid Top Left Coordinate in LLH(deg,deg,mt)");
+        pSys->SendConsoleResponse("Enter valid Top Left Coordinate in LLH(deg,deg,mt)");
         return;
     }
 
     if (!IsVectorUpdated(TerrainBottomRightCornerLLH)) {
-        p_api->SendConsoleResponse("Enter valid Bottom Right Coordinate in LLH(deg,deg,mt)");
+        pSys->SendConsoleResponse("Enter valid Bottom Right Coordinate in LLH(deg,deg,mt)");
         return;
     }
 

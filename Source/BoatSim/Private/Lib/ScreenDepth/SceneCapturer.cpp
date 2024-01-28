@@ -136,7 +136,7 @@ void ASceneCapturer::SaveAsPNG(UTextureRenderTarget2D* RenderTarget, FString ima
             
             TArray<FColor> Bitmap;
             FReadSurfaceDataFlags ReadPixelFlags;
-            ReadPixelFlags.SetLinearToGamma(false);
+            ReadPixelFlags.SetLinearToGamma(true);
            
 
             // Read pixels from the render target resource

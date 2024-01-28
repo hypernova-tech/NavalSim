@@ -77,7 +77,8 @@ protected:
 	virtual void Tick(float DeltaTime) override;
 	UPROPERTY(EditAnywhere)
 		bool EncapsulateStaticMeshAsActor = false;
-
+	UPROPERTY(EditAnywhere)
+		bool UpdateSpawnedStaticMeshActors = false;
 
 	UPROPERTY(EditAnywhere)
 		FAgentObjectDefContainer AgentObjectDefContainer;
@@ -90,7 +91,7 @@ protected:
 	void ProcessActor(AActor* OriginalActor, UWorld* World);
 	
 	bool BuiltOnce = false;
-	TArray< AActor*> SpawnedActors;
+	TArray< AActorBase*> SpawnedActors;
 	
 public:	
 
@@ -100,4 +101,6 @@ public:
 		FAgentObjectDefEntry FindDef(FString name);
 
 	virtual void UpdateAnnotation(bool is_enabled) override;
+	virtual void  SetAnnotationId_(int val) override;
+	virtual void	SetTempratureKelvin(double val) override;
 };

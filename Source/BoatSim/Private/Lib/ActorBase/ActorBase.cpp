@@ -29,7 +29,7 @@ void AActorBase::OnConstruction(const FTransform& Transform)
 void AActorBase::BeginPlay()
 {
 	Super::BeginPlay();
-	pSys = ASystemManagerBase::GetInstance();
+	auto pSys = ASystemManagerBase::GetInstance();
 	AActor *p_owner = CUtil::GetTopParent(this);
 
 	if (IsRegisterEnabled) {
@@ -241,6 +241,19 @@ void AActorBase::Save(ISaveLoader* p_save_loader)
 	p_save_loader->AddLine(line);
 
 	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
+	p_save_loader->AppendOption(line, CCLICommandManager::IsHeatSource, IsHeatSource_);
+	p_save_loader->AddLine(line);
+
+	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
+	p_save_loader->AppendOption(line, CCLICommandManager::AnnotationId, AnnotationId_);
+	p_save_loader->AddLine(line);
+
+	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
+	p_save_loader->AppendOption(line, CCLICommandManager::AnnotateChildren, AnnotateChildrenActors_);
+	p_save_loader->AddLine(line);
+
+	/*
+	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
 	p_save_loader->AppendOption(line, CCLICommandManager::Property, GET_MEMBER_NAME_CHECKED(AActorBase, IsHeatSource_).ToString());
 	p_save_loader->AppendOption(line, CCLICommandManager::PropertyValue, IsHeatSource_);
 	p_save_loader->AddLine(line);
@@ -249,7 +262,7 @@ void AActorBase::Save(ISaveLoader* p_save_loader)
 	p_save_loader->AppendOption(line, CCLICommandManager::Property, GET_MEMBER_NAME_CHECKED(AActorBase, AnnotationId_).ToString());
 	p_save_loader->AppendOption(line, CCLICommandManager::PropertyValue, AnnotationId_);
 	p_save_loader->AddLine(line);
-
+	*/
 
 	if (pCommIF) {
 		auto connections = pCommIF->GetConnectionsInfo();
@@ -290,6 +303,7 @@ void AActorBase::SaveJSON(CJsonDataContainer& data)
 	data.Add(CCLICommandManager::TempratureKelvin, TempratureKelvin);
 	data.Add(CCLICommandManager::IsHeatSource, IsHeatSource_);
 	data.Add(CCLICommandManager::AnnotationId, AnnotationId_);
+	data.Add(CCLICommandManager::AnnotateChildren, AnnotateChildrenActors_);
 	if (pCommIF) {
 		auto connections = pCommIF->GetConnectionsInfo();
 		int ind = 0;
@@ -427,6 +441,16 @@ void AActorBase::SetTempratureKelvin(double val)
 	TempratureKelvin = val;
 }
 
+bool AActorBase::GetIsHeatSource_()
+{
+	return IsHeatSource_;
+}
+
+void AActorBase::SetIsHeatSource_(bool val)
+{
+	IsHeatSource_ = val;
+}
+
 int AActorBase::GetAnnotationId_()
 {
 	return AnnotationId_;
@@ -436,6 +460,18 @@ void AActorBase::SetAnnotationId_(int val)
 {
 	AnnotationId_ = val;
 }
+
+
+void  AActorBase::SetAnnotateChildrenActors_(bool val)
+{
+	AnnotateChildrenActors_ = val;
+}
+
+bool AActorBase:: GetAnnotateChildrenActors_()
+{
+	return AnnotateChildrenActors_;
+}
+
 void AActorBase::HandleAnnotation(AActor* p_actor, bool is_enabled, int annotation_id)
 {
 	TArray<UMeshComponent*> mesh_components;

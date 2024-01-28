@@ -12,6 +12,7 @@
 
 
 
+
 // Sets default values
 ASystemManagerBase* ASystemManagerBase::pInstance = nullptr;
 
@@ -2720,6 +2721,27 @@ bool ASystemManagerBase::GetPathLineColor(AActor* p_actor, FColor& val)
 	 return false;
  }
 
+ bool ASystemManagerBase::SetIsHeatSource(AActor* p_actor, bool val)
+ {
+	 auto actor = ToActorBase(p_actor);
+	 if (actor) {
+		 actor->SetIsHeatSource_(val);
+		 return true;
+	 }
+	 return false;
+ }
+
+ bool ASystemManagerBase::GetIsHeatSource(AActor* p_actor, bool& val)
+ {
+	 auto actor = ToActorBase(p_actor);
+	 if (actor) {
+		 val = actor->GetIsHeatSource_();
+		 return true;
+	 }
+	 return false;
+ }
+
+
  APostProcessVolume* ASystemManagerBase::GetMainPostProcessVolume()
  {
 	 return pEnvManager->GetPostProcessVolume();
@@ -2753,6 +2775,47 @@ bool ASystemManagerBase::GetPathLineColor(AActor* p_actor, FColor& val)
 
  }
 
+ bool ASystemManagerBase::SetActorAnnotationId(AActor* p_actor, INT32S id)
+ {
+	 auto actorbase = ToActorBase(p_actor);
+	 if (actorbase) {
+		 actorbase->SetAnnotationId_(id);
+		 return true;
+	 }
+	 return false;
+ }
+
+ bool ASystemManagerBase::GetActorAnnotationId(AActor* p_actor, INT32S &id)
+ {
+	
+	 auto actorbase = ToActorBase(p_actor);
+	 if (actorbase) {
+		 id = actorbase->GetAnnotationId_();
+		 return true;
+	 }
+	 return false;
+ }
+
+bool ASystemManagerBase::SetAnnotateChildren(AActor* p_actor, bool val)
+{
+	auto actorbase = ToActorBase(p_actor);
+	
+	if (actorbase) {
+		actorbase->SetAnnotateChildrenActors_(val);
+		return true;
+	}
+	return false;
+}
+bool ASystemManagerBase::GetAnnotateChildren(AActor* p_actor, bool& val)
+{
+	auto actorbase = ToActorBase(p_actor);
+	
+	if (actorbase) {
+		val = actorbase->GetAnnotateChildrenActors_();
+		return true;
+	}
+	return false;
+}
 
 bool ASystemManagerBase::GetPathSpeed(AActor* p_actor, FLOAT64& val)
 {

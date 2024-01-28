@@ -519,12 +519,22 @@ public:
 	virtual bool SetTempratureKelvin(AActor* p_actor, FLOAT64 temp);
 	virtual bool GetTempratureKelvin(AActor* p_actor, FLOAT64& mode);
 
+	virtual bool SetIsHeatSource(AActor* p_actor, bool temp) ;
+	virtual bool GetIsHeatSource(AActor* p_actor, bool& mode) ;
+
 	virtual void SetAnnotationModeEnabled(bool val);
 	virtual bool GetAnnotationModeEnabled();
 
 	virtual void SetAnnotationSaveEnabled(bool val);
 	virtual bool GetAnnotationSaveEnabled();
 
+	virtual bool SetActorAnnotationId(AActor* p_actor, INT32S id);
+	virtual bool GetActorAnnotationId(AActor* p_actor, INT32S &id);
+
+	virtual bool SetAnnotateChildren(AActor* p_actor, bool val);
+	virtual bool GetAnnotateChildren(AActor* p_actor, bool &val);
+
+	
 
 	virtual APostProcessVolume *GetMainPostProcessVolume();
 

@@ -12,7 +12,7 @@
 #include "ActorBase.generated.h"
 
 
-class ASystemManagerBase;
+
 
 UCLASS()
 class AActorBase : public AActor
@@ -93,6 +93,9 @@ protected:
 		int AnnotationId_ = 0;
 
 	UPROPERTY(EditAnywhere)
+		bool AnnotateChildrenActors_ = false;
+
+	UPROPERTY(EditAnywhere)
 		TArray<USceneComponent*> ManuallyAttachComponents;
 
 	INT64U ExternalUpdateCount = 0;
@@ -108,7 +111,7 @@ protected:
 		 void AddManuallyAttach(USceneComponent* p_comp);
 	 static  void HandleAnnotation(AActor* p_actor, bool is_enabled, int annotation_id);
 
-	 ASystemManagerBase* pSys;
+	 
 public:	
 	// Called every frame
 	
@@ -154,12 +157,28 @@ public:
 	bool GetIsHeatSource();
 
 	double	GetTempratureKelvin();
-	void	SetTempratureKelvin(double val);
+	virtual void	SetTempratureKelvin(double val);
+
+	UFUNCTION(BlueprintCallable)
+		bool GetIsHeatSource_();
+	UFUNCTION(BlueprintCallable)
+		void  SetIsHeatSource_(bool val);
+
+
 
 	UFUNCTION(BlueprintCallable)
 	int GetAnnotationId_();
 	UFUNCTION(BlueprintCallable)
-	void  SetAnnotationId_(int val);
+	virtual void  SetAnnotationId_(int val);
+	
+	UFUNCTION(BlueprintCallable)
+		void  SetAnnotateChildrenActors_(bool val);
+
+	UFUNCTION(BlueprintCallable)
+		bool  GetAnnotateChildrenActors_();
+
+
+
 
 	virtual void UpdateAnnotation(bool is_enabled);
 	

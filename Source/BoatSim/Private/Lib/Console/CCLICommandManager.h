@@ -147,6 +147,7 @@ public:
 	static FString TempratureKelvin;
 	static FString IsHeatSource;
 	static FString AnnotationId;
+	static FString AnnotateChildren;
 	static FString TerrHMap;
 	static FString TerrDMap;
 	static FString TerrBaseTexture;

@@ -90,9 +90,12 @@ public static class CLICommandManager
     [Modifiable] public const string PlatformTurnRate = "pltturnrate";
     [Modifiable] public const string CamView = "camview";
     [Modifiable] public const string ThermalMode = "thermalmode";
-    [Modifiable(IsProperty = true)] public const string AnnotationId = "annotationid";
+    //[Modifiable(IsProperty = true)] public const string AnnotationId = "annotationid";
+    [Modifiable] public const string AnnotationId = "annotationid";
+    [Modifiable] public const string AnnotateChildren = "annotatechildren";
     [Modifiable] public const string TempratureKelvin = "tempkelvin";
-    [Modifiable(IsProperty = true)] public const string IsHeatSource = "heatsource";
+    //[Modifiable(IsProperty = true)] public const string IsHeatSource = "heatsource";
+    [Modifiable] public const string IsHeatSource = "heatsource";
     [Modifiable] public const string TimeOfDay = "timeofday";
     [Modifiable] public const string EnvTimeFlowScale = "envtimeflowscale";
     [Modifiable] public const string RainPercent = "rain";

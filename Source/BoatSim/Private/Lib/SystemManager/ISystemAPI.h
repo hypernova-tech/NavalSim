@@ -345,9 +345,18 @@ public:
 	virtual bool SetTempratureKelvin(AActor* p_actor, FLOAT64 temp) = 0;
 	virtual bool GetTempratureKelvin(AActor* p_actor, FLOAT64& mode) = 0;
 
+	virtual bool SetIsHeatSource(AActor* p_actor, bool temp) = 0;
+	virtual bool GetIsHeatSource(AActor* p_actor, bool& mode) = 0;
+
 	virtual void SetAnnotationModeEnabled(bool val) = 0;
 	virtual bool GetAnnotationModeEnabled() = 0;
 
 	virtual void SetAnnotationSaveEnabled(bool val) = 0;
 	virtual bool GetAnnotationSaveEnabled() = 0;
+
+	virtual bool SetActorAnnotationId(AActor* p_actor, INT32S id) = 0;
+	virtual bool GetActorAnnotationId(AActor* p_actor, INT32S &id) = 0;
+
+	virtual bool SetAnnotateChildren(AActor* p_actor, bool val) = 0;
+	virtual bool GetAnnotateChildren(AActor* p_actor, bool& val) = 0;
 };

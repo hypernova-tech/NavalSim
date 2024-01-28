@@ -31,12 +31,12 @@ void AAnnotationManager::StateMachine()
 	case AnnotationStateEnable:
 		EnableAnnotation();
 		AnnotationModeRequest = EAnnotationMode::AnnotationModeUnknown;
-		UpdateAnnotation();
+		HandleAnnotation();
 		next_state = AnnotationStateWait;
 		break;
 	case AnnotationStateDisable:
 		DisableAnnotation();
-		UpdateAnnotation();
+		HandleAnnotation();
 		AnnotationModeRequest = EAnnotationMode::AnnotationModeUnknown;
 		next_state = AnnotationStateWait;
 		break;
@@ -60,7 +60,7 @@ void AAnnotationManager::EnableAnnotation()
 	
 }
 
-void AAnnotationManager::UpdateAnnotation()
+void AAnnotationManager::HandleAnnotation()
 {
 	auto p_sys_manager = ASystemManagerBase::GetInstance();
 
@@ -92,12 +92,12 @@ void AAnnotationManager::SetAnnotationEnabled_(bool val)
 {
 	if (val) {
 		EnableAnnotation();
-		UpdateAnnotation();
+		HandleAnnotation();
 		AnnotationModeRequest = EAnnotationMode::AnnotationModeEnable;
 	}
 	else {
 		DisableAnnotation();
-		UpdateAnnotation();
+		HandleAnnotation();
 		AnnotationModeRequest = EAnnotationMode::AnnotationModeDisable;
 	}
 }

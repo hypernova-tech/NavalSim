@@ -43,7 +43,7 @@ void ACameraBase::ResumeSensor()
 void ACameraBase::Run(float delta_time_sec)
 {
 	Super::Run(delta_time_sec);
-
+	auto pSys = ASystemManagerBase::GetInstance();
 	if (pSys->GetIsSimulationMode()) {
 	
 		if(pSys->GetAnnotationModeEnabled()){
@@ -58,7 +58,7 @@ void ACameraBase::Run(float delta_time_sec)
 }
 void ACameraBase::CaptureScreen()
 {
-
+	auto pSys = ASystemManagerBase::GetInstance();
 	bool save = pSys->CanSaveAnnotationFrame();
 
 

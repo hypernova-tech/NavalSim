@@ -50,7 +50,7 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void StateMachine();
 	virtual void EnableAnnotation();
-	void UpdateAnnotation();
+	virtual void HandleAnnotation();
 	virtual void DisableAnnotation();
 
 

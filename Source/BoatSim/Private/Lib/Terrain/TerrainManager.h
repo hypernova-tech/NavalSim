@@ -13,7 +13,7 @@
 
 #define TERRAIN_INVALID_VAL (double)(DBL_MAX);
 
-class ASystemManagerBase;
+
 
 /**
  * 
@@ -23,21 +23,12 @@ class ATerrainManager : public AActorBase
 {
 	GENERATED_BODY()
 public:
-	friend class ASystemManagerBase;
+	
 		ATerrainManager();
-protected:
-	virtual void BeginPlay() override;
-	void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
-	TArray<FVector> Vertices;
-	TArray<int32> Triangles;
-	TArray<FVector2D> UVs;
-	TArray<FVector> Normals;
-	ECoordSystem CoordSystem = ECoordSystem::CoordSystemLLH_WGS84;
 
-	UTexture2D* LoadPNGTextureFromFile(const FString& ImagePath, ERGBFormat format, INT32S bit_depth, EPixelFormat px_format);
-
+public:
 	UPROPERTY(EditAnywhere)
-		FString HeightMapPath="";
+		FString HeightMapPath = "";
 
 	UPROPERTY(EditAnywhere)
 		FString DepthMapPath = "";
@@ -62,6 +53,18 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 		FVector TerrainBottomRightCornerLLH;
+protected:
+	virtual void BeginPlay() override;
+	void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+	TArray<FVector> Vertices;
+	TArray<int32> Triangles;
+	TArray<FVector2D> UVs;
+	TArray<FVector> Normals;
+	ECoordSystem CoordSystem = ECoordSystem::CoordSystemLLH_WGS84;
+
+	UTexture2D* LoadPNGTextureFromFile(const FString& ImagePath, ERGBFormat format, INT32S bit_depth, EPixelFormat px_format);
+
+
 
 
 
