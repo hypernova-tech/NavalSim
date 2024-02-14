@@ -53,7 +53,7 @@ void UHalo24CommIF::SendSerial(INT8U* p_data, INT32U count)
 	auto pack = GetPacket();
 	pack->SetPayload(ESimSDKDataIDS::Serials, p_data, count);
 
-	pUDPConnection->SendUDPData((INT8U*)pack, pack->GetTransmitSize());
+	pUDPConnection->SendData((INT8U*)pack, pack->GetTransmitSize());
 
 	RestorePacket(pack);
 }
@@ -123,7 +123,7 @@ void UHalo24CommIF::SendRadarTrack()
 			p_spoke_payload->SerialData.SetSerial(pHostIF->GetSerial(), strlen(pHostIF->GetSerial()));
 			packspoke.SetPayload(ESimSDKDataIDS::SpokeData, (INT8U*)packspoke.Payload, sizeof(SHalo24SpokePayload));
 			//pack.SetPayloadSize(sizeof(SHalo24SpokePayload));
-			pUDPConnection->SendUDPData((const INT8U*)&packspoke, packspoke.GetTransmitSize());
+			pUDPConnection->SendData((const INT8U*)&packspoke, packspoke.GetTransmitSize());
 
 		
 		}
@@ -168,7 +168,7 @@ void UHalo24CommIF::SendResponseAckNack(ESimSDKDataIDS id, char* p_serial, bool 
 	SRadarSimSDKPacket pack;
 	pack.SetResponse(id, p_serial, is_ack, stream_no);
 
-	pUDPConnection->SendUDPData((const INT8U*) & pack, pack.GetTransmitSize());
+	pUDPConnection->SendData((const INT8U*) & pack, pack.GetTransmitSize());
 }
 void UHalo24CommIF::SendRadarState(ERadarState radar_state, char* p_serial)
 {
@@ -178,7 +178,7 @@ void UHalo24CommIF::SendRadarState(ERadarState radar_state, char* p_serial)
 	state.SerialData.SetSerial(p_serial, strlen(p_serial));
 	SRadarSimSDKPacket pack;
 	pack.SetPayload(ESimSDKDataIDS::RadarState, (INT8U*)&state, sizeof(SRadarState));
-	pUDPConnection->SendUDPData((const INT8U*)&pack, pack.GetTransmitSize());
+	pUDPConnection->SendData((const INT8U*)&pack, pack.GetTransmitSize());
 
 }
 void UHalo24CommIF::SendRadarSetup(const SRadarSetupData& setup, char *p_serial)
@@ -189,7 +189,7 @@ void UHalo24CommIF::SendRadarSetup(const SRadarSetupData& setup, char *p_serial)
 	memcpy(&payload.RadarSetupData, &setup, sizeof(SRadarSetupData));
 	payload.SerialData.SetSerial(p_serial, strlen(p_serial));
 	pack.SetPayload(ESimSDKDataIDS::RadarSetup, (INT8U*)&payload, sizeof(SRadarSetupPayload));
-	pUDPConnection->SendUDPData((const INT8U*)&pack, pack.GetTransmitSize());
+	pUDPConnection->SendData((const INT8U*)&pack, pack.GetTransmitSize());
 }
 
 void UHalo24CommIF::SendTrackedObjects(const STargetTrackStatusData& info, char* p_serial)
@@ -252,7 +252,7 @@ void UHalo24CommIF::SendTrackedObjects(const STargetTrackStatusData& info, char*
 		pack.SetPayload((INT8U*) & payload, sizeof(STrackingTargetStatusPayload));
 
 
-		pUDPConnection->SendUDPData((const INT8U*)&pack, pack.GetTransmitSize());
+		pUDPConnection->SendData((const INT8U*)&pack, pack.GetTransmitSize());
 
 
 	}

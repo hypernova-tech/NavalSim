@@ -82,7 +82,7 @@ bool CUtil::Trace(const STraceArgs& args, SScanResult* pscan_result)
 
     FVector start_loc = args.p_actor->GetActorLocation();
 
-    BOOLEAN is_on_surface = false;
+    bool is_on_surface = false;
 
     pscan_result->AzimuthRange.X = args.azimuth_start_deg;
     pscan_result->AzimuthRange.Y = args.azimuth_end_deg;
@@ -561,7 +561,7 @@ int CUtil::StringToInt(FString& str)
     return ret;
 }
 
-FString CUtil::BoolToStringBinary(BOOLEAN val)
+FString CUtil::BoolToStringBinary(bool val)
 {
     return val ? TEXT("1") : TEXT("0");
 }
@@ -742,7 +742,7 @@ FLOAT64 CUtil::StringToFloat64(FString& str)
     return ret;
 }
 
-BOOLEAN CUtil::StringToBool(FString& value) 
+bool CUtil::StringToBool(FString& value)
 {
     return value.ToBool();
 }
@@ -876,6 +876,29 @@ T* CUtil::FindChildActor(AActor* p_parent)
     }
 
     return nullptr;
+}
+
+
+template<typename T>
+TArray<T*> CUtil::FindChildActors(AActor* p_parent)
+{
+    TArray<AActor*> child_actors;
+    p_parent->GetAllChildActors(child_actors, true);
+    TArray <T*> ret;
+
+    for (AActor* child : child_actors)
+    {
+
+        // Check if the child actor is of the desired class
+        if (child->IsA<T>())
+        {
+            T* p_ret = Cast<T>(child);
+            // Perform actions with the found child actor
+            ret.Add(p_ret);
+        }
+    }
+
+    return ret;
 }
 
 

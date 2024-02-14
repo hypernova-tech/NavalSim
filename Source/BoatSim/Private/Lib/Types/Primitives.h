@@ -17,7 +17,7 @@
 #endif
 
 
-typedef bool BOOLEAN;
+
 
 typedef char INT8S;
 typedef unsigned char INT8U;

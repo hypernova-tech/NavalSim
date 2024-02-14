@@ -185,7 +185,7 @@ void URobosenseM1CommIF::SendMainStreamOutputPacket()
 inline bool URobosenseM1CommIF::SendPacket(SMSOPPacket* p_pack)
 {
 	if (pMainOutputStreamConnection != nullptr) {
-		bool ret = pMainOutputStreamConnection->SendUDPData((INT8U*)p_pack, sizeof(SMSOPPacket));
+		bool ret = pMainOutputStreamConnection->SendData((INT8U*)p_pack, sizeof(SMSOPPacket));
 		return ret;
 	}
 	else {
@@ -205,7 +205,7 @@ inline bool URobosenseM1CommIF::SendPacket(SMSOPPacket* p_pack)
 	return;
 
 	if (pDIFOP != nullptr) {
-		bool ret = pDIFOP->SendUDPData((INT8U*)&DIOPPacket, sizeof(DIOPPacket));
+		bool ret = pDIFOP->SendData((INT8U*)&DIOPPacket, sizeof(DIOPPacket));
 		
 	}
 	else {

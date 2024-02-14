@@ -34,8 +34,15 @@ protected:
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-	virtual void InitConnection();
+	virtual void InitConnection(void *args = nullptr);
 	void AddConnectionDataReceiver(IConnectionDataReceiver* p_rcv);
 	bool GetIsRunning();
 	virtual void OnModifiedConnection(SConnectionInfo info);
+
+
+	virtual bool SendData(const FString& Message);
+	virtual bool SendData(const INT8U* p_bytes, INT32U count);
+	virtual bool SendData(const INT8U* p_bytes, INT32U count, INT32U port);
+
+
 };

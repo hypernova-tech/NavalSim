@@ -33,9 +33,9 @@ void UUdpConnection::BeginPlay()
 	
 }
 
-void UUdpConnection::InitConnection()
+void UUdpConnection::InitConnection(void* args)
 {
-	Super::InitConnection();
+	Super::InitConnection(args);
 	
 	SocketSubsystem = nullptr;
 	if (SocketSubsystem == nullptr) {
@@ -168,16 +168,16 @@ void UUdpConnection::StartUDPThread()
 }
 
 // Send UDP data
-bool UUdpConnection::SendUDPData(const FString& Message)
+bool UUdpConnection::SendData(const FString& Message)
 {
 	char dest[2048];
 
 	CUtil::FStringToAsciiChar(Message, dest, sizeof(dest));
-	auto ret = SendUDPData((const INT8U*)dest, Message.Len());
+	auto ret = SendData((const INT8U*)dest, Message.Len());
 	return ret;
 }
 
-bool UUdpConnection::SendUDPData(const INT8U* p_bytes, INT32U count)
+bool UUdpConnection::SendData(const INT8U* p_bytes, INT32U count)
 {
 	if (Socket == nullptr) {
 		return false;
@@ -189,7 +189,7 @@ bool UUdpConnection::SendUDPData(const INT8U* p_bytes, INT32U count)
 	return ret;
 }
 
-bool UUdpConnection::SendUDPData(const INT8U* p_bytes, INT32U count, INT32U port)
+bool UUdpConnection::SendData(const INT8U* p_bytes, INT32U count, INT32U port)
 {
 	FIPv4Endpoint end_point;
 

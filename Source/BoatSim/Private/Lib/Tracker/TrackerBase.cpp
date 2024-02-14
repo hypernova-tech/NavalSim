@@ -28,7 +28,7 @@ FLOAT64 CTrackerBase::GetCPATimeSec()
 {
     return CPATimeSec;
 }
-BOOLEAN CTrackerBase::GetIsTowardsCPA()
+bool CTrackerBase::GetIsTowardsCPA()
 {
     return IsTowardsCPA;
 }

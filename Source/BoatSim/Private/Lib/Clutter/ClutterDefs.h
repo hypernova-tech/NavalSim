@@ -9,11 +9,11 @@ struct SClutterParams
 public:
 
 	// Use the UPROPERTY macro to expose properties to the Unreal Editor
-	BOOLEAN EnableSubsurfaceScan;
+	bool EnableSubsurfaceScan;
 
-	BOOLEAN EnableSurfaceDetect;
+	bool EnableSurfaceDetect;
 
-	BOOLEAN EnableFoamDetect;
+	bool EnableFoamDetect;
 
 	FLOAT32 SeaSurfaceDetectionProbability; // Unreal typically uses "float" rather than "FLOAT32".
 

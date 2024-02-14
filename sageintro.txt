@@ -1,0 +1,109 @@
+create --name marlin --bp MARLIN
+set --controller marlin
+set --name marlin --position "51.508495 -34.902148 -0.292769"
+set --name marlin --rotation "-0.000000 -0.000000 -169.200029"
+set --name marlin --scale "1.000000 1.000000 1.000000"
+
+create --name jeoref --bp  --tick 0
+set --name jeoref --instance -1
+set --name jeoref --suppressed 0
+set --name jeoref --standalone 0
+set --name jeoref --position "0.000000 0.000000 0.000000"
+set --name jeoref --rotation "-0.000000 -0.000000 0.000000"
+set --name jeoref --scale "1.000000 1.000000 1.000000"
+set --name jeoref --tempkelvin 300.000000
+set --name jeoref --heatsource 0
+set --name jeoref --annotationid 0
+set --name jeoref --annotatechildren 0
+set --name jeoref --maporiginlat 0.000000
+set --name jeoref --maporiginlon 0.000000
+set --name jeoref --maporiginh 0.000000
+
+create --name thermal --bp  --tick 0
+set --name thermal --instance -1
+set --name thermal --suppressed 0
+set --name thermal --standalone 0
+set --name thermal --position "0.000000 0.000000 0.000000"
+set --name thermal --rotation "-0.000000 -0.000000 0.000000"
+set --name thermal --scale "1.000000 1.000000 1.000000"
+set --name thermal --tempkelvin 300.000000
+set --name thermal --heatsource 0
+set --name thermal --annotationid 0
+set --name thermal --annotatechildren 0
+set --name thermal --thermalmode 0
+
+create --name env --bp  --tick 0
+set --name env --instance -1
+set --name env --suppressed 0
+set --name env --standalone 0
+set --name env --position "324.600000 284.200000 4.600000"
+set --name env --rotation "-0.000000 -0.000000 0.000000"
+set --name env --scale "1.000000 1.000000 1.000000"
+set --name env --tempkelvin 300.000000
+set --name env --heatsource 0
+set --name env --annotationid 0
+set --name env --annotatechildren 0
+set --name env --timeofday 14.164614
+set --name env --envtimeflowscale 1.000000
+set --name env --rain 1.000000
+set --name env --cloud 43.000000
+set --name env --snow 0.000000
+set --name env --dust 0.000000
+set --name env --fog 0.000000
+set --name env --thunder 0.000000
+set --name env --envsoundfx 1
+set --name env --wind 4.000000
+set --name env --winddir 54.000000
+
+create --name annotation --bp  --tick 0
+set --name annotation --instance -1
+set --name annotation --suppressed 0
+set --name annotation --standalone 0
+set --name annotation --position "-20.097436 6.361075 10.299538"
+set --name annotation --rotation "-0.000000 -0.000000 0.000000"
+set --name annotation --scale "1.000000 1.000000 1.000000"
+set --name annotation --tempkelvin 300.000000
+set --name annotation --heatsource 0
+set --name annotation --annotationid 0
+set --name annotation --annotatechildren 0
+
+create --name cube1 --bp CUBE --tick 0
+set --name cube1 --instance -1
+set --name cube1 --suppressed 0
+set --name cube1 --standalone 0
+set --name cube1 --position "0.000000 2.810338 1.217523"
+set --name cube1 --rotation "-0.000000 -0.000000 0.000000"
+set --name cube1 --scale "1.000000 1.000000 1.000000"
+set --name cube1 --tempkelvin 300.000000
+set --name cube1 --heatsource 0
+set --name cube1 --annotationid 0
+set --name cube1 --annotatechildren 0
+
+create --name ir1 --bp CAMIR --tick 0
+set --name ir1 --parent marlin
+set --name ir1 --instance -1
+set --name ir1 --suppressed 0
+set --name ir1 --standalone 0
+set --name ir1 --position "48.256004 -35.522591 5.641767"
+set --name ir1 --rotation "-0.000000 0.000000 -169.200028"
+set --name ir1 --scale "1.000000 1.000000 1.000000"
+set --name ir1 --tempkelvin 300.000000
+set --name ir1 --heatsource 0
+set --name ir1 --annotationid 0
+set --name ir1 --annotatechildren 0
+set --name ir1 --slotindex 0
+set --name ir1 --rangemin 5.000000
+set --name ir1 --rangemax 100.000000
+set --name ir1 --vfov 90.000000
+set --name ir1 --hfov 90.000000
+set --name ir1 --hscanstepang 0.000000
+set --name ir1 --vscanstepang 36.000000
+set --name ir1 --merrormean 0.000000
+set --name ir1 --merrorstd 0.000000
+set --name ir1 --surfacedetecten 0
+set --name ir1 --subsurfacedetecten 0
+set --name ir1 --foamen 0
+set --name ir1 --seasurfdetectprob 0.000000
+set --name ir1 --maxsurfpenet 0.000000
+set --name ir1 --widthpx 1920
+set --name ir1 --heightpx 1080

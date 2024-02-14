@@ -404,7 +404,29 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
 
     }
 
+    ret = CommandManager.HasA(CCLICommandManager::CamWidthPx);
+    if (ret) {
 
+        if (pSystemAPI->GetCamWidthPx(p_actor, sint)) {
+            SendConsoleResponse(name, CCLICommandManager::CamWidthPx, sint);
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.HasA(CCLICommandManager::CamHeightPx);
+    if (ret) {
+
+        if (pSystemAPI->GetCamHeightPx(p_actor, sint)) {
+            SendConsoleResponse(name, CCLICommandManager::CamHeightPx, sint);
+            return true;
+        }
+    }
+    else {
+
+    }
 
 
     ret = CommandManager.HasA(CCLICommandManager::HorizontalFov);

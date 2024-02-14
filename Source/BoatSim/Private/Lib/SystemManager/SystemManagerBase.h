@@ -13,6 +13,7 @@
 #include <Lib/Console/ConsoleBase.h>
 #include <Lib/SaveLoad/SaverLoaderBase.h>
 #include <Lib/Sensor/GenericSensor/RadarBase.h>
+#include <Lib/Sensor/GenericSensor/CameraBase.h>
 #include <Lib/PathController/PathController.h>
 #include <Lib/Platform/PlatformBase.h>
 #include <Lib/DataContainer/DataManager.h>
@@ -255,6 +256,7 @@ public:
 	AWaypointActor* ToWaypoint(AActor* p_actor);
 	ATerrainManager* ToTerrain(AActor* p_actor);
 	AMapOrigin* ToMapOrigin(AActor* p_actor);
+	ACameraBase* ToCameraBase(AActor* p_actor);
 	AAgent* ToAgent(AActor* p_actor);
 	AThermalMaterialManager* ToThermalMaterialManager(AActor* p_actor);
 	template <typename T>
@@ -341,6 +343,14 @@ public:
 	virtual bool GetRangeMaxMeter(AActor* p_actor, FLOAT64& val);
 	virtual bool SetVerticalFov(AActor* p_actor, FLOAT64 angle_deg);
 	virtual bool GetVerticalFov(AActor* p_actor, FLOAT64& angle_deg);
+
+	virtual bool SetCamWidthPx(AActor* p_actor, INT32S val);
+	virtual bool GetCamWidthPx(AActor* p_actor, INT32S& val);
+
+	virtual bool SetCamHeightPx(AActor* p_actor, INT32S val);
+	virtual bool GetCamHeightPx(AActor* p_actor, INT32S& val);
+
+
 	virtual bool SetHorizontalScanStepAngleDeg(AActor* p_actor, FLOAT64 angle_deg);
 	virtual bool GetHorizontalScanStepAngleDeg(AActor* p_actor, FLOAT64& angle_deg);
 	virtual bool SetVerticalScanStepAngleDeg(AActor* p_actor, FLOAT64 angle_deg);
@@ -349,14 +359,14 @@ public:
 	virtual bool SetMeasurementErrorStd(AActor* p_actor, FLOAT64 angle_deg);
 	virtual bool GetMeasurementErrorMean(AActor* p_actor, FLOAT64& angle_deg);
 	virtual bool GetMeasurementErrorStd(AActor* p_actor, FLOAT64& angle_deg);
-	virtual bool SetEnableSurfaceDetect(AActor* p_actor, BOOLEAN val);
-	virtual bool SetEnableSubsurfaceDetect(AActor* p_actor, BOOLEAN val) ;
-	virtual bool SetEnableFoamDetect(AActor* p_actor, BOOLEAN angle_deg);
+	virtual bool SetEnableSurfaceDetect(AActor* p_actor, bool val);
+	virtual bool SetEnableSubsurfaceDetect(AActor* p_actor, bool val) ;
+	virtual bool SetEnableFoamDetect(AActor* p_actor, bool angle_deg);
 	virtual bool SetSeaSurfaceDetectionProb(AActor* p_actor, FLOAT64 val) ;
 
-	virtual bool GetEnableSurfaceDetect(AActor* p_actor, BOOLEAN& val) ;
-	virtual bool GetEnableSubsurfaceDetect(AActor* p_actor, BOOLEAN& val) ;
-	virtual bool GetEnableFoamDetect(AActor* p_actor, BOOLEAN& angle_deg) ;
+	virtual bool GetEnableSurfaceDetect(AActor* p_actor, bool& val) ;
+	virtual bool GetEnableSubsurfaceDetect(AActor* p_actor, bool& val) ;
+	virtual bool GetEnableFoamDetect(AActor* p_actor, bool& angle_deg) ;
 	virtual bool GetSeaSurfaceDetectionProb(AActor* p_actor, FLOAT64& val);
 
 	virtual bool SetMaxSurfacePenetration(AActor* p_actor, FLOAT64 val);

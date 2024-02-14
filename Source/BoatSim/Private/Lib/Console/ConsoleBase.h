@@ -47,7 +47,7 @@ protected:
 	void SendConsoleResponse(AActor *p_actor);
 	void SendConsoleResponse(FString name, FString option, INT32S ret);
 	void SendConsoleResponse(FString name, FString option, FLOAT64 ret);
-	void SendConsoleResponse(FString name, FString option, BOOLEAN ret);
+	void SendConsoleResponse(FString name, FString option, bool ret);
 	void SendConsoleResponse(FString name, FString option, FVector2D ret);
 	void SendConsoleResponse(FString name, FString option, FVector ret);
 	void SendConsoleResponse(FString name, FString option, FString ret);

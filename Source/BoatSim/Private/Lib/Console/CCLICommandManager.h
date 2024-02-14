@@ -36,8 +36,8 @@ struct SCommandOptionInfo
 
 struct SParsedOption
 {
-	BOOLEAN Ret;
-	BOOLEAN BoolVal;
+	bool Ret;
+	bool BoolVal;
 	INT32S IntVal;
 	INT64S Int64Val;
 	FLOAT64 DoubleVal;
@@ -244,7 +244,7 @@ public:
 
 	bool HasA(FString str);
 
-	bool GetValue(FString& name, BOOLEAN& val);
+	bool GetValue(FString& name, bool& val);
 	bool GetValue(FString& name, FVector& val);
 	bool GetValue(FString& name, FColor& val);
 	bool GetValue(FString& name, FVector2D& val);

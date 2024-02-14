@@ -36,7 +36,7 @@ public:
 	FLOAT64 ZoneStartBearingDeg;
 	FLOAT64 ZoneEndBearingDeg;
 	FLOAT32 ZoneSensitivity;
-	BOOLEAN IsZoneAlarmEnabled;
+	bool IsZoneAlarmEnabled;
 	EZoneAlarm ZoneAlarm;
 };
 

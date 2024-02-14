@@ -43,7 +43,7 @@ void USaverLoaderBase::AppendOption(FString &line, FString option, FString value
 	line += " --" + option + " " + value;
 }
 
-void USaverLoaderBase::AppendOption(FString &line, FString option, BOOLEAN value)
+void USaverLoaderBase::AppendOption(FString &line, FString option, bool value)
 {
 	FString val_str = value ? "1" : "0";
 	line += " --" + option + " " + val_str;

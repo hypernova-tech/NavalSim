@@ -32,7 +32,7 @@ void UConnectionBase::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 	// ...
 }
 
-void UConnectionBase::InitConnection()
+void UConnectionBase::InitConnection(void* args)
 {
 	IsRunning = true;
 }
@@ -49,4 +49,19 @@ bool UConnectionBase::GetIsRunning()
 
 void UConnectionBase::OnModifiedConnection(SConnectionInfo info)
 {
+}
+
+bool UConnectionBase::SendData(const FString& Message)
+{
+	return false;
+}
+
+bool UConnectionBase::SendData(const INT8U* p_bytes, INT32U count)
+{
+	return false;
+}
+
+bool UConnectionBase::SendData(const INT8U* p_bytes, INT32U count, INT32U port)
+{
+	return false;
 }

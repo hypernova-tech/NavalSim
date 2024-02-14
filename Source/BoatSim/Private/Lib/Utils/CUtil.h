@@ -80,7 +80,8 @@ public:
 	static T* FindComponent(AActor* p_parent);
 	template <typename T>
 	static T* FindChildActor(AActor* p_parent);
-	
+	template <typename T>
+	static TArray<T*> FindChildActors(AActor* p_parent);
 
 	template<typename T>
 	static T* FindChildComponent(AActor* Parent)
@@ -120,7 +121,7 @@ public:
 	static float ConvertToFloat(const char* p_str);
 	static FString ConvertToFString(const char* p_str);
 	static int StringToInt(FString& str);
-	static FString BoolToStringBinary(BOOLEAN val);
+	static FString BoolToStringBinary(bool val);
 	static FString IntToString(INT32S val);
 	static FString IntToString(INT32U val);
 	static FString IntToString(INT64S val);
@@ -132,7 +133,7 @@ public:
 	static void FStringToAsciiChar(const FString& str, char* p_dest, INT32U dest_len);
 
 
-	static BOOLEAN StringToBool(FString& value) ;
+	static bool StringToBool(FString& value) ;
 	static INT8S StringToInt8(FString& value) ;
 	static INT8U StringToInt8U(FString& value) ;
 	static INT32U StringToInt32U(FString& value) ;

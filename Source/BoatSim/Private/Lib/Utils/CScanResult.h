@@ -299,7 +299,7 @@ struct SScanResult
 
 	FLOAT64 TotalTimeSec;
 	FLOAT64 TotalRaycastTimeSec;
-	BOOLEAN IsTrueNorth = false;
+	bool IsTrueNorth = false;
 
 public:
 

@@ -21,7 +21,7 @@ public:
 	void Add(FString name, INT32S ret);
 	void Add(FString name, INT32U ret);
 	void Add(FString name, FLOAT64 ret);
-	void Add(FString name, BOOLEAN ret);
+	void Add(FString name, bool ret);
 	void Add(FString name, FVector2D ret);
 	void Add(FString name, FVector ret);
 	void Add(FString name, FString ret);

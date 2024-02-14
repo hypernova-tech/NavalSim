@@ -108,9 +108,9 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	// Send UDP data
-	bool SendUDPData(const FString& Message);
-	bool SendUDPData(const INT8U* p_bytes, INT32U count);
-	bool SendUDPData(const INT8U* p_bytes, INT32U count, INT32U port);
+	virtual bool SendData(const FString& Message) override;
+	virtual bool SendData(const INT8U* p_bytes, INT32U count) override;
+	virtual bool SendData(const INT8U* p_bytes, INT32U count, INT32U port) override;
 
 	INT16U GetLocalPort();
 	INT16U GetRemotePort();
@@ -118,7 +118,7 @@ public:
 	static FString GetMacAddr();
 
 	
-	virtual void InitConnection() override;
+	virtual void InitConnection(void* args = nullptr) override;
 	SConnectionInfo GetConnectionInfo();
 
 

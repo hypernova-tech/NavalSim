@@ -63,7 +63,7 @@ public:
 	virtual void NewLine();
 	virtual void AddLine(FString line);
 	virtual void AppendOption(FString& line, FString option, FString value) ;
-	virtual void AppendOption(FString& line, FString option, BOOLEAN value) ;
+	virtual void AppendOption(FString& line, FString option, bool value) ;
 	virtual void AppendOption(FString& line, FString option, INT32U value);
 	virtual void AppendOption(FString& line, FString option, INT32S value);
 	virtual void AppendOption(FString& line, FString option, INT64U value);

@@ -447,6 +447,26 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
 
     }
 
+    ret = CommandManager.GetValue(CCLICommandManager::CamWidthPx, sint);
+    if (ret) {
+        if (pSystemAPI->SetCamWidthPx(p_actor, sint)) {
+            one_success = true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::CamHeightPx, sint);
+    if (ret) {
+        if (pSystemAPI->SetCamHeightPx(p_actor, sint)) {
+            one_success = true;
+        }
+    }
+    else {
+
+    }
+
     ret = CommandManager.GetValue(CCLICommandManager::Focused, is_enabled);
     if (ret) {
         if (pSystemAPI->FocusCamera(p_actor)) {

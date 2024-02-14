@@ -19,7 +19,7 @@ public:
 	virtual void NewLine() = 0;
 	virtual void AddLine(FString line) = 0;
 	virtual void AppendOption(FString& line, FString option, FString value)=0;
-	virtual void AppendOption(FString& line, FString option, BOOLEAN value) = 0;
+	virtual void AppendOption(FString& line, FString option, bool value) = 0;
 	virtual void AppendOption(FString& line, FString option, INT32U value) = 0;
 	virtual void AppendOption(FString& line, FString option, INT32S value) = 0;
 	virtual void AppendOption(FString& line, FString option, INT64U value) = 0;

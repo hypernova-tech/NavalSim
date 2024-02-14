@@ -1113,7 +1113,7 @@ bool CCLICommandManager::GetValue(FString& name, INT32S& val)
 
 
 
-bool CCLICommandManager::GetValue(FString& name, BOOLEAN& val)
+bool CCLICommandManager::GetValue(FString& name, bool& val)
 {
 	bool ret = false;
 	auto pstr = pOptions->Find(name);

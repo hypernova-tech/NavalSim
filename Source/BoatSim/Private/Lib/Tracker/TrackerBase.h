@@ -55,7 +55,7 @@ public:
 	FLOAT64 AcquireStartTimeRefSec;
 	FLOAT64 TargetLossTimeRefSec;
 	FVector TrackLocationWhenCreated;
-	BOOLEAN IsOutOfRange;
+	bool IsOutOfRange;
 
 	FLOAT64 StateEnterTimeSec[EObjectTrackState::StateCount];
 	FLOAT64 StateStayDurationSec[EObjectTrackState::StateCount];
@@ -105,7 +105,7 @@ public:
 		return StateStayDurationSec[TrackState];
 	}
 
-	BOOLEAN IsAcquired()
+	bool IsAcquired()
 	{
 		return	TrackState == EObjectTrackState::AcquiredAndSafe ||
 			TrackState == EObjectTrackState::AcquiredAndDangerous ||
@@ -127,7 +127,7 @@ protected:
 	STrackedObjectInfo ClosestTrack;
 	FLOAT64 CPAMeters;
 	FLOAT64 CPATimeSec;
-	BOOLEAN IsTowardsCPA;
+	bool IsTowardsCPA;
 	FVector OwnShipLocation;
 	FVector OwnShipVelocity;
 	FVector OwnShipRPY;
@@ -166,6 +166,6 @@ public:
 	virtual TArray< STrackedObjectInfo*>* GetTrackedObjects();
 	virtual FLOAT64 GetCPAMeters();
 	virtual FLOAT64 GetCPATimeSec();
-	virtual BOOLEAN GetIsTowardsCPA();
+	virtual bool GetIsTowardsCPA();
 
 };

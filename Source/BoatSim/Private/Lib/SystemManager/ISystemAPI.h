@@ -164,14 +164,19 @@ public:
     virtual bool SetMeasurementErrorStd(AActor* p_actor, FLOAT64 angle_deg) = 0;
 	virtual bool GetMeasurementErrorMean(AActor* p_actor, FLOAT64& angle_deg) = 0;
 	virtual bool GetMeasurementErrorStd(AActor* p_actor, FLOAT64& angle_deg) = 0;
-    virtual bool SetEnableSurfaceDetect(AActor* p_actor, BOOLEAN val) = 0;
-    virtual bool SetEnableSubsurfaceDetect(AActor* p_actor, BOOLEAN val) = 0;
-    virtual bool SetEnableFoamDetect(AActor* p_actor, BOOLEAN angle_deg) = 0;
+    virtual bool SetEnableSurfaceDetect(AActor* p_actor, bool val) = 0;
+    virtual bool SetEnableSubsurfaceDetect(AActor* p_actor, bool val) = 0;
+    virtual bool SetEnableFoamDetect(AActor* p_actor, bool angle_deg) = 0;
     virtual bool SetSeaSurfaceDetectionProb(AActor* p_actor, FLOAT64 val) = 0;
+	virtual bool SetCamWidthPx(AActor* p_actor, INT32S val) = 0;
+	virtual bool GetCamWidthPx(AActor* p_actor, INT32S &val) = 0;
 
-	virtual bool GetEnableSurfaceDetect(AActor* p_actor, BOOLEAN& val) = 0;
-	virtual bool GetEnableSubsurfaceDetect(AActor* p_actor, BOOLEAN& val) = 0;
-	virtual bool GetEnableFoamDetect(AActor* p_actor, BOOLEAN& angle_deg) = 0;
+	virtual bool SetCamHeightPx(AActor* p_actor, INT32S val) = 0;
+	virtual bool GetCamHeightPx(AActor* p_actor, INT32S& val) = 0;
+
+	virtual bool GetEnableSurfaceDetect(AActor* p_actor, bool& val) = 0;
+	virtual bool GetEnableSubsurfaceDetect(AActor* p_actor, bool& val) = 0;
+	virtual bool GetEnableFoamDetect(AActor* p_actor, bool& angle_deg) = 0;
 	virtual bool GetSeaSurfaceDetectionProb(AActor* p_actor, FLOAT64& val) = 0;
 
     virtual bool SetMaxSurfacePenetration(AActor* p_actor, FLOAT64 val) = 0;

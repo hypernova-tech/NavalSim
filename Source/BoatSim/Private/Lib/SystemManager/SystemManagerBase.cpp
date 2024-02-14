@@ -343,6 +343,15 @@ AMapOrigin* ASystemManagerBase::ToMapOrigin(AActor* p_actor)
 
 	return nullptr;
 }
+
+ACameraBase* ASystemManagerBase::ToCameraBase(AActor* p_actor)
+{
+	if (p_actor->IsA<ACameraBase>()) {
+		return (ACameraBase*)p_actor;
+	}
+
+	return nullptr;
+}
 AThermalMaterialManager* ASystemManagerBase::ToThermalMaterialManager(AActor* p_actor)
 {
 	if (p_actor->IsA<AThermalMaterialManager>()) {
@@ -1200,7 +1209,7 @@ void ASystemManagerBase::SetConsoleConnection(void* p_connection)
 void ASystemManagerBase::SendConsoleResponse(const FString& str)
 {
 	if (pConsoleConnection != nullptr) {
-		pConsoleConnection->SendUDPData(str);
+		pConsoleConnection->SendData(str);
 	}
 }
 
@@ -1557,7 +1566,7 @@ bool ASystemManagerBase::GetMeasurementErrorStd(AActor* p_actor, FLOAT64& val)
 	return false;
 }
 
-bool ASystemManagerBase::SetEnableSurfaceDetect(AActor* p_actor, BOOLEAN val)
+bool ASystemManagerBase::SetEnableSurfaceDetect(AActor* p_actor, bool val)
 {
 	auto p_obj = ToSensorBase(p_actor);
 	if (p_obj) {
@@ -1568,7 +1577,7 @@ bool ASystemManagerBase::SetEnableSurfaceDetect(AActor* p_actor, BOOLEAN val)
 	return false;
 }
 
-bool ASystemManagerBase::SetEnableSubsurfaceDetect(AActor* p_actor, BOOLEAN val)
+bool ASystemManagerBase::SetEnableSubsurfaceDetect(AActor* p_actor, bool val)
 {
 	auto p_obj = ToSensorBase(p_actor);
 	if (p_obj) {
@@ -1578,7 +1587,7 @@ bool ASystemManagerBase::SetEnableSubsurfaceDetect(AActor* p_actor, BOOLEAN val)
 	return false;
 }
 
-bool ASystemManagerBase::SetEnableFoamDetect(AActor* p_actor, BOOLEAN val)
+bool ASystemManagerBase::SetEnableFoamDetect(AActor* p_actor, bool val)
 {
 	auto p_obj = ToSensorBase(p_actor);
 	if (p_obj) {
@@ -1598,7 +1607,7 @@ bool ASystemManagerBase::SetSeaSurfaceDetectionProb(AActor* p_actor, FLOAT64 val
 	return false;
 }
 
-bool ASystemManagerBase::GetEnableSurfaceDetect(AActor* p_actor, BOOLEAN& val)
+bool ASystemManagerBase::GetEnableSurfaceDetect(AActor* p_actor, bool& val)
 {
 	auto p_obj = ToSensorBase(p_actor);
 	if (p_obj) {
@@ -1608,7 +1617,7 @@ bool ASystemManagerBase::GetEnableSurfaceDetect(AActor* p_actor, BOOLEAN& val)
 	return false;
 }
 
-bool ASystemManagerBase::GetEnableSubsurfaceDetect(AActor* p_actor, BOOLEAN& val)
+bool ASystemManagerBase::GetEnableSubsurfaceDetect(AActor* p_actor, bool& val)
 {
 	auto p_obj = ToSensorBase(p_actor);
 	if (p_obj) {
@@ -1618,7 +1627,7 @@ bool ASystemManagerBase::GetEnableSubsurfaceDetect(AActor* p_actor, BOOLEAN& val
 	return false;
 }
 
-bool ASystemManagerBase::GetEnableFoamDetect(AActor* p_actor, BOOLEAN& val)
+bool ASystemManagerBase::GetEnableFoamDetect(AActor* p_actor, bool& val)
 {
 	auto p_obj = ToSensorBase(p_actor);
 	if (p_obj) {
@@ -1633,6 +1642,26 @@ bool ASystemManagerBase::GetSeaSurfaceDetectionProb(AActor* p_actor, FLOAT64& va
 	auto p_obj = ToSensorBase(p_actor);
 	if (p_obj) {
 		val = p_obj->SeaSurfaceDetectionProbability;
+		return true;
+	}
+	return false;
+}
+
+bool ASystemManagerBase::SetCamWidthPx(AActor* p_actor, INT32S val)
+{
+	auto p_obj = ToCameraBase(p_actor);
+	if (p_obj) {
+		p_obj->SensorWidth = val;
+		return true;
+	}
+	return false;
+}
+
+bool ASystemManagerBase::GetCamWidthPx(AActor* p_actor, INT32S& val)
+{
+	auto p_obj = ToCameraBase(p_actor);
+	if (p_obj) {
+		val = p_obj->SensorWidth;
 		return true;
 	}
 	return false;
@@ -1658,11 +1687,31 @@ bool ASystemManagerBase::SetRadarScanLevel(AActor* p_actor, INT32S val)
 	return false;
 }
 
+bool ASystemManagerBase::SetCamHeightPx(AActor* p_actor, INT32S val)
+{
+	auto p_obj = ToCameraBase(p_actor);
+	if (p_obj) {
+		p_obj->SensorHeight = val;
+		return true;
+	}
+	return false;
+}
+
 bool ASystemManagerBase::SetRadarScannerRPM(AActor* p_actor, INT32S val)
 {
 	auto p_obj = ToRadarBase(p_actor);
 	if (p_obj) {
 		p_obj->ScannerRPMValue = val;
+		return true;
+	}
+	return false;
+}
+
+bool ASystemManagerBase::GetCamHeightPx(AActor* p_actor, INT32S& val)
+{
+	auto p_obj = ToCameraBase(p_actor);
+	if (p_obj) {
+		val = p_obj->SensorHeight;
 		return true;
 	}
 	return false;

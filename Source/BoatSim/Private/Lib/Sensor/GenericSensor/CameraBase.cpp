@@ -14,6 +14,7 @@ void ACameraBase::InitSensor()
 	pSceneCapture->TextureTarget = p_render_target;
 	pSceneCapture->FOVAngle = FovHorizontalDeg;
 
+
 	auto pppv = ASystemManagerBase::GetInstance()->GetMainPostProcessVolume();
 	pSceneCapture->PostProcessBlendWeight = 1;
 	pSceneCapture->PostProcessSettings = pppv->Settings;
@@ -23,7 +24,7 @@ void ACameraBase::InitSensor()
 			pSceneCapture->bAlwaysPersistRenderingState = true;
 			pSceneCapture->CaptureSource = ESceneCaptureSource::SCS_FinalColorLDR;
 			pSceneCapturer->SetRenderTarget(pPointVisualizer->pRenderTarget);
-			
+			pSceneCapturer->pMaster = this;
 
 	//	}
 		
@@ -51,7 +52,10 @@ void ACameraBase::Run(float delta_time_sec)
 			CaptureScreen();
 			
 		}
-		
+		else {
+			pSceneCapturer->Capture();
+			OnCaptured();
+		}
 	}
 
 
@@ -79,6 +83,15 @@ void ACameraBase::PauseSensor()
 	if (pSceneCapture != nullptr) {
 		pSceneCapture->Deactivate();
 	}
+}
+
+void ACameraBase::OnCaptured()
+{
+}
+
+void ACameraBase::OnCaptureReady(void* p_data)
+{
+
 }
 
 void ACameraBase::SetFovDeg(double fov_deg)

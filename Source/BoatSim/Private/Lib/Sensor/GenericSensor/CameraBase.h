@@ -41,6 +41,8 @@ protected:
 	void CaptureScreen();
 
 	INT64U CaptureIndex = 0;
+	virtual void OnCaptured();
+	virtual void OnCaptureReady(void* p_data) override;
 public:
 	void SetFovDeg(double fov_deg);
 	virtual void Save(ISaveLoader* p_save_loader) override;

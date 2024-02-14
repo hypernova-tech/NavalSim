@@ -27,7 +27,7 @@ void CJsonDataContainer::Add(FString name, FLOAT64 ret)
 	Data.Add(name, CUtil::FloatToString(ret));
 }
 
-void CJsonDataContainer::Add(FString name, BOOLEAN ret)
+void CJsonDataContainer::Add(FString name, bool ret)
 {
 	if (ret) {
 		Data.Add(name, "1");

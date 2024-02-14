@@ -124,7 +124,7 @@ void UConsoleBase::OnReceivedConnectionData(void* connection, INT8U* p_data, INT
 void UConsoleBase::SendToConsole(FString val)
 {
     if (pUDPConnection != nullptr) {
-        pUDPConnection->SendUDPData(val);
+        pUDPConnection->SendData(val);
     }
    
 }
@@ -285,7 +285,7 @@ void UConsoleBase::SendConsoleResponse(FString name, FString option, FLOAT64 ret
 
     //pSystemAPI->SendConsoleResponse("--name " + name + " --" + option + " " + CUtil::FloatToString(ret));
 }
-void UConsoleBase::SendConsoleResponse(FString name, FString option, BOOLEAN ret)
+void UConsoleBase::SendConsoleResponse(FString name, FString option, bool ret)
 {
 
     TMap<FString, FString> data;

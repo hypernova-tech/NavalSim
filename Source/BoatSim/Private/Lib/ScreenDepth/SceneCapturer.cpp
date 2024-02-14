@@ -37,7 +37,7 @@ void ASceneCapturer::Tick(float DeltaTime)
 
 void ASceneCapturer::CreateRenderTexture(void *owner, INT32U width_px, INT32U height_px, EPixelFormat pixel_format)
 {
-	pOwner = owner;
+    pMaster = owner;
     pRenderTarget = NewObject<UTextureRenderTarget2D>(this);
     pRenderTarget->InitAutoFormat(width_px, width_px);
     pRenderTarget->OverrideFormat = (pixel_format);
@@ -109,7 +109,7 @@ void ASceneCapturer::StartReadPixelsAsync()
 
 void ASceneCapturer::OnReadbackComplete()
 {
-	ASensorBase* p_sensor = (ASensorBase*)pOwner;
+	ASensorBase* p_sensor = (ASensorBase*)pMaster;
 	
 	p_sensor->OnCaptureReady((void*)&OutBMP);
 }
