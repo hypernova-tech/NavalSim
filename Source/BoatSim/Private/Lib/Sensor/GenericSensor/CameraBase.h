@@ -27,6 +27,23 @@ public:
 	UPROPERTY(EditAnywhere)
 		float FieldOfViewDeg;
 
+	UPROPERTY(EditAnywhere)
+		bool IsWhiteHot = true;
+
+	UPROPERTY(EditAnywhere)
+		bool IsDefogEnabled = false;
+
+	UPROPERTY(EditAnywhere)
+		int DefogLevel = 0;
+
+	UPROPERTY(EditAnywhere)
+		bool IsICREnabled = false;
+
+	UPROPERTY(EditAnywhere)
+		int  BrightnessLevel = 0; // 0-100
+
+	UPROPERTY(EditAnywhere)
+		int  ContrastLevel = 0;// 0-100
 
 protected:
 

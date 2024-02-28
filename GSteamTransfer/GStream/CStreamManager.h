@@ -23,11 +23,12 @@ protected:
 	std::thread *pThread;
 	SAppArgs Args;
 	CSharedMem* pSharedMem;
-	GStreamSender* pSender;
+	
 
 	
 	virtual void ThreadFunc();
 public:
 	virtual void Init(const SAppArgs& args);
+	GStreamSender* pSender;
 };
 

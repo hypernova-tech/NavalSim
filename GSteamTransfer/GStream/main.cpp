@@ -8,6 +8,8 @@
 
 CStreamManager* pStreamManager;
 
+
+
 void ThreadFuncInit()
 {
 
@@ -15,11 +17,13 @@ void ThreadFuncInit()
 
 
 int main() {
+
+   
     SAppArgs args;
     args.ShareMemName = "MARTIVISSM";
     
     args.PortNo = 1045;
-    args.IpAddr = "192.168.1.102";
+    args.IpAddr = "15.0.66.89";
     args.Width = 720;
     args.Height = 576;
     args.Size = args.Width * args.Height * 4;

@@ -130,9 +130,7 @@ protected:
 	virtual void FinalizeGimbal();
 
 	virtual void UpdateAxis(EGimbalAxis axis, float delta_time_sec);
-	FSGimbalAxisInfo* GetAxis(EGimbalAxis axis);
-	double GetAxisAngleDeg(EGimbalAxis axis);
-	FVector GetRPYDeg();
+	
 	void UpdateAttachedActors();
 
 public:	
@@ -155,6 +153,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void RemoveAttachedComp_(USceneComponent* p_comp);
 
-
+	FSGimbalAxisInfo* GetAxis(EGimbalAxis axis);
+	double GetAxisAngleDeg(EGimbalAxis axis);
+	FVector GetRPYDeg();
 	
 };

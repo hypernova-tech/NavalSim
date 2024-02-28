@@ -84,6 +84,9 @@ public:
 	static TArray<T*> FindChildActors(AActor* p_parent);
 
 	template<typename T>
+	static void FindChildActorsRecursive(AActor* ParentActor, TArray<T*>& OutChildren);
+
+	template<typename T>
 	static T* FindChildComponent(AActor* Parent)
 	{
 		if (Parent == nullptr)

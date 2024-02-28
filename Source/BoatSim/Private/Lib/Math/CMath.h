@@ -26,4 +26,9 @@ public:
 
 	static TArray<FVector> GetBoxCornersAndCenter(const FBox& Box);
 	static bool CheckBoxInsideVolume(const FBox& box, FVector& origin, FLOAT64 min_elevation_deg, FLOAT64 max_elevation_deg, FLOAT64 min_azimuth_deg, FLOAT64 max_azimuth_deg, FLOAT64 min_range_meter, FLOAT64 max_range_meter);
+
+
+	static INT32S EncodeSigned32(FLOAT64 val, FLOAT64 lsb);
+	static INT16S EncodeSigned16(FLOAT64 val, FLOAT64 lsb);
+	static INT16U EncodeUnsigned16(FLOAT64 val, FLOAT64 lsb);
 }; 

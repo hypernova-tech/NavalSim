@@ -901,6 +901,26 @@ TArray<T*> CUtil::FindChildActors(AActor* p_parent)
     return ret;
 }
 
+template<typename T>
+void CUtil::FindChildActorsRecursive(AActor* ParentActor, TArray<T*>& OutChildren)
+{
+    TArray<AActor*> AttachedActors;
+    ParentActor->GetAttachedActors(AttachedActors);
+
+    for (AActor* Child : AttachedActors)
+    {
+        if (Child && !Child->IsPendingKill())
+        {
+            if (Child->IsA<T>()) {
+                T* p_ret = Cast<T>(Child);
+                OutChildren.Add(p_ret);
+            }
+            
+            // Optionally, add a recursive call here to delve deeper into the hierarchy
+            FindChildActorsRecursive(Child, OutChildren);
+        }
+    }
+}
 
 AActor* CUtil::SpawnObjectFromBlueprint(AActor *p_template, FString blueprint_path, UWorld *p_world, AActor *p_owner, FString name, FVector pos, FVector rot_rpy, FVector scale)
 {

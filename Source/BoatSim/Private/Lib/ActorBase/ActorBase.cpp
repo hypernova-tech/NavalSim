@@ -5,6 +5,10 @@
 #include <Lib/SystemManager/SystemManagerBase.h>
 #include <Lib/Utils/CUtil.h>
 #include <Lib/Math/CMath.h>
+#include "GameFramework/Actor.h"
+#include "Components/PrimitiveComponent.h"
+#include "GameFramework/Character.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
 AActorBase::AActorBase()
@@ -99,6 +103,8 @@ void AActorBase::Tick(float DeltaTime)
 {
 
 	Super::Tick(DeltaTime);
+	UpdateActorVelocityMetersPerSec();
+	UpdateActorAngularVelocityRPYDegPerSec();
 	if (!IsExternalUpdate) {
 		if (CheckAffinity() && !Suppressed) {
 			
@@ -496,4 +502,108 @@ void AActorBase::HandleAnnotation(AActor* p_actor, bool is_enabled, int annotati
 void AActorBase::UpdateAnnotation(bool is_enabled)
 {
 	AActorBase::HandleAnnotation(this, is_enabled, AnnotationId_);
+}
+
+int AActorBase::GetAISClassType()
+{
+	return AISClassType;
+}
+
+void AActorBase::SetAISClassType(int val)
+{
+	AISClassType = val;
+}
+
+float AActorBase::GetAISMessagePublishPeriodSec()
+{
+	return AISMessagePublishPeriodSec;
+}
+
+void AActorBase::SetAISMessagePublishPeriodSec(float val)
+{
+	AISMessagePublishPeriodSec = val;
+}
+
+bool AActorBase::GetShoudPublishATON()
+{
+	return ShoudPublishATON;
+}
+
+void AActorBase::SetShoudPublishATON(bool val)
+{
+	ShoudPublishATON = val;
+}
+
+FVector AActorBase::GetPositionLatLongHeightMSL()
+{
+	auto pos = GetActorLocation();
+	FVector llh = ASystemManagerBase::GetInstance()->GetMapOrigin()->ConvertUEXYZToLLH(pos);
+
+	return llh;
+}
+FVector AActorBase::GetActorVelocityMetersPerSec()
+{
+	return ActorVelocityMetersPerSec;
+}
+FVector AActorBase::UpdateActorVelocityMetersPerSec()
+{
+	FVector Velocity(0.0f, 0.0f, 0.0f);
+
+	// Check for physics-based movement
+	UPrimitiveComponent* PrimaryPhysComponent = Cast<UPrimitiveComponent>(this->GetRootComponent());
+	if (PrimaryPhysComponent && PrimaryPhysComponent->IsSimulatingPhysics())
+	{
+		ActorVelocityMetersPerSec = PrimaryPhysComponent->GetComponentVelocity();
+		return ActorVelocityMetersPerSec;
+	}
+
+	// Check for a character movement component
+	ACharacter* Character = Cast<ACharacter>(this);
+	if (Character && Character->GetCharacterMovement())
+	{
+		ActorVelocityMetersPerSec = Character->GetCharacterMovement()->Velocity;
+		return Velocity;
+	}
+
+	
+	float CurrentTime = FPlatformTime::Seconds();
+	FVector CurrentPosition = this->GetActorLocation();
+	if (CurrentTime != PreviousTime) // Avoid division by zero
+	{
+			ActorVelocityMetersPerSec = (CurrentPosition - PreviousPosition) / (CurrentTime - PreviousTime);
+		    PreviousPosition = CurrentPosition;
+		    PreviousTime = CurrentTime;
+		}
+
+	return ActorVelocityMetersPerSec;
+	
+}
+FVector AActorBase::GetActorAngularVelocityRPYDegPerSec()
+{
+	return ActorAngularVelocityRPYDegPerSec;
+}
+FVector AActorBase::UpdateActorAngularVelocityRPYDegPerSec()
+{
+
+	// Check for physics-based rotation
+	UPrimitiveComponent* PrimaryPhysComponent = Cast<UPrimitiveComponent>(this->GetRootComponent());
+	if (PrimaryPhysComponent && PrimaryPhysComponent->IsSimulatingPhysics())
+	{
+		ActorAngularVelocityRPYDegPerSec = PrimaryPhysComponent->GetPhysicsAngularVelocityInDegrees();
+		return ActorAngularVelocityRPYDegPerSec;
+	}
+
+
+	 float CurrentTime = FPlatformTime::Seconds();
+	 FRotator CurrentRotation = this->GetActorRotation();
+	 if (CurrentTime != PreviousTime) // Avoid division by zero
+	 {
+	     FRotator DeltaRotation = CurrentRotation - PreviousRotation;
+	     // Convert rotation delta to angular velocity (degrees per second)
+		 ActorAngularVelocityRPYDegPerSec = DeltaRotation.GetNormalized().Euler() / (CurrentTime - PreviousTime);
+	     PreviousRotation = CurrentRotation;
+	     PreviousTime = CurrentTime;
+	 }
+
+	return ActorAngularVelocityRPYDegPerSec;
 }

@@ -21,6 +21,8 @@ enum EActorQueryArgs
 	OnlyAgents,
 	ActorBasesExceptSensorsAndPathsAndGimbals,
 	Gimbals,
+	AIS,
+	AISEnabledActors,
 };
 
 

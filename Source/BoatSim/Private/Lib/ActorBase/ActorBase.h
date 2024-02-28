@@ -81,6 +81,16 @@ protected:
 		int AffinityInstanceId = -1;
 
 	UPROPERTY(EditAnywhere)
+		int AISClassType = 0; // 0: none, 1: class A, 2: class B
+
+	UPROPERTY(EditAnywhere)
+		float AISMessagePublishPeriodSec = 10; // 0: none, 1: class A, 2: class B
+
+	UPROPERTY(EditAnywhere)
+		bool ShoudPublishATON = true; // 0: none, 1: class A, 2: class B
+
+
+	UPROPERTY(EditAnywhere)
 		AActor* ActorGizmo;
 
 	UPROPERTY(EditAnywhere)
@@ -100,6 +110,12 @@ protected:
 
 	INT64U ExternalUpdateCount = 0;
 	INT64U ExternalUpdateCountScenarioMode = 0;
+	double PreviousTime;
+	FVector PreviousPosition;
+    FRotator PreviousRotation;
+
+	FVector ActorVelocityMetersPerSec;
+	FVector ActorAngularVelocityRPYDegPerSec;
 
 
 	 virtual void OnActorDisabled();
@@ -111,7 +127,8 @@ protected:
 		 void AddManuallyAttach(USceneComponent* p_comp);
 	 static  void HandleAnnotation(AActor* p_actor, bool is_enabled, int annotation_id);
 
-	 
+	 virtual FVector UpdateActorVelocityMetersPerSec();
+	 virtual FVector UpdateActorAngularVelocityRPYDegPerSec();
 public:	
 	// Called every frame
 	
@@ -181,7 +198,21 @@ public:
 
 
 	virtual void UpdateAnnotation(bool is_enabled);
-	
+
+
+
+	int GetAISClassType();
+	void SetAISClassType(int val);
+
+	float GetAISMessagePublishPeriodSec();
+	void SetAISMessagePublishPeriodSec(float val);
+
+	bool GetShoudPublishATON(); 
+	void SetShoudPublishATON(bool val);
+
+	FVector GetPositionLatLongHeightMSL();
+	FVector GetActorVelocityMetersPerSec();
+	FVector GetActorAngularVelocityRPYDegPerSec();
 
 	/// <summary>
 	/// save load

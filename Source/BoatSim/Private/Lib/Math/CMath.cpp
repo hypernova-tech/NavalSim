@@ -228,6 +228,24 @@ bool CMath::CheckBoxInsideVolume(const FBox& box, FVector& origin, FLOAT64 min_e
     return true;
 }
 
+INT32S CMath::EncodeSigned32(FLOAT64 val, FLOAT64 lsb)
+{
+    INT32S ret = (INT32S) (val / lsb);
+    return ret;
+}
+
+INT16S CMath::EncodeSigned16(FLOAT64 val, FLOAT64 lsb)
+{
+    INT16S ret = (INT16S)(val / lsb);
+    return ret;
+}
+
+INT16U CMath::EncodeUnsigned16(FLOAT64 val, FLOAT64 lsb)
+{
+    INT16U ret = (INT16U)(val / lsb);
+    return ret;
+}
+
 FVector CMath::GetEulerAnglesRPYDeg(const FVector& dir)
 {
 

@@ -153,6 +153,7 @@ public:
 		INT8U Reserved : 4;
 
 	}CommandReturnValidty;
+
 	INT8U ReservedBytes1[2];
 	FLOAT32 ElavationRate;
 	FLOAT32 AzimuthRate;
@@ -170,7 +171,7 @@ enum EDTVFieldOfView
 {
 	DTVFieldOfViewNoChange = 0,
 	DTVFieldOfViewNarrow = 1,
-	DTVFieldOfView = 2,
+	DTVFieldOfViewMiddle = 2,
 	DTVFieldOfViewWide = 3,
 	DTVFieldOfViewSuperWide = 4
 };
@@ -181,7 +182,7 @@ enum EThermalFieldOfView
 	ThermalFieldOfViewNarrow = 1,
 	ThermalFieldOfViewMiddle = 2,
 	ThermalFieldOfViewWide = 3,
-	ThermalFieldOfViewSuperWide = 4
+
 };
 
 enum ESystemMode
@@ -193,6 +194,24 @@ enum ESystemMode
 	SystemModeShutdown = 4,
 	SystemModeInit = 5,
 	SystemModeNotReady = 6
+};
+
+enum EDefogCommand
+{
+	ReadDefogLevel = 0,
+	SetDefogLevel1 = 1,
+	SetDefogLevel2 = 2,
+	SetDefogLevel3 = 3,
+	SetDefogOff = 4,
+};
+
+enum EDefogStatus
+{
+	DefogNotUsed = 0,
+	DefogLevel1 = 1,
+	DefogLevel2 = 2,
+	DefogLevel3 = 3,
+	DefogOff = 4,
 };
 
 #pragma pack(push, 1)
@@ -217,18 +236,21 @@ public:
 		INT8U ThermalPolarity : 2;
 	}ModeContol;
 
-	INT8U ReservedBytes1[2];
-	INT8U  DTVBrightness;
-	INT8U  ThermalBrightness;
-	INT8U  ThermalContrast;
+	INT8U	ReservedBytes1[2];
+	INT8U	DTVBrightness;
+	INT8U	ThermalBrightness;
+	INT8U	DTVContrast;
+	INT8U	ThermalContrast;
+
 	union {
 		INT8U Mode;
 		EThermalFieldOfView Bits;
 	}SystemMode;
+
 	struct {
-		INT8U  DtvFocus : 3;
+		INT8U DtvFocus : 3;
 		INT8U ThermalFocus : 3;
-		INT8U ActiveVideoSelection : 2;
+		INT8U ActiveVideoSelection : 2; //1: thermal 2: dtv
 		INT8U DtvZoom : 3;
 		INT8U ThermalZoom : 3;
 		INT8U Reserved : 2;
@@ -262,7 +284,7 @@ public:
 	}ThermalFieldOfView;
 
 	struct {
-		INT8U ActiveVideoStatus : 2; //1: thermal, 0: dtv
+		INT8U ActiveVideoStatus : 2; //1: thermal, 2: dtv
 		INT8U Reserved : 1;
 		INT8U DtvAutoManualMode : 2;
 		INT8U ThermalAutoManualMode : 2;
@@ -270,7 +292,7 @@ public:
 
 	struct {
 		INT8U SystemModeStatus : 6; // ESystemMode
-		INT8U ThermalPolarity : 2;
+		INT8U ThermalPolarity : 2; // 1 white hot, 2 black hot
 	}ModeContolReturn;
 
 
@@ -289,6 +311,7 @@ public:
 
 	INT8U  DTVBrightness;
 	INT8U  ThermalBrightness;
+	INT8U  DTVContrast;
 	INT8U  ThermalContrast;
 	
 
@@ -303,14 +326,11 @@ public:
 struct SDTVDefogCommandPayload
 {
 public:
-
-
 	union {
 		INT8U Command;
-		EDTVFieldOfView Bits;
-	}DTVFieldOfView;
-	INT8U DTVDefogCommand;
-
+		EDefogCommand Bits;
+	}DTVDefogCommand;
+	
 	SDTVDefogCommandPayload()
 	{
 
@@ -324,13 +344,12 @@ struct SDTVDefogStatus
 {
 public:
 
-	SMartiHeader Header;
 
 	union {
 		INT8U Command;
-		EDTVFieldOfView Bits;
-	}DTVFieldOfView;
-	INT8U DTVDefogCommand;
+		EDefogStatus Bits;
+	}DTVDefogStatus;
+
 
 
 
@@ -350,10 +369,7 @@ struct SDTVICRCommandPayload
 {
 public:
 
-	union {
-		INT8U Command;
-		EDTVFieldOfView Bits;
-	}DTVFieldOfView;
+
 	INT8U DTVICRCommand;
 
 	SDTVICRCommandPayload()
@@ -369,11 +385,6 @@ struct SDTVICRReportPayload
 {
 public:
 
-
-	union {
-		INT8U Command;
-		EDTVFieldOfView Bits;
-	}DTVFieldOfView;
 	INT8U DTVICRStatus;
 
 	SDTVICRReportPayload()

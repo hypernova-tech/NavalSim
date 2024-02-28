@@ -13,7 +13,7 @@ void AMartiCamera::OnCaptureReady(void* p_data)
 {
 	Super::OnCaptureReady(p_data);
 	TArray<FColor>* p_color_arr = (TArray<FColor> *)p_data;
-	pSharedMemory->SetDataDimension(SensorWidth, SensorHeight);
+	pSharedMemory->SetDataDimension(SensorWidth, SensorHeight, SensorType == ESensorType::CameraIR, IsWhiteHot, IsDefogEnabled, DefogLevel, IsICREnabled);
 	pSharedMemory->SendData((INT8U*)p_color_arr->GetData(), sizeof(FColor) * p_color_arr->Num());
 
 }

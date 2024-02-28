@@ -30,6 +30,13 @@ void UMartiCommIF::SetHostIf(IMartiHostIF* p_val)
 	pHostIf = p_val;
 }
 
+void UMartiCommIF::SendMessage(EMartiCommandReportId id, INT8U* payload, INT32S size)
+{
+	SMartiGenericMessage mes;
+	mes.SetMessage(id, payload, size);
+	pUDPConnection->SendData(mes.Message.AllData, mes.Message.Header.MessageSize);
+}
+
 void UMartiCommIF::OnReceivedConnectionData(void* connection, INT8U* p_data, INT32U count)
 {
 	Super::OnReceivedConnectionData(connection, p_data, count);

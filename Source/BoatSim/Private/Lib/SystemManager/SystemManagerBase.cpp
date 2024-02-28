@@ -210,8 +210,31 @@ void ASystemManagerBase::QueryActors(EActorQueryArgs args, TArray<AActor*>& acto
 		 }
 
 	 }
+	 else if (args == EActorQueryArgs::AIS) {
+		for (auto pactor : ActorList) {
+			if (ToAIS(pactor)) {
 
-	 
+				actors.Add(pactor);
+
+			}
+
+		}
+
+	}
+	 else if (args == EActorQueryArgs::AISEnabledActors) {
+		for (auto pactor : ActorList) {
+			AActorBase* p_act = ToActorBase(pactor);
+			if (p_act) {
+				if (p_act->GetAISClassType() > 0) {
+					actors.Add(p_act);
+				}
+			}
+
+		}
+
+	}
+
+	
 	
 }
 AAgent* ASystemManagerBase::ToAgent(AActor* p_actor)
@@ -317,6 +340,15 @@ APlatformBase* ASystemManagerBase::ToPlatform(AActor* p_actor)
 
 	return nullptr;
 }
+AAISBase* ASystemManagerBase::ToAIS(AActor* p_actor)
+{
+	if (p_actor->IsA<APlatformBase>()) {
+		return (AAISBase*)p_actor;
+	}
+
+	return nullptr;
+}
+
 AWaypointActor* ASystemManagerBase::ToWaypoint(AActor* p_actor)
 {
 	if (p_actor->IsA<AWaypointActor>()) {

@@ -1,2 +1,19 @@
-﻿  main.cpp
+﻿  GStreamSender.cpp
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\GSteamTransfer\GStream\CMath.h(11,20): warning C4244: 'return': conversion from 'INT16S' to 'INT8U', possible loss of data
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\GSteamTransfer\GStream\CMath.h(14,20): warning C4244: 'return': conversion from 'INT16S' to 'INT8U', possible loss of data
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\GSteamTransfer\GStream\CMath.h(17,16): warning C4244: 'return': conversion from 'INT16S' to 'INT8U', possible loss of data
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\GSteamTransfer\GStream\CMath.h(29,20): warning C4244: 'initializing': conversion from 'float' to 'INT16S', possible loss of data
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\GSteamTransfer\GStream\GStreamSender.cpp(289,18): warning C4305: 'return': truncation from 'int' to 'bool'
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\GSteamTransfer\GStream\GStreamSender.cpp(297,18): warning C4305: 'return': truncation from 'int' to 'bool'
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\GSteamTransfer\GStream\GStreamSender.cpp(272,13): warning C4101: 'raw_data': unreferenced local variable
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\GSteamTransfer\GStream\GStreamSender.cpp(271,16): warning C4101: 'map': unreferenced local variable
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\GSteamTransfer\GStream\GStreamSender.cpp(270,19): warning C4101: 'ret': unreferenced local variable
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\GSteamTransfer\GStream\GStreamSender.cpp(269,16): warning C4101: 'buffer': unreferenced local variable
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\GSteamTransfer\GStream\GStreamSender.cpp(341,37): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\GSteamTransfer\GStream\GStreamSender.cpp(350,26): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\GSteamTransfer\GStream\GStreamSender.cpp(353,57): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\GSteamTransfer\GStream\GStreamSender.cpp(416,42): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\GSteamTransfer\GStream\GStreamSender.cpp(444,40): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\GSteamTransfer\GStream\GStreamSender.cpp(357,12): warning C4101: 'high_res_pix': unreferenced local variable
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\GSteamTransfer\GStream\GStreamSender.cpp(359,11): warning C4101: 'curr_pixel': unreferenced local variable
   GStream.vcxproj -> C:\Users\Pc\Documents\Unreal Projects\BoatSim\GSteamTransfer\GStream\x64\Debug\GStream.exe

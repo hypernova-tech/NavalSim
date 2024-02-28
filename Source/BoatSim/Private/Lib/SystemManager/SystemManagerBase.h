@@ -14,6 +14,7 @@
 #include <Lib/SaveLoad/SaverLoaderBase.h>
 #include <Lib/Sensor/GenericSensor/RadarBase.h>
 #include <Lib/Sensor/GenericSensor/CameraBase.h>
+#include <Lib/Sensor/GenericSensor/AISBase.h>
 #include <Lib/PathController/PathController.h>
 #include <Lib/Platform/PlatformBase.h>
 #include <Lib/DataContainer/DataManager.h>
@@ -257,6 +258,7 @@ public:
 	ATerrainManager* ToTerrain(AActor* p_actor);
 	AMapOrigin* ToMapOrigin(AActor* p_actor);
 	ACameraBase* ToCameraBase(AActor* p_actor);
+	AAISBase* ToAIS(AActor* p_actor);
 	AAgent* ToAgent(AActor* p_actor);
 	AThermalMaterialManager* ToThermalMaterialManager(AActor* p_actor);
 	template <typename T>

@@ -49,9 +49,14 @@ bool USharedMemoryWinImpl::SendData(const INT8U* p_bytes, INT32U count)
     Super::SendData(p_bytes, count);
     SSharedMemBufferHdr* p_hdr = (SSharedMemBufferHdr*)pMemPtr;
     p_hdr->IsUpdated = 1;
-    p_hdr->DataSize = count;
-    p_hdr->Width = DataWidth;
-    p_hdr->Height = DataHeight;
+    p_hdr->DataSize                 = count;
+    p_hdr->Width                    = DataWidth;
+    p_hdr->Height                   = DataHeight;
+    p_hdr->ImageInfo.IsIr           = IsIR;
+    p_hdr->ImageInfo.IsWhiteHot     = IsWhiteHot;
+    p_hdr->ImageInfo.EnableDefog    = IsDefogEnabled;
+    p_hdr->ImageInfo.DefogLevel     = DefogLevel;
+    p_hdr->ImageInfo.IsICREnabled   = IsICREnabled;
     INT8U* p_data = (INT8U*)pMemPtr;
     memcpy(&p_data[sizeof(SSharedMemBufferHdr)], p_bytes, count);
     return true;

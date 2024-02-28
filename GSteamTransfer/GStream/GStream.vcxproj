@@ -112,7 +112,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>gstreamer-1.0.lib;gobject-2.0.lib;glib-2.0.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>gstreamer-1.0.lib;gobject-2.0.lib;glib-2.0.lib;gstapp-1.0.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -132,13 +132,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CMath.cpp" />
     <ClCompile Include="CSharedMem.cpp" />
+    <ClCompile Include="CStreamerTest.cpp" />
     <ClCompile Include="CStreamManager.cpp" />
     <ClCompile Include="GStreamSender.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CMath.h" />
     <ClInclude Include="CSharedMem.h" />
+    <ClInclude Include="CStreamerTest.h" />
     <ClInclude Include="CStreamManager.h" />
     <ClInclude Include="GStreamSender.h" />
     <ClInclude Include="types.h" />
