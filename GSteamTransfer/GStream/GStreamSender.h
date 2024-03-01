@@ -18,7 +18,7 @@ protected:
 	GstElement* AppSrc;
 	
 	uint8_t* pOut;
-	uint8_t* ConvertRGBAtoYCbCr(SSharedMemBufferHdr *p_hdr, const std::uint8_t* p_buffer, size_t width, size_t height);
+	uint8_t* ConvertRGBAtoYCbCr(SSharedMemBufferHdr *p_hdr,  std::uint8_t* p_buffer, size_t width, size_t height);
 	void FeedData(uint8_t* data, int size);
 	std::thread* pThread;
 

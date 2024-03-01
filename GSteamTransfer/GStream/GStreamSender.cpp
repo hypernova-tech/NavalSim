@@ -296,21 +296,26 @@ bool GStreamSender::Init(string name, string ip_addr, int port, int width, int h
         gst_object_unref(pipeline);
         return -1;
     }
+  
 
     // Configure the elements
-    g_object_set(udpsink, "host", "127.0.0.1", "port", 1045, NULL);
+    g_object_set(udpsink, "host", ip_addr.c_str(), "port", port, NULL);
 
+    char capstr[1024];
     // Set appsrc properties
+    sprintf_s(capstr, "video/x-raw,format=YUY2,width=%d,height=%d,framerate=%d/1", width, height, frame_rate);
+    
     g_object_set(G_OBJECT(appsrc),
-        "caps", gst_caps_from_string("video/x-raw,format=YUY2,width=720,height=576,framerate=30/1"),
+        //"caps", gst_caps_from_string("video/x-raw,format=YUY2,width=720,height=576,framerate=30/1"),
+        "caps", gst_caps_from_string(capstr),
         "format", GST_FORMAT_TIME, NULL);
 
     // Start playing the pipeline
 
-    TestImageBufferSize = 720 * 576 * 3;
+    TestImageBufferSize = width * height * 3;
     pTestImageBuffer = new uint8_t[TestImageBufferSize];
     memset(pTestImageBuffer, 0, TestImageBufferSize);
-    pOutputBuffer = new uint8_t[720 * 576 * 4];
+    pOutputBuffer = new uint8_t[width * height * 4];
 
     UserData.appsrc = appsrc;
     UserData.pSender = this;
@@ -337,35 +342,46 @@ void GStreamSender::SenderLoop()
 
 void GStreamSender::OnReceivedFrame(SSharedMemBufferHdr *p_hdr, const std::uint8_t* p_buffer, size_t width, size_t height)
 {
-    uint8_t* ret =  ConvertRGBAtoYCbCr(p_hdr, p_buffer,  width,  height);
+    uint8_t* ret =  ConvertRGBAtoYCbCr(p_hdr, (uint8_t*)p_buffer,  width,  height);
     FeedData(ret, width * height * 4);
 }
 
 
-uint8_t* GStreamSender::ConvertRGBAtoYCbCr(SSharedMemBufferHdr *p_hdr, const std::uint8_t* p_buffer, size_t width, size_t height)
+uint8_t* GStreamSender::ConvertRGBAtoYCbCr(SSharedMemBufferHdr *p_hdr,  std::uint8_t* p_buffer, size_t width, size_t height)
 {
     uint8_t* yCbCrData = (uint8_t*)pOutputBuffer;
     int ind = 0;
-    float brigtness_level = 0 + p_hdr->BrightnessLevel / 100 * 255;
-    float constast_scale = 1 + 1.5 * p_hdr->ContrastLevel / 100;
+
+    SSharedMemBufferHdr hdr_rcv = *p_hdr;
+
+    hdr_rcv.BrightnessLevel = 0;
+    hdr_rcv.ContrastLevel = 0;
+    hdr_rcv.ImageInfo.IsIr = false;
+    hdr_rcv.ImageInfo.IsWhiteHot = true;
+    hdr_rcv.ImageInfo.EnableDefog = 0;
+    hdr_rcv.ImageInfo.DefogLevel = 3;
+
+    float brigtness_level = 0 + hdr_rcv.BrightnessLevel / 100.0 * 255;
+    float constast_scale = 1 + 1.5 * hdr_rcv.ContrastLevel / 100;
     
-    if (!p_hdr->ImageInfo.IsIr) {
-        constast_scale += p_hdr->ImageInfo.IsICREnabled * 0.1;
+    if (!hdr_rcv.ImageInfo.IsIr) {
+        constast_scale += hdr_rcv.ImageInfo.IsICREnabled * 0.1;
     }
     
   
     INT16S high_res_pix[3];
     INT8U ir_val = 0;
     INT8U curr_pixel[3];
-    INT16S fog_color[3] = { 10,10 , 50 };
+    INT16S fog_color[3] = { 150,150 , 100 };
 
-    float defog_tf = 1-p_hdr->ImageInfo.DefogLevel / 3.0f;
-#if false
+    
+    float defog_tf = 1- hdr_rcv.ImageInfo.DefogLevel / 3.0f;
+#if true
     for (size_t i = 0; i < width * height * 4; i += 4) {
 
-        if (p_hdr->ImageInfo.IsIr) {
+        if (hdr_rcv.ImageInfo.IsIr) {
             ir_val = p_buffer[i] * 0.299 + p_buffer[i + 1] * 0.587 + p_buffer[i + 2] * 0.114;
-            if (!p_hdr->ImageInfo.IsWhiteHot) {
+            if (!hdr_rcv.ImageInfo.IsWhiteHot) {
                 ir_val = 255 - ir_val;
             }
             high_res_pix[0] = ir_val;
@@ -378,10 +394,15 @@ uint8_t* GStreamSender::ConvertRGBAtoYCbCr(SSharedMemBufferHdr *p_hdr, const std
             high_res_pix[2]   = p_buffer[i + 2];
         }
   
-        if (p_hdr->ImageInfo.EnableDefog) {
+        if (hdr_rcv.ImageInfo.EnableDefog) {
             high_res_pix[0] += CMath::Lerp(defog_tf, high_res_pix[0], fog_color[0]);
             high_res_pix[1] += CMath::Lerp(defog_tf, high_res_pix[1], fog_color[1]);
             high_res_pix[2] += CMath::Lerp(defog_tf, high_res_pix[2], fog_color[2]);
+        }
+        else {
+            high_res_pix[0] += CMath::Lerp(1, high_res_pix[0], fog_color[0]);
+            high_res_pix[1] += CMath::Lerp(1, high_res_pix[1], fog_color[1]);
+            high_res_pix[2] += CMath::Lerp(1, high_res_pix[2], fog_color[2]);
         }
 
 
@@ -395,15 +416,10 @@ uint8_t* GStreamSender::ConvertRGBAtoYCbCr(SSharedMemBufferHdr *p_hdr, const std
         uint8_t B = CMath::ClampHighResPixel(high_res_pix[2], 0, 255);
         // Alpha (p_buffer[i + 3]) is ignored
 
-        // Apply conversion formulas
-        uint8_t Y =  (uint8_t)(0.299 * R + 0.587 * G + 0.114 * B);
-        uint8_t Cb = (uint8_t)(-0.168736 * R - 0.331264 * G + 0.5 * B + 128);
-        uint8_t Cr = (uint8_t)(0.5 * R - 0.418688 * G - 0.081312 * B + 128);
+        p_buffer[i]     = R;
+        p_buffer[i + 1] = G;
+        p_buffer[i + 2] = B;
 
-        // Append Y, Cb, and Cr to the output buffer
-        pOutputBuffer[ind++] = (Y);
-        pOutputBuffer[ind++] = (Cb);
-        pOutputBuffer[ind++] = (Cr);
     }
 
 #endif
