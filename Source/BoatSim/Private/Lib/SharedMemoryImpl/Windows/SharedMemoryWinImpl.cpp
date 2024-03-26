@@ -3,9 +3,9 @@
 
 #include "Lib/SharedMemoryImpl/Windows/SharedMemoryWinImpl.h"
 
-HANDLE USharedMemoryWinImpl::CreateOrAccessSharedMemory(const FString sharedMemoryName, size_t size)
+HANDLE USharedMemoryWinImpl::CreateOrAccessSharedMemory(const FString sharedMemoryName, size_t size, size_t header_size)
 {
-    size += sizeof(SSharedMemBufferHdr);
+    size += header_size;//sizeof(SSharedMemBufferHdr);
     // Create or open a file mapping object for the shared memory
     HANDLE hMapFile = CreateFileMapping(
         INVALID_HANDLE_VALUE,    // Use paging file - shared memory
@@ -40,13 +40,14 @@ void USharedMemoryWinImpl::InitConnection(void* p_args)
 {
     Super::InitConnection(p_args);
     SSharedMemInitArgs* p_sm_arg = (SSharedMemInitArgs*)p_args;
-    Handle = CreateOrAccessSharedMemory(p_sm_arg->Name, p_sm_arg->size);
+    Handle = CreateOrAccessSharedMemory(p_sm_arg->Name, p_sm_arg->size, p_sm_arg->HeaderSize);
 
 }
 
 bool USharedMemoryWinImpl::SendData(const INT8U* p_bytes, INT32U count)
 {
     Super::SendData(p_bytes, count);
+#if 0
     SSharedMemBufferHdr* p_hdr = (SSharedMemBufferHdr*)pMemPtr;
     p_hdr->IsUpdated = 1;
     p_hdr->DataSize                 = count;
@@ -59,5 +60,19 @@ bool USharedMemoryWinImpl::SendData(const INT8U* p_bytes, INT32U count)
     p_hdr->ImageInfo.IsICREnabled   = IsICREnabled;
     INT8U* p_data = (INT8U*)pMemPtr;
     memcpy(&p_data[sizeof(SSharedMemBufferHdr)], p_bytes, count);
+#endif
     return true;
+}
+bool USharedMemoryWinImpl::SendData(const INT8U* p_hdr, INT32U header_size, const INT8U* p_bytes, INT32U count)
+{
+    Super::SendData(p_hdr, header_size, p_bytes, count);
+    memcpy(pMemPtr, p_hdr, header_size);
+    INT8U* p_data = (INT8U*)pMemPtr;
+    memcpy(&p_data[header_size], p_bytes, count);
+    return true;
+}
+
+void* USharedMemoryWinImpl::GetHeader()
+{
+    return pMemPtr;
 }

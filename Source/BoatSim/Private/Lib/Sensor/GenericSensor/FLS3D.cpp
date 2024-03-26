@@ -23,6 +23,11 @@ void AFLS3D::BeginPlay()
 	
 }
 
+void AFLS3D::OnDataReady()
+{
+
+}
+
 void AFLS3D::InitSensor()
 {
 	Super::InitSensor();
@@ -94,8 +99,6 @@ void AFLS3D::Run(float delta_time_sec)
 
 
 		bool ret = false;
-
-		
 		ret = CUtil::Trace(args, pScanResult);
 		
 
@@ -109,6 +112,8 @@ void AFLS3D::Run(float delta_time_sec)
 		FVector right = GetActorRightVector();
 	
 		Visualize(pScanResult, GetActorLocation(), forward, right, RangeMaxMeter);
+
+		OnDataReady();
 
 		NextScanTime = FApp::GetCurrentTime() + 0.2;
 

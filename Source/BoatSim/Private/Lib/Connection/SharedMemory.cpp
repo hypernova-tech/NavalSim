@@ -16,16 +16,17 @@ bool USharedMemory::SendData(const INT8U* p_bytes, INT32U count)
     return false;
 }
 
-void USharedMemory::SetDataDimension(unsigned int width, unsigned int Height, bool is_ir, bool is_white_hot, bool defog_enabled, int defog_level, bool is_icr_enabled)
+bool USharedMemory::SendData(const INT8U* p_hdr, INT32U header_size, const INT8U* p_bytes, INT32U count)
 {
-    DataWidth           = width;
-    DataHeight          = Height;
-    IsIR                = is_ir;
-    IsWhiteHot          = is_white_hot;
-    IsDefogEnabled      = defog_enabled;
-    DefogLevel          = defog_level;
-    IsICREnabled = is_icr_enabled;
+    return false;
 }
+
+void* USharedMemory::GetHeader()
+{
+    return nullptr;
+}
+
+
 
 
 

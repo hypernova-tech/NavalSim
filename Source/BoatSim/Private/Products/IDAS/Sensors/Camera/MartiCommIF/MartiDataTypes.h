@@ -63,7 +63,7 @@ public:
 		if (data_len <= MAX_PAYLOAD_SIZE) {
 			memcpy(&Message.AllData[sizeof(Message.Header)], p_data, data_len);
 			auto cs = ComputeChecksum();
-			Message.AllData[Message.Header.MessageSize] = cs;
+			Message.AllData[Message.Header.MessageSize-1] = cs;
 
 		}
 		else {
@@ -76,12 +76,12 @@ public:
 
 	void SetCs(INT8U cs) 
 	{
-		Message.AllData[Message.Header.MessageSize] = cs;
+		Message.AllData[Message.Header.MessageSize-1] = cs;
 	}
 
 	INT8U GetCs()
 	{
-		return Message.AllData[Message.Header.MessageSize];
+		return Message.AllData[Message.Header.MessageSize-1];
 	}
 
 	INT8U ComputeChecksum()

@@ -1,0 +1,13 @@
+URL: www.zeromq.org
+Version: 4.3.4
+Website: http://zeromq.org/intro:get-the-software
+License: LGPL
+
+Description: Easy to use sockets for communication between processes.
+
+Use the build.bat script to get and build libzmq and the cppzmq bindings.
+
+build.bat uses git, cmake, and visual studio to get the includes, libs, and
+binaries ready for sonasoft. After running build.bat you next replace the
+old files with the new ones and then update build\post_checkout_setup.py and
+src\*\*.vcxproj files to reference the new files.

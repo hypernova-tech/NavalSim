@@ -1,0 +1,72 @@
+// Protobuf message specification
+// Copyright FarSounder, Inc. All rights reserved.
+//
+// This work is an unpublished work and contains confidential,
+// proprietary and trade secret information of FarSounder, Inc.
+//
+// Access to this work is restricted to:
+//
+//   (i) FarSounder, Inc. employees who have a need to know how to perform
+//       tasks within the scope of their assignments and
+//
+//   (ii) Entities other than FarSounder, Inc. who have entered into
+//        appropriate license agreements.
+//
+// No part of this work may be used, practiced, performed, copied,
+// distributed, revised, modified, translated, abridged, condensed,
+// expanded, collected, compiled, linked, recast, transformed or adapted
+// without the prior written consent of FarSounder, Inc.
+//
+// Any use or exploitation of this work without authorization could
+// subject the perpetrator to criminal and civil liability.
+
+syntax = "proto2";
+
+package proto.array;
+
+option optimize_for = LITE_RUNTIME;
+
+// ArrayData is a generic container to hold an N-dimensional homogeneous array
+// of contiguous values.
+message ArrayData {
+  enum Type {
+    BYTE = 0;
+    INT16 = 1;
+    UINT16 = 2;
+    INT32 = 3;
+    UINT32 = 4;
+    INT64 = 5;
+    UINT64 = 6;
+    FLOAT32 = 7;
+    FLOAT64 = 8;
+    COMPLEX64 = 9; // two adjacent FLOAT32's
+    COMPLEX128 = 10; // two adjacent FLOAT64's
+    BOOL = 11;
+  }
+  enum Order {
+    ROW_MAJOR = 0;
+    COLUMN_MAJOR = 1;
+  }
+  // dims describes the dimensionality of the array. length of the dims field
+  // describes the number of dimensions and each value describes the length of
+  // that dimension.
+  //
+  // For example, the dims field for a two dimensional array with 43 rows and
+  // 151 columns would be stored as:
+  //
+  //   len(dims) == 2;  dims[0] == 43;  dims[1] == 151
+  //
+  // See
+  // http://en.wikipedia.org/wiki/Array_data_structure#Multidimensional_arrays
+  // for additional details.
+  repeated int32 dims = 1;
+  // Regardless of the original type, array data is stored as a series of
+  // bytes. This field is used to reinterpret those bytes with the correct
+  // type:
+  optional Type type = 2;
+  // Ordering of the values for a multi-dimensional array.
+  // See http://en.wikipedia.org/wiki/Row-major_order
+  optional Order order = 3;
+  // The actual array data:
+  optional bytes data = 4;
+}

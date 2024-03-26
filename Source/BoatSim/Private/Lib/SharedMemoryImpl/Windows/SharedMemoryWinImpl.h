@@ -18,9 +18,11 @@ class USharedMemoryWinImpl : public USharedMemory
 protected:
 	HANDLE Handle;
 	PVOID pMemPtr;
-	HANDLE CreateOrAccessSharedMemory(const FString sharedMemoryName, size_t size);
+	HANDLE CreateOrAccessSharedMemory(const FString sharedMemoryName, size_t size, size_t header_size);
 
 public:
 	virtual void InitConnection(void* p_args = nullptr) override;
 	virtual bool SendData(const INT8U* p_bytes, INT32U count) override;
+	virtual bool SendData(const INT8U* p_hdr, INT32U header_size, const INT8U* p_bytes, INT32U count) override;
+	virtual void* GetHeader() override;
 };

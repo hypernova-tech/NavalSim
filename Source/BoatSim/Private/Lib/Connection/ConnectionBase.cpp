@@ -65,3 +65,8 @@ bool UConnectionBase::SendData(const INT8U* p_bytes, INT32U count, INT32U port)
 {
 	return false;
 }
+
+bool UConnectionBase::SendData(const INT8U* p_hdr, INT32U header_size, const INT8U* p_bytes, INT32U count)
+{
+	return false;
+}

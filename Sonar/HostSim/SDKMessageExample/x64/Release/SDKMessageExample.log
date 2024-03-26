@@ -1,0 +1,9 @@
+﻿  SDKMessageExample.cpp
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\HostSim\SDKMessageExample\SDKMessageExample.cpp(55,49): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\HostSim\SDKMessageExample\SDKMessageExample.cpp(206,10): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+  Generating code
+  0 of 1877 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  SDKMessageExample.vcxproj -> C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\HostSim\x64\Release\SDKMessageExample.exe

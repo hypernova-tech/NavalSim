@@ -43,6 +43,6 @@ public:
 	virtual bool SendData(const FString& Message);
 	virtual bool SendData(const INT8U* p_bytes, INT32U count);
 	virtual bool SendData(const INT8U* p_bytes, INT32U count, INT32U port);
-
+	virtual bool SendData(const INT8U *p_hdr, INT32U header_size, const INT8U* p_bytes, INT32U count);
 
 };

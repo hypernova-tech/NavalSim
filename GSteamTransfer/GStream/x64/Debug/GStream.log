@@ -20,4 +20,5 @@ C:\Users\Pc\Documents\Unreal Projects\BoatSim\GSteamTransfer\GStream\GStreamSend
 C:\Users\Pc\Documents\Unreal Projects\BoatSim\GSteamTransfer\GStream\GStreamSender.cpp(432,42): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
 C:\Users\Pc\Documents\Unreal Projects\BoatSim\GSteamTransfer\GStream\GStreamSender.cpp(460,40): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
 C:\Users\Pc\Documents\Unreal Projects\BoatSim\GSteamTransfer\GStream\GStreamSender.cpp(374,11): warning C4101: 'curr_pixel': unreferenced local variable
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\GSteamTransfer\GStream\GStreamSender.cpp(483,16): warning C4101: 'map': unreferenced local variable
   GStream.vcxproj -> C:\Users\Pc\Documents\Unreal Projects\BoatSim\GSteamTransfer\GStream\x64\Debug\GStream.exe

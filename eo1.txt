@@ -85,9 +85,9 @@ set --name EOSuite --tempkelvin 300.000000
 set --name EOSuite --heatsource 0
 set --name EOSuite --annotationid 0
 set --name EOSuite --annotatechildren 0
-set --name EOSuite --ipaddr1 127.0.0.1
-set --name EOSuite --localport1 51000
-set --name EOSuite --remoteport 51001
+set --name EOSuite --ipaddr1 15.0.110.90
+set --name EOSuite --localport1 7770
+set --name EOSuite --remoteport 7770
 set --name EOSuite --slotindex 0
 set --name EOSuite --rangemin 5.000000
 set --name EOSuite --rangemax 100.000000

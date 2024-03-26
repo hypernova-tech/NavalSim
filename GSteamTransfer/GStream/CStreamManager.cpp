@@ -27,7 +27,6 @@ void CStreamManager::ThreadFunc()
             pSender->OnReceivedFrame(hdr, p_raw, hdr->Width, hdr->Height);
             auto end = std::chrono::high_resolution_clock::now();
             auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
-
             /////std::cout << "Time taken by function: " << duration.count()/1000.0 << " ms" << std::endl;
 
         }

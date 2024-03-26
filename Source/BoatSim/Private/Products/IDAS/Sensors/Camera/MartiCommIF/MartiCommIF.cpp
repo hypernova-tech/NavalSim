@@ -44,7 +44,10 @@ void UMartiCommIF::OnReceivedConnectionData(void* connection, INT8U* p_data, INT
 	SMartiGenericMessage* p_mes = (SMartiGenericMessage*)p_data;
 
 	if (p_mes->IsMessageValid()) {
-		pHostIf->OnRecievedMessage(p_mes);
+		if (pHostIf != nullptr) {
+			pHostIf->OnRecievedMessage(p_mes);
+		}
+		
 	}
 
 

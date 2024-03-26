@@ -26,7 +26,7 @@ protected:
 	virtual void Run(float delta_time_sec) override;
 	virtual void InitSensor() override;
 	virtual void BeginPlay() override;
-
+	virtual void OnDataReady() override;
 public:
 
 

@@ -84,7 +84,25 @@ public:
 	static TArray<T*> FindChildActors(AActor* p_parent);
 
 	template<typename T>
-	static void FindChildActorsRecursive(AActor* ParentActor, TArray<T*>& OutChildren);
+	static void FindChildActorsRecursive(AActor* ParentActor, TArray<T*>& OutChildren)
+	{
+		TArray<AActor*> AttachedActors;
+		ParentActor->GetAttachedActors(AttachedActors);
+
+		for (AActor* Child : AttachedActors)
+		{
+			if (Child && !Child->IsPendingKill())
+			{
+				if (Child->IsA<T>()) {
+					T* p_ret = Cast<T>(Child);
+					OutChildren.Add(p_ret);
+				}
+
+				// Optionally, add a recursive call here to delve deeper into the hierarchy
+				FindChildActorsRecursive(Child, OutChildren);
+			}
+		}
+	};
 
 	template<typename T>
 	static T* FindChildComponent(AActor* Parent)

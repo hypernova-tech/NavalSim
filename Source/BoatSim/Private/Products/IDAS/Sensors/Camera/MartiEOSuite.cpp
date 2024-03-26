@@ -14,6 +14,8 @@ void AMartiEOSuite::InitSensor()
 
 void AMartiEOSuite::OnPreStep(float DeltaTime)
 {
+	Super::OnPreStep(DeltaTime);
+
 	TArray<ACameraBase*> cams;
 
 	CUtil::FindChildActorsRecursive<ACameraBase>(this, cams);
@@ -35,13 +37,13 @@ void AMartiEOSuite::OnPreStep(float DeltaTime)
 	CUtil::FindChildActorsRecursive<AGimbalBase>(this, gimbals);
 	if (gimbals.Num() > 0) {
 		pGimbal = gimbals[0];
-	}
-	
+	}	
 	
 }
 
 void AMartiEOSuite::OnStep(float DeltaTime)
 {
+	Super::OnStep(DeltaTime);
 }
 
 void AMartiEOSuite::OnRecievedMessage(SMartiGenericMessage* p_commands)

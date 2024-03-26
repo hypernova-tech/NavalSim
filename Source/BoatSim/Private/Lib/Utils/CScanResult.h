@@ -39,6 +39,7 @@ struct SSectorInfo
 	FLOAT64 AzimuthStepDeg;
 	INT32S ScanLineCount;
 	TArray<FVector> SectorData;
+	TArray<EScanObjectType> ObjectType;
 	TArray<TArray<SScanLineEntry>*> ScanLines;
 
 
@@ -58,21 +59,23 @@ public:
 	}
 	void Reset() {
 		SectorData.Reset();
-
+		ObjectType.Reset();
 		for (INT32S i = 0; i < ScanLines.Num(); i++) {
 			ScanLines[i]->Reset();
 		}
 	
 	}
 
-	void Add(FVector& vec)
+	void Add(FVector& vec, EScanObjectType object_type = EScanObjectType::ScanObjectTypeUnknown)
 	{
 		SectorData.Add(vec);
-	
+		ObjectType.Add(object_type);
 	}
 	void Add(FVector& vec, INT32S azimuth_scan_ind, EScanObjectType object_type = EScanObjectType::ScanObjectTypeUnknown)
 	{
 		SectorData.Add(vec);
+		ObjectType.Add(object_type);
+
 		if (azimuth_scan_ind < ScanLines.Num()) {
 			SScanLineEntry entry;
 			entry.Pos = vec;

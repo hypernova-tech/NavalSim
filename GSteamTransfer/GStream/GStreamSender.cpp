@@ -12,7 +12,7 @@ int TotalPushed = 0;
 
 static void enough_data_callback(GstAppSrc* src, gpointer user_data) {
     // Your code to handle the situation when appsrc has enough data
-    std::cout << "appsrc has enough data, pausing or slowing data feed." << std::endl;
+    //std::cout << "appsrc has enough data, pausing or slowing data feed." << std::endl;
     // You can use user_data to access your application's data structures
 }
 static void need_data_callback(GstAppSrc* src, guint length, gpointer user_data) {
@@ -473,38 +473,46 @@ uint8_t* GStreamSender::ConvertRGBAtoYCbCr(SSharedMemBufferHdr *p_hdr,  std::uin
 
 void GStreamSender::FeedData(uint8_t* data, int size) {
 
-    if (pLastBuff == NULL) {
-        pLastBuff = new uint8_t[size];
-    }
 
-    memcpy(pLastBuff, data, size);
-    LastSize = size;
-     
-    
- 
     if (!this->AppSrc) {
         return; // AppSrc is not initialized
     }
 
     GstClockTime buffer_duration = gst_util_uint64_scale_int(1, GST_SECOND, 30); // 1/30th of a second
    
-    GstBuffer* buffer = gst_buffer_new_allocate(NULL, size, NULL);
-    auto filled = gst_buffer_fill(buffer, 0, data, size);
+    GstMapInfo map;
+    /*
+    if (pFeederBuffer == nullptr) {
+        pFeederBuffer = gst_buffer_new_allocate(NULL, size, NULL);
+        pFeederBuffer = gst_buffer_make_writable(pFeederBuffer);
+  
+    }
+    */
+    pFeederBuffer = gst_buffer_new_allocate(NULL, size, NULL);
+    /*
+    if (gst_buffer_map(pFeederBuffer, &map, GST_MAP_WRITE)) {
+        memcpy(map.data, data, size);
+        gst_buffer_unmap(pFeederBuffer, &map);
+    }
+    */
+    gst_buffer_fill(pFeederBuffer, 0, data, size);
+    
+    //auto filled = gst_buffer_fill(pFeederBuffer, 0, data, size);
     // Set buffer PTS. DTS is not set here as it's often not necessary for simple cases.
-    GST_BUFFER_PTS(buffer) = TimeStamp;
-    GST_BUFFER_DURATION(buffer) = buffer_duration;
+    GST_BUFFER_PTS(pFeederBuffer) = TimeStamp;
+    GST_BUFFER_DURATION(pFeederBuffer) = buffer_duration;
 
     TimeStamp += buffer_duration;
     GstFlowReturn ret;
    
 
-    g_signal_emit_by_name(this->AppSrc, "push-buffer", buffer, &ret);
+    g_signal_emit_by_name(this->AppSrc, "push-buffer", pFeederBuffer, &ret);
 
     if (ret != GST_FLOW_OK) {
         // Handle error
     }
-
-    gst_buffer_unref(buffer);
+    
+    gst_buffer_unref(pFeederBuffer);
 
     //g_timer_start(this->AppSrc->timer);
 }

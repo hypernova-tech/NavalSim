@@ -1,0 +1,507 @@
+// FarSounder Navigation System API
+// Copyright FarSounder, Inc. All rights reserved.
+//
+// This work is an unpublished work and contains confidential,
+// proprietary and trade secret information of FarSounder, Inc.
+//
+// Access to this work is restricted to:
+//
+//   (i) FarSounder, Inc. employees who have a need to know how to perform
+//       tasks within the scope of their assignments and
+//
+//   (ii) Entities other than FarSounder, Inc. who have entered into
+//        appropriate license agreements.
+//
+// No part of this work may be used, practiced, performed, copied,
+// distributed, revised, modified, translated, abridged, condensed,
+// expanded, collected, compiled, linked, recast, transformed or adapted
+// without the prior written consent of FarSounder, Inc.
+//
+// Any use or exploitation of this work without authorization could
+// subject the perpetrator to criminal and civil liability.
+
+// Overview:
+//
+// FarSounder's Navigation System is composed of a processing computer connected
+// to a transducer module. The processing computer provides the Protobuf encoded
+// data detailed in this file via a ZeroMQ socket. Each network port functions
+// independently and may be connected to as needed.
+//
+// Please note that port numbers specified in this file are provided as defaults
+// only. Clients should be built in a way that allows for the ports to be
+// individually configured. This allows us to work around any port conflicts
+// that may arise due to other systems in operation on the vessel.
+//
+// Please note that while all message parameters are marked as optional, the
+// expectation is that they are all used. Marking them as optional is a
+// Protobuf technique that provides more robustness against future changes.
+//
+// For this release of the Navigation System, FarSounder is using the
+// following tool versions:
+//
+//   Protobuf v2.5.0. Note that this may change if there are important patches
+//   and/or updates.
+//
+//   ZeroMQ v4.1.4. Note that this may change if there are important patches
+//   and/or updates.
+
+// Version 1.6
+
+syntax = "proto2";
+
+import "array.proto";
+import "grid_description.proto";
+import "nav_info.proto";
+import "time.proto";
+
+package proto.nav_api;
+
+option optimize_for = LITE_RUNTIME;
+
+
+// Generic result message. This is included with responses to certain remote
+// procedure call (RPC) style requests.
+message RequestResult {
+  enum ResultCode {
+    kSuccess = 0;
+    kUnknownError = 1;
+    kOperationUnavailable = 2;
+    kParameterOutOfRange = 3;
+    kParameterMissing = 4;
+    kInvalidRequest = 5;
+  }
+  optional time.Time time = 1;
+  optional ResultCode code = 2;
+  optional string result_detail = 3;
+}
+
+
+// HydrophoneData: This is the filtered receiver signal outputted by a sonar's
+// Transducer Module. As each receiver is generally comprised of multiple
+// receiver elements arranged into a receiver array, hydrophone data includes
+// the raw signals for all the elements in the array. This is sent regularly at
+// approximately .5Hz-2Hz depending on the system configuration and settings.
+//
+// FarSounder's user interface display uses hydrophone data in its status
+// viewer. This data type is included so that 3rd party systems can replicate a
+// similar display if desired. This display is used for troubleshooting and
+// checking that the system is transmitting and/or receiving. The FarSounder
+// display shows a "checker board" indicating the geometric layout of the
+// receiver array. Each square in the "checker board" represents a single
+// receiver element. The color of each square is related to total energy
+// received by that receiver. This lets the user quickly see if a single channel
+// is not operating well. The FarSounder display also allows a user to select a
+// specific channel and display the timeseries of that single channel in an
+// O-scope like display.
+//
+// See also "F33583-FarSounder_IDD Appendix B: Hydrophone Data".
+//
+// Network details:
+// - ZeroMQ pattern: Publish-subscribe
+// - Default port: 61501
+message HydrophoneData {
+  // Time stamp for when the timeseries was recorded.
+  optional time.Time time = 1;
+  // raw_timeseries data is stored as a 2D array with dimensions channels by
+  // samples. The channel data can be mapped to the array channels as follows:
+  //
+  //      ----------------------------------
+  //      |(v-1)h - 1    ...      (v-1)h   |
+  //      |     ...                   ...  |
+  //      |    3h-1      ...          2h   |
+  //      |    2h-1      ...           h   |
+  //      |     h-1      ...   2   1   0   |
+  //      ----------------------------------
+  //
+  // Notes:
+  //   Channel layout when looking AT the array face from outside the
+  //   Transducer Module.
+  //   h == num_hor_phones
+  //   v == num_ver_phones
+  optional array.ArrayData raw_timeseries = 2;
+  // Number of horizontal hydrophones in the node's receiver array.
+  optional int32 num_hor_phones = 3;
+  // Number of vertical hydrophones in the node's receiver array.
+  optional int32 num_ver_phones = 4;
+  // Unique string to identify the sonar this data came from.
+  optional string serial = 5;
+  // Identification string for the transmit type used for this dataset.
+  optional string transmit_id = 6;
+}
+
+
+// TargetData is the 3-dimensional data processed from the sonar. The data is
+// split into two primary groups: the bottom and in-water detections. In-water
+// data is further organized into "groups" - a collection of points organized
+// into groups.
+//
+// In FarSounder's display software, the "bottom" is drawn as a smoothed
+// surface. It is generally limited to about 8 times the depth of water below
+// the Transducer Module (see
+// http://www.farsounder.com/technology/blog/water_depth_limit for more
+// information). The bottom image can be drawn with color mapped to depth or
+// color mapped to signal strength. This is 3D information and can be displayed
+// in a top down orthographic projection or as a 3D surface with perspective.
+//
+// In FarSounder's display software, in-water targets are drawn separate from
+// the sea floor. When these targets are located beyond the water depth limit of
+// the sonar, their depth information is not reliable.
+//
+// Example screen shots of FarSounder's display can be found at:
+// http://www.farsounder.com/multimedia/screenshots
+//
+// Network details:
+// - ZeroMQ pattern: Publish-subscribe
+// - Default port: 61502
+message TargetData {
+  // Time stamp for when this data was collected.
+  optional time.Time time = 1;
+  // Unique string to identify the sonar this data came from.
+  optional string serial = 2;
+  // Heading and lat/lon position at time of data collection.
+  // Note that the position and heading displayed in the SonaSoft coning display
+  // may be updating a rate different from the ping rate. Further, this value
+  // is filtered if Settings -> System Settings -> "Filter heading and position"
+  // is checked.
+  optional nav_info.Heading heading = 4;
+  optional nav_info.Position position = 5;
+  // The bottom (i.e. sea floor) is a collection of points arranged into a grid.
+  // This data is generally expected to be sparse. One example of how to
+  // generate a 3D sea floor image is described in "F33583-FarSounder_IDD
+  // Appendix C: 3D Target Data".
+  repeated Bin bottom = 6;
+  // Each group is a collection of points in the water column that is detected
+  // to be a navigationally significant target.
+  repeated Group groups = 7;
+  // Grid description describes the angle space that this data originates
+  // from.
+  optional grid_description.GridDescription grid_description = 8;
+  // Maximum depth of Bins contained in this dataset.
+  optional double max_depth = 9;
+  // max_range_index is the maximum number of bins that can occur along a
+  // horizontal look angle.
+  optional int32 max_range_index = 10;
+}
+
+
+// A Bin is an individual point in the water located relative to the sonar. All
+// targets (both sea bottom and in-water) are a collection of Bins. Used by the
+// Group and TargetData messages.
+//
+// See also "F33583-FarSounder_IDD Appendix A: Coordinate System".
+message Bin {
+  // hor, ver, and range index values describe the location of this Bin in its
+  // original index space. They are included to facilitate re-packing the data
+  // into an array structure when/if needed.
+  optional int32 hor_index = 1;
+  optional int32 ver_index = 2;
+  optional int32 range_index = 3;
+  // cross_range, down_range, and depth values describe the location of this bin
+  // (in meters) relative to the sonar face.
+  optional float cross_range = 4;
+  optional float down_range = 5;
+  optional float depth = 6;
+  // Range normalized loudness of this point.
+  optional float strength = 7;
+  // This parameter is deprecated.
+  optional float confidence = 8;
+}
+
+
+// A Group is container of Bins. Used by the TargetData message.
+message Group {
+  repeated Bin bins = 1;
+}
+
+
+// The FieldOfView enum represents the current range/sector_width mode.
+// Different products are capable of operating in different modes.
+enum FieldOfView {
+  // FS-3DT systems:
+  k90d110m = 0;   // 90 degree sector out to 110 meters range
+  k90d220m = 1;   // 90 degree sector out to 220 meters range
+  k90d330m = 2;   // 90 degree sector out to 330 meters range
+  k60d440m = 3;   // 60 degree sector out to 440 meters range
+  kAlt = 4;       // Alternate between k90d330m and k60d44m with each ping
+  // Argos-500 & Argos-1000 systems:
+  k120d100m = 5;   // 120 degree sector out to 100 meters range
+  k120d200m = 6;   // 120 degree sector out to 200 meters range
+  k90d500m = 7;   // 90 degree sector out to 500 meters range
+  // Argos-1000 systems only:
+  k60d1000m = 8;  // 60 degree sector out to 1000 meters range
+  // Argos-350 systems:
+  k90d100m = 9;
+  k90d200m = 10;
+  k90d350m = 11;
+}
+
+
+// The current processor settings can be accessed via both "Publish-subscribe"
+// and "Request-reply" methods. When accessed via the Publish-subscribe method,
+// all subscribers are notified with the latest changes whenever a value
+// changes. This way if the value is changed by another client or on the server,
+// all clients are notified. This same information can be requested via the
+// GetProcessorSettingsRequest/GetProcessorSettingsResponse messages.
+//
+// Network details:
+// - ZeroMQ pattern: Publish-subscribe
+// - Default port: 61503
+message ProcessorSettings {
+  enum SystemType {
+    kFS3DT = 0;  // FS-3DT sonar
+    kFS500 = 1;  // Argos-500 sonar
+    kFS1000 = 2;  // Argos-1000 sonar
+    kFS350 = 3; // Argos-350 sonar
+  }
+
+  optional time.Time time = 1;
+
+  // Minimum squelch level to which the sonar can be set when operating in
+  // manual squelch mode.
+  optional float min_inwater_squelch = 2;
+
+  // Maximum squelch level to which the sonar can be set when operating in
+  // manual squelch mode.
+  optional float max_inwater_squelch = 3;
+
+  // Current manual squelch level.
+  optional float inwater_squelch = 4;
+
+  // Enable or disable the squelchless in-water detector.
+  //   true: sonar is operating in auto-squelch mode.
+  //   false: sonar is operating in manual squelch mode.
+  optional bool squelchless_inwater_detector = 5;
+
+  // Enable or disable bottom detection.
+  //   true: sonar will try to detect the sea floor (even if the bottom is below
+  //         the sonar's maximum detection depth).
+  //   false: sonar will not try to detect the sea floor (even if the bottom is
+  //          above the sonar's maximum detection depth).
+  optional bool detect_bottom = 6;
+
+  // Specifies to which product the client is connected. This value cannot be
+  // changed by the client.
+  optional SystemType system_type = 7 [default = kFS3DT];
+
+  // Specifies the sonar's current FieldOfView mode.
+  optional FieldOfView fov = 8 [default = k90d330m];
+}
+
+
+// Use the following messages to access the current processor settings via the
+// "Request-reply" method. It is recommended that at client start up, the client
+// request the current settings even if the client also subscribes to them via
+// the "Publish-subscribe" method. In this way, the client's processor settings
+// display can be initially configured.
+//
+// Network details:
+// - ZeroMQ pattern: Request-reply
+// - Default port: 60501
+message GetProcessorSettingsRequest {
+  // This message is deliberately empty.
+}
+// Response for GetProcessorSettingsRequest.
+message GetProcessorSettingsResponse {
+  // "settings" is only updated if "result" returns "kSuccess".
+  optional RequestResult result = 1;
+  // Current processor settings.
+  optional ProcessorSettings settings = 2;
+}
+
+
+// In the event that a client wishes to change the sonar's current FieldOfView
+// mode, a SetFieldOfViewRequest should be sent with a "fov" value that is valid
+// for the given sonar system. The FieldOfView is only changed if
+// SetFieldOfViewResponse's "result" is "kSuccess". Since different sonar types
+// support different FieldOfView modes, use ProcessorSettings' "system_type"
+// to determine to which sonar product the client is connected.
+//
+// Network details:
+// - ZeroMQ pattern: Request-reply
+// - Default port: 60502
+message SetFieldOfViewRequest {
+  // Must be a mode that is valid for the current sonar product. Otherwise the
+  // response will not return kSuccess.
+  optional FieldOfView fov = 1;
+}
+// Response for SetFieldOfViewRequest.
+message SetFieldOfViewResponse {
+  // The sonar's current FieldOfView mode will only be updated if "result"
+  // returns "kSuccess".
+  optional RequestResult result = 1;
+}
+
+
+// FarSounder's current products are capable of detecting the sea floor up to
+// 50 meters deep. If the software attempts to map a bottom when the actual sea
+// floor is deeper than 50 meters, it may incorrectly draw a "crazy" sea floor
+// at a clearly incorrect location. When the vessel is operating in water
+// depths greater than 50 meters, it is recommended that the user set the
+// enable_bottom_detection state to false. When set to false, the software will
+// not try to find the sea floor and will avoid any "crazy" bottoms.
+//
+// If enable_bottom_detection is set to false while the vessel is operating in
+// waters less than 50 meters deep, echoes reflecting from the bottom may
+// appear in the display as a series of in-water targets at or near the
+// expected bottom depth. In this case, the user should toggle the
+// enable_bottom_detection state to true.
+//
+// In the event that a client wishes to change the sonar's current
+// enable_bottom_detection state, a SetBottomDetectionRequest should be sent
+// with the desired "enable_bottom_detection" state. The sonar's
+// enable_bottom_detection state is only changed to the requested state if
+// SetBottomDetectionResponse's "result" is "kSuccess".
+//
+// Network details:
+// - ZeroMQ pattern: Request-reply
+// - Default port: 60503
+message SetBottomDetectionRequest {
+  // true: the software will try to detect the sea floor.
+  // false: the software will not try to detect the sea floor.
+  optional bool enable_bottom_detection = 1;
+}
+// Response for SetBottomDetectionRequest.
+message SetBottomDetectionResponse {
+  optional RequestResult result = 1;
+}
+
+
+// FarSounder's products use a squelch value when detecting in-water targets.
+// When the squelch level is low, targets with smaller reflectivities can be
+// detected. However, more noise may be detected. When the squelch level is
+// high, more noise is filtered from the detection algorithm.  However, this is
+// done at the cost of smaller target detection. This is somewhat analogous to
+// the squelch on a marine radio. Squelch can be set manually or automatically
+// depending upon the state of ProcessorSettings'
+// "squelchless_inwater_detector".
+//
+// If operating in manual squelch mode (i.e.
+// ProcessorSettings' "squelchless_inwater_detector" == false) and a client
+// wishes to change the sonar's current squelch setting, a
+// SetInWaterSquelchRequest should be sent with the desired squelch value. The
+// current squelch can only be changed in manual squelch mode. The sonar's
+// squelch is only changed to the requested value if the
+// SetInWaterSquelchResponse's "result" is "kSuccess". The valid squelch range
+// is from ProcessorSettings' "min_inwater_squelch" to ProcessorSettings'
+// "max_inwater_squelch".
+//
+// Network details:
+// - ZeroMQ pattern: Request-reply
+// - Default port: 60504
+message SetInWaterSquelchRequest {
+  optional float new_squelch_val = 1;
+}
+// Response for SetInWaterSquelchRequest.
+message SetInWaterSquelchResponse {
+  optional RequestResult result = 1;
+}
+
+
+// In the event that a client wishes to toggle between manual squelch and auto
+// "Squelchless" inwater target detectors, a
+// SetSquelchlessInWaterDetectorRequest should be sent with the desired
+// enable_squelchless_detection state. The sonar's squelchless_inwater_detector
+// state is only changed to the requested state if
+// SetSquelchlessInWaterDetectorResponse's "result" is "kSuccess".
+//
+// Network details:
+// - ZeroMQ pattern: Request-reply
+// - Default port: 60505
+message SetSquelchlessInWaterDetectorRequest {
+  // true: operate in auto mode
+  // false: operate in manual mode
+  optional bool enable_squelchless_detection = 1;
+}
+// Response for SetSquelchlessInWaterDetectorRequest.
+message SetSquelchlessInWaterDetectorResponse {
+  optional RequestResult result = 1;
+}
+
+
+// FarSounder's software needs to know how deep the Transducer Module is
+// installed below the water's surface. Since this can change if the vessel's
+// draft changes, the Transducer Module's depth is calculated from the draft of
+// the vessel and offset between the keel (the deepest part of the vessel
+// determining the draft) and the center of the Transducer Module's array face.
+// For smaller vessels, this will generally not change. For larger vessels, it
+// may. Therefore, it is recommended that clients are able to update the
+// vessel's draft. The keel offset can also be set by the client. However,
+// developers may chose to only display the keel offset, requiring the offset to
+// be set from the sonar's server software.
+//
+// The VesselInfo can be accessed via both "Publish-subscribe" and
+// "Request-reply" methods. When accessed via the Publish-subscribe method, all
+// subscribers are notified with the latest changes whenever a value changes.
+// This way if the value is changed by another client or on the server, all
+// clients are notified. This same information can be requested via the
+// GetVesselInfoRequest/GetVesselInfoResponse messages.
+//
+// Network details:
+// - ZeroMQ pattern: Publish-subscribe
+// - Default port: 61504
+message VesselInfo {
+  // Draft of the keel in meters, positive number.
+  optional float draft = 1;
+  // Offset from the keel to the center of the Transducer Module's array face.
+  // Above keel == positive values.
+  // Below keel == negative values.
+  optional float keel_offset = 2;
+}
+
+
+// Use the following messages to access the current VesselInfo via the
+// "Request-reply" method. It is recommended that at client start up, the client
+// request the current VesselInfo even if the client also subscribes to them via
+// the "Publish-subscribe" method. In this way, the client's VesselInfo display
+// can be initially configured.
+//
+// Network details:
+// - ZeroMQ pattern: Request-reply
+// - Default port: 60506
+message GetVesselInfoRequest {
+  // This message is deliberately empty.
+}
+// Response for GetVesselInfoRequest.
+message GetVesselInfoResponse {
+  // The info value is only updated if "result" == "kSuccess".
+  optional RequestResult result = 1;
+  optional VesselInfo info = 2;
+}
+
+
+// ----- OBSOLETE ------
+// Setting vessel draft via the network is no longer supported. This request
+// will always return "kInvalidRequest". This is only here to allow backwards
+// compatability. This functionality should no longer be included in clients.
+//
+// Network details:
+// - ZeroMQ pattern: Request-reply
+// - Default port: 60507
+message SetDraftRequest {
+  // The vessel's draft in meters.
+  optional float new_draft = 1;
+}
+// Response for SetDraftRequest.
+message SetDraftResponse {
+  optional RequestResult result = 1;
+}
+
+
+// ----- OBSOLETE ------
+// Setting the keel offset via the network is no longer supported. This request
+// will always return "kInvalidRequest". This is only here to allow backwards
+// compatability. This functionality should no longer be included in clients.
+//
+// Network details:
+// - ZeroMQ pattern: Request-reply
+// - Default port: 60508
+message SetKeelOffsetRequest {
+  // Offset from the keel to the center of the Transducer Module's array face.
+  // Above keel == positive values.
+  // Below keel == negative values.
+  optional float new_keel_offset = 1;
+}
+// Response for SetKeelOffsetRequest.
+message SetKeelOffsetResponse {
+  optional RequestResult result = 1;
+}

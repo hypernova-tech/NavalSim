@@ -25,7 +25,7 @@ protected:
 	void SenderLoop();
 	
 	SUserData UserData;
-	
+	GstBuffer* pFeederBuffer = nullptr;
 
 public:
 	int TestImageBufferSize = 0;
