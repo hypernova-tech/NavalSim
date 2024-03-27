@@ -35,8 +35,14 @@ void CSharedMemManager::ThreadFunc()
         if (pSharedMem->ReadData(p_raw, Args.Size, read_len)) {
             // process stream;
             auto hdr = pSharedMem->GetHeader();
+            SFLSDataEntry* p_entries = (SFLSDataEntry*)pSharedMem->GetPayload();
+            int cnt = hdr->DataSize / sizeof(SFLSDataEntry);
+
             auto start = std::chrono::high_resolution_clock::now();
             // HANDLE FRAME
+
+            Args.pFlsIf->UpdateFlsData(*hdr, p_entries, cnt);
+       
             auto end = std::chrono::high_resolution_clock::now();
             auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
 

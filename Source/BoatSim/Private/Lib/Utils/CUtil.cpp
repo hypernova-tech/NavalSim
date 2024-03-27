@@ -304,7 +304,7 @@ void inline CUtil::ScanPie(const STraceArgs& args, double azimuth, double elevat
             p_current_sektor->Add(detected_pos_error, horizantal_ind, object_type);
         }
         else {
-            p_current_sektor->Add(detected_pos_error);
+            p_current_sektor->Add(detected_pos_error, object_type);
         }
         int pos_err = 0;
         if (detected_pos_error.Z < 0) {

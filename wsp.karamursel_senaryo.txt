@@ -1,3 +1,19 @@
+create --name jeoref --bp  --tick 0
+set --name jeoref --instance -1
+set --name jeoref --suppressed 0
+set --name jeoref --standalone 0
+set --name jeoref --position "0.000000 0.000000 0.000000"
+set --name jeoref --rotation "-0.000000 -0.000000 0.000000"
+set --name jeoref --scale "1.000000 1.000000 1.000000"
+set --name jeoref --tempkelvin 300.000000
+set --name jeoref --heatsource 0
+set --name jeoref --annotationid 0
+set --name jeoref --annotatechildren 0
+set --name jeoref --maporiginlat 40.692208
+set --name jeoref --maporiginlon 29.595441
+set --name jeoref --maporiginh 0.000000
+
+
 create --name sidamir --bp MIR
 set --controller sidamir
 set --name sidamir --position "-30.713003 74.190262 0.000000"

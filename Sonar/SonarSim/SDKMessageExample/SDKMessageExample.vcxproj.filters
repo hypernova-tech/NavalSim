@@ -48,6 +48,9 @@
     <ClInclude Include="CFlsIF.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SharedMemTypes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="proto\array.pb.cc">
@@ -68,7 +71,7 @@
     <ClCompile Include="proto\time.pb.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SDKMessageExample.cpp">
+    <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CSharedMem.cpp">

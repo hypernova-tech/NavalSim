@@ -1,10 +1,10 @@
 #pragma once
-#include "CSharedMem.h"
+#include "SharedMemTypes.h"
 class CFlsIF
 {
 
 public:
 
-	void UpdateFlsData(SFLSDataEntry* p_entries, INT32U count);
+	void UpdateFlsData(SSharedMemBufferHdr hdr, SFLSDataEntry* p_entries, INT32U count);
 };
 

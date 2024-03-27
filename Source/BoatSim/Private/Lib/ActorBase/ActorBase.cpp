@@ -541,6 +541,11 @@ FVector AActorBase::GetPositionLatLongHeightMSL()
 
 	return llh;
 }
+FVector AActorBase:: GetPositionXYZMeters()
+{
+	auto pos = GetActorLocation();
+	return TOW(pos);
+}
 FVector AActorBase::GetActorVelocityMetersPerSec()
 {
 	return ActorVelocityMetersPerSec;

@@ -307,7 +307,7 @@ int main()
     pSharedMemManager = new CSharedMemManager();
 
     SAppArgs args;
-    args.ShareMemName = "FLSSM";
+    args.ShareMemName = "FLSSM1";
     args.Size = sizeof(SSharedMemBufferHdr) + 1920 * 1080 * sizeof(SFLSDataEntry);
     pSharedMemManager->Init(args);
     ZeroMQProtoServer();

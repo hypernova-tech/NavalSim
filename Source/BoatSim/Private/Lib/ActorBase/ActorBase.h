@@ -211,6 +211,7 @@ public:
 	void SetShoudPublishATON(bool val);
 
 	FVector GetPositionLatLongHeightMSL();
+	FVector GetPositionXYZMeters();
 	FVector GetActorVelocityMetersPerSec();
 	FVector GetActorAngularVelocityRPYDegPerSec();
 

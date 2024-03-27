@@ -4,16 +4,13 @@ using namespace std;
 #include "types.h"
 #include <string>
 #include "CSharedMem.h"
+#include "CFlsIF.h"
 
 
 struct SAppArgs{
 	INT32U Size;
 	string ShareMemName;
-	string IpAddr;
-	INT32S PortNo;
-	INT32S Width;
-	INT32S Height;
-	INT32S FrameRate;
+	CFlsIF* pFlsIf;
 };
 
 class CSharedMemManager
