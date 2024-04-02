@@ -6,7 +6,13 @@
 #include "zeromq/include/zmq.hpp"
 
 #include "proto/nav_api.pb.h"
-void CFlsIF::UpdateFlsData(SSharedMemBufferHdr hdr, SFLSDataEntry* p_entries, INT32U count)
+const std::string CFlsIF::TargetDataPort = "61502";
+const std::string CFlsIF::FovPort = "60502";
+const std::string CFlsIF::SquelchPort = "60504";
+const std::string CFlsIF::AutoSquelchPort = "60505";
+const std::string CFlsIF::BottomDetectionPort = "60503";
+
+void CFlsIF::UpdateFlsTargetData(SSharedMemBufferHdr hdr, SFLSDataEntry* p_entries, INT32U count)
 {
 
     if (count <= 0) {
@@ -15,7 +21,7 @@ void CFlsIF::UpdateFlsData(SSharedMemBufferHdr hdr, SFLSDataEntry* p_entries, IN
 
     zmq::context_t context(1);
     zmq::socket_t publisher(context, ZMQ_PUB);
-    publisher.bind("tcp://*:61502"); // Adjust the port and protocol as needed
+    publisher.bind("tcp://*:"+ CFlsIF::TargetDataPort); // Adjust the port and protocol as needed
 
     proto::nav_api::TargetData targetData;
 

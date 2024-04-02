@@ -41,7 +41,7 @@ void CSharedMemManager::ThreadFunc()
             auto start = std::chrono::high_resolution_clock::now();
             // HANDLE FRAME
 
-            Args.pFlsIf->UpdateFlsData(*hdr, p_entries, cnt);
+            Args.pFlsIf->UpdateFlsTargetData(*hdr, p_entries, cnt);
        
             auto end = std::chrono::high_resolution_clock::now();
             auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);

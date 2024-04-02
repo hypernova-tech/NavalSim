@@ -19,6 +19,7 @@ SOFTWARE.
 
 #include "proto/nav_api.pb.h"
 #include "CSharedMemManager.h"
+#include "CFLSHostListener.h"
 
 const std::string TcpPortNo = "4152";
 
@@ -301,18 +302,25 @@ proto::nav_api::TargetData CreateTargetData() {
     return target_data;
 }
 CSharedMemManager* pSharedMemManager;
+CFLSHostListener* pHostListener;
+
 int main()
 {
 
     pSharedMemManager = new CSharedMemManager();
+    pHostListener = new CFLSHostListener();
 
     SAppArgs args;
     args.ShareMemName = "FLSSM1";
     args.Size = sizeof(SSharedMemBufferHdr) + 1920 * 1080 * sizeof(SFLSDataEntry);
     pSharedMemManager->Init(args);
+    pHostListener->Init();
+    while (true);
+    
+    
     ZeroMQProtoServer();
 
-    while (true);
+   
     
     std::cout << "Test Communication with SonaSoft API\n";
 

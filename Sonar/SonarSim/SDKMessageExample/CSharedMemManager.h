@@ -20,9 +20,7 @@ protected:
 	std::thread *pThread;
 	SAppArgs Args;
 	CSharedMem* pSharedMem;
-	
 
-	
 	virtual void ThreadFunc();
 public:
 	virtual void Init(const SAppArgs& args);

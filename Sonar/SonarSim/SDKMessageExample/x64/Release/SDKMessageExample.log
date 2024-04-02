@@ -1,13 +1,9 @@
-﻿  CFlsIF.cpp
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\SDKMessageExample\CFlsIF.cpp(45,49): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\SDKMessageExample\CFlsIF.cpp(46,48): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\SDKMessageExample\CFlsIF.cpp(47,28): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\SDKMessageExample\CFlsIF.cpp(57,48): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\SDKMessageExample\CFlsIF.cpp(58,48): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\SDKMessageExample\CFlsIF.cpp(59,28): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(531,5): warning MSB8028: The intermediate directory (x64\Release\) contains files shared from another project (SDKMessageExample.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  CFLSHostListener.cpp
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\SDKMessageExample\CFLSHostListener.cpp(52,51): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
   Generating code
-  2 of 2102 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+  2 of 2318 functions (<0.1%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
     0 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
-  SDKMessageExample.vcxproj -> C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\x64\Release\SDKMessageExample.exe
+  SDKMessageExample.vcxproj -> C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\x64\Release\SonarSimProj.exe
