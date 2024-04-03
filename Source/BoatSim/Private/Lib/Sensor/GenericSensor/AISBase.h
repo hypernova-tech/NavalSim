@@ -36,7 +36,7 @@ protected:
 	virtual void ProcessEntries();
 	double GetCourseOverGround(AActor* Actor);
 public:
-
+	virtual void BeginPlay() override;
 	virtual void InitSensor() override;
 	virtual void Run(float delta_time_sec) override;
 	void PublishClassAPositionReport(AActorBase* p_act);

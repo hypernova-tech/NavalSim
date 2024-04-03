@@ -5,6 +5,10 @@
 
 void UIDASAISSCommIF::BeginPlay()
 {
+
+	RegisterConnectionInfo(0, pUDPConnection->GetConnectionInfo(), pUDPConnection);
+	Super::BeginPlay();
+
 }
 
 void UIDASAISSCommIF::OnReceivedConnectionData(void* connection, INT8U* p_data, INT32U count)
@@ -20,5 +24,10 @@ uint32 UIDASAISSCommIF::Run()
 
 void UIDASAISSCommIF::Stop()
 {
+}
+
+void UIDASAISSCommIF::SendData(void* p_data, uint32 size_in_bytes)
+{
+	pUDPConnection->SendData((const INT8U * )p_data, size_in_bytes);
 }
 

@@ -105,7 +105,9 @@ public:
 	static FString PlatformSpeed;
 	static FString PlatformTurnRate;
 	static FString CamView;
-
+	static FString AISClassType;
+	static FString AISMessagePublishPeriodSec;
+	static FString AISShouldPublishAton;
 	static FString VericalFov;
 	static FString HorizontalFov;
 	static FString HorizontalScanStepAngleDeg;

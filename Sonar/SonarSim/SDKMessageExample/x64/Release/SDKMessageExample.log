@@ -1,9 +1,21 @@
 ﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(531,5): warning MSB8028: The intermediate directory (x64\Release\) contains files shared from another project (SDKMessageExample.vcxproj).  This can lead to incorrect clean and rebuild behavior.
   CFLSHostListener.cpp
 C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\SDKMessageExample\CFLSHostListener.cpp(52,51): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  CFlsIF.cpp
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\SDKMessageExample\CFlsIF.cpp(51,49): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\SDKMessageExample\CFlsIF.cpp(52,48): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\SDKMessageExample\CFlsIF.cpp(53,28): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\SDKMessageExample\CFlsIF.cpp(63,48): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\SDKMessageExample\CFlsIF.cpp(64,48): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\SDKMessageExample\CFlsIF.cpp(65,28): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  CSharedMemManager.cpp
+  main.cpp
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\SDKMessageExample\main.cpp(57,49): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\SDKMessageExample\main.cpp(208,10): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\SDKMessageExample\main.cpp(293,33): warning C4305: 'argument': truncation from 'double' to 'float'
   Generating code
-  2 of 2318 functions (<0.1%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
+  225 of 2334 functions ( 9.6%) were compiled, the rest were copied from previous compilation.
+    16 functions were new in current compilation
+    135 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   SDKMessageExample.vcxproj -> C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\x64\Release\SonarSimProj.exe

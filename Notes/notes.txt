@@ -1,0 +1,8 @@
+RegisterConnection Info
+
+void UIDASAISSCommIF::BeginPlay()
+{
+
+	RegisterConnectionInfo(0, pUDPConnection->GetConnectionInfo(), pUDPConnection);
+
+}

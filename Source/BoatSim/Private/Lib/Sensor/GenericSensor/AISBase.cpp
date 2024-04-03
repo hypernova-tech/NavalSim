@@ -5,6 +5,12 @@
 #include <Lib/SystemManager/SystemManagerBase.h>
 #include <Lib/Math/CMath.h>
 
+void AAISBase::BeginPlay()
+{
+	Super::BeginPlay();
+	//Rename((TEXT("ais")));
+	
+}
 
 
 void AAISBase::InitSensor()
@@ -32,24 +38,29 @@ void AAISBase::Run(float delta_time_sec)
 
 void AAISBase::ProcessEntries()
 {
-	for (auto entry : AisEntries) {
+	for (auto &entry : AisEntries) {
 	
 		if (entry.LastTransmitTimeSec < 0) {
 			entry.LastTransmitTimeSec = FApp::GetCurrentTime();
 		}
 
-		if (FApp::GetCurrentTime() >= (entry.LastTransmitTimeSec + entry.pActor->GetAISMessagePublishPeriodSec())) {
+		auto curr_time = FApp::GetCurrentTime();
+		auto next_time = (entry.LastTransmitTimeSec + entry.pActor->GetAISMessagePublishPeriodSec());
+
+		if(curr_time >= next_time) {
 			if (entry.pActor->GetAISClassType() == 1) {
 				PublishClassAPositionReport(entry.pActor);
 				if (entry.pActor->GetShoudPublishATON()) {
 					PublishATONReport(entry.pActor);
 				}
+				entry.LastTransmitTimeSec = FApp::GetCurrentTime();
 
 			}else if (entry.pActor->GetAISClassType() == 2) {
 				PublishClassBPositionReport(entry.pActor);
 				if (entry.pActor->GetShoudPublishATON()) {
 					PublishATONReport(entry.pActor);
 				}
+				entry.LastTransmitTimeSec = FApp::GetCurrentTime();
 			}
 		}
 		
@@ -72,7 +83,9 @@ double AAISBase::GetCourseOverGround(AActor* Actor)
 
 	return COGInDegrees;
 }
-
+// class A static 5
+// class B part A static 24, PGN: 129809
+// class B part b static 24  PGN: 129810
 void AAISBase::PublishClassAPositionReport(AActorBase* p_act)
 {
 	SClassAPositionReport report;
@@ -82,6 +95,7 @@ void AAISBase::PublishClassAPositionReport(AActorBase* p_act)
 	FVector vel			= p_act->GetActorVelocityMetersPerSec();
 	FVector ang_vel		= p_act->GetActorAngularVelocityRPYDegPerSec();
 
+
 	report.SetMessageID(1);
 	report.SetLat(pos.X);
 	report.SetLon(pos.Y);
@@ -90,6 +104,22 @@ void AAISBase::PublishClassAPositionReport(AActorBase* p_act)
 	report.SetCourseOverGround(GetCourseOverGround(p_act));
 	report.SetTrueHeading(rpy_ang.Z);
 	report.SetRateOfTurn(ang_vel.Z);
+
+
+	/*
+	report.SetMessageID(1);
+	report.SetLat(42.3456789);
+	report.SetLon(-42.3456789);
+	report.SetPositionAccuracy(false);
+	report.SetSpeedOverGround(123.123456);
+	report.SetCourseOverGround(16.123456);
+	report.SetTrueHeading(96.87456);
+	report.SetRateOfTurn(-10.123456);
+	*/
+
+
+
+	pCommIF->SendData(&report, sizeof(SClassAPositionReport));
 
 }
 void AAISBase::PublishClassBPositionReport(AActorBase* p_act)
@@ -102,15 +132,20 @@ void AAISBase::PublishClassBPositionReport(AActorBase* p_act)
 	FVector vel = p_act->GetActorVelocityMetersPerSec();
 	FVector ang_vel = p_act->GetActorAngularVelocityRPYDegPerSec();
 
-	report.SetMessageID(1);
+	report.SetMessageID(18);
 	report.SetLat(pos.X);
 	report.SetLon(pos.Y);
 	report.SetPositionAccuracy(false);
 	report.SetSpeedOverGround(vel.Length());
 	report.SetCourseOverGround(GetCourseOverGround(p_act));
 	report.SetTrueHeading(rpy_ang.Z);
+	//pCommIF->SendData(&report, sizeof(SClassBPositionReport));
 
 }
+/// <summary>
+/// todo aton type
+/// </summary>
+/// <param name="p_act"></param>
 void AAISBase::PublishATONReport(AActorBase* p_act)
 {
 
@@ -121,9 +156,10 @@ void AAISBase::PublishATONReport(AActorBase* p_act)
 	FVector vel = p_act->GetActorVelocityMetersPerSec();
 	FVector ang_vel = p_act->GetActorAngularVelocityRPYDegPerSec();
 
-	report.SetMessageID(1);
+	report.SetMessageID(21);
 	report.SetLat(pos.X);
 	report.SetLon(pos.Y);
 	report.SetPositionAccuracy(false);
 	report.SetElectronicFixingPositionDeviceType(EAISPositionFixingDeviceType::CombinedGPSGLONASS);
+	//pCommIF->SendData(&report, sizeof(SADISAtonReport));
 }

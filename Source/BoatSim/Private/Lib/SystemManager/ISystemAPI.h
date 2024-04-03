@@ -366,4 +366,15 @@ public:
 
 	virtual bool SetAnnotateChildren(AActor* p_actor, bool val) = 0;
 	virtual bool GetAnnotateChildren(AActor* p_actor, bool& val) = 0;
+
+
+
+	virtual bool SetAisClassType(AActor* p_actor, int class_type) = 0;
+	virtual bool GetAisClassType(AActor* p_actor, int &class_type) = 0;
+
+	virtual bool SetAisPublishDurationSec(AActor* p_actor, double val) = 0;
+	virtual bool GetAisPublishDurationSec(AActor* p_actor, double& val) = 0;
+
+	virtual bool SetPublishAton(AActor* p_actor, bool val) = 0;
+	virtual bool GetPublishAton(AActor* p_actor, bool& val) = 0;
 };

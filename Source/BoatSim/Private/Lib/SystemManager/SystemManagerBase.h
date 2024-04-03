@@ -546,6 +546,16 @@ public:
 	virtual bool SetAnnotateChildren(AActor* p_actor, bool val);
 	virtual bool GetAnnotateChildren(AActor* p_actor, bool &val);
 
+
+	virtual bool SetAisClassType(AActor* p_actor, int class_type) ;
+	virtual bool GetAisClassType(AActor* p_actor, int& class_type);
+
+	virtual bool SetAisPublishDurationSec(AActor* p_actor, double val);
+	virtual bool GetAisPublishDurationSec(AActor* p_actor, double& val) ;
+
+	virtual bool SetPublishAton(AActor* p_actor, bool val);
+	virtual bool GetPublishAton(AActor* p_actor, bool& val);
+
 	
 
 	virtual APostProcessVolume *GetMainPostProcessVolume();

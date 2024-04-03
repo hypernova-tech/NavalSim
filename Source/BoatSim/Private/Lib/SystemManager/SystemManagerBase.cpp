@@ -2898,6 +2898,72 @@ bool ASystemManagerBase::GetAnnotateChildren(AActor* p_actor, bool& val)
 	return false;
 }
 
+
+bool ASystemManagerBase::SetAisClassType(AActor* p_actor, int class_type)
+{
+	auto actorbase = ToActorBase(p_actor);
+
+	if (actorbase) {
+		actorbase->SetAISClassType(class_type);
+		return true;
+	}
+	return false;
+}
+bool ASystemManagerBase::GetAisClassType(AActor* p_actor, int& class_type)
+{
+	auto actorbase = ToActorBase(p_actor);
+
+	if (actorbase) {
+		class_type = actorbase->GetAISClassType();
+		return true;
+	}
+	return false;
+}
+
+bool ASystemManagerBase::SetAisPublishDurationSec(AActor* p_actor, double val)
+{
+	auto actorbase = ToActorBase(p_actor);
+
+	if (actorbase) {
+		actorbase->SetAISMessagePublishPeriodSec(val);
+		return true;
+	}
+	return false;
+}
+bool ASystemManagerBase::GetAisPublishDurationSec(AActor* p_actor, double& val)
+{
+	auto actorbase = ToActorBase(p_actor);
+
+	if (actorbase) {
+		val =  actorbase->GetAISMessagePublishPeriodSec();
+		return true;
+	}
+	return false;
+}
+
+bool ASystemManagerBase::SetPublishAton(AActor* p_actor, bool val)
+{
+	auto actorbase = ToActorBase(p_actor);
+
+	if (actorbase) {
+		actorbase->SetShoudPublishATON(val);
+		return true;
+	}
+	return false;
+}
+bool ASystemManagerBase::GetPublishAton(AActor* p_actor, bool& val)
+{
+	auto actorbase = ToActorBase(p_actor);
+
+	if (actorbase) {
+		val = actorbase->GetShoudPublishATON();
+		return true;
+	}
+	return false;
+}
+
+
+
 bool ASystemManagerBase::GetPathSpeed(AActor* p_actor, FLOAT64& val)
 {
 	auto actorbase = ToActorBase(p_actor);

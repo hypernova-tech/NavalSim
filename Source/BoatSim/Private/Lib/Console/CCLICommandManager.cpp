@@ -61,6 +61,10 @@ FString CCLICommandManager::CamView = "camview";
 FString CCLICommandManager::PlatformSpeed = "pltspeed";
 FString CCLICommandManager::PlatformTurnRate = "pltturnrate";
 
+FString CCLICommandManager::AISClassType = "aisclass";
+FString CCLICommandManager::AISMessagePublishPeriodSec = "aispublishperiod";
+FString CCLICommandManager::AISShouldPublishAton="aispublishaton";
+
 FString CCLICommandManager::VericalFov = "vfov";
 FString CCLICommandManager::HorizontalFov = "hfov";
 FString CCLICommandManager::HorizontalScanStepAngleDeg = "hscanstepang";

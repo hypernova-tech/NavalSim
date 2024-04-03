@@ -44,12 +44,14 @@ public:
 	}ID;
 };
 
+
 #pragma pack(push, 1)
 struct SClassAPositionReport {
 	SAISHeader Header;
 	INT32U UserId;
 	INT32U LongDeg;
 	INT32U LatDeg;
+
 	struct {
 		INT8U PositionAccuracy : 1;
 		INT8U AISRAIMFlag : 1;
@@ -58,11 +60,10 @@ struct SClassAPositionReport {
 	}AccRaimTimeStamp;
 	INT16U Cog;
 	INT16U Sog;
-	struct {
-		INT32U AisCommState : 19;
-		INT32U AisTransciverInfo : 5;
-	}CommState;
+	
+	INT8U CommState[3];
 
+	
 	INT16U TrueHeading;
 	INT16U RateOfTurn;
 	struct {
@@ -104,10 +105,11 @@ struct SClassBPositionReport {
 	}AccRaimTimeStamp;
 	INT16U Cog;
 	INT16U Sog;
-	struct {
+	/*	struct {
 		INT32U AisCommState : 19;
 		INT32U AisTransciverInfo : 5;
-	}CommState;
+	}CommState;*/
+	INT8U CommState[3];
 
 	INT16U TrueHeading;
 

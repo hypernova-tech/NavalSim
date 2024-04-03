@@ -243,6 +243,20 @@ void AActorBase::Save(ISaveLoader* p_save_loader)
 	p_save_loader->AddLine(line);
 
 	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
+	p_save_loader->AppendOption(line, CCLICommandManager::AISClassType, GetAISClassType());
+	p_save_loader->AddLine(line);
+
+	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
+	p_save_loader->AppendOption(line, CCLICommandManager::AISShouldPublishAton, GetShoudPublishATON());
+	p_save_loader->AddLine(line);
+
+
+	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
+	p_save_loader->AppendOption(line, CCLICommandManager::AISMessagePublishPeriodSec, GetAISMessagePublishPeriodSec());
+	p_save_loader->AddLine(line);
+
+
+	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
 	p_save_loader->AppendOption(line, CCLICommandManager::TempratureKelvin, TempratureKelvin);
 	p_save_loader->AddLine(line);
 
@@ -257,6 +271,11 @@ void AActorBase::Save(ISaveLoader* p_save_loader)
 	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
 	p_save_loader->AppendOption(line, CCLICommandManager::AnnotateChildren, AnnotateChildrenActors_);
 	p_save_loader->AddLine(line);
+
+	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
+	p_save_loader->AppendOption(line, CCLICommandManager::AnnotateChildren, AnnotateChildrenActors_);
+	p_save_loader->AddLine(line);
+
 
 	/*
 	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
@@ -306,6 +325,12 @@ void AActorBase::SaveJSON(CJsonDataContainer& data)
 	data.Add(CCLICommandManager::Position, TOW(GetActorLocation()));
 	data.Add(CCLICommandManager::Rotation, (CMath::GetActorEulerAnglesRPY(this)));
 	data.Add(CCLICommandManager::Scale, (GetActorScale3D()));
+	data.Add(CCLICommandManager::AISClassType, GetAISClassType());
+	data.Add(CCLICommandManager::AISShouldPublishAton, GetShoudPublishATON());
+	data.Add(CCLICommandManager::AISMessagePublishPeriodSec, GetAISMessagePublishPeriodSec());
+
+
+
 	data.Add(CCLICommandManager::TempratureKelvin, TempratureKelvin);
 	data.Add(CCLICommandManager::IsHeatSource, IsHeatSource_);
 	data.Add(CCLICommandManager::AnnotationId, AnnotationId_);
@@ -571,13 +596,13 @@ FVector AActorBase::UpdateActorVelocityMetersPerSec()
 	}
 
 	
-	float CurrentTime = FPlatformTime::Seconds();
+	double CurrentTime = FApp::GetCurrentTime();
 	FVector CurrentPosition = this->GetActorLocation();
-	if (CurrentTime != PreviousTime) // Avoid division by zero
+	if (CurrentTime != VelPreviousTime) // Avoid division by zero
 	{
-			ActorVelocityMetersPerSec = (CurrentPosition - PreviousPosition) / (CurrentTime - PreviousTime);
+			ActorVelocityMetersPerSec = TOW((CurrentPosition - PreviousPosition) / (CurrentTime - VelPreviousTime));
 		    PreviousPosition = CurrentPosition;
-		    PreviousTime = CurrentTime;
+			VelPreviousTime = CurrentTime;
 		}
 
 	return ActorVelocityMetersPerSec;
@@ -599,15 +624,15 @@ FVector AActorBase::UpdateActorAngularVelocityRPYDegPerSec()
 	}
 
 
-	 float CurrentTime = FPlatformTime::Seconds();
+	 double CurrentTime = FApp::GetCurrentTime();
 	 FRotator CurrentRotation = this->GetActorRotation();
-	 if (CurrentTime != PreviousTime) // Avoid division by zero
+	 if (CurrentTime != AngVelPreviousTime) // Avoid division by zero
 	 {
 	     FRotator DeltaRotation = CurrentRotation - PreviousRotation;
 	     // Convert rotation delta to angular velocity (degrees per second)
-		 ActorAngularVelocityRPYDegPerSec = DeltaRotation.GetNormalized().Euler() / (CurrentTime - PreviousTime);
+		 ActorAngularVelocityRPYDegPerSec = DeltaRotation.GetNormalized().Euler() / (CurrentTime - AngVelPreviousTime);
 	     PreviousRotation = CurrentRotation;
-	     PreviousTime = CurrentTime;
+		 AngVelPreviousTime = CurrentTime;
 	 }
 
 	return ActorAngularVelocityRPYDegPerSec;

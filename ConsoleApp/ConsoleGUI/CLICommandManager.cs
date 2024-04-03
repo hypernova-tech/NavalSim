@@ -89,6 +89,11 @@ public static class CLICommandManager
     [Modifiable] public const string PlatformSpeed = "pltspeed";
     [Modifiable] public const string PlatformTurnRate = "pltturnrate";
     [Modifiable] public const string CamView = "camview";
+
+    [Modifiable] public const string AISClassType = "aisclass";
+    [Modifiable] public const string AISMessagePublishPeriodSec = "aispublishperiod";
+    [Modifiable] public const string AISShouldPublishAton = "aispublishaton";
+
     [Modifiable] public const string ThermalMode = "thermalmode";
     //[Modifiable(IsProperty = true)] public const string AnnotationId = "annotationid";
     [Modifiable] public const string AnnotationId = "annotationid";

@@ -87,6 +87,10 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
 
     }
 
+
+
+    
+
     ret = CommandManager.GetValue(CCLICommandManager::Selected, sret);
     if (ret) {
         auto selected = pSystemAPI->FindActor(sret);
@@ -1028,7 +1032,35 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
 
     }
 
+    ret = CommandManager.GetValue(CCLICommandManager::AISClassType, sint);
+    if (ret) {
+        if (pSystemAPI->SetAisClassType(p_actor, sint)) {
+            return true;
+        }
+    }
+    else {
 
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::AISMessagePublishPeriodSec, dbl);
+    if (ret) {
+        if (pSystemAPI->SetAisPublishDurationSec(p_actor, dbl)) {
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::AISShouldPublishAton, is_enabled);
+    if (ret) {
+        if (pSystemAPI->SetPublishAton(p_actor, is_enabled)) {
+            return true;
+        }
+    }
+    else {
+
+    }
 
 
     return one_success;

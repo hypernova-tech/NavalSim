@@ -535,6 +535,39 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
     else {
 
     }
+
+
+    ret = CommandManager.HasA(CCLICommandManager::AISClassType);
+    if (ret) {
+        if (pSystemAPI->GetAisClassType(p_actor, sint)) {
+            SendConsoleResponse(name, CCLICommandManager::AISClassType, sint);
+            return true;
+        }
+    }
+    else {
+
+    }
+    ret = CommandManager.HasA(CCLICommandManager::AISMessagePublishPeriodSec);
+    if (ret) {
+        if (pSystemAPI->GetAisPublishDurationSec(p_actor, dbl)) {
+            SendConsoleResponse(name, CCLICommandManager::AISMessagePublishPeriodSec, dbl);
+            return true;
+        }
+    }
+    else {
+
+    }
+    ret = CommandManager.HasA(CCLICommandManager::AISShouldPublishAton);
+    if (ret) {
+        if (pSystemAPI->GetPublishAton(p_actor, is_enabled)) {
+            SendConsoleResponse(name, CCLICommandManager::AISShouldPublishAton, is_enabled);
+            return true;
+        }
+    }
+    else {
+
+    }
+
     ret = CommandManager.HasA(CCLICommandManager::Beam);
     if (ret) {
         if (pSystemAPI->GetBeamEnabled(p_actor, is_enabled)) {

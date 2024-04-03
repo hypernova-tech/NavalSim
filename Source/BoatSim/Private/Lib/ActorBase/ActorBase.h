@@ -110,7 +110,8 @@ protected:
 
 	INT64U ExternalUpdateCount = 0;
 	INT64U ExternalUpdateCountScenarioMode = 0;
-	double PreviousTime;
+	double VelPreviousTime;
+	double AngVelPreviousTime;
 	FVector PreviousPosition;
     FRotator PreviousRotation;
 
