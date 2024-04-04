@@ -17,7 +17,7 @@ wstring CSharedMem::StringToWString(const std::string& s)
 
 bool CSharedMem::ReadData(INT8U* p_data, INT32U dest_len, INT32U& read_len)
 {
-    SSharedMemBufferHdr* p_hdr = (SSharedMemBufferHdr*)pMemPtr;
+    volatile SSharedMemBufferHdr* p_hdr = (SSharedMemBufferHdr*)pMemPtr;
     
     if (p_hdr->IsUpdated) {
         if (dest_len >= p_hdr->DataSize) {

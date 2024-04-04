@@ -20,8 +20,6 @@ public:
 	UPROPERTY(EditAnywhere)
 		bool Enabled;
 
-
-
 	UPROPERTY(EditAnywhere)
 		double InitialAngleDeg;
 
@@ -78,6 +76,14 @@ enum EGimbalAxis
 	Yaw
 };
 
+
+enum EGimbalControlMode
+{
+	PositionWithRateMode = 0,
+	OnlyRate,	
+	PositionWithoutRate,
+};
+
 USTRUCT()
 struct FCompEntry {
 	GENERATED_BODY()
@@ -101,6 +107,9 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void OnPreStep(float DeltaTime) override;
 
+	EGimbalControlMode GimbalControlMode = EGimbalControlMode::PositionWithRateMode;
+
+
 	UPROPERTY(BlueprintReadWrite)
 		AActorBase* pHandle;
 
@@ -113,7 +122,8 @@ protected:
 	UPROPERTY(EditAnywhere)
 		FSGimbalAxisInfo YawAxis;
 
-
+	UPROPERTY(BlueprintReadWrite)
+		FVector FixedControlRateDegPerSec = FVector(360,360,360);
 	
 
 	UPROPERTY(EditAnywhere)
@@ -129,8 +139,9 @@ protected:
 	virtual void Run(float delta_time_sec);
 	virtual void FinalizeGimbal();
 
-	virtual void UpdateAxis(EGimbalAxis axis, float delta_time_sec);
-	
+	virtual void UpdateAxisPositionWithRate(EGimbalAxis axis, float delta_time_sec);
+	virtual void UpdateAxisPositionWithoutRate(EGimbalAxis axis, float delta_time_sec);
+	virtual void UpdateAxisOnlyRate(EGimbalAxis axis, float delta_time_sec);
 	void UpdateAttachedActors();
 
 public:	
@@ -154,7 +165,10 @@ public:
 		void RemoveAttachedComp_(USceneComponent* p_comp);
 
 	FSGimbalAxisInfo* GetAxis(EGimbalAxis axis);
+	double GetFixedRate(EGimbalAxis axis);
 	double GetAxisAngleDeg(EGimbalAxis axis);
 	FVector GetRPYDeg();
-	
+
+	void SetGimbalControlMode(EGimbalControlMode mode);
+	EGimbalControlMode GetGimbalControlMode();
 };

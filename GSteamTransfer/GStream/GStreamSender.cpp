@@ -478,7 +478,7 @@ void GStreamSender::FeedData(uint8_t* data, int size) {
         return; // AppSrc is not initialized
     }
 
-    GstClockTime buffer_duration = gst_util_uint64_scale_int(1, GST_SECOND, 30); // 1/30th of a second
+    GstClockTime buffer_duration = gst_util_uint64_scale_int(1, GST_SECOND, 60); // 1/30th of a second
    
     GstMapInfo map;
     /*

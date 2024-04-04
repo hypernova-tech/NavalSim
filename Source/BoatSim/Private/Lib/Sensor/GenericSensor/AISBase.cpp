@@ -4,6 +4,7 @@
 #include "Lib/Sensor/GenericSensor/AISBase.h"
 #include <Lib/SystemManager/SystemManagerBase.h>
 #include <Lib/Math/CMath.h>
+#include <Lib/Utils/CUtil.h>
 
 void AAISBase::BeginPlay()
 {
@@ -19,8 +20,12 @@ void AAISBase::InitSensor()
 	
 	TArray<AActor*> actors;
 
-	ASystemManagerBase::GetInstance()->QueryActors(EActorQueryArgs::AISEnabledActors, actors);
-
+	//ASystemManagerBase::GetInstance()->QueryActors(EActorQueryArgs::AISEnabledActors, actors);
+	auto owner = CUtil::GetParentActor(this);
+	if (owner) {
+		actors.Add(owner);
+	}
+	
 	for (auto actor : actors) {
 		FAISEntry entry;
 		entry.pActor = Cast<AActorBase>(actor);
@@ -45,19 +50,19 @@ void AAISBase::ProcessEntries()
 		}
 
 		auto curr_time = FApp::GetCurrentTime();
-		auto next_time = (entry.LastTransmitTimeSec + entry.pActor->GetAISMessagePublishPeriodSec());
+		auto next_time = (entry.LastTransmitTimeSec + GetAISMessagePublishPeriodSec());
 
 		if(curr_time >= next_time) {
-			if (entry.pActor->GetAISClassType() == 1) {
+			if (GetAISClassType() == 1) {
 				PublishClassAPositionReport(entry.pActor);
-				if (entry.pActor->GetShoudPublishATON()) {
+				if (GetShoudPublishATON()) {
 					PublishATONReport(entry.pActor);
 				}
 				entry.LastTransmitTimeSec = FApp::GetCurrentTime();
 
-			}else if (entry.pActor->GetAISClassType() == 2) {
+			}else if (GetAISClassType() == 2) {
 				PublishClassBPositionReport(entry.pActor);
-				if (entry.pActor->GetShoudPublishATON()) {
+				if (GetShoudPublishATON()) {
 					PublishATONReport(entry.pActor);
 				}
 				entry.LastTransmitTimeSec = FApp::GetCurrentTime();
@@ -162,4 +167,64 @@ void AAISBase::PublishATONReport(AActorBase* p_act)
 	report.SetPositionAccuracy(false);
 	report.SetElectronicFixingPositionDeviceType(EAISPositionFixingDeviceType::CombinedGPSGLONASS);
 	//pCommIF->SendData(&report, sizeof(SADISAtonReport));
+}
+
+
+int AAISBase::GetAISClassType()
+{
+	return AISClassType;
+}
+
+void AAISBase::SetAISClassType(int val)
+{
+	AISClassType = val;
+}
+
+float AAISBase::GetAISMessagePublishPeriodSec()
+{
+	return AISMessagePublishPeriodSec;
+}
+
+void AAISBase::SetAISMessagePublishPeriodSec(float val)
+{
+	AISMessagePublishPeriodSec = val;
+}
+
+bool AAISBase::GetShoudPublishATON()
+{
+	return ShoudPublishATON;
+}
+
+void AAISBase::SetShoudPublishATON(bool val)
+{
+	ShoudPublishATON = val;
+}
+
+void AAISBase::Save(ISaveLoader* p_save_loader)
+{
+	Super::Save(p_save_loader);
+	FString line;
+
+	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
+	p_save_loader->AppendOption(line, CCLICommandManager::AISClassType, GetAISClassType());
+	p_save_loader->AddLine(line);
+
+	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
+	p_save_loader->AppendOption(line, CCLICommandManager::AISShouldPublishAton, GetShoudPublishATON());
+	p_save_loader->AddLine(line);
+
+
+	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
+	p_save_loader->AppendOption(line, CCLICommandManager::AISMessagePublishPeriodSec, GetAISMessagePublishPeriodSec());
+	p_save_loader->AddLine(line);
+}
+
+void AAISBase::SaveJSON(CJsonDataContainer& data)
+{
+	Super::SaveJSON(data);
+
+	data.Add(CCLICommandManager::AISClassType, GetAISClassType());
+	data.Add(CCLICommandManager::AISShouldPublishAton, GetShoudPublishATON());
+	data.Add(CCLICommandManager::AISMessagePublishPeriodSec, GetAISMessagePublishPeriodSec());
+
 }

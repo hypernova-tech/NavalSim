@@ -223,7 +223,7 @@ void ASystemManagerBase::QueryActors(EActorQueryArgs args, TArray<AActor*>& acto
 	}
 	 else if (args == EActorQueryArgs::AISEnabledActors) {
 		for (auto pactor : ActorList) {
-			AActorBase* p_act = ToActorBase(pactor);
+			auto* p_act = ToAIS(pactor);
 			if (p_act) {
 				if (p_act->GetAISClassType() > 0) {
 					actors.Add(p_act);
@@ -2889,7 +2889,7 @@ bool ASystemManagerBase::SetAnnotateChildren(AActor* p_actor, bool val)
 }
 bool ASystemManagerBase::GetAnnotateChildren(AActor* p_actor, bool& val)
 {
-	auto actorbase = ToActorBase(p_actor);
+	auto actorbase = ToAIS(p_actor);
 	
 	if (actorbase) {
 		val = actorbase->GetAnnotateChildrenActors_();
@@ -2901,7 +2901,7 @@ bool ASystemManagerBase::GetAnnotateChildren(AActor* p_actor, bool& val)
 
 bool ASystemManagerBase::SetAisClassType(AActor* p_actor, int class_type)
 {
-	auto actorbase = ToActorBase(p_actor);
+	auto actorbase = ToAIS(p_actor);
 
 	if (actorbase) {
 		actorbase->SetAISClassType(class_type);
@@ -2911,7 +2911,7 @@ bool ASystemManagerBase::SetAisClassType(AActor* p_actor, int class_type)
 }
 bool ASystemManagerBase::GetAisClassType(AActor* p_actor, int& class_type)
 {
-	auto actorbase = ToActorBase(p_actor);
+	auto actorbase = ToAIS(p_actor);
 
 	if (actorbase) {
 		class_type = actorbase->GetAISClassType();
@@ -2922,7 +2922,7 @@ bool ASystemManagerBase::GetAisClassType(AActor* p_actor, int& class_type)
 
 bool ASystemManagerBase::SetAisPublishDurationSec(AActor* p_actor, double val)
 {
-	auto actorbase = ToActorBase(p_actor);
+	auto actorbase = ToAIS(p_actor);
 
 	if (actorbase) {
 		actorbase->SetAISMessagePublishPeriodSec(val);
@@ -2932,7 +2932,7 @@ bool ASystemManagerBase::SetAisPublishDurationSec(AActor* p_actor, double val)
 }
 bool ASystemManagerBase::GetAisPublishDurationSec(AActor* p_actor, double& val)
 {
-	auto actorbase = ToActorBase(p_actor);
+	auto actorbase = ToAIS(p_actor);
 
 	if (actorbase) {
 		val =  actorbase->GetAISMessagePublishPeriodSec();
@@ -2943,7 +2943,7 @@ bool ASystemManagerBase::GetAisPublishDurationSec(AActor* p_actor, double& val)
 
 bool ASystemManagerBase::SetPublishAton(AActor* p_actor, bool val)
 {
-	auto actorbase = ToActorBase(p_actor);
+	auto actorbase = ToAIS(p_actor);
 
 	if (actorbase) {
 		actorbase->SetShoudPublishATON(val);
@@ -2953,7 +2953,7 @@ bool ASystemManagerBase::SetPublishAton(AActor* p_actor, bool val)
 }
 bool ASystemManagerBase::GetPublishAton(AActor* p_actor, bool& val)
 {
-	auto actorbase = ToActorBase(p_actor);
+	auto actorbase = ToAIS(p_actor);
 
 	if (actorbase) {
 		val = actorbase->GetShoudPublishATON();

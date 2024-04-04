@@ -60,9 +60,24 @@ void AGimbalBase::InitGimbal()
 
 void AGimbalBase::Run(float delta_time_sec)
 {
-	UpdateAxis(EGimbalAxis::Roll, delta_time_sec);
-	UpdateAxis(EGimbalAxis::Pitch, delta_time_sec);
-	UpdateAxis(EGimbalAxis::Yaw, delta_time_sec);
+	switch (GimbalControlMode) {
+	case EGimbalControlMode::PositionWithRateMode:
+		UpdateAxisPositionWithRate(EGimbalAxis::Roll, delta_time_sec);
+		UpdateAxisPositionWithRate(EGimbalAxis::Pitch, delta_time_sec);
+		UpdateAxisPositionWithRate(EGimbalAxis::Yaw, delta_time_sec);
+		break;
+	case EGimbalControlMode::OnlyRate:
+		UpdateAxisOnlyRate(EGimbalAxis::Roll, delta_time_sec);
+		UpdateAxisOnlyRate(EGimbalAxis::Pitch, delta_time_sec);
+		UpdateAxisOnlyRate(EGimbalAxis::Yaw, delta_time_sec);
+		break;
+	case EGimbalControlMode::PositionWithoutRate:
+		UpdateAxisPositionWithoutRate(EGimbalAxis::Roll, delta_time_sec);
+		UpdateAxisPositionWithoutRate(EGimbalAxis::Pitch, delta_time_sec);
+		UpdateAxisPositionWithoutRate(EGimbalAxis::Yaw, delta_time_sec);
+		break;
+	}
+
 	UpdateAttachedActors();
 	
 }
@@ -88,6 +103,22 @@ FSGimbalAxisInfo* AGimbalBase::GetAxis(EGimbalAxis axis)
 
 	return nullptr;
 }
+double AGimbalBase::GetFixedRate(EGimbalAxis axis)
+{
+	switch (axis)
+	{
+	case Roll:
+		return FixedControlRateDegPerSec.X;
+	case Pitch:
+		return FixedControlRateDegPerSec.Y;
+	case Yaw:
+		return FixedControlRateDegPerSec.Z;
+	default:
+		break;
+	}
+
+	return 0;
+}
 
 double AGimbalBase::GetAxisAngleDeg(EGimbalAxis axis)
 {
@@ -101,6 +132,16 @@ FVector AGimbalBase::GetRPYDeg()
 	ret.Z = GetAxis(EGimbalAxis::Yaw)->GetCurrentAngleDeg();
 
 	return ret;
+}
+
+void AGimbalBase::SetGimbalControlMode(EGimbalControlMode mode)
+{
+	GimbalControlMode = mode;
+}
+
+EGimbalControlMode AGimbalBase::GetGimbalControlMode()
+{
+	return GimbalControlMode;
 }
 
 
@@ -125,7 +166,7 @@ void AGimbalBase::SetAxisRateDegPerSec_(FVector rpy_en)
 
 
 
-void AGimbalBase::UpdateAxis(EGimbalAxis axis, float delta_time_sec)
+void AGimbalBase::UpdateAxisPositionWithRate(EGimbalAxis axis, float delta_time_sec)
 {
 	FSGimbalAxisInfo* p_axis = GetAxis(axis);
 
@@ -159,7 +200,52 @@ void AGimbalBase::UpdateAxis(EGimbalAxis axis, float delta_time_sec)
 	}
 }
 
+void AGimbalBase::UpdateAxisPositionWithoutRate(EGimbalAxis axis, float delta_time_sec)
+{
+	FSGimbalAxisInfo* p_axis = GetAxis(axis);
+	auto rate = GetFixedRate(axis);
 
+	if (p_axis->Enabled) {
+		double current_angle_deg = p_axis->GetCurrentAngleDeg();
+		double cmd = p_axis->GetCommandAngleDeg();
+
+		if (FMath::Abs(current_angle_deg - cmd) > 1e-6) {
+			double error = cmd - current_angle_deg;
+			double kp = 1.0;
+
+
+			if (error < 0) {
+				kp = -1;
+			}
+
+
+			double next_angle_deg = current_angle_deg + kp * rate * delta_time_sec;
+			next_angle_deg = FMath::Clamp(next_angle_deg, p_axis->MinLimitAngleDeg, p_axis->MaxLimitAngleDeg);
+
+			if (((next_angle_deg - cmd) * (current_angle_deg - cmd)) < 0) {
+				next_angle_deg = cmd;
+			}
+
+			p_axis->SetCurrentAngleDeg(next_angle_deg);
+		}
+		else {
+			p_axis->SetCurrentAngleDeg(cmd);
+		}
+
+	}
+}
+void AGimbalBase::UpdateAxisOnlyRate(EGimbalAxis axis, float delta_time_sec)
+{
+	FSGimbalAxisInfo* p_axis = GetAxis(axis);
+
+	if (p_axis->Enabled) {
+
+		double current_angle_deg = p_axis->GetCurrentAngleDeg();
+		double next_angle_deg = current_angle_deg + p_axis->AngleSpeedDegPerSec * delta_time_sec;
+		next_angle_deg = FMath::Clamp(next_angle_deg, p_axis->MinLimitAngleDeg, p_axis->MaxLimitAngleDeg);
+		p_axis->SetCurrentAngleDeg(next_angle_deg);
+	}
+}
 void AGimbalBase::AttachComp_(USceneComponent* p_comp)
 {
 	FCompEntry entry;
@@ -217,8 +303,7 @@ void AGimbalBase::UpdateAttachedActors()
 	{
 		FQuat final_quat = /*child_entry.InitialTransform.GetRotation() * */additional_quat;
 		CMath::RotateRelative(this, child_entry.pComp, child_entry.InitialTransform, final_quat.Euler());
-		//child_entry.pComp->SetRelativeRotation(final_quat.Rotator());
-		
+		//child_entry.pComp->SetRelativeRotation(final_quat.Rotator());		
 	}
 
 

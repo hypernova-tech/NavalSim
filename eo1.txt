@@ -9,6 +9,7 @@ set --name jeoref --tempkelvin 300.000000
 set --name jeoref --heatsource 0
 set --name jeoref --annotationid 0
 set --name jeoref --annotatechildren 0
+set --name jeoref --annotatechildren 0
 set --name jeoref --maporiginlat 0.000000
 set --name jeoref --maporiginlon 0.000000
 set --name jeoref --maporiginh 0.000000
@@ -24,6 +25,7 @@ set --name thermal --tempkelvin 300.000000
 set --name thermal --heatsource 0
 set --name thermal --annotationid 0
 set --name thermal --annotatechildren 0
+set --name thermal --annotatechildren 0
 set --name thermal --thermalmode 0
 
 create --name env --bp  --tick 0
@@ -36,6 +38,7 @@ set --name env --scale "1.000000 1.000000 1.000000"
 set --name env --tempkelvin 300.000000
 set --name env --heatsource 0
 set --name env --annotationid 0
+set --name env --annotatechildren 0
 set --name env --annotatechildren 0
 set --name env --timeofday 12.001508
 set --name env --envtimeflowscale 1.000000
@@ -60,6 +63,7 @@ set --name annotation --tempkelvin 300.000000
 set --name annotation --heatsource 0
 set --name annotation --annotationid 0
 set --name annotation --annotatechildren 0
+set --name annotation --annotatechildren 0
 
 create --name Gimbal --bp GIMBAL3DOF --tick 2
 set --name Gimbal --parent EOSuite
@@ -73,6 +77,7 @@ set --name Gimbal --tempkelvin 300.000000
 set --name Gimbal --heatsource 0
 set --name Gimbal --annotationid 0
 set --name Gimbal --annotatechildren 0
+set --name Gimbal --annotatechildren 0
 
 create --name EOSuite --bp MARTIEOSUITE --tick 0
 set --name EOSuite --instance -1
@@ -85,7 +90,8 @@ set --name EOSuite --tempkelvin 300.000000
 set --name EOSuite --heatsource 0
 set --name EOSuite --annotationid 0
 set --name EOSuite --annotatechildren 0
-set --name EOSuite --ipaddr1 15.0.110.90
+set --name EOSuite --annotatechildren 0
+set --name EOSuite --ipaddr1 15.0.91.65
 set --name EOSuite --localport1 7770
 set --name EOSuite --remoteport 7770
 set --name EOSuite --slotindex 0
@@ -115,6 +121,7 @@ set --name martivis --tempkelvin 300.000000
 set --name martivis --heatsource 0
 set --name martivis --annotationid 0
 set --name martivis --annotatechildren 0
+set --name martivis --annotatechildren 0
 set --name martivis --slotindex 0
 set --name martivis --rangemin 5.000000
 set --name martivis --rangemax 100.000000
@@ -143,6 +150,7 @@ set --name martiir --scale "1.000000 1.000000 1.000000"
 set --name martiir --tempkelvin 300.000000
 set --name martiir --heatsource 0
 set --name martiir --annotationid 0
+set --name martiir --annotatechildren 0
 set --name martiir --annotatechildren 0
 set --name martiir --slotindex 0
 set --name martiir --rangemin 5.000000

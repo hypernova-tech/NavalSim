@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "Products/IDAS/Sensors/Camera/MartiEOSuite.h"
@@ -10,6 +10,8 @@ void AMartiEOSuite::InitSensor()
 	Super::InitSensor();
 	pMartiCommIF = (UMartiCommIF*)GetCommCommIF();
 	pMartiCommIF->SetHostIf(this);
+
+
 }
 
 void AMartiEOSuite::OnPreStep(float DeltaTime)
@@ -57,8 +59,10 @@ void AMartiEOSuite::OnRecievedMessage(SMartiGenericMessage* p_commands)
 		break;
 
 	case EMartiCommandReportId::SensorCommand:
+	
 		LastSensorCommandPayload = *(SMartiSensorCommandPayload*)p_commands->GetPayload();
 		HandleSensorCommand(&LastSensorCommandPayload);
+
 		break;
 
 	case EMartiCommandReportId::DTVDefogCommand:
@@ -78,6 +82,63 @@ void AMartiEOSuite::HandleLosCommand(SMartiLosCommandPayload* p_cmd)
 	FVector rpy_en		= FVector::ZeroVector;
 	FVector rpy_cmd		= FVector::ZeroVector;
 	FVector rpy_rate	= FVector::ZeroVector;
+
+	ELosModOfOperation mode_op = (ELosModOfOperation)p_cmd->LosModeOfOperation;
+	bool is_forward = false;
+	bool is_slave_rate = false;
+	bool is_slave_position = false;
+	bool is_chicken_head = false;
+	bool is_idle = false;
+	bool is_stabilization = false;
+	bool is_park = false;
+	bool is_track = false;
+	bool is_scan = false;
+	bool is_drift_comp = false;
+
+	switch (mode_op) {
+	case LosModOfOperationNoChange:
+
+		break;
+	case LosModOfOperationPark:// + aşağı baktırıyor
+		is_park = true;
+		break;
+	case LosModOfOperationSleveRate:// +dön
+		is_slave_rate = true;
+		break;
+	case LosModOfOperationSlevePosition:// + bak
+		is_slave_position = true;
+		break;
+	case LosModOfOperationForward: // + kullanıyor,sıfırda kalıyor
+		is_forward = true;
+		break;  
+	case LosModOfOperationIdle:
+		is_idle = false;
+		break;
+	case LosModOfOperationPoint:
+		break;
+	case LosModOfOperationCuedPoint:
+		break;
+	case LosModOfOperationScan:
+		is_scan = true;
+		break;
+	case LosModOfOperationTargetTrack:
+		is_track = true;
+		break;
+	case LosModOfOperationDriftCompensation:// motor drift compensation offset girme
+		is_drift_comp = false;
+		break;
+	case LosModOfOperationStow:
+		break;
+	case LosModOfOperationReserved:
+		break;
+	case LosModOfOperationStabilizasyon:
+		is_stabilization = false;
+		break;// ?
+	case LosModOfOperationChickenHead:// aynı noktaya bakırım
+		is_chicken_head = true;
+		break; 
+
+	}
 
 	if (p_cmd->CommandValidty.AzimuthPositionCommandValid) {
 		rpy_en.Z = 1;
@@ -99,6 +160,33 @@ void AMartiEOSuite::HandleLosCommand(SMartiLosCommandPayload* p_cmd)
 		rpy_rate.Y = p_cmd->ElavationRateCommand;
 	}
 
+	if (is_park) {
+		rpy_cmd.X = 0;
+		rpy_cmd.Y = 45;
+		rpy_cmd.Z = 0;
+		pGimbal->SetGimbalControlMode(EGimbalControlMode::PositionWithoutRate);
+	}
+	else if (is_forward) {
+		rpy_cmd.X = 0;
+		rpy_cmd.Y = 0;
+		rpy_cmd.Z = 0;
+		pGimbal->SetGimbalControlMode(EGimbalControlMode::PositionWithoutRate);
+	}
+	else if (is_slave_rate) {
+		pGimbal->SetGimbalControlMode(EGimbalControlMode::OnlyRate);
+	}
+	else if (is_slave_position) {
+		pGimbal->SetGimbalControlMode(EGimbalControlMode::PositionWithoutRate);
+	}
+	else if (is_idle) {
+		rpy_en = (FVector::ZeroVector);
+	}
+	else if (is_chicken_head) {
+
+	}
+
+
+
 	pGimbal->EnableAxis_(rpy_en);
 	pGimbal->SetCommand_(rpy_cmd);
 	pGimbal->SetAxisRateDegPerSec_(rpy_rate);
@@ -108,9 +196,9 @@ void AMartiEOSuite::HandleLosCommand(SMartiLosCommandPayload* p_cmd)
 
 void AMartiEOSuite::HandleSensorCommand(SMartiSensorCommandPayload* p_cmd)
 {
-	if (p_cmd->CamControl.ActiveVideoSelection == 1) { //ir
+	if (p_cmd->CamControl1.ActiveVideoSelection == 1) { //ir
 		ChangeActiveCamera(pIR);
-	}else if (p_cmd->CamControl.ActiveVideoSelection == 2) { //DTV
+	}else if (p_cmd->CamControl1.ActiveVideoSelection == 2) { //DTV
 		ChangeActiveCamera(pDTV);
 	}
 	UpdateDTVFieldOfView(p_cmd->DTVFieldOfView.Bits);
@@ -128,6 +216,8 @@ void AMartiEOSuite::HandleSensorCommand(SMartiSensorCommandPayload* p_cmd)
 
 	pIR->ContrastLevel = p_cmd->ThermalContrast;
 	pIR->BrightnessLevel = p_cmd->ThermalBrightness;
+
+	pActiveCamera->UpdateFov();
 }
 
 void AMartiEOSuite::HandleDefogCommand(SDTVDefogCommandPayload* p_cmd)
@@ -183,7 +273,7 @@ void AMartiEOSuite::UpdateDTVFieldOfView(EDTVFieldOfView fov_cmd)
 		break;
 	}
 
-	pDTV->FieldOfViewDeg = cur_fov;
+	pDTV->SetFovDeg(cur_fov);
 }
 
 void AMartiEOSuite::UpdateIRFieldOfView(EThermalFieldOfView fov_cmd)
@@ -208,7 +298,7 @@ void AMartiEOSuite::UpdateIRFieldOfView(EThermalFieldOfView fov_cmd)
 		break;
 	}
 
-	pIR->FieldOfViewDeg = cur_fov;
+	pIR->SetFovDeg(cur_fov);
 }
 
 void AMartiEOSuite::SendLosReportCommand()

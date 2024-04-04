@@ -62,6 +62,7 @@ protected:
 	virtual void OnCaptureReady(void* p_data) override;
 public:
 	void SetFovDeg(double fov_deg);
+	void UpdateFov();
 	virtual void Save(ISaveLoader* p_save_loader) override;
 	virtual void SaveJSON(CJsonDataContainer& data) override;
 

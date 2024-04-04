@@ -71,18 +71,19 @@ static bool ProtoMessageToZeromqMessage(
 }
 
 void CFLSHostListener::ZeroMQProtoServer() {
-    std::string port = "60502";
+    std::string port;
     vector< string> ports = { "60502", "60503" };
-    zmq::context_t context(1);
+
     vector< zmq::context_t> contexts;
 
     vector<zmq::socket_t*> sockets;// socket(context, ZMQ_REP);
-    //socket.bind("tcp://*:" + port);
-
+   
+    auto context = zmq::context_t( 1);
     for (int i = 0; i < ports.size(); i++) {
+        port = ports.at(i);
         
-        contexts.push_back(zmq::context_t(i+1));
-        zmq::socket_t* p_soc = new zmq::socket_t(contexts.at(i), ZMQ_REP);
+        zmq::socket_t* p_soc = new zmq::socket_t(context, ZMQ_REP);
+        p_soc->bind("tcp://*:" + port);
         sockets.push_back(p_soc);
         
     }
@@ -138,7 +139,7 @@ void CFLSHostListener::ZeroMQProtoServer() {
             }
      
         }
-        std::this_thread::sleep_for(std::chrono::microseconds(1));
+        std::this_thread::sleep_for(std::chrono::microseconds(100));
         
     }
 }

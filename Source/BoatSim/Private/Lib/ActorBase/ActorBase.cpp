@@ -242,18 +242,7 @@ void AActorBase::Save(ISaveLoader* p_save_loader)
 	p_save_loader->AppendOption(line, CCLICommandManager::Scale, GetActorScale3D());
 	p_save_loader->AddLine(line);
 
-	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
-	p_save_loader->AppendOption(line, CCLICommandManager::AISClassType, GetAISClassType());
-	p_save_loader->AddLine(line);
-
-	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
-	p_save_loader->AppendOption(line, CCLICommandManager::AISShouldPublishAton, GetShoudPublishATON());
-	p_save_loader->AddLine(line);
-
-
-	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
-	p_save_loader->AppendOption(line, CCLICommandManager::AISMessagePublishPeriodSec, GetAISMessagePublishPeriodSec());
-	p_save_loader->AddLine(line);
+	
 
 
 	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
@@ -325,10 +314,7 @@ void AActorBase::SaveJSON(CJsonDataContainer& data)
 	data.Add(CCLICommandManager::Position, TOW(GetActorLocation()));
 	data.Add(CCLICommandManager::Rotation, (CMath::GetActorEulerAnglesRPY(this)));
 	data.Add(CCLICommandManager::Scale, (GetActorScale3D()));
-	data.Add(CCLICommandManager::AISClassType, GetAISClassType());
-	data.Add(CCLICommandManager::AISShouldPublishAton, GetShoudPublishATON());
-	data.Add(CCLICommandManager::AISMessagePublishPeriodSec, GetAISMessagePublishPeriodSec());
-
+	
 
 
 	data.Add(CCLICommandManager::TempratureKelvin, TempratureKelvin);
@@ -529,35 +515,6 @@ void AActorBase::UpdateAnnotation(bool is_enabled)
 	AActorBase::HandleAnnotation(this, is_enabled, AnnotationId_);
 }
 
-int AActorBase::GetAISClassType()
-{
-	return AISClassType;
-}
-
-void AActorBase::SetAISClassType(int val)
-{
-	AISClassType = val;
-}
-
-float AActorBase::GetAISMessagePublishPeriodSec()
-{
-	return AISMessagePublishPeriodSec;
-}
-
-void AActorBase::SetAISMessagePublishPeriodSec(float val)
-{
-	AISMessagePublishPeriodSec = val;
-}
-
-bool AActorBase::GetShoudPublishATON()
-{
-	return ShoudPublishATON;
-}
-
-void AActorBase::SetShoudPublishATON(bool val)
-{
-	ShoudPublishATON = val;
-}
 
 FVector AActorBase::GetPositionLatLongHeightMSL()
 {

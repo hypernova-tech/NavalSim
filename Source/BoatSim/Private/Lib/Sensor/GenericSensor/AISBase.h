@@ -35,6 +35,17 @@ protected:
 	TArray<FAISEntry> AisEntries;
 	virtual void ProcessEntries();
 	double GetCourseOverGround(AActor* Actor);
+
+	UPROPERTY(EditAnywhere)
+		int AISClassType = 0; // 0: none, 1: class A, 2: class B
+
+	UPROPERTY(EditAnywhere)
+		float AISMessagePublishPeriodSec = 10; // 0: none, 1: class A, 2: class B
+
+	UPROPERTY(EditAnywhere)
+		bool ShoudPublishATON = true; // 0: none, 1: class A, 2: class B
+
+
 public:
 	virtual void BeginPlay() override;
 	virtual void InitSensor() override;
@@ -42,4 +53,16 @@ public:
 	void PublishClassAPositionReport(AActorBase* p_act);
 	void PublishClassBPositionReport(AActorBase* p_act);
 	void PublishATONReport(AActorBase* p_act);
+
+	int GetAISClassType();
+	void SetAISClassType(int val);
+
+	float GetAISMessagePublishPeriodSec();
+	void SetAISMessagePublishPeriodSec(float val);
+
+	bool GetShoudPublishATON();
+	void SetShoudPublishATON(bool val);
+
+	void Save(ISaveLoader* p_save_loader);
+	void SaveJSON(CJsonDataContainer& data);
 };

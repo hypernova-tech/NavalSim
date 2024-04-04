@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "CoreMinimal.h"
 #include <Lib/Types/Primitives.h>
 #include <Lib/Utils/CUtil.h>
@@ -8,7 +8,7 @@
 #define START_OF_FRAME1 0x55
 #define START_OF_FRAME2 0xAA
 
-enum EMartiCommandReportId
+enum EMartiCommandReportId:INT8U
 {
 	LosCommand				= 1,
 	LosReport				= 2,
@@ -92,7 +92,7 @@ public:
 			cs += Message.AllData[i];
 		}
 
-		cs = 255 - cs + 1;
+		cs = 255-cs + 1;
 
 		return cs;
 	}
@@ -102,7 +102,9 @@ public:
 		auto cs = ComputeChecksum();
 		auto curr_cs = GetCs();
 
-		return cs == curr_cs;
+		bool ret =  cs == curr_cs;
+
+		return ret;
 
 	}
 
@@ -167,7 +169,7 @@ public:
 #pragma pack(pop)
 
 
-enum EDTVFieldOfView
+enum EDTVFieldOfView:INT8U
 {
 	DTVFieldOfViewNoChange = 0,
 	DTVFieldOfViewNarrow = 1,
@@ -176,7 +178,7 @@ enum EDTVFieldOfView
 	DTVFieldOfViewSuperWide = 4
 };
 
-enum EThermalFieldOfView
+enum EThermalFieldOfView:INT8U
 {
 	ThermalFieldOfViewNoChange = 0,
 	ThermalFieldOfViewNarrow = 1,
@@ -185,7 +187,7 @@ enum EThermalFieldOfView
 
 };
 
-enum ESystemMode
+enum ESystemMode:INT8U
 {
 	SystemModeNoChange = 0,
 	SystemModeOperational = 1,
@@ -196,7 +198,7 @@ enum ESystemMode
 	SystemModeNotReady = 6
 };
 
-enum EDefogCommand
+enum EDefogCommand:INT8U
 {
 	ReadDefogLevel = 0,
 	SetDefogLevel1 = 1,
@@ -205,7 +207,7 @@ enum EDefogCommand
 	SetDefogOff = 4,
 };
 
-enum EDefogStatus
+enum EDefogStatus:INT8U
 {
 	DefogNotUsed = 0,
 	DefogLevel1 = 1,
@@ -213,6 +215,50 @@ enum EDefogStatus
 	DefogLevel3 = 3,
 	DefogOff = 4,
 };
+
+enum ELosModOfOperation:INT8U
+{
+	LosModOfOperationNoChange		= 0,
+	LosModOfOperationPark			= 1, // + aşağı baktırıyor
+	LosModOfOperationSleveRate		= 2, // +dön
+	LosModOfOperationSlevePosition  = 3, // + bak
+	LosModOfOperationForward		= 4, // + kullanıyor,sıfırda kalıyor*/
+	LosModOfOperationIdle			= 5,
+	LosModOfOperationPoint			= 6, 
+	LosModOfOperationCuedPoint		= 7, 
+	LosModOfOperationScan			= 8, 
+	LosModOfOperationTargetTrack		= 9,
+	LosModOfOperationDriftCompensation = 10,// motor drift compensation offset girme
+	LosModOfOperationStow				= 11, 
+	LosModOfOperationReserved			= 12,
+	LosModOfOperationStabilizasyon		= 13,// ?
+	LosModOfOperationChickenHead		= 14, // aynı noktaya bakırım
+};
+
+#pragma pack(push, 1)
+struct SModeContol {
+	INT8U DtvAutoManualMode : 2;
+	INT8U ThermalAutoManualMode : 2;
+	INT8U ThermalPolarity : 2;
+	INT8U Reserved : 2;
+};
+#pragma pack(pop)
+
+#pragma pack(push, 1)
+struct SCamControl1 {
+	INT8U DtvFocus : 3;
+	INT8U ThermalFocus : 3;
+	INT8U ActiveVideoSelection : 2; //1: thermal 2: dtv
+};
+#pragma pack(pop)
+
+#pragma pack(push, 1)
+struct SCamControl2 {
+	INT8U DtvZoom : 3;
+	INT8U ThermalZoom : 3;
+	INT8U Reserved : 2;
+};
+#pragma pack(pop)
 
 #pragma pack(push, 1)
 struct SMartiSensorCommandPayload
@@ -230,13 +276,9 @@ public:
 		EThermalFieldOfView Bits;
 	}ThermalFieldOfView;
 
-	struct {
-		INT8U DtvAutoManualMode:2;
-		INT8U ThermalAutoManualMode : 2;
-		INT8U ThermalPolarity : 2;
-	}ModeContol;
+	
+	SModeContol ModeContol;
 
-	INT8U	ReservedBytes1[2];
 	INT8U	DTVBrightness;
 	INT8U	ThermalBrightness;
 	INT8U	DTVContrast;
@@ -246,15 +288,8 @@ public:
 		INT8U Mode;
 		EThermalFieldOfView Bits;
 	}SystemMode;
-
-	struct {
-		INT8U DtvFocus : 3;
-		INT8U ThermalFocus : 3;
-		INT8U ActiveVideoSelection : 2; //1: thermal 2: dtv
-		INT8U DtvZoom : 3;
-		INT8U ThermalZoom : 3;
-		INT8U Reserved : 2;
-	}CamControl;
+	SCamControl1 CamControl1;
+	SCamControl2 CamControl2;
 
 
 

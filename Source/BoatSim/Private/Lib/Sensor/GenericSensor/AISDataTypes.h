@@ -185,3 +185,50 @@ struct SADISAtonReport { // aids to navigation reports
 };
 #pragma pack(pop)
 
+//AIS Class B "CS" Static Data Report, Part B
+#pragma pack(push, 1)
+struct SClassBStaticDataReport {
+	SAISHeader Header;
+	INT32U UserId;
+	INT32U LongDeg;
+	INT32U LatDeg;
+
+	struct {
+		INT8U PositionAccuracy : 1;
+		INT8U AISRAIMFlag : 1;
+		INT8U TimeStamp : 6;
+
+	}AccRaimTimeStamp;
+	INT16U Cog;
+	INT16U Sog;
+
+	INT8U CommState[3];
+
+
+	INT16U TrueHeading;
+	INT16U RateOfTurn;
+	struct {
+		INT32U NavStatus : 4;
+		INT32U SpecialManeuverIndicator : 2;
+		INT32U NMEAReserved1 : 2;
+		INT32U AISSpare : 3;
+		INT32U NMEAReserved2 : 5;
+		INT32U SequenceId : 1;
+	};
+
+public:
+
+	void SetMessageID(INT8U id);
+	void SetTimeStamp(INT8U val);
+	void SetPositionAccuracy(bool is_low);
+	void SetLat(FLOAT64 lat_deg);
+	void SetLon(FLOAT64 lat_deg);
+
+	void SetCourseOverGround(FLOAT64 val_deg);
+	void SetSpeedOverGround(FLOAT64 val_meters_per_sec);
+	void SetTrueHeading(FLOAT64 val_deg);
+
+	void SetRateOfTurn(FLOAT64 deg_per_sec);
+};
+#pragma pack(pop)
+

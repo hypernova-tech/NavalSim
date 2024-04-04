@@ -23,11 +23,11 @@ int main() {
     args.ShareMemName = "MARTIVISSM";
     
     args.PortNo = 1045;
-    args.IpAddr = "127.0.0.1";// "15.0.91.65";
+    args.IpAddr = "15.0.91.65";// "15.0.91.65";
     args.Width = 720;
     args.Height = 576;
     args.Size = args.Width * args.Height * 4;
-    args.FrameRate = 30;
+    args.FrameRate = 60;
 
     pStreamManager = new CStreamManager();
     pStreamManager->Init(args);

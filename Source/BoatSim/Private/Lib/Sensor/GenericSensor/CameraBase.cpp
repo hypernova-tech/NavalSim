@@ -13,7 +13,7 @@ void ACameraBase::InitSensor()
 	UTextureRenderTarget2D* p_render_target = pPointVisualizer->CreateRenderTarget(SensorWidth, SensorHeight, ASystemManagerBase::GetInstance()->GetUIController()->GetSensorSlotImage(SensorSlotIndex));
 	pSceneCapture->TextureTarget = p_render_target;
 	pSceneCapture->FOVAngle = FovHorizontalDeg;
-
+	FieldOfViewDeg = pSceneCapture->FOVAngle;
 
 	auto pppv = ASystemManagerBase::GetInstance()->GetMainPostProcessVolume();
 	pSceneCapture->PostProcessBlendWeight = 1;
@@ -97,7 +97,16 @@ void ACameraBase::OnCaptureReady(void* p_data)
 void ACameraBase::SetFovDeg(double fov_deg)
 {
 	FieldOfViewDeg = fov_deg;
-	pSceneCapture->FOVAngle = fov_deg;
+	if (pSceneCapture != nullptr) {
+		pSceneCapture->FOVAngle = fov_deg;
+	}
+}
+void ACameraBase::UpdateFov()
+{
+	if (pSceneCapture != nullptr && FieldOfViewDeg != 0) {
+		pSceneCapture->FOVAngle = FieldOfViewDeg;
+	}
+	
 }
 void ACameraBase::Save(ISaveLoader* p_save_loader)
 {
