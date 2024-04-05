@@ -58,6 +58,16 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
 
     }
 
+    ret = CommandManager.GetValue(CCLICommandManager::CamFollow, sret);
+    if (ret) {
+        if (pSystemAPI->SetCamFollow(sret)) {
+            return true;
+        }
+    }
+    else {
+
+    }
+
     ret = CommandManager.GetValue(CCLICommandManager::CamView, sret);
     if (ret) {
         if (SetCamView(sret)) {

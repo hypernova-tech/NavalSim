@@ -522,6 +522,9 @@ public:
 	virtual bool SetCamSpeed(AActor* p_actor, FLOAT64 val) ;
 	virtual bool GetCamSpeed(AActor* p_actor, FLOAT64& val);
 
+	virtual bool SetCamFollow(FString  actor_name);
+	virtual bool GetCamFollow(FString& actor_name);
+
 	virtual bool SetCamView(ECamView view);
 	virtual bool GetCamView(ECamView& view);
 

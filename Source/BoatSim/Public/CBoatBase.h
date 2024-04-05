@@ -145,6 +145,7 @@ public:
 	virtual FLOAT32 GetTurnRateDegPerSec() ;
 	void AdjustCamView(FVector view_dir);
 	void SetTarget(AActor* p_val);
+	AActor* GetTarget();
 	void CamLookAtTarget();
 };
 

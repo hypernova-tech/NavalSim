@@ -51,6 +51,7 @@ namespace ConsoleGUI
             attachToPathToolStripMenuItem = new ToolStripMenuItem();
             detachPathToolStripMenuItem = new ToolStripMenuItem();
             destroyToolStripMenuItem = new ToolStripMenuItem();
+            cameraAttachToolStripMenuItem = new ToolStripMenuItem();
             flowLayoutPanel1 = new FlowLayoutPanel();
             label10 = new Label();
             TBName = new TextBox();
@@ -197,6 +198,8 @@ namespace ConsoleGUI
             ConsoeListBoxContextMenu = new ContextMenuStrip(components);
             clearToolStripMenuItem = new ToolStripMenuItem();
             FileSaver = new SaveFileDialog();
+            contextMenuStrip2 = new ContextMenuStrip(components);
+            contextMenuStrip3 = new ContextMenuStrip(components);
             ActorListContextMenu.SuspendLayout();
             contextMenuConsoleListBox.SuspendLayout();
             tabPage2.SuspendLayout();
@@ -327,35 +330,43 @@ namespace ConsoleGUI
             // 
             // ObjectEditorContextMenu
             // 
-            ObjectEditorContextMenu.Items.AddRange(new ToolStripItem[] { blueprintToolStripMenuItem, attachToPathToolStripMenuItem, detachPathToolStripMenuItem, destroyToolStripMenuItem });
+            ObjectEditorContextMenu.Items.AddRange(new ToolStripItem[] { blueprintToolStripMenuItem, attachToPathToolStripMenuItem, detachPathToolStripMenuItem, destroyToolStripMenuItem, cameraAttachToolStripMenuItem });
             ObjectEditorContextMenu.Name = "contextMenuStrip2";
-            ObjectEditorContextMenu.Size = new Size(139, 92);
+            ObjectEditorContextMenu.Size = new Size(154, 114);
             ObjectEditorContextMenu.Opening += ObjectEditorContextMenu_Opening;
             // 
             // blueprintToolStripMenuItem
             // 
             blueprintToolStripMenuItem.Name = "blueprintToolStripMenuItem";
-            blueprintToolStripMenuItem.Size = new Size(138, 22);
+            blueprintToolStripMenuItem.Size = new Size(153, 22);
             blueprintToolStripMenuItem.Text = "Blueprints";
             // 
             // attachToPathToolStripMenuItem
             // 
             attachToPathToolStripMenuItem.Name = "attachToPathToolStripMenuItem";
-            attachToPathToolStripMenuItem.Size = new Size(138, 22);
+            attachToPathToolStripMenuItem.Size = new Size(153, 22);
             attachToPathToolStripMenuItem.Text = "Attach Path";
+            attachToPathToolStripMenuItem.Click += attachToPathToolStripMenuItem_Click;
             // 
             // detachPathToolStripMenuItem
             // 
             detachPathToolStripMenuItem.Name = "detachPathToolStripMenuItem";
-            detachPathToolStripMenuItem.Size = new Size(138, 22);
+            detachPathToolStripMenuItem.Size = new Size(153, 22);
             detachPathToolStripMenuItem.Text = "Detach Path";
             // 
             // destroyToolStripMenuItem
             // 
             destroyToolStripMenuItem.Name = "destroyToolStripMenuItem";
-            destroyToolStripMenuItem.Size = new Size(138, 22);
+            destroyToolStripMenuItem.Size = new Size(153, 22);
             destroyToolStripMenuItem.Text = "Destroy";
             destroyToolStripMenuItem.Click += destroyToolStripMenuItem_Click_1;
+            // 
+            // cameraAttachToolStripMenuItem
+            // 
+            cameraAttachToolStripMenuItem.Name = "cameraAttachToolStripMenuItem";
+            cameraAttachToolStripMenuItem.Size = new Size(153, 22);
+            cameraAttachToolStripMenuItem.Text = "Camera Attach";
+            cameraAttachToolStripMenuItem.Click += cameraAttachToolStripMenuItem_Click;
             // 
             // flowLayoutPanel1
             // 
@@ -1608,20 +1619,20 @@ namespace ConsoleGUI
             // 
             controlToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { enableToolStripMenuItem1, disableToolStripMenuItem1 });
             controlToolStripMenuItem.Name = "controlToolStripMenuItem";
-            controlToolStripMenuItem.Size = new Size(180, 22);
+            controlToolStripMenuItem.Size = new Size(114, 22);
             controlToolStripMenuItem.Text = "Control";
             // 
             // enableToolStripMenuItem1
             // 
             enableToolStripMenuItem1.Name = "enableToolStripMenuItem1";
-            enableToolStripMenuItem1.Size = new Size(180, 22);
+            enableToolStripMenuItem1.Size = new Size(112, 22);
             enableToolStripMenuItem1.Text = "Enable";
             enableToolStripMenuItem1.Click += enableToolStripMenuItem1_Click;
             // 
             // disableToolStripMenuItem1
             // 
             disableToolStripMenuItem1.Name = "disableToolStripMenuItem1";
-            disableToolStripMenuItem1.Size = new Size(180, 22);
+            disableToolStripMenuItem1.Size = new Size(112, 22);
             disableToolStripMenuItem1.Text = "Disable";
             disableToolStripMenuItem1.Click += disableToolStripMenuItem1_Click;
             // 
@@ -1629,20 +1640,20 @@ namespace ConsoleGUI
             // 
             saveToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { enabledToolStripMenuItem, disabledToolStripMenuItem });
             saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            saveToolStripMenuItem.Size = new Size(180, 22);
+            saveToolStripMenuItem.Size = new Size(114, 22);
             saveToolStripMenuItem.Text = "Save";
             // 
             // enabledToolStripMenuItem
             // 
             enabledToolStripMenuItem.Name = "enabledToolStripMenuItem";
-            enabledToolStripMenuItem.Size = new Size(180, 22);
+            enabledToolStripMenuItem.Size = new Size(119, 22);
             enabledToolStripMenuItem.Text = "Enabled";
             enabledToolStripMenuItem.Click += enabledToolStripMenuItem_Click;
             // 
             // disabledToolStripMenuItem
             // 
             disabledToolStripMenuItem.Name = "disabledToolStripMenuItem";
-            disabledToolStripMenuItem.Size = new Size(180, 22);
+            disabledToolStripMenuItem.Size = new Size(119, 22);
             disabledToolStripMenuItem.Text = "Disabled";
             disabledToolStripMenuItem.Click += disabledToolStripMenuItem_Click;
             // 
@@ -1684,6 +1695,16 @@ namespace ConsoleGUI
             clearToolStripMenuItem.Name = "clearToolStripMenuItem";
             clearToolStripMenuItem.Size = new Size(101, 22);
             clearToolStripMenuItem.Text = "Clear";
+            // 
+            // contextMenuStrip2
+            // 
+            contextMenuStrip2.Name = "contextMenuStrip2";
+            contextMenuStrip2.Size = new Size(61, 4);
+            // 
+            // contextMenuStrip3
+            // 
+            contextMenuStrip3.Name = "contextMenuStrip3";
+            contextMenuStrip3.Size = new Size(61, 4);
             // 
             // MainForm
             // 
@@ -1909,5 +1930,8 @@ namespace ConsoleGUI
         private ToolStripMenuItem saveToolStripMenuItem;
         private ToolStripMenuItem enabledToolStripMenuItem;
         private ToolStripMenuItem disabledToolStripMenuItem;
+        private ContextMenuStrip contextMenuStrip2;
+        private ContextMenuStrip contextMenuStrip3;
+        private ToolStripMenuItem cameraAttachToolStripMenuItem;
     }
 }

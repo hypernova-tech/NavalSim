@@ -2720,6 +2720,37 @@ bool ASystemManagerBase::GetPathLineColor(AActor* p_actor, FColor& val)
 	 return false;
  }
 
+ bool ASystemManagerBase::SetCamFollow(FString  actor_name)
+ {
+	 auto plt = GetPlatform();
+	 if (plt != nullptr) {
+		 auto p_actor = FindActor(actor_name);
+
+		 if (p_actor) {
+			 plt->SetTarget(p_actor);
+			 return true;
+		 }
+		 
+	 }
+
+	 return false;
+ }
+ bool ASystemManagerBase::GetCamFollow(FString& actor_name)
+ {
+	 auto plt = GetPlatform();
+	 if (plt != nullptr) {
+		 auto p_actor = plt->GetTarget();
+
+		 if (p_actor) {
+			 actor_name = p_actor->GetName();
+			 return true;
+		 }
+
+	 }
+
+	 return false;
+ }
+
  bool ASystemManagerBase::SetCamView(ECamView view)
  {
 	 auto plt = GetPlatform();

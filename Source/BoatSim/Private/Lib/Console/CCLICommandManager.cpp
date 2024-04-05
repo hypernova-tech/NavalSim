@@ -57,6 +57,7 @@ FString CCLICommandManager::RemotePort2 = "remoteport2";
 FString CCLICommandManager::CamSpeed = "camspeed";
 
 
+FString CCLICommandManager::CamFollow = "camfollow";
 FString CCLICommandManager::CamView = "camview";
 FString CCLICommandManager::PlatformSpeed = "pltspeed";
 FString CCLICommandManager::PlatformTurnRate = "pltturnrate";

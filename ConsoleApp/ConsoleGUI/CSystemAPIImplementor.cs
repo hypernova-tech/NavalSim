@@ -210,5 +210,17 @@ public class CSystemAPIImplementor
         QueryAnnotation();
     }
 
+    internal void CameraAttach(string selected)
+    {
+        CreateAndSendCommand(CLICommandManager.AnnotationCommand, CLICommandManager.Query);
+
+    }
+    internal void SetCamFollow(string selected)
+    {
+        CreateAndSendCommand(CLICommandManager.SetCommand, CLICommandManager.CamFollow, selected);
+
+    }
     
+
+
 }

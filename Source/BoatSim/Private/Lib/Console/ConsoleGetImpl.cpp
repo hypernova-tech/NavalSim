@@ -71,6 +71,17 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
 
     }
 
+    ret = CommandManager.HasA(CCLICommandManager::CamFollow);
+    if (ret) {
+        if (pSystemAPI->GetCamFollow(sret)) {
+            SendConsoleResponse(name, CCLICommandManager::CamFollow, sret);
+            return true;
+        }
+    }
+    else {
+
+    }
+
     name = CommandManager.GetName();
     if (name != "") {
 

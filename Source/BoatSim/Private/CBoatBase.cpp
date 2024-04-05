@@ -286,6 +286,9 @@ void ACBoatBase::OnDownKeyReleased()
 }
 void ACBoatBase::AdjustCameraDistance(float val)
 {
+	if (val == 0) {
+		return;
+	}
 	FVector cam_forward = pCam->GetForwardVector();
 	FVector cam_pos = pCam->GetComponentLocation();
 	pCam->SetWorldLocation(cam_pos + cam_forward * val * CamMovementSpeed);
@@ -317,6 +320,12 @@ void ACBoatBase::CamLookAtTarget()
 {
 	
 }
+
+AActor* ACBoatBase::GetTarget()
+{
+	return pTarget;
+}
+
 void ACBoatBase::SetTarget(AActor* p_val)
 {
 	pTarget = p_val; 

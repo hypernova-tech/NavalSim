@@ -2175,6 +2175,16 @@ namespace ConsoleGUI
         {
             SystemAPIImplementor.EnableAnnotationSave(false);
         }
+
+        private void cameraAttachToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SystemAPIImplementor.SetCamFollow(Selected);
+        }
+
+        private void attachToPathToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+           
+        }
     }
 }
 

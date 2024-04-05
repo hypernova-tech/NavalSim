@@ -61,6 +61,7 @@ protected:
 	bool ParseVectorFromString(const FString& InString, FVector& OutVector);
 	bool ParseVectorFromString(const FString& InString, FVector2D& OutVector);
 	bool SetCamView(FString cmd);
+	
 	FTimerHandle TimerHandle;
 public:	
 	// Called every frame
