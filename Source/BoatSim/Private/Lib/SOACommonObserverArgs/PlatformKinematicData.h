@@ -17,7 +17,7 @@ class UPlatformKinematicData : public UCSOAObserverArgs
 
 public:
 
-	int    BodId;
+	int    BotId;
 	double BotPosLatDeg;
 	double BotPosLonDeg;
 	double VelNorthNedMeterSec;
@@ -43,7 +43,7 @@ public:
 	}
 
 	void Copy(UPlatformKinematicData *p_dest) {
-		p_dest->BodId = 							BodId;
+		p_dest->BotId = BotId;
 		p_dest->BotPosLatDeg = BotPosLatDeg;
 		p_dest->BotPosLonDeg = BotPosLonDeg;
 		p_dest->VelNorthNedMeterSec = VelNorthNedMeterSec;

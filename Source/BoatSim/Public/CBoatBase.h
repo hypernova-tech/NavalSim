@@ -39,6 +39,9 @@ public:
 		void StopPawn();
 
 	UPROPERTY(EditAnywhere)
+		AActor* pTarget = nullptr;
+
+	UPROPERTY(EditAnywhere)
 		bool IsSaveEnabled = true;
 
 	UPROPERTY(EditAnywhere)
@@ -67,6 +70,8 @@ public:
 	AActor* pFocusedActor = nullptr;
 	const double FocusDistanceMeter = 20;
 
+	FTransform RelativeTransform;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -93,6 +98,10 @@ protected:
 	void FrontView();
 	void BackView();
 	void Perpective();
+
+
+	void UpdateCamTransform();
+	void InitializeCamRelativeTransform();
 
 public:	
 	// Called every frame
@@ -135,5 +144,7 @@ public:
 	virtual void SetTurnRateDegPerSec(FLOAT32 speed) ;
 	virtual FLOAT32 GetTurnRateDegPerSec() ;
 	void AdjustCamView(FVector view_dir);
+	void SetTarget(AActor* p_val);
+	void CamLookAtTarget();
 };
 

@@ -94,6 +94,14 @@ void ASystemManagerBase::RegisterActor(AActor* p_actor)
 			SetMainPlayerController(p_actor->GetName());
 		//}
 	}
+
+
+	auto p_actor_as_platform = ToActorAsPlatform(p_actor);
+	if (p_actor_as_platform) {
+		if (pVirtualPlatform != nullptr) {
+			pVirtualPlatform->SetTarget(p_actor_as_platform);
+		}
+	}
 	
 
 
@@ -253,6 +261,16 @@ AActorBase* ASystemManagerBase::ToActorBase(AActor* p_actor)
 
 	return nullptr;
 }
+AActorAsPlatform* ASystemManagerBase::ToActorAsPlatform(AActor* p_actor)
+{
+	if (p_actor->IsA<AActorAsPlatform>()) {
+		return (AActorAsPlatform*)p_actor;
+	}
+
+	return nullptr;
+}
+
+
 
 bool ASystemManagerBase::SetActorEnabled(AActor* p_actor, bool val)
 {

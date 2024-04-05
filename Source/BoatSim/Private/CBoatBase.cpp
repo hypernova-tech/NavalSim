@@ -42,43 +42,46 @@ void ACBoatBase::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	//TimeSec += DeltaTime;
 	FVector forward;
-	forward = GetActorForwardVector();
-	if (IsForward) {
 
-		FVector pos = GetActorLocation();
+	if (pTarget != nullptr) {
 
-		pos += forward * DeltaTime * MovementSpeedUnitPerSec;
-		SetActorLocation(pos);
+		forward = pTarget->GetActorForwardVector();
+		if (IsForward) {
+
+			FVector pos = pTarget->GetActorLocation();
+
+			pos += forward * DeltaTime * MovementSpeedUnitPerSec;
+			pTarget->SetActorLocation(pos);
+
+
+		}
+		else if (IsBackward) {
+
+			FVector pos = pTarget->GetActorLocation();
+
+			pos -= forward * DeltaTime * MovementSpeedUnitPerSec;
+			pTarget->SetActorLocation(pos);
+
+		}
+
+		if (IsLeft) {
+
+			forward = pTarget->GetActorForwardVector();
+			FQuat rot_qua = FQuat::MakeFromEuler(FVector(0.0f, 0.0f, 45 * DeltaTime)); // The rotation quaternion
+			forward = rot_qua.RotateVector(forward); // Rotate the vector
+			FRotator new_rot = forward.Rotation();
+			pTarget->SetActorRotation(new_rot);
+
+		}
+		else if (IsRight) {
+			forward = pTarget->GetActorForwardVector();
+			FQuat rot_qua = FQuat::MakeFromEuler(FVector(0.0f, 0.0f, -45 * DeltaTime)); // The rotation quaternion
+			forward = rot_qua.RotateVector(forward); // Rotate the vector
+			FRotator new_rot = forward.Rotation();
+			pTarget->SetActorRotation(new_rot);
+		}
+	}
 	
-
-	}
-	else if (IsBackward) {
-
-		FVector pos = GetActorLocation();
-
-		pos -= forward * DeltaTime * MovementSpeedUnitPerSec;
-		SetActorLocation(pos);
-
-	}
-
-	if (IsLeft) {
-
-		forward = GetActorForwardVector();
-		FQuat rot_qua = FQuat::MakeFromEuler(FVector(0.0f, 0.0f, 45 * DeltaTime)); // The rotation quaternion
-		forward = rot_qua.RotateVector(forward); // Rotate the vector
-		FRotator new_rot = forward.Rotation();
-		SetActorRotation(new_rot);
-
-	}
-	else if (IsRight) {
-		forward = GetActorForwardVector();
-		FQuat rot_qua = FQuat::MakeFromEuler(FVector(0.0f, 0.0f, -45 * DeltaTime)); // The rotation quaternion
-		forward = rot_qua.RotateVector(forward); // Rotate the vector
-		FRotator new_rot = forward.Rotation();
-		SetActorRotation(new_rot);
-
-		
-	}
 
 #if true
 	if (pCam != nullptr) {
@@ -101,9 +104,9 @@ void ACBoatBase::Tick(float DeltaTime)
 	}
 #endif
 
-	
+	UpdateCamTransform();
 	Oscillate();
-	UpdateKinematicData();
+	////UpdateKinematicData();
 }
 
 
@@ -197,19 +200,12 @@ void ACBoatBase::BindedMouseMoveX(float val)
 		FRotator curr_rot = pCam->GetRelativeRotation();
 		// Adjust the yaw based on the rate of mouse movement
 		FLOAT64 new_ang = curr_rot.Yaw + val;
-		/*
-		if (new_ang > 360) {
-			new_ang = new_ang - 360;
-		}
-		else if (new_ang < 0) 
-		{
-			new_ang += 360;
-		}
-		*/
+
 		curr_rot.Yaw = new_ang;
 		// Set the updated rotation to the camera
 		pCam->AddRelativeRotation(FRotator(0, 1.3*val, 0));
 		// Set the updated rotation to the camera
+		InitializeCamRelativeTransform();
 		
 		
 	}else if (pCam && bIsLeftMousePressed) {
@@ -219,6 +215,7 @@ void ACBoatBase::BindedMouseMoveX(float val)
 			FVector cam_pos = pCam->GetComponentLocation();
 
 			pCam->SetWorldLocation(cam_pos + cam_right * val * (CamMovementSpeed));
+			InitializeCamRelativeTransform();
 		}
 	
 	}
@@ -237,7 +234,7 @@ void ACBoatBase::BindedMouseMoveY(float val)
 		FQuat DeltaRotation = FQuat(FRotator(-1.3*val,0,0));
 		QuatRotation *= DeltaRotation;
 		pCam->SetWorldRotation(QuatRotation.Rotator());
-
+		InitializeCamRelativeTransform();
 		return;
 		
 	}
@@ -248,6 +245,7 @@ void ACBoatBase::BindedMouseMoveY(float val)
 			FVector cam_pos = pCam->GetComponentLocation();
 
 			pCam->SetWorldLocation(cam_pos + cam_vec * val * (CamMovementSpeed));
+			InitializeCamRelativeTransform();
 		}
 
 	}
@@ -290,8 +288,8 @@ void ACBoatBase::AdjustCameraDistance(float val)
 {
 	FVector cam_forward = pCam->GetForwardVector();
 	FVector cam_pos = pCam->GetComponentLocation();
-
 	pCam->SetWorldLocation(cam_pos + cam_forward * val * CamMovementSpeed);
+	InitializeCamRelativeTransform();
 }
 
 void ACBoatBase::OnFocusEnter()
@@ -312,6 +310,20 @@ void ACBoatBase::AdjustCamView(FVector view_dir)
 	else {
 		CUtil::CameraLookAt(pCam, pCam->GetComponentLocation() + view_dir * TOUE(FocusDistanceMeter));
 	}
+	InitializeCamRelativeTransform();
+}
+
+void ACBoatBase::CamLookAtTarget()
+{
+	
+}
+void ACBoatBase::SetTarget(AActor* p_val)
+{
+	pTarget = p_val; 
+	pFocusedActor = pTarget;
+	FocusCamera(pTarget);
+	InitializeCamRelativeTransform();
+	
 }
 void ACBoatBase::TopView()
 {
@@ -345,10 +357,35 @@ void ACBoatBase::BackView()
 void ACBoatBase::Perpective()
 {
 }
+
+void ACBoatBase::InitializeCamRelativeTransform()
+{
+	if (pCam && pTarget)
+	{
+		// Get the world transform of both the camera and the target
+		FTransform CameraWorldTransform = pCam->GetComponentTransform();
+		FTransform TargetWorldTransform = pTarget->GetActorTransform();
+
+		// Calculate the relative transform of the camera to the target
+		RelativeTransform = CameraWorldTransform.GetRelativeTransform(TargetWorldTransform);
+	}
+}
+void ACBoatBase::UpdateCamTransform()
+{
+
+	if (pTarget && pCam)
+	{
+		FTransform TargetTransform = pTarget->GetActorTransform();
+		FTransform NewCameraTransform = RelativeTransform * TargetTransform;
+
+		pCam->SetWorldLocationAndRotation(NewCameraTransform.GetLocation(), NewCameraTransform.GetRotation());
+	}
+}
 bool ACBoatBase::FocusCamera(AActor* p_actor)
 {
 	CUtil::CameraLookAt(pCam, p_actor,  TOUE(FocusDistanceMeter));
 	pFocusedActor = p_actor;
+	InitializeCamRelativeTransform();
 	return true;
 }
 
@@ -357,7 +394,7 @@ bool ACBoatBase::FocusCamera(AActor* p_actor)
 
 void ACBoatBase::Update(UCSOAObserverArgs* p_args)
 {
-	
+#if 0
 
 	if (p_args->GetSubjectId() == CommonSOAObservers::PlatformKinematicObserverId) {
 		UPlatformKinematicData* p_kinematic = Cast<UPlatformKinematicData>(p_args);
@@ -374,7 +411,7 @@ void ACBoatBase::Update(UCSOAObserverArgs* p_args)
 
 		}
 	}
-
+#endif
 }
 
 void ACBoatBase::UpdateKinematicData()

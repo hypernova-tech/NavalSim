@@ -24,6 +24,7 @@
 #include <Lib/Gimbal/GimbalBase.h>
 #include <Lib/Annotation/AnnotationManager.h>
 #include <Lib/Thermal/ThermalMaterialManager.h>
+#include <Lib/ActorBase/ActorAsPlatform.h>
 #include "SystemManagerBase.generated.h"
 
 
@@ -91,8 +92,13 @@ protected:
 
 	void DetectInstance();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		ACBoatBase* pVirtualPlatform;
+
 	UPROPERTY(EditAnywhere)
 		AMapOrigin* pMapOrigin;
+
+
 
 	UPROPERTY(EditAnywhere)
 		AActor* pFloor;
@@ -260,6 +266,7 @@ public:
 	ACameraBase* ToCameraBase(AActor* p_actor);
 	AAISBase* ToAIS(AActor* p_actor);
 	AAgent* ToAgent(AActor* p_actor);
+	AActorAsPlatform* ToActorAsPlatform(AActor* p_actor);
 	AThermalMaterialManager* ToThermalMaterialManager(AActor* p_actor);
 	template <typename T>
 	T* To(AActor* p_actor);
