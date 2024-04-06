@@ -106,6 +106,8 @@ public:
 	static FString PlatformTurnRate;
 	static FString CamView;
 	static FString CamFollow;
+	static FString CamFollowTranslation;
+	static FString CamFollowEuler;
 	static FString AISClassType;
 	static FString AISMessagePublishPeriodSec;
 	static FString AISShouldPublishAton;

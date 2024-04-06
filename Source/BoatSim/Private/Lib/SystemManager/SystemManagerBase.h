@@ -525,6 +525,12 @@ public:
 	virtual bool SetCamFollow(FString  actor_name);
 	virtual bool GetCamFollow(FString& actor_name);
 
+	virtual bool SetCamFollowTranslation(FVector val);
+	virtual bool GetCamFollowTranslation(FVector& val);
+
+	virtual bool SetCamFollowEuler(FVector  val);
+	virtual bool GetCamFollowEuler(FVector& val);
+
 	virtual bool SetCamView(ECamView view);
 	virtual bool GetCamView(ECamView& view);
 

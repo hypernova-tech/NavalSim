@@ -336,6 +336,34 @@ void ACBoatBase::CamLookAtTarget()
 	
 }
 
+FTransform* ACBoatBase::GetCamRelativeOffset()
+{
+	return &RelativeTransform;
+}
+
+void ACBoatBase::SetCamRelativeOffsetTranslation(FVector val)
+{
+	RelativeTransform.SetTranslation(val);
+}
+
+FVector ACBoatBase::GetCamRelativeOffsetTranslation()
+{
+	return RelativeTransform.GetTranslation();
+}
+
+void ACBoatBase::SetCamRelativeOffsetRPYDeg(FVector val)
+{
+
+	FRotator Rotator = FRotator(val.Y, val.Z, val.X);
+	RelativeTransform.SetRotation(Rotator.Quaternion());
+}
+
+FVector ACBoatBase::GetCamRelativeOffsetRPYDeg()
+{
+	FRotator Rotator = RelativeTransform.GetRotation().Rotator();
+	return FVector(Rotator.Roll, Rotator.Pitch, Rotator.Yaw);
+}
+
 AActor* ACBoatBase::GetTarget()
 {
 	return pTarget;

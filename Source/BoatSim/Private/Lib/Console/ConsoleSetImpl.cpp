@@ -68,6 +68,26 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
 
     }
 
+    ret = CommandManager.GetValue(CCLICommandManager::CamFollowTranslation, vec);
+    if (ret) {
+        if (pSystemAPI->SetCamFollowTranslation(vec)) {
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::CamFollowEuler, vec);
+    if (ret) {
+        if (pSystemAPI->SetCamFollowEuler(vec)) {
+            return true;
+        }
+    }
+    else {
+
+    }
+
     ret = CommandManager.GetValue(CCLICommandManager::CamView, sret);
     if (ret) {
         if (SetCamView(sret)) {

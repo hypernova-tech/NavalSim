@@ -58,6 +58,8 @@ FString CCLICommandManager::CamSpeed = "camspeed";
 
 
 FString CCLICommandManager::CamFollow = "camfollow";
+FString CCLICommandManager::CamFollowTranslation = "camfollowtrans";
+FString CCLICommandManager::CamFollowEuler = "camfolloweuler";
 FString CCLICommandManager::CamView = "camview";
 FString CCLICommandManager::PlatformSpeed = "pltspeed";
 FString CCLICommandManager::PlatformTurnRate = "pltturnrate";

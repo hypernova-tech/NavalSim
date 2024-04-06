@@ -20,9 +20,11 @@ enum EActorQueryArgs
 	Platforms,
 	OnlyAgents,
 	ActorBasesExceptSensorsAndPathsAndGimbals,
+	ActorBasesExceptSensorsAndPathsAndGimbalsActorAsPlatform,
 	Gimbals,
 	AIS,
 	AISEnabledActors,
+	ActorAsPlatform,
 };
 
 
@@ -346,6 +348,16 @@ public:
 
 	virtual bool SetCamFollow(FString  actor_name) = 0;
 	virtual bool GetCamFollow(FString& actor_name) = 0;
+
+
+	virtual bool SetCamFollowTranslation(FVector val) = 0;
+	virtual bool GetCamFollowTranslation(FVector& val) = 0;
+
+	virtual bool SetCamFollowEuler(FVector  val) = 0;
+	virtual bool GetCamFollowEuler(FVector& val) = 0;
+
+	
+		
 
 	virtual bool SetCamView(ECamView view) = 0;
 	virtual bool GetCamView(ECamView &view) = 0;

@@ -134,48 +134,31 @@ FString USaverLoaderBase::CreateCommandWithName(FString cmd, FString name)
 
 void USaverLoaderBase::SavePlatform(ACBoatBase* p_platform, TArray<FString>& cli)
 {
-	if (!p_platform->IsSaveEnabled) {
-		return;
-	}
 
 	FString line;
 
-	if (p_platform->IsSaveLoadCreateEnabled) {
-		line = CreateCommand(pCLI->CreateCommand);
-		AppendOption(line, pCLI->Name, p_platform->GetName());
-		AppendOption(line, pCLI->Bp, p_platform->BlueprintName);
+	
+
+
+	if (p_platform->GetTarget()) {
+		line = CreateCommand(pCLI->SetCommand);
+		AppendOption(line, pCLI->CamFollow, p_platform->GetTarget()->GetName());
 		AddLine(line);
+
+		line = CreateCommand(pCLI->SetCommand);
+		AppendOption(line, pCLI->CamFollowTranslation, p_platform->GetCamRelativeOffsetTranslation());
+		AddLine(line);
+
+		line = CreateCommand(pCLI->SetCommand);
+		AppendOption(line, pCLI->CamFollowEuler, p_platform->GetCamRelativeOffsetRPYDeg());
+		AddLine(line);
+
+		NewLine();
 	}
 	
-
-	line = CreateCommand(pCLI->SetCommand);
-
-	if (CUtil::IsPossedByPlayerController(GetWorld(), p_platform)) {
-		AppendOption(line, pCLI->Controller, p_platform->GetName());
-		AddLine(line);
-	}
 	
 	
 
-	line = CreateCommandWithName(pCLI->SetCommand, p_platform->GetName());
-	auto parent = CUtil::GetParentActor(p_platform);
-	if (parent != nullptr) {
-		AppendOption(line, pCLI->Parent, parent->GetName());
-		AddLine(line);
-	}
-	
-	line = CreateCommandWithName(pCLI->SetCommand, p_platform->GetName());
-	AppendOption(line, pCLI->Position,TOW( p_platform->GetActorLocation()));
-	AddLine(line);
-
-	line = CreateCommandWithName(pCLI->SetCommand, p_platform->GetName());
-	AppendOption(line, pCLI->Rotation, CMath::GetActorEulerAnglesRPY(p_platform));
-	AddLine(line);
-
-	line = CreateCommandWithName(pCLI->SetCommand, p_platform->GetName());
-	AppendOption(line, pCLI->Scale, p_platform->GetActorScale3D());
-	AddLine(line);
-	NewLine();
 
 }
 
@@ -206,16 +189,22 @@ bool USaverLoaderBase::Save(ISystemAPI* p_api, FString file_name)
 	pSystemApi = p_api;
 
 	pCLI = p_api->GetConsole()->GetCommandManager();
-	TArray<AActor*> platforms;
+
 	
-	p_api->QueryActors(EActorQueryArgs::Platforms, platforms);
-	
-	for (auto platform : platforms) {
-		SavePlatform((APlatformBase*)platform, CLIList);
+	TArray<AActor*> actor_as_platforms;
+	p_api->QueryActors(EActorQueryArgs::ActorAsPlatform, actor_as_platforms);
+
+	for (auto val : actor_as_platforms) {
+		AActorBase* p_base = (AActorBase*)val;
+
+		if (p_base && p_base->GetIsSaveEnabled()) {
+			SaveActor(p_base, CLIList);
+			NewLine();
+		}
 	}
 
 	TArray<AActor*> non_sensors;
-	p_api->QueryActors(EActorQueryArgs::ActorBasesExceptSensorsAndPathsAndGimbals, non_sensors);
+	p_api->QueryActors(EActorQueryArgs::ActorBasesExceptSensorsAndPathsAndGimbalsActorAsPlatform, non_sensors);
 
 	for (auto p_actor : non_sensors) {
 		AActorBase* p_actor_base = (AActorBase*)p_actor;
@@ -259,6 +248,14 @@ bool USaverLoaderBase::Save(ISystemAPI* p_api, FString file_name)
 			SaveActor((AActorBase*)p_path, CLIList);
 			NewLine();
 		}
+	}
+
+	TArray<AActor*> platforms;
+
+	p_api->QueryActors(EActorQueryArgs::Platforms, platforms);
+
+	for (auto platform : platforms) {
+		SavePlatform((APlatformBase*)platform, CLIList);
 	}
 
 

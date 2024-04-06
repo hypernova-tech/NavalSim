@@ -185,6 +185,17 @@ void ASystemManagerBase::QueryActors(EActorQueryArgs args, TArray<AActor*>& acto
 		}
 
 	}
+	else if (args == EActorQueryArgs::ActorBasesExceptSensorsAndPathsAndGimbalsActorAsPlatform) {
+		for (auto pactor : ActorList) {
+			if (ToActorBase(pactor)) {
+				if (!ToSensorBase(pactor) && !ToGimbal(pactor) && !ToPath(pactor) && !ToActorAsPlatform(pactor)) {
+					actors.Add(pactor);
+				}
+			}
+
+		}
+
+	}
 	else if (args == EActorQueryArgs::ActorBasesOnlyPaths) {
 		 for (auto pactor : ActorList) {
 			 if (ToActorBase(pactor)) {
@@ -229,6 +240,19 @@ void ASystemManagerBase::QueryActors(EActorQueryArgs args, TArray<AActor*>& acto
 		}
 
 	}
+	 else if (args == EActorQueryArgs::ActorAsPlatform) {
+		for (auto pactor : ActorList) {
+			if (ToActorAsPlatform(pactor)) {
+
+				actors.Add(pactor);
+
+			}
+
+		}
+
+	}
+
+	
 	 else if (args == EActorQueryArgs::AISEnabledActors) {
 		for (auto pactor : ActorList) {
 			auto* p_act = ToAIS(pactor);
@@ -2746,6 +2770,48 @@ bool ASystemManagerBase::GetPathLineColor(AActor* p_actor, FColor& val)
 			 return true;
 		 }
 
+	 }
+
+	 return false;
+ }
+
+ bool ASystemManagerBase::SetCamFollowTranslation(FVector val)
+ {
+	 auto plt = GetPlatform();
+	 if (plt != nullptr) {
+		 plt->SetCamRelativeOffsetTranslation(val);
+		 return true;
+	 }
+
+	 return false;
+ }
+ bool ASystemManagerBase::GetCamFollowTranslation(FVector& val)
+ {
+	 auto plt = GetPlatform();
+	 if (plt != nullptr) {
+		 val = plt->GetCamRelativeOffsetTranslation();		
+		 return true;
+	 }
+
+	 return false;
+ }
+
+ bool ASystemManagerBase::SetCamFollowEuler(FVector  val)
+ {
+	 auto plt = GetPlatform();
+	 if (plt != nullptr) {
+		 plt->SetCamRelativeOffsetRPYDeg(val);
+		 return true;
+	 }
+
+	 return false;
+ }
+ bool ASystemManagerBase::GetCamFollowEuler(FVector& val)
+ {
+	 auto plt = GetPlatform();
+	 if (plt != nullptr) {
+		 auto val = plt->GetCamRelativeOffsetRPYDeg();
+		 return true;
 	 }
 
 	 return false;

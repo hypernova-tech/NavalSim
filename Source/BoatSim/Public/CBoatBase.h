@@ -41,18 +41,6 @@ public:
 	UPROPERTY(EditAnywhere)
 		AActor* pTarget = nullptr;
 
-	
-
-
-	UPROPERTY(EditAnywhere)
-		bool IsSaveEnabled = true;
-
-	UPROPERTY(EditAnywhere)
-		bool IsSaveLoadCreateEnabled = true;
-
-	UPROPERTY(EditAnywhere)
-		FString BlueprintName = "";
-
 	UPROPERTY(BlueprintReadWrite)
 		float MovementSpeedUnitPerSec = 500;
 
@@ -74,8 +62,7 @@ public:
 		bool InterpCam = false;
 
 	UPROPERTY(EditAnywhere)
-		float CamInterpSpeed = 10;
-	
+		float CamInterpSpeed = 10;	
 
 	virtual void PostInitializeComponents() override;
 	AActor* pFocusedActor = nullptr;
@@ -158,5 +145,12 @@ public:
 	void SetTarget(AActor* p_val);
 	AActor* GetTarget();
 	void CamLookAtTarget();
+	FTransform* GetCamRelativeOffset();
+
+	void SetCamRelativeOffsetTranslation(FVector val);
+	FVector GetCamRelativeOffsetTranslation();
+
+	void SetCamRelativeOffsetRPYDeg(FVector val);
+	FVector GetCamRelativeOffsetRPYDeg();
 };
 
