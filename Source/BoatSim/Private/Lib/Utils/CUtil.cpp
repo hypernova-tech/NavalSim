@@ -481,7 +481,7 @@ void  CUtil::CameraLookAt(UCameraComponent* p_looker, AActor* p_target, FLOAT32 
     FVector Direction = (p_looker->GetComponentLocation() - p_target->GetActorLocation()).GetSafeNormal();
 
     // Calculate the new camera position: target position + direction * desired distance
-    FVector NewCameraLocation = p_target->GetActorLocation() + Direction * distance + FVector::UpVector * distance *0.35;
+    FVector NewCameraLocation = p_target->GetActorLocation() + Direction * distance;
 
     // Set the camera's new position
     p_looker->SetWorldLocation(NewCameraLocation);

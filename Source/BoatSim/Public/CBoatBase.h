@@ -41,6 +41,9 @@ public:
 	UPROPERTY(EditAnywhere)
 		AActor* pTarget = nullptr;
 
+	
+
+
 	UPROPERTY(EditAnywhere)
 		bool IsSaveEnabled = true;
 
@@ -51,10 +54,12 @@ public:
 		FString BlueprintName = "";
 
 	UPROPERTY(BlueprintReadWrite)
-	float MovementSpeedUnitPerSec = 500;
+		float MovementSpeedUnitPerSec = 500;
 
 	UPROPERTY(BlueprintReadWrite)
 		float TurnRateDegPerSec = 30;
+
+
 
 	UPROPERTY(EditAnywhere)
 	float OscillationAmplitude = 1;
@@ -64,6 +69,12 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	float CamMovementSpeed = 100;
+
+	UPROPERTY(EditAnywhere)
+		bool InterpCam = false;
+
+	UPROPERTY(EditAnywhere)
+		float CamInterpSpeed = 10;
 	
 
 	virtual void PostInitializeComponents() override;
@@ -100,7 +111,7 @@ protected:
 	void Perpective();
 
 
-	void UpdateCamTransform();
+	void UpdateCamTransform(float delta_time);
 	void InitializeCamRelativeTransform();
 
 public:	

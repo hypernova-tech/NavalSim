@@ -32,7 +32,7 @@ void ACBoatBase::BeginPlay()
 	ASOAImplementor::GetInstance()->Subscribe(CommonSOAObservers::PlatformKinematicObserverId,this);
 	pCam = Cast<UCameraComponent>(GetComponentByClass<UCameraComponent>());
 	pLastData = NewObject< UPlatformKinematicData>();
-
+	PrimaryActorTick.TickGroup = TG_PostUpdateWork;
 	
 }
 
@@ -104,7 +104,7 @@ void ACBoatBase::Tick(float DeltaTime)
 	}
 #endif
 
-	UpdateCamTransform();
+	UpdateCamTransform(DeltaTime);
 	Oscillate();
 	////UpdateKinematicData();
 }
@@ -191,6 +191,10 @@ void ACBoatBase::BindedMoveRight(float val)
 void ACBoatBase::BindedMouseMoveX(float val)
 {
 
+	if (val == 0) {
+		return;
+	}
+
 	if (pCam && bIsRightMousePressed)
 	{
 	
@@ -216,7 +220,12 @@ void ACBoatBase::BindedMouseMoveX(float val)
 
 			pCam->SetWorldLocation(cam_pos + cam_right * val * (CamMovementSpeed));
 			InitializeCamRelativeTransform();
+			
 		}
+		else {
+			
+		}
+		
 	
 	}
 	
@@ -224,7 +233,9 @@ void ACBoatBase::BindedMouseMoveX(float val)
 
 void ACBoatBase::BindedMouseMoveY(float val)
 {
-
+	if (val == 0) {
+		return;
+	}
 	if (pCam && bIsRightMousePressed)
 	{
 
@@ -235,7 +246,7 @@ void ACBoatBase::BindedMouseMoveY(float val)
 		QuatRotation *= DeltaRotation;
 		pCam->SetWorldRotation(QuatRotation.Rotator());
 		InitializeCamRelativeTransform();
-		return;
+		
 		
 	}
 	else if (pCam && bIsLeftMousePressed) {
@@ -246,6 +257,10 @@ void ACBoatBase::BindedMouseMoveY(float val)
 
 			pCam->SetWorldLocation(cam_pos + cam_vec * val * (CamMovementSpeed));
 			InitializeCamRelativeTransform();
+			
+		}
+		else {
+			
 		}
 
 	}
@@ -379,15 +394,23 @@ void ACBoatBase::InitializeCamRelativeTransform()
 		RelativeTransform = CameraWorldTransform.GetRelativeTransform(TargetWorldTransform);
 	}
 }
-void ACBoatBase::UpdateCamTransform()
+void ACBoatBase::UpdateCamTransform(float delta_time)
 {
 
 	if (pTarget && pCam)
 	{
 		FTransform TargetTransform = pTarget->GetActorTransform();
 		FTransform NewCameraTransform = RelativeTransform * TargetTransform;
+		if (InterpCam) {
+			FTransform interped;
+			CMath::SmoothTransformLerp(pCam->GetComponentTransform(), NewCameraTransform, delta_time, CamInterpSpeed, interped);
+			pCam->SetWorldLocationAndRotation(interped.GetLocation(), interped.GetRotation());
 
-		pCam->SetWorldLocationAndRotation(NewCameraTransform.GetLocation(), NewCameraTransform.GetRotation());
+		}
+		else {
+			pCam->SetWorldLocationAndRotation(NewCameraTransform.GetLocation(), NewCameraTransform.GetRotation());
+		}
+	
 	}
 }
 bool ACBoatBase::FocusCamera(AActor* p_actor)

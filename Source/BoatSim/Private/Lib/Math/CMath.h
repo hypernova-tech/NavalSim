@@ -31,4 +31,6 @@ public:
 	static INT32S EncodeSigned32(FLOAT64 val, FLOAT64 lsb);
 	static INT16S EncodeSigned16(FLOAT64 val, FLOAT64 lsb);
 	static INT16U EncodeUnsigned16(FLOAT64 val, FLOAT64 lsb);
+
+	static void SmoothTransformLerp(const FTransform& CurrentTargetTransform, const FTransform& TargetTransform, float DeltaTime, float InterpSpeed, FTransform& new_transform);
 }; 

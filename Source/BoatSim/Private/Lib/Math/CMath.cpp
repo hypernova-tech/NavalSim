@@ -312,3 +312,20 @@ void CMath::RotateRelative(AActor* p_actor, USceneComponent* p_comp, const FTran
     p_comp->SetRelativeTransform(final_trasform);
    
 }
+void CMath::SmoothTransformLerp(const FTransform& CurrentTransform, const FTransform& TargetTransform, float DeltaTime, float InterpSpeed,  FTransform& new_transform)
+{
+   
+    // Interpolate location
+    FVector NewLocation = FMath::Lerp(CurrentTransform.GetLocation(), TargetTransform.GetLocation(), InterpSpeed * DeltaTime);
+
+    // Interpolate rotation
+    // Note: RInterpTo works with FRotator, so we convert to and from FQuat as necessary
+    FRotator NewRotation = FMath::RInterpTo(CurrentTransform.GetRotation().Rotator(), TargetTransform.GetRotation().Rotator(), DeltaTime, InterpSpeed);
+
+    // Interpolate scale
+    FVector NewScale = FMath::Lerp(CurrentTransform.GetScale3D(), TargetTransform.GetScale3D(), InterpSpeed * DeltaTime);
+
+
+    new_transform = FTransform(NewRotation, NewLocation, NewScale);
+}
+

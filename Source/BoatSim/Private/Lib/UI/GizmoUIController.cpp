@@ -147,6 +147,7 @@ FLOAT32 UGizmoUIController::ComputeAxisMovement(ECoordAxis curr_axis, FVector2D 
 		tf = 1;
 
 	}
+	tf = 1;
 	switch (curr_axis) {
 	case ECoordAxis::CoordAxisX:
 		screen_space_dir = CMath::ProjectWorldDirectionToScreenSpace(pc, pTrackedActor->GetActorForwardVector());
@@ -198,7 +199,8 @@ void UGizmoUIController::OnCursorMove()
 	    mouse_drag_2d = FVector2D(LastMouseDeltaX, LastMouseDeltaY);
 		disp = FVector2D(LastMouseDeltaX, LastMouseDeltaY).Length();
 		delta = ComputeAxisMovement(CurrAxis, mouse_drag_2d, disp, 250, move_dir);
-		//CUtil::DebugLog("GizmoModeMove: " + move_dir.ToString() + " delta: " + CUtil::FloatToString(delta));
+		CUtil::DebugLog("GizmoModeMove: " + move_dir.ToString() + " delta: " + CUtil::FloatToString(delta));
+		//delta = 10;
 		pTrackedActor->SetActorLocation(curr_loc + move_dir * delta);
 
 	}
