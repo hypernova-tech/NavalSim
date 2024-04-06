@@ -83,6 +83,26 @@ public:
 	template <typename T>
 	static TArray<T*> FindChildActors(AActor* p_parent);
 
+
+	template<typename T>
+	static T* FindComponentOfTag(AActor* p_actor, FString tag)
+	{
+		TArray<T*> comps;
+		p_actor->GetComponents<T>(comps);
+
+		// Now StaticMeshComponents contains all UStaticMeshComponent instances within the actor
+		for (T* cmp : comps)
+		{
+			if (cmp->ComponentHasTag(FName(tag)))
+			{
+				// If yes, add it to the output array
+				return cmp;
+			}
+		}
+
+		return nullptr;
+	}
+
 	template<typename T>
 	static void FindChildActorsRecursive(AActor* ParentActor, TArray<T*>& OutChildren)
 	{

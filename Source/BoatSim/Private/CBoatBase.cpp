@@ -106,7 +106,7 @@ void ACBoatBase::Tick(float DeltaTime)
 
 	UpdateCamTransform(DeltaTime);
 	Oscillate();
-	////UpdateKinematicData();
+
 }
 
 
@@ -449,30 +449,6 @@ bool ACBoatBase::FocusCamera(AActor* p_actor)
 	return true;
 }
 
-
-
-
-void ACBoatBase::Update(UCSOAObserverArgs* p_args)
-{
-#if 0
-
-	if (p_args->GetSubjectId() == CommonSOAObservers::PlatformKinematicObserverId) {
-		UPlatformKinematicData* p_kinematic = Cast<UPlatformKinematicData>(p_args);
-		
-		if (p_kinematic != nullptr) {
-			
-			
-			//Mutex.Lock();
-			pLastData = p_kinematic;
-			//p_kinematic->Copy(pLastData);
-			IsDirty = true;
-			//Mutex.Unlock();
-			UpdateKinematicData();
-
-		}
-	}
-#endif
-}
 
 void ACBoatBase::UpdateKinematicData()
 {

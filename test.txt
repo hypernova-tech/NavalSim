@@ -2,27 +2,14 @@ create --name m1 --bp MARLIN --tick 0
 set --name m1 --instance -1
 set --name m1 --suppressed 0
 set --name m1 --standalone 0
-set --name m1 --position "101.515167 35.712158 0.000000"
-set --name m1 --rotation "-0.000000 -0.000000 98.099953"
+set --name m1 --position "1.000000 1.000000 1.000000"
+set --name m1 --rotation "-0.000000 -0.000000 41.849884"
 set --name m1 --scale "1.000000 1.000000 1.000000"
 set --name m1 --tempkelvin 300.000000
 set --name m1 --heatsource 0
 set --name m1 --annotationid 0
 set --name m1 --annotatechildren 0
 set --name m1 --annotatechildren 0
-
-create --name m2 --bp MARLIN --tick 0
-set --name m2 --instance -1
-set --name m2 --suppressed 0
-set --name m2 --standalone 0
-set --name m2 --position "22.523413 133.041840 0.000000"
-set --name m2 --rotation "-0.000000 -0.000000 2.249936"
-set --name m2 --scale "1.000000 1.000000 1.000000"
-set --name m2 --tempkelvin 300.000000
-set --name m2 --heatsource 0
-set --name m2 --annotationid 0
-set --name m2 --annotatechildren 0
-set --name m2 --annotatechildren 0
 
 create --name jeoref --bp  --tick 0
 set --name jeoref --instance -1
@@ -66,7 +53,7 @@ set --name env --heatsource 0
 set --name env --annotationid 0
 set --name env --annotatechildren 0
 set --name env --annotatechildren 0
-set --name env --timeofday 12.007089
+set --name env --timeofday 12.000000
 set --name env --envtimeflowscale 1.000000
 set --name env --rain 0.000000
 set --name env --cloud 0.000000
@@ -91,70 +78,19 @@ set --name annotation --annotationid 0
 set --name annotation --annotatechildren 0
 set --name annotation --annotatechildren 0
 
-create --name c1 --bp CAMVIS --tick 0
-set --name c1 --parent m1
+create --name c1 --bp CUBE --tick 0
 set --name c1 --instance -1
 set --name c1 --suppressed 0
 set --name c1 --standalone 0
-set --name c1 --position "97.423859 35.129879 4.665498"
-set --name c1 --rotation "-0.000000 -0.000000 98.099953"
+set --name c1 --position "34.290076 -36.167748 1.000000"
+set --name c1 --rotation "-0.000000 -0.000000 41.849884"
 set --name c1 --scale "1.000000 1.000000 1.000000"
 set --name c1 --tempkelvin 300.000000
 set --name c1 --heatsource 0
 set --name c1 --annotationid 0
 set --name c1 --annotatechildren 0
 set --name c1 --annotatechildren 0
-set --name c1 --slotindex 0
-set --name c1 --rangemin 5.000000
-set --name c1 --rangemax 100.000000
-set --name c1 --vfov 10.000000
-set --name c1 --hfov 90.000000
-set --name c1 --hscanstepang 0.000000
-set --name c1 --vscanstepang 36.000000
-set --name c1 --merrormean 0.000000
-set --name c1 --merrorstd 0.000000
-set --name c1 --surfacedetecten 0
-set --name c1 --subsurfacedetecten 0
-set --name c1 --foamen 0
-set --name c1 --seasurfdetectprob 0.000000
-set --name c1 --maxsurfpenet 0.000000
-set --name c1 --widthpx 1920
-set --name c1 --heightpx 1080
 
-create --name l1 --bp LIDARM1 --tick 0
-set --name l1 --parent m1
-set --name l1 --instance -1
-set --name l1 --suppressed 0
-set --name l1 --standalone 0
-set --name l1 --position "102.960243 47.113667 3.524262"
-set --name l1 --rotation "-0.000000 -0.000000 98.099953"
-set --name l1 --scale "1.000000 1.000000 1.000000"
-set --name l1 --tempkelvin 300.000000
-set --name l1 --heatsource 0
-set --name l1 --annotationid 0
-set --name l1 --annotatechildren 0
-set --name l1 --annotatechildren 0
-set --name l1 --ipaddr1 192.168.1.102
-set --name l1 --localport1 2000
-set --name l1 --remoteport 2023
-set --name l1 --ipaddr2 192.168.1.102
-set --name l1 --localport2 54001
-set --name l1 --remoteport2 2024
-set --name l1 --slotindex 1
-set --name l1 --rangemin 5.000000
-set --name l1 --rangemax 100.000000
-set --name l1 --vfov 10.000000
-set --name l1 --hfov 120.000000
-set --name l1 --hscanstepang 0.200000
-set --name l1 --vscanstepang 0.200000
-set --name l1 --merrormean 3.000000
-set --name l1 --merrorstd 0.000000
-set --name l1 --surfacedetecten 0
-set --name l1 --subsurfacedetecten 0
-set --name l1 --foamen 1
-set --name l1 --seasurfdetectprob 0.050000
-set --name l1 --maxsurfpenet 1.000000
-
-set --camfollow m2
-set --camfollowtrans "0.000000 0.000000 3300.000000"
-set --camfolloweuler "176.854890 -90.000000 -179.104826"
+set --camfollow m1
+set --camfollowtrans "-1854.094329 206.010481 721.036684"
+set --camfolloweuler "-0.000000 -21.132033 -6.340192"

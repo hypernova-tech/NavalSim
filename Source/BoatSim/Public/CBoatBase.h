@@ -108,7 +108,7 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-    virtual void Update(UCSOAObserverArgs* p_args) override;
+
 	virtual void OnControllerChanged();
 	bool FocusCamera(AActor* p_actor);
 	UPlatformKinematicData *pLastData;

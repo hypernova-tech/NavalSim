@@ -5,14 +5,21 @@
 #include <Lib/SOA/SOAImplementor.h>
 #include <Lib/SOA/CommonSOAObservers.h>
 #include <Lib/SystemManager/SystemManagerBase.h>
+#include <Lib/Utils/CUtil.h>
 
 void AActorAsPlatform::BeginPlay()
 {
 	Super::BeginPlay();
 	ASOAImplementor::GetInstance()->Subscribe(CommonSOAObservers::PlatformKinematicObserverId, this);
 	pLastData = NewObject< UPlatformKinematicData>();
+	pMainMesh = CUtil::FindComponentOfTag<UStaticMeshComponent>(this, "MainMesh");
+	pMainMesh->OnComponentBeginOverlap.AddDynamic(this, &AActorAsPlatform::OnOverlapBegin);
 }
-
+void AActorAsPlatform::OnOverlapBegin(class UPrimitiveComponent* HitComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	// Handle the overlap event here (e.g., check the actor type and respond accordingly)
+	
+}
 void AActorAsPlatform::Update(UCSOAObserverArgs* p_args)
 {
 	if (p_args->GetSubjectId() == CommonSOAObservers::PlatformKinematicObserverId) {

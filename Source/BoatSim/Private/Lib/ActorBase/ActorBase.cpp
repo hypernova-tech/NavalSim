@@ -516,6 +516,56 @@ void AActorBase::UpdateAnnotation(bool is_enabled)
 }
 
 
+bool AActorBase::CanMove(FVector target_pos)
+{
+
+	return false;
+
+#if false
+	FHitResult HitResult;
+	FVector Origin, BoxExtent;
+	GetActorBounds(false, Origin, BoxExtent);
+
+	// Define start and end points of the ray
+	FVector Start = Origin + BoxExtent.UnitX;
+	FVector End = Start + (WorldDirection * TOUE(20000));  // MaxTraceDistance is up to you, e.g., 10000.0f
+
+	//CUtil::DrawDebugRay(GetWorld(), Start, End, FColor::Red, 10, 0.75);
+
+	// Perform the line trace
+	// The ECC_Visibility channel will typically work, but you can change this if necessary
+	bool bHit = GetWorld()->LineTraceSingleByChannel(
+		HitResult,
+		Start,
+		End,
+		ECC_GameTraceChannel1
+	);
+
+	if (bHit)
+	{
+		// HitResult now contains information about what was hit
+		AActor* ClickedActor = HitResult.GetActor();
+		bool gizmo_tag = ClickedActor->ActorHasTag("Gizmo");
+
+
+		if (ClickedActor && !gizmo_tag)
+		{
+			CurrAxis = pGizmoActor->GetAxis(HitResult.GetComponent());
+			CUtil::DebugLogScreen(ClickedActor->GetName());
+			return ClickedActor;
+
+
+		}
+
+
+	}
+	else {
+
+	}
+
+#endif
+}
+
 FVector AActorBase::GetPositionLatLongHeightMSL()
 {
 	auto pos = GetActorLocation();

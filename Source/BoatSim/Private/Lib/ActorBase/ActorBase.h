@@ -202,6 +202,8 @@ public:
 	FVector GetActorVelocityMetersPerSec();
 	FVector GetActorAngularVelocityRPYDegPerSec();
 
+	bool CanMove(FVector target_pos);
+
 	/// <summary>
 	/// save load
 	/// </summary>
