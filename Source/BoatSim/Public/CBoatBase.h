@@ -41,6 +41,8 @@ public:
 	UPROPERTY(EditAnywhere)
 		AActor* pTarget = nullptr;
 
+
+
 	UPROPERTY(BlueprintReadWrite)
 		float MovementSpeedUnitPerSec = 500;
 

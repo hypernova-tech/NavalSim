@@ -6,3 +6,12 @@ void UIDASAISSCommIF::BeginPlay()
 	RegisterConnectionInfo(0, pUDPConnection->GetConnectionInfo(), pUDPConnection);
 
 }
+
+
+
+--------
+Blueprint hazırlama
+Blueprint isim verme
+Diğer aktor base ayarlarının yapılması
+MainMesh tag in atanacağı static objecyi belirleme
+Collision response ayarlarını yapma

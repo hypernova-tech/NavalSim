@@ -40,27 +40,44 @@ void ACBoatBase::BeginPlay()
 void ACBoatBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	bool can_move = true;
 	//TimeSec += DeltaTime;
 	FVector forward;
-
+	AActorBase* p_base = (AActorBase*)pTarget;
+	
 	if (pTarget != nullptr) {
 
 		forward = pTarget->GetActorForwardVector();
 		if (IsForward) {
+			
+			if (p_base) {
+				can_move = p_base->CanMoveTowards(forward);
+			}
 
-			FVector pos = pTarget->GetActorLocation();
+			if (can_move) {
+				FVector pos = pTarget->GetActorLocation();
 
-			pos += forward * DeltaTime * MovementSpeedUnitPerSec;
-			pTarget->SetActorLocation(pos);
+				pos += forward * DeltaTime * MovementSpeedUnitPerSec;
+
+				pTarget->SetActorLocation(pos);
+			}
+	
 
 
 		}
 		else if (IsBackward) {
 
-			FVector pos = pTarget->GetActorLocation();
+			if (p_base) {
+				can_move = p_base->CanMoveTowards(-forward);
+			}
 
-			pos -= forward * DeltaTime * MovementSpeedUnitPerSec;
-			pTarget->SetActorLocation(pos);
+			if (can_move) {
+				FVector pos = pTarget->GetActorLocation();
+
+				pos -= forward * DeltaTime * MovementSpeedUnitPerSec;
+				pTarget->SetActorLocation(pos);
+			}
+
 
 		}
 

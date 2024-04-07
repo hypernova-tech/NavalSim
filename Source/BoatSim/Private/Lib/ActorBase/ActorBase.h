@@ -80,7 +80,8 @@ protected:
 	UPROPERTY(EditAnywhere)
 		int AffinityInstanceId = -1;
 
-	
+	UPROPERTY(EditAnywhere)
+		bool IsBlockingObject = true;
 
 
 	UPROPERTY(EditAnywhere)
@@ -202,7 +203,11 @@ public:
 	FVector GetActorVelocityMetersPerSec();
 	FVector GetActorAngularVelocityRPYDegPerSec();
 
-	bool CanMove(FVector target_pos);
+	virtual bool IsColldingWithBlockingObject();
+	virtual bool CanMoveTowards(FVector dir);
+
+	bool GetIsBlockingObject();
+	void SetIsBlockingObject(bool val);
 
 	/// <summary>
 	/// save load

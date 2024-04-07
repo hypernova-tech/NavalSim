@@ -515,8 +515,11 @@ void AActorBase::UpdateAnnotation(bool is_enabled)
 	AActorBase::HandleAnnotation(this, is_enabled, AnnotationId_);
 }
 
-
-bool AActorBase::CanMove(FVector target_pos)
+bool AActorBase::CanMoveTowards(FVector dir)
+{
+	return true;
+}
+bool AActorBase::IsColldingWithBlockingObject()
 {
 
 	return false;
@@ -581,6 +584,14 @@ FVector AActorBase:: GetPositionXYZMeters()
 FVector AActorBase::GetActorVelocityMetersPerSec()
 {
 	return ActorVelocityMetersPerSec;
+}
+bool AActorBase::GetIsBlockingObject()
+{
+	return IsBlockingObject;
+}
+void AActorBase::SetIsBlockingObject(bool val)
+{
+	IsBlockingObject = val;
 }
 FVector AActorBase::UpdateActorVelocityMetersPerSec()
 {
