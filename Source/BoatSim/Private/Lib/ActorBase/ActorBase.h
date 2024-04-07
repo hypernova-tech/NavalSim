@@ -102,6 +102,9 @@ protected:
 	UPROPERTY(EditAnywhere)
 		TArray<USceneComponent*> ManuallyAttachComponents;
 
+	UPROPERTY(EditAnywhere)
+		bool KeepPhysicsEnabledComponentRelativeTransformConstant = false;
+
 	INT64U ExternalUpdateCount = 0;
 	INT64U ExternalUpdateCountScenarioMode = 0;
 	double VelPreviousTime;
@@ -128,6 +131,10 @@ public:
 	// Called every frame
 	
 	virtual void Tick(float DeltaTime) override;
+
+	virtual void SetActorId(int val);
+	virtual int GetActorId();
+
 	virtual void SetEnabled(bool val) ;
 	virtual bool GetEnabled() ;
 

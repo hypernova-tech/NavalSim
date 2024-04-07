@@ -16,6 +16,8 @@ AActorBase::AActorBase()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	//SetBaseActor(this);
+
+
 	
 	
 
@@ -50,6 +52,21 @@ void AActorBase::BeginPlay()
 
 	pCommIF = GetComponentByClass<UGenericCommIF>();
 
+
+	if (KeepPhysicsEnabledComponentRelativeTransformConstant) {
+		TArray<UStaticMeshComponent*> Components;
+		
+		GetComponents<UStaticMeshComponent>(Components);
+
+		for (UStaticMeshComponent* Component : Components)
+		{
+			if (Component->IsSimulatingPhysics()) {
+				// Do something with each component
+				CUtil::ReattachComponentToActor(Component, this);
+			}
+			
+		}
+	}
 	
 	
 }
@@ -112,6 +129,15 @@ void AActorBase::Tick(float DeltaTime)
 		}
 	}
 	
+}
+
+void AActorBase::SetActorId(int val)
+{
+	ActorId = val;
+}
+int AActorBase::GetActorId()
+{
+	return ActorId;
 }
 
 void AActorBase::SetEnabled(bool val)
@@ -219,6 +245,10 @@ void AActorBase::Save(ISaveLoader* p_save_loader)
 	}
 
 	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
+	p_save_loader->AppendOption(line, CCLICommandManager::ActorId, GetActorId());
+	p_save_loader->AddLine(line);
+
+	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
 	p_save_loader->AppendOption(line, CCLICommandManager::Instance, AffinityInstanceId);
 	p_save_loader->AddLine(line);
 
@@ -242,9 +272,11 @@ void AActorBase::Save(ISaveLoader* p_save_loader)
 	p_save_loader->AppendOption(line, CCLICommandManager::Scale, GetActorScale3D());
 	p_save_loader->AddLine(line);
 
+	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
+	p_save_loader->AppendOption(line, CCLICommandManager::IsBlockingObject, GetIsBlockingObject());
+	p_save_loader->AddLine(line);
+
 	
-
-
 	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
 	p_save_loader->AppendOption(line, CCLICommandManager::TempratureKelvin, TempratureKelvin);
 	p_save_loader->AddLine(line);
@@ -297,6 +329,7 @@ void AActorBase::Save(ISaveLoader* p_save_loader)
 void AActorBase::SaveJSON(CJsonDataContainer& data)
 {
 	data.Add(CCLICommandManager::Name, GetName());
+	data.Add(CCLICommandManager::ActorId, (GetActorId()));
 	data.Add(CCLICommandManager::Instance, (AffinityInstanceId));
 	data.Add(CCLICommandManager::Suppressed, (Suppressed));
 	data.Add(CCLICommandManager::Enabled, (Enabled));
@@ -314,7 +347,7 @@ void AActorBase::SaveJSON(CJsonDataContainer& data)
 	data.Add(CCLICommandManager::Position, TOW(GetActorLocation()));
 	data.Add(CCLICommandManager::Rotation, (CMath::GetActorEulerAnglesRPY(this)));
 	data.Add(CCLICommandManager::Scale, (GetActorScale3D()));
-	
+	data.Add(CCLICommandManager::IsBlockingObject, GetIsBlockingObject());
 
 
 	data.Add(CCLICommandManager::TempratureKelvin, TempratureKelvin);

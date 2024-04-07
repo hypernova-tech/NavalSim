@@ -1417,3 +1417,13 @@ TArray<FString> CUtil::GetAllComponentPaths(AActor* Actor)
 
     return Paths;
 }
+void CUtil::ReattachComponentToActor(UPrimitiveComponent* ChildComponent, AActor* ParentActor, FName SocketName)
+{
+    if (!ChildComponent || !ParentActor) return;
+
+    // Detach the component, keeping its world position
+    ChildComponent->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
+
+    // Reattach the component to the new parent, maintaining relative transform
+    ChildComponent->AttachToComponent(ParentActor->GetRootComponent(), FAttachmentTransformRules::KeepRelativeTransform, SocketName);
+}

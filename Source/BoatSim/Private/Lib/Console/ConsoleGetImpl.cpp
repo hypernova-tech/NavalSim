@@ -287,6 +287,24 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
         return true;
     }
 
+    ret = CommandManager.HasA(CCLICommandManager::ActorId);
+    if (ret) {
+        if (pSystemAPI->GetActorId(p_actor, sint)) {
+            SendConsoleResponse(name, CCLICommandManager::ActorId, sint);
+            return true;
+        }
+
+    }
+
+    ret = CommandManager.HasA(CCLICommandManager::IsBlockingObject);
+    if (ret) {
+        if (pSystemAPI->GetIsBlockingObject(p_actor, is_enabled)) {
+            SendConsoleResponse(name, CCLICommandManager::IsBlockingObject,is_enabled);
+            return true;
+        }
+      
+    }
+
     ret = CommandManager.HasA(CCLICommandManager::ThermalMode);
     if (ret) {
         INT32S thermal_mode;

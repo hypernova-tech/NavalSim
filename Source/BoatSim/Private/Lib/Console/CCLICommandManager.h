@@ -76,6 +76,7 @@ public:
 	static FString SetCommand;
 	static FString Active;
 	static FString Enabled;
+	static FString ActorId;
 	static FString Suppressed;
 	static FString StandaloneModeEnabled;
 	static FString Instance;
@@ -95,6 +96,7 @@ public:
 	static FString Selected;
 	static FString Focused;
 	static FString UIVisible;
+	static FString IsBlockingObject;
 	static FString IPAddr1;
 	static FString LocalPort1;
 	static FString RemotePort1;

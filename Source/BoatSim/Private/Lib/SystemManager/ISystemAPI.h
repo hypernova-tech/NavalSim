@@ -150,6 +150,9 @@ public:
     /// <param name="p_actor"></param>
     /// <param name="slot_index"></param>
     /// <returns></returns>
+	/// 
+	virtual bool SetActorId(AActor* p_actor, INT32S slot_index) = 0;
+	virtual bool GetActorId(AActor* p_actor, INT32S& slot_index) = 0;
 	virtual bool SetSlotIndex(AActor* p_actor, INT32S slot_index) = 0;
 	virtual bool GetSlotIndex(AActor* p_actor, INT32S &slot_index) = 0;
     virtual bool SetHorizontalFov(AActor* p_actor, FLOAT64 angle_deg) = 0;
@@ -177,6 +180,10 @@ public:
 
 	virtual bool SetCamHeightPx(AActor* p_actor, INT32S val) = 0;
 	virtual bool GetCamHeightPx(AActor* p_actor, INT32S& val) = 0;
+
+	virtual bool SetIsBlockingObject(AActor* p_actor, bool val) = 0;
+	virtual bool GetIsBlockingObject(AActor* p_actor, bool& val) = 0;
+	
 
 	virtual bool GetEnableSurfaceDetect(AActor* p_actor, bool& val) = 0;
 	virtual bool GetEnableSubsurfaceDetect(AActor* p_actor, bool& val) = 0;
@@ -394,4 +401,7 @@ public:
 
 	virtual bool SetPublishAton(AActor* p_actor, bool val) = 0;
 	virtual bool GetPublishAton(AActor* p_actor, bool& val) = 0;
+
+
+
 };

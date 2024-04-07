@@ -39,6 +39,7 @@ public static class CLICommandManager
     [Modifiable] public const string Suppressed = "suppressed";
     [Modifiable] public const string Active = "active";
     [Modifiable] public const string Enabled = "enabled";
+    [Modifiable] public const string ActorId = "actorid";
     [Modifiable] public const string StandaloneModeEnabled = "standalone";
     public const string Instance = "instance";
     public const string Position = "position";
@@ -90,6 +91,7 @@ public static class CLICommandManager
     [Modifiable] public const string PlatformTurnRate = "pltturnrate";
     [Modifiable] public const string CamFollow = "camfollow";
     [Modifiable] public const string CamView = "camview";
+    [Modifiable] public const string IsBlockingObject = "blocking";
 
     [Modifiable] public const string AISClassType = "aisclass";
     [Modifiable] public const string AISMessagePublishPeriodSec = "aispublishperiod";

@@ -338,8 +338,14 @@ public:
 	virtual bool Load(FString fname);
 
 
+	virtual bool SetActorId(AActor* p_actor, INT32S id);
+	virtual bool GetActorId(AActor* p_actor, INT32S& id);
+
 	virtual bool SetSlotIndex(AActor* p_actor, INT32S slot_index);
 	virtual bool GetSlotIndex(AActor* p_actor, INT32S& slot_index);
+
+	virtual bool SetIsBlockingObject(AActor* p_actor, bool val);
+	virtual bool GetIsBlockingObject(AActor* p_actor, bool& val);
 
 	virtual bool GetConnectionInfo(AActor* p_actor, INT32S ind, SConnectionInfo& conn);
 	virtual bool SetConnectionInfo(AActor* p_actor, INT32S ind, SConnectionInfo conn) ;
@@ -358,6 +364,7 @@ public:
 
 	virtual bool SetCamHeightPx(AActor* p_actor, INT32S val);
 	virtual bool GetCamHeightPx(AActor* p_actor, INT32S& val);
+
 
 
 	virtual bool SetHorizontalScanStepAngleDeg(AActor* p_actor, FLOAT64 angle_deg);

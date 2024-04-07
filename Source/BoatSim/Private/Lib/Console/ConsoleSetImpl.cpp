@@ -417,6 +417,20 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
 
     }
 
+    ret = CommandManager.GetValue(CCLICommandManager::ActorId, sint);
+    if (ret) {
+        pSystemAPI->SetActorId(p_actor, sint);
+        one_success = true;
+
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::IsBlockingObject, is_enabled);
+    if (ret) {
+        pSystemAPI->SetIsBlockingObject(p_actor, is_enabled);
+        one_success = true;
+
+    }
+
     int  instance_no = -1;
     ret = CommandManager.GetInstance(instance_no);
     if (ret) {

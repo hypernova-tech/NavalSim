@@ -1440,6 +1440,27 @@ bool ASystemManagerBase::Load(FString fname)
 	return pSaverLoader->Load(this, fname);
 }
 
+
+bool ASystemManagerBase::SetActorId(AActor* p_actor, INT32S id)
+{
+	auto p_obj = ToActorBase(p_actor);
+	if (p_obj) {
+		p_obj->SetActorId(id);
+		return true;
+	}
+	return false;
+}
+
+bool ASystemManagerBase::GetActorId(AActor* p_actor, INT32S& id)
+{
+	auto p_obj = ToActorBase(p_actor);
+	if (p_obj) {
+		id = p_obj->GetActorId();
+		return true;
+	}
+	return false;
+}
+
 bool ASystemManagerBase::SetSlotIndex(AActor* p_actor, INT32S slot_index)
 {
 	auto p_obj = ToSensorBase(p_actor);
@@ -1459,6 +1480,28 @@ bool ASystemManagerBase::GetSlotIndex(AActor* p_actor, INT32S& slot_index)
 	}
 	return false;
 }
+
+
+bool ASystemManagerBase::SetIsBlockingObject(AActor* p_actor, bool val)
+{
+	auto p_obj = ToActorBase(p_actor);
+	if (p_obj) {
+		p_obj->SetIsBlockingObject(val);
+		return true;
+	}
+	return false;
+}
+
+bool ASystemManagerBase::GetIsBlockingObject(AActor* p_actor, bool& val)
+{
+	auto p_obj = ToActorBase(p_actor);
+	if (p_obj) {
+		val = p_obj->GetIsBlockingObject();
+		return true;
+	}
+	return false;
+}
+
 
 
 bool ASystemManagerBase::GetConnectionInfo(AActor* p_actor, INT32S ind, SConnectionInfo& conn)

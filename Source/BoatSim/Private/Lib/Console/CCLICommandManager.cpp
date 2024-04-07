@@ -28,7 +28,7 @@ FString CCLICommandManager::Suppressed = "suppressed";
 FString CCLICommandManager::StandaloneModeEnabled = "standalone";
 FString CCLICommandManager::Active = "active";
 FString CCLICommandManager::Enabled = "enabled";
-
+FString CCLICommandManager::ActorId = "actorid";
 
 FString CCLICommandManager::Instance = "instance";
 FString CCLICommandManager::Position = "position";
@@ -47,6 +47,7 @@ FString CCLICommandManager::RangeMax = "rangemax";
 FString CCLICommandManager::Selected = "selected";
 FString CCLICommandManager::Focused = "focused";
 FString CCLICommandManager::UIVisible = "uivisible";
+FString  CCLICommandManager::IsBlockingObject = "blocking";
 
 FString CCLICommandManager::IPAddr1 = "ipaddr1";
 FString CCLICommandManager::LocalPort1 = "localport1";
