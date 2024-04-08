@@ -67,6 +67,7 @@ public static class CLICommandManager
     [Modifiable] public const string HorizontalFov = "hfov";
     [Modifiable] public const string HorizontalScanStepAngleDeg = "hscanstepang";
     [Modifiable] public const string VerticalScanStepAngleDeg = "vscanstepang";
+    [Modifiable] public const string IsNormalDistribution = "isnormaldistribution";
     [Modifiable] public const string MeasurementErrorMean = "merrormean";
     [Modifiable] public const string MeasurementErrorStd = "merrorstd";
     [Modifiable] public const string EnableSurfaceDetect = "surfacedetecten";

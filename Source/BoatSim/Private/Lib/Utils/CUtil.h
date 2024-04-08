@@ -49,6 +49,7 @@ public:
 	TArray<AActor*> additional_ignore_list;
 	bool create_scan_line;
 	bool use_render_target = false;
+	bool is_normal_distribution = false;
 
 	TArray<AActor*> *include_actor_list;
 };
@@ -218,7 +219,7 @@ public:
 			p_dest[i] = p_src[len - 1 - i];
 		}
 	}
-	static FLOAT64 GetRandomRange(FLOAT64 min_inclusive, FLOAT64 max_inclusive);
+	
 	static FVector GetActorRPY(AActor* p_actor);
 	static AActor* GetParentActor(AActor *p_child);
 	static FString GetActorFullComponentPath(AActor* p_actor);

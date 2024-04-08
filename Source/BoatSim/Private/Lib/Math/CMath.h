@@ -1,7 +1,8 @@
 #pragma once
 #include "CoreMinimal.h"
 #include "Lib/Types/Primitives.h"
-
+#include <random>
+using namespace std;
 
 class CMath
 {
@@ -33,4 +34,67 @@ public:
 	static INT16U EncodeUnsigned16(FLOAT64 val, FLOAT64 lsb);
 
 	static void SmoothTransformLerp(const FTransform& CurrentTargetTransform, const FTransform& TargetTransform, float DeltaTime, float InterpSpeed, FTransform& new_transform);
+	static inline double GaussianRandom(double mean, double stddev)
+	{
+		static double z1;
+		static int generate = 0;
+		generate = !generate;
+
+		// Generate a pair of Gaussian numbers on every other call
+		if (!generate) {
+			return mean + z1 * stddev;
+		}
+
+		double u1, u2;
+		do {
+			u1 = rand() / (RAND_MAX + 1.0);
+			u2 = rand() / (RAND_MAX + 1.0);
+		} while (u1 <= 1e-10); // Avoid division by zero
+
+		// Box-Muller transform
+		double z0;
+		double sqrtlog = sqrt(-2.0 * log(u1));
+		z0 = sqrtlog * cos(2.0 * PI * u2);
+		z1 = sqrtlog * sin(2.0 * PI * u2);
+
+		return mean + z0 * stddev;
+	}
+
+	
+	static inline  double GetRandomRange(bool is_normal, double mean, double std, double min, double max)
+	{
+		double val;
+		if (is_normal) {
+			val = GaussianRandom(mean, std);
+			val = val < min ? min : (val > max ? max : val);
+
+		}
+		else {
+			val = FMath::RandRange(min, max);
+		}
+		return val;
+	};
+	/// <summary>
+	/// uniform distribution
+	/// </summary>
+	/// <param name="min_inclusive"></param>
+	/// <param name="max_inclusive"></param>
+	/// <returns></returns>
+	static inline FLOAT64  GetRandomRange(FLOAT64 min_inclusive, FLOAT64 max_inclusive)
+	{
+		return FMath::RandRange(min_inclusive, max_inclusive);
+	};
+	/// <summary>
+	/// normal (gaussian distribution)
+	/// </summary>
+	/// <param name="mean"></param>
+	/// <param name="std"></param>
+	/// <returns></returns>
+	static inline double GetRandNormal(double mean, double std)
+	{
+		std::default_random_engine generator;
+		std::normal_distribution<double> distribution(mean, std);
+		double number = distribution(generator);
+		return number;
+	};
 }; 

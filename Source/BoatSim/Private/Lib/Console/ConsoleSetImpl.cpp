@@ -757,6 +757,16 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
 
     }
 
+    ret = CommandManager.GetValue(CCLICommandManager::IsNormalDistribution, is_enabled);
+    if (ret) {
+        if (pSystemAPI->SetIsNormalDistribution(p_actor, is_enabled)) {
+            one_success = true;
+        }
+    }
+    else {
+
+    }
+
     ret = CommandManager.GetValue(CCLICommandManager::MeasurementErrorMean, dbl);
     if (ret) {
         if (pSystemAPI->SetMeasurementErrorMean(p_actor, dbl)) {

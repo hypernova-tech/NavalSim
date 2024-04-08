@@ -3,6 +3,7 @@
 
 #include "Lib/Agent/Misc/BulletBase.h"
 #include <Lib/Utils/CUtil.h>
+#include <Lib/Math/CMath.h>
 
 void ABulletBase::BeginPlay()
 {
@@ -38,5 +39,5 @@ FVector ABulletBase::GetLinearVelocity()
 
 double ABulletBase::GetSpeed()
 {
-	return CUtil::GetRandomRange(MinInitialSpeedMetersPerSec_, MaxInitialSpeedMetersPerSec_);
+	return CMath::GetRandomRange(MinInitialSpeedMetersPerSec_, MaxInitialSpeedMetersPerSec_);
 }

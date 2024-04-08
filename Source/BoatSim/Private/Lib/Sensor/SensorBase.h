@@ -103,12 +103,16 @@ public:
 	UPROPERTY(EditAnywhere)
 		float FullScanPeriodSec = 1;
 
+	UPROPERTY(EditAnywhere)
+		bool IsNormalDistribution;
 
 	UPROPERTY(EditAnywhere)
 		double MeasurementErrorMean = 0.0f;
 
 	UPROPERTY(EditAnywhere)
 		double MeasurementErrorUncertainy = 0.0f;
+
+
 
 	// Use the UPROPERTY macro to expose properties to the Unreal Editor
 	UPROPERTY(EditAnywhere, Category = "Clutter Params")

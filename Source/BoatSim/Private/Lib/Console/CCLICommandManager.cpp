@@ -73,6 +73,7 @@ FString CCLICommandManager::VericalFov = "vfov";
 FString CCLICommandManager::HorizontalFov = "hfov";
 FString CCLICommandManager::HorizontalScanStepAngleDeg = "hscanstepang";
 FString CCLICommandManager::VerticalScanStepAngleDeg = "vscanstepang";
+FString CCLICommandManager::IsNormalDistribution = "isnormaldistribution";
 FString CCLICommandManager::MeasurementErrorMean= "merrormean";
 FString CCLICommandManager::MeasurementErrorStd= "merrorstd";
 FString CCLICommandManager::EnableSurfaceDetect = "surfacedetecten";

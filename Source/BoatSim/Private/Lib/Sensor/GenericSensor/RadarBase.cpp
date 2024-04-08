@@ -271,6 +271,7 @@ void ARadarBase::Scan()
 
 		args.p_actor = this;
 		args.is_world = true;
+		args.is_normal_distribution = IsNormalDistribution;
 		args.range_meter = RangeMaxMeter;
 		args.min_range_meter = RangeMinMeter;
 		args.azimuth_start_deg = start_azimuth;

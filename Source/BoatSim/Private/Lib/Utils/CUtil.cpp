@@ -193,9 +193,15 @@ void inline CUtil::ScanPie(const STraceArgs& args, double azimuth, double elevat
                     SSectorInfo* p_current_sektor, int& success_count)
 {
     FLOAT64 filtered_range_meter = args.range_meter;
-    FLOAT32 error_meter = args.measurement_error_mean + args.measurement_error_std * 0.33f * GetRandomRange(-1.0f, 1.0f);
+    FLOAT32 error_meter = CMath::GetRandomRange(args.is_normal_distribution,
+        args.measurement_error_mean,
+        args.measurement_error_std,
+        args.measurement_error_mean - args.measurement_error_std * 3,
+        args.measurement_error_mean + args.measurement_error_std * 3);//args.measurement_error_mean + args.measurement_error_std * 0.33f * GetRandomRange(-1.0f, 1.0f);
     FVector start_pos;
     FVector new_dir;
+
+
 
     if (args.is_world) {
         /**
@@ -247,7 +253,7 @@ void inline CUtil::ScanPie(const STraceArgs& args, double azimuth, double elevat
     }
 
     if (args.use_render_target) {
-        if (CUtil::GetRandomRange(0.0f, 1.0f) > 0.8) {
+        if (CMath::GetRandomRange(0.0f, 1.0f) > 0.8) {
             ret = true;
             result.Distance = (start_pos - end).Length();
             result.Location = end;
@@ -967,10 +973,7 @@ FLOAT64 CUtil::GetTimeSeconds()
     return FApp::GetCurrentTime();
 }
 
-FLOAT64  CUtil::GetRandomRange(FLOAT64 min_inclusive, FLOAT64 max_inclusive)
-{
-    return FMath::RandRange(min_inclusive, max_inclusive);
-}
+
 
 FVector CUtil::GetActorRPY(AActor* p_actor)
 {

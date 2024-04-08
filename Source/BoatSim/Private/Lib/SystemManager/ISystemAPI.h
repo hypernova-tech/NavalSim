@@ -167,6 +167,10 @@ public:
 	virtual bool GetHorizontalScanStepAngleDeg(AActor* p_actor, FLOAT64& angle_deg) = 0;
     virtual bool SetVerticalScanStepAngleDeg(AActor* p_actor, FLOAT64 angle_deg) = 0;
 	virtual bool GetVerticalScanStepAngleDeg(AActor* p_actor, FLOAT64& angle_deg) = 0;
+
+	virtual bool GetIsNormalDistribution(AActor* p_actor, bool&val) = 0;
+	virtual	bool SetIsNormalDistribution(AActor* p_actor, bool val) = 0;
+
     virtual bool SetMeasurementErrorMean(AActor* p_actor, FLOAT64 angle_deg) = 0;
     virtual bool SetMeasurementErrorStd(AActor* p_actor, FLOAT64 angle_deg) = 0;
 	virtual bool GetMeasurementErrorMean(AActor* p_actor, FLOAT64& angle_deg) = 0;

@@ -9,6 +9,7 @@
 #include <Lib/Annotation/AnnotationManager.h>
 #include <Lib/Console/CCLICommandManager.h>
 #include <Lib/SystemManager/SystemManagerBase.h>
+#include <Lib/Math/CMath.h>
 
 
 ATerrainManager::ATerrainManager()
@@ -203,7 +204,7 @@ void ATerrainManager::CalculateVertices(const TArray<FLOAT64>& HeightMap, int32 
                     Height = (depth_map[y + (MapHeight - 1 - x) * MapWidth]);
                 }
                 else {
-                    Height = (CUtil::GetRandomRange(DepthMapMinLevelMeter, DepthMapMaxLevelMeter));
+                    Height = (CMath::GetRandomRange(DepthMapMinLevelMeter, DepthMapMaxLevelMeter));
                 }
             }
             FLOAT64 tf_lat = x / (FLOAT64)(MapHeight - 1);

@@ -78,6 +78,7 @@ void ALidarBase::Run(float delta_time_sec)
 
 		args.p_actor = this;
 		args.is_world = false;
+		args.is_normal_distribution = IsNormalDistribution;
 		args.range_meter = RangeMaxMeter;
 		args.min_range_meter = RangeMinMeter;
 		args.azimuth_start_deg = start_azimuth;

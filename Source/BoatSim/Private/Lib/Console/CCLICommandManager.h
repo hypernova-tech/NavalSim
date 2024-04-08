@@ -117,6 +117,7 @@ public:
 	static FString HorizontalFov;
 	static FString HorizontalScanStepAngleDeg;
 	static FString VerticalScanStepAngleDeg;
+	static FString IsNormalDistribution;
 	static FString MeasurementErrorMean;
 	static FString MeasurementErrorStd;
 	static FString EnableSurfaceDetect;

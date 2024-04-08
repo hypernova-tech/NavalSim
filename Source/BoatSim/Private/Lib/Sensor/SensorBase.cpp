@@ -307,6 +307,11 @@ void ASensorBase::Save(ISaveLoader* p_save_loader)
 	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
 	p_save_loader->AppendOption(line, CCLICommandManager::VerticalScanStepAngleDeg,		VerticalScanStepAngleDeg);
 	p_save_loader->AddLine(line);
+
+
+	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
+	p_save_loader->AppendOption(line, CCLICommandManager::IsNormalDistribution, IsNormalDistribution);
+	p_save_loader->AddLine(line);
 	
 	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
 	p_save_loader->AppendOption(line, CCLICommandManager::MeasurementErrorMean,			MeasurementErrorMean);
@@ -349,6 +354,7 @@ void ASensorBase::SaveJSON(CJsonDataContainer& data)
 	data.Add(CCLICommandManager::HorizontalFov, FovHorizontalDeg);
 	data.Add(CCLICommandManager::HorizontalScanStepAngleDeg, HorizontalScanStepAngleDeg);
 	data.Add(CCLICommandManager::VerticalScanStepAngleDeg, VerticalScanStepAngleDeg);
+	data.Add(CCLICommandManager::IsNormalDistribution, IsNormalDistribution);
 	data.Add(CCLICommandManager::MeasurementErrorMean, MeasurementErrorMean);
 	data.Add(CCLICommandManager::MeasurementErrorStd, MeasurementErrorUncertainy);
 	data.Add(CCLICommandManager::EnableSurfaceDetect, EnableSurfaceDetect);

@@ -1643,6 +1643,26 @@ bool ASystemManagerBase::GetRangeMaxMeter(AActor* p_actor, FLOAT64& val)
 	return false;
 }
 
+bool ASystemManagerBase::SetIsNormalDistribution(AActor* p_actor, bool val)
+{
+	auto p_obj = ToSensorBase(p_actor);
+	if (p_obj) {
+		p_obj->IsNormalDistribution = val;
+		return true;
+	}
+	return false;
+}
+
+bool ASystemManagerBase::GetIsNormalDistribution(AActor* p_actor, bool&val)
+{
+	auto p_obj = ToSensorBase(p_actor);
+	if (p_obj) {
+		val = p_obj->IsNormalDistribution;
+		return true;
+	}
+	return false;
+}
+
 bool ASystemManagerBase::SetMeasurementErrorMean(AActor* p_actor, FLOAT64 val)
 {
 	auto p_obj = ToSensorBase(p_actor);
