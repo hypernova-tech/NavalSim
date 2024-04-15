@@ -21,6 +21,8 @@ SOFTWARE.
 #include "CSharedMemManager.h"
 #include "CFLSHostListener.h"
 
+#define STANDALONE_EN 0
+
 const std::string TcpPortNo = "4152";
 
 const int kLargeMessageBytesLimit = 128 << 20;  // 128MB
@@ -301,18 +303,40 @@ proto::nav_api::TargetData CreateTargetData() {
 
     return target_data;
 }
+
+#if STANDALONE_EN > 0
 CSharedMemManager* pSharedMemManager;
 CFLSHostListener* pHostListener;
 
-int main()
+
+
+int main(int argc, char* argv[])
 {
+    std::string smAddress = "FLSSM1";
+    int memSize = sizeof(SSharedMemBufferHdr) + 1920 * 1080 * sizeof(SFLSDataEntry);
+    
+    if (argc < 3) {
+        std::cerr << "Usage: " << argv[0] << " <InitialArguments> <SmAddress> <MemSize>\n";
+        while (true);
+    }
+
+    std::string initialArguments = argv[1]; // The initial arguments for the executable
+    smAddress = argv[2];        // The shared memory address as a string
+    memSize = std::stoi(argv[3]);       // Memory size converted from string to int
+
+    // Example processing: just printing the arguments
+    std::cout << "Initial Arguments: " << initialArguments << std::endl;
+    std::cout << "Shared Memory Address: " << smAddress << std::endl;
+    std::cout << "Memory Size: " << memSize << std::endl;
+
+
 
     pSharedMemManager = new CSharedMemManager();
     pHostListener = new CFLSHostListener();
 
     SAppArgs args;
-    args.ShareMemName = "FLSSM1";
-    args.Size = sizeof(SSharedMemBufferHdr) + 1920 * 1080 * sizeof(SFLSDataEntry);
+    args.ShareMemName = smAddress;
+    args.Size = memSize;
     pSharedMemManager->Init(args);
     pHostListener->Init();
     while (true);
@@ -389,3 +413,41 @@ int main()
 }
 
 
+#else
+// Declare the function with the export/import macro
+extern "C" {  // Use extern "C" if you want to ensure C linkage (name mangling avoidance)
+    __declspec(dllexport) int CreateInstance(string sm_sname, int size);
+}
+
+struct SInstanceParams
+{
+    SAppArgs Args;
+    CSharedMemManager* pSharedMemManager;
+    CFLSHostListener* pHostListener;
+};
+
+list< SInstanceParams*> InstancesParams;
+
+
+
+// Function definition
+int CreateInstance(string sm_sname, int size) {
+    // Implement your initialization logic here 
+    cout << "initing sonar model" << endl;
+    SInstanceParams* p_args = new SInstanceParams();
+
+    p_args->pSharedMemManager = new CSharedMemManager();
+    p_args->pHostListener = new CFLSHostListener();
+
+    SAppArgs args;
+    args.ShareMemName = sm_sname;
+    args.Size = size;
+    p_args->Args = args;
+    p_args->pSharedMemManager->Init(args);
+    p_args->pHostListener->Init();
+    InstancesParams.push_back(p_args);
+    return InstancesParams.size();
+    //while (true);
+}
+
+#endif

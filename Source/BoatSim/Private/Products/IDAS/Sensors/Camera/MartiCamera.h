@@ -36,8 +36,11 @@ class AMartiCamera : public ACameraBase
 
 protected:
 	USharedMemory* pSharedMemory;
+	virtual void BeginPlay() override;
 	virtual void OnCaptured() override;
 	virtual void OnCaptureReady(void* p_data) override;
 public:
 	virtual void InitSensor() override;
+	void SetSharedMemoryName(FString val);
+	FString GetSharedMemoryName();
 };

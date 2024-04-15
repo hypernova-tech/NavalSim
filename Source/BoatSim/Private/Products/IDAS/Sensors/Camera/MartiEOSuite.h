@@ -8,6 +8,7 @@
 #include <Products/IDAS/Sensors/Camera/IMartiHostIF.h>
 #include "MartiCommIF/MartiCommIF.h"
 #include <Lib/Gimbal/GimbalBase.h>
+#include "Windows/MinWindows.h" // Include this header for Windows-specific functions
 #include "MartiEOSuite.generated.h"
 
 
@@ -30,7 +31,8 @@ protected:
 	ACameraBase* pActiveCamera;
 	AGimbalBase* pGimbal;
 	UMartiCommIF* pMartiCommIF;
-			
+	INT32S StreamerInstanceId;
+	HINSTANCE hDLL;
 
 	SMartiLosCommandPayload			LastLosCommand;
 	SMartiLosReportPayload			LastLosReport;
@@ -44,7 +46,7 @@ protected:
 	SDTVICRCommandPayload			LastDTVICRCommandPayload;
 	SDTVICRReportPayload			LastDTVICRReportPayload;
 
-
+	virtual void BeginPlay() override;
 	virtual void InitSensor() override;
 	virtual void OnPreStep(float DeltaTime) override;
 	virtual void OnStep(float DeltaTime) override;
@@ -65,5 +67,13 @@ protected:
 	void SendDefogReport();
 	void SendICRReport();
 
+public:
+	UPROPERTY(EditAnywhere)
+		FString ProtocolConverterSharedMemoryName = "MARTISM1";
 
+	UPROPERTY(EditAnywhere)
+		FString ProtocolConverterExecutableRelativePath = "/Executables/Marti/bin/marticonverter.exe";
+
+	UPROPERTY(EditAnywhere)
+		int GStreamerDestPort = 1045;
 };

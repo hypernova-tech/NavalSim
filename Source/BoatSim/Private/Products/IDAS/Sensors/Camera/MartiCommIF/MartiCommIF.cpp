@@ -30,7 +30,7 @@ void UMartiCommIF::SetHostIf(IMartiHostIF* p_val)
 	pHostIf = p_val;
 }
 
-void UMartiCommIF::SendMessage(EMartiCommandReportId id, INT8U* payload, INT32S size)
+void UMartiCommIF::SendMessageWithId(EMartiCommandReportId id, INT8U* payload, INT32S size)
 {
 	SMartiGenericMessage mes;
 	mes.SetMessage(id, payload, size);

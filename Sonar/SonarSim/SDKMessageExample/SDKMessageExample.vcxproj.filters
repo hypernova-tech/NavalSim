@@ -54,6 +54,12 @@
     <ClInclude Include="CFLSHostListener.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DllExport.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CInit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="proto\array.pb.cc">
@@ -87,6 +93,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CFLSHostListener.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CInit.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

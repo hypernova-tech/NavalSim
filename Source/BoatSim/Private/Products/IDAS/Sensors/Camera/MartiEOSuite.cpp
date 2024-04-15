@@ -5,11 +5,56 @@
 #include <Lib/Utils/CUtil.h>
 #include "MartiCamera.h"
 
+#include <string>
+
+
+using namespace std;
+
+typedef int(*EOCreateInstance)(char* sm_sname, char* listner_ip_addr, int listener_port, int width, int height, int frame_rate);
+
+
+void AMartiEOSuite::BeginPlay()
+{
+	Super::BeginPlay();
+}
+
 void AMartiEOSuite::InitSensor()
 {
 	Super::InitSensor();
 	pMartiCommIF = (UMartiCommIF*)GetCommCommIF();
 	pMartiCommIF->SetHostIf(this);
+
+
+
+	FString BinariesDir = FPaths::ProjectDir() + TEXT("Binaries/Win64/Marti/");
+
+	FString DLLName = TEXT("GStream.dll");
+
+	// Construct the full path to the DLL
+	FString DLLPath = BinariesDir + DLLName;
+
+	// Load the DLL
+    hDLL = LoadLibrary(*DLLPath);
+	if (hDLL != nullptr)
+	{
+		// Get function pointer
+		EOCreateInstance func_ptr = (EOCreateInstance)GetProcAddress(hDLL, "CreateInstance");
+		if (func_ptr != nullptr)
+		{
+			char sm_name[1024];
+			CUtil::FStringToAsciiChar(ProtocolConverterSharedMemoryName, sm_name, 1024);
+
+			auto conns = pMartiCommIF->GetConnectionsInfo();
+			char ip_addr[256];
+			CUtil::FStringToAsciiChar(conns[0].ConnectionInfo.IpAddr, ip_addr, 256);
+			// Call function
+			
+			StreamerInstanceId = func_ptr(sm_name, ip_addr, GStreamerDestPort, pActiveCamera->SensorWidth, pActiveCamera->SensorHeight, 60);
+		}
+
+		// Unload DLL (optional)
+		//FreeLibrary(hDLL);
+	}
 
 
 }
@@ -28,6 +73,8 @@ void AMartiEOSuite::OnPreStep(float DeltaTime)
 		}else if (cam->SensorType == ESensorType::CameraIR) {
 			pIR = cam;
 		}
+		AMartiCamera* p_marti_cam = (AMartiCamera*)cam;
+		p_marti_cam->SetSharedMemoryName(ProtocolConverterSharedMemoryName);
 	}
 
 	pActiveCamera = pDTV;
@@ -311,7 +358,7 @@ void AMartiEOSuite::SendLosReportCommand()
 
 	los_report.AzimuthPosition = pGimbal->GetAxisAngleDeg(EGimbalAxis::Yaw);
 	los_report.ElevationPosition = pGimbal->GetAxisAngleDeg(EGimbalAxis::Pitch);
-	pMartiCommIF->SendMessage(EMartiCommandReportId::LosReport, (INT8U*)&los_report, sizeof(SMartiLosReportPayload));
+	pMartiCommIF->SendMessageWithId(EMartiCommandReportId::LosReport, (INT8U*)&los_report, sizeof(SMartiLosReportPayload));
 }
 
 void AMartiEOSuite::SendSensorReport()
@@ -332,7 +379,7 @@ void AMartiEOSuite::SendSensorReport()
 	report.ThermalBrightness = pIR->BrightnessLevel;
 	report.ThermalContrast = pIR->ContrastLevel;
 
-	pMartiCommIF->SendMessage(EMartiCommandReportId::SensorReport, (INT8U*) & report, sizeof(SMartiSensorReportPayload));
+	pMartiCommIF->SendMessageWithId(EMartiCommandReportId::SensorReport, (INT8U*) & report, sizeof(SMartiSensorReportPayload));
 }
 
 void AMartiEOSuite::SendDefogReport()
@@ -347,7 +394,7 @@ void AMartiEOSuite::SendDefogReport()
 		status.DTVDefogStatus.Bits = (EDefogStatus)pActiveCamera->DefogLevel;
 	}
 	
-	pMartiCommIF->SendMessage(EMartiCommandReportId::DTVDefogReport, (INT8U*)&status, sizeof(SDTVDefogStatus));
+	pMartiCommIF->SendMessageWithId(EMartiCommandReportId::DTVDefogReport, (INT8U*)&status, sizeof(SDTVDefogStatus));
 }
 void AMartiEOSuite::SendICRReport()
 {
@@ -361,5 +408,5 @@ void AMartiEOSuite::SendICRReport()
 		icr.DTVICRStatus = 2;
 	}
 
-	pMartiCommIF->SendMessage(EMartiCommandReportId::DTVICRReport, (INT8U*)&icr, sizeof(SDTVICRReportPayload));
+	pMartiCommIF->SendMessageWithId(EMartiCommandReportId::DTVICRReport, (INT8U*)&icr, sizeof(SDTVICRReportPayload));
 }

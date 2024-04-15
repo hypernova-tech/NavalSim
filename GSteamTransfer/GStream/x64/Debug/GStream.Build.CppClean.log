@@ -6,9 +6,11 @@ c:\users\pc\documents\unreal projects\boatsim\gsteamtransfer\gstream\x64\debug\c
 c:\users\pc\documents\unreal projects\boatsim\gsteamtransfer\gstream\x64\debug\cstreamertest.obj
 c:\users\pc\documents\unreal projects\boatsim\gsteamtransfer\gstream\x64\debug\csharedmem.obj
 c:\users\pc\documents\unreal projects\boatsim\gsteamtransfer\gstream\x64\debug\cmath.obj
-c:\users\pc\documents\unreal projects\boatsim\gsteamtransfer\gstream\x64\debug\gstream.exe
 c:\users\pc\documents\unreal projects\boatsim\gsteamtransfer\gstream\x64\debug\gstream.ilk
+c:\users\pc\documents\unreal projects\boatsim\gsteamtransfer\gstream\x64\debug\gstream.dll
 c:\users\pc\documents\unreal projects\boatsim\gsteamtransfer\gstream\x64\debug\gstream.pdb
+c:\users\pc\documents\unreal projects\boatsim\gsteamtransfer\gstream\x64\debug\gstream.lib
+c:\users\pc\documents\unreal projects\boatsim\gsteamtransfer\gstream\x64\debug\gstream.exp
 c:\users\pc\documents\unreal projects\boatsim\gsteamtransfer\gstream\x64\debug\gstream.tlog\cl.command.1.tlog
 c:\users\pc\documents\unreal projects\boatsim\gsteamtransfer\gstream\x64\debug\gstream.tlog\cl.items.tlog
 c:\users\pc\documents\unreal projects\boatsim\gsteamtransfer\gstream\x64\debug\gstream.tlog\cl.read.1.tlog
@@ -16,3 +18,4 @@ c:\users\pc\documents\unreal projects\boatsim\gsteamtransfer\gstream\x64\debug\g
 c:\users\pc\documents\unreal projects\boatsim\gsteamtransfer\gstream\x64\debug\gstream.tlog\link.command.1.tlog
 c:\users\pc\documents\unreal projects\boatsim\gsteamtransfer\gstream\x64\debug\gstream.tlog\link.read.1.tlog
 c:\users\pc\documents\unreal projects\boatsim\gsteamtransfer\gstream\x64\debug\gstream.tlog\link.write.1.tlog
+c:\users\pc\documents\unreal projects\boatsim\gsteamtransfer\gstream\x64\debug\gstream.tlog\link.write.2u.tlog

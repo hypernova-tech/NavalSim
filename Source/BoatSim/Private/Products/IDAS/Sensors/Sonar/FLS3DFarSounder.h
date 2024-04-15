@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Lib/Sensor/GenericSensor/FLS3D.h"
 #include <Lib/Connection/SharedMemory.h>
+#include <Lib/ExecRunner/ExecRunnerBase.h>
 #include "FLS3DFarSounder.generated.h"
 
 
@@ -45,4 +46,16 @@ protected:
 	virtual void InitSensor() override;
 	void OnDataReady();
 	virtual void Run(float delta_time_sec) override;
+	CExecRunnerBase* pFlsExecRunner;
+	void* hDLL;
+	INT32S SonarDllInstanceInd;
+public:
+
+	UPROPERTY(EditAnywhere)
+		FString ProtocolConverterSharedMemoryName = "FLSSM1";
+
+	UPROPERTY(EditAnywhere)
+		FString FLSProtocolConverterExecutableRelativePath = "/Executables/FLS/bin/flsconverter.exe";
+
+
 };

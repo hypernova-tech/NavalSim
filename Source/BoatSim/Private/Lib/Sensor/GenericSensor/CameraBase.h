@@ -46,7 +46,7 @@ public:
 		int  ContrastLevel = 0;// 0-100
 
 protected:
-
+	virtual void BeginPlay() override;
 	virtual void InitSensor() override;
 
 

@@ -1,4 +1,12 @@
-﻿  GStreamSender.cpp
+﻿  CMath.cpp
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\GSteamTransfer\GStream\CMath.h(11,20): warning C4244: 'return': conversion from 'INT16S' to 'INT8U', possible loss of data
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\GSteamTransfer\GStream\CMath.h(14,20): warning C4244: 'return': conversion from 'INT16S' to 'INT8U', possible loss of data
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\GSteamTransfer\GStream\CMath.h(17,16): warning C4244: 'return': conversion from 'INT16S' to 'INT8U', possible loss of data
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\GSteamTransfer\GStream\CMath.h(29,20): warning C4244: 'initializing': conversion from 'float' to 'INT16S', possible loss of data
+  CSharedMem.cpp
+  CStreamerTest.cpp
+  CStreamManager.cpp
+  GStreamSender.cpp
 C:\Users\Pc\Documents\Unreal Projects\BoatSim\GSteamTransfer\GStream\CMath.h(11,20): warning C4244: 'return': conversion from 'INT16S' to 'INT8U', possible loss of data
 C:\Users\Pc\Documents\Unreal Projects\BoatSim\GSteamTransfer\GStream\CMath.h(14,20): warning C4244: 'return': conversion from 'INT16S' to 'INT8U', possible loss of data
 C:\Users\Pc\Documents\Unreal Projects\BoatSim\GSteamTransfer\GStream\CMath.h(17,16): warning C4244: 'return': conversion from 'INT16S' to 'INT8U', possible loss of data
@@ -21,4 +29,8 @@ C:\Users\Pc\Documents\Unreal Projects\BoatSim\GSteamTransfer\GStream\GStreamSend
 C:\Users\Pc\Documents\Unreal Projects\BoatSim\GSteamTransfer\GStream\GStreamSender.cpp(460,40): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
 C:\Users\Pc\Documents\Unreal Projects\BoatSim\GSteamTransfer\GStream\GStreamSender.cpp(374,11): warning C4101: 'curr_pixel': unreferenced local variable
 C:\Users\Pc\Documents\Unreal Projects\BoatSim\GSteamTransfer\GStream\GStreamSender.cpp(483,16): warning C4101: 'map': unreferenced local variable
-  GStream.vcxproj -> C:\Users\Pc\Documents\Unreal Projects\BoatSim\GSteamTransfer\GStream\x64\Debug\GStream.exe
+  main.cpp
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\GSteamTransfer\GStream\main.cpp(79,34): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+  Generating Code...
+     Creating library C:\Users\Pc\Documents\Unreal Projects\BoatSim\GSteamTransfer\GStream\x64\Debug\GStream.lib and object C:\Users\Pc\Documents\Unreal Projects\BoatSim\GSteamTransfer\GStream\x64\Debug\GStream.exp
+  GStream.vcxproj -> C:\Users\Pc\Documents\Unreal Projects\BoatSim\GSteamTransfer\GStream\x64\Debug\GStream.dll

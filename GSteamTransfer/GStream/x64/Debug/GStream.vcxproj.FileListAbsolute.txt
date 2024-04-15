@@ -1,1 +1,1 @@
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\GSteamTransfer\GStream\x64\Debug\GStream.exe
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\GSteamTransfer\GStream\x64\Debug\GStream.dll

@@ -5,6 +5,11 @@
 #include <Lib/SystemManager/SystemManagerBase.h>
 #include <Lib/Utils/CUtil.h>
 
+void ACameraBase::BeginPlay()
+{
+	Super::BeginPlay();
+}
+
 void ACameraBase::InitSensor()
 {
 	Super::InitSensor();

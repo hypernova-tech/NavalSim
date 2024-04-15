@@ -35,5 +35,5 @@ public:
 	virtual void Stop() override;
 
 	void SetHostIf(IMartiHostIF* p_val);
-	void SendMessage(EMartiCommandReportId id, INT8U* payload, INT32S size);
+	void SendMessageWithId(EMartiCommandReportId id, INT8U* payload, INT32S size);
 };

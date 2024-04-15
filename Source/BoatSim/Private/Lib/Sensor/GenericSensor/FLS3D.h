@@ -33,6 +33,8 @@ public:
 	
 	virtual void OnCaptureReady(void* p_data) override;
 
+
+
 private:
 	float CurrentScanAzimuth;
 	double NextScanTime;

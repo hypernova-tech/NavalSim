@@ -3,6 +3,12 @@
 
 #include "Products/IDAS/Sensors/Camera/MartiCamera.h"
 
+void AMartiCamera::BeginPlay()
+{
+	Super::BeginPlay();
+	pSharedMemory = GetComponentByClass<USharedMemory>();
+}
+
 void AMartiCamera::OnCaptured()
 {
 	Super::OnCaptured();
@@ -34,10 +40,20 @@ void AMartiCamera::OnCaptureReady(void* p_data)
 void AMartiCamera::InitSensor()
 {
 	Super::InitSensor();
-	pSharedMemory  = GetComponentByClass<USharedMemory>();
+	
 	SSharedMemInitArgs args;
 	args.Name = pSharedMemory->SharedMemoryName;
 	args.size = SensorWidth * SensorHeight * 4;
 	args.HeaderSize = sizeof(SMartiSharedMemBufferHdr);
 	pSharedMemory->InitConnection(&args);
+}
+
+void AMartiCamera::SetSharedMemoryName(FString val)
+{
+	pSharedMemory->SharedMemoryName = val;
+}
+
+FString AMartiCamera::GetSharedMemoryName()
+{
+	return pSharedMemory->SharedMemoryName;
 }

@@ -84,17 +84,5 @@ public:
 	{
 		return FMath::RandRange(min_inclusive, max_inclusive);
 	};
-	/// <summary>
-	/// normal (gaussian distribution)
-	/// </summary>
-	/// <param name="mean"></param>
-	/// <param name="std"></param>
-	/// <returns></returns>
-	static inline double GetRandNormal(double mean, double std)
-	{
-		std::default_random_engine generator;
-		std::normal_distribution<double> distribution(mean, std);
-		double number = distribution(generator);
-		return number;
-	};
+
 }; 

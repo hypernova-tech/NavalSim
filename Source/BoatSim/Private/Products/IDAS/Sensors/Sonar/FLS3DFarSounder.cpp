@@ -3,12 +3,18 @@
 
 #include "Products/IDAS/Sensors/Sonar/FLS3DFarSounder.h"
 #include <Lib/SystemManager/SystemManagerBase.h>
+#include <string>
+#include "Windows/MinWindows.h" // Include this header for Windows-specific functions
+using namespace std;
+
+typedef int(*SonarCreateInstanceFuncPtr)(string, int);
 
 void AFLS3DFarSounder::InitSensor()
 {
 	Super::InitSensor();
 	pSharedMemory = GetComponentByClass<USharedMemory>();
 	SSharedMemInitArgs args;
+	pSharedMemory->SharedMemoryName = ProtocolConverterSharedMemoryName;
 	args.Name = pSharedMemory->SharedMemoryName;
 	//INT32U vert_cnt = (INT32U)(FovVerticalDeg / VerticalScanStepAngleDeg + 0.5f) + 1;
 	//INT32U hor_cnt = (INT32U)(FovHorizontalDeg / HorizontalScanStepAngleDeg + 0.5f) + 1;
@@ -16,6 +22,39 @@ void AFLS3DFarSounder::InitSensor()
 	args.size = sizeof(SFLSSharedMemBufferHdr) + 1920*1080 * sizeof(SFLSDataEntry);
 	args.HeaderSize = sizeof(SFLSSharedMemBufferHdr);
 	pSharedMemory->InitConnection(&args);
+
+#if 0
+	pFlsExecRunner = new CExecRunnerBase();
+	FString args_str = "";
+	args_str = FString::Printf(TEXT("--smname %s --memsize %d"), *ProtocolConverterSharedMemoryName, args.HeaderSize + args.size);
+	pFlsExecRunner->RunExecutable(FLSProtocolConverterExecutableRelativePath, (const FString &)args_str);
+#endif
+
+	FString BinariesDir = FPaths::ProjectDir() + TEXT("Binaries/Win64/Sonar/");
+
+	FString DLLName = TEXT("SonarSimProj.dll");
+
+	// Construct the full path to the DLL
+	FString DLLPath = BinariesDir + DLLName;
+
+
+	HINSTANCE inst;
+	// Load the DLL
+	inst = LoadLibrary(*DLLPath);
+	if (inst != nullptr)
+	{
+		// Get function pointer
+		SonarCreateInstanceFuncPtr func_ptr = (SonarCreateInstanceFuncPtr)GetProcAddress(inst, "CreateInstance");
+		if (func_ptr != nullptr)
+		{
+			std::string sm_name = TCHAR_TO_UTF8(*ProtocolConverterSharedMemoryName);
+			// Call function
+			SonarDllInstanceInd = func_ptr(sm_name, args.HeaderSize + args.size);
+		}
+		hDLL = inst;
+		// Unload DLL (optional)
+		//FreeLibrary(hDLL);
+	}
 }
 
 void AFLS3DFarSounder::OnDataReady()
