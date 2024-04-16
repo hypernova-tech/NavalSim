@@ -4,11 +4,8 @@
 #include "Products/IDAS/Sensors/Camera/MartiEOSuite.h"
 #include <Lib/Utils/CUtil.h>
 #include "MartiCamera.h"
+#include "Windows/MinWindows.h" // Include this header for Windows-specific functions
 
-#include <string>
-
-
-using namespace std;
 
 typedef int(*EOCreateInstance)(char* sm_sname, char* listner_ip_addr, int listener_port, int width, int height, int frame_rate);
 
@@ -34,11 +31,12 @@ void AMartiEOSuite::InitSensor()
 	FString DLLPath = BinariesDir + DLLName;
 
 	// Load the DLL
-    hDLL = LoadLibrary(*DLLPath);
-	if (hDLL != nullptr)
+	HINSTANCE inst;
+	inst = LoadLibrary(*DLLPath);
+	if (inst != nullptr)
 	{
 		// Get function pointer
-		EOCreateInstance func_ptr = (EOCreateInstance)GetProcAddress(hDLL, "CreateInstance");
+		EOCreateInstance func_ptr = (EOCreateInstance)GetProcAddress(inst, "CreateInstance");
 		if (func_ptr != nullptr)
 		{
 			char sm_name[1024];
@@ -46,11 +44,12 @@ void AMartiEOSuite::InitSensor()
 
 			auto conns = pMartiCommIF->GetConnectionsInfo();
 			char ip_addr[256];
-			CUtil::FStringToAsciiChar(conns[0].ConnectionInfo.IpAddr, ip_addr, 256);
+			CUtil::FStringToAsciiChar(GStreamerIP, ip_addr, 256);
 			// Call function
 			
-			StreamerInstanceId = func_ptr(sm_name, ip_addr, GStreamerDestPort, pActiveCamera->SensorWidth, pActiveCamera->SensorHeight, 60);
+			StreamerInstanceId = func_ptr(sm_name, ip_addr, GStreamerPort, pActiveCamera->SensorWidth, pActiveCamera->SensorHeight, 60);
 		}
+		hDLL = inst;
 
 		// Unload DLL (optional)
 		//FreeLibrary(hDLL);

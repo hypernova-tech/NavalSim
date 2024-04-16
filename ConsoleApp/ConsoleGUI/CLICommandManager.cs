@@ -67,6 +67,11 @@ public static class CLICommandManager
     [Modifiable] public const string HorizontalFov = "hfov";
     [Modifiable] public const string HorizontalScanStepAngleDeg = "hscanstepang";
     [Modifiable] public const string VerticalScanStepAngleDeg = "vscanstepang";
+
+    [Modifiable] public const string SharedMemName      = "sharedmemname";
+    [Modifiable] public const string GStreamerIP        = "gstreamerip";
+    [Modifiable] public const string GStreamerPort      = "gstreamerport";
+
     [Modifiable] public const string IsNormalDistribution = "isnormaldistribution";
     [Modifiable] public const string MeasurementErrorMean = "merrormean";
     [Modifiable] public const string MeasurementErrorStd = "merrorstd";

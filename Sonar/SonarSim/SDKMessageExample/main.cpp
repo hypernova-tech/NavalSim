@@ -416,7 +416,7 @@ int main(int argc, char* argv[])
 #else
 // Declare the function with the export/import macro
 extern "C" {  // Use extern "C" if you want to ensure C linkage (name mangling avoidance)
-    __declspec(dllexport) int CreateInstance(string sm_sname, int size);
+    __declspec(dllexport) int CreateInstance(char *sm_sname, int size);
 }
 
 struct SInstanceParams
@@ -431,7 +431,7 @@ list< SInstanceParams*> InstancesParams;
 
 
 // Function definition
-int CreateInstance(string sm_sname, int size) {
+int CreateInstance(char *sm_sname, int size) {
     // Implement your initialization logic here 
     cout << "initing sonar model" << endl;
     SInstanceParams* p_args = new SInstanceParams();
@@ -440,7 +440,7 @@ int CreateInstance(string sm_sname, int size) {
     p_args->pHostListener = new CFLSHostListener();
 
     SAppArgs args;
-    args.ShareMemName = sm_sname;
+    args.ShareMemName = string(sm_sname);
     args.Size = size;
     p_args->Args = args;
     p_args->pSharedMemManager->Init(args);

@@ -1,54 +1,4 @@
 ﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(531,5): warning MSB8028: The intermediate directory (x64\Release\) contains files shared from another project (SDKMessageExample.vcxproj).  This can lead to incorrect clean and rebuild behavior.
-  CFLSHostListener.cpp
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\SDKMessageExample\CFLSHostListener.cpp(52,51): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-  CFlsIF.cpp
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\SDKMessageExample\CFlsIF.cpp(51,49): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\SDKMessageExample\CFlsIF.cpp(52,48): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\SDKMessageExample\CFlsIF.cpp(53,28): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\SDKMessageExample\CFlsIF.cpp(63,48): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\SDKMessageExample\CFlsIF.cpp(64,48): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\SDKMessageExample\CFlsIF.cpp(65,28): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  CInit.cpp
-  CSharedMem.cpp
-  CSharedMemManager.cpp
-  array.pb.cc
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\SDKMessageExample\proto\array.pb.cc(332,15): warning C4244: 'argument': conversion from 'uint64_t' to 'int', possible loss of data
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\SDKMessageExample\proto\array.pb.cc(345,15): warning C4244: 'argument': conversion from 'uint64_t' to 'int', possible loss of data
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\SDKMessageExample\protobuf-bin\include\google\protobuf\has_bits.h(73,41): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\SDKMessageExample\protobuf-bin\include\google\protobuf\has_bits.h(72,1): message : while compiling class template member function 'void google::protobuf::internal::HasBits<1>::Or(const google::protobuf::internal::HasBits<1> &)'
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\SDKMessageExample\proto\array.pb.cc(378,16): message : see reference to function template instantiation 'void google::protobuf::internal::HasBits<1>::Or(const google::protobuf::internal::HasBits<1> &)' being compiled
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\SDKMessageExample\protobuf-bin\include\google\protobuf\has_bits.h(83,30): message : see reference to class template instantiation 'google::protobuf::internal::HasBits<1>' being compiled
-  grid_description.pb.cc
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\SDKMessageExample\proto\grid_description.pb.cc(191,15): warning C4244: 'argument': conversion from 'uint64_t' to 'int', possible loss of data
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\SDKMessageExample\protobuf-bin\include\google\protobuf\has_bits.h(73,41): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\SDKMessageExample\protobuf-bin\include\google\protobuf\has_bits.h(72,1): message : while compiling class template member function 'void google::protobuf::internal::HasBits<1>::Or(const google::protobuf::internal::HasBits<1> &)'
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\SDKMessageExample\proto\grid_description.pb.cc(256,16): message : see reference to function template instantiation 'void google::protobuf::internal::HasBits<1>::Or(const google::protobuf::internal::HasBits<1> &)' being compiled
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\SDKMessageExample\protobuf-bin\include\google\protobuf\has_bits.h(83,30): message : see reference to class template instantiation 'google::protobuf::internal::HasBits<1>' being compiled
-  nav_api.pb.cc
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\SDKMessageExample\proto\nav_api.pb.cc(700,15): warning C4244: 'argument': conversion from 'uint64_t' to 'int', possible loss of data
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\SDKMessageExample\proto\nav_api.pb.cc(2608,15): warning C4244: 'argument': conversion from 'uint64_t' to 'int', possible loss of data
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\SDKMessageExample\proto\nav_api.pb.cc(2621,15): warning C4244: 'argument': conversion from 'uint64_t' to 'int', possible loss of data
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\SDKMessageExample\proto\nav_api.pb.cc(3337,15): warning C4244: 'argument': conversion from 'uint64_t' to 'int', possible loss of data
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\SDKMessageExample\protobuf-bin\include\google\protobuf\has_bits.h(73,41): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\SDKMessageExample\protobuf-bin\include\google\protobuf\has_bits.h(72,1): message : while compiling class template member function 'void google::protobuf::internal::HasBits<1>::Or(const google::protobuf::internal::HasBits<1> &)'
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\SDKMessageExample\proto\nav_api.pb.cc(733,16): message : see reference to function template instantiation 'void google::protobuf::internal::HasBits<1>::Or(const google::protobuf::internal::HasBits<1> &)' being compiled
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\SDKMessageExample\protobuf-bin\include\google\protobuf\has_bits.h(83,30): message : see reference to class template instantiation 'google::protobuf::internal::HasBits<1>' being compiled
-  nav_info.pb.cc
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\SDKMessageExample\proto\nav_info.pb.cc(600,15): warning C4244: 'argument': conversion from 'uint64_t' to 'int', possible loss of data
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\SDKMessageExample\protobuf-bin\include\google\protobuf\has_bits.h(73,41): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\SDKMessageExample\protobuf-bin\include\google\protobuf\has_bits.h(72,1): message : while compiling class template member function 'void google::protobuf::internal::HasBits<1>::Or(const google::protobuf::internal::HasBits<1> &)'
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\SDKMessageExample\proto\nav_info.pb.cc(360,16): message : see reference to function template instantiation 'void google::protobuf::internal::HasBits<1>::Or(const google::protobuf::internal::HasBits<1> &)' being compiled
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\SDKMessageExample\protobuf-bin\include\google\protobuf\has_bits.h(83,30): message : see reference to class template instantiation 'google::protobuf::internal::HasBits<1>' being compiled
-  nmea.pb.cc
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\SDKMessageExample\protobuf-bin\include\google\protobuf\has_bits.h(73,41): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\SDKMessageExample\protobuf-bin\include\google\protobuf\has_bits.h(72,1): message : while compiling class template member function 'void google::protobuf::internal::HasBits<1>::Or(const google::protobuf::internal::HasBits<1> &)'
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\SDKMessageExample\proto\nmea.pb.cc(212,16): message : see reference to function template instantiation 'void google::protobuf::internal::HasBits<1>::Or(const google::protobuf::internal::HasBits<1> &)' being compiled
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\SDKMessageExample\protobuf-bin\include\google\protobuf\has_bits.h(83,30): message : see reference to class template instantiation 'google::protobuf::internal::HasBits<1>' being compiled
-  time.pb.cc
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\SDKMessageExample\protobuf-bin\include\google\protobuf\has_bits.h(73,41): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\SDKMessageExample\protobuf-bin\include\google\protobuf\has_bits.h(72,1): message : while compiling class template member function 'void google::protobuf::internal::HasBits<1>::Or(const google::protobuf::internal::HasBits<1> &)'
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\SDKMessageExample\proto\time.pb.cc(218,16): message : see reference to function template instantiation 'void google::protobuf::internal::HasBits<1>::Or(const google::protobuf::internal::HasBits<1> &)' being compiled
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\SDKMessageExample\protobuf-bin\include\google\protobuf\has_bits.h(83,30): message : see reference to class template instantiation 'google::protobuf::internal::HasBits<1>' being compiled
   main.cpp
 C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\SDKMessageExample\main.cpp(59,49): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
 C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\SDKMessageExample\main.cpp(210,10): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
@@ -56,7 +6,8 @@ C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\SDKMessageExample\m
 C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\SDKMessageExample\main.cpp(449,34): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
      Creating library C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\x64\Release\SonarSimProj.lib and object C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\x64\Release\SonarSimProj.exp
   Generating code
-  Previous IPDB not found, fall back to full compilation.
-  All 2309 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  4 of 2312 functions ( 0.2%) were compiled, the rest were copied from previous compilation.
+    3 functions were new in current compilation
+    11 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   SDKMessageExample.vcxproj -> C:\Users\Pc\Documents\Unreal Projects\BoatSim\Sonar\SonarSim\x64\Release\SonarSimProj.dll

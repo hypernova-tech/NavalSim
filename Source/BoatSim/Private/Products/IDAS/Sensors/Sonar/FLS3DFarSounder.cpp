@@ -3,11 +3,10 @@
 
 #include "Products/IDAS/Sensors/Sonar/FLS3DFarSounder.h"
 #include <Lib/SystemManager/SystemManagerBase.h>
-#include <string>
+#include <Lib/Utils/CUtil.h>
 #include "Windows/MinWindows.h" // Include this header for Windows-specific functions
-using namespace std;
 
-typedef int(*SonarCreateInstanceFuncPtr)(string, int);
+typedef int(*SonarCreateInstanceFuncPtr)(char*, int);
 
 void AFLS3DFarSounder::InitSensor()
 {
@@ -23,12 +22,6 @@ void AFLS3DFarSounder::InitSensor()
 	args.HeaderSize = sizeof(SFLSSharedMemBufferHdr);
 	pSharedMemory->InitConnection(&args);
 
-#if 0
-	pFlsExecRunner = new CExecRunnerBase();
-	FString args_str = "";
-	args_str = FString::Printf(TEXT("--smname %s --memsize %d"), *ProtocolConverterSharedMemoryName, args.HeaderSize + args.size);
-	pFlsExecRunner->RunExecutable(FLSProtocolConverterExecutableRelativePath, (const FString &)args_str);
-#endif
 
 	FString BinariesDir = FPaths::ProjectDir() + TEXT("Binaries/Win64/Sonar/");
 
@@ -47,7 +40,9 @@ void AFLS3DFarSounder::InitSensor()
 		SonarCreateInstanceFuncPtr func_ptr = (SonarCreateInstanceFuncPtr)GetProcAddress(inst, "CreateInstance");
 		if (func_ptr != nullptr)
 		{
-			std::string sm_name = TCHAR_TO_UTF8(*ProtocolConverterSharedMemoryName);
+			char sm_name[1024];
+			CUtil::FStringToAsciiChar(ProtocolConverterSharedMemoryName, sm_name, 1024);
+			
 			// Call function
 			SonarDllInstanceInd = func_ptr(sm_name, args.HeaderSize + args.size);
 		}
@@ -113,4 +108,14 @@ void AFLS3DFarSounder::Run(float delta_time_sec)
 			p_hdr->SonarSimIsUpdateData = 0;
 		}
 	}
+}
+
+void AFLS3DFarSounder::Save(ISaveLoader* p_save_loader)
+{
+	Super::Save(p_save_loader);
+}
+
+void AFLS3DFarSounder::SaveJSON(CJsonDataContainer& data)
+{
+	Super::SaveJSON(data);
 }

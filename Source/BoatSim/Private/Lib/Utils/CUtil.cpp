@@ -1140,6 +1140,7 @@ void CUtil::FStringToAsciiChar(const FString& str, char *p_dest, INT32U dest_len
 
     INT32S len = (INT32S)dest_len <= UTF8String.Length() ? (INT32S)dest_len : UTF8String.Length();
     memcpy(p_dest, UTF8String.Get(), len);
+    p_dest[len] = 0;
 
 
 #if false

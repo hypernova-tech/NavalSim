@@ -324,6 +324,19 @@ void AActorBase::Save(ISaveLoader* p_save_loader)
 			ind++;
 		}
 	}
+	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
+	p_save_loader->AppendOption(line, CCLICommandManager::SharedMemName, ProtocolConverterSharedMemoryName);
+	p_save_loader->AddLine(line);
+
+	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
+	p_save_loader->AppendOption(line, CCLICommandManager::GStreamerIP, GStreamerIP);
+	p_save_loader->AddLine(line);
+
+	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
+	p_save_loader->AppendOption(line, CCLICommandManager::GStreamerPort, GStreamerPort);
+	p_save_loader->AddLine(line);
+
+
 }
 
 void AActorBase::SaveJSON(CJsonDataContainer& data)
@@ -371,6 +384,10 @@ void AActorBase::SaveJSON(CJsonDataContainer& data)
 			ind++;
 		}
 	}
+
+	data.Add(CCLICommandManager::SharedMemName, ProtocolConverterSharedMemoryName);
+	data.Add(CCLICommandManager::GStreamerIP, GStreamerIP);
+	data.Add(CCLICommandManager::GStreamerPort, GStreamerPort);
 }
 
 void AActorBase::ShowActorGizmo(bool val)

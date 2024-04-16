@@ -8,7 +8,6 @@
 #include <Products/IDAS/Sensors/Camera/IMartiHostIF.h>
 #include "MartiCommIF/MartiCommIF.h"
 #include <Lib/Gimbal/GimbalBase.h>
-#include "Windows/MinWindows.h" // Include this header for Windows-specific functions
 #include "MartiEOSuite.generated.h"
 
 
@@ -32,7 +31,7 @@ protected:
 	AGimbalBase* pGimbal;
 	UMartiCommIF* pMartiCommIF;
 	INT32S StreamerInstanceId;
-	HINSTANCE hDLL;
+	void* hDLL;
 
 	SMartiLosCommandPayload			LastLosCommand;
 	SMartiLosReportPayload			LastLosReport;
@@ -67,13 +66,6 @@ protected:
 	void SendDefogReport();
 	void SendICRReport();
 
-public:
-	UPROPERTY(EditAnywhere)
-		FString ProtocolConverterSharedMemoryName = "MARTISM1";
 
-	UPROPERTY(EditAnywhere)
-		FString ProtocolConverterExecutableRelativePath = "/Executables/Marti/bin/marticonverter.exe";
 
-	UPROPERTY(EditAnywhere)
-		int GStreamerDestPort = 1045;
 };

@@ -92,9 +92,11 @@ FString CCLICommandManager::RadarSeaClutterAutoOffset = "radseaclutautooffset";
 FString CCLICommandManager::RadarRainClutterLevel = "radrainclutlevel";
 FString CCLICommandManager::RadarMaxGuardZoneCount = "radmaxguardzonecount";
 FString CCLICommandManager::RadarMaxSectorBlankingZoneCount = "radmaxsectorblankingzonecount";
-FString CCLICommandManager::CamWidthPx = "widthpx";
-FString CCLICommandManager::CamHeightPx = "heightpx";
-
+FString CCLICommandManager::CamWidthPx		= "widthpx";
+FString CCLICommandManager::CamHeightPx		= "heightpx";
+FString CCLICommandManager::SharedMemName	= "sharedmemname";
+FString CCLICommandManager::GStreamerIP = "gstreamerip";
+FString CCLICommandManager::GStreamerPort = "gstreamerport";
 FString CCLICommandManager::TimeOfDayHour = "timeofday";
 FString CCLICommandManager::EnvTimeFlowScale = "envtimeflowscale";
 FString CCLICommandManager::ThermalMode ="thermalmode";

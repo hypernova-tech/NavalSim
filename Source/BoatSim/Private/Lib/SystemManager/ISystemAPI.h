@@ -168,6 +168,8 @@ public:
     virtual bool SetVerticalScanStepAngleDeg(AActor* p_actor, FLOAT64 angle_deg) = 0;
 	virtual bool GetVerticalScanStepAngleDeg(AActor* p_actor, FLOAT64& angle_deg) = 0;
 
+
+
 	virtual bool GetIsNormalDistribution(AActor* p_actor, bool&val) = 0;
 	virtual	bool SetIsNormalDistribution(AActor* p_actor, bool val) = 0;
 
@@ -406,6 +408,13 @@ public:
 	virtual bool SetPublishAton(AActor* p_actor, bool val) = 0;
 	virtual bool GetPublishAton(AActor* p_actor, bool& val) = 0;
 
+	virtual bool GetSharedMemoryName(AActor* p_actor, FString& val) = 0;
+	virtual	bool SetSharedMemoryName(AActor* p_actor, FString val) = 0;
 
+	virtual bool GetGStreamerIP(AActor* p_actor, FString& val) = 0;
+	virtual	bool SetGStreamerIP(AActor* p_actor, FString val) = 0;
+
+	virtual bool GetGStreamerPort(AActor* p_actor, int& val) = 0;
+	virtual	bool SetGStreamerPort(AActor* p_actor, int val) = 0;
 
 };

@@ -2,7 +2,7 @@
 #include "CoreMinimal.h"
 #include "Lib/Types/Primitives.h"
 #include <random>
-using namespace std;
+
 
 class CMath
 {

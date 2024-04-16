@@ -3141,6 +3141,71 @@ bool ASystemManagerBase::GetPublishAton(AActor* p_actor, bool& val)
 }
 
 
+bool ASystemManagerBase::GetSharedMemoryName(AActor* p_actor, FString& val)
+{
+	auto actorbase = ToActorBase(p_actor);
+
+	if (actorbase) {
+		val = actorbase->ProtocolConverterSharedMemoryName;
+		return true;
+	}
+	return false;
+}
+bool ASystemManagerBase::SetSharedMemoryName(AActor* p_actor, FString val)
+{
+	auto actorbase = ToActorBase(p_actor);
+
+	if (actorbase) {
+		actorbase->ProtocolConverterSharedMemoryName = val;
+		return true;
+	}
+	return false;
+}
+
+bool ASystemManagerBase::GetGStreamerIP(AActor* p_actor, FString& val)
+{
+	auto actorbase = ToActorBase(p_actor);
+
+	if (actorbase) {
+		val = actorbase->GStreamerIP;
+		return true;
+	}
+	return false;
+}
+bool ASystemManagerBase::SetGStreamerIP(AActor* p_actor, FString val)
+{
+	auto actorbase = ToActorBase(p_actor);
+
+	if (actorbase) {
+		actorbase->GStreamerIP = val;
+		return true;
+	}
+	return false;
+}
+
+bool ASystemManagerBase::GetGStreamerPort(AActor* p_actor, int& val)
+{
+	auto actorbase = ToActorBase(p_actor);
+
+	if (actorbase) {
+		val = actorbase->GStreamerPort;
+		return true;
+	}
+	return false;
+}
+
+bool ASystemManagerBase::SetGStreamerPort(AActor* p_actor, int val)
+{
+	auto actorbase = ToActorBase(p_actor);
+
+	if (actorbase) {
+		actorbase->GStreamerPort = val;
+		return true;
+	}
+	return false;
+}
+
+
 
 bool ASystemManagerBase::GetPathSpeed(AActor* p_actor, FLOAT64& val)
 {

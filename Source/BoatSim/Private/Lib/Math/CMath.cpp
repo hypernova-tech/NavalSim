@@ -1,6 +1,5 @@
 #include "CMath.h"
 #include <random>
-using namespace std;
 
 FLOAT64 CMath::GetVisibleDistanceOverSurfaceMeter(const FVector& pos, const FVector& dir, FLOAT64 max_surface_penetration_meter)
 {

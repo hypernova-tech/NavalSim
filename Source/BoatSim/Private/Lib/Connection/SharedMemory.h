@@ -26,8 +26,7 @@ class USharedMemory : public UConnectionBase
 protected:
 
 public:
-	UPROPERTY(EditAnywhere)
-		FString SharedMemoryName;
+	FString SharedMemoryName;
 	virtual void InitConnection(void *p_args = nullptr) override;
 	virtual bool SendData(const INT8U* p_bytes, INT32U count) override;
 	virtual bool SendData(const INT8U* p_hdr, INT32U header_size, const INT8U* p_bytes, INT32U count) override;

@@ -653,6 +653,39 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
 
     }
 
+    ret = CommandManager.HasA(CCLICommandManager::SharedMemName);
+    if (ret) {
+        if (pSystemAPI->GetSharedMemoryName(p_actor, sret)) {
+            SendConsoleResponse(name, CCLICommandManager::SharedMemName, sret);
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.HasA(CCLICommandManager::GStreamerIP);
+    if (ret) {
+        if (pSystemAPI->GetGStreamerIP(p_actor, sret)) {
+            SendConsoleResponse(name, CCLICommandManager::GStreamerIP, sret);
+            return true;
+        }
+    }
+    else {
+
+    }
+    
+    ret = CommandManager.HasA(CCLICommandManager::GStreamerPort);
+    if (ret) {
+        if (pSystemAPI->GetGStreamerPort(p_actor, sint)) {
+            SendConsoleResponse(name, CCLICommandManager::GStreamerPort, sint);
+            return true;
+        }
+    }
+    else {
+
+    }
+
 
     ret = CommandManager.HasA(CCLICommandManager::IsNormalDistribution);
     if (ret) {

@@ -757,6 +757,36 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
 
     }
 
+    ret = CommandManager.GetValue(CCLICommandManager::SharedMemName, sret);
+    if (ret) {
+        if (pSystemAPI->SetSharedMemoryName(p_actor, sret)) {
+            one_success = true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::GStreamerIP, sret);
+    if (ret) {
+        if (pSystemAPI->SetGStreamerIP(p_actor, sret)) {
+            one_success = true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::GStreamerPort, sint);
+    if (ret) {
+        if (pSystemAPI->SetGStreamerPort(p_actor, sint)) {
+            one_success = true;
+        }
+    }
+    else {
+
+    }
+
     ret = CommandManager.GetValue(CCLICommandManager::IsNormalDistribution, is_enabled);
     if (ret) {
         if (pSystemAPI->SetIsNormalDistribution(p_actor, is_enabled)) {

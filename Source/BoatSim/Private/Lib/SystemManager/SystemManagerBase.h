@@ -582,6 +582,15 @@ public:
 	virtual bool SetPublishAton(AActor* p_actor, bool val);
 	virtual bool GetPublishAton(AActor* p_actor, bool& val);
 
+	virtual bool GetSharedMemoryName(AActor* p_actor, FString& val);
+	virtual	bool SetSharedMemoryName(AActor* p_actor, FString val);
+
+	virtual bool GetGStreamerIP(AActor* p_actor, FString& val);
+	virtual	bool SetGStreamerIP(AActor* p_actor, FString val);
+
+	virtual bool GetGStreamerPort(AActor* p_actor, int& val);
+	virtual	bool SetGStreamerPort(AActor* p_actor, int val);
+
 	
 
 	virtual APostProcessVolume *GetMainPostProcessVolume();

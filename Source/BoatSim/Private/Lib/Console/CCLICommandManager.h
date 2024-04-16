@@ -87,6 +87,9 @@ public:
 	static FString Scale;
 	static FString Parent;
 	static FString FullPath;
+	static FString SharedMemName;
+	static FString GStreamerIP;
+	static FString GStreamerPort;
 	static FString Tick;
 	static FString Controller;
 	static FString SensorSlotIndex;
@@ -139,6 +142,8 @@ public:
 	
 	static FString CamWidthPx;
 	static FString CamHeightPx;
+
+	
 
 	static FString RainPercent;
 	static FString CloudPercent;

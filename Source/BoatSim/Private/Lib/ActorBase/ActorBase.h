@@ -39,6 +39,7 @@ protected:
 	virtual void OnConstruction(const FTransform& Transform) override;
 	virtual void BeginPlay() override;
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+	
 	UPROPERTY(EditAnywhere)
 		bool IsSaveEnabled = true;
 
@@ -60,7 +61,7 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 		bool IsRegisterEnabled = true;
-	
+
 
 	UPROPERTY(EditAnywhere)
 		bool IsExternalUpdate = true;
@@ -105,6 +106,8 @@ protected:
 	UPROPERTY(EditAnywhere)
 		bool KeepPhysicsEnabledComponentRelativeTransformConstant = false;
 
+
+
 	INT64U ExternalUpdateCount = 0;
 	INT64U ExternalUpdateCountScenarioMode = 0;
 	double VelPreviousTime;
@@ -127,8 +130,20 @@ protected:
 
 	 virtual FVector UpdateActorVelocityMetersPerSec();
 	 virtual FVector UpdateActorAngularVelocityRPYDegPerSec();
+
+
+
 public:	
 	// Called every frame
+
+	UPROPERTY(EditAnywhere)
+		FString ProtocolConverterSharedMemoryName = "";
+
+	UPROPERTY(EditAnywhere)
+		FString GStreamerIP = "";
+
+	UPROPERTY(EditAnywhere)
+		int GStreamerPort = 0;
 	
 	virtual void Tick(float DeltaTime) override;
 
@@ -197,13 +212,7 @@ public:
 		bool  GetAnnotateChildrenActors_();
 
 
-
-
 	virtual void UpdateAnnotation(bool is_enabled);
-
-
-
-	
 
 	FVector GetPositionLatLongHeightMSL();
 	FVector GetPositionXYZMeters();
