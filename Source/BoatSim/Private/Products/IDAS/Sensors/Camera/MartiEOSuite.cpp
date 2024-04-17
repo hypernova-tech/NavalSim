@@ -46,8 +46,10 @@ void AMartiEOSuite::InitSensor()
 			char ip_addr[256];
 			CUtil::FStringToAsciiChar(GStreamerIP, ip_addr, 256);
 			// Call function
-			
-			StreamerInstanceId = func_ptr(sm_name, ip_addr, GStreamerPort, pActiveCamera->SensorWidth, pActiveCamera->SensorHeight, 60);
+			if (GStreamerPort != 0) {
+				StreamerInstanceId = func_ptr(sm_name, ip_addr, GStreamerPort, pActiveCamera->SensorWidth, pActiveCamera->SensorHeight, 60);
+
+			}
 		}
 		hDLL = inst;
 
@@ -253,15 +255,27 @@ void AMartiEOSuite::HandleSensorCommand(SMartiSensorCommandPayload* p_cmd)
 	if (p_cmd->ModeContol.ThermalPolarity == 1) {
 		pActiveCamera->IsWhiteHot = true;
 	}
-	else {
+	else if (p_cmd->ModeContol.ThermalPolarity == 2) {
 		pActiveCamera->IsWhiteHot = false;
 	}
-
-	pDTV->ContrastLevel = p_cmd->DTVContrast;
-	pDTV->BrightnessLevel = p_cmd->DTVBrightness;
-
-	pIR->ContrastLevel = p_cmd->ThermalContrast;
-	pIR->BrightnessLevel = p_cmd->ThermalBrightness;
+	else {
+		// no change
+	}
+	if (p_cmd->DTVContrast <= 100) {
+		pDTV->ContrastLevel = FMath::Clamp(p_cmd->DTVContrast, 0, 100);
+	}
+	if (pDTV->BrightnessLevel <= 100) {
+		pDTV->BrightnessLevel = FMath::Clamp(p_cmd->DTVBrightness, 0, 100);
+	}
+	
+	if (pIR->ContrastLevel <= 100) {
+		pIR->ContrastLevel = FMath::Clamp(p_cmd->ThermalContrast, 0, 100);
+	}
+	
+	if (pIR->BrightnessLevel <= 100) {
+		pIR->BrightnessLevel = FMath::Clamp(p_cmd->ThermalBrightness, 0, 100);
+	}
+	
 
 	pActiveCamera->UpdateFov();
 }

@@ -122,8 +122,8 @@ set --name EOSuite --ipaddr1 15.0.91.65
 set --name EOSuite --localport1 7770
 set --name EOSuite --remoteport 7770
 set --name EOSuite --sharedmemname eo1sm
-set --name EOSuite --gstreamerip 127.0.0.1
-set --name EOSuite --gstreamerport 1045
+set --name EOSuite --gstreamerip 15.0.91.65
+set --name EOSuite --gstreamerport 0
 set --name EOSuite --slotindex 0
 set --name EOSuite --rangemin 5.000000
 set --name EOSuite --rangemax 100.000000

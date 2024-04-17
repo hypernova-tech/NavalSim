@@ -8,7 +8,7 @@ public:
 	{
         
         if (val <= min_val) {
-            return val;
+            return min_val;
         }
         else if (val >= max_val) {
             return max_val;

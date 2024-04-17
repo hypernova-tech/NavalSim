@@ -7,7 +7,7 @@
 #include "CStreamManager.h"
 #include <list>
 
-#define STANDALONE_EN 0
+#define STANDALONE_EN 1
 
 
 void ThreadFuncInit()
@@ -21,7 +21,7 @@ int main() {
 
    
     SAppArgs args;
-    args.ShareMemName = "MARTIVISSM";
+    args.ShareMemName = "eo1sm";
     
     args.PortNo = 1045;
     args.IpAddr = "15.0.91.65";// "15.0.91.65";

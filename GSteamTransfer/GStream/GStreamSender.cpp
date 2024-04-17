@@ -354,15 +354,30 @@ uint8_t* GStreamSender::ConvertRGBAtoYCbCr(SSharedMemBufferHdr *p_hdr,  std::uin
 
     SSharedMemBufferHdr hdr_rcv = *p_hdr;
 
+#if 0
     hdr_rcv.BrightnessLevel = 0;
     hdr_rcv.ContrastLevel = 0;
     hdr_rcv.ImageInfo.IsIr = false;
     hdr_rcv.ImageInfo.IsWhiteHot = true;
     hdr_rcv.ImageInfo.EnableDefog = 0;
     hdr_rcv.ImageInfo.DefogLevel = 3;
+#endif
 
-    float brigtness_level = 0 + hdr_rcv.BrightnessLevel / 100.0 * 255;
-    float constast_scale = 1 + 1.5 * hdr_rcv.ContrastLevel / 100;
+
+    float brigtness_level = 0 + hdr_rcv.BrightnessLevel/5.0 / 100.0 * 255;
+    if (hdr_rcv.ImageInfo.IsIr) {
+        if (!hdr_rcv.ImageInfo.IsWhiteHot) {
+            brigtness_level = CMath::Lerp(hdr_rcv.BrightnessLevel / 100.0, 50, -50);
+        }
+        else {
+            brigtness_level = CMath::Lerp(hdr_rcv.BrightnessLevel / 100.0, -50, 50);
+        }
+    }
+    else {
+        brigtness_level = CMath::Lerp(hdr_rcv.BrightnessLevel / 100.0, -50, 50);
+    }
+   
+    float constast_scale = 1 + hdr_rcv.ContrastLevel / 150;
     
     if (!hdr_rcv.ImageInfo.IsIr) {
         constast_scale += hdr_rcv.ImageInfo.IsICREnabled * 0.1;
@@ -381,9 +396,7 @@ uint8_t* GStreamSender::ConvertRGBAtoYCbCr(SSharedMemBufferHdr *p_hdr,  std::uin
 
         if (hdr_rcv.ImageInfo.IsIr) {
             ir_val = p_buffer[i] * 0.299 + p_buffer[i + 1] * 0.587 + p_buffer[i + 2] * 0.114;
-            if (!hdr_rcv.ImageInfo.IsWhiteHot) {
-                ir_val = 255 - ir_val;
-            }
+       
             high_res_pix[0] = ir_val;
             high_res_pix[1] = ir_val;
             high_res_pix[2] = ir_val;
@@ -394,15 +407,25 @@ uint8_t* GStreamSender::ConvertRGBAtoYCbCr(SSharedMemBufferHdr *p_hdr,  std::uin
             high_res_pix[2]   = p_buffer[i + 2];
         }
   
-        if (hdr_rcv.ImageInfo.EnableDefog) {
-            high_res_pix[0] += CMath::Lerp(defog_tf, high_res_pix[0], fog_color[0]);
-            high_res_pix[1] += CMath::Lerp(defog_tf, high_res_pix[1], fog_color[1]);
-            high_res_pix[2] += CMath::Lerp(defog_tf, high_res_pix[2], fog_color[2]);
-        }
-        else {
-            high_res_pix[0] += CMath::Lerp(1, high_res_pix[0], fog_color[0]);
-            high_res_pix[1] += CMath::Lerp(1, high_res_pix[1], fog_color[1]);
-            high_res_pix[2] += CMath::Lerp(1, high_res_pix[2], fog_color[2]);
+        if (!hdr_rcv.ImageInfo.IsIr) {
+            if (hdr_rcv.ImageInfo.EnableDefog) {
+                //high_res_pix[0] += CMath::Lerp(defog_tf, high_res_pix[0], fog_color[0]);
+                //high_res_pix[1] += CMath::Lerp(defog_tf, high_res_pix[1], fog_color[1]);
+                //high_res_pix[2] += CMath::Lerp(defog_tf, high_res_pix[2], fog_color[2]);
+
+
+                high_res_pix[0] -= CMath::Lerp(defog_tf,  0.3*fog_color[0],0);
+                high_res_pix[1] -= CMath::Lerp(defog_tf, 0.3*fog_color[1],0);
+                high_res_pix[2] -= CMath::Lerp(defog_tf,  0.3*fog_color[2],0);
+
+    
+            }
+            else {
+
+               // high_res_pix[0] += CMath::Lerp(1, high_res_pix[0], fog_color[0]);
+               // high_res_pix[1] += CMath::Lerp(1, high_res_pix[1], fog_color[1]);
+               // high_res_pix[2] += CMath::Lerp(1, high_res_pix[2], fog_color[2]);
+            }
         }
 
 
@@ -415,6 +438,14 @@ uint8_t* GStreamSender::ConvertRGBAtoYCbCr(SSharedMemBufferHdr *p_hdr,  std::uin
         uint8_t G = CMath::ClampHighResPixel(high_res_pix[1], 0, 255);
         uint8_t B = CMath::ClampHighResPixel(high_res_pix[2], 0, 255);
         // Alpha (p_buffer[i + 3]) is ignored
+
+        if (hdr_rcv.ImageInfo.IsIr) {
+            if (!hdr_rcv.ImageInfo.IsWhiteHot) {
+                R = 255 - R;
+                G = 255 - G;
+                B = 255 - B;
+            }
+        }
 
         p_buffer[i]     = R;
         p_buffer[i + 1] = G;

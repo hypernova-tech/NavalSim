@@ -40,10 +40,10 @@ public:
 		bool IsICREnabled = false;
 
 	UPROPERTY(EditAnywhere)
-		int  BrightnessLevel = 0; // 0-100
+		int  BrightnessLevel = 50; // 0-100
 
 	UPROPERTY(EditAnywhere)
-		int  ContrastLevel = 0;// 0-100
+		int  ContrastLevel = 50;// 0-100
 
 protected:
 	virtual void BeginPlay() override;
