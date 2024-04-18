@@ -5,6 +5,7 @@
 #include <Lib/SystemManager/SystemManagerBase.h>
 #include <Lib/Utils/CUtil.h>
 #include "Windows/MinWindows.h" // Include this header for Windows-specific functions
+#include <Lib/Math/CMath.h>
 
 typedef int(*SonarCreateInstanceFuncPtr)(char*, int);
 
@@ -85,6 +86,20 @@ void AFLS3DFarSounder::OnDataReady()
 	int cnt = sector_info->SectorData.Num();
 	int ind = 0;
 	bool is_ground;
+	
+	double filtered_squelch = FMath::Clamp(SquelchSensitivity, 110, 210);
+	double detection_prop_percent = 100;
+
+	if (AutoSquelchEnabled) {
+		detection_prop_percent = CMath::GetRandomRange(95, 100);
+	}
+	else {
+		detection_prop_percent = CMath::Remap(filtered_squelch, 110, 210, 99, 10);
+	}
+
+
+
+
 	if (IsFlsOn) {
 		for (int i = 0; i < cnt; i++) {
 
@@ -95,19 +110,24 @@ void AFLS3DFarSounder::OnDataReady()
 
 			if (is_ground) {
 				if (p_hdr->FromSimToHost.BottomDetectionEnabled) {
+					if (detection_prop_percent >= CMath::GetRandomRange(0, 100)) {
+						p_curr_entry->X = TOW(data.X);
+						p_curr_entry->Y = TOW(data.Y);
+						p_curr_entry->Z = TOW(data.Z);
+						p_curr_entry->Info.IsGround = is_ground;
+						ind++;
+					}
+				
+				}
+			}
+			else {
+				if (detection_prop_percent >= CMath::GetRandomRange(0, 100)) {
 					p_curr_entry->X = TOW(data.X);
-					p_curr_entry->Y = TOW(-data.Y);
+					p_curr_entry->Y = TOW(data.Y);
 					p_curr_entry->Z = TOW(data.Z);
 					p_curr_entry->Info.IsGround = is_ground;
 					ind++;
 				}
-			}
-			else {
-				p_curr_entry->X = TOW(data.X);
-				p_curr_entry->Y = TOW(-data.Y);
-				p_curr_entry->Z = TOW(data.Z);
-				p_curr_entry->Info.IsGround = is_ground;
-				ind++;
 			}
 		}
 	}
@@ -130,6 +150,7 @@ void AFLS3DFarSounder::Run(float delta_time_sec)
 	SFLSSharedMemBufferHdr* p_hdr = (SFLSSharedMemBufferHdr*)pSharedMemory->GetHeader();
 
 	if (p_hdr->SonarSimIsUpdateData) { // reint data structures if an
+		IsFlsOn = p_hdr->FromHostToSim.IsFlsOn > 0;
 		RangeMaxMeter = p_hdr->FromHostToSim.RangeMeter;
 		BottomDetectEnabled = p_hdr->FromHostToSim.BottomDetectionEnabled > 0;
 		AutoSquelchEnabled = p_hdr->FromHostToSim.IsAutoSquelchEnabled > 0 ;
@@ -137,11 +158,7 @@ void AFLS3DFarSounder::Run(float delta_time_sec)
 
 	}
 
-	//update
-	p_hdr->FromHostToSim.RangeMeter = RangeMaxMeter;
-	p_hdr->FromHostToSim.BottomDetectionEnabled = BottomDetectEnabled;
-	p_hdr->FromHostToSim.IsAutoSquelchEnabled   = AutoSquelchEnabled;
-	p_hdr->FromHostToSim.SquelchSensitivity     = SquelchSensitivity;  
+ 
 	   
 	   
 }

@@ -85,6 +85,24 @@ set --name annotation --sharedmemname
 set --name annotation --gstreamerip 
 set --name annotation --gstreamerport 0
 
+create --name target --bp CUBE --tick 0
+set --name target --actorid 0
+set --name target --instance -1
+set --name target --suppressed 0
+set --name target --standalone 0
+set --name target --position "50.000000 0.000000 0.000000"
+set --name target --rotation "-0.000000 -0.000000 0.000000"
+set --name target --scale "1.000000 1.000000 1.000000"
+set --name target --blocking 1
+set --name target --tempkelvin 300.000000
+set --name target --heatsource 0
+set --name target --annotationid 0
+set --name target --annotatechildren 0
+set --name target --annotatechildren 0
+set --name target --sharedmemname 
+set --name target --gstreamerip 
+set --name target --gstreamerport 0
+
 create --name fls --bp FLSFARSOUNDER --tick 0
 set --name fls --actorid 0
 set --name fls --instance -1
@@ -105,13 +123,13 @@ set --name fls --gstreamerport 0
 set --name fls --slotindex 0
 set --name fls --rangemin 5.000000
 set --name fls --rangemax 100.000000
-set --name fls --vfov 45.000000
-set --name fls --hfov 45.000000
-set --name fls --hscanstepang 0.500000
-set --name fls --vscanstepang 0.500000
+set --name fls --vfov 60.000000
+set --name fls --hfov 90.000000
+set --name fls --hscanstepang 0.250000
+set --name fls --vscanstepang 0.250000
 set --name fls --isnormaldistribution 0
 set --name fls --merrormean 5.000000
-set --name fls --merrorstd 0.000000
+set --name fls --merrorstd 1.000000
 set --name fls --surfacedetecten 1
 set --name fls --subsurfacedetecten 1
 set --name fls --foamen 1

@@ -17,7 +17,7 @@ wstring CSharedMem::StringToWString(const std::string& s)
 
 bool CSharedMem::ReadData(INT8U* p_data, INT32U dest_len, INT32U& read_len)
 {
-    SSharedMemBufferHdr* p_hdr = (SSharedMemBufferHdr*)pMemPtr;
+    SFLSSharedMemBufferHdr* p_hdr = (SFLSSharedMemBufferHdr*)pMemPtr;
     
     if (p_hdr->IsUpdated) {
         if (dest_len >= p_hdr->DataSize) {
@@ -32,18 +32,18 @@ bool CSharedMem::ReadData(INT8U* p_data, INT32U dest_len, INT32U& read_len)
 INT8U* CSharedMem::GetPayload()
 {
     INT8U* p_data = (INT8U*)pMemPtr;
-    return &p_data[sizeof(SSharedMemBufferHdr)];
+    return &p_data[sizeof(SFLSSharedMemBufferHdr)];
 }
 
-SSharedMemBufferHdr* CSharedMem::GetHeader()
+SFLSSharedMemBufferHdr* CSharedMem::GetHeader()
 {
-    return (SSharedMemBufferHdr*)pMemPtr;;
+    return (SFLSSharedMemBufferHdr*)pMemPtr;;
 }
 
 void CSharedMem::Init(int size, string name)
 {
     wstring text = StringToWString(name);
-    size += sizeof(SSharedMemBufferHdr);
+    size += sizeof(SFLSSharedMemBufferHdr);
 
     HANDLE sharedMemory = CreateFileMapping(
         INVALID_HANDLE_VALUE,    // use paging file

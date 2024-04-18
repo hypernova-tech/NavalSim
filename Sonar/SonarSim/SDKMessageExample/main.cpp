@@ -313,7 +313,7 @@ CFlsIF* pFLSIf;
 int main()
 {
     std::string smAddress = "FLSSM1";
-    int memSize = sizeof(SSharedMemBufferHdr) + 1920 * 1080 * sizeof(SFLSDataEntry);
+    int memSize = sizeof(SFLSSharedMemBufferHdr) + 1920 * 1080 * sizeof(SFLSDataEntry);
     
 
    

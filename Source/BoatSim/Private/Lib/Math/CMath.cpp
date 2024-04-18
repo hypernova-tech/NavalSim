@@ -132,7 +132,7 @@ FLOAT64 CMath::Remap(FLOAT64 x, FLOAT64 x1, FLOAT64 x2, FLOAT64 y1, FLOAT64 y2)
     FLOAT64 remappedValue = y1 + (x - x1) * (y2 - y1) / (x2 - x1);
 
     // Clamp the remapped value to the range [y1, y2]
-    return FMath::Clamp(remappedValue, y1, y2);
+    return remappedValue;//FMath::Clamp(remappedValue, y1, y2);
 }
 
 FVector CMath::ProjectWorldDirectionToScreenSpace(APlayerController* PC, const FVector& world_dir)

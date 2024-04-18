@@ -11,10 +11,10 @@ struct SFLSProcessorSettings
 	double SquelchSensitivity;
 };
 
-struct SSharedMemBufferHdr {
+struct SFLSSharedMemBufferHdr {
 	unsigned int IsUpdated;
 	unsigned int DataSize;
-	unsigned int SonarSimIsUpdateData;
+	unsigned int SonarSimIsUpdateData;//host to sim update
 	double PosXYZ[3];
 	double PosLLH[3];
 	double LookDir[3];

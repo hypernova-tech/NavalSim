@@ -122,6 +122,7 @@ void AActorBase::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	UpdateActorVelocityMetersPerSec();
 	UpdateActorAngularVelocityRPYDegPerSec();
+	UpdateMotionLog();
 	if (!IsExternalUpdate) {
 		if (CheckAffinity() && !Suppressed) {
 			
@@ -388,6 +389,39 @@ void AActorBase::SaveJSON(CJsonDataContainer& data)
 	data.Add(CCLICommandManager::SharedMemName, ProtocolConverterSharedMemoryName);
 	data.Add(CCLICommandManager::GStreamerIP, GStreamerIP);
 	data.Add(CCLICommandManager::GStreamerPort, GStreamerPort);
+}
+
+CMotionLogger* AActorBase:: GetMotionLogger()
+{
+	return &MotionLogger;
+}
+
+void AActorBase::SetIsMotionLogEnabled(bool val)
+{
+	IsMotionLogEnabled = val;
+}
+bool AActorBase::GetIsMotionLogEnabled()
+{
+	return IsMotionLogEnabled;
+}
+
+void AActorBase::SetMotionLogLifeTimeSec(double val)
+{
+	MotionLogLifeTimeSec = val;
+}
+
+double AActorBase::GetMotionLogLifeTimeSec()
+{
+	return MotionLogLifeTimeSec;
+}
+
+void AActorBase::SetMotionLogMinDistanceMeter(double val)
+{
+	MotionLogMinDistanceMeter = val;
+}
+double AActorBase::GetMotionLogMinDistanceMeter()
+{
+	return MotionLogMinDistanceMeter;
 }
 
 void AActorBase::ShowActorGizmo(bool val)
@@ -676,10 +710,24 @@ FVector AActorBase::UpdateActorVelocityMetersPerSec()
 	return ActorVelocityMetersPerSec;
 	
 }
+
+void AActorBase::UpdateMotionLog()
+{
+	if (!IsMotionLogEnabled) {
+		return;
+	}
+	double curr_time_sec = FApp::GetCurrentTime();
+	MotionLogger.Log(curr_time_sec, GetActorLocation(), MotionLogMinDistanceMeter);
+	MotionLogger.Update(curr_time_sec, MotionLogLifeTimeSec);
+	
+}
+
 FVector AActorBase::GetActorAngularVelocityRPYDegPerSec()
 {
 	return ActorAngularVelocityRPYDegPerSec;
 }
+
+
 FVector AActorBase::UpdateActorAngularVelocityRPYDegPerSec()
 {
 

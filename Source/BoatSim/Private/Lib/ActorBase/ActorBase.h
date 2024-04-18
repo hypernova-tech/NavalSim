@@ -9,7 +9,9 @@
 #include <Lib/JSON/CJsonDataContainer.h>
 #include <Lib/Sensor/GenericCommIF/GenericCommIF.h>
 #include <Lib/ActorBase/ActorIF.h>
+#include "CMotionLogger.h"
 #include "ActorBase.generated.h"
+
 
 
 
@@ -84,6 +86,14 @@ protected:
 	UPROPERTY(EditAnywhere)
 		bool IsBlockingObject = true;
 
+	UPROPERTY(EditAnywhere)
+		bool IsMotionLogEnabled = false;
+
+	UPROPERTY(EditAnywhere)
+		double MotionLogLifeTimeSec = 60;
+
+	UPROPERTY(EditAnywhere)
+		double MotionLogMinDistanceMeter = 5;
 
 	UPROPERTY(EditAnywhere)
 		AActor* ActorGizmo;
@@ -117,7 +127,7 @@ protected:
 
 	FVector ActorVelocityMetersPerSec;
 	FVector ActorAngularVelocityRPYDegPerSec;
-
+	CMotionLogger MotionLogger;
 
 	 virtual void OnActorDisabled();
 	 virtual void OnActorEnabled();
@@ -130,7 +140,7 @@ protected:
 
 	 virtual FVector UpdateActorVelocityMetersPerSec();
 	 virtual FVector UpdateActorAngularVelocityRPYDegPerSec();
-
+	 virtual void UpdateMotionLog();
 
 
 public:	
@@ -224,6 +234,19 @@ public:
 
 	bool GetIsBlockingObject();
 	void SetIsBlockingObject(bool val);
+
+	void SetIsMotionLogEnabled(bool val);
+	bool GetIsMotionLogEnabled();
+
+	void SetMotionLogLifeTimeSec(double val);
+	double GetMotionLogLifeTimeSec();
+
+	void SetMotionLogMinDistanceMeter(double val);
+	double GetMotionLogMinDistanceMeter();
+
+	CMotionLogger* GetMotionLogger();
+
+
 
 	/// <summary>
 	/// save load

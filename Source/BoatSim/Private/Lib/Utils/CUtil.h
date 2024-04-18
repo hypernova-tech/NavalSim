@@ -52,6 +52,7 @@ public:
 	bool is_normal_distribution = false;
 
 	TArray<AActor*> *include_actor_list;
+	TArray<FVector> include_point_list;
 };
 
 class CUtil

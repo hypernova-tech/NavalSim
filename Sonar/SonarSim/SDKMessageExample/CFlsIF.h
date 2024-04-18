@@ -19,10 +19,11 @@ public:
 	static const std::string GetProcessingSettingPort;
 	static const std::string PublisProcessingSettinghPort;
 
-	void  SetHeader(SSharedMemBufferHdr *p_val);
-	SSharedMemBufferHdr* GetHeader();
+	void  SetHeader(SFLSSharedMemBufferHdr *p_val);
+	SFLSSharedMemBufferHdr* GetHeader();
 
-	void UpdateFlsTargetData(SSharedMemBufferHdr hdr, SFLSDataEntry* p_entries, INT32U count);
+	void UpdateFlsTargetData(SFLSSharedMemBufferHdr hdr, SFLSDataEntry* p_entries, INT32U count);
+	void PublishProcessorSettingData();
 	void SetRangeMeter(double val);
 	double GetRangeMeter();
 
@@ -43,8 +44,9 @@ public:
 
 
 protected:
-	SSharedMemBufferHdr* pHdr;
+	SFLSSharedMemBufferHdr* pHdr;
 	zmq::socket_t *pTargetDataPublisherSoc = nullptr;
-
+	zmq::socket_t* pProcessorSettingsSoc = nullptr;
+	bool IsHostDataDirty = true;
 };
 

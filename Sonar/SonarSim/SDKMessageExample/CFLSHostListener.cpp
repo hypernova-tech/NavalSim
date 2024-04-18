@@ -74,7 +74,7 @@ bool ProtoMessageToZeromqMessage__(
 auto ContextOne = zmq::context_t(1);
 void CFLSHostListener::ZeroMQProtoServer() {
     std::string port;
-    vector< string> ports = {"60503", "60502" };
+    vector< string> ports = {"60503", "60502","60504", "60501","60505" };
 
     vector< zmq::context_t> contexts;
 
@@ -125,7 +125,8 @@ void CFLSHostListener::ZeroMQProtoServer() {
                     case ::proto::nav_api::FieldOfView::k90d350m:
                         pFlsIf->SetFLSOn(true);
                         pFlsIf->SetRangeMeter(350);
-                    case 12:
+                        break;
+                    case ::proto::nav_api::FieldOfView::k90d110m:// standy, protobuff uyumsuz todo fixme
                         // off mode
                         pFlsIf ->SetFLSOn(false);
                         break;
@@ -197,6 +198,44 @@ void CFLSHostListener::ZeroMQProtoServer() {
                     response.mutable_settings()->set_max_inwater_squelch(210);
                     response.mutable_settings()->set_system_type(::proto::nav_api::ProcessorSettings_SystemType::ProcessorSettings_SystemType_kFS350);
                     
+                    zmq::message_t res_msg;
+                    // Populate response based on the request
+                    ProtoMessageToZeromqMessage__(response, &res_msg);
+                    p_socket->send(res_msg, zmq::send_flags::none);
+                }
+                else if (CFlsIF::SquelchPort == port) {
+                    proto::nav_api::SetInWaterSquelchRequest request;
+                    auto ret = ZeromqMessageToProtoMessage(request_msg, &request);
+                    if (!ret) {
+                        std::cerr << "Failed to parse SetFieldOfViewRequest." << std::endl;
+                        continue; // Skip to next iteration on parse failure
+                    }
+
+                    pFlsIf->SetInWaterSquelch(request.new_squelch_val());
+
+                    // Process request (this is where you would add your logic)
+                    proto::nav_api::SetInWaterSquelchResponse response;
+                    response.mutable_result()->set_code(::proto::nav_api::RequestResult_ResultCode::RequestResult_ResultCode_kSuccess);
+
+                    zmq::message_t res_msg;
+                    // Populate response based on the request
+                    ProtoMessageToZeromqMessage__(response, &res_msg);
+                    p_socket->send(res_msg, zmq::send_flags::none);
+                }
+                else if (CFlsIF::AutoSquelchPort == port) {
+                    proto::nav_api::SetSquelchlessInWaterDetectorRequest request;
+                    auto ret = ZeromqMessageToProtoMessage(request_msg, &request);
+                    if (!ret) {
+                        std::cerr << "Failed to parse SetFieldOfViewRequest." << std::endl;
+                        continue; // Skip to next iteration on parse failure
+                    }
+
+                    pFlsIf->SetAutoSquelch(request.enable_squelchless_detection());
+
+                    // Process request (this is where you would add your logic)
+                    proto::nav_api::SetSquelchlessInWaterDetectorResponse response;
+                    response.mutable_result()->set_code(::proto::nav_api::RequestResult_ResultCode::RequestResult_ResultCode_kSuccess);
+
                     zmq::message_t res_msg;
                     // Populate response based on the request
                     ProtoMessageToZeromqMessage__(response, &res_msg);

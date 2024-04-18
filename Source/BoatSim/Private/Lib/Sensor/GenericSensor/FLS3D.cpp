@@ -39,6 +39,8 @@ void AFLS3D::InitSensor()
 	if (UseRenderTargetForDepthCalculation) {
 		pSceneCapturer->CreateRenderTexture(this, DepthRenderTargetWidthPx, DepthRenderTargetHeightPx, EPixelFormat::PF_B8G8R8A8);
 	}
+
+	ASystemManagerBase::GetInstance()->QueryActors(EActorQueryArgs::ActorAsPlatform, CachedPlatforms);
 	
 }
 void AFLS3D::OnCaptureReady(void* p_data)
@@ -86,6 +88,15 @@ void AFLS3D::Run(float delta_time_sec)
 		if (p_parent != nullptr) {
 			args.additional_ignore_list.Add(p_parent);
 		}
+
+		for (auto plt : CachedPlatforms) {
+			AActorBase* p_base = (AActorBase*)plt;
+			if (p_base->GetIsMotionLogEnabled()) {
+				p_base->GetMotionLogger()->GetPoints(args.include_point_list);
+			}
+		}
+
+
 		args.use_render_target = UseRenderTargetForDepthCalculation;
 
 		if (args.use_render_target) {
@@ -116,7 +127,7 @@ void AFLS3D::Run(float delta_time_sec)
 
 		OnDataReady();
 
-		NextScanTime = FApp::GetCurrentTime() + 0.2;
+		NextScanTime = FApp::GetCurrentTime() + 1;
 
 		IsFullScaned = true;
 

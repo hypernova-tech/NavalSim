@@ -32,12 +32,17 @@ void CSharedMemManager::ThreadFunc()
             // HANDLE FRAME
 
             Args.pFlsIf->UpdateFlsTargetData(*hdr, p_entries, cnt);
+            Args.pFlsIf->PublishProcessorSettingData();
        
             auto end = std::chrono::high_resolution_clock::now();
             auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
 
             /////std::cout << "Time taken by function: " << duration.count()/1000.0 << " ms" << std::endl;
 
+        }
+        else {
+            std::this_thread::sleep_for(std::chrono::microseconds(100));
+            Args.pFlsIf->PublishProcessorSettingData();
         }
     }
 }

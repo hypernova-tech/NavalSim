@@ -56,7 +56,7 @@ protected:
 	virtual void Run(float delta_time_sec) override;
 	void* hDLL;
 	INT32S SonarDllInstanceInd;
-	bool IsFlsOn = true;
+	bool IsFlsOn = false;
 	bool   BottomDetectEnabled = false;
 	double SquelchSensitivity = 100;
 	bool   AutoSquelchEnabled = true;

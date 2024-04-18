@@ -15,7 +15,7 @@ public:
 	wstring StringToWString(const std::string& s);
 	bool ReadData(INT8U*p_data, INT32U dest_len, INT32U &read_len);
 	INT8U* GetPayload();
-	SSharedMemBufferHdr* GetHeader();
+	SFLSSharedMemBufferHdr* GetHeader();
 protected:
 	PVOID pMemPtr;
 
