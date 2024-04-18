@@ -47,6 +47,7 @@ protected:
 
 	virtual void BeginPlay() override;
 	virtual void InitSensor() override;
+	virtual void Run(float delta_time_sec) override;
 	virtual void OnPreStep(float DeltaTime) override;
 	virtual void OnStep(float DeltaTime) override;
 
@@ -65,6 +66,10 @@ protected:
 	void SendSensorReport();
 	void SendDefogReport();
 	void SendICRReport();
+
+
+	UPROPERTY(EditAnywhere)
+		FVector RateOverride; //todo sil
 
 
 

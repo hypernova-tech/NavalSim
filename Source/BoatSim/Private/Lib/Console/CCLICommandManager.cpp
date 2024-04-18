@@ -82,6 +82,17 @@ FString CCLICommandManager::EnableFoamDetect = "foamen";
 FString CCLICommandManager::SeaSurfaceDetectionProb = "seasurfdetectprob";
 FString CCLICommandManager::MaxSurfacePenetration = "maxsurfpenet";
 
+FString CCLICommandManager::GimbalMode = "gimbalmode";
+FString CCLICommandManager::GimbalCmd = "gimbalcmd";
+FString CCLICommandManager::GimbalAng = "gimbalang";
+FString CCLICommandManager::GimbalInitialAng = "gimbalinitialang";
+FString CCLICommandManager::GimbalAxisEnabled ="gimbalaxisen";
+FString CCLICommandManager::GimbalRate = "gimbalrate";
+FString CCLICommandManager::GimbalFixedRate = "gimbalfixedrate";
+FString CCLICommandManager::GimbalMaxLimitAng = "gimbalmaxlimitang";
+FString CCLICommandManager::GimbalMinLimitAng = "gimbalminlimitang";
+FString CCLICommandManager::GimbalFreeRotateEnabled = "gimbalfreerotateen";
+
 FString CCLICommandManager::RadarScanLevel = "radscanlevel";
 FString CCLICommandManager::RadarScannerRPM = "radscanrpm";
 FString CCLICommandManager::RadarGainType = "radgaintype";

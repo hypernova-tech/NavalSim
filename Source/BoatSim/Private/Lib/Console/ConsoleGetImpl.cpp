@@ -686,6 +686,116 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
 
     }
 
+    ret = CommandManager.HasA(CCLICommandManager::GimbalMode);
+    if (ret) {
+        if (pSystemAPI->GetGimbalMode(p_actor, sint)) {
+            SendConsoleResponse(name, CCLICommandManager::GimbalMode, sint);
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.HasA(CCLICommandManager::GimbalCmd);
+    if (ret) {
+        if (pSystemAPI->GetGimbalCommand(p_actor, vec)) {
+            SendConsoleResponse(name, CCLICommandManager::GimbalCmd, vec);
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.HasA(CCLICommandManager::GimbalAng);
+    if (ret) {
+        if (pSystemAPI->GetGimbalAngleRPY(p_actor, vec)) {
+            SendConsoleResponse(name, CCLICommandManager::GimbalAng, vec);
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.HasA(CCLICommandManager::GimbalInitialAng);
+    if (ret) {
+        if (pSystemAPI->GetGimbalInitialAngleRPY(p_actor, vec)) {
+            SendConsoleResponse(name, CCLICommandManager::GimbalInitialAng, vec);
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.HasA(CCLICommandManager::GimbalAxisEnabled);
+    if (ret) {
+        if (pSystemAPI->GetGimbalAxisEnabled(p_actor, vec)) {
+            SendConsoleResponse(name, CCLICommandManager::GimbalAxisEnabled, vec);
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.HasA(CCLICommandManager::GimbalRate);
+    if (ret) {
+        if (pSystemAPI->GetGimbalAxisRateDegPerSec(p_actor, vec)) {
+            SendConsoleResponse(name, CCLICommandManager::GimbalRate, vec);
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.HasA(CCLICommandManager::GimbalFixedRate);
+    if (ret) {
+        if (pSystemAPI->GetGimbalAxisFixedRateDegPerSec(p_actor, vec)) {
+            SendConsoleResponse(name, CCLICommandManager::GimbalFixedRate, vec);
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.HasA(CCLICommandManager::GimbalMaxLimitAng);
+    if (ret) {
+        if (pSystemAPI->GetGimbalAxisMaxLimit(p_actor, vec)) {
+            SendConsoleResponse(name, CCLICommandManager::GimbalMaxLimitAng, vec);
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.HasA(CCLICommandManager::GimbalMinLimitAng);
+    if (ret) {
+        if (pSystemAPI->GetGimbalAxisMinLimit(p_actor, vec)) {
+            SendConsoleResponse(name, CCLICommandManager::GimbalMinLimitAng, vec);
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.HasA(CCLICommandManager::GimbalFreeRotateEnabled);
+    if (ret) {
+        if (pSystemAPI->GetGimbalAxisIsFreeRotateEnabled(p_actor, vec)) {
+            SendConsoleResponse(name, CCLICommandManager::GimbalFreeRotateEnabled, vec);
+            return true;
+        }
+    }
+    else {
+
+    }
+
 
     ret = CommandManager.HasA(CCLICommandManager::IsNormalDistribution);
     if (ret) {

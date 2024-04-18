@@ -85,13 +85,31 @@ set --name annotation --sharedmemname
 set --name annotation --gstreamerip 
 set --name annotation --gstreamerport 0
 
+create --name tcg --bp  --tick 0
+set --name tcg --actorid 0
+set --name tcg --instance -1
+set --name tcg --suppressed 0
+set --name tcg --standalone 0
+set --name tcg --position "154.528631 0.000000 -1.208750"
+set --name tcg --rotation "-0.000000 -0.000000 60.000000"
+set --name tcg --scale "1.000000 1.000000 1.000000"
+set --name tcg --blocking 1
+set --name tcg --tempkelvin 300.000000
+set --name tcg --heatsource 0
+set --name tcg --annotationid 0
+set --name tcg --annotatechildren 0
+set --name tcg --annotatechildren 0
+set --name tcg --sharedmemname 
+set --name tcg --gstreamerip 
+set --name tcg --gstreamerport 0
+
 create --name Gimbal --bp GIMBAL3DOF --tick 2
 set --name Gimbal --parent EOSuite
 set --name Gimbal --actorid 0
 set --name Gimbal --instance -1
 set --name Gimbal --suppressed 0
 set --name Gimbal --standalone 0
-set --name Gimbal --position "0.000000 0.000000 0.000000"
+set --name Gimbal --position "0.000000 0.000000 6.992608"
 set --name Gimbal --rotation "-0.000000 -0.000000 0.000000"
 set --name Gimbal --scale "1.000000 1.000000 1.000000"
 set --name Gimbal --blocking 1
@@ -109,7 +127,7 @@ set --name EOSuite --actorid 0
 set --name EOSuite --instance -1
 set --name EOSuite --suppressed 0
 set --name EOSuite --standalone 0
-set --name EOSuite --position "0.000000 0.000000 0.000000"
+set --name EOSuite --position "0.000000 0.000000 6.992608"
 set --name EOSuite --rotation "-0.000000 -0.000000 0.000000"
 set --name EOSuite --scale "1.000000 1.000000 1.000000"
 set --name EOSuite --blocking 1
@@ -146,7 +164,7 @@ set --name martivis --actorid 0
 set --name martivis --instance -1
 set --name martivis --suppressed 0
 set --name martivis --standalone 0
-set --name martivis --position "0.000000 0.000000 0.000000"
+set --name martivis --position "0.000000 0.000000 6.992608"
 set --name martivis --rotation "-0.000000 -0.000000 0.000000"
 set --name martivis --scale "1.000000 1.000000 1.000000"
 set --name martivis --blocking 1
@@ -182,7 +200,7 @@ set --name martiir --actorid 0
 set --name martiir --instance -1
 set --name martiir --suppressed 0
 set --name martiir --standalone 0
-set --name martiir --position "0.000000 0.000000 0.000000"
+set --name martiir --position "0.000000 0.000000 6.992608"
 set --name martiir --rotation "-0.000000 -0.000000 0.000000"
 set --name martiir --scale "1.000000 1.000000 1.000000"
 set --name martiir --blocking 1

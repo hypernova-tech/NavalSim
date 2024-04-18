@@ -967,6 +967,106 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
 
     }
 
+    ret = CommandManager.GetValue(CCLICommandManager::GimbalMode, sint);
+    if (ret) {
+        if (pSystemAPI->SetGimbalMode(p_actor, sint)) {
+            one_success = true;;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::GimbalCmd, vec);
+    if (ret) {
+        if (pSystemAPI->SetGimbalCommand(p_actor, vec)) {
+            one_success = true;;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::GimbalAng, vec);
+    if (ret) {
+        if (pSystemAPI->SetGimbalAngleRPY(p_actor, vec)) {
+            one_success = true;;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::GimbalInitialAng, vec);
+    if (ret) {
+        if (pSystemAPI->SetGimbalInitialAngleRPY(p_actor, vec)) {
+            one_success = true;;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::GimbalAxisEnabled, vec);
+    if (ret) {
+        if (pSystemAPI->SetGimbalAxisEnabled(p_actor, vec)) {
+            one_success = true;;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::GimbalRate, vec);
+    if (ret) {
+        if (pSystemAPI->SetGimbalAxisRateDegPerSec(p_actor, vec)) {
+            one_success = true;;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::GimbalFixedRate, vec);
+    if (ret) {
+        if (pSystemAPI->SetGimbalAxisFixedRateDegPerSec(p_actor, vec)) {
+            one_success = true;;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::GimbalMaxLimitAng, vec);
+    if (ret) {
+        if (pSystemAPI->SetGimbalAxisMaxLimit(p_actor, vec)) {
+            one_success = true;;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::GimbalMinLimitAng, vec);
+    if (ret) {
+        if (pSystemAPI->SetGimbalAxisMinLimit(p_actor, vec)) {
+            one_success = true;;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::GimbalFreeRotateEnabled, vec);
+    if (ret) {
+        if (pSystemAPI->SetGimbalAxisIsFreeRotateEnabled(p_actor, vec)) {
+            one_success = true;;
+        }
+    }
+    else {
+
+    }
+
     ret = CommandManager.GetValue(CCLICommandManager::MapOriginLat, dbl);
     if (ret) {
         FVector origin;

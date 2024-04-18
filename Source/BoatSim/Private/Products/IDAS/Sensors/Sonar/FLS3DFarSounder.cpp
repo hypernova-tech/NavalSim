@@ -33,23 +33,26 @@ void AFLS3DFarSounder::InitSensor()
 
 	HINSTANCE inst;
 	// Load the DLL
-	inst = LoadLibrary(*DLLPath);
-	if (inst != nullptr)
-	{
-		// Get function pointer
-		SonarCreateInstanceFuncPtr func_ptr = (SonarCreateInstanceFuncPtr)GetProcAddress(inst, "CreateInstance");
-		if (func_ptr != nullptr)
+	if (ProtocolConverterSharedMemoryName != "") {
+		inst = LoadLibrary(*DLLPath);
+		if (inst != nullptr)
 		{
-			char sm_name[1024];
-			CUtil::FStringToAsciiChar(ProtocolConverterSharedMemoryName, sm_name, 1024);
-			
-			// Call function
-			SonarDllInstanceInd = func_ptr(sm_name, args.HeaderSize + args.size);
+			// Get function pointer
+			SonarCreateInstanceFuncPtr func_ptr = (SonarCreateInstanceFuncPtr)GetProcAddress(inst, "CreateInstance");
+			if (func_ptr != nullptr)
+			{
+				char sm_name[1024];
+				CUtil::FStringToAsciiChar(ProtocolConverterSharedMemoryName, sm_name, 1024);
+
+				// Call function
+				/////SonarDllInstanceInd = func_ptr(sm_name, args.HeaderSize + args.size);
+			}
+			hDLL = inst;
+			// Unload DLL (optional)
+			//FreeLibrary(hDLL);
 		}
-		hDLL = inst;
-		// Unload DLL (optional)
-		//FreeLibrary(hDLL);
 	}
+
 }
 
 void AFLS3DFarSounder::OnDataReady()
@@ -80,18 +83,43 @@ void AFLS3DFarSounder::OnDataReady()
 	p_hdr->LookDir[2] = forward.Z;
 
 	int cnt = sector_info->SectorData.Num();
+	int ind = 0;
+	bool is_ground;
+	if (IsFlsOn) {
+		for (int i = 0; i < cnt; i++) {
 
-	for (int i = 0; i < cnt; i++) {
-		FVector& data = (sector_info->SectorData[i]);
-		EScanObjectType& object_type = sector_info->ObjectType[i];
-		SFLSDataEntry  *p_curr_entry = &p_entries[i];
-		p_curr_entry->X = TOW(data.X) ;
-		p_curr_entry->Y = TOW(-data.Y);
-		p_curr_entry->Z = TOW(data.Z);
+			FVector& data = (sector_info->SectorData[i]);
+			EScanObjectType& object_type = sector_info->ObjectType[i];
+			SFLSDataEntry* p_curr_entry = &p_entries[ind];
+			is_ground = object_type == EScanObjectType::ScanObjectTypeTerrain;
 
-		p_curr_entry->Info.IsGround = object_type == EScanObjectType::ScanObjectTypeTerrain;
+			if (is_ground) {
+				if (p_hdr->FromSimToHost.BottomDetectionEnabled) {
+					p_curr_entry->X = TOW(data.X);
+					p_curr_entry->Y = TOW(-data.Y);
+					p_curr_entry->Z = TOW(data.Z);
+					p_curr_entry->Info.IsGround = is_ground;
+					ind++;
+				}
+			}
+			else {
+				p_curr_entry->X = TOW(data.X);
+				p_curr_entry->Y = TOW(-data.Y);
+				p_curr_entry->Z = TOW(data.Z);
+				p_curr_entry->Info.IsGround = is_ground;
+				ind++;
+			}
+		}
 	}
-	p_hdr->DataSize = sizeof(SFLSDataEntry) * cnt;
+	
+	p_hdr->DataSize = sizeof(SFLSDataEntry) * ind;
+
+	p_hdr->FromSimToHost.RangeMeter = RangeMaxMeter;
+	p_hdr->FromSimToHost.BottomDetectionEnabled = BottomDetectEnabled;
+	p_hdr->FromSimToHost.IsAutoSquelchEnabled = AutoSquelchEnabled;
+	p_hdr->FromSimToHost.SquelchSensitivity = SquelchSensitivity;
+	p_hdr->FromSimToHost.IsFlsOn = IsFlsOn;
+
 	p_hdr->IsUpdated = true;
 }
 
@@ -102,12 +130,20 @@ void AFLS3DFarSounder::Run(float delta_time_sec)
 	SFLSSharedMemBufferHdr* p_hdr = (SFLSSharedMemBufferHdr*)pSharedMemory->GetHeader();
 
 	if (p_hdr->SonarSimIsUpdateData) { // reint data structures if an
-		if (p_hdr->SonarSimVerticalFovDeg > 0 && p_hdr->SonarSimHorizontalFovDeg > 0){
-			FovVerticalDeg = p_hdr->SonarSimVerticalFovDeg;
-			FovHorizontalDeg = p_hdr->SonarSimHorizontalFovDeg;
-			p_hdr->SonarSimIsUpdateData = 0;
-		}
+		RangeMaxMeter = p_hdr->FromHostToSim.RangeMeter;
+		BottomDetectEnabled = p_hdr->FromHostToSim.BottomDetectionEnabled > 0;
+		AutoSquelchEnabled = p_hdr->FromHostToSim.IsAutoSquelchEnabled > 0 ;
+		SquelchSensitivity = p_hdr->FromHostToSim.SquelchSensitivity;
+
 	}
+
+	//update
+	p_hdr->FromHostToSim.RangeMeter = RangeMaxMeter;
+	p_hdr->FromHostToSim.BottomDetectionEnabled = BottomDetectEnabled;
+	p_hdr->FromHostToSim.IsAutoSquelchEnabled   = AutoSquelchEnabled;
+	p_hdr->FromHostToSim.SquelchSensitivity     = SquelchSensitivity;  
+	   
+	   
 }
 
 void AFLS3DFarSounder::Save(ISaveLoader* p_save_loader)

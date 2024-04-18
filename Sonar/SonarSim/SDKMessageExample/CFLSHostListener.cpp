@@ -6,11 +6,13 @@
 #include "zeromq/include/zmq.hpp"
 #include "proto/nav_api.pb.h"
 #include "CSharedMemManager.h"
+#include "CMath.h"
 
 const int kLargeMessageBytesLimit = 128 << 20;  // 128MB
 const int kLargeMessageBytesWarningThreshold = 110 << 20;  // 110MB
-void CFLSHostListener::Init()
+void CFLSHostListener::Init(CFlsIF* p_if)
 {
+    pFlsIf = p_if;
     pThread = new thread(&CFLSHostListener::ThreadFunc, this);
     
 }
@@ -46,7 +48,7 @@ static bool ZeromqMessageToProtoMessage(const zmq::message_t& zeromq_message,   
     }
     return success;
 }
-static bool ProtoMessageToZeromqMessage(
+bool ProtoMessageToZeromqMessage__(
     const ::google::protobuf::MessageLite& proto_message,
     zmq::message_t* zeromq_message) {
     int string_size = proto_message.ByteSizeLong();
@@ -69,20 +71,20 @@ static bool ProtoMessageToZeromqMessage(
     zeromq_message->rebuild(string, string_size, zeromq_free);
     return true;
 }
-
+auto ContextOne = zmq::context_t(1);
 void CFLSHostListener::ZeroMQProtoServer() {
     std::string port;
-    vector< string> ports = { "60502", "60503" };
+    vector< string> ports = {"60503", "60502" };
 
     vector< zmq::context_t> contexts;
 
     vector<zmq::socket_t*> sockets;// socket(context, ZMQ_REP);
    
-    auto context = zmq::context_t( 1);
+    
     for (int i = 0; i < ports.size(); i++) {
         port = ports.at(i);
         
-        zmq::socket_t* p_soc = new zmq::socket_t(context, ZMQ_REP);
+        zmq::socket_t* p_soc = new zmq::socket_t(ContextOne, ZMQ_REP);
         p_soc->bind("tcp://*:" + port);
         sockets.push_back(p_soc);
         
@@ -109,12 +111,33 @@ void CFLSHostListener::ZeroMQProtoServer() {
                         continue; // Skip to next iteration on parse failure
                     }
 
+                    auto fov = request.fov();
+                   
+                    switch (fov) {
+                    case ::proto::nav_api::FieldOfView::k90d100m:
+                        pFlsIf->SetFLSOn(true);
+                        pFlsIf->SetRangeMeter(100);
+                        break;
+                    case ::proto::nav_api::FieldOfView::k90d200m:
+                        pFlsIf->SetFLSOn(true);
+                        pFlsIf->SetRangeMeter(200);
+                        break;
+                    case ::proto::nav_api::FieldOfView::k90d350m:
+                        pFlsIf->SetFLSOn(true);
+                        pFlsIf->SetRangeMeter(350);
+                    case 12:
+                        // off mode
+                        pFlsIf ->SetFLSOn(false);
+                        break;
+                    }
+                    
+
                     // Process request (this is where you would add your logic)
                     proto::nav_api::SetFieldOfViewResponse response;
-
+                    response.mutable_result()->set_code(::proto::nav_api::RequestResult_ResultCode::RequestResult_ResultCode_kSuccess);
                     zmq::message_t res_msg;
                     // Populate response based on the request
-                    ProtoMessageToZeromqMessage(response, &res_msg);
+                    ProtoMessageToZeromqMessage__(response, &res_msg);
                     p_socket->send(res_msg, zmq::send_flags::none);
                 }
                 else if (CFlsIF::BottomDetectionPort == port) {
@@ -125,18 +148,65 @@ void CFLSHostListener::ZeroMQProtoServer() {
                         continue; // Skip to next iteration on parse failure
                     }
 
+                    pFlsIf->SetBottomDetection(request.enable_bottom_detection());
+
                     // Process request (this is where you would add your logic)
                     proto::nav_api::SetBottomDetectionResponse response;
+                    response.mutable_result()->set_code(::proto::nav_api::RequestResult_ResultCode::RequestResult_ResultCode_kSuccess);
 
                     zmq::message_t res_msg;
                     // Populate response based on the request
-                    ProtoMessageToZeromqMessage(response, &res_msg);
+                    ProtoMessageToZeromqMessage__(response, &res_msg);
+                    p_socket->send(res_msg, zmq::send_flags::none);
+                }
+                else if (CFlsIF::GetProcessingSettingPort == port) {
+                    
+                    proto::nav_api::GetProcessorSettingsRequest request;
+                    auto ret = ZeromqMessageToProtoMessage(request_msg, &request);
+                    if (!ret) {
+                        std::cerr << "Failed to parse SetFieldOfViewRequest." << std::endl;
+                        continue; // Skip to next iteration on parse failure
+                    }
+
+                    ////pFlsIf->SetBottomDetection(request.enable_bottom_detection());
+
+                    // Process request (this is where you would add your logic)
+                    proto::nav_api::GetProcessorSettingsResponse response;
+                
+
+                    response.mutable_result()->set_code(::proto::nav_api::RequestResult_ResultCode::RequestResult_ResultCode_kSuccess);
+                    
+                  
+                    response.mutable_settings()->set_detect_bottom(pFlsIf->GetBottomDetection());
+
+                    double range = pFlsIf->GetRangeMeter();
+                    if (CMath::IsZero(range - 100.0)){
+                        response.mutable_settings()->set_fov(::proto::nav_api::FieldOfView::k90d100m);
+                    }else if (CMath::IsZero(range - 200)) {
+                        response.mutable_settings()->set_fov(::proto::nav_api::FieldOfView::k90d200m);
+                    }
+                    else if (CMath::IsZero(range - 350)) {
+                        response.mutable_settings()->set_fov(::proto::nav_api::FieldOfView::k90d350m);
+                    }
+
+
+                    
+                    response.mutable_settings()->set_inwater_squelch(pFlsIf->GetInWaterSquelch());
+                    response.mutable_settings()->set_squelchless_inwater_detector(pFlsIf->GetAutoSquelch());
+                    response.mutable_settings()->set_min_inwater_squelch(110);
+                    response.mutable_settings()->set_max_inwater_squelch(210);
+                    response.mutable_settings()->set_system_type(::proto::nav_api::ProcessorSettings_SystemType::ProcessorSettings_SystemType_kFS350);
+                    
+                    zmq::message_t res_msg;
+                    // Populate response based on the request
+                    ProtoMessageToZeromqMessage__(response, &res_msg);
                     p_socket->send(res_msg, zmq::send_flags::none);
                 }
                
 
                
             }
+           
      
         }
         std::this_thread::sleep_for(std::chrono::microseconds(100));

@@ -4,25 +4,54 @@
 #include <google/protobuf/io/zero_copy_stream_impl_lite.h>
 #include "zeromq/include/zmq.h"
 #include "zeromq/include/zmq.hpp"
-
 #include "proto/nav_api.pb.h"
+
 const std::string CFlsIF::TargetDataPort = "61502";
 const std::string CFlsIF::FovPort = "60502";
 const std::string CFlsIF::SquelchPort = "60504";
 const std::string CFlsIF::AutoSquelchPort = "60505";
 const std::string CFlsIF::BottomDetectionPort = "60503";
+const std::string CFlsIF::GetProcessingSettingPort = "60501";
+const std::string CFlsIF::PublisProcessingSettinghPort = "61503";
 
+extern bool ProtoMessageToZeromqMessage__(
+    const ::google::protobuf::MessageLite& proto_message,
+    zmq::message_t* zeromq_message);
+
+CFlsIF::CFlsIF()
+{
+    pTargetDataPublisherSoc = nullptr;
+}
+
+void  CFlsIF::SetHeader(SSharedMemBufferHdr* p_val)
+{
+    pHdr = p_val;
+}
+SSharedMemBufferHdr* CFlsIF::GetHeader()
+{
+    return pHdr;
+}
+
+zmq::context_t context(1);
 void CFlsIF::UpdateFlsTargetData(SSharedMemBufferHdr hdr, SFLSDataEntry* p_entries, INT32U count)
 {
+
+ 
 
     if (count <= 0) {
         return;
     }
 
-    zmq::context_t context(1);
-    zmq::socket_t publisher(context, ZMQ_PUB);
-    publisher.bind("tcp://*:"+ CFlsIF::TargetDataPort); // Adjust the port and protocol as needed
+   
+    if (pTargetDataPublisherSoc == nullptr) {
+        
+        pTargetDataPublisherSoc = new zmq::socket_t(context, ZMQ_PUB);
+        pTargetDataPublisherSoc->bind("tcp://*:" + CFlsIF::TargetDataPort); // Adjust the port and protocol as needed
+        
+    }
 
+
+    
     proto::nav_api::TargetData targetData;
 
     // Fill in the shared memory buffer header data
@@ -69,6 +98,9 @@ void CFlsIF::UpdateFlsTargetData(SSharedMemBufferHdr hdr, SFLSDataEntry* p_entri
             bin->set_strength(strength);
         }
     }
+    
+
+#if 0
 
     // Serialize the TargetData message
     std::string serializedData;
@@ -76,10 +108,65 @@ void CFlsIF::UpdateFlsTargetData(SSharedMemBufferHdr hdr, SFLSDataEntry* p_entri
         std::cerr << "Failed to serialize TargetData." << std::endl;
         return;
     }
-
     // Publish the serialized TargetData
     zmq::message_t message(serializedData.begin(), serializedData.end());
-    publisher.send(message, zmq::send_flags::none);
+
+#endif
+
+ 
+    zmq::message_t message;
+    ProtoMessageToZeromqMessage__(targetData, &message);
+    pTargetDataPublisherSoc->send(message, zmq::send_flags::none);
 
 
+}
+
+void CFlsIF::SetRangeMeter(double val)
+{
+    pHdr->FromHostToSim.RangeMeter = val;
+}
+
+double CFlsIF::GetRangeMeter()
+{
+    return pHdr->FromSimToHost.RangeMeter;
+}
+
+void CFlsIF::SetFLSOn(bool val)
+{
+    pHdr->FromHostToSim.IsFlsOn = val;
+}
+
+bool CFlsIF::GetFLSOn()
+{
+    pHdr->FromSimToHost.IsFlsOn;
+}
+
+void CFlsIF::SetAutoSquelch(bool val)
+{
+    pHdr->FromHostToSim.IsAutoSquelchEnabled = val;
+}
+
+bool CFlsIF::GetAutoSquelch()
+{
+    return pHdr->FromSimToHost.IsAutoSquelchEnabled;
+}
+
+void CFlsIF::SetBottomDetection(bool val)
+{
+    pHdr->FromHostToSim.BottomDetectionEnabled = val;
+}
+
+bool CFlsIF::GetBottomDetection()
+{
+    return pHdr->FromSimToHost.BottomDetectionEnabled;
+}
+
+void CFlsIF::SetInWaterSquelch(double val)
+{
+    pHdr->FromHostToSim.SquelchSensitivity = val;
+}
+
+double CFlsIF::GetInWaterSquelch()
+{
+    return pHdr->FromHostToSim.SquelchSensitivity;
 }

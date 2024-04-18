@@ -8,16 +8,25 @@
 #include "FLS3DFarSounder.generated.h"
 
 
+struct SFLSProcessorSettings
+{
+	unsigned int IsFlsOn;
+	double RangeMeter;
+	unsigned int BottomDetectionEnabled;
+	unsigned int IsAutoSquelchEnabled;
+	double SquelchSensitivity;
+};
+
 struct SFLSSharedMemBufferHdr {
 	unsigned int IsUpdated;
 	unsigned int DataSize;
 	unsigned int SonarSimIsUpdateData;
-	float SonarSimVerticalFovDeg; // from SonarSim to UnrealEngine
-	float SonarSimHorizontalFovDeg; // from SonarSim to UnrealEngine
-	float SonarSimIsSquelchEnabled; // from SonarSim to UnrealEngine
 	double PosXYZ[3];
 	double PosLLH[3];
 	double LookDir[3];
+	SFLSProcessorSettings FromHostToSim;
+	SFLSProcessorSettings FromSimToHost;
+
 };
 
 struct SFLSDataEntry
@@ -47,6 +56,10 @@ protected:
 	virtual void Run(float delta_time_sec) override;
 	void* hDLL;
 	INT32S SonarDllInstanceInd;
+	bool IsFlsOn = true;
+	bool   BottomDetectEnabled = false;
+	double SquelchSensitivity = 100;
+	bool   AutoSquelchEnabled = true;
 public:
 
 	virtual void Save(ISaveLoader* p_save_loader) override;

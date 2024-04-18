@@ -129,6 +129,19 @@ public:
 	static FString SeaSurfaceDetectionProb;
 	static FString MaxSurfacePenetration;
 
+	static FString GimbalMode;
+	static FString GimbalCmd;
+	static FString GimbalAng;
+	static FString GimbalInitialAng;
+	static FString GimbalAxisEnabled;
+	static FString GimbalRate;
+	static FString GimbalFixedRate;
+	static FString GimbalMaxLimitAng;
+	static FString GimbalMinLimitAng;
+	static FString GimbalFreeRotateEnabled;
+
+	
+
 	static FString RadarScanLevel;
 	static FString RadarScannerRPM;
 	static FString RadarGainType;

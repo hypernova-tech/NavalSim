@@ -4,6 +4,7 @@ using namespace std;
 #include <thread>
 #include "types.h"
 #include <string>
+#include "CFlsIF.h"
 
 
 class CFLSHostListener
@@ -14,9 +15,10 @@ protected:
 
 	virtual void ThreadFunc();
 	void ZeroMQProtoServer();
+	CFlsIF* pFlsIf;
 
 
 public:
-	virtual void Init();
+	virtual void Init(CFlsIF *p_if);
 };
 

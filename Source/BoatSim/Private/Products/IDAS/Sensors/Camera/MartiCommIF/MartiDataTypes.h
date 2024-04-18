@@ -52,16 +52,16 @@ public:
 		return &Message.AllData[sizeof(SMartiHeader)];
 	}
 
-	bool SetMessage(INT8U id, INT8U *p_data, INT8U data_len)
+	bool SetMessage(INT8U id, INT8U *p_data, INT8U payload_data_len)
 	{
 		
 		Message.Header.StartOfFrame1 = START_OF_FRAME1;
 		Message.Header.StartOfFrame2 = START_OF_FRAME2;
 		Message.Header.Header = id;
-		Message.Header.MessageSize = sizeof(Message.Header) + data_len;
+		Message.Header.MessageSize = sizeof(Message.Header) + payload_data_len + 1;
 		
-		if (data_len <= MAX_PAYLOAD_SIZE) {
-			memcpy(&Message.AllData[sizeof(Message.Header)], p_data, data_len);
+		if (payload_data_len <= MAX_PAYLOAD_SIZE) {
+			memcpy(&Message.AllData[sizeof(Message.Header)], p_data, payload_data_len);
 			auto cs = ComputeChecksum();
 			Message.AllData[Message.Header.MessageSize-1] = cs;
 
@@ -135,7 +135,7 @@ public:
 
 	SMartiLosCommandPayload()
 	{
-
+		memset(this, 0, sizeof(SMartiLosCommandPayload));
 	}
 };
 #pragma pack(pop)

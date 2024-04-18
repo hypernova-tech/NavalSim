@@ -29,7 +29,7 @@ void AMartiEOSuite::InitSensor()
 
 	// Construct the full path to the DLL
 	FString DLLPath = BinariesDir + DLLName;
-
+	pGimbal->EnableAxis_(FVector(0, 1, 1));
 	// Load the DLL
 	HINSTANCE inst;
 	inst = LoadLibrary(*DLLPath);
@@ -58,6 +58,12 @@ void AMartiEOSuite::InitSensor()
 	}
 
 
+}
+
+void AMartiEOSuite::Run(float delta_time_sec)
+{
+	Super::Run(delta_time_sec);
+	SendLosReportCommand();
 }
 
 void AMartiEOSuite::OnPreStep(float DeltaTime)
@@ -127,9 +133,9 @@ void AMartiEOSuite::OnRecievedMessage(SMartiGenericMessage* p_commands)
 
 void AMartiEOSuite::HandleLosCommand(SMartiLosCommandPayload* p_cmd)
 {
-	FVector rpy_en		= FVector::ZeroVector;
-	FVector rpy_cmd		= FVector::ZeroVector;
-	FVector rpy_rate	= FVector::ZeroVector;
+	FVector rpy_en		= pGimbal->GetAxisEnabled_();
+	FVector rpy_cmd		= pGimbal->GetCommand_();
+	FVector rpy_rate	 = pGimbal->GetAxisRateDegPerSec_();
 
 	ELosModOfOperation mode_op = (ELosModOfOperation)p_cmd->LosModeOfOperation;
 	bool is_forward = false;
@@ -142,6 +148,11 @@ void AMartiEOSuite::HandleLosCommand(SMartiLosCommandPayload* p_cmd)
 	bool is_track = false;
 	bool is_scan = false;
 	bool is_drift_comp = false;
+
+
+	if (mode_op != 0) {
+		mode_op = mode_op;
+	}
 
 	switch (mode_op) {
 	case LosModOfOperationNoChange:
@@ -195,7 +206,7 @@ void AMartiEOSuite::HandleLosCommand(SMartiLosCommandPayload* p_cmd)
 	
 	if (p_cmd->CommandValidty.AzimuthRateCommandValid) {
 		rpy_en.Z = 1;
-		rpy_rate.Z = p_cmd->AzimuthRateCommand;
+		rpy_rate.Z = (p_cmd->AzimuthRateCommand + RateOverride.Z);
 	}
 	
 	if (p_cmd->CommandValidty.ElavationPositionCommandValid) {
@@ -205,7 +216,7 @@ void AMartiEOSuite::HandleLosCommand(SMartiLosCommandPayload* p_cmd)
 	
 	if (p_cmd->CommandValidty.ElavationRateCommandValid) {
 		rpy_en.Y = 1;
-		rpy_rate.Y = p_cmd->ElavationRateCommand;
+		rpy_rate.Y = -(p_cmd->ElavationRateCommand + RateOverride.Y);
 	}
 
 	if (is_park) {
@@ -222,6 +233,8 @@ void AMartiEOSuite::HandleLosCommand(SMartiLosCommandPayload* p_cmd)
 	}
 	else if (is_slave_rate) {
 		pGimbal->SetGimbalControlMode(EGimbalControlMode::OnlyRate);
+		rpy_rate = RateOverride;
+		
 	}
 	else if (is_slave_position) {
 		pGimbal->SetGimbalControlMode(EGimbalControlMode::PositionWithoutRate);
@@ -367,10 +380,11 @@ void AMartiEOSuite::SendLosReportCommand()
 	memcpy(&los_report, &LastLosCommand, sizeof(los_report));
 
 	los_report.AzimuthRate = pGimbal->GetAxis(EGimbalAxis::Yaw)->AngleSpeedDegPerSec;
-	los_report.ElavationRate = pGimbal->GetAxis(EGimbalAxis::Pitch)->AngleSpeedDegPerSec;
+	los_report.ElavationRate = -pGimbal->GetAxis(EGimbalAxis::Pitch)->AngleSpeedDegPerSec;
 
 	los_report.AzimuthPosition = pGimbal->GetAxisAngleDeg(EGimbalAxis::Yaw);
-	los_report.ElevationPosition = pGimbal->GetAxisAngleDeg(EGimbalAxis::Pitch);
+	los_report.ElevationPosition = -pGimbal->GetAxisAngleDeg(EGimbalAxis::Pitch);
+
 	pMartiCommIF->SendMessageWithId(EMartiCommandReportId::LosReport, (INT8U*)&los_report, sizeof(SMartiLosReportPayload));
 }
 

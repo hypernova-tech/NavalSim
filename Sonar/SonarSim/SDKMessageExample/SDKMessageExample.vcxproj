@@ -47,7 +47,7 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -170,6 +170,7 @@
     <ClInclude Include="CFLSHostListener.h" />
     <ClInclude Include="CFlsIF.h" />
     <ClInclude Include="CInit.h" />
+    <ClInclude Include="CMath.h" />
     <ClInclude Include="CSharedMem.h" />
     <ClInclude Include="CSharedMemManager.h" />
     <ClInclude Include="DllExport.h" />
@@ -187,6 +188,7 @@
     <ClCompile Include="CFLSHostListener.cpp" />
     <ClCompile Include="CFlsIF.cpp" />
     <ClCompile Include="CInit.cpp" />
+    <ClCompile Include="CMath.cpp" />
     <ClCompile Include="CSharedMem.cpp" />
     <ClCompile Include="CSharedMemManager.cpp" />
     <ClCompile Include="proto\array.pb.cc" />

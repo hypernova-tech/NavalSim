@@ -2,17 +2,24 @@
 #include "types.h"
 using namespace std;
 
+struct SFLSProcessorSettings
+{
+	unsigned int IsFlsOn;
+	double RangeMeter;
+	unsigned int BottomDetectionEnabled;
+	unsigned int IsAutoSquelchEnabled;
+	double SquelchSensitivity;
+};
 
 struct SSharedMemBufferHdr {
 	unsigned int IsUpdated;
 	unsigned int DataSize;
 	unsigned int SonarSimIsUpdateData;
-	float SonarSimVerticalFovDeg; // from SonarSim to UnrealEngine
-	float SonarSimHorizontalFovDeg; // from SonarSim to UnrealEngine
-	float SonarSimIsSquelchEnabled; // from SonarSim to UnrealEngine
 	double PosXYZ[3];
 	double PosLLH[3];
 	double LookDir[3];
+	SFLSProcessorSettings FromHostToSim;
+	SFLSProcessorSettings FromSimToHost;
 
 };
 

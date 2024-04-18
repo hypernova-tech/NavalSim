@@ -21,7 +21,7 @@ SOFTWARE.
 #include "CSharedMemManager.h"
 #include "CFLSHostListener.h"
 
-#define STANDALONE_EN 0
+#define STANDALONE_EN 1
 
 const std::string TcpPortNo = "4152";
 
@@ -307,38 +307,26 @@ proto::nav_api::TargetData CreateTargetData() {
 #if STANDALONE_EN > 0
 CSharedMemManager* pSharedMemManager;
 CFLSHostListener* pHostListener;
+CFlsIF* pFLSIf;
 
 
-
-int main(int argc, char* argv[])
+int main()
 {
     std::string smAddress = "FLSSM1";
     int memSize = sizeof(SSharedMemBufferHdr) + 1920 * 1080 * sizeof(SFLSDataEntry);
     
-    if (argc < 3) {
-        std::cerr << "Usage: " << argv[0] << " <InitialArguments> <SmAddress> <MemSize>\n";
-        while (true);
-    }
 
-    std::string initialArguments = argv[1]; // The initial arguments for the executable
-    smAddress = argv[2];        // The shared memory address as a string
-    memSize = std::stoi(argv[3]);       // Memory size converted from string to int
-
-    // Example processing: just printing the arguments
-    std::cout << "Initial Arguments: " << initialArguments << std::endl;
-    std::cout << "Shared Memory Address: " << smAddress << std::endl;
-    std::cout << "Memory Size: " << memSize << std::endl;
-
-
-
+   
     pSharedMemManager = new CSharedMemManager();
     pHostListener = new CFLSHostListener();
+    pFLSIf = new CFlsIF();
 
     SAppArgs args;
     args.ShareMemName = smAddress;
     args.Size = memSize;
+    args.pFlsIf = pFLSIf;
     pSharedMemManager->Init(args);
-    pHostListener->Init();
+    pHostListener->Init(pFLSIf);
     while (true);
     
     

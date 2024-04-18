@@ -24,7 +24,6 @@ protected:
 	virtual void ThreadFunc();
 public:
 	virtual void Init(const SAppArgs& args);
-	void SetVerticalFOVDeg(float ang);
-	void SetHorizontalFOVDeg(float ang);
+
 };
 

@@ -82,6 +82,8 @@ void ASensorBase::FinalizeSensor()
 {
 }
 
+
+
 SClutterParams ASensorBase::GetClutterParams()
 {
 	SClutterParams Params;

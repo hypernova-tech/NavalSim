@@ -3244,3 +3244,214 @@ bool ASystemManagerBase::GetPathSpeed(AActor* p_actor, FLOAT64& val)
 
 	 return false;
 }
+
+
+ bool ASystemManagerBase::SetGimbalMode(AActor* p_actor, int val)
+ {
+	 auto pgimbal = ToGimbal(p_actor);
+
+	 if (pgimbal) {
+		 pgimbal->SetGimbalControlMode((EGimbalControlMode)val);
+		 return true;
+	 }
+	 return false;
+ }
+ bool ASystemManagerBase::GetGimbalMode(AActor* p_actor, int& val)
+ {
+	 auto pgimbal = ToGimbal(p_actor);
+
+	 if (pgimbal) {
+		 val = pgimbal->GetGimbalControlMode();
+		 return true;
+	 }
+	 return false;
+ }
+
+ bool ASystemManagerBase::SetGimbalCommand(AActor* p_actor, FVector rpy_deg)
+ {
+	 auto pgimbal = ToGimbal(p_actor);
+
+	 if (pgimbal) {
+		  pgimbal->SetCommand_(rpy_deg);
+		 return true;
+	 }
+	 return false;
+ }
+ bool ASystemManagerBase::GetGimbalCommand(AActor* p_actor, FVector& rpy_deg)
+ {
+	 auto pgimbal = ToGimbal(p_actor);
+
+	 if (pgimbal) {
+		 rpy_deg = pgimbal->GetCommand_();
+		 return true;
+	 }
+	 return false;
+ }
+
+ bool ASystemManagerBase::SetGimbalAxisEnabled(AActor* p_actor, FVector rpy_en)
+ {
+	 auto pgimbal = ToGimbal(p_actor);
+
+	 if (pgimbal) {
+		 pgimbal->EnableAxis_(rpy_en);
+		 return true;
+	 }
+	 return false;
+ }
+ bool ASystemManagerBase::GetGimbalAxisEnabled(AActor* p_actor, FVector& rpy_en)
+ {
+	 auto pgimbal = ToGimbal(p_actor);
+
+	 if (pgimbal) {
+		 rpy_en = pgimbal->GetAxisEnabled_();
+		 return true;
+	 }
+	 return false;
+ }
+
+ bool ASystemManagerBase::SetGimbalAxisRateDegPerSec(AActor* p_actor, FVector rpy_deg)
+ {
+	 auto pgimbal = ToGimbal(p_actor);
+
+	 if (pgimbal) {
+		 pgimbal->SetAxisRateDegPerSec_(rpy_deg);
+		 return true;
+	 }
+	 return false;
+ }
+ bool ASystemManagerBase::GetGimbalAxisRateDegPerSec(AActor* p_actor, FVector& rpy_deg)
+ {
+	 auto pgimbal = ToGimbal(p_actor);
+
+	 if (pgimbal) {
+		 rpy_deg = pgimbal->GetAxisRateDegPerSec_();
+		 return true;
+	 }
+	 return false;
+ }
+
+ bool ASystemManagerBase::SetGimbalAxisMaxLimit(AActor* p_actor, FVector rpy_deg)
+ {
+	 auto pgimbal = ToGimbal(p_actor);
+
+	 if (pgimbal) {
+		 pgimbal->SetAxisMaxLimitAngleDeg(rpy_deg);
+		 return true;
+	 }
+	 return false;
+ }
+ bool ASystemManagerBase::GetGimbalAxisMaxLimit(AActor* p_actor, FVector& rpy_deg)
+ {
+	 auto pgimbal = ToGimbal(p_actor);
+
+	 if (pgimbal) {
+		 rpy_deg = pgimbal->GetAxisMaxLimitAngleDeg();
+		 return true;
+	 }
+	 return false;
+ }
+
+ bool ASystemManagerBase::SetGimbalAxisMinLimit(AActor* p_actor, FVector rpy_deg)
+ {
+	 auto pgimbal = ToGimbal(p_actor);
+
+	 if (pgimbal) {
+		 pgimbal->SetAxisMinLimitAngleDeg(rpy_deg);
+		 return true;
+	 }
+	 return false;
+ }
+ bool ASystemManagerBase::GetGimbalAxisMinLimit(AActor* p_actor, FVector& rpy_deg)
+ {
+	 auto pgimbal = ToGimbal(p_actor);
+
+	 if (pgimbal) {
+		 rpy_deg = pgimbal->GetAxisMinLimitAngleDeg();
+		 return true;
+	 }
+	 return false;
+ }
+
+ bool ASystemManagerBase::SetGimbalAxisIsFreeRotateEnabled(AActor* p_actor, FVector rpy_en)
+ {
+	 auto pgimbal = ToGimbal(p_actor);
+
+	 if (pgimbal) {
+		 rpy_en = pgimbal->GetAxisIsFreeRotateEnabled();
+		 return true;
+	 }
+	 return false;
+ }
+ bool ASystemManagerBase::GetGimbalAxisIsFreeRotateEnabled(AActor* p_actor, FVector& rpy_en)
+ {
+	 auto pgimbal = ToGimbal(p_actor);
+
+	 if (pgimbal) {
+		 pgimbal->SetAxisIsFreeRotateEnabled(rpy_en);
+		 return true;
+	 }
+	 return false;
+ }
+
+ bool ASystemManagerBase::SetGimbalAngleRPY(AActor* p_actor, FVector rpy_deg)
+ {
+	 auto pgimbal = ToGimbal(p_actor);
+
+	 if (pgimbal) {
+		 pgimbal->SetRPYDeg(rpy_deg);
+		 return true;
+	 }
+	 return false;
+ }
+ bool ASystemManagerBase::GetGimbalAngleRPY(AActor* p_actor, FVector& rpy_deg)
+ {
+	 auto pgimbal = ToGimbal(p_actor);
+
+	 if (pgimbal) {
+		 rpy_deg = pgimbal->GetRPYDeg();
+		 return true;
+	 }
+	 return false;
+ }
+
+ bool ASystemManagerBase::SetGimbalInitialAngleRPY(AActor* p_actor, FVector rpy_deg)
+ {
+	 auto pgimbal = ToGimbal(p_actor);
+
+	 if (pgimbal) {
+		 pgimbal->SetAxisInitialAngleDeg(rpy_deg);
+		 return true;
+	 }
+	 return false;
+ }
+ bool ASystemManagerBase::GetGimbalInitialAngleRPY(AActor* p_actor, FVector& rpy_deg)
+ {
+	 auto pgimbal = ToGimbal(p_actor);
+
+	 if (pgimbal) {
+		 rpy_deg = pgimbal->GetAxisInitialAngleDeg();
+		 return true;
+	 }
+	 return false;
+ }
+
+ bool ASystemManagerBase::SetGimbalAxisFixedRateDegPerSec(AActor* p_actor, FVector rpy_deg)
+ {
+	 auto pgimbal = ToGimbal(p_actor);
+
+	 if (pgimbal) {
+		 pgimbal->SetAxisFixedRateDegPerSec_(rpy_deg);
+		 return true;
+	 }
+	 return false;
+ }
+ bool ASystemManagerBase::GetGimbalAxisFixedRateDegPerSec(AActor* p_actor, FVector& rpy_deg)
+ {
+	 auto pgimbal = ToGimbal(p_actor);
+
+	 if (pgimbal) {
+		 rpy_deg = pgimbal->GetAxisFixedRateDegPerSec_();
+		 return true;
+	 }
+	 return false;
+ }

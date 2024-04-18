@@ -14,9 +14,6 @@ struct FSGimbalAxisInfo {
 
 public:
 
-
-
-
 	UPROPERTY(EditAnywhere)
 		bool Enabled;
 
@@ -34,6 +31,12 @@ public:
 
 	UPROPERTY(EditAnywhere)
 		double CommandAngleDeg;
+
+	UPROPERTY(EditAnywhere)
+		bool IsFreeRotateEnabled; 
+
+	UPROPERTY(EditAnywhere)
+		double FixedControlRateDegPerSec;
 private:
 	double CurrentAngleDeg;
 
@@ -58,6 +61,7 @@ public:
 	{
 		CommandAngleDeg = val;
 	}
+
 };
 
 
@@ -122,8 +126,7 @@ protected:
 	UPROPERTY(EditAnywhere)
 		FSGimbalAxisInfo YawAxis;
 
-	UPROPERTY(BlueprintReadWrite)
-		FVector FixedControlRateDegPerSec = FVector(360,360,360);
+	
 	
 
 	UPROPERTY(EditAnywhere)
@@ -153,10 +156,56 @@ public:
 		void SetCommand_(FVector rpy_deg);
 
 	UFUNCTION(BlueprintCallable)
+		FVector GetCommand_();
+
+	UFUNCTION(BlueprintCallable)
+		FVector GetAxisInitialAngleDeg();
+
+	UFUNCTION(BlueprintCallable)
+		void SetAxisInitialAngleDeg(FVector val);
+	
+	UFUNCTION(BlueprintCallable)
+		FVector GetRPYDeg();
+
+	UFUNCTION(BlueprintCallable)
+		void SetRPYDeg(FVector val);
+
+	UFUNCTION(BlueprintCallable)
 		void EnableAxis_(FVector rpy_en);
+	
+	UFUNCTION(BlueprintCallable)
+		FVector GetAxisEnabled_();
 
 	UFUNCTION(BlueprintCallable)
 		void SetAxisRateDegPerSec_(FVector rpy_en);
+
+	UFUNCTION(BlueprintCallable)
+		FVector GetAxisRateDegPerSec_();
+
+	UFUNCTION(BlueprintCallable)
+		void SetAxisFixedRateDegPerSec_(FVector rpy_en);
+
+	UFUNCTION(BlueprintCallable)
+		FVector GetAxisFixedRateDegPerSec_();
+
+	UFUNCTION(BlueprintCallable)
+		FVector GetAxisMaxLimitAngleDeg();
+
+	UFUNCTION(BlueprintCallable)
+		void SetAxisMaxLimitAngleDeg(FVector val);
+
+	UFUNCTION(BlueprintCallable)
+		FVector GetAxisMinLimitAngleDeg();
+
+	UFUNCTION(BlueprintCallable)
+		void SetAxisMinLimitAngleDeg(FVector val);
+
+	UFUNCTION(BlueprintCallable)
+		FVector GetAxisIsFreeRotateEnabled();
+
+	UFUNCTION(BlueprintCallable)
+		void SetAxisIsFreeRotateEnabled(FVector val);
+
 	
 	UFUNCTION(BlueprintCallable)
 		void AttachComp_(USceneComponent* p_comp);
@@ -164,11 +213,30 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void RemoveAttachedComp_(USceneComponent* p_comp);
 
-	FSGimbalAxisInfo* GetAxis(EGimbalAxis axis);
+	inline FSGimbalAxisInfo* GetAxis(EGimbalAxis axis)
+	{
+		switch (axis)
+		{
+		case Roll:
+			return &RollAxis;
+		case Pitch:
+			return &PitchAxis;
+		case Yaw:
+			return &YawAxis;
+		default:
+			break;
+		}
+
+		return nullptr;
+	}
 	double GetFixedRate(EGimbalAxis axis);
 	double GetAxisAngleDeg(EGimbalAxis axis);
-	FVector GetRPYDeg();
+	
 
 	void SetGimbalControlMode(EGimbalControlMode mode);
 	EGimbalControlMode GetGimbalControlMode();
+
+public:
+	virtual void Save(ISaveLoader* p_save_loader) override;
+	virtual void SaveJSON(CJsonDataContainer& data) override;
 };

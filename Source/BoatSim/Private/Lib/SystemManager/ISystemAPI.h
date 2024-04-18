@@ -417,4 +417,38 @@ public:
 	virtual bool GetGStreamerPort(AActor* p_actor, int& val) = 0;
 	virtual	bool SetGStreamerPort(AActor* p_actor, int val) = 0;
 
+
+	virtual	bool SetGimbalMode(AActor* p_actor, int val) = 0;
+	virtual	bool GetGimbalMode(AActor* p_actor, int& rpy_deg) = 0;
+	
+	virtual	bool SetGimbalCommand(AActor* p_actor, FVector rpy_deg) = 0;
+	virtual	bool GetGimbalCommand(AActor* p_actor, FVector &rpy_deg) = 0;
+
+	virtual	bool SetGimbalAngleRPY(AActor* p_actor, FVector rpy_deg) = 0;
+	virtual	bool GetGimbalAngleRPY(AActor* p_actor, FVector& rpy_deg) = 0;
+
+	virtual	bool SetGimbalInitialAngleRPY(AActor* p_actor, FVector rpy_deg) = 0;
+	virtual	bool GetGimbalInitialAngleRPY(AActor* p_actor, FVector& rpy_deg) = 0;
+
+	virtual	bool SetGimbalAxisEnabled(AActor* p_actor, FVector rpy_en) = 0;
+	virtual	bool GetGimbalAxisEnabled(AActor* p_actor, FVector& rpy_en) = 0;
+
+	virtual	bool SetGimbalAxisRateDegPerSec(AActor* p_actor, FVector rpy_deg) = 0;
+	virtual	bool GetGimbalAxisRateDegPerSec(AActor* p_actor, FVector& rpy_deg) = 0;
+
+	virtual	bool SetGimbalAxisFixedRateDegPerSec(AActor* p_actor, FVector rpy_deg) = 0;
+	virtual	bool GetGimbalAxisFixedRateDegPerSec(AActor* p_actor, FVector& rpy_deg) = 0;
+
+	virtual	bool SetGimbalAxisMaxLimit(AActor* p_actor, FVector rpy_deg) = 0;
+	virtual	bool GetGimbalAxisMaxLimit(AActor* p_actor, FVector& rpy_deg) = 0;
+
+	virtual	bool SetGimbalAxisMinLimit(AActor* p_actor, FVector rpy_deg) = 0;
+	virtual	bool GetGimbalAxisMinLimit(AActor* p_actor, FVector& rpy_deg) = 0;
+
+	virtual	bool SetGimbalAxisIsFreeRotateEnabled(AActor* p_actor, FVector rpy_en) = 0;
+	virtual	bool GetGimbalAxisIsFreeRotateEnabled(AActor* p_actor, FVector& rpy_en) = 0;
+
+	
+
+
 };

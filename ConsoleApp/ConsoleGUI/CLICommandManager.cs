@@ -72,6 +72,17 @@ public static class CLICommandManager
     [Modifiable] public const string GStreamerIP        = "gstreamerip";
     [Modifiable] public const string GStreamerPort      = "gstreamerport";
 
+    [Modifiable] public const string GimbalMode = "gimbalmode";
+    [Modifiable] public const string GimbalAxisEnabled = "gimbalaxisen";
+    [Modifiable] public const string GimbalCmd = "gimbalcmd";
+    [Modifiable] public const string GimbalAng = "gimbalang";
+    [Modifiable] public const string GimbalInitialAng = "gimbalinitialang";    
+    [Modifiable] public const string GimbalRate = "gimbalrate";
+    [Modifiable] public const string GimbalFixedRate = "gimbalfixedrate";
+    [Modifiable] public const string GimbalMaxLimitAng = "gimbalmaxlimitang";
+    [Modifiable] public const string GimbalMinLimitAng = "gimbalminlimitang";
+    [Modifiable] public const string GimbalFreeRotateEnabled = "gimbalfreerotateen";
+
     [Modifiable] public const string IsNormalDistribution = "isnormaldistribution";
     [Modifiable] public const string MeasurementErrorMean = "merrormean";
     [Modifiable] public const string MeasurementErrorStd = "merrorstd";
