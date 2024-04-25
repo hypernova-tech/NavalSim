@@ -92,6 +92,24 @@ FVector CMath::GetActorEulerAnglesRPY(AActor* p_actor)
 
     return FVector(-Roll, -Pitch, Yaw);
 }
+
+FVector CMath::FindRPYFromVectors(const FVector& Vec, const FVector& Dir)
+{
+    // Ensure vectors are normalized
+    FVector VecNormalized = Vec.GetSafeNormal();
+    FVector DirNormalized = Dir.GetSafeNormal();
+
+    // Calculate the quaternion for rotation
+    FQuat RotationQuat = FQuat::FindBetween(VecNormalized, DirNormalized);
+
+    // Convert quaternion to Euler angles (Roll, Pitch, Yaw)
+    FRotator RotatorFromQuat = RotationQuat.Rotator();
+
+    FLOAT64 Roll = RotatorFromQuat.Roll;
+    FLOAT64 Pitch = RotatorFromQuat.Pitch;
+    FLOAT64 Yaw = RotatorFromQuat.Yaw;
+    return FVector(-Roll, -Pitch, Yaw);
+}
 FVector CMath::GetActorReleativeEulerAnglesRPY(AActor* p_actor)
 {
    
@@ -176,10 +194,10 @@ bool CMath::IsZero(FVector vec, FLOAT64 tolerance)
 {
     return (FMath::Abs(vec.X)<= tolerance) && (FMath::Abs(vec.Y) <= tolerance) && (FMath::Abs(vec.Z) <= tolerance);
 }
-bool CMath::IsPointInsideVolume(const FVector& origin, const FVector& point, FLOAT64 min_elevation_deg, FLOAT64 max_elevation_deg, FLOAT64 min_azimuth_deg, FLOAT64 max_azimuth_deg, FLOAT64 min_range_meter, FLOAT64 max_range_meter)
+bool CMath::IsPointInsideVolume(bool is_local, const FVector& origin, const FVector dir, const FVector& point, FLOAT64 min_elevation_deg, FLOAT64 max_elevation_deg, FLOAT64 min_azimuth_deg, FLOAT64 max_azimuth_deg, FLOAT64 min_range_meter, FLOAT64 max_range_meter, FVector& local_rpy)
 {
     // Convert elevation and azimuth ranges from degrees to radians
-
+   
 
     // Calculate vector from origin to point
     FVector direction_to_pt = point - origin;
@@ -191,36 +209,47 @@ bool CMath::IsPointInsideVolume(const FVector& origin, const FVector& point, FLO
         return false;
     }
 
+
     // Normalize the direction vector
     direction_to_pt.Normalize();
+    float elev_ang;
+    float azim_angle;
 
-    // Calculate elevation and azimuth angles for the point
-    float elev_ang = -FMath::Asin(direction_to_pt.Z)*RADTODEG;
-    float azim_angle = FMath::Atan2(direction_to_pt.Y, direction_to_pt.X) * RADTODEG;
-    if (azim_angle < 0) {
-        azim_angle += 360;
+    if (is_local) {
+        local_rpy = CMath::FindRPYFromVectors(dir, direction_to_pt);
+        // Calculate elevation and azimuth angles for the point
+        elev_ang = local_rpy.Y;//-FMath::Asin((direction_to_pt-dir).Z)*RADTODEG;
+        azim_angle = local_rpy.Z;// FMath::Atan2(direction_to_pt.Y, direction_to_pt.X)* RADTODEG;
+        // Check if the point is within the elevation range
+       
     }
-
-    // Check if the point is within the elevation range
+    else {
+        elev_ang = -FMath::Asin(direction_to_pt.Z) * RADTODEG;
+        azim_angle = FMath::Atan2(direction_to_pt.Y, direction_to_pt.X) * RADTODEG;
+        if (azim_angle < 0) {
+            azim_angle += 360;
+        }
+    }
+    
     if (elev_ang < min_elevation_deg || elev_ang > max_elevation_deg)
     {
         return false;
     }
 
-    // Check if the point is within the azimuth range
     if (azim_angle < min_azimuth_deg || azim_angle > max_azimuth_deg)
     {
         return false;
     }
-
+    
+    // Check if the point is within the azimuth range
     return true;
 }
-bool CMath::CheckBoxInsideVolume(const FBox& box, FVector& origin, FLOAT64 min_elevation_deg, FLOAT64 max_elevation_deg, FLOAT64 min_azimuth_deg, FLOAT64 max_azimuth_deg, FLOAT64 min_range_meter, FLOAT64 max_range_meter)
+bool CMath::CheckBoxInsideVolume(bool is_local, const FBox& box, const FVector& origin, const FVector &dir, FLOAT64 min_elevation_deg, FLOAT64 max_elevation_deg, FLOAT64 min_azimuth_deg, FLOAT64 max_azimuth_deg, FLOAT64 min_range_meter, FLOAT64 max_range_meter, FVector& local_rpy)
 {
     auto corners = GetBoxCornersAndCenter(box);
 
     for (auto corner : corners) {
-        bool ret = CMath::IsPointInsideVolume(origin, corner, min_elevation_deg, max_elevation_deg, min_azimuth_deg, max_azimuth_deg, min_range_meter, max_range_meter);
+        bool ret = CMath::IsPointInsideVolume(is_local, origin, dir, corner, min_elevation_deg, max_elevation_deg, min_azimuth_deg, max_azimuth_deg, min_range_meter, max_range_meter, local_rpy);
         if (!ret) {
             return false;
         }

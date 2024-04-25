@@ -967,6 +967,16 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
 
     }
 
+    ret = CommandManager.GetValue(CCLICommandManager::MotionLogEnabled, is_enabled);
+    if (ret) {
+        if (pSystemAPI->SetIsMotionLogEnabled(p_actor, is_enabled)) {
+            one_success = true;;
+        }
+    }
+    else {
+
+    }
+
     ret = CommandManager.GetValue(CCLICommandManager::GimbalMode, sint);
     if (ret) {
         if (pSystemAPI->SetGimbalMode(p_actor, sint)) {

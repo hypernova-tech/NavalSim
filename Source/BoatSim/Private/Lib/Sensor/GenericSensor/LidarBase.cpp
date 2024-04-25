@@ -90,7 +90,7 @@ void ALidarBase::Run(float delta_time_sec)
 		args.measurement_error_mean = MeasurementErrorMean;
 		args.measurement_error_std = MeasurementErrorUncertainy;
 		args.clutter_params = GetClutterParams();
-		args.show_radar_beam = ShowBeam;
+		args.show_beam = ShowBeam;
 		args.p_ignore_list = &(ASystemManagerBase::GetInstance()->GetSensorGlobalIgnoreList());
 		args.create_scan_line = false;
 		args.scan_center = GetActorLocation();

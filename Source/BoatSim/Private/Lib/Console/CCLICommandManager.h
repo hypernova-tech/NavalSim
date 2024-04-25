@@ -90,6 +90,7 @@ public:
 	static FString SharedMemName;
 	static FString GStreamerIP;
 	static FString GStreamerPort;
+	static FString MotionLogEnabled;
 	static FString Tick;
 	static FString Controller;
 	static FString SensorSlotIndex;

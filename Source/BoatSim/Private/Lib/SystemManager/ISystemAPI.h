@@ -448,7 +448,8 @@ public:
 	virtual	bool SetGimbalAxisIsFreeRotateEnabled(AActor* p_actor, FVector rpy_en) = 0;
 	virtual	bool GetGimbalAxisIsFreeRotateEnabled(AActor* p_actor, FVector& rpy_en) = 0;
 
-	
+	virtual	bool SetIsMotionLogEnabled(AActor* p_actor, bool val) = 0;
+	virtual	bool GetIsMotionLogEnabled(AActor* p_actor, bool &val) = 0;
 
 
 };

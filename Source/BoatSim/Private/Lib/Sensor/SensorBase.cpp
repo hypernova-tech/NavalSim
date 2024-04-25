@@ -176,6 +176,10 @@ void ASensorBase::ResumeSensor()
 {
 }
 
+void ASensorBase::OnPreTrace(STraceArgs& args)
+{
+}
+
 TArray<AActor*>* ASensorBase::GetScanAdditionalIncludes()
 {
 	ScanAdditionalIncludes.Reset();

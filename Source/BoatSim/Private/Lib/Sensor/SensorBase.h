@@ -11,6 +11,7 @@
 #include <Lib/ActorBase/ActorBase.h>
 #include "Lib/Clutter/ClutterDefs.h"
 #include <Lib/ScreenDepth/SceneCapturer.h>
+#include <Lib/Utils/CUtil.h>
 #include "SensorBase.generated.h"
 
 
@@ -146,6 +147,7 @@ protected:
 	virtual void FinalizeSensor();
 	virtual void PauseSensor();
 	virtual void ResumeSensor();
+	virtual void OnPreTrace(STraceArgs& args);
 	virtual TArray<AActor*>* GetScanAdditionalIncludes();
 	SClutterParams GetClutterParams();
 	FLOAT64 CaptureStartTimeRef;

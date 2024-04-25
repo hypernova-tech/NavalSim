@@ -25,7 +25,7 @@ CMotionLogEntry* CMotionLogger::AddEntry(double time, const FVector& pos)
 void CMotionLogger::Log(double time, const FVector& pos, FLOAT32 min_distance_meter)
 {
 	if (pLastEntry != nullptr) {
-		if (FVector::Distance(pos, pLastEntry->Position) < TOUE(min_distance_meter)) {
+		if (FVector::Distance(pos, pLastEntry->Position) > TOUE(min_distance_meter)) {
 			pLastEntry = AddEntry(time, pos);
 		}
 	}

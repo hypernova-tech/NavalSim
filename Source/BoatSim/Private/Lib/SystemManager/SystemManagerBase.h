@@ -621,6 +621,9 @@ public:
 
 	virtual	bool SetGimbalAxisFixedRateDegPerSec(AActor* p_actor, FVector rpy_deg);
 	virtual	bool GetGimbalAxisFixedRateDegPerSec(AActor* p_actor, FVector& rpy_deg);
+
+	virtual	bool SetIsMotionLogEnabled(AActor* p_actor, bool val);
+	virtual	bool GetIsMotionLogEnabled(AActor* p_actor, bool &val);
 	
 
 	virtual APostProcessVolume *GetMainPostProcessVolume();

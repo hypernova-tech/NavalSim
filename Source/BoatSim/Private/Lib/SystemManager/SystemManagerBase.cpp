@@ -3455,3 +3455,25 @@ bool ASystemManagerBase::GetPathSpeed(AActor* p_actor, FLOAT64& val)
 	 }
 	 return false;
  }
+
+ bool ASystemManagerBase::SetIsMotionLogEnabled(AActor* p_actor, bool val)
+ {
+	 auto act = ToActorBase(p_actor);
+
+	 if (act) {
+		 act->SetIsMotionLogEnabled(val);
+		 return true;
+	 }
+	 return false;
+ }
+
+ bool ASystemManagerBase::GetIsMotionLogEnabled(AActor* p_actor, bool &val)
+ {
+	 auto act = ToActorBase(p_actor);
+
+	 if (act) {
+		 val = act->GetIsMotionLogEnabled();
+		 return true;
+	 }
+	 return false;
+ }

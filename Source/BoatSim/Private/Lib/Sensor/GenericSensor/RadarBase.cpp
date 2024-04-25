@@ -283,7 +283,7 @@ void ARadarBase::Scan()
 		args.measurement_error_mean = MeasurementErrorMean;
 		args.measurement_error_std = MeasurementErrorUncertainy;
 		args.clutter_params = GetClutterParams();
-		args.show_radar_beam = ShowBeam;
+		args.show_beam = ShowBeam;
 		args.p_ignore_list = &(ASystemManagerBase::GetInstance()->GetSensorGlobalIgnoreList());
 		args.create_scan_line = true;
 		args.scan_center = GetActorLocation();

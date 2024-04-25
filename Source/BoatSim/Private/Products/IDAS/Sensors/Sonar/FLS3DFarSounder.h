@@ -60,6 +60,8 @@ protected:
 	bool   BottomDetectEnabled = false;
 	double SquelchSensitivity = 100;
 	bool   AutoSquelchEnabled = true;
+
+	virtual void OnPreTrace(STraceArgs& args) override;
 public:
 
 	virtual void Save(ISaveLoader* p_save_loader) override;

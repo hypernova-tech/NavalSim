@@ -686,6 +686,17 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
 
     }
 
+    ret = CommandManager.HasA(CCLICommandManager::MotionLogEnabled);
+    if (ret) {
+        if (pSystemAPI->GetIsMotionLogEnabled(p_actor, is_enabled)) {
+            SendConsoleResponse(name, CCLICommandManager::MotionLogEnabled, is_enabled);
+            return true;
+        }
+    }
+    else {
+
+    }
+
     ret = CommandManager.HasA(CCLICommandManager::GimbalMode);
     if (ret) {
         if (pSystemAPI->GetGimbalMode(p_actor, sint)) {

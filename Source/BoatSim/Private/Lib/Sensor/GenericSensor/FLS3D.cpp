@@ -71,14 +71,14 @@ void AFLS3D::Run(float delta_time_sec)
 		args.min_range_meter = RangeMinMeter;
 		args.azimuth_start_deg = start_azimuth;
 		args.azimuth_end_deg = end_azimuth;
-		args.elevation_start_deg = -FovVerticalDeg;
-		args.elevation_end_deg = 0;
+		args.elevation_start_deg = -FovVerticalDeg/2;
+		args.elevation_end_deg = FovVerticalDeg / 2;
 		args.azimuth_angle_step_deg = HorizontalScanStepAngleDeg;
 		args.elevation_angle_step_deg = VerticalScanStepAngleDeg;
 		args.measurement_error_mean = MeasurementErrorMean;
 		args.measurement_error_std = MeasurementErrorUncertainy;
 		args.clutter_params = GetClutterParams();
-		args.show_radar_beam = ShowBeam;
+		args.show_beam = ShowBeam;
 		args.p_ignore_list =  &(ASystemManagerBase::GetInstance()->GetSensorGlobalIgnoreList());
 		args.create_scan_line = false;
 		args.scan_center = GetActorLocation();
@@ -111,6 +111,7 @@ void AFLS3D::Run(float delta_time_sec)
 
 
 		bool ret = false;
+		OnPreTrace(args);
 		ret = CUtil::Trace(args, pScanResult);
 		
 

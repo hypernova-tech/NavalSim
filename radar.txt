@@ -1,0 +1,137 @@
+create --name jeoref --bp  --tick 0
+set --name jeoref --actorid 0
+set --name jeoref --instance -1
+set --name jeoref --suppressed 0
+set --name jeoref --standalone 0
+set --name jeoref --position "0.000000 0.000000 0.000000"
+set --name jeoref --rotation "-0.000000 -0.000000 0.000000"
+set --name jeoref --scale "1.000000 1.000000 1.000000"
+set --name jeoref --blocking 1
+set --name jeoref --tempkelvin 300.000000
+set --name jeoref --heatsource 0
+set --name jeoref --annotationid 0
+set --name jeoref --annotatechildren 0
+set --name jeoref --annotatechildren 0
+set --name jeoref --sharedmemname 
+set --name jeoref --gstreamerip 
+set --name jeoref --gstreamerport 0
+set --name jeoref --motionlogen 0
+set --name jeoref --maporiginlat 0.000000
+set --name jeoref --maporiginlon 0.000000
+set --name jeoref --maporiginh 0.000000
+
+create --name thermal --bp  --tick 0
+set --name thermal --actorid 0
+set --name thermal --instance -1
+set --name thermal --suppressed 0
+set --name thermal --standalone 0
+set --name thermal --position "0.000000 0.000000 0.000000"
+set --name thermal --rotation "-0.000000 -0.000000 0.000000"
+set --name thermal --scale "1.000000 1.000000 1.000000"
+set --name thermal --blocking 1
+set --name thermal --tempkelvin 300.000000
+set --name thermal --heatsource 0
+set --name thermal --annotationid 0
+set --name thermal --annotatechildren 0
+set --name thermal --annotatechildren 0
+set --name thermal --sharedmemname 
+set --name thermal --gstreamerip 
+set --name thermal --gstreamerport 0
+set --name thermal --motionlogen 0
+set --name thermal --thermalmode 0
+
+create --name env --bp  --tick 0
+set --name env --actorid 0
+set --name env --instance -1
+set --name env --suppressed 0
+set --name env --standalone 0
+set --name env --position "324.600000 284.200000 4.600000"
+set --name env --rotation "-0.000000 -0.000000 0.000000"
+set --name env --scale "1.000000 1.000000 1.000000"
+set --name env --blocking 1
+set --name env --tempkelvin 300.000000
+set --name env --heatsource 0
+set --name env --annotationid 0
+set --name env --annotatechildren 0
+set --name env --annotatechildren 0
+set --name env --sharedmemname 
+set --name env --gstreamerip 
+set --name env --gstreamerport 0
+set --name env --motionlogen 0
+set --name env --timeofday 12.000000
+set --name env --envtimeflowscale 1.000000
+set --name env --rain 0.000000
+set --name env --cloud 0.000000
+set --name env --snow 0.000000
+set --name env --dust 0.000000
+set --name env --fog 0.000000
+set --name env --thunder 0.000000
+set --name env --envsoundfx 1
+set --name env --wind 3.000000
+set --name env --winddir 0.000000
+
+create --name annotation --bp  --tick 0
+set --name annotation --actorid 0
+set --name annotation --instance -1
+set --name annotation --suppressed 0
+set --name annotation --standalone 0
+set --name annotation --position "-20.097436 6.361075 10.299538"
+set --name annotation --rotation "-0.000000 -0.000000 0.000000"
+set --name annotation --scale "1.000000 1.000000 1.000000"
+set --name annotation --blocking 1
+set --name annotation --tempkelvin 300.000000
+set --name annotation --heatsource 0
+set --name annotation --annotationid 0
+set --name annotation --annotatechildren 0
+set --name annotation --annotatechildren 0
+set --name annotation --sharedmemname 
+set --name annotation --gstreamerip 
+set --name annotation --gstreamerport 0
+set --name annotation --motionlogen 0
+
+create --name halo --bp RADARHALO24 --tick 0
+set --name halo --actorid 0
+set --name halo --instance -1
+set --name halo --suppressed 0
+set --name halo --standalone 1
+set --name halo --position "0.000000 0.000000 0.000000"
+set --name halo --rotation "-0.000000 -0.000000 0.000000"
+set --name halo --scale "1.000000 1.000000 1.000000"
+set --name halo --blocking 1
+set --name halo --tempkelvin 300.000000
+set --name halo --heatsource 0
+set --name halo --annotationid 0
+set --name halo --annotatechildren 0
+set --name halo --annotatechildren 0
+set --name halo --ipaddr1 127.0.0.1
+set --name halo --localport1 13080
+set --name halo --remoteport 13081
+set --name halo --sharedmemname 
+set --name halo --gstreamerip 
+set --name halo --gstreamerport 0
+set --name halo --motionlogen 0
+set --name halo --slotindex 0
+set --name halo --rangemin 5.000000
+set --name halo --rangemax 100.000000
+set --name halo --vfov 10.000000
+set --name halo --hfov 90.000000
+set --name halo --hscanstepang 1.000000
+set --name halo --vscanstepang 1.000000
+set --name halo --isnormaldistribution 0
+set --name halo --merrormean 10.000000
+set --name halo --merrorstd 500.000000
+set --name halo --surfacedetecten 1
+set --name halo --subsurfacedetecten 0
+set --name halo --foamen 1
+set --name halo --seasurfdetectprob 0.010000
+set --name halo --maxsurfpenet 2.000000
+set --name halo --radscanlevel 0
+set --name halo --radscanrpm 0
+set --name halo --radgaintype 2
+set --name halo --radgainlevel 1
+set --name halo --radseaclutleveltype 0
+set --name halo --radseaclutlevel 0
+set --name halo --radseaclutautooffset 0
+set --name halo --radrainclutlevel 0
+set --name halo --radmaxguardzonecount 2
+set --name halo --radmaxsectorblankingzonecount 4

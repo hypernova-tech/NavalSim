@@ -108,6 +108,7 @@ FString CCLICommandManager::CamHeightPx		= "heightpx";
 FString CCLICommandManager::SharedMemName	= "sharedmemname";
 FString CCLICommandManager::GStreamerIP = "gstreamerip";
 FString CCLICommandManager::GStreamerPort = "gstreamerport";
+FString CCLICommandManager::MotionLogEnabled = "motionlogen";
 FString CCLICommandManager::TimeOfDayHour = "timeofday";
 FString CCLICommandManager::EnvTimeFlowScale = "envtimeflowscale";
 FString CCLICommandManager::ThermalMode ="thermalmode";

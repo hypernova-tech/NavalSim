@@ -163,6 +163,14 @@ void AFLS3DFarSounder::Run(float delta_time_sec)
 	   
 }
 
+void AFLS3DFarSounder::OnPreTrace(STraceArgs& args)
+{
+	args.elevation_start_deg = -10;
+	args.elevation_end_deg = FovVerticalDeg - 10;
+	Super::OnPreTrace(args);
+
+}
+
 void AFLS3DFarSounder::Save(ISaveLoader* p_save_loader)
 {
 	Super::Save(p_save_loader);

@@ -25,12 +25,6 @@ public:
 	FVector scan_rpy_world_deg;
 	bool is_world;
 
-
-
-
-
-
-
 	float min_range_meter;
 	float range_meter;
 	float azimuth_start_deg;
@@ -44,7 +38,7 @@ public:
 	float measurement_error_std;
     SClutterParams clutter_params;
 
-	bool show_radar_beam;
+	bool show_beam;
 	TArray<AActor*> *p_ignore_list;
 	TArray<AActor*> additional_ignore_list;
 	bool create_scan_line;
@@ -53,6 +47,10 @@ public:
 
 	TArray<AActor*> *include_actor_list;
 	TArray<FVector> include_point_list;
+
+	struct {
+		FVector visibility_check_location;
+	}drived_params;
 };
 
 class CUtil
@@ -64,13 +62,15 @@ public:
 
 public:
 	static bool DoesExist(FString name, UWorld* p_world);
-	static bool Trace(const STraceArgs &args, SScanResult* pscan_result);
+	static bool Trace(STraceArgs &args, SScanResult* pscan_result);
 
-	static inline void ScanPie(const STraceArgs& args, double azimuth, double elevation, FVector& look_dir, FVector& start_loc, FVector& end, const FVector& right_vec, const FVector& up_vec, bool& ret, FHitResult& result, FCollisionQueryParams& query_params, SScanResult* pscan_result, int horizantal_ind, int vertical_ind, SSectorInfo* p_current_sektor, int& success_count);
+	static inline void ScanPie(const STraceArgs& args, double azimuth, double elevation, FVector& look_dir, FVector& start_loc, FVector& end, const FVector& right_vec, const FVector& up_vec, bool& ret, FHitResult& result, FCollisionQueryParams& query_params, SScanResult* pscan_result, int horizantal_ind, int vertical_ind, SSectorInfo* p_current_sektor, int& success_count,bool is_visiblity = false,
+		bool draw_points = false);
 
 
 	static void DrawDebugRay(UWorld* p_world, const FVector& Start, const FVector& End, FColor Color, float Duration, float Thickness);
-
+	static void DebugSphere(UWorld* p_world, const FVector& Center, float Radius, FColor Color, float Duration);
+	static void DebugBox(UWorld* p_world, const FVector& Center, float Size, FColor Color, float Duration);
 	static bool ParseVector2D(const FString& Text, FVector2D& ret);
 	static bool ParseVector3D(const FString& Text, FVector& ret);
 	static bool ParseColor(const FString& Text, FColor& ret);
