@@ -452,4 +452,28 @@ public:
 	virtual	bool GetIsMotionLogEnabled(AActor* p_actor, bool &val) = 0;
 
 
+	virtual	bool SetAISMMSI(AActor* p_actor, int val) = 0;
+	virtual	bool GetAISMMSI(AActor* p_actor, int& val) = 0;
+
+	virtual	bool SetAISVendorID(AActor* p_actor, FString val) = 0;
+	virtual	bool GetAISVendorID(AActor* p_actor, FString& val) = 0;
+
+	virtual	bool SetAISCallSign(AActor* p_actor, FString val) = 0;
+	virtual	bool GetAISCallSign(AActor* p_actor, FString& val) = 0;
+
+	virtual	bool SetAISReferencePointFromStarboard(AActor* p_actor, double val) = 0;
+	virtual	bool GetAISReferencePointFromStarboard(AActor* p_actor, double& val) = 0;
+
+	virtual	bool SetReferencePointPositionAftOfBow(AActor* p_actor, double val) = 0;
+	virtual	bool GetReferencePointPositionAftOfBow(AActor* p_actor, double& val) = 0;
+
+	virtual	bool SetAISName(AActor* p_actor, FString val) = 0;
+	virtual	bool GetAISName(AActor* p_actor, FString& val) = 0;
+
+	virtual	bool SetAISDateOfArrivalYearMonthDay(AActor* p_actor, FVector val) = 0;
+	virtual	bool GetAISDateOfArrivalYearMonthDay(AActor* p_actor, FVector& val) = 0;
+
+	virtual	bool SetAISTimeOfArrivalSec(AActor* p_actor, double val) = 0;
+	virtual	bool GetAISTimeOfArrivalSec(AActor* p_actor, double& val) = 0;
+
 };

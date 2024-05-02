@@ -1256,6 +1256,87 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
 
     }
 
+    ret = CommandManager.GetValue(CCLICommandManager::AISName, sret);
+    if (ret) {
+        if (pSystemAPI->SetAISName(p_actor, sret)) {
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::AISVendorId, sret);
+    if (ret) {
+        if (pSystemAPI->SetAISVendorID(p_actor, sret)) {
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::AISCallSign, sret);
+    if (ret) {
+        if (pSystemAPI->SetAISCallSign(p_actor, sret)) {
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::AISReferencePointFromStarboard, dbl);
+    if (ret) {
+        if (pSystemAPI->SetAISReferencePointFromStarboard(p_actor, dbl)) {
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::ReferencePointPositionAftOfBow, dbl);
+    if (ret) {
+        if (pSystemAPI->SetReferencePointPositionAftOfBow(p_actor, dbl)) {
+            return true;
+        }
+    }
+    else {
+
+    }
+
+
+    ret = CommandManager.GetValue(CCLICommandManager::AISMMSI, sint);
+    if (ret) {
+        if (pSystemAPI->SetAISMMSI(p_actor, sint)) {
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::AISDateOfArrival, vec);
+    if (ret) {
+        if (pSystemAPI->SetAISDateOfArrivalYearMonthDay(p_actor, vec)) {
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::AISTimeOfArrival, dbl);
+    if (ret) {
+        if (pSystemAPI->SetAISTimeOfArrivalSec(p_actor, dbl)) {
+            return true;
+        }
+    }
+    else {
+
+    }
+
 
     return one_success;
 }

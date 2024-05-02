@@ -1552,3 +1552,35 @@ void CUtil::ReattachComponentToActor(UPrimitiveComponent* ChildComponent, AActor
     // Reattach the component to the new parent, maintaining relative transform
     ChildComponent->AttachToComponent(ParentActor->GetRootComponent(), FAttachmentTransformRules::KeepRelativeTransform, SocketName);
 }
+
+FVector CUtil::GetActorSizeInLocalAxes(AActor* Actor)
+{
+    if (!Actor) return FVector::ZeroVector;
+
+    FVector TotalMin(FLT_MAX, FLT_MAX, FLT_MAX);
+    FVector TotalMax(-FLT_MAX, -FLT_MAX, -FLT_MAX);
+
+    // Transform to get back to local actor space
+    FTransform ActorTransformInverse = Actor->GetTransform().Inverse();
+
+    // Iterate over primitive components
+    TArray<UPrimitiveComponent*> Components;
+    Actor->GetComponents<UPrimitiveComponent>(Components);
+
+    for (const auto* Component : Components)
+    {
+        // Get world bounds
+        FBoxSphereBounds WorldBounds = Component->CalcBounds(Component->GetComponentTransform());
+
+        // Transform world bounds to actor's local space
+        FVector LocalMin = ActorTransformInverse.TransformPosition(WorldBounds.Origin - WorldBounds.BoxExtent);
+        FVector LocalMax = ActorTransformInverse.TransformPosition(WorldBounds.Origin + WorldBounds.BoxExtent);
+
+        // Extend total bounds
+        TotalMin = TotalMin.ComponentMin(LocalMin);
+        TotalMax = TotalMax.ComponentMax(LocalMax);
+    }
+
+    // Calculate total size in local axes
+    return TotalMax - TotalMin;
+}

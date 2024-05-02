@@ -254,5 +254,8 @@ public:
 	static void BuildComponentPaths(USceneComponent* Component, const FString& BasePath, TArray<FString>& OutPaths);
 	static TArray<FString> GetAllComponentPaths(AActor* Actor);
 	static void ReattachComponentToActor(UPrimitiveComponent* ChildComponent, AActor* ParentActor, FName SocketName = NAME_None);
+	static FVector GetActorSizeInLocalAxes(AActor* Actor);
+
+
 };
 

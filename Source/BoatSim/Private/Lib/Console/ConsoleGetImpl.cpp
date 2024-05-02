@@ -597,6 +597,96 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
 
     }
 
+    ret = CommandManager.HasA(CCLICommandManager::AISName);
+    if (ret) {
+        if (pSystemAPI->GetAISName(p_actor, sret)) {
+            SendConsoleResponse(name, CCLICommandManager::AISName, sret);
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.HasA(CCLICommandManager::AISVendorId);
+    if (ret) {
+        if (pSystemAPI->GetAISVendorID(p_actor, sret)) {
+            SendConsoleResponse(name, CCLICommandManager::AISVendorId, sret);
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.HasA(CCLICommandManager::AISCallSign);
+    if (ret) {
+        if (pSystemAPI->GetAISCallSign(p_actor, sret)) {
+            SendConsoleResponse(name, CCLICommandManager::AISCallSign, sret);
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.HasA(CCLICommandManager::AISReferencePointFromStarboard);
+    if (ret) {
+        if (pSystemAPI->GetAISReferencePointFromStarboard(p_actor, dbl)) {
+            SendConsoleResponse(name, CCLICommandManager::AISReferencePointFromStarboard, dbl);
+            return true;
+        }
+    }
+    else {
+
+    }
+
+
+    ret = CommandManager.HasA(CCLICommandManager::ReferencePointPositionAftOfBow);
+    if (ret) {
+        if (pSystemAPI->GetReferencePointPositionAftOfBow(p_actor, dbl)) {
+            SendConsoleResponse(name, CCLICommandManager::ReferencePointPositionAftOfBow, dbl);
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.HasA(CCLICommandManager::AISMMSI);
+    if (ret) {
+        if (pSystemAPI->GetAISMMSI(p_actor, sint)) {
+            SendConsoleResponse(name, CCLICommandManager::AISMMSI, sret);
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.HasA(CCLICommandManager::AISDateOfArrival);
+    if (ret) {
+        if (pSystemAPI->GetAISDateOfArrivalYearMonthDay(p_actor, vec)) {
+            SendConsoleResponse(name, CCLICommandManager::AISDateOfArrival, vec);
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.HasA(CCLICommandManager::AISTimeOfArrival);
+    if (ret) {
+        if (pSystemAPI->GetAISTimeOfArrivalSec(p_actor, dbl)) {
+            SendConsoleResponse(name, CCLICommandManager::AISTimeOfArrival, dbl);
+            return true;
+        }
+    }
+    else {
+
+    }
+
+
     ret = CommandManager.HasA(CCLICommandManager::Beam);
     if (ret) {
         if (pSystemAPI->GetBeamEnabled(p_actor, is_enabled)) {

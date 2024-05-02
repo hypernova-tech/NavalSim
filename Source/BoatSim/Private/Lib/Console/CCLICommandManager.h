@@ -114,9 +114,19 @@ public:
 	static FString CamFollow;
 	static FString CamFollowTranslation;
 	static FString CamFollowEuler;
+
 	static FString AISClassType;
 	static FString AISMessagePublishPeriodSec;
 	static FString AISShouldPublishAton;
+	static FString AISVendorId;
+	static FString AISCallSign;
+	static FString AISReferencePointFromStarboard;
+	static FString ReferencePointPositionAftOfBow;
+	static FString AISMMSI;
+	static FString AISName;
+	static FString AISDateOfArrival;
+	static FString AISTimeOfArrival;
+
 	static FString VericalFov;
 	static FString HorizontalFov;
 	static FString HorizontalScanStepAngleDeg;

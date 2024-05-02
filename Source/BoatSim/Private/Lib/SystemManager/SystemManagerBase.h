@@ -579,6 +579,42 @@ public:
 	virtual bool SetAisPublishDurationSec(AActor* p_actor, double val);
 	virtual bool GetAisPublishDurationSec(AActor* p_actor, double& val) ;
 
+
+
+
+	virtual	bool SetAISMMSI(AActor* p_actor, int val);
+	virtual	bool GetAISMMSI(AActor* p_actor, int& val);
+
+	virtual	bool SetAISVendorID(AActor* p_actor, FString val);
+	virtual	bool GetAISVendorID(AActor* p_actor, FString& val);
+
+	virtual	bool SetAISCallSign(AActor* p_actor, FString val);
+	virtual	bool GetAISCallSign(AActor* p_actor, FString& val);
+
+	virtual	bool SetAISReferencePointFromStarboard(AActor* p_actor, double val);
+	virtual	bool GetAISReferencePointFromStarboard(AActor* p_actor, double& val);
+
+	virtual	bool SetReferencePointPositionAftOfBow(AActor* p_actor, double val);
+	virtual	bool GetReferencePointPositionAftOfBow(AActor* p_actor, double& val);
+
+	virtual	bool SetAISName(AActor* p_actor, FString val);
+	virtual	bool GetAISName(AActor* p_actor, FString& val);
+
+	virtual	bool SetAISDateOfArrivalYearMonthDay(AActor* p_actor, FVector val);
+	virtual	bool GetAISDateOfArrivalYearMonthDay(AActor* p_actor, FVector& val);
+
+	virtual	bool SetAISTimeOfArrivalSec(AActor* p_actor, double val);
+	virtual	bool GetAISTimeOfArrivalSec(AActor* p_actor, double& val);
+
+	
+	
+	
+	
+	
+	
+
+
+
 	virtual bool SetPublishAton(AActor* p_actor, bool val);
 	virtual bool GetPublishAton(AActor* p_actor, bool& val);
 

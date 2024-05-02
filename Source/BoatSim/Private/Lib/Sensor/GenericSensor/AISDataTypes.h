@@ -15,7 +15,12 @@
 #define ATON_STRUCTURE_BEAM_DIAMTER_SF_METER 1e-1
 #define POSITION_REFERENCE_POINT_FROM_STARBOARD_STRUCTURE_EDGE_RADIUS_SF_METER 1e-1
 #define POSITION_REFERENCE_POINT_FROM_TRUE_NORTH_FACING_STRUCTURE_EDGE_RADIUS_SF_METER 1e-1
-
+#define SHIP_LENGTH_SF_METER 1e-1
+#define SHIP_BEAM_SF_METER 1e-1
+#define REFERENCE_POINT_POSITION_FROM_STARTBOARD_SF_METER 1e-1
+#define REFERENCE_POINT_POSITION_AFTOfBO_SF_METER 1e-1
+#define ESTIMATED_TIME_OF_ARRIVAL_SF_SEC 1e-4
+#define DRAFT_SF_METER 1e-2
 
 enum EAISPositionFixingDeviceType
 {
@@ -185,50 +190,108 @@ struct SADISAtonReport { // aids to navigation reports
 };
 #pragma pack(pop)
 
-//AIS Class B "CS" Static Data Report, Part B
+
 #pragma pack(push, 1)
-struct SClassBStaticDataReport {
+struct SClassBStaticDataReportPartA {
 	SAISHeader Header;
 	INT32U UserId;
-	INT32U LongDeg;
-	INT32U LatDeg;
+	INT8U Name[21]; //null terminated
 
 	struct {
-		INT8U PositionAccuracy : 1;
-		INT8U AISRAIMFlag : 1;
-		INT8U TimeStamp : 6;
+		INT8U AISTransciverInfo : 5;
+		INT8U NMEAReserved2 : 3;
 
-	}AccRaimTimeStamp;
-	INT16U Cog;
-	INT16U Sog;
-
-	INT8U CommState[3];
-
-
-	INT16U TrueHeading;
-	INT16U RateOfTurn;
-	struct {
-		INT32U NavStatus : 4;
-		INT32U SpecialManeuverIndicator : 2;
-		INT32U NMEAReserved1 : 2;
-		INT32U AISSpare : 3;
-		INT32U NMEAReserved2 : 5;
-		INT32U SequenceId : 1;
-	};
-
-public:
+	}Reserved1;
+	INT8U SequenceId;
 
 	void SetMessageID(INT8U id);
-	void SetTimeStamp(INT8U val);
-	void SetPositionAccuracy(bool is_low);
-	void SetLat(FLOAT64 lat_deg);
-	void SetLon(FLOAT64 lat_deg);
+	void SetName(char* name);
 
-	void SetCourseOverGround(FLOAT64 val_deg);
-	void SetSpeedOverGround(FLOAT64 val_meters_per_sec);
-	void SetTrueHeading(FLOAT64 val_deg);
-
-	void SetRateOfTurn(FLOAT64 deg_per_sec);
 };
 #pragma pack(pop)
 
+
+#pragma pack(push, 1)
+struct SClassBStaticDataReportPartB {
+	SAISHeader Header;
+	INT32U UserId;
+	INT8U TypeOfShipAndCargo;
+	INT8U VendorId[8]; //null terminated
+	INT8U CallSign[8]; //null terminated
+	INT16U ShipLength;
+	INT16U ShipBeam;
+	INT16U ReferencePointFromStarboard;
+	INT16U ReferencePointPositionAftOfBow;
+	INT16U MotherShipMMSI;
+	struct {
+		INT8U NMEAReserved : 2;
+		INT8U AllSpare : 6;
+		INT8U AisTrasvicerInfo : 5;
+		INT8U NMEAReserved2 : 3;
+
+	}Reserved1;
+
+	void SetMessageID(INT8U id);
+	void SetTypeOfShipAndCargo(INT8U val);
+	void SetVendorId(char* name);
+	void SetCallSign(char* name);
+	void SetShipLenght(float val);
+	void SetShipBeam(float val);
+
+	void SetReferencePointFromStarboard(float val);
+	void SetReferencePointPositionAftOfBow (float val);
+	void SetMotherShipMMSI (INT32U val);
+};
+#pragma pack(pop)
+
+
+
+
+
+#pragma pack(push, 1)
+struct SAISClassAStaticVoyageRelatedData {
+	SAISHeader Header;
+	INT32U UserId;
+	INT32U Imo;
+	INT8U CallSign[8]; //null terminated
+	INT8U Name[21]; //null terminated
+	INT8U TypeOfShipAndCargo;
+	INT16U ShipLength;
+	INT16U ShipBeam;
+	INT16U ReferencePointFromStarboard;
+	INT16U ReferencePointPositionAftOfBow;
+	INT16U EstimatedDateOfArrival;
+	INT16U EstimatedTimeOfArrival;
+	INT16U Draft;
+	INT8U Destination[21]; //null terminated
+
+	struct {
+		INT32U AISVersion : 2;
+		INT32U TypeOfElectronicPositioningDevice : 4;
+		INT32U DataTerminalEquipment : 1;
+		INT32U AISSpare:1;
+		INT32U AISTransceiverInformation : 5;
+		INT32U NMEAReserved : 3;
+
+
+	}Descrites;
+	INT8U SequenceID;
+
+
+
+	void SetMessageID(INT8U id);
+	void SetTypeOfShipAndCargo(INT8U val);
+	void SetName(char* name);
+	void SetCallSign(char* name);
+	void SetShipLenght(float val);
+	void SetShipBeam(float val);
+
+	void SetReferencePointFromStarboard(float val);
+	void SetReferencePointPositionAftOfBow(float val);
+
+	void SetEstimatedDateOfArrival(int year, int month, int day);
+	void SetEstimatedTimeOfArrival(float val);
+	void SetDraft(float val);
+	void SetDestination(char* name);
+};
+#pragma pack(pop)

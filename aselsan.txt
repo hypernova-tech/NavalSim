@@ -1,0 +1,1612 @@
+create --name marlin1 --bp MARLIN --tick 0
+set --name marlin1 --actorid 0
+set --name marlin1 --instance -1
+set --name marlin1 --suppressed 0
+set --name marlin1 --standalone 0
+set --name marlin1 --position "-14.811163 33.406265 -0.691867"
+set --name marlin1 --rotation "-0.000000 -0.000000 -38.250005"
+set --name marlin1 --scale "1.000000 1.000000 1.000000"
+set --name marlin1 --blocking 1
+set --name marlin1 --tempkelvin 300.000000
+set --name marlin1 --heatsource 0
+set --name marlin1 --annotationid 0
+set --name marlin1 --annotatechildren 0
+set --name marlin1 --annotatechildren 0
+set --name marlin1 --sharedmemname 
+set --name marlin1 --gstreamerip 
+set --name marlin1 --gstreamerport 0
+set --name marlin1 --motionlogen 0
+
+create --name jeoref --bp  --tick 0
+set --name jeoref --actorid 0
+set --name jeoref --instance -1
+set --name jeoref --suppressed 0
+set --name jeoref --standalone 0
+set --name jeoref --position "0.000000 0.000000 0.000000"
+set --name jeoref --rotation "-0.000000 -0.000000 0.000000"
+set --name jeoref --scale "1.000000 1.000000 1.000000"
+set --name jeoref --blocking 1
+set --name jeoref --tempkelvin 300.000000
+set --name jeoref --heatsource 0
+set --name jeoref --annotationid 0
+set --name jeoref --annotatechildren 0
+set --name jeoref --annotatechildren 0
+set --name jeoref --sharedmemname 
+set --name jeoref --gstreamerip 
+set --name jeoref --gstreamerport 0
+set --name jeoref --motionlogen 0
+set --name jeoref --maporiginlat 0.000000
+set --name jeoref --maporiginlon 0.000000
+set --name jeoref --maporiginh 0.000000
+
+create --name thermal --bp  --tick 0
+set --name thermal --actorid 0
+set --name thermal --instance -1
+set --name thermal --suppressed 0
+set --name thermal --standalone 0
+set --name thermal --position "0.000000 0.000000 0.000000"
+set --name thermal --rotation "-0.000000 -0.000000 0.000000"
+set --name thermal --scale "1.000000 1.000000 1.000000"
+set --name thermal --blocking 1
+set --name thermal --tempkelvin 300.000000
+set --name thermal --heatsource 0
+set --name thermal --annotationid 0
+set --name thermal --annotatechildren 0
+set --name thermal --annotatechildren 0
+set --name thermal --sharedmemname 
+set --name thermal --gstreamerip 
+set --name thermal --gstreamerport 0
+set --name thermal --motionlogen 0
+set --name thermal --thermalmode 0
+
+create --name env --bp  --tick 0
+set --name env --actorid 0
+set --name env --instance -1
+set --name env --suppressed 0
+set --name env --standalone 0
+set --name env --position "324.600000 284.200000 4.600000"
+set --name env --rotation "-0.000000 -0.000000 0.000000"
+set --name env --scale "1.000000 1.000000 1.000000"
+set --name env --blocking 1
+set --name env --tempkelvin 300.000000
+set --name env --heatsource 0
+set --name env --annotationid 0
+set --name env --annotatechildren 0
+set --name env --annotatechildren 0
+set --name env --sharedmemname 
+set --name env --gstreamerip 
+set --name env --gstreamerport 0
+set --name env --motionlogen 0
+set --name env --timeofday 12.008841
+set --name env --envtimeflowscale 1.000000
+set --name env --rain 0.000000
+set --name env --cloud 0.000000
+set --name env --snow 0.000000
+set --name env --dust 0.000000
+set --name env --fog 0.000000
+set --name env --thunder 0.000000
+set --name env --envsoundfx 1
+set --name env --wind 3.000000
+set --name env --winddir 0.000000
+
+create --name annotation --bp  --tick 0
+set --name annotation --actorid 0
+set --name annotation --instance -1
+set --name annotation --suppressed 0
+set --name annotation --standalone 0
+set --name annotation --position "-20.097436 6.361075 10.299538"
+set --name annotation --rotation "-0.000000 -0.000000 0.000000"
+set --name annotation --scale "1.000000 1.000000 1.000000"
+set --name annotation --blocking 1
+set --name annotation --tempkelvin 300.000000
+set --name annotation --heatsource 0
+set --name annotation --annotationid 0
+set --name annotation --annotatechildren 0
+set --name annotation --annotatechildren 0
+set --name annotation --sharedmemname 
+set --name annotation --gstreamerip 
+set --name annotation --gstreamerport 0
+set --name annotation --motionlogen 0
+
+create --name f16 --bp F16 --tick 0
+set --name f16 --actorid 0
+set --name f16 --instance -1
+set --name f16 --suppressed 0
+set --name f16 --standalone 0
+set --name f16 --position "35.501636 50.189303 0.355970"
+set --name f16 --rotation "2.878348 -0.000000 0.000000"
+set --name f16 --scale "2.000000 2.000000 2.000000"
+set --name f16 --blocking 1
+set --name f16 --tempkelvin 300.000000
+set --name f16 --heatsource 0
+set --name f16 --annotationid 0
+set --name f16 --annotatechildren 0
+set --name f16 --annotatechildren 0
+set --name f16 --sharedmemname 
+set --name f16 --gstreamerip 
+set --name f16 --gstreamerport 0
+set --name f16 --motionlogen 0
+
+set --name f16_wing_back2 --parent f16
+set --name f16_wing_back2 --actorid 0
+set --name f16_wing_back2 --instance -1
+set --name f16_wing_back2 --suppressed 0
+set --name f16_wing_back2 --standalone 0
+set --name f16_wing_back2 --position "18.495071 54.896347 4.756322"
+set --name f16_wing_back2 --rotation "2.878348 -0.000000 0.000000"
+set --name f16_wing_back2 --scale "2.000000 2.000000 2.000000"
+set --name f16_wing_back2 --blocking 1
+set --name f16_wing_back2 --tempkelvin 300.000000
+set --name f16_wing_back2 --heatsource 0
+set --name f16_wing_back2 --annotationid 0
+set --name f16_wing_back2 --annotatechildren 0
+set --name f16_wing_back2 --annotatechildren 0
+set --name f16_wing_back2 --sharedmemname 
+set --name f16_wing_back2 --gstreamerip 
+set --name f16_wing_back2 --gstreamerport 0
+set --name f16_wing_back2 --motionlogen 0
+
+set --name f16_wing_back --parent f16
+set --name f16_wing_back --actorid 0
+set --name f16_wing_back --instance -1
+set --name f16_wing_back --suppressed 0
+set --name f16_wing_back --standalone 0
+set --name f16_wing_back --position "18.495071 45.071111 4.262319"
+set --name f16_wing_back --rotation "2.878348 -0.000000 0.000000"
+set --name f16_wing_back --scale "2.000000 2.000000 2.000000"
+set --name f16_wing_back --blocking 1
+set --name f16_wing_back --tempkelvin 300.000000
+set --name f16_wing_back --heatsource 0
+set --name f16_wing_back --annotationid 0
+set --name f16_wing_back --annotatechildren 0
+set --name f16_wing_back --annotatechildren 0
+set --name f16_wing_back --sharedmemname 
+set --name f16_wing_back --gstreamerip 
+set --name f16_wing_back --gstreamerport 0
+set --name f16_wing_back --motionlogen 0
+
+set --name f16_sphere_front2 --parent f16
+set --name f16_sphere_front2 --actorid 0
+set --name f16_sphere_front2 --instance -1
+set --name f16_sphere_front2 --suppressed 0
+set --name f16_sphere_front2 --standalone 0
+set --name f16_sphere_front2 --position "49.336746 51.197683 5.758516"
+set --name f16_sphere_front2 --rotation "2.878348 -0.000000 0.000000"
+set --name f16_sphere_front2 --scale "2.000000 2.000000 2.000000"
+set --name f16_sphere_front2 --blocking 1
+set --name f16_sphere_front2 --tempkelvin 300.000000
+set --name f16_sphere_front2 --heatsource 0
+set --name f16_sphere_front2 --annotationid 0
+set --name f16_sphere_front2 --annotatechildren 0
+set --name f16_sphere_front2 --annotatechildren 0
+set --name f16_sphere_front2 --sharedmemname 
+set --name f16_sphere_front2 --gstreamerip 
+set --name f16_sphere_front2 --gstreamerport 0
+set --name f16_sphere_front2 --motionlogen 0
+
+set --name f16_sphere_front --parent f16
+set --name f16_sphere_front --actorid 0
+set --name f16_sphere_front --instance -1
+set --name f16_sphere_front --suppressed 0
+set --name f16_sphere_front --standalone 0
+set --name f16_sphere_front --position "49.336746 48.650601 5.630452"
+set --name f16_sphere_front --rotation "2.878348 -0.000000 0.000000"
+set --name f16_sphere_front --scale "2.000000 2.000000 2.000000"
+set --name f16_sphere_front --blocking 1
+set --name f16_sphere_front --tempkelvin 300.000000
+set --name f16_sphere_front --heatsource 0
+set --name f16_sphere_front --annotationid 0
+set --name f16_sphere_front --annotatechildren 0
+set --name f16_sphere_front --annotatechildren 0
+set --name f16_sphere_front --sharedmemname 
+set --name f16_sphere_front --gstreamerip 
+set --name f16_sphere_front --gstreamerport 0
+set --name f16_sphere_front --motionlogen 0
+
+set --name f16_sphere_back2 --parent f16
+set --name f16_sphere_back2 --actorid 0
+set --name f16_sphere_back2 --instance -1
+set --name f16_sphere_back2 --suppressed 0
+set --name f16_sphere_back2 --standalone 0
+set --name f16_sphere_back2 --position "23.479797 50.308464 7.489259"
+set --name f16_sphere_back2 --rotation "2.878348 -0.000000 0.000000"
+set --name f16_sphere_back2 --scale "2.000000 2.000000 2.000000"
+set --name f16_sphere_back2 --blocking 1
+set --name f16_sphere_back2 --tempkelvin 300.000000
+set --name f16_sphere_back2 --heatsource 0
+set --name f16_sphere_back2 --annotationid 0
+set --name f16_sphere_back2 --annotatechildren 0
+set --name f16_sphere_back2 --annotatechildren 0
+set --name f16_sphere_back2 --sharedmemname 
+set --name f16_sphere_back2 --gstreamerip 
+set --name f16_sphere_back2 --gstreamerport 0
+set --name f16_sphere_back2 --motionlogen 0
+
+set --name f16_sphere_back --parent f16
+set --name f16_sphere_back --actorid 0
+set --name f16_sphere_back --instance -1
+set --name f16_sphere_back --suppressed 0
+set --name f16_sphere_back --standalone 0
+set --name f16_sphere_back --position "23.437172 49.361562 7.441016"
+set --name f16_sphere_back --rotation "2.878348 -0.000000 0.000000"
+set --name f16_sphere_back --scale "2.000000 2.000000 2.000000"
+set --name f16_sphere_back --blocking 1
+set --name f16_sphere_back --tempkelvin 300.000000
+set --name f16_sphere_back --heatsource 0
+set --name f16_sphere_back --annotationid 0
+set --name f16_sphere_back --annotatechildren 0
+set --name f16_sphere_back --annotatechildren 0
+set --name f16_sphere_back --sharedmemname 
+set --name f16_sphere_back --gstreamerip 
+set --name f16_sphere_back --gstreamerport 0
+set --name f16_sphere_back --motionlogen 0
+
+set --name f16_rocket_holder_jsow_2 --parent f16
+set --name f16_rocket_holder_jsow_2 --actorid 0
+set --name f16_rocket_holder_jsow_2 --instance -1
+set --name f16_rocket_holder_jsow_2 --suppressed 0
+set --name f16_rocket_holder_jsow_2 --standalone 0
+set --name f16_rocket_holder_jsow_2 --position "30.456864 58.369419 4.650030"
+set --name f16_rocket_holder_jsow_2 --rotation "2.878348 -0.000000 0.000000"
+set --name f16_rocket_holder_jsow_2 --scale "2.000000 2.000000 2.000000"
+set --name f16_rocket_holder_jsow_2 --blocking 1
+set --name f16_rocket_holder_jsow_2 --tempkelvin 300.000000
+set --name f16_rocket_holder_jsow_2 --heatsource 0
+set --name f16_rocket_holder_jsow_2 --annotationid 0
+set --name f16_rocket_holder_jsow_2 --annotatechildren 0
+set --name f16_rocket_holder_jsow_2 --annotatechildren 0
+set --name f16_rocket_holder_jsow_2 --sharedmemname 
+set --name f16_rocket_holder_jsow_2 --gstreamerip 
+set --name f16_rocket_holder_jsow_2 --gstreamerport 0
+set --name f16_rocket_holder_jsow_2 --motionlogen 0
+
+set --name f16_rocket_holder_jsow --parent f16
+set --name f16_rocket_holder_jsow --actorid 0
+set --name f16_rocket_holder_jsow --instance -1
+set --name f16_rocket_holder_jsow --suppressed 0
+set --name f16_rocket_holder_jsow --standalone 0
+set --name f16_rocket_holder_jsow --position "30.456865 41.626217 3.808199"
+set --name f16_rocket_holder_jsow --rotation "2.878348 -0.000000 0.000000"
+set --name f16_rocket_holder_jsow --scale "2.000000 2.000000 2.000000"
+set --name f16_rocket_holder_jsow --blocking 1
+set --name f16_rocket_holder_jsow --tempkelvin 300.000000
+set --name f16_rocket_holder_jsow --heatsource 0
+set --name f16_rocket_holder_jsow --annotationid 0
+set --name f16_rocket_holder_jsow --annotatechildren 0
+set --name f16_rocket_holder_jsow --annotatechildren 0
+set --name f16_rocket_holder_jsow --sharedmemname 
+set --name f16_rocket_holder_jsow --gstreamerip 
+set --name f16_rocket_holder_jsow --gstreamerport 0
+set --name f16_rocket_holder_jsow --motionlogen 0
+
+set --name f16_rocket_holder_aim_120_2 --parent f16
+set --name f16_rocket_holder_aim_120_2 --actorid 0
+set --name f16_rocket_holder_aim_120_2 --instance -1
+set --name f16_rocket_holder_aim_120_2 --suppressed 0
+set --name f16_rocket_holder_aim_120_2 --standalone 0
+set --name f16_rocket_holder_aim_120_2 --position "29.484927 62.468305 5.710820"
+set --name f16_rocket_holder_aim_120_2 --rotation "2.878348 -0.000000 0.000000"
+set --name f16_rocket_holder_aim_120_2 --scale "2.000000 2.000000 2.000000"
+set --name f16_rocket_holder_aim_120_2 --blocking 1
+set --name f16_rocket_holder_aim_120_2 --tempkelvin 300.000000
+set --name f16_rocket_holder_aim_120_2 --heatsource 0
+set --name f16_rocket_holder_aim_120_2 --annotationid 0
+set --name f16_rocket_holder_aim_120_2 --annotatechildren 0
+set --name f16_rocket_holder_aim_120_2 --annotatechildren 0
+set --name f16_rocket_holder_aim_120_2 --sharedmemname 
+set --name f16_rocket_holder_aim_120_2 --gstreamerip 
+set --name f16_rocket_holder_aim_120_2 --gstreamerport 0
+set --name f16_rocket_holder_aim_120_2 --motionlogen 0
+
+set --name f16_rocket_holder_aim_120 --parent f16
+set --name f16_rocket_holder_aim_120 --actorid 0
+set --name f16_rocket_holder_aim_120 --instance -1
+set --name f16_rocket_holder_aim_120 --suppressed 0
+set --name f16_rocket_holder_aim_120 --standalone 0
+set --name f16_rocket_holder_aim_120 --position "29.484928 37.441598 4.452503"
+set --name f16_rocket_holder_aim_120 --rotation "2.878348 -0.000000 0.000000"
+set --name f16_rocket_holder_aim_120 --scale "2.000000 2.000000 2.000000"
+set --name f16_rocket_holder_aim_120 --blocking 1
+set --name f16_rocket_holder_aim_120 --tempkelvin 300.000000
+set --name f16_rocket_holder_aim_120 --heatsource 0
+set --name f16_rocket_holder_aim_120 --annotationid 0
+set --name f16_rocket_holder_aim_120 --annotatechildren 0
+set --name f16_rocket_holder_aim_120 --annotatechildren 0
+set --name f16_rocket_holder_aim_120 --sharedmemname 
+set --name f16_rocket_holder_aim_120 --gstreamerip 
+set --name f16_rocket_holder_aim_120 --gstreamerport 0
+set --name f16_rocket_holder_aim_120 --motionlogen 0
+
+set --name f16_rocket_holder_aim9_2 --parent f16
+set --name f16_rocket_holder_aim9_2 --actorid 0
+set --name f16_rocket_holder_aim9_2 --instance -1
+set --name f16_rocket_holder_aim9_2 --suppressed 0
+set --name f16_rocket_holder_aim9_2 --standalone 0
+set --name f16_rocket_holder_aim9_2 --position "29.080157 60.793905 5.269163"
+set --name f16_rocket_holder_aim9_2 --rotation "2.878348 -0.000000 0.000000"
+set --name f16_rocket_holder_aim9_2 --scale "2.000000 2.000000 2.000000"
+set --name f16_rocket_holder_aim9_2 --blocking 1
+set --name f16_rocket_holder_aim9_2 --tempkelvin 300.000000
+set --name f16_rocket_holder_aim9_2 --heatsource 0
+set --name f16_rocket_holder_aim9_2 --annotationid 0
+set --name f16_rocket_holder_aim9_2 --annotatechildren 0
+set --name f16_rocket_holder_aim9_2 --annotatechildren 0
+set --name f16_rocket_holder_aim9_2 --sharedmemname 
+set --name f16_rocket_holder_aim9_2 --gstreamerip 
+set --name f16_rocket_holder_aim9_2 --gstreamerport 0
+set --name f16_rocket_holder_aim9_2 --motionlogen 0
+
+set --name f16_rocket_holder_aim9 --parent f16
+set --name f16_rocket_holder_aim9 --actorid 0
+set --name f16_rocket_holder_aim9 --instance -1
+set --name f16_rocket_holder_aim9 --suppressed 0
+set --name f16_rocket_holder_aim9 --standalone 0
+set --name f16_rocket_holder_aim9 --position "29.080159 39.151855 4.181023"
+set --name f16_rocket_holder_aim9 --rotation "2.878348 -0.000000 0.000000"
+set --name f16_rocket_holder_aim9 --scale "2.000000 2.000000 2.000000"
+set --name f16_rocket_holder_aim9 --blocking 1
+set --name f16_rocket_holder_aim9 --tempkelvin 300.000000
+set --name f16_rocket_holder_aim9 --heatsource 0
+set --name f16_rocket_holder_aim9 --annotationid 0
+set --name f16_rocket_holder_aim9 --annotatechildren 0
+set --name f16_rocket_holder_aim9 --annotatechildren 0
+set --name f16_rocket_holder_aim9 --sharedmemname 
+set --name f16_rocket_holder_aim9 --gstreamerip 
+set --name f16_rocket_holder_aim9 --gstreamerport 0
+set --name f16_rocket_holder_aim9 --motionlogen 0
+
+set --name f16_pSphere2 --parent f16
+set --name f16_pSphere2 --actorid 0
+set --name f16_pSphere2 --instance -1
+set --name f16_pSphere2 --suppressed 0
+set --name f16_pSphere2 --standalone 0
+set --name f16_pSphere2 --position "16.947653 49.512141 13.673747"
+set --name f16_pSphere2 --rotation "2.878348 -0.000000 0.000000"
+set --name f16_pSphere2 --scale "2.000000 2.000000 2.000000"
+set --name f16_pSphere2 --blocking 1
+set --name f16_pSphere2 --tempkelvin 300.000000
+set --name f16_pSphere2 --heatsource 0
+set --name f16_pSphere2 --annotationid 0
+set --name f16_pSphere2 --annotatechildren 0
+set --name f16_pSphere2 --annotatechildren 0
+set --name f16_pSphere2 --sharedmemname 
+set --name f16_pSphere2 --gstreamerip 
+set --name f16_pSphere2 --gstreamerport 0
+set --name f16_pSphere2 --motionlogen 0
+
+set --name f16_polySurface304 --parent f16
+set --name f16_polySurface304 --actorid 0
+set --name f16_polySurface304 --instance -1
+set --name f16_polySurface304 --suppressed 0
+set --name f16_polySurface304 --standalone 0
+set --name f16_polySurface304 --position "17.489897 49.662943 10.718045"
+set --name f16_polySurface304 --rotation "2.878348 -0.000000 0.000000"
+set --name f16_polySurface304 --scale "2.000000 2.000000 2.000000"
+set --name f16_polySurface304 --blocking 1
+set --name f16_polySurface304 --tempkelvin 300.000000
+set --name f16_polySurface304 --heatsource 0
+set --name f16_polySurface304 --annotationid 0
+set --name f16_polySurface304 --annotatechildren 0
+set --name f16_polySurface304 --annotatechildren 0
+set --name f16_polySurface304 --sharedmemname 
+set --name f16_polySurface304 --gstreamerip 
+set --name f16_polySurface304 --gstreamerport 0
+set --name f16_polySurface304 --motionlogen 0
+
+set --name f16_polySurface303 --parent f16
+set --name f16_polySurface303 --actorid 0
+set --name f16_polySurface303 --instance -1
+set --name f16_polySurface303 --suppressed 0
+set --name f16_polySurface303 --standalone 0
+set --name f16_polySurface303 --position "17.993450 49.605317 11.864166"
+set --name f16_polySurface303 --rotation "2.878348 -0.000000 0.000000"
+set --name f16_polySurface303 --scale "2.000000 2.000000 2.000000"
+set --name f16_polySurface303 --blocking 1
+set --name f16_polySurface303 --tempkelvin 300.000000
+set --name f16_polySurface303 --heatsource 0
+set --name f16_polySurface303 --annotationid 0
+set --name f16_polySurface303 --annotatechildren 0
+set --name f16_polySurface303 --annotatechildren 0
+set --name f16_polySurface303 --sharedmemname 
+set --name f16_polySurface303 --gstreamerip 
+set --name f16_polySurface303 --gstreamerport 0
+set --name f16_polySurface303 --motionlogen 0
+
+set --name f16_polySurface302 --parent f16
+set --name f16_polySurface302 --actorid 0
+set --name f16_polySurface302 --instance -1
+set --name f16_polySurface302 --suppressed 0
+set --name f16_polySurface302 --standalone 0
+set --name f16_polySurface302 --position "46.645661 49.868351 6.445457"
+set --name f16_polySurface302 --rotation "2.878348 -0.000000 0.000000"
+set --name f16_polySurface302 --scale "2.000000 2.000000 2.000000"
+set --name f16_polySurface302 --blocking 1
+set --name f16_polySurface302 --tempkelvin 300.000000
+set --name f16_polySurface302 --heatsource 0
+set --name f16_polySurface302 --annotationid 0
+set --name f16_polySurface302 --annotatechildren 0
+set --name f16_polySurface302 --annotatechildren 0
+set --name f16_polySurface302 --sharedmemname 
+set --name f16_polySurface302 --gstreamerip 
+set --name f16_polySurface302 --gstreamerport 0
+set --name f16_polySurface302 --motionlogen 0
+
+set --name f16_polySurface301 --parent f16
+set --name f16_polySurface301 --actorid 0
+set --name f16_polySurface301 --instance -1
+set --name f16_polySurface301 --suppressed 0
+set --name f16_polySurface301 --standalone 0
+set --name f16_polySurface301 --position "46.380468 49.565182 7.251042"
+set --name f16_polySurface301 --rotation "2.878348 -0.000000 0.000000"
+set --name f16_polySurface301 --scale "2.000000 2.000000 2.000000"
+set --name f16_polySurface301 --blocking 1
+set --name f16_polySurface301 --tempkelvin 300.000000
+set --name f16_polySurface301 --heatsource 0
+set --name f16_polySurface301 --annotationid 0
+set --name f16_polySurface301 --annotatechildren 0
+set --name f16_polySurface301 --annotatechildren 0
+set --name f16_polySurface301 --sharedmemname 
+set --name f16_polySurface301 --gstreamerip 
+set --name f16_polySurface301 --gstreamerport 0
+set --name f16_polySurface301 --motionlogen 0
+
+set --name f16_polySurface299 --parent f16
+set --name f16_polySurface299 --actorid 0
+set --name f16_polySurface299 --instance -1
+set --name f16_polySurface299 --suppressed 0
+set --name f16_polySurface299 --standalone 0
+set --name f16_polySurface299 --position "46.377735 50.085736 7.291469"
+set --name f16_polySurface299 --rotation "2.878348 -0.000000 0.000000"
+set --name f16_polySurface299 --scale "2.000000 2.000000 2.000000"
+set --name f16_polySurface299 --blocking 1
+set --name f16_polySurface299 --tempkelvin 300.000000
+set --name f16_polySurface299 --heatsource 0
+set --name f16_polySurface299 --annotationid 0
+set --name f16_polySurface299 --annotatechildren 0
+set --name f16_polySurface299 --annotatechildren 0
+set --name f16_polySurface299 --sharedmemname 
+set --name f16_polySurface299 --gstreamerip 
+set --name f16_polySurface299 --gstreamerport 0
+set --name f16_polySurface299 --motionlogen 0
+
+set --name f16_polySurface295 --parent f16
+set --name f16_polySurface295 --actorid 0
+set --name f16_polySurface295 --instance -1
+set --name f16_polySurface295 --suppressed 0
+set --name f16_polySurface295 --standalone 0
+set --name f16_polySurface295 --position "46.182831 49.822087 7.380329"
+set --name f16_polySurface295 --rotation "2.878348 -0.000000 0.000000"
+set --name f16_polySurface295 --scale "2.000000 2.000000 2.000000"
+set --name f16_polySurface295 --blocking 1
+set --name f16_polySurface295 --tempkelvin 300.000000
+set --name f16_polySurface295 --heatsource 0
+set --name f16_polySurface295 --annotationid 0
+set --name f16_polySurface295 --annotatechildren 0
+set --name f16_polySurface295 --annotatechildren 0
+set --name f16_polySurface295 --sharedmemname 
+set --name f16_polySurface295 --gstreamerip 
+set --name f16_polySurface295 --gstreamerport 0
+set --name f16_polySurface295 --motionlogen 0
+
+set --name f16_plane_front4 --parent f16
+set --name f16_plane_front4 --actorid 0
+set --name f16_plane_front4 --instance -1
+set --name f16_plane_front4 --suppressed 0
+set --name f16_plane_front4 --standalone 0
+set --name f16_plane_front4 --position "49.231193 50.551897 6.306395"
+set --name f16_plane_front4 --rotation "2.878348 -0.000000 0.000000"
+set --name f16_plane_front4 --scale "2.000000 2.000000 2.000000"
+set --name f16_plane_front4 --blocking 1
+set --name f16_plane_front4 --tempkelvin 300.000000
+set --name f16_plane_front4 --heatsource 0
+set --name f16_plane_front4 --annotationid 0
+set --name f16_plane_front4 --annotatechildren 0
+set --name f16_plane_front4 --annotatechildren 0
+set --name f16_plane_front4 --sharedmemname 
+set --name f16_plane_front4 --gstreamerip 
+set --name f16_plane_front4 --gstreamerport 0
+set --name f16_plane_front4 --motionlogen 0
+
+set --name f16_plane_front3 --parent f16
+set --name f16_plane_front3 --actorid 0
+set --name f16_plane_front3 --instance -1
+set --name f16_plane_front3 --suppressed 0
+set --name f16_plane_front3 --standalone 0
+set --name f16_plane_front3 --position "49.229297 50.151493 6.414481"
+set --name f16_plane_front3 --rotation "2.878348 -0.000000 0.000000"
+set --name f16_plane_front3 --scale "2.000000 2.000000 2.000000"
+set --name f16_plane_front3 --blocking 1
+set --name f16_plane_front3 --tempkelvin 300.000000
+set --name f16_plane_front3 --heatsource 0
+set --name f16_plane_front3 --annotationid 0
+set --name f16_plane_front3 --annotatechildren 0
+set --name f16_plane_front3 --annotatechildren 0
+set --name f16_plane_front3 --sharedmemname 
+set --name f16_plane_front3 --gstreamerip 
+set --name f16_plane_front3 --gstreamerport 0
+set --name f16_plane_front3 --motionlogen 0
+
+set --name f16_plane_front2 --parent f16
+set --name f16_plane_front2 --actorid 0
+set --name f16_plane_front2 --instance -1
+set --name f16_plane_front2 --suppressed 0
+set --name f16_plane_front2 --standalone 0
+set --name f16_plane_front2 --position "49.229296 49.625719 6.388045"
+set --name f16_plane_front2 --rotation "2.878348 -0.000000 0.000000"
+set --name f16_plane_front2 --scale "2.000000 2.000000 2.000000"
+set --name f16_plane_front2 --blocking 1
+set --name f16_plane_front2 --tempkelvin 300.000000
+set --name f16_plane_front2 --heatsource 0
+set --name f16_plane_front2 --annotationid 0
+set --name f16_plane_front2 --annotatechildren 0
+set --name f16_plane_front2 --annotatechildren 0
+set --name f16_plane_front2 --sharedmemname 
+set --name f16_plane_front2 --gstreamerip 
+set --name f16_plane_front2 --gstreamerport 0
+set --name f16_plane_front2 --motionlogen 0
+
+set --name f16_plane_front --parent f16
+set --name f16_plane_front --actorid 0
+set --name f16_plane_front --instance -1
+set --name f16_plane_front --suppressed 0
+set --name f16_plane_front --standalone 0
+set --name f16_plane_front --position "49.231193 49.238176 6.240343"
+set --name f16_plane_front --rotation "2.878348 -0.000000 0.000000"
+set --name f16_plane_front --scale "2.000000 2.000000 2.000000"
+set --name f16_plane_front --blocking 1
+set --name f16_plane_front --tempkelvin 300.000000
+set --name f16_plane_front --heatsource 0
+set --name f16_plane_front --annotationid 0
+set --name f16_plane_front --annotatechildren 0
+set --name f16_plane_front --annotatechildren 0
+set --name f16_plane_front --sharedmemname 
+set --name f16_plane_front --gstreamerip 
+set --name f16_plane_front --gstreamerport 0
+set --name f16_plane_front --motionlogen 0
+
+set --name f16_plane_big_back2 --parent f16
+set --name f16_plane_big_back2 --actorid 0
+set --name f16_plane_big_back2 --instance -1
+set --name f16_plane_big_back2 --suppressed 0
+set --name f16_plane_big_back2 --standalone 0
+set --name f16_plane_big_back2 --position "25.270887 51.985959 2.520157"
+set --name f16_plane_big_back2 --rotation "2.878348 -0.000000 0.000000"
+set --name f16_plane_big_back2 --scale "2.000000 2.000000 2.000000"
+set --name f16_plane_big_back2 --blocking 1
+set --name f16_plane_big_back2 --tempkelvin 300.000000
+set --name f16_plane_big_back2 --heatsource 0
+set --name f16_plane_big_back2 --annotationid 0
+set --name f16_plane_big_back2 --annotatechildren 0
+set --name f16_plane_big_back2 --annotatechildren 0
+set --name f16_plane_big_back2 --sharedmemname 
+set --name f16_plane_big_back2 --gstreamerip 
+set --name f16_plane_big_back2 --gstreamerport 0
+set --name f16_plane_big_back2 --motionlogen 0
+
+set --name f16_plane_big_back --parent f16
+set --name f16_plane_big_back --actorid 0
+set --name f16_plane_big_back --instance -1
+set --name f16_plane_big_back --suppressed 0
+set --name f16_plane_big_back --standalone 0
+set --name f16_plane_big_back --position "25.270887 48.191119 2.329356"
+set --name f16_plane_big_back --rotation "2.878348 -0.000000 0.000000"
+set --name f16_plane_big_back --scale "2.000000 2.000000 2.000000"
+set --name f16_plane_big_back --blocking 1
+set --name f16_plane_big_back --tempkelvin 300.000000
+set --name f16_plane_big_back --heatsource 0
+set --name f16_plane_big_back --annotationid 0
+set --name f16_plane_big_back --annotatechildren 0
+set --name f16_plane_big_back --annotatechildren 0
+set --name f16_plane_big_back --sharedmemname 
+set --name f16_plane_big_back --gstreamerip 
+set --name f16_plane_big_back --gstreamerport 0
+set --name f16_plane_big_back --motionlogen 0
+
+set --name f16_peak_middle4 --parent f16
+set --name f16_peak_middle4 --actorid 0
+set --name f16_peak_middle4 --instance -1
+set --name f16_peak_middle4 --suppressed 0
+set --name f16_peak_middle4 --standalone 0
+set --name f16_peak_middle4 --position "25.860540 61.201933 5.615858"
+set --name f16_peak_middle4 --rotation "2.878348 -0.000000 0.000000"
+set --name f16_peak_middle4 --scale "2.000000 2.000000 2.000000"
+set --name f16_peak_middle4 --blocking 1
+set --name f16_peak_middle4 --tempkelvin 300.000000
+set --name f16_peak_middle4 --heatsource 0
+set --name f16_peak_middle4 --annotationid 0
+set --name f16_peak_middle4 --annotatechildren 0
+set --name f16_peak_middle4 --annotatechildren 0
+set --name f16_peak_middle4 --sharedmemname 
+set --name f16_peak_middle4 --gstreamerip 
+set --name f16_peak_middle4 --gstreamerport 0
+set --name f16_peak_middle4 --motionlogen 0
+
+set --name f16_peak_middle3 --parent f16
+set --name f16_peak_middle3 --actorid 0
+set --name f16_peak_middle3 --instance -1
+set --name f16_peak_middle3 --suppressed 0
+set --name f16_peak_middle3 --standalone 0
+set --name f16_peak_middle3 --position "25.826642 61.676086 5.639196"
+set --name f16_peak_middle3 --rotation "2.878348 -0.000000 0.000000"
+set --name f16_peak_middle3 --scale "2.000000 2.000000 2.000000"
+set --name f16_peak_middle3 --blocking 1
+set --name f16_peak_middle3 --tempkelvin 300.000000
+set --name f16_peak_middle3 --heatsource 0
+set --name f16_peak_middle3 --annotationid 0
+set --name f16_peak_middle3 --annotatechildren 0
+set --name f16_peak_middle3 --annotatechildren 0
+set --name f16_peak_middle3 --sharedmemname 
+set --name f16_peak_middle3 --gstreamerip 
+set --name f16_peak_middle3 --gstreamerport 0
+set --name f16_peak_middle3 --motionlogen 0
+
+set --name f16_peak_middle1 --parent f16
+set --name f16_peak_middle1 --actorid 0
+set --name f16_peak_middle1 --instance -1
+set --name f16_peak_middle1 --suppressed 0
+set --name f16_peak_middle1 --standalone 0
+set --name f16_peak_middle1 --position "25.849512 38.744410 4.486554"
+set --name f16_peak_middle1 --rotation "2.878348 -0.000000 0.000000"
+set --name f16_peak_middle1 --scale "2.000000 2.000000 2.000000"
+set --name f16_peak_middle1 --blocking 1
+set --name f16_peak_middle1 --tempkelvin 300.000000
+set --name f16_peak_middle1 --heatsource 0
+set --name f16_peak_middle1 --annotationid 0
+set --name f16_peak_middle1 --annotatechildren 0
+set --name f16_peak_middle1 --annotatechildren 0
+set --name f16_peak_middle1 --sharedmemname 
+set --name f16_peak_middle1 --gstreamerip 
+set --name f16_peak_middle1 --gstreamerport 0
+set --name f16_peak_middle1 --motionlogen 0
+
+set --name f16_peak_middle0 --parent f16
+set --name f16_peak_middle0 --actorid 0
+set --name f16_peak_middle0 --instance -1
+set --name f16_peak_middle0 --suppressed 0
+set --name f16_peak_middle0 --standalone 0
+set --name f16_peak_middle0 --position "25.826642 38.237006 4.460703"
+set --name f16_peak_middle0 --rotation "2.878348 -0.000000 0.000000"
+set --name f16_peak_middle0 --scale "2.000000 2.000000 2.000000"
+set --name f16_peak_middle0 --blocking 1
+set --name f16_peak_middle0 --tempkelvin 300.000000
+set --name f16_peak_middle0 --heatsource 0
+set --name f16_peak_middle0 --annotationid 0
+set --name f16_peak_middle0 --annotatechildren 0
+set --name f16_peak_middle0 --annotatechildren 0
+set --name f16_peak_middle0 --sharedmemname 
+set --name f16_peak_middle0 --gstreamerip 
+set --name f16_peak_middle0 --gstreamerport 0
+set --name f16_peak_middle0 --motionlogen 0
+
+set --name f16_peak2_back2 --parent f16
+set --name f16_peak2_back2 --actorid 0
+set --name f16_peak2_back2 --instance -1
+set --name f16_peak2_back2 --suppressed 0
+set --name f16_peak2_back2 --standalone 0
+set --name f16_peak2_back2 --position "16.318636 56.656588 4.399973"
+set --name f16_peak2_back2 --rotation "2.878348 -0.000000 0.000000"
+set --name f16_peak2_back2 --scale "2.000000 2.000000 2.000000"
+set --name f16_peak2_back2 --blocking 1
+set --name f16_peak2_back2 --tempkelvin 300.000000
+set --name f16_peak2_back2 --heatsource 0
+set --name f16_peak2_back2 --annotationid 0
+set --name f16_peak2_back2 --annotatechildren 0
+set --name f16_peak2_back2 --annotatechildren 0
+set --name f16_peak2_back2 --sharedmemname 
+set --name f16_peak2_back2 --gstreamerip 
+set --name f16_peak2_back2 --gstreamerport 0
+set --name f16_peak2_back2 --motionlogen 0
+
+set --name f16_peak2_back --parent f16
+set --name f16_peak2_back --actorid 0
+set --name f16_peak2_back --instance -1
+set --name f16_peak2_back --suppressed 0
+set --name f16_peak2_back --standalone 0
+set --name f16_peak2_back --position "16.318640 43.355490 3.731208"
+set --name f16_peak2_back --rotation "2.878348 -0.000000 0.000000"
+set --name f16_peak2_back --scale "2.000000 2.000000 2.000000"
+set --name f16_peak2_back --blocking 1
+set --name f16_peak2_back --tempkelvin 300.000000
+set --name f16_peak2_back --heatsource 0
+set --name f16_peak2_back --annotationid 0
+set --name f16_peak2_back --annotatechildren 0
+set --name f16_peak2_back --annotatechildren 0
+set --name f16_peak2_back --sharedmemname 
+set --name f16_peak2_back --gstreamerip 
+set --name f16_peak2_back --gstreamerport 0
+set --name f16_peak2_back --motionlogen 0
+
+set --name f16_peak1_back2 --parent f16
+set --name f16_peak1_back2 --actorid 0
+set --name f16_peak1_back2 --instance -1
+set --name f16_peak1_back2 --suppressed 0
+set --name f16_peak1_back2 --standalone 0
+set --name f16_peak1_back2 --position "16.314384 55.428447 4.686386"
+set --name f16_peak1_back2 --rotation "2.878348 -0.000000 0.000000"
+set --name f16_peak1_back2 --scale "2.000000 2.000000 2.000000"
+set --name f16_peak1_back2 --blocking 1
+set --name f16_peak1_back2 --tempkelvin 300.000000
+set --name f16_peak1_back2 --heatsource 0
+set --name f16_peak1_back2 --annotationid 0
+set --name f16_peak1_back2 --annotatechildren 0
+set --name f16_peak1_back2 --annotatechildren 0
+set --name f16_peak1_back2 --sharedmemname 
+set --name f16_peak1_back2 --gstreamerip 
+set --name f16_peak1_back2 --gstreamerport 0
+set --name f16_peak1_back2 --motionlogen 0
+
+set --name f16_peak1_back --parent f16
+set --name f16_peak1_back --actorid 0
+set --name f16_peak1_back --instance -1
+set --name f16_peak1_back --suppressed 0
+set --name f16_peak1_back --standalone 0
+set --name f16_peak1_back --position "16.314384 44.548710 4.139364"
+set --name f16_peak1_back --rotation "2.878348 -0.000000 0.000000"
+set --name f16_peak1_back --scale "2.000000 2.000000 2.000000"
+set --name f16_peak1_back --blocking 1
+set --name f16_peak1_back --tempkelvin 300.000000
+set --name f16_peak1_back --heatsource 0
+set --name f16_peak1_back --annotationid 0
+set --name f16_peak1_back --annotatechildren 0
+set --name f16_peak1_back --annotatechildren 0
+set --name f16_peak1_back --sharedmemname 
+set --name f16_peak1_back --gstreamerip 
+set --name f16_peak1_back --gstreamerport 0
+set --name f16_peak1_back --motionlogen 0
+
+set --name f16_nozzle --parent f16
+set --name f16_nozzle --actorid 0
+set --name f16_nozzle --instance -1
+set --name f16_nozzle --suppressed 0
+set --name f16_nozzle --standalone 0
+set --name f16_nozzle --position "18.154074 49.972972 4.641035"
+set --name f16_nozzle --rotation "2.878348 -0.000000 0.000000"
+set --name f16_nozzle --scale "2.000000 2.000000 2.000000"
+set --name f16_nozzle --blocking 1
+set --name f16_nozzle --tempkelvin 300.000000
+set --name f16_nozzle --heatsource 0
+set --name f16_nozzle --annotationid 0
+set --name f16_nozzle --annotatechildren 0
+set --name f16_nozzle --annotatechildren 0
+set --name f16_nozzle --sharedmemname 
+set --name f16_nozzle --gstreamerip 
+set --name f16_nozzle --gstreamerport 0
+set --name f16_nozzle --motionlogen 0
+
+set --name f16_middle_wing_move2 --parent f16
+set --name f16_middle_wing_move2 --actorid 0
+set --name f16_middle_wing_move2 --instance -1
+set --name f16_middle_wing_move2 --suppressed 0
+set --name f16_middle_wing_move2 --standalone 0
+set --name f16_middle_wing_move2 --position "27.172479 56.203447 5.410101"
+set --name f16_middle_wing_move2 --rotation "2.878348 -0.000000 0.000000"
+set --name f16_middle_wing_move2 --scale "2.000000 2.000000 2.000000"
+set --name f16_middle_wing_move2 --blocking 1
+set --name f16_middle_wing_move2 --tempkelvin 300.000000
+set --name f16_middle_wing_move2 --heatsource 0
+set --name f16_middle_wing_move2 --annotationid 0
+set --name f16_middle_wing_move2 --annotatechildren 0
+set --name f16_middle_wing_move2 --annotatechildren 0
+set --name f16_middle_wing_move2 --sharedmemname 
+set --name f16_middle_wing_move2 --gstreamerip 
+set --name f16_middle_wing_move2 --gstreamerport 0
+set --name f16_middle_wing_move2 --motionlogen 0
+
+set --name f16_middle_wing_move --parent f16
+set --name f16_middle_wing_move --actorid 0
+set --name f16_middle_wing_move --instance -1
+set --name f16_middle_wing_move --suppressed 0
+set --name f16_middle_wing_move --standalone 0
+set --name f16_middle_wing_move --position "27.183942 43.746479 4.783478"
+set --name f16_middle_wing_move --rotation "2.878348 -0.000000 0.000000"
+set --name f16_middle_wing_move --scale "2.000000 2.000000 2.000000"
+set --name f16_middle_wing_move --blocking 1
+set --name f16_middle_wing_move --tempkelvin 300.000000
+set --name f16_middle_wing_move --heatsource 0
+set --name f16_middle_wing_move --annotationid 0
+set --name f16_middle_wing_move --annotatechildren 0
+set --name f16_middle_wing_move --annotatechildren 0
+set --name f16_middle_wing_move --sharedmemname 
+set --name f16_middle_wing_move --gstreamerip 
+set --name f16_middle_wing_move --gstreamerport 0
+set --name f16_middle_wing_move --motionlogen 0
+
+set --name f16_middle_wing_core2 --parent f16
+set --name f16_middle_wing_core2 --actorid 0
+set --name f16_middle_wing_core2 --instance -1
+set --name f16_middle_wing_core2 --suppressed 0
+set --name f16_middle_wing_core2 --standalone 0
+set --name f16_middle_wing_core2 --position "29.446188 58.965923 5.555295"
+set --name f16_middle_wing_core2 --rotation "2.878348 -0.000000 0.000000"
+set --name f16_middle_wing_core2 --scale "2.000000 2.000000 2.000000"
+set --name f16_middle_wing_core2 --blocking 1
+set --name f16_middle_wing_core2 --tempkelvin 300.000000
+set --name f16_middle_wing_core2 --heatsource 0
+set --name f16_middle_wing_core2 --annotationid 0
+set --name f16_middle_wing_core2 --annotatechildren 0
+set --name f16_middle_wing_core2 --annotatechildren 0
+set --name f16_middle_wing_core2 --sharedmemname 
+set --name f16_middle_wing_core2 --gstreamerip 
+set --name f16_middle_wing_core2 --gstreamerport 0
+set --name f16_middle_wing_core2 --motionlogen 0
+
+set --name f16_middle_wing_core --parent f16
+set --name f16_middle_wing_core --actorid 0
+set --name f16_middle_wing_core --instance -1
+set --name f16_middle_wing_core --suppressed 0
+set --name f16_middle_wing_core --standalone 0
+set --name f16_middle_wing_core --position "29.446189 40.941918 4.649067"
+set --name f16_middle_wing_core --rotation "2.878348 -0.000000 0.000000"
+set --name f16_middle_wing_core --scale "2.000000 2.000000 2.000000"
+set --name f16_middle_wing_core --blocking 1
+set --name f16_middle_wing_core --tempkelvin 300.000000
+set --name f16_middle_wing_core --heatsource 0
+set --name f16_middle_wing_core --annotationid 0
+set --name f16_middle_wing_core --annotatechildren 0
+set --name f16_middle_wing_core --annotatechildren 0
+set --name f16_middle_wing_core --sharedmemname 
+set --name f16_middle_wing_core --gstreamerip 
+set --name f16_middle_wing_core --gstreamerport 0
+set --name f16_middle_wing_core --motionlogen 0
+
+set --name f16_main_body --parent f16
+set --name f16_main_body --actorid 0
+set --name f16_main_body --instance -1
+set --name f16_main_body --suppressed 0
+set --name f16_main_body --standalone 0
+set --name f16_main_body --position "38.333750 49.931072 5.556647"
+set --name f16_main_body --rotation "2.878348 -0.000000 0.000000"
+set --name f16_main_body --scale "2.000000 2.000000 2.000000"
+set --name f16_main_body --blocking 1
+set --name f16_main_body --tempkelvin 300.000000
+set --name f16_main_body --heatsource 0
+set --name f16_main_body --annotationid 0
+set --name f16_main_body --annotatechildren 0
+set --name f16_main_body --annotatechildren 0
+set --name f16_main_body --sharedmemname 
+set --name f16_main_body --gstreamerip 
+set --name f16_main_body --gstreamerport 0
+set --name f16_main_body --motionlogen 0
+
+set --name f16_holder4 --parent f16
+set --name f16_holder4 --actorid 0
+set --name f16_holder4 --instance -1
+set --name f16_holder4 --suppressed 0
+set --name f16_holder4 --standalone 0
+set --name f16_holder4 --position "29.869200 60.805825 5.073238"
+set --name f16_holder4 --rotation "2.878348 -0.000000 0.000000"
+set --name f16_holder4 --scale "2.000000 2.000000 2.000000"
+set --name f16_holder4 --blocking 1
+set --name f16_holder4 --tempkelvin 300.000000
+set --name f16_holder4 --heatsource 0
+set --name f16_holder4 --annotationid 0
+set --name f16_holder4 --annotatechildren 0
+set --name f16_holder4 --annotatechildren 0
+set --name f16_holder4 --sharedmemname 
+set --name f16_holder4 --gstreamerip 
+set --name f16_holder4 --gstreamerport 0
+set --name f16_holder4 --motionlogen 0
+
+set --name f16_holder3 --parent f16
+set --name f16_holder3 --actorid 0
+set --name f16_holder3 --instance -1
+set --name f16_holder3 --suppressed 0
+set --name f16_holder3 --standalone 0
+set --name f16_holder3 --position "27.790842 60.807372 5.042499"
+set --name f16_holder3 --rotation "2.878348 -0.000000 0.000000"
+set --name f16_holder3 --scale "2.000000 2.000000 2.000000"
+set --name f16_holder3 --blocking 1
+set --name f16_holder3 --tempkelvin 300.000000
+set --name f16_holder3 --heatsource 0
+set --name f16_holder3 --annotationid 0
+set --name f16_holder3 --annotatechildren 0
+set --name f16_holder3 --annotatechildren 0
+set --name f16_holder3 --sharedmemname 
+set --name f16_holder3 --gstreamerip 
+set --name f16_holder3 --gstreamerport 0
+set --name f16_holder3 --motionlogen 0
+
+set --name f16_holder2 --parent f16
+set --name f16_holder2 --actorid 0
+set --name f16_holder2 --instance -1
+set --name f16_holder2 --suppressed 0
+set --name f16_holder2 --standalone 0
+set --name f16_holder2 --position "29.869202 39.158298 3.984823"
+set --name f16_holder2 --rotation "2.878348 -0.000000 0.000000"
+set --name f16_holder2 --scale "2.000000 2.000000 2.000000"
+set --name f16_holder2 --blocking 1
+set --name f16_holder2 --tempkelvin 300.000000
+set --name f16_holder2 --heatsource 0
+set --name f16_holder2 --annotationid 0
+set --name f16_holder2 --annotatechildren 0
+set --name f16_holder2 --annotatechildren 0
+set --name f16_holder2 --sharedmemname 
+set --name f16_holder2 --gstreamerip 
+set --name f16_holder2 --gstreamerport 0
+set --name f16_holder2 --motionlogen 0
+
+set --name f16_holder --parent f16
+set --name f16_holder --actorid 0
+set --name f16_holder --instance -1
+set --name f16_holder --suppressed 0
+set --name f16_holder --standalone 0
+set --name f16_holder --position "27.790844 39.159844 3.954085"
+set --name f16_holder --rotation "2.878348 -0.000000 0.000000"
+set --name f16_holder --scale "2.000000 2.000000 2.000000"
+set --name f16_holder --blocking 1
+set --name f16_holder --tempkelvin 300.000000
+set --name f16_holder --heatsource 0
+set --name f16_holder --annotationid 0
+set --name f16_holder --annotatechildren 0
+set --name f16_holder --annotatechildren 0
+set --name f16_holder --sharedmemname 
+set --name f16_holder --gstreamerip 
+set --name f16_holder --gstreamerport 0
+set --name f16_holder --motionlogen 0
+
+set --name f16_front_plane8 --parent f16
+set --name f16_front_plane8 --actorid 0
+set --name f16_front_plane8 --instance -1
+set --name f16_front_plane8 --suppressed 0
+set --name f16_front_plane8 --standalone 0
+set --name f16_front_plane8 --position "36.903410 49.835097 7.462652"
+set --name f16_front_plane8 --rotation "2.878348 -0.000000 0.000000"
+set --name f16_front_plane8 --scale "2.000000 2.000000 2.000000"
+set --name f16_front_plane8 --blocking 1
+set --name f16_front_plane8 --tempkelvin 300.000000
+set --name f16_front_plane8 --heatsource 0
+set --name f16_front_plane8 --annotationid 0
+set --name f16_front_plane8 --annotatechildren 0
+set --name f16_front_plane8 --annotatechildren 0
+set --name f16_front_plane8 --sharedmemname 
+set --name f16_front_plane8 --gstreamerip 
+set --name f16_front_plane8 --gstreamerport 0
+set --name f16_front_plane8 --motionlogen 0
+
+set --name f16_front_plane --parent f16
+set --name f16_front_plane --actorid 0
+set --name f16_front_plane --instance -1
+set --name f16_front_plane --suppressed 0
+set --name f16_front_plane --standalone 0
+set --name f16_front_plane --position "49.452889 49.989332 4.395085"
+set --name f16_front_plane --rotation "2.878348 -0.000000 0.000000"
+set --name f16_front_plane --scale "2.000000 2.000000 2.000000"
+set --name f16_front_plane --blocking 1
+set --name f16_front_plane --tempkelvin 300.000000
+set --name f16_front_plane --heatsource 0
+set --name f16_front_plane --annotationid 0
+set --name f16_front_plane --annotatechildren 0
+set --name f16_front_plane --annotatechildren 0
+set --name f16_front_plane --sharedmemname 
+set --name f16_front_plane --gstreamerip 
+set --name f16_front_plane --gstreamerport 0
+set --name f16_front_plane --motionlogen 0
+
+set --name f16_front_part --parent f16
+set --name f16_front_part --actorid 0
+set --name f16_front_part --instance -1
+set --name f16_front_part --suppressed 0
+set --name f16_front_part --standalone 0
+set --name f16_front_part --position "45.392892 49.842201 7.333172"
+set --name f16_front_part --rotation "2.878348 -0.000000 0.000000"
+set --name f16_front_part --scale "2.000000 2.000000 2.000000"
+set --name f16_front_part --blocking 1
+set --name f16_front_part --tempkelvin 300.000000
+set --name f16_front_part --heatsource 0
+set --name f16_front_part --annotationid 0
+set --name f16_front_part --annotatechildren 0
+set --name f16_front_part --annotatechildren 0
+set --name f16_front_part --sharedmemname 
+set --name f16_front_part --gstreamerip 
+set --name f16_front_part --gstreamerport 0
+set --name f16_front_part --motionlogen 0
+
+set --name f16_front_air_splitter --parent f16
+set --name f16_front_air_splitter --actorid 0
+set --name f16_front_air_splitter --instance -1
+set --name f16_front_air_splitter --suppressed 0
+set --name f16_front_air_splitter --standalone 0
+set --name f16_front_air_splitter --position "41.765296 49.974122 4.605153"
+set --name f16_front_air_splitter --rotation "2.878348 -0.000000 0.000000"
+set --name f16_front_air_splitter --scale "2.000000 2.000000 2.000000"
+set --name f16_front_air_splitter --blocking 1
+set --name f16_front_air_splitter --tempkelvin 300.000000
+set --name f16_front_air_splitter --heatsource 0
+set --name f16_front_air_splitter --annotationid 0
+set --name f16_front_air_splitter --annotatechildren 0
+set --name f16_front_air_splitter --annotatechildren 0
+set --name f16_front_air_splitter --sharedmemname 
+set --name f16_front_air_splitter --gstreamerip 
+set --name f16_front_air_splitter --gstreamerport 0
+set --name f16_front_air_splitter --motionlogen 0
+
+set --name f16_flash_container_middle2 --parent f16
+set --name f16_flash_container_middle2 --actorid 0
+set --name f16_flash_container_middle2 --instance -1
+set --name f16_flash_container_middle2 --suppressed 0
+set --name f16_flash_container_middle2 --standalone 0
+set --name f16_flash_container_middle2 --position "31.379747 59.820832 5.595762"
+set --name f16_flash_container_middle2 --rotation "2.878348 -0.000000 0.000000"
+set --name f16_flash_container_middle2 --scale "2.000000 2.000000 2.000000"
+set --name f16_flash_container_middle2 --blocking 1
+set --name f16_flash_container_middle2 --tempkelvin 300.000000
+set --name f16_flash_container_middle2 --heatsource 0
+set --name f16_flash_container_middle2 --annotationid 0
+set --name f16_flash_container_middle2 --annotatechildren 0
+set --name f16_flash_container_middle2 --annotatechildren 0
+set --name f16_flash_container_middle2 --sharedmemname 
+set --name f16_flash_container_middle2 --gstreamerip 
+set --name f16_flash_container_middle2 --gstreamerport 0
+set --name f16_flash_container_middle2 --motionlogen 0
+
+set --name f16_flash_container_middle --parent f16
+set --name f16_flash_container_middle --actorid 0
+set --name f16_flash_container_middle --instance -1
+set --name f16_flash_container_middle --suppressed 0
+set --name f16_flash_container_middle --standalone 0
+set --name f16_flash_container_middle --position "31.382049 40.086888 4.603877"
+set --name f16_flash_container_middle --rotation "2.878348 -0.000000 0.000000"
+set --name f16_flash_container_middle --scale "2.000000 2.000000 2.000000"
+set --name f16_flash_container_middle --blocking 1
+set --name f16_flash_container_middle --tempkelvin 300.000000
+set --name f16_flash_container_middle --heatsource 0
+set --name f16_flash_container_middle --annotationid 0
+set --name f16_flash_container_middle --annotatechildren 0
+set --name f16_flash_container_middle --annotatechildren 0
+set --name f16_flash_container_middle --sharedmemname 
+set --name f16_flash_container_middle --gstreamerip 
+set --name f16_flash_container_middle --gstreamerport 0
+set --name f16_flash_container_middle --motionlogen 0
+
+set --name f16_Wheel_1 --parent f16
+set --name f16_Wheel_1 --actorid 0
+set --name f16_Wheel_1 --instance -1
+set --name f16_Wheel_1 --suppressed 0
+set --name f16_Wheel_1 --standalone 0
+set --name f16_Wheel_1 --position "38.435724 50.033998 3.620990"
+set --name f16_Wheel_1 --rotation "2.878348 -0.000000 0.000000"
+set --name f16_Wheel_1 --scale "2.000000 2.000000 2.000000"
+set --name f16_Wheel_1 --blocking 1
+set --name f16_Wheel_1 --tempkelvin 300.000000
+set --name f16_Wheel_1 --heatsource 0
+set --name f16_Wheel_1 --annotationid 0
+set --name f16_Wheel_1 --annotatechildren 0
+set --name f16_Wheel_1 --annotatechildren 0
+set --name f16_Wheel_1 --sharedmemname 
+set --name f16_Wheel_1 --gstreamerip 
+set --name f16_Wheel_1 --gstreamerport 0
+set --name f16_Wheel_1 --motionlogen 0
+
+set --name f16_cone_front --parent f16
+set --name f16_cone_front --actorid 0
+set --name f16_cone_front --instance -1
+set --name f16_cone_front --suppressed 0
+set --name f16_cone_front --standalone 0
+set --name f16_cone_front --position "50.605732 48.744296 5.339112"
+set --name f16_cone_front --rotation "2.878348 -0.000000 0.000000"
+set --name f16_cone_front --scale "2.000000 2.000000 2.000000"
+set --name f16_cone_front --blocking 1
+set --name f16_cone_front --tempkelvin 300.000000
+set --name f16_cone_front --heatsource 0
+set --name f16_cone_front --annotationid 0
+set --name f16_cone_front --annotatechildren 0
+set --name f16_cone_front --annotatechildren 0
+set --name f16_cone_front --sharedmemname 
+set --name f16_cone_front --gstreamerip 
+set --name f16_cone_front --gstreamerport 0
+set --name f16_cone_front --motionlogen 0
+
+set --name f16_chassis_fold2 --parent f16
+set --name f16_chassis_fold2 --actorid 0
+set --name f16_chassis_fold2 --instance -1
+set --name f16_chassis_fold2 --suppressed 0
+set --name f16_chassis_fold2 --standalone 0
+set --name f16_chassis_fold2 --position "32.503485 51.617348 3.832525"
+set --name f16_chassis_fold2 --rotation "2.878348 -0.000000 0.000000"
+set --name f16_chassis_fold2 --scale "2.000000 2.000000 2.000000"
+set --name f16_chassis_fold2 --blocking 1
+set --name f16_chassis_fold2 --tempkelvin 300.000000
+set --name f16_chassis_fold2 --heatsource 0
+set --name f16_chassis_fold2 --annotationid 0
+set --name f16_chassis_fold2 --annotatechildren 0
+set --name f16_chassis_fold2 --annotatechildren 0
+set --name f16_chassis_fold2 --sharedmemname 
+set --name f16_chassis_fold2 --gstreamerip 
+set --name f16_chassis_fold2 --gstreamerport 0
+set --name f16_chassis_fold2 --motionlogen 0
+
+set --name f16_chassis_fold1 --parent f16
+set --name f16_chassis_fold1 --actorid 0
+set --name f16_chassis_fold1 --instance -1
+set --name f16_chassis_fold1 --suppressed 0
+set --name f16_chassis_fold1 --standalone 0
+set --name f16_chassis_fold1 --position "32.503242 48.428154 3.688637"
+set --name f16_chassis_fold1 --rotation "2.878348 -0.000000 0.000000"
+set --name f16_chassis_fold1 --scale "2.000000 2.000000 2.000000"
+set --name f16_chassis_fold1 --blocking 1
+set --name f16_chassis_fold1 --tempkelvin 300.000000
+set --name f16_chassis_fold1 --heatsource 0
+set --name f16_chassis_fold1 --annotationid 0
+set --name f16_chassis_fold1 --annotatechildren 0
+set --name f16_chassis_fold1 --annotatechildren 0
+set --name f16_chassis_fold1 --sharedmemname 
+set --name f16_chassis_fold1 --gstreamerip 
+set --name f16_chassis_fold1 --gstreamerport 0
+set --name f16_chassis_fold1 --motionlogen 0
+
+set --name f16_chassis_container_right --parent f16
+set --name f16_chassis_container_right --actorid 0
+set --name f16_chassis_container_right --instance -1
+set --name f16_chassis_container_right --suppressed 0
+set --name f16_chassis_container_right --standalone 0
+set --name f16_chassis_container_right --position "32.652109 51.022073 4.055669"
+set --name f16_chassis_container_right --rotation "2.878348 -0.000000 0.000000"
+set --name f16_chassis_container_right --scale "2.000000 2.000000 2.000000"
+set --name f16_chassis_container_right --blocking 1
+set --name f16_chassis_container_right --tempkelvin 300.000000
+set --name f16_chassis_container_right --heatsource 0
+set --name f16_chassis_container_right --annotationid 0
+set --name f16_chassis_container_right --annotatechildren 0
+set --name f16_chassis_container_right --annotatechildren 0
+set --name f16_chassis_container_right --sharedmemname 
+set --name f16_chassis_container_right --gstreamerip 
+set --name f16_chassis_container_right --gstreamerport 0
+set --name f16_chassis_container_right --motionlogen 0
+
+set --name f16_chassis_container_left --parent f16
+set --name f16_chassis_container_left --actorid 0
+set --name f16_chassis_container_left --instance -1
+set --name f16_chassis_container_left --suppressed 0
+set --name f16_chassis_container_left --standalone 0
+set --name f16_chassis_container_left --position "32.652109 48.996127 3.953806"
+set --name f16_chassis_container_left --rotation "2.878348 -0.000000 0.000000"
+set --name f16_chassis_container_left --scale "2.000000 2.000000 2.000000"
+set --name f16_chassis_container_left --blocking 1
+set --name f16_chassis_container_left --tempkelvin 300.000000
+set --name f16_chassis_container_left --heatsource 0
+set --name f16_chassis_container_left --annotationid 0
+set --name f16_chassis_container_left --annotatechildren 0
+set --name f16_chassis_container_left --annotatechildren 0
+set --name f16_chassis_container_left --sharedmemname 
+set --name f16_chassis_container_left --gstreamerip 
+set --name f16_chassis_container_left --gstreamerport 0
+set --name f16_chassis_container_left --motionlogen 0
+
+set --name f16_chassis_container_front --parent f16
+set --name f16_chassis_container_front --actorid 0
+set --name f16_chassis_container_front --instance -1
+set --name f16_chassis_container_front --suppressed 0
+set --name f16_chassis_container_front --standalone 0
+set --name f16_chassis_container_front --position "39.494390 50.048826 3.214621"
+set --name f16_chassis_container_front --rotation "2.878348 -0.000000 0.000000"
+set --name f16_chassis_container_front --scale "2.000000 2.000000 2.000000"
+set --name f16_chassis_container_front --blocking 1
+set --name f16_chassis_container_front --tempkelvin 300.000000
+set --name f16_chassis_container_front --heatsource 0
+set --name f16_chassis_container_front --annotationid 0
+set --name f16_chassis_container_front --annotatechildren 0
+set --name f16_chassis_container_front --annotatechildren 0
+set --name f16_chassis_container_front --sharedmemname 
+set --name f16_chassis_container_front --gstreamerip 
+set --name f16_chassis_container_front --gstreamerport 0
+set --name f16_chassis_container_front --motionlogen 0
+
+set --name f16_cab_keep --parent f16
+set --name f16_cab_keep --actorid 0
+set --name f16_cab_keep --instance -1
+set --name f16_cab_keep --suppressed 0
+set --name f16_cab_keep --standalone 0
+set --name f16_cab_keep --position "42.022060 49.830925 7.731471"
+set --name f16_cab_keep --rotation "2.878348 -0.000000 0.000000"
+set --name f16_cab_keep --scale "2.000000 2.000000 2.000000"
+set --name f16_cab_keep --blocking 1
+set --name f16_cab_keep --tempkelvin 300.000000
+set --name f16_cab_keep --heatsource 0
+set --name f16_cab_keep --annotationid 0
+set --name f16_cab_keep --annotatechildren 0
+set --name f16_cab_keep --annotatechildren 0
+set --name f16_cab_keep --sharedmemname 
+set --name f16_cab_keep --gstreamerip 
+set --name f16_cab_keep --gstreamerport 0
+set --name f16_cab_keep --motionlogen 0
+
+set --name f16_cab_around --parent f16
+set --name f16_cab_around --actorid 0
+set --name f16_cab_around --instance -1
+set --name f16_cab_around --suppressed 0
+set --name f16_cab_around --standalone 0
+set --name f16_cab_around --position "43.238236 49.884397 6.484969"
+set --name f16_cab_around --rotation "2.878348 -0.000000 0.000000"
+set --name f16_cab_around --scale "2.000000 2.000000 2.000000"
+set --name f16_cab_around --blocking 1
+set --name f16_cab_around --tempkelvin 300.000000
+set --name f16_cab_around --heatsource 0
+set --name f16_cab_around --annotationid 0
+set --name f16_cab_around --annotatechildren 0
+set --name f16_cab_around --annotatechildren 0
+set --name f16_cab_around --sharedmemname 
+set --name f16_cab_around --gstreamerip 
+set --name f16_cab_around --gstreamerport 0
+set --name f16_cab_around --motionlogen 0
+
+set --name f16_botside --parent f16
+set --name f16_botside --actorid 0
+set --name f16_botside --instance -1
+set --name f16_botside --suppressed 0
+set --name f16_botside --standalone 0
+set --name f16_botside --position "29.856994 50.014851 3.890354"
+set --name f16_botside --rotation "2.878348 -0.000000 0.000000"
+set --name f16_botside --scale "2.000000 2.000000 2.000000"
+set --name f16_botside --blocking 1
+set --name f16_botside --tempkelvin 300.000000
+set --name f16_botside --heatsource 0
+set --name f16_botside --annotationid 0
+set --name f16_botside --annotatechildren 0
+set --name f16_botside --annotatechildren 0
+set --name f16_botside --sharedmemname 
+set --name f16_botside --gstreamerip 
+set --name f16_botside --gstreamerport 0
+set --name f16_botside --motionlogen 0
+
+set --name f16_back_wing_attach --parent f16
+set --name f16_back_wing_attach --actorid 0
+set --name f16_back_wing_attach --instance -1
+set --name f16_back_wing_attach --suppressed 0
+set --name f16_back_wing_attach --standalone 0
+set --name f16_back_wing_attach --position "21.787441 49.831013 7.372689"
+set --name f16_back_wing_attach --rotation "2.878348 -0.000000 0.000000"
+set --name f16_back_wing_attach --scale "2.000000 2.000000 2.000000"
+set --name f16_back_wing_attach --blocking 1
+set --name f16_back_wing_attach --tempkelvin 300.000000
+set --name f16_back_wing_attach --heatsource 0
+set --name f16_back_wing_attach --annotationid 0
+set --name f16_back_wing_attach --annotatechildren 0
+set --name f16_back_wing_attach --annotatechildren 0
+set --name f16_back_wing_attach --sharedmemname 
+set --name f16_back_wing_attach --gstreamerip 
+set --name f16_back_wing_attach --gstreamerport 0
+set --name f16_back_wing_attach --motionlogen 0
+
+set --name f16_back_sphere --parent f16
+set --name f16_back_sphere --actorid 0
+set --name f16_back_sphere --instance -1
+set --name f16_back_sphere --suppressed 0
+set --name f16_back_sphere --standalone 0
+set --name f16_back_sphere --position "16.361921 49.812233 7.642818"
+set --name f16_back_sphere --rotation "2.878348 -0.000000 0.000000"
+set --name f16_back_sphere --scale "2.000000 2.000000 2.000000"
+set --name f16_back_sphere --blocking 1
+set --name f16_back_sphere --tempkelvin 300.000000
+set --name f16_back_sphere --heatsource 0
+set --name f16_back_sphere --annotationid 0
+set --name f16_back_sphere --annotatechildren 0
+set --name f16_back_sphere --annotatechildren 0
+set --name f16_back_sphere --sharedmemname 
+set --name f16_back_sphere --gstreamerip 
+set --name f16_back_sphere --gstreamerport 0
+set --name f16_back_sphere --motionlogen 0
+
+set --name f16_back_plane --parent f16
+set --name f16_back_plane --actorid 0
+set --name f16_back_plane --instance -1
+set --name f16_back_plane --suppressed 0
+set --name f16_back_plane --standalone 0
+set --name f16_back_plane --position "28.964475 49.823095 7.522182"
+set --name f16_back_plane --rotation "2.878348 -0.000000 0.000000"
+set --name f16_back_plane --scale "2.000000 2.000000 2.000000"
+set --name f16_back_plane --blocking 1
+set --name f16_back_plane --tempkelvin 300.000000
+set --name f16_back_plane --heatsource 0
+set --name f16_back_plane --annotationid 0
+set --name f16_back_plane --annotatechildren 0
+set --name f16_back_plane --annotatechildren 0
+set --name f16_back_plane --sharedmemname 
+set --name f16_back_plane --gstreamerip 
+set --name f16_back_plane --gstreamerport 0
+set --name f16_back_plane --motionlogen 0
+
+set --name f16_back_part --parent f16
+set --name f16_back_part --actorid 0
+set --name f16_back_part --instance -1
+set --name f16_back_part --suppressed 0
+set --name f16_back_part --standalone 0
+set --name f16_back_part --position "40.201989 49.828116 7.604338"
+set --name f16_back_part --rotation "2.878348 -0.000000 0.000000"
+set --name f16_back_part --scale "2.000000 2.000000 2.000000"
+set --name f16_back_part --blocking 1
+set --name f16_back_part --tempkelvin 300.000000
+set --name f16_back_part --heatsource 0
+set --name f16_back_part --annotationid 0
+set --name f16_back_part --annotatechildren 0
+set --name f16_back_part --annotatechildren 0
+set --name f16_back_part --sharedmemname 
+set --name f16_back_part --gstreamerip 
+set --name f16_back_part --gstreamerport 0
+set --name f16_back_part --motionlogen 0
+
+set --name f16_back_flash_container --parent f16
+set --name f16_back_flash_container --actorid 0
+set --name f16_back_flash_container --instance -1
+set --name f16_back_flash_container --suppressed 0
+set --name f16_back_flash_container --standalone 0
+set --name f16_back_flash_container --position "20.171339 49.582074 12.349501"
+set --name f16_back_flash_container --rotation "2.878348 -0.000000 0.000000"
+set --name f16_back_flash_container --scale "2.000000 2.000000 2.000000"
+set --name f16_back_flash_container --blocking 1
+set --name f16_back_flash_container --tempkelvin 300.000000
+set --name f16_back_flash_container --heatsource 0
+set --name f16_back_flash_container --annotationid 0
+set --name f16_back_flash_container --annotatechildren 0
+set --name f16_back_flash_container --annotatechildren 0
+set --name f16_back_flash_container --sharedmemname 
+set --name f16_back_flash_container --gstreamerip 
+set --name f16_back_flash_container --gstreamerport 0
+set --name f16_back_flash_container --motionlogen 0
+
+set --name f16_back_air_grab --parent f16
+set --name f16_back_air_grab --actorid 0
+set --name f16_back_air_grab --instance -1
+set --name f16_back_air_grab --suppressed 0
+set --name f16_back_air_grab --standalone 0
+set --name f16_back_air_grab --position "27.692844 49.824527 7.504227"
+set --name f16_back_air_grab --rotation "2.878348 -0.000000 0.000000"
+set --name f16_back_air_grab --scale "2.000000 2.000000 2.000000"
+set --name f16_back_air_grab --blocking 1
+set --name f16_back_air_grab --tempkelvin 300.000000
+set --name f16_back_air_grab --heatsource 0
+set --name f16_back_air_grab --annotationid 0
+set --name f16_back_air_grab --annotatechildren 0
+set --name f16_back_air_grab --annotatechildren 0
+set --name f16_back_air_grab --sharedmemname 
+set --name f16_back_air_grab --gstreamerip 
+set --name f16_back_air_grab --gstreamerport 0
+set --name f16_back_air_grab --motionlogen 0
+
+set --name f16_air_grab_middle2 --parent f16
+set --name f16_air_grab_middle2 --actorid 0
+set --name f16_air_grab_middle2 --instance -1
+set --name f16_air_grab_middle2 --suppressed 0
+set --name f16_air_grab_middle2 --standalone 0
+set --name f16_air_grab_middle2 --position "41.290617 51.985620 5.812392"
+set --name f16_air_grab_middle2 --rotation "2.878348 -0.000000 0.000000"
+set --name f16_air_grab_middle2 --scale "2.000000 2.000000 2.000000"
+set --name f16_air_grab_middle2 --blocking 1
+set --name f16_air_grab_middle2 --tempkelvin 300.000000
+set --name f16_air_grab_middle2 --heatsource 0
+set --name f16_air_grab_middle2 --annotationid 0
+set --name f16_air_grab_middle2 --annotatechildren 0
+set --name f16_air_grab_middle2 --annotatechildren 0
+set --name f16_air_grab_middle2 --sharedmemname 
+set --name f16_air_grab_middle2 --gstreamerip 
+set --name f16_air_grab_middle2 --gstreamerport 0
+set --name f16_air_grab_middle2 --motionlogen 0
+
+set --name f16_air_grab_middle --parent f16
+set --name f16_air_grab_middle --actorid 0
+set --name f16_air_grab_middle --instance -1
+set --name f16_air_grab_middle --suppressed 0
+set --name f16_air_grab_middle --standalone 0
+set --name f16_air_grab_middle --position "41.290618 47.861235 5.605023"
+set --name f16_air_grab_middle --rotation "2.878348 -0.000000 0.000000"
+set --name f16_air_grab_middle --scale "2.000000 2.000000 2.000000"
+set --name f16_air_grab_middle --blocking 1
+set --name f16_air_grab_middle --tempkelvin 300.000000
+set --name f16_air_grab_middle --heatsource 0
+set --name f16_air_grab_middle --annotationid 0
+set --name f16_air_grab_middle --annotatechildren 0
+set --name f16_air_grab_middle --annotatechildren 0
+set --name f16_air_grab_middle --sharedmemname 
+set --name f16_air_grab_middle --gstreamerip 
+set --name f16_air_grab_middle --gstreamerport 0
+set --name f16_air_grab_middle --motionlogen 0
+
+set --name f16_air_grab_main --parent f16
+set --name f16_air_grab_main --actorid 0
+set --name f16_air_grab_main --instance -1
+set --name f16_air_grab_main --suppressed 0
+set --name f16_air_grab_main --standalone 0
+set --name f16_air_grab_main --position "40.681333 50.014292 3.901488"
+set --name f16_air_grab_main --rotation "2.878348 -0.000000 0.000000"
+set --name f16_air_grab_main --scale "2.000000 2.000000 2.000000"
+set --name f16_air_grab_main --blocking 1
+set --name f16_air_grab_main --tempkelvin 300.000000
+set --name f16_air_grab_main --heatsource 0
+set --name f16_air_grab_main --annotationid 0
+set --name f16_air_grab_main --annotatechildren 0
+set --name f16_air_grab_main --annotatechildren 0
+set --name f16_air_grab_main --sharedmemname 
+set --name f16_air_grab_main --gstreamerip 
+set --name f16_air_grab_main --gstreamerport 0
+set --name f16_air_grab_main --motionlogen 0
+
+set --name f16_chassis_front_fold_002 --parent f16
+set --name f16_chassis_front_fold_002 --actorid 0
+set --name f16_chassis_front_fold_002 --instance -1
+set --name f16_chassis_front_fold_002 --suppressed 0
+set --name f16_chassis_front_fold_002 --standalone 0
+set --name f16_chassis_front_fold_002 --position "39.308157 49.123377 2.985971"
+set --name f16_chassis_front_fold_002 --rotation "2.878348 -0.000000 0.000000"
+set --name f16_chassis_front_fold_002 --scale "2.000000 2.000000 2.000000"
+set --name f16_chassis_front_fold_002 --blocking 1
+set --name f16_chassis_front_fold_002 --tempkelvin 300.000000
+set --name f16_chassis_front_fold_002 --heatsource 0
+set --name f16_chassis_front_fold_002 --annotationid 0
+set --name f16_chassis_front_fold_002 --annotatechildren 0
+set --name f16_chassis_front_fold_002 --annotatechildren 0
+set --name f16_chassis_front_fold_002 --sharedmemname 
+set --name f16_chassis_front_fold_002 --gstreamerip 
+set --name f16_chassis_front_fold_002 --gstreamerport 0
+set --name f16_chassis_front_fold_002 --motionlogen 0
+
+set --name f16_Wheel_3 --parent f16
+set --name f16_Wheel_3 --actorid 0
+set --name f16_Wheel_3 --instance -1
+set --name f16_Wheel_3 --suppressed 0
+set --name f16_Wheel_3 --standalone 0
+set --name f16_Wheel_3 --position "32.697767 49.394111 3.176879"
+set --name f16_Wheel_3 --rotation "2.878348 -0.000000 0.000000"
+set --name f16_Wheel_3 --scale "2.000000 2.000000 2.000000"
+set --name f16_Wheel_3 --blocking 1
+set --name f16_Wheel_3 --tempkelvin 300.000000
+set --name f16_Wheel_3 --heatsource 0
+set --name f16_Wheel_3 --annotationid 0
+set --name f16_Wheel_3 --annotatechildren 0
+set --name f16_Wheel_3 --annotatechildren 0
+set --name f16_Wheel_3 --sharedmemname 
+set --name f16_Wheel_3 --gstreamerip 
+set --name f16_Wheel_3 --gstreamerport 0
+set --name f16_Wheel_3 --motionlogen 0
+
+set --name f16_Wheel_2 --parent f16
+set --name f16_Wheel_2 --actorid 0
+set --name f16_Wheel_2 --instance -1
+set --name f16_Wheel_2 --suppressed 0
+set --name f16_Wheel_2 --standalone 0
+set --name f16_Wheel_2 --position "32.697767 50.787372 3.246277"
+set --name f16_Wheel_2 --rotation "2.878348 -0.000000 0.000000"
+set --name f16_Wheel_2 --scale "2.000000 2.000000 2.000000"
+set --name f16_Wheel_2 --blocking 1
+set --name f16_Wheel_2 --tempkelvin 300.000000
+set --name f16_Wheel_2 --heatsource 0
+set --name f16_Wheel_2 --annotationid 0
+set --name f16_Wheel_2 --annotatechildren 0
+set --name f16_Wheel_2 --annotatechildren 0
+set --name f16_Wheel_2 --sharedmemname 
+set --name f16_Wheel_2 --gstreamerip 
+set --name f16_Wheel_2 --gstreamerport 0
+set --name f16_Wheel_2 --motionlogen 0
+
+set --name f16_Wheel_1_001 --parent f16
+set --name f16_Wheel_1_001 --actorid 0
+set --name f16_Wheel_1_001 --instance -1
+set --name f16_Wheel_1_001 --suppressed 0
+set --name f16_Wheel_1_001 --standalone 0
+set --name f16_Wheel_1_001 --position "38.422390 50.167965 0.956523"
+set --name f16_Wheel_1_001 --rotation "2.878348 -0.000000 0.000000"
+set --name f16_Wheel_1_001 --scale "2.000000 2.000000 2.000000"
+set --name f16_Wheel_1_001 --blocking 1
+set --name f16_Wheel_1_001 --tempkelvin 300.000000
+set --name f16_Wheel_1_001 --heatsource 0
+set --name f16_Wheel_1_001 --annotationid 0
+set --name f16_Wheel_1_001 --annotatechildren 0
+set --name f16_Wheel_1_001 --annotatechildren 0
+set --name f16_Wheel_1_001 --sharedmemname 
+set --name f16_Wheel_1_001 --gstreamerip 
+set --name f16_Wheel_1_001 --gstreamerport 0
+set --name f16_Wheel_1_001 --motionlogen 0
+
+set --name f16_Wheel-3 --parent f16
+set --name f16_Wheel-3 --actorid 0
+set --name f16_Wheel-3 --instance -1
+set --name f16_Wheel-3 --suppressed 0
+set --name f16_Wheel-3 --standalone 0
+set --name f16_Wheel-3 --position "32.733139 48.914006 1.083734"
+set --name f16_Wheel-3 --rotation "2.878348 -0.000000 0.000000"
+set --name f16_Wheel-3 --scale "2.000000 2.000000 2.000000"
+set --name f16_Wheel-3 --blocking 1
+set --name f16_Wheel-3 --tempkelvin 300.000000
+set --name f16_Wheel-3 --heatsource 0
+set --name f16_Wheel-3 --annotationid 0
+set --name f16_Wheel-3 --annotatechildren 0
+set --name f16_Wheel-3 --annotatechildren 0
+set --name f16_Wheel-3 --sharedmemname 
+set --name f16_Wheel-3 --gstreamerip 
+set --name f16_Wheel-3 --gstreamerport 0
+set --name f16_Wheel-3 --motionlogen 0
+
+set --name f16_Wheel-2 --parent f16
+set --name f16_Wheel-2 --actorid 0
+set --name f16_Wheel-2 --instance -1
+set --name f16_Wheel-2 --suppressed 0
+set --name f16_Wheel-2 --standalone 0
+set --name f16_Wheel-2 --position "32.733138 51.475048 1.211847"
+set --name f16_Wheel-2 --rotation "2.878348 -0.000000 0.000000"
+set --name f16_Wheel-2 --scale "2.000000 2.000000 2.000000"
+set --name f16_Wheel-2 --blocking 1
+set --name f16_Wheel-2 --tempkelvin 300.000000
+set --name f16_Wheel-2 --heatsource 0
+set --name f16_Wheel-2 --annotationid 0
+set --name f16_Wheel-2 --annotatechildren 0
+set --name f16_Wheel-2 --annotatechildren 0
+set --name f16_Wheel-2 --sharedmemname 
+set --name f16_Wheel-2 --gstreamerip 
+set --name f16_Wheel-2 --gstreamerport 0
+set --name f16_Wheel-2 --motionlogen 0
+
+create --name camvis1 --bp CAMVIS --tick 0
+set --name camvis1 --parent marlin1
+set --name camvis1 --actorid 0
+set --name camvis1 --instance -1
+set --name camvis1 --suppressed 0
+set --name camvis1 --standalone 0
+set --name camvis1 --position "-8.469430 28.406842 6.095234"
+set --name camvis1 --rotation "0.000000 -0.000000 22.405640"
+set --name camvis1 --scale "1.000000 1.000000 1.000000"
+set --name camvis1 --blocking 1
+set --name camvis1 --tempkelvin 300.000000
+set --name camvis1 --heatsource 0
+set --name camvis1 --annotationid 0
+set --name camvis1 --annotatechildren 0
+set --name camvis1 --annotatechildren 0
+set --name camvis1 --sharedmemname 
+set --name camvis1 --gstreamerip 
+set --name camvis1 --gstreamerport 0
+set --name camvis1 --motionlogen 0
+set --name camvis1 --slotindex 0
+set --name camvis1 --rangemin 5.000000
+set --name camvis1 --rangemax 100.000000
+set --name camvis1 --vfov 10.000000
+set --name camvis1 --hfov 60.000000
+set --name camvis1 --hscanstepang 0.000000
+set --name camvis1 --vscanstepang 36.000000
+set --name camvis1 --isnormaldistribution 0
+set --name camvis1 --merrormean 0.000000
+set --name camvis1 --merrorstd 0.000000
+set --name camvis1 --surfacedetecten 0
+set --name camvis1 --subsurfacedetecten 0
+set --name camvis1 --foamen 0
+set --name camvis1 --seasurfdetectprob 0.000000
+set --name camvis1 --maxsurfpenet 0.000000
+set --name camvis1 --widthpx 1920
+set --name camvis1 --heightpx 1080
+
+create --name camir1 --bp MARTIIR --tick 0
+set --name camir1 --parent marlin1
+set --name camir1 --actorid 0
+set --name camir1 --instance -1
+set --name camir1 --suppressed 0
+set --name camir1 --standalone 0
+set --name camir1 --position "-13.212100 35.434668 4.749457"
+set --name camir1 --rotation "0.000000 -0.000000 10.799989"
+set --name camir1 --scale "1.000000 1.000000 1.000000"
+set --name camir1 --blocking 1
+set --name camir1 --tempkelvin 300.000000
+set --name camir1 --heatsource 0
+set --name camir1 --annotationid 0
+set --name camir1 --annotatechildren 0
+set --name camir1 --annotatechildren 0
+set --name camir1 --sharedmemname 
+set --name camir1 --gstreamerip 
+set --name camir1 --gstreamerport 0
+set --name camir1 --motionlogen 0
+set --name camir1 --slotindex 1
+set --name camir1 --rangemin 5.000000
+set --name camir1 --rangemax 100.000000
+set --name camir1 --vfov 90.000000
+set --name camir1 --hfov 90.000000
+set --name camir1 --hscanstepang 0.000000
+set --name camir1 --vscanstepang 36.000000
+set --name camir1 --isnormaldistribution 0
+set --name camir1 --merrormean 0.000000
+set --name camir1 --merrorstd 0.000000
+set --name camir1 --surfacedetecten 0
+set --name camir1 --subsurfacedetecten 0
+set --name camir1 --foamen 0
+set --name camir1 --seasurfdetectprob 0.000000
+set --name camir1 --maxsurfpenet 0.000000
+set --name camir1 --widthpx 1920
+set --name camir1 --heightpx 1080
+
+set --camfollow marlin1
+set --camfollowtrans "3824.862731 6796.555831 7789.226261"
+set --camfolloweuler "-180.000000 -78.661436 -156.279462"

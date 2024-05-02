@@ -173,8 +173,198 @@ void SADISAtonReport::SetATONName(char* p_name)
 
 
 
+/// <summary>
+/// SClassBStaticDataReportPartB functions
+/// </summary>
+/// <param name="id"></param>
+
+void SClassBStaticDataReportPartB::SetMessageID(INT8U id)
+{
+	Header.ID.MessageID = (INT8U)id;
+}
+
+void SClassBStaticDataReportPartB::SetTypeOfShipAndCargo(INT8U val)
+{
+	TypeOfShipAndCargo = val;
+}
+
+void SClassBStaticDataReportPartB::SetVendorId(char* name)
+{
+	memset(VendorId, 0, sizeof(VendorId));
+	int len = strlen(name);
+	if (len >= 7) {
+		memcpy(VendorId, name, 7);
+		VendorId[7] = 0;
+	}
+	else {
+		memcpy(VendorId, name, len);
+		VendorId[len] = 0;
+	}
+}
+
+void SClassBStaticDataReportPartB::SetCallSign(char* name)
+{
+	memset(CallSign, 0, sizeof(CallSign));
+	int len = strlen(name);
+	if (len >= 7) {
+		memcpy(CallSign, name, 7);
+		CallSign[7] = 0;
+	}
+	else {
+		memcpy(CallSign, name, len);
+		CallSign[len] = 0;
+	}
+}
+
+void SClassBStaticDataReportPartB::SetShipLenght(float val)
+{
+	ShipLength = CMath::EncodeUnsigned16(val, SHIP_LENGTH_SF_METER);
+}
+
+void SClassBStaticDataReportPartB::SetShipBeam(float val)
+{
+	ShipBeam = CMath::EncodeUnsigned16(val, SHIP_BEAM_SF_METER);
+}
+
+void SClassBStaticDataReportPartB::SetReferencePointFromStarboard(float val)
+{
+	ReferencePointFromStarboard = CMath::EncodeUnsigned16(val, REFERENCE_POINT_POSITION_FROM_STARTBOARD_SF_METER);
+}
+
+void SClassBStaticDataReportPartB::SetReferencePointPositionAftOfBow(float val)
+{
+	ReferencePointPositionAftOfBow = CMath::EncodeUnsigned16(val, REFERENCE_POINT_POSITION_AFTOfBO_SF_METER);
+}
+
+void SClassBStaticDataReportPartB::SetMotherShipMMSI(INT32U val)
+{
+	MotherShipMMSI = val;
+}
 
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+void SAISClassAStaticVoyageRelatedData::SetMessageID(INT8U id)
+{
+	Header.ID.MessageID = (INT8U)id;
+}
+
+void SAISClassAStaticVoyageRelatedData::SetTypeOfShipAndCargo(INT8U val)
+{
+	TypeOfShipAndCargo = val;
+}
+
+void SAISClassAStaticVoyageRelatedData::SetName(char* name)
+{
+	memset(Name, 0, sizeof(Name));
+	int len = strlen(name);
+	if (len >= (sizeof(Name)-1)) {
+		memcpy(Name, name, sizeof(Name) - 1);
+		Name[sizeof(Name) - 1] = 0;
+	}
+	else {
+		memcpy(Name, name, len);
+		Name[len] = 0;
+	}
+}
+
+void SAISClassAStaticVoyageRelatedData::SetCallSign(char* name)
+{
+	memset(CallSign, 0, sizeof(CallSign));
+	int len = strlen(name);
+	if (len >= 7) {
+		memcpy(CallSign, name, 7);
+		CallSign[7] = 0;
+	}
+	else {
+		memcpy(CallSign, name, len);
+		CallSign[len] = 0;
+	}
+}
+
+void SAISClassAStaticVoyageRelatedData::SetShipLenght(float val)
+{
+	ShipLength = CMath::EncodeUnsigned16(val, SHIP_LENGTH_SF_METER);
+}
+
+void SAISClassAStaticVoyageRelatedData::SetShipBeam(float val)
+{
+	ShipBeam = CMath::EncodeUnsigned16(val, SHIP_BEAM_SF_METER);
+}
+
+void SAISClassAStaticVoyageRelatedData::SetReferencePointFromStarboard(float val)
+{
+	ReferencePointFromStarboard = CMath::EncodeUnsigned16(val, REFERENCE_POINT_POSITION_FROM_STARTBOARD_SF_METER);
+}
+
+void SAISClassAStaticVoyageRelatedData::SetReferencePointPositionAftOfBow(float val)
+{
+	ReferencePointPositionAftOfBow = CMath::EncodeUnsigned16(val, REFERENCE_POINT_POSITION_AFTOfBO_SF_METER);
+}
+
+void SAISClassAStaticVoyageRelatedData::SetEstimatedDateOfArrival(int year, int month, int day)
+{
+	int total_day = (year - 1970) * 365 + month * 30 + day;
+	EstimatedDateOfArrival = total_day;
+}
+void SAISClassAStaticVoyageRelatedData::SetEstimatedTimeOfArrival(float val)
+{
+	EstimatedTimeOfArrival = CMath::EncodeUnsigned16(val, ESTIMATED_TIME_OF_ARRIVAL_SF_SEC);
+}
+
+void SAISClassAStaticVoyageRelatedData::SetDraft(float val)
+{
+	Draft = CMath::EncodeUnsigned16(val, DRAFT_SF_METER);
+}
+void SAISClassAStaticVoyageRelatedData::SetDestination(char* name)
+{
+	memset(Destination, 0, sizeof(Destination));
+
+	int len = strlen(name);
+	if (len >= (sizeof(Destination) - 1)) {
+		memcpy(Destination, name, sizeof(Destination) - 1);
+		Destination[sizeof(Destination) - 1] = 0;
+	}
+	else {
+		memcpy(Destination, name, len);
+		Destination[len] = 0;
+	}
+
+}
+
+/// <summary>
+/// SClassBStaticDataReportPartA
+/// </summary>
+/// <param name="id"></param>
+void SClassBStaticDataReportPartA::SetMessageID(INT8U id)
+{
+	Header.ID.MessageID = (INT8U)id;
+}
+
+void SClassBStaticDataReportPartA::SetName(char* name)
+{
+	
+	memset(Name, 0, sizeof(Name));
+	int len = strlen(name);
+	if (len >= (sizeof(Name) - 1)) {
+		memcpy(Name, name, sizeof(Name) - 1);
+		Name[sizeof(Name) - 1] = 0;
+	}
+	else {
+		memcpy(Name, name, len);
+		Name[len] = 0;
+	}
+	
+
+}

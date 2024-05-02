@@ -254,6 +254,7 @@ void AGimbalBase::SaveJSON(CJsonDataContainer& data)
 
 	data.Add(CCLICommandManager::GimbalMode, GetGimbalControlMode());
 	data.Add(CCLICommandManager::GimbalInitialAng, GetAxisInitialAngleDeg());
+	data.Add(CCLICommandManager::GimbalAng, GetRPYDeg());
 	data.Add(CCLICommandManager::GimbalAxisEnabled, GetAxisEnabled_());
 	data.Add(CCLICommandManager::GimbalRate, GetAxisRateDegPerSec_());
 	data.Add(CCLICommandManager::GimbalFixedRate, GetAxisFixedRateDegPerSec_());

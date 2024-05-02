@@ -68,6 +68,15 @@ FString CCLICommandManager::PlatformTurnRate = "pltturnrate";
 FString CCLICommandManager::AISClassType = "aisclass";
 FString CCLICommandManager::AISMessagePublishPeriodSec = "aispublishperiod";
 FString CCLICommandManager::AISShouldPublishAton="aispublishaton";
+FString CCLICommandManager::AISVendorId = "aisvendorid";
+FString CCLICommandManager::AISCallSign = "aiscallsign";
+FString CCLICommandManager::AISReferencePointFromStarboard = "airrefptfromstarboard";
+FString CCLICommandManager::ReferencePointPositionAftOfBow = "airrefptaftofbow";
+FString CCLICommandManager::AISMMSI = "aismmsi";
+FString CCLICommandManager::AISName = "aisname";
+FString CCLICommandManager::AISDateOfArrival = "aisdateofarrival";
+FString CCLICommandManager::AISTimeOfArrival = "aistimeofarrival";
+
 
 FString CCLICommandManager::VericalFov = "vfov";
 FString CCLICommandManager::HorizontalFov = "hfov";

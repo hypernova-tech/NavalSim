@@ -81,7 +81,8 @@ void AActorBase::EndPlay(const EEndPlayReason::Type EndPlayReason)
 }
 void AActorBase:: OnPreStep(float DeltaTime)
 {
-
+	FVector size = CUtil::GetActorSizeInLocalAxes(this);
+	SetActorComputedActorSizeMeter(TOW(size));
 }
 void AActorBase::OnStep(float DeltaTime)
 {
@@ -475,6 +476,15 @@ void AActorBase::SetActorRot(FVector rpy_deg)
 void AActorBase::SetActorRelRot(FVector rpy_deg)
 {
 	CMath::SetActorRelativeRotation(this, rpy_deg);
+}
+
+void AActorBase::SetActorComputedActorSizeMeter(FVector val)
+{
+	ActorComputedSizeMeter = val;
+}
+FVector AActorBase::GetActorComputedActorSizeMeter()
+{
+	return ActorComputedSizeMeter;
 }
 
 bool AActorBase::GetConnnectionInfo(INT32S ind, SConnectionInfo& info)

@@ -38,7 +38,7 @@ set --name thermal --sharedmemname
 set --name thermal --gstreamerip 
 set --name thermal --gstreamerport 0
 set --name thermal --motionlogen 0
-set --name thermal --thermalmode 0
+set --name thermal --thermalmode 1
 
 create --name env --bp  --tick 0
 set --name env --actorid 0
@@ -58,7 +58,7 @@ set --name env --sharedmemname
 set --name env --gstreamerip 
 set --name env --gstreamerport 0
 set --name env --motionlogen 0
-set --name env --timeofday 12.000000
+set --name env --timeofday 12.005092
 set --name env --envtimeflowscale 1.000000
 set --name env --rain 0.000000
 set --name env --cloud 0.000000
@@ -89,70 +89,40 @@ set --name annotation --gstreamerip
 set --name annotation --gstreamerport 0
 set --name annotation --motionlogen 0
 
-create --name cube1 --bp CUBE --tick 0
-set --name cube1 --actorid 0
-set --name cube1 --instance -1
-set --name cube1 --suppressed 0
-set --name cube1 --standalone 0
-set --name cube1 --position "0.000000 0.000000 0.000000"
-set --name cube1 --rotation "-0.000000 -0.000000 0.000000"
-set --name cube1 --scale "1.000000 1.000000 1.000000"
-set --name cube1 --blocking 1
-set --name cube1 --tempkelvin 300.000000
-set --name cube1 --heatsource 0
-set --name cube1 --annotationid 0
-set --name cube1 --annotatechildren 0
-set --name cube1 --annotatechildren 0
-set --name cube1 --sharedmemname 
-set --name cube1 --gstreamerip 
-set --name cube1 --gstreamerport 0
-set --name cube1 --motionlogen 0
+create --name wall --bp CUBE --tick 0
+set --name wall --actorid 0
+set --name wall --instance -1
+set --name wall --suppressed 0
+set --name wall --standalone 0
+set --name wall --position "1.000000 -30.056746 1.000000"
+set --name wall --rotation "-0.000000 -0.000000 0.000000"
+set --name wall --scale "10.000000 1.000000 10.000000"
+set --name wall --blocking 1
+set --name wall --tempkelvin 300.000000
+set --name wall --heatsource 0
+set --name wall --annotationid 0
+set --name wall --annotatechildren 0
+set --name wall --annotatechildren 0
+set --name wall --sharedmemname 
+set --name wall --gstreamerip 
+set --name wall --gstreamerport 0
+set --name wall --motionlogen 0
 
-create --name ais --bp AIS --tick 0
-set --name ais --parent cube1
-set --name ais --actorid 0
-set --name ais --instance -1
-set --name ais --suppressed 0
-set --name ais --standalone 0
-set --name ais --position "0.000000 0.000000 0.000000"
-set --name ais --rotation "-0.000000 -0.000000 0.000000"
-set --name ais --scale "1.000000 1.000000 1.000000"
-set --name ais --blocking 1
-set --name ais --tempkelvin 300.000000
-set --name ais --heatsource 0
-set --name ais --annotationid 0
-set --name ais --annotatechildren 0
-set --name ais --annotatechildren 0
-set --name ais --ipaddr1 127.0.0.1
-set --name ais --localport1 51000
-set --name ais --remoteport 51001
-set --name ais --sharedmemname 
-set --name ais --gstreamerip 
-set --name ais --gstreamerport 0
-set --name ais --motionlogen 0
-set --name ais --slotindex 0
-set --name ais --rangemin 5.000000
-set --name ais --rangemax 100.000000
-set --name ais --vfov 10.000000
-set --name ais --hfov 90.000000
-set --name ais --hscanstepang 0.000000
-set --name ais --vscanstepang 36.000000
-set --name ais --isnormaldistribution 0
-set --name ais --merrormean 0.000000
-set --name ais --merrorstd 0.000000
-set --name ais --surfacedetecten 0
-set --name ais --subsurfacedetecten 0
-set --name ais --foamen 0
-set --name ais --seasurfdetectprob 0.000000
-set --name ais --maxsurfpenet 0.000000
-set --name ais --aisclass 0
-set --name ais --aispublishaton 1
-set --name ais --aispublishperiod 10.000000
-set --name ais --aismmsi 10
-set --name ais --aisname ais
-set --name ais --aisvendorid vendor
-set --name ais --aiscallsign callsig
-set --name ais --airrefptfromstarboard 0.000000
-set --name ais --airrefptaftofbow 2.000000
-set --name ais --aisdateofarrival "2024.000000 12.000000 5.000000"
-set --name ais --aistimeofarrival 50.000000
+create --name heatsrc --bp CUBE --tick 0
+set --name heatsrc --actorid 0
+set --name heatsrc --instance -1
+set --name heatsrc --suppressed 0
+set --name heatsrc --standalone 0
+set --name heatsrc --position "1.000000 18.326819 10.673554"
+set --name heatsrc --rotation "-0.000000 -0.000000 0.000000"
+set --name heatsrc --scale "1.000000 1.000000 1.000000"
+set --name heatsrc --blocking 1
+set --name heatsrc --tempkelvin 300.000000
+set --name heatsrc --heatsource 1
+set --name heatsrc --annotationid 0
+set --name heatsrc --annotatechildren 0
+set --name heatsrc --annotatechildren 0
+set --name heatsrc --sharedmemname 
+set --name heatsrc --gstreamerip 
+set --name heatsrc --gstreamerport 0
+set --name heatsrc --motionlogen 0

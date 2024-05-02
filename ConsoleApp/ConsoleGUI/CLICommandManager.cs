@@ -113,6 +113,15 @@ public static class CLICommandManager
     [Modifiable] public const string AISClassType = "aisclass";
     [Modifiable] public const string AISMessagePublishPeriodSec = "aispublishperiod";
     [Modifiable] public const string AISShouldPublishAton = "aispublishaton";
+    [Modifiable] public const string AISVendorId = "aisvendorid";
+    [Modifiable] public const string AISCallSign = "aiscallsign";
+    [Modifiable] public const string AISReferencePointFromStarboard = "airrefptfromstarboard";
+    [Modifiable] public const string ReferencePointPositionAftOfBow = "airrefptaftofbow";
+    [Modifiable] public const string AISMMSI = "aismmsi";
+    [Modifiable] public const string AISName = "aisname";
+    [Modifiable] public const string AISDateOfArrival = "aisdateofarrival";
+    [Modifiable] public const string AISTimeOfArrival = "aistimeofarrival";
+
 
     [Modifiable] public const string ThermalMode = "thermalmode";
     //[Modifiable(IsProperty = true)] public const string AnnotationId = "annotationid";

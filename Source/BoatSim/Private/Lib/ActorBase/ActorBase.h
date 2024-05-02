@@ -128,6 +128,7 @@ protected:
 	FVector ActorVelocityMetersPerSec;
 	FVector ActorAngularVelocityRPYDegPerSec;
 	CMotionLogger MotionLogger;
+	FVector ActorComputedSizeMeter;
 
 	 virtual void OnActorDisabled();
 	 virtual void OnActorEnabled();
@@ -190,6 +191,12 @@ public:
 	virtual void SetActorRelPosition(FVector pos);
 	virtual void SetActorRot(FVector rpy_deg);
 	virtual void SetActorRelRot(FVector rpy_deg);
+
+
+	virtual void SetActorComputedActorSizeMeter(FVector val);
+	virtual FVector GetActorComputedActorSizeMeter();
+
+
 
 	bool GetConnnectionInfo(INT32S ind, SConnectionInfo& info);
 	bool SetConnnectionInfo(INT32S ind, SConnectionInfo info);

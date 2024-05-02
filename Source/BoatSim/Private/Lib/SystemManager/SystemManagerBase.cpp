@@ -384,7 +384,7 @@ APlatformBase* ASystemManagerBase::ToPlatform(AActor* p_actor)
 }
 AAISBase* ASystemManagerBase::ToAIS(AActor* p_actor)
 {
-	if (p_actor->IsA<APlatformBase>()) {
+	if (p_actor->IsA<AAISBase>()) {
 		return (AAISBase*)p_actor;
 	}
 
@@ -3139,6 +3139,178 @@ bool ASystemManagerBase::GetPublishAton(AActor* p_actor, bool& val)
 	}
 	return false;
 }
+
+bool ASystemManagerBase::SetAISMMSI(AActor* p_actor, int val)
+{
+	auto actorbase = ToAIS(p_actor);
+
+	if (actorbase) {
+		actorbase->SetAISMMSI(val);
+		return true;
+	}
+	return false;
+}
+bool ASystemManagerBase::GetAISMMSI(AActor* p_actor, int& val)
+{
+	auto actorbase = ToAIS(p_actor);
+
+	if (actorbase) {
+		val = actorbase->GetAISMMSI();
+		return true;
+	}
+	return false;
+}
+
+bool ASystemManagerBase::SetAISVendorID(AActor* p_actor, FString val)
+{
+	auto actorbase = ToAIS(p_actor);
+
+	if (actorbase) {
+		actorbase->SetAISVendorId(val);
+		return true;
+	}
+	return false;
+}
+bool ASystemManagerBase::GetAISVendorID(AActor* p_actor, FString& val)
+{
+	auto actorbase = ToAIS(p_actor);
+
+	if (actorbase) {
+		val = actorbase->GetAISVendorId();
+		return true;
+	}
+	return false;
+}
+
+bool ASystemManagerBase::SetAISCallSign(AActor* p_actor, FString val) 
+{
+	auto actorbase = ToAIS(p_actor);
+
+	if (actorbase) {
+		actorbase->SetAISCallSign(val);
+		return true;
+	}
+	return false;
+}
+bool ASystemManagerBase::GetAISCallSign(AActor* p_actor, FString& val)
+{
+	auto actorbase = ToAIS(p_actor);
+
+	if (actorbase) {
+		val = actorbase->GetAISCallSign();
+		return true;
+	}
+	return false;
+}
+
+bool ASystemManagerBase::SetAISReferencePointFromStarboard(AActor* p_actor, double val)
+{
+	auto actorbase = ToAIS(p_actor);
+
+	if (actorbase) {
+		actorbase->SetAISReferencePointFromStarboard(val);
+		return true;
+	}
+	return false;
+}
+bool ASystemManagerBase::GetAISReferencePointFromStarboard(AActor* p_actor, double& val)
+{
+	auto actorbase = ToAIS(p_actor);
+
+	if (actorbase) {
+		val = actorbase->GetAISReferencePointFromStarboard();
+		return true;
+	}
+	return false;
+}
+
+bool ASystemManagerBase::SetReferencePointPositionAftOfBow(AActor* p_actor, double val)
+{
+	auto actorbase = ToAIS(p_actor);
+
+	if (actorbase) {
+		actorbase->SetReferencePointPositionAftOfBow(val);
+		return true;
+	}
+	return false;
+}
+bool ASystemManagerBase::GetReferencePointPositionAftOfBow(AActor* p_actor, double& val)
+{
+	auto actorbase = ToAIS(p_actor);
+
+	if (actorbase) {
+		val = actorbase->GetReferencePointPositionAftOfBow();
+		return true;
+	}
+	return false;
+}
+
+bool ASystemManagerBase::SetAISName(AActor* p_actor, FString val)
+{
+	auto actorbase = ToAIS(p_actor);
+
+	if (actorbase) {
+		actorbase->SetAISName(val);
+		return true;
+	}
+	return false;
+}
+bool ASystemManagerBase::GetAISName(AActor* p_actor, FString& val)
+{
+	auto actorbase = ToAIS(p_actor);
+
+	if (actorbase) {
+		val = actorbase->GetAISName();
+		return true;
+	}
+	return false;
+}
+bool ASystemManagerBase::SetAISDateOfArrivalYearMonthDay(AActor* p_actor, FVector val)
+{
+	auto actorbase = ToAIS(p_actor);
+
+	if (actorbase) {
+		actorbase->SetDateOfArrivalYearMonthDay(val);
+		return true;
+	}
+	return false;
+}
+bool ASystemManagerBase::GetAISDateOfArrivalYearMonthDay(AActor* p_actor, FVector& val)
+{
+	auto actorbase = ToAIS(p_actor);
+
+	if (actorbase) {
+		val = actorbase->GetDateOfArrivalYearMonthDay();
+		return true;
+	}
+	return false;
+}
+bool ASystemManagerBase::SetAISTimeOfArrivalSec(AActor* p_actor, double val)
+{
+	auto actorbase = ToAIS(p_actor);
+
+	if (actorbase) {
+		actorbase->SetTimeOfArrivalSec(val);
+		return true;
+	}
+	return false;
+}
+bool ASystemManagerBase::GetAISTimeOfArrivalSec(AActor* p_actor, double& val)
+{
+	auto actorbase = ToAIS(p_actor);
+
+	if (actorbase) {
+		val = actorbase->GetTimeOfArrivalSec();
+		return true;
+	}
+	return false;
+}
+
+
+
+
+
+
 
 
 bool ASystemManagerBase::GetSharedMemoryName(AActor* p_actor, FString& val)
