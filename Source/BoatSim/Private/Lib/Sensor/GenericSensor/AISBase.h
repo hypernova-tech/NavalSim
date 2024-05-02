@@ -40,7 +40,16 @@ protected:
 		int AISClassType = 0; // 0: none, 1: class A, 2: class B
 
 	UPROPERTY(EditAnywhere)
-		float AISMessagePublishPeriodSec = 10; 
+		float AISMessagePublishPeriodSecStationary = 300; 
+
+	UPROPERTY(EditAnywhere)
+		float AISMessagePublishPeriodSecMoving = 5;
+
+	UPROPERTY(EditAnywhere)
+		int AISUserId = 0; // 
+
+	UPROPERTY(EditAnywhere)
+		int ShipCargoType = 0; // 
 
 	UPROPERTY(EditAnywhere)
 		bool ShoudPublishATON = true; 
@@ -69,6 +78,12 @@ protected:
 	UPROPERTY(EditAnywhere)
 		double AISTimeOfArrival; 
 
+	void UpdateAISMotionMode();
+	void InvalidateEntries();
+	double GetCurrentPusblishPeriod();
+	bool IsStationary = true;
+	bool IsMotionModeChanged = false;
+
 public:
 	virtual void BeginPlay() override;
 	virtual void InitSensor() override;
@@ -82,8 +97,11 @@ public:
 	int GetAISClassType();
 	void SetAISClassType(int val);
 
-	float GetAISMessagePublishPeriodSec();
-	void SetAISMessagePublishPeriodSec(float val);
+	float GetAISMessagePublishPeriodSecStationary();
+	void SetAISMessagePublishPeriodSecStationary(float val);
+
+	float GetAISMessagePublishPeriodSecMoving();
+	void SetAISMessagePublishPeriodSecMoving(float val);
 
 	bool GetShoudPublishATON();
 	void SetShoudPublishATON(bool val);
@@ -111,6 +129,13 @@ public:
 
 	void SetReferencePointPositionAftOfBow(double val);
 	double GetReferencePointPositionAftOfBow();
+
+	void SetAISUserId(int val);
+	int GetAISUserId();
+
+	void SetShipCargoType(int val);
+	int GetShipCargoType();
+
 
 	void Save(ISaveLoader* p_save_loader);
 	void SaveJSON(CJsonDataContainer& data);

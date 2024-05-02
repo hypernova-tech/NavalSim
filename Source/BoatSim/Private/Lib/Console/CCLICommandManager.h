@@ -116,7 +116,8 @@ public:
 	static FString CamFollowEuler;
 
 	static FString AISClassType;
-	static FString AISMessagePublishPeriodSec;
+	static FString AISMessagePublishPeriodSecStationary;
+	static FString AISMessagePublishPeriodSecMoving;
 	static FString AISShouldPublishAton;
 	static FString AISVendorId;
 	static FString AISCallSign;
@@ -126,6 +127,8 @@ public:
 	static FString AISName;
 	static FString AISDateOfArrival;
 	static FString AISTimeOfArrival;
+	static FString AISUserId;
+	static FString AISShipOrCargoType;
 
 	static FString VericalFov;
 	static FString HorizontalFov;

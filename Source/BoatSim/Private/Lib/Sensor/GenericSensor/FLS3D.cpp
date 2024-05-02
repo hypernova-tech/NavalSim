@@ -82,6 +82,7 @@ void AFLS3D::Run(float delta_time_sec)
 		args.p_ignore_list =  &(ASystemManagerBase::GetInstance()->GetSensorGlobalIgnoreList());
 		args.create_scan_line = false;
 		args.scan_center = GetActorLocation();
+		args.inlude_point_list_virtual_amplification_point = 2;
 		auto rotator = GetActorRotation();
 		args.scan_rpy_world_deg = FVector(rotator.Roll, -rotator.Pitch, -rotator.Yaw);
 		auto* p_parent = CUtil::GetParentActor(this);

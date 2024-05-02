@@ -576,16 +576,28 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
     else {
 
     }
-    ret = CommandManager.HasA(CCLICommandManager::AISMessagePublishPeriodSec);
+    ret = CommandManager.HasA(CCLICommandManager::AISMessagePublishPeriodSecStationary);
     if (ret) {
-        if (pSystemAPI->GetAisPublishDurationSec(p_actor, dbl)) {
-            SendConsoleResponse(name, CCLICommandManager::AISMessagePublishPeriodSec, dbl);
+        if (pSystemAPI->GetAisPublishDurationSecStationary(p_actor, dbl)) {
+            SendConsoleResponse(name, CCLICommandManager::AISMessagePublishPeriodSecStationary, dbl);
             return true;
         }
     }
     else {
 
     }
+
+    ret = CommandManager.HasA(CCLICommandManager::AISMessagePublishPeriodSecMoving);
+    if (ret) {
+        if (pSystemAPI->GetAisPublishDurationSecMoving(p_actor, dbl)) {
+            SendConsoleResponse(name, CCLICommandManager::AISMessagePublishPeriodSecMoving, dbl);
+            return true;
+        }
+    }
+    else {
+
+    }
+
     ret = CommandManager.HasA(CCLICommandManager::AISShouldPublishAton);
     if (ret) {
         if (pSystemAPI->GetPublishAton(p_actor, is_enabled)) {
@@ -679,6 +691,29 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
     if (ret) {
         if (pSystemAPI->GetAISTimeOfArrivalSec(p_actor, dbl)) {
             SendConsoleResponse(name, CCLICommandManager::AISTimeOfArrival, dbl);
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.HasA(CCLICommandManager::AISUserId);
+    if (ret) {
+        if (pSystemAPI->GetAISUserID(p_actor, sint)) {
+            SendConsoleResponse(name, CCLICommandManager::AISUserId, sint);
+            return true;
+        }
+    }
+    else {
+
+    }
+
+
+    ret = CommandManager.HasA(CCLICommandManager::AISShipOrCargoType);
+    if (ret) {
+        if (pSystemAPI->GetAISShipOrCargoType(p_actor, sint)) {
+            SendConsoleResponse(name, CCLICommandManager::AISShipOrCargoType, sint);
             return true;
         }
     }

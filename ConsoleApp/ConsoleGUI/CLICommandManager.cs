@@ -109,18 +109,21 @@ public static class CLICommandManager
     [Modifiable] public const string CamFollow = "camfollow";
     [Modifiable] public const string CamView = "camview";
     [Modifiable] public const string IsBlockingObject = "blocking";
-
+    [Modifiable] public const string AISUserId = "aisuserid"; 
     [Modifiable] public const string AISClassType = "aisclass";
-    [Modifiable] public const string AISMessagePublishPeriodSec = "aispublishperiod";
+    [Modifiable] public const string AISMessagePublishPeriodSecStationary = "aispublishperiodstatic";
+    [Modifiable] public const string AISMessagePublishPeriodSecMoving = "aispublishperiodmoving";
     [Modifiable] public const string AISShouldPublishAton = "aispublishaton";
     [Modifiable] public const string AISVendorId = "aisvendorid";
     [Modifiable] public const string AISCallSign = "aiscallsign";
+    [Modifiable] public const string AISShipOrCargoType = "aisshiporcargotype";
     [Modifiable] public const string AISReferencePointFromStarboard = "airrefptfromstarboard";
     [Modifiable] public const string ReferencePointPositionAftOfBow = "airrefptaftofbow";
     [Modifiable] public const string AISMMSI = "aismmsi";
     [Modifiable] public const string AISName = "aisname";
     [Modifiable] public const string AISDateOfArrival = "aisdateofarrival";
     [Modifiable] public const string AISTimeOfArrival = "aistimeofarrival";
+
 
 
     [Modifiable] public const string ThermalMode = "thermalmode";

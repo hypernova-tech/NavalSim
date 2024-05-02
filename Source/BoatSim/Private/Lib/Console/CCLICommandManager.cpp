@@ -66,7 +66,8 @@ FString CCLICommandManager::PlatformSpeed = "pltspeed";
 FString CCLICommandManager::PlatformTurnRate = "pltturnrate";
 
 FString CCLICommandManager::AISClassType = "aisclass";
-FString CCLICommandManager::AISMessagePublishPeriodSec = "aispublishperiod";
+FString CCLICommandManager::AISMessagePublishPeriodSecStationary = "aispublishperiodstatic";
+FString CCLICommandManager::AISMessagePublishPeriodSecMoving = "aispublishperiodmoving";
 FString CCLICommandManager::AISShouldPublishAton="aispublishaton";
 FString CCLICommandManager::AISVendorId = "aisvendorid";
 FString CCLICommandManager::AISCallSign = "aiscallsign";
@@ -76,6 +77,8 @@ FString CCLICommandManager::AISMMSI = "aismmsi";
 FString CCLICommandManager::AISName = "aisname";
 FString CCLICommandManager::AISDateOfArrival = "aisdateofarrival";
 FString CCLICommandManager::AISTimeOfArrival = "aistimeofarrival";
+FString CCLICommandManager::AISUserId = "aisuserid";
+FString CCLICommandManager::AISShipOrCargoType = "aisshiporcargotype";
 
 
 FString CCLICommandManager::VericalFov = "vfov";

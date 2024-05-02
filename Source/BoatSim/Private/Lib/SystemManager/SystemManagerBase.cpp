@@ -3098,22 +3098,43 @@ bool ASystemManagerBase::GetAisClassType(AActor* p_actor, int& class_type)
 	return false;
 }
 
-bool ASystemManagerBase::SetAisPublishDurationSec(AActor* p_actor, double val)
+bool ASystemManagerBase::SetAisPublishDurationSecStationary(AActor* p_actor, double val)
 {
 	auto actorbase = ToAIS(p_actor);
 
 	if (actorbase) {
-		actorbase->SetAISMessagePublishPeriodSec(val);
+		actorbase->SetAISMessagePublishPeriodSecStationary(val);
 		return true;
 	}
 	return false;
 }
-bool ASystemManagerBase::GetAisPublishDurationSec(AActor* p_actor, double& val)
+bool ASystemManagerBase::GetAisPublishDurationSecStationary(AActor* p_actor, double& val)
 {
 	auto actorbase = ToAIS(p_actor);
 
 	if (actorbase) {
-		val =  actorbase->GetAISMessagePublishPeriodSec();
+		val =  actorbase->GetAISMessagePublishPeriodSecStationary();
+		return true;
+	}
+	return false;
+}
+
+bool ASystemManagerBase::SetAisPublishDurationSecMoving(AActor* p_actor, double val)
+{
+	auto actorbase = ToAIS(p_actor);
+
+	if (actorbase) {
+		actorbase->SetAISMessagePublishPeriodSecMoving(val);
+		return true;
+	}
+	return false;
+}
+bool ASystemManagerBase::GetAisPublishDurationSecMoving(AActor* p_actor, double& val)
+{
+	auto actorbase = ToAIS(p_actor);
+
+	if (actorbase) {
+		val = actorbase->GetAISMessagePublishPeriodSecMoving();
 		return true;
 	}
 	return false;
@@ -3307,6 +3328,47 @@ bool ASystemManagerBase::GetAISTimeOfArrivalSec(AActor* p_actor, double& val)
 }
 
 
+
+bool ASystemManagerBase::SetAISUserID(AActor* p_actor, int val)
+{
+	auto actorbase = ToAIS(p_actor);
+
+	if (actorbase) {
+		actorbase->SetAISUserId(val);
+		return true;
+	}
+	return false;
+}
+bool ASystemManagerBase::GetAISUserID(AActor* p_actor, int& val)
+{
+	auto actorbase = ToAIS(p_actor);
+
+	if (actorbase) {
+		val = actorbase->GetAISUserId();
+		return true;
+	}
+	return false;
+}
+bool ASystemManagerBase::SetAISShipOrCargoType(AActor* p_actor, int val)
+{
+	auto actorbase = ToAIS(p_actor);
+
+	if (actorbase) {
+		actorbase->SetShipCargoType(val);
+		return true;
+	}
+	return false;
+}
+bool ASystemManagerBase::GetAISShipOrCargoType(AActor* p_actor, int& val)
+{
+	auto actorbase = ToAIS(p_actor);
+
+	if (actorbase) {
+		val = actorbase->GetShipCargoType();
+		return true;
+	}
+	return false;
+}
 
 
 

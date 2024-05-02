@@ -38,21 +38,66 @@ void AAISBase::InitSensor()
 void AAISBase::Run(float delta_time_sec)
 {
 	Super::Run(delta_time_sec);
+	UpdateAISMotionMode();
+	InvalidateEntries();
 	ProcessEntries();
+}
+
+double AAISBase::GetCurrentPusblishPeriod()
+{
+
+	if (IsStationary) {
+		return AISMessagePublishPeriodSecStationary;
+	}
+	else {
+		return AISMessagePublishPeriodSecMoving;
+	}
+}
+
+void AAISBase::UpdateAISMotionMode()
+{
+	auto vel = GetActorVelocityMetersPerSec();
+
+	if (vel.Length() > 0.5f) {
+		if (IsStationary) {
+			IsMotionModeChanged = true;
+		}
+		IsStationary = false;
+	}
+	else {
+		if (!IsStationary) {
+			IsMotionModeChanged = true;
+		}
+		IsStationary = true;
+	}
+
+}
+
+void AAISBase::InvalidateEntries()
+{
+	if (IsMotionModeChanged) {
+		for (auto& entry : AisEntries) {
+			entry.LastTransmitTimeSec = -1;
+		}
+		IsMotionModeChanged = false;
+	}
+
 }
 
 void AAISBase::ProcessEntries()
 {
+	bool is_first_time = false;
 	for (auto &entry : AisEntries) {
 	
 		if (entry.LastTransmitTimeSec < 0) {
 			entry.LastTransmitTimeSec = FApp::GetCurrentTime();
+			is_first_time = true;
 		}
 
 		auto curr_time = FApp::GetCurrentTime();
-		auto next_time = (entry.LastTransmitTimeSec + GetAISMessagePublishPeriodSec());
+		auto next_time = (entry.LastTransmitTimeSec + GetCurrentPusblishPeriod());
 
-		if(curr_time >= next_time) {
+		if(curr_time >= next_time || is_first_time) {
 			if (GetAISClassType() == 1) {
 				PublishClassAPositionReport(entry.pActor);
 				if (GetShoudPublishATON()) {
@@ -107,6 +152,7 @@ void AAISBase::PublishClassAPositionReport(AActorBase* p_act)
 
 
 	report.SetMessageID(1);
+	report.SetUserID(AISUserId);
 	report.SetLat(pos.X);
 	report.SetLon(pos.Y);
 	report.SetPositionAccuracy(false);
@@ -143,6 +189,7 @@ void AAISBase::PublishClassBPositionReport(AActorBase* p_act)
 	FVector ang_vel = p_act->GetActorAngularVelocityRPYDegPerSec();
 
 	report.SetMessageID(18);
+	report.SetUserID(AISUserId);
 	report.SetLat(pos.X);
 	report.SetLon(pos.Y);
 	report.SetPositionAccuracy(false);
@@ -167,6 +214,7 @@ void AAISBase::PublishATONReport(AActorBase* p_act)
 	FVector ang_vel = p_act->GetActorAngularVelocityRPYDegPerSec();
 
 	report.SetMessageID(21);
+	report.SetUserID(AISUserId);
 	report.SetLat(pos.X);
 	report.SetLon(pos.Y);
 	report.SetPositionAccuracy(false);
@@ -187,7 +235,8 @@ void AAISBase::PublishClassBStaticDataReportPartB(AActorBase* p_act)
 	char temp[8];
 
 	report.SetMessageID(24);
-
+	report.SetUserID(AISUserId);
+	report.SetTypeOfShipAndCargo(ShipCargoType);
 
 	CUtil::FStringToAsciiChar(AISVendorId, temp, 8);
 	report.SetVendorId(temp);
@@ -216,7 +265,7 @@ void AAISBase::PublishClassBStaticDataReportPartA(AActorBase* p_act)
 	char temp[21];
 
 	report.SetMessageID(24);
-
+	report.SetUserID(AISUserId);
 
 	CUtil::FStringToAsciiChar(AISName, temp, 21);
 	report.SetName(temp);
@@ -237,8 +286,9 @@ void AAISBase::PublishAISClassAStaticVoyageRelatedData(AActorBase* p_act)
 	FVector ang_vel = p_act->GetActorAngularVelocityRPYDegPerSec();
 	char temp[21];
 
-	report.SetMessageID(24);
-
+	report.SetMessageID(5);
+	report.SetUserID(AISUserId);
+	report.SetTypeOfShipAndCargo(ShipCargoType);
 
 	CUtil::FStringToAsciiChar(AISName, temp, 21);
 	report.SetName(temp);
@@ -255,7 +305,14 @@ void AAISBase::PublishAISClassAStaticVoyageRelatedData(AActorBase* p_act)
 
 	report.SetEstimatedDateOfArrival(FMath::CeilToInt32(AISDataOfArrivalYMD.X), FMath::CeilToInt32(AISDataOfArrivalYMD.Y), FMath::CeilToInt32(AISDataOfArrivalYMD.Z));
 	report.SetEstimatedTimeOfArrival(AISTimeOfArrival);
-	report.SetDraft(0); //todo fixme
+
+	FVector origin;
+	FVector extend;
+
+	p_act->GetActorBounds(true, origin, extend, false);
+	double lowest_pt = origin.Z - extend.Z;
+	double draft = 0 - lowest_pt;
+	report.SetDraft(TOW(draft)); //todo fixme
 
 	pCommIF->SendData(&report, sizeof(SAISClassAStaticVoyageRelatedData));
 }
@@ -271,14 +328,24 @@ void AAISBase::SetAISClassType(int val)
 	AISClassType = val;
 }
 
-float AAISBase::GetAISMessagePublishPeriodSec()
+float AAISBase::GetAISMessagePublishPeriodSecStationary()
 {
-	return AISMessagePublishPeriodSec;
+	return AISMessagePublishPeriodSecStationary;
 }
 
-void AAISBase::SetAISMessagePublishPeriodSec(float val)
+void AAISBase::SetAISMessagePublishPeriodSecStationary(float val)
 {
-	AISMessagePublishPeriodSec = val;
+	AISMessagePublishPeriodSecStationary = val;
+}
+
+float AAISBase::GetAISMessagePublishPeriodSecMoving()
+{
+	return AISMessagePublishPeriodSecMoving;
+
+}
+void AAISBase::SetAISMessagePublishPeriodSecMoving(float val)
+{
+	AISMessagePublishPeriodSecMoving = val;
 }
 
 bool AAISBase::GetShoudPublishATON()
@@ -371,10 +438,34 @@ double AAISBase::GetReferencePointPositionAftOfBow()
 	return ReferencePointPositionAftOfBow;
 }
 
+void AAISBase::SetAISUserId(int val)
+{
+	AISUserId = val;
+}
+
+int AAISBase::GetAISUserId()
+{
+	return AISUserId;
+}
+
+void AAISBase::SetShipCargoType(int val)
+{
+	ShipCargoType = val;
+}
+
+int AAISBase::GetShipCargoType()
+{
+	return ShipCargoType;
+}
+
 void AAISBase::Save(ISaveLoader* p_save_loader)
 {
 	Super::Save(p_save_loader);
 	FString line;
+
+	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
+	p_save_loader->AppendOption(line, CCLICommandManager::AISUserId, AISUserId);
+	p_save_loader->AddLine(line);
 
 	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
 	p_save_loader->AppendOption(line, CCLICommandManager::AISClassType, GetAISClassType());
@@ -386,13 +477,19 @@ void AAISBase::Save(ISaveLoader* p_save_loader)
 
 
 	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
-	p_save_loader->AppendOption(line, CCLICommandManager::AISMessagePublishPeriodSec, GetAISMessagePublishPeriodSec());
+	p_save_loader->AppendOption(line, CCLICommandManager::AISMessagePublishPeriodSecStationary, GetAISMessagePublishPeriodSecStationary());
 	p_save_loader->AddLine(line);
 
-
+	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
+	p_save_loader->AppendOption(line, CCLICommandManager::AISMessagePublishPeriodSecMoving, GetAISMessagePublishPeriodSecMoving());
+	p_save_loader->AddLine(line);
 
 	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
 	p_save_loader->AppendOption(line, CCLICommandManager::AISMMSI, AISMMSI);
+	p_save_loader->AddLine(line);
+
+	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
+	p_save_loader->AppendOption(line, CCLICommandManager::AISShipOrCargoType, ShipCargoType);
 	p_save_loader->AddLine(line);
 
 	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
@@ -429,16 +526,17 @@ void AAISBase::Save(ISaveLoader* p_save_loader)
 void AAISBase::SaveJSON(CJsonDataContainer& data)
 {
 	Super::SaveJSON(data);
-
+	data.Add(CCLICommandManager::AISUserId, AISUserId);
 	data.Add(CCLICommandManager::AISClassType, GetAISClassType());
 	data.Add(CCLICommandManager::AISShouldPublishAton, GetShoudPublishATON());
-	data.Add(CCLICommandManager::AISMessagePublishPeriodSec, GetAISMessagePublishPeriodSec());
-
+	data.Add(CCLICommandManager::AISMessagePublishPeriodSecStationary, GetAISMessagePublishPeriodSecStationary());
+	data.Add(CCLICommandManager::AISMessagePublishPeriodSecMoving, GetAISMessagePublishPeriodSecMoving());
 
 	data.Add(CCLICommandManager::AISMMSI, AISMMSI);
 	data.Add(CCLICommandManager::AISName, AISName);
 	data.Add(CCLICommandManager::AISVendorId, AISVendorId);
 	data.Add(CCLICommandManager::AISCallSign, AISCallSign);
+	data.Add(CCLICommandManager::AISShipOrCargoType, ShipCargoType);
 	data.Add(CCLICommandManager::AISReferencePointFromStarboard, AISReferencePointFromStarboard);
 	data.Add(CCLICommandManager::ReferencePointPositionAftOfBow, ReferencePointPositionAftOfBow);
 	data.Add(CCLICommandManager::AISDateOfArrival, AISDataOfArrivalYMD);

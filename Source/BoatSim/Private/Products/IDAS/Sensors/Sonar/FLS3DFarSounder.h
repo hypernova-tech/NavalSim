@@ -34,7 +34,8 @@ struct SFLSDataEntry
 public:
 	struct {
 		INT32U IsGround : 1;
-		INT32U Reserved : 31;
+		INT32U Intensity : 16;
+		INT32U Reserved : 15;
 	}Info;
 	FLOAT32 X;
 	FLOAT32 Y;

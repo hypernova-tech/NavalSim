@@ -30,6 +30,7 @@ struct SScanInfo
 struct SScanLineEntry {
 	FVector Pos;
 	EScanObjectType  ObjectType;
+	FLOAT32 NormalStrength;
 };
 
 struct SSectorInfo
@@ -40,6 +41,7 @@ struct SSectorInfo
 	INT32S ScanLineCount;
 	TArray<FVector> SectorData;
 	TArray<EScanObjectType> ObjectType;
+	TArray<FLOAT32> NormalStrength;
 	TArray<TArray<SScanLineEntry>*> ScanLines;
 
 
@@ -60,18 +62,20 @@ public:
 	void Reset() {
 		SectorData.Reset();
 		ObjectType.Reset();
+		NormalStrength.Reset();
 		for (INT32S i = 0; i < ScanLines.Num(); i++) {
 			ScanLines[i]->Reset();
 		}
 	
 	}
 
-	void Add(FVector& vec, EScanObjectType object_type = EScanObjectType::ScanObjectTypeUnknown)
+	void Add(FVector& vec, EScanObjectType object_type = EScanObjectType::ScanObjectTypeUnknown, FLOAT32 NormalStrenght = 1)
 	{
 		SectorData.Add(vec);
 		ObjectType.Add(object_type);
+		NormalStrength.Add(NormalStrenght);
 	}
-	void Add(FVector& vec, INT32S azimuth_scan_ind, EScanObjectType object_type = EScanObjectType::ScanObjectTypeUnknown)
+	void Add(FVector& vec, INT32S azimuth_scan_ind, EScanObjectType object_type = EScanObjectType::ScanObjectTypeUnknown, FLOAT32 NormalStrenght = 1)
 	{
 		SectorData.Add(vec);
 		ObjectType.Add(object_type);
@@ -80,6 +84,7 @@ public:
 			SScanLineEntry entry;
 			entry.Pos = vec;
 			entry.ObjectType = object_type;
+			entry.NormalStrength = NormalStrenght;
 			ScanLines[azimuth_scan_ind]->Add(entry);
 		}
 	}

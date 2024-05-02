@@ -1236,9 +1236,19 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
 
     }
 
-    ret = CommandManager.GetValue(CCLICommandManager::AISMessagePublishPeriodSec, dbl);
+    ret = CommandManager.GetValue(CCLICommandManager::AISMessagePublishPeriodSecStationary, dbl);
     if (ret) {
-        if (pSystemAPI->SetAisPublishDurationSec(p_actor, dbl)) {
+        if (pSystemAPI->SetAisPublishDurationSecStationary(p_actor, dbl)) {
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::AISMessagePublishPeriodSecMoving, dbl);
+    if (ret) {
+        if (pSystemAPI->SetAisPublishDurationSecMoving(p_actor, dbl)) {
             return true;
         }
     }
@@ -1330,6 +1340,26 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
     ret = CommandManager.GetValue(CCLICommandManager::AISTimeOfArrival, dbl);
     if (ret) {
         if (pSystemAPI->SetAISTimeOfArrivalSec(p_actor, dbl)) {
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::AISUserId, sint);
+    if (ret) {
+        if (pSystemAPI->SetAISUserID(p_actor, sint)) {
+            return true;
+        }
+    }
+    else {
+
+    }
+
+    ret = CommandManager.GetValue(CCLICommandManager::AISShipOrCargoType, sint);
+    if (ret) {
+        if (pSystemAPI->SetAISShipOrCargoType(p_actor, sint)) {
             return true;
         }
     }

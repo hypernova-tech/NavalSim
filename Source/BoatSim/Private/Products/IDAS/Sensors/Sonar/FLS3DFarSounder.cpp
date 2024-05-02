@@ -105,8 +105,12 @@ void AFLS3DFarSounder::OnDataReady()
 
 			FVector& data = (sector_info->SectorData[i]);
 			EScanObjectType& object_type = sector_info->ObjectType[i];
+			FLOAT32 & normal_strength = sector_info->NormalStrength[i];
 			SFLSDataEntry* p_curr_entry = &p_entries[ind];
 			is_ground = object_type == EScanObjectType::ScanObjectTypeTerrain;
+			
+
+			INT16U intensity = FMath::Lerp(110.0, 210.0, FMath::Abs(normal_strength));
 
 			if (is_ground) {
 				if (p_hdr->FromSimToHost.BottomDetectionEnabled) {
@@ -114,7 +118,9 @@ void AFLS3DFarSounder::OnDataReady()
 						p_curr_entry->X = TOW(data.X);
 						p_curr_entry->Y = TOW(data.Y);
 						p_curr_entry->Z = TOW(data.Z);
+						
 						p_curr_entry->Info.IsGround = is_ground;
+						p_curr_entry->Info.Intensity = intensity;
 						ind++;
 					}
 				
@@ -126,6 +132,7 @@ void AFLS3DFarSounder::OnDataReady()
 					p_curr_entry->Y = TOW(data.Y);
 					p_curr_entry->Z = TOW(data.Z);
 					p_curr_entry->Info.IsGround = is_ground;
+					p_curr_entry->Info.Intensity = intensity;
 					ind++;
 				}
 			}

@@ -82,6 +82,7 @@ void CFlsIF::UpdateFlsTargetData(SFLSSharedMemBufferHdr hdr, SFLSDataEntry* p_en
             bin->set_down_range(p_entries[i].X - own_ship[0]);
             bin->set_cross_range(-(p_entries[i].Y - own_ship[1])); // Adjust field names as needed
             bin->set_depth((p_entries[i].Z - own_ship[2]));
+            strength = p_entries[i].Info.Intensity;
             bin->set_hor_index(horr_index);
             bin->set_ver_index(ver_index);
             bin->set_range_index(range_index);
@@ -97,6 +98,7 @@ void CFlsIF::UpdateFlsTargetData(SFLSSharedMemBufferHdr hdr, SFLSDataEntry* p_en
             bin->set_hor_index(horr_index);
             bin->set_ver_index(ver_index);
             bin->set_range_index(range_index);
+            strength = p_entries[i].Info.Intensity;
             bin->set_strength(strength);
         }
     }

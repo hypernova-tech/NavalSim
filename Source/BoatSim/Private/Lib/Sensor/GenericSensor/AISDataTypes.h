@@ -83,6 +83,7 @@ struct SClassAPositionReport {
 public:
 
 	void SetMessageID(INT8U id);
+	void SetUserID(INT32U val);
 	void SetTimeStamp(INT8U val);
 	void SetPositionAccuracy(bool is_low);
 	void SetLat(FLOAT64 lat_deg);
@@ -133,6 +134,7 @@ struct SClassBPositionReport {
 	};
 
 	void SetMessageID(INT8U id);
+	void SetUserID(INT32U val);
 	void SetTimeStamp(INT8U val);
 	void SetPositionAccuracy(bool is_low);
 	void SetLat(FLOAT64 lat_deg);
@@ -175,6 +177,7 @@ struct SADISAtonReport { // aids to navigation reports
 	INT8S AtonName[16];
 
 	void SetMessageID(INT8U id);
+	void SetUserID(INT32U val);
 	void SetTimeStamp(INT8U val);
 	void SetPositionAccuracy(bool is_low);
 	void SetLat(FLOAT64 lat_deg);
@@ -205,6 +208,7 @@ struct SClassBStaticDataReportPartA {
 	INT8U SequenceId;
 
 	void SetMessageID(INT8U id);
+	void SetUserID(INT32U val);
 	void SetName(char* name);
 
 };
@@ -222,7 +226,7 @@ struct SClassBStaticDataReportPartB {
 	INT16U ShipBeam;
 	INT16U ReferencePointFromStarboard;
 	INT16U ReferencePointPositionAftOfBow;
-	INT16U MotherShipMMSI;
+	INT32U MotherShipMMSI;
 	struct {
 		INT8U NMEAReserved : 2;
 		INT8U AllSpare : 6;
@@ -230,8 +234,9 @@ struct SClassBStaticDataReportPartB {
 		INT8U NMEAReserved2 : 3;
 
 	}Reserved1;
-
+	INT8U SequenceID;
 	void SetMessageID(INT8U id);
+	void SetUserID(INT32U val);
 	void SetTypeOfShipAndCargo(INT8U val);
 	void SetVendorId(char* name);
 	void SetCallSign(char* name);
@@ -280,6 +285,7 @@ struct SAISClassAStaticVoyageRelatedData {
 
 
 	void SetMessageID(INT8U id);
+	void SetUserID(INT32U val);
 	void SetTypeOfShipAndCargo(INT8U val);
 	void SetName(char* name);
 	void SetCallSign(char* name);

@@ -47,7 +47,7 @@ public:
 
 	TArray<AActor*> *include_actor_list;
 	TArray<FVector> include_point_list;
-
+	int inlude_point_list_virtual_amplification_point; //without scans
 	struct {
 		FVector visibility_check_location;
 	}drived_params;

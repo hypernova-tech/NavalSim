@@ -11,6 +11,10 @@ void SClassAPositionReport::SetMessageID(INT8U id)
 {
 	Header.ID.MessageID = (INT8U)id;
 }
+void SClassAPositionReport::SetUserID(INT32U val)
+{
+	UserId = val;
+}
 void SClassAPositionReport::SetTimeStamp(INT8U val)
 {
 	AccRaimTimeStamp.TimeStamp = val;
@@ -68,6 +72,10 @@ void SClassBPositionReport::SetMessageID(INT8U id)
 {
 	Header.ID.MessageID = (INT8U)id;
 }
+void SClassBPositionReport::SetUserID(INT32U val)
+{
+	UserId = val;
+}
 void SClassBPositionReport::SetTimeStamp(INT8U val)
 {
 	AccRaimTimeStamp.TimeStamp = val;
@@ -116,6 +124,10 @@ void SClassBPositionReport::SetTrueHeading(FLOAT64 val_deg)
 void SADISAtonReport::SetMessageID(INT8U id)
 {
 	Header.ID.MessageID = (INT8U)id;
+}
+void SADISAtonReport::SetUserID(INT32U val)
+{
+	UserId = val;
 }
 void SADISAtonReport::SetTimeStamp(INT8U val)
 {
@@ -181,6 +193,11 @@ void SADISAtonReport::SetATONName(char* p_name)
 void SClassBStaticDataReportPartB::SetMessageID(INT8U id)
 {
 	Header.ID.MessageID = (INT8U)id;
+}
+
+void SClassBStaticDataReportPartB::SetUserID(INT32U val)
+{
+	UserId = val;
 }
 
 void SClassBStaticDataReportPartB::SetTypeOfShipAndCargo(INT8U val)
@@ -258,6 +275,11 @@ void SClassBStaticDataReportPartB::SetMotherShipMMSI(INT32U val)
 void SAISClassAStaticVoyageRelatedData::SetMessageID(INT8U id)
 {
 	Header.ID.MessageID = (INT8U)id;
+}
+
+void SAISClassAStaticVoyageRelatedData::SetUserID(INT32U val)
+{
+	UserId = val;
 }
 
 void SAISClassAStaticVoyageRelatedData::SetTypeOfShipAndCargo(INT8U val)
@@ -350,6 +372,11 @@ void SAISClassAStaticVoyageRelatedData::SetDestination(char* name)
 void SClassBStaticDataReportPartA::SetMessageID(INT8U id)
 {
 	Header.ID.MessageID = (INT8U)id;
+}
+
+void SClassBStaticDataReportPartA::SetUserID(INT32U val)
+{
+	UserId = val;
 }
 
 void SClassBStaticDataReportPartA::SetName(char* name)

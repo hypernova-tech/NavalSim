@@ -344,7 +344,8 @@ void inline CUtil::ScanPie(const STraceArgs& args, double azimuth, double elevat
 
         FLOAT32 range_errored_meter = TOW(result.Distance) + error_meter;
         pscan_result->RangeMeter[horizantal_ind][vertical_ind] = range_errored_meter;
-        pscan_result->NormalStrength[horizantal_ind][vertical_ind] = new_dir.Dot(-result.ImpactNormal.GetSafeNormal());
+        FLOAT32 normal_strength = new_dir.Dot(-result.ImpactNormal.GetSafeNormal());
+        pscan_result->NormalStrength[horizantal_ind][vertical_ind] = normal_strength;
         FVector detected_pos_error = result.Location + TOUE(error_meter) * new_dir;
         pscan_result->Point3D[horizantal_ind][vertical_ind] = detected_pos_error;
 
@@ -368,10 +369,10 @@ void inline CUtil::ScanPie(const STraceArgs& args, double azimuth, double elevat
 
 
         if (args.create_scan_line) {
-            p_current_sektor->Add(detected_pos_error, horizantal_ind, object_type);
+            p_current_sektor->Add(detected_pos_error, horizantal_ind, object_type, normal_strength);
         }
         else {
-            p_current_sektor->Add(detected_pos_error, object_type);
+            p_current_sektor->Add(detected_pos_error, object_type, normal_strength);
         }
         int pos_err = 0;
         if (detected_pos_error.Z < 0) {
@@ -383,38 +384,55 @@ void inline CUtil::ScanPie(const STraceArgs& args, double azimuth, double elevat
     }
     else if (is_visiblity && !ret) {
         //DrawDebugLine(p_actor->GetWorld(), start_pos,start_pos + new_dir * result.Distance,FColor::Red,false, 0.2f);
-
-        FLOAT32 range_errored_meter = TOW((start_pos - end).Length()) + error_meter;
-        pscan_result->RangeMeter[horizantal_ind][vertical_ind] = range_errored_meter;
-        pscan_result->NormalStrength[horizantal_ind][vertical_ind] = new_dir.Dot(-result.ImpactNormal.GetSafeNormal());
-        FVector detected_pos_error = end + TOUE(error_meter) * new_dir;
-        pscan_result->Point3D[horizantal_ind][vertical_ind] = detected_pos_error;
-
-
-        pscan_result->AddTrackPoint3DList(detected_pos_error, range_errored_meter);
-        if (draw_points) {
-            CUtil::DebugBox(GWorld, detected_pos_error, TOUE(1), FColor::Red, 2);
+        int cnt = args.inlude_point_list_virtual_amplification_point;
+        if (cnt <= 0) {
+            cnt = 1;
         }
+        FLOAT32 vp_noise = 0;
 
-        auto actor = result.GetActor();
-        auto comp = result.GetComponent();
-        EScanObjectType object_type = EScanObjectType::ScanObjectTypeUnknown;
-       
+        for (int vp = 0; vp < cnt; vp++) {
+            if (vp >  0) {
+                vp_noise = CMath::GetRandomRange(args.is_normal_distribution,
+                    args.measurement_error_mean,
+                    args.measurement_error_std,
+                    args.measurement_error_mean - args.measurement_error_std * 3,
+                    args.measurement_error_mean + args.measurement_error_std * 3);
+            }
+
+            FLOAT32 range_errored_meter = TOW((start_pos - end).Length()) + error_meter + vp_noise;
+            pscan_result->RangeMeter[horizantal_ind][vertical_ind] = range_errored_meter + vp_noise;
+            FLOAT32 normal_strength = CMath::GetRandomRange(0.15, 0.3f); //new_dir.Dot(-result.ImpactNormal.GetSafeNormal());
+            pscan_result->NormalStrength[horizantal_ind][vertical_ind] = normal_strength;
+            FVector detected_pos_error = end + TOUE(error_meter + vp_noise) * new_dir;
+            pscan_result->Point3D[horizantal_ind][vertical_ind] = detected_pos_error;
 
 
-        if (args.create_scan_line) {
-            p_current_sektor->Add(detected_pos_error, horizantal_ind, object_type);
+            pscan_result->AddTrackPoint3DList(detected_pos_error, range_errored_meter + vp_noise);
+            if (draw_points) {
+                CUtil::DebugBox(GWorld, detected_pos_error, TOUE(1), FColor::Red, 2);
+            }
+
+            auto actor = result.GetActor();
+            auto comp = result.GetComponent();
+            EScanObjectType object_type = EScanObjectType::ScanObjectTypeUnknown;
+
+
+
+            if (args.create_scan_line) {
+                p_current_sektor->Add(detected_pos_error, horizantal_ind, object_type, normal_strength);
+            }
+            else {
+                p_current_sektor->Add(detected_pos_error, object_type, normal_strength);
+            }
+            int pos_err = 0;
+            if (detected_pos_error.Z < 0) {
+                pos_err++;
+            }
+
+
+            success_count++;
         }
-        else {
-            p_current_sektor->Add(detected_pos_error, object_type);
-        }
-        int pos_err = 0;
-        if (detected_pos_error.Z < 0) {
-            pos_err++;
-        }
-
-
-        success_count++;
+        
     }
 }
 
@@ -1582,5 +1600,7 @@ FVector CUtil::GetActorSizeInLocalAxes(AActor* Actor)
     }
 
     // Calculate total size in local axes
-    return TotalMax - TotalMin;
+    auto ret = TotalMax - TotalMin;
+    auto scale = Actor->GetActorScale3D();
+    return FVector(ret.X * scale.X, ret.Y * scale.Y, ret.Z * scale.Z);
 }

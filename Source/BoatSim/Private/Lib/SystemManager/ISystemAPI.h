@@ -402,8 +402,11 @@ public:
 	virtual bool SetAisClassType(AActor* p_actor, int class_type) = 0;
 	virtual bool GetAisClassType(AActor* p_actor, int &class_type) = 0;
 
-	virtual bool SetAisPublishDurationSec(AActor* p_actor, double val) = 0;
-	virtual bool GetAisPublishDurationSec(AActor* p_actor, double& val) = 0;
+	virtual bool SetAisPublishDurationSecStationary(AActor* p_actor, double val) = 0;
+	virtual bool GetAisPublishDurationSecStationary(AActor* p_actor, double& val) = 0;
+
+	virtual bool SetAisPublishDurationSecMoving(AActor* p_actor, double val) = 0;
+	virtual bool GetAisPublishDurationSecMoving(AActor* p_actor, double& val) = 0;
 
 	virtual bool SetPublishAton(AActor* p_actor, bool val) = 0;
 	virtual bool GetPublishAton(AActor* p_actor, bool& val) = 0;
@@ -475,5 +478,11 @@ public:
 
 	virtual	bool SetAISTimeOfArrivalSec(AActor* p_actor, double val) = 0;
 	virtual	bool GetAISTimeOfArrivalSec(AActor* p_actor, double& val) = 0;
+
+	virtual	bool SetAISUserID(AActor* p_actor, int val) = 0;
+	virtual	bool GetAISUserID(AActor* p_actor, int& val) = 0;
+
+	virtual	bool SetAISShipOrCargoType(AActor* p_actor, int val) = 0;
+	virtual	bool GetAISShipOrCargoType(AActor* p_actor, int& val) = 0;
 
 };
