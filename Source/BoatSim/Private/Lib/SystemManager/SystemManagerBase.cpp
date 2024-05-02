@@ -265,6 +265,18 @@ void ASystemManagerBase::QueryActors(EActorQueryArgs args, TArray<AActor*>& acto
 		}
 
 	}
+	 else if (args == EActorQueryArgs::AISPublishers) {
+		 for (auto pactor : ActorList) {
+			 auto* p_act = ToAISPublisher(pactor);
+			 if (p_act) {				 
+				actors.Add(p_act);
+				 
+			 }
+
+		 }
+
+	}
+
 
 	
 	
@@ -293,7 +305,14 @@ AActorAsPlatform* ASystemManagerBase::ToActorAsPlatform(AActor* p_actor)
 
 	return nullptr;
 }
+AAISPublisher* ASystemManagerBase::ToAISPublisher(AActor* p_actor)
+{
+	if (p_actor->IsA<AAISPublisher>()) {
+		return (AAISPublisher*)p_actor;
+	}
 
+	return nullptr;
+}
 
 
 bool ASystemManagerBase::SetActorEnabled(AActor* p_actor, bool val)
@@ -1476,6 +1495,27 @@ bool ASystemManagerBase::GetSlotIndex(AActor* p_actor, INT32S& slot_index)
 	auto p_obj = ToSensorBase(p_actor);
 	if (p_obj) {
 		slot_index = p_obj->SensorSlotIndex;
+		return true;
+	}
+	return false;
+}
+
+
+bool ASystemManagerBase::SetSensorFrequency(AActor* p_actor, FLOAT64 freq)
+{
+	auto p_obj = ToSensorBase(p_actor);
+	if (p_obj) {
+		p_obj->Frequency = freq;
+		return true;
+	}
+	return false;
+}
+
+bool ASystemManagerBase::GetSensorFrequency(AActor* p_actor, FLOAT64& freq)
+{
+	auto p_obj = ToSensorBase(p_actor);
+	if (p_obj) {
+		freq = p_obj->Frequency;
 		return true;
 	}
 	return false;

@@ -41,6 +41,7 @@ FString CCLICommandManager::FullPath = "fullpath";
 FString CCLICommandManager::Tick = "tick";
 FString CCLICommandManager::Controller = "controller";
 FString CCLICommandManager::SensorSlotIndex = "slotindex";
+FString CCLICommandManager::SensorFrequency = "sensorfreq";
 FString CCLICommandManager::Beam = "beam";
 FString CCLICommandManager::RangeMin = "rangemin";
 FString CCLICommandManager::RangeMax = "rangemax";

@@ -128,7 +128,7 @@ void ALidarBase::Run(float delta_time_sec)
 		OnScanCompleted(pScanResult);
 		Visualize(pScanResult, GetActorLocation(), forward, right, RangeMaxMeter);
 
-		NextScanTime = FApp::GetCurrentTime() + 0.2;
+		NextScanTime = FApp::GetCurrentTime() + 1.0/Frequency;
 
 		IsFullScaned = true;
 

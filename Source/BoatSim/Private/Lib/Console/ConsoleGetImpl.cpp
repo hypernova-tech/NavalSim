@@ -433,6 +433,18 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
 
     }
 
+    ret = CommandManager.HasA(CCLICommandManager::SensorFrequency);
+    if (ret) {
+
+        if (pSystemAPI->GetSensorFrequency(p_actor, dbl)) {
+            SendConsoleResponse(name, CCLICommandManager::SensorFrequency, dbl);
+            return true;
+        }
+    }
+    else {
+
+    }
+
     ret = CommandManager.HasA(CCLICommandManager::CamWidthPx);
     if (ret) {
 

@@ -86,6 +86,7 @@ public:
 	static FString RelRotation;
 	static FString Scale;
 	static FString Parent;
+	static FString SensorFrequency;
 	static FString FullPath;
 	static FString SharedMemName;
 	static FString GStreamerIP;

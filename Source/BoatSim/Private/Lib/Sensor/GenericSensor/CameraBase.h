@@ -45,6 +45,8 @@ public:
 	UPROPERTY(EditAnywhere)
 		int  ContrastLevel = 50;// 0-100
 
+	FLOAT64 LastCaptureTimeSec;
+
 protected:
 	virtual void BeginPlay() override;
 	virtual void InitSensor() override;

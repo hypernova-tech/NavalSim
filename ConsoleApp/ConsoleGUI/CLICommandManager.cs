@@ -50,6 +50,7 @@ public static class CLICommandManager
     [Modifiable] public const string Parent = "parent";
      public const string FullPath = "fullpath";
     public const string Controller = "controller";
+    [Modifiable] public const string SensorFrequency = "sensorfreq";
     [Modifiable] public const string SensorSlotIndex = "slotindex";
     [Modifiable] public const string Beam = "beam";
     [Modifiable] public const string RangeMin = "rangemin";

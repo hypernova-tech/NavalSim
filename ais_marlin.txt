@@ -108,6 +108,28 @@ set --name annotation --gstreamerip
 set --name annotation --gstreamerport 0
 set --name annotation --motionlogen 0
 
+create --name aispub --bp AISPUB --tick 0
+set --name aispub --actorid 0
+set --name aispub --instance -1
+set --name aispub --suppressed 0
+set --name aispub --standalone 0
+set --name aispub --position "0.000000 0.000000 0.000000"
+set --name aispub --rotation "-0.000000 -0.000000 0.000000"
+set --name aispub --scale "1.000000 1.000000 1.000000"
+set --name aispub --blocking 1
+set --name aispub --tempkelvin 300.000000
+set --name aispub --heatsource 0
+set --name aispub --annotationid 0
+set --name aispub --annotatechildren 0
+set --name aispub --annotatechildren 0
+set --name aispub --ipaddr1 127.0.0.2
+set --name aispub --localport1 51000
+set --name aispub --remoteport 51001
+set --name aispub --sharedmemname 
+set --name aispub --gstreamerip 
+set --name aispub --gstreamerport 0
+set --name aispub --motionlogen 0
+
 create --name ais1 --bp AIS --tick 0
 set --name ais1 --parent marlin
 set --name ais1 --actorid 0
@@ -123,9 +145,6 @@ set --name ais1 --heatsource 0
 set --name ais1 --annotationid 0
 set --name ais1 --annotatechildren 0
 set --name ais1 --annotatechildren 0
-set --name ais1 --ipaddr1 15.0.110.35
-set --name ais1 --localport1 51000
-set --name ais1 --remoteport 51001
 set --name ais1 --sharedmemname 
 set --name ais1 --gstreamerip 
 set --name ais1 --gstreamerport 0
@@ -161,5 +180,5 @@ set --name ais1 --aisdateofarrival "2024.000000 4.000000 4.000000"
 set --name ais1 --aistimeofarrival 695.000000
 
 set --camfollow marlin
-set --camfollowtrans "-1854.094329 206.010481 721.036684"
-set --camfolloweuler "-0.000000 -21.132033 -6.340192"
+set --camfollowtrans "-1854.094360 206.010483 721.036682"
+set --camfolloweuler "-0.000000 -21.132032 -6.340192"

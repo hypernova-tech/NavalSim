@@ -25,6 +25,7 @@
 #include <Lib/Annotation/AnnotationManager.h>
 #include <Lib/Thermal/ThermalMaterialManager.h>
 #include <Lib/ActorBase/ActorAsPlatform.h>
+#include <Lib/Sensor/AISPublisher/AISPublisher.h>
 #include "SystemManagerBase.generated.h"
 
 
@@ -267,6 +268,7 @@ public:
 	AAISBase* ToAIS(AActor* p_actor);
 	AAgent* ToAgent(AActor* p_actor);
 	AActorAsPlatform* ToActorAsPlatform(AActor* p_actor);
+	AAISPublisher* ToAISPublisher(AActor* p_actor);
 	AThermalMaterialManager* ToThermalMaterialManager(AActor* p_actor);
 	template <typename T>
 	T* To(AActor* p_actor);
@@ -343,6 +345,9 @@ public:
 
 	virtual bool SetSlotIndex(AActor* p_actor, INT32S slot_index);
 	virtual bool GetSlotIndex(AActor* p_actor, INT32S& slot_index);
+
+	virtual bool SetSensorFrequency(AActor* p_actor, FLOAT64 freq);
+	virtual bool GetSensorFrequency(AActor* p_actor, FLOAT64& freq);
 
 	virtual bool SetIsBlockingObject(AActor* p_actor, bool val);
 	virtual bool GetIsBlockingObject(AActor* p_actor, bool& val);

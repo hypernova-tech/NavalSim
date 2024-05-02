@@ -6,6 +6,8 @@
 #include <Lib/Math/CMath.h>
 #include <Lib/Utils/CUtil.h>
 
+
+
 void AAISBase::BeginPlay()
 {
 	Super::BeginPlay();
@@ -17,8 +19,16 @@ void AAISBase::BeginPlay()
 void AAISBase::InitSensor()
 {
 	Super::InitSensor();
-	
 	TArray<AActor*> actors;
+	ASystemManagerBase::GetInstance()->QueryActors(EActorQueryArgs::AISPublishers, actors);
+
+	if (actors.Num() > 0) {
+		pAISPublisher = (AActorBase*)actors[0];
+	}
+	else {
+		pAISPublisher = nullptr;
+	}
+	
 
 	//ASystemManagerBase::GetInstance()->QueryActors(EActorQueryArgs::AISEnabledActors, actors);
 	auto owner = CUtil::GetParentActor(this);
@@ -123,6 +133,15 @@ void AAISBase::ProcessEntries()
 
 }
 
+void AAISBase::SendMessageViaAISPusblisher(void* p_data, INT32S data_size)
+{
+	if (pAISPublisher != nullptr) {
+		AAISPublisher* p_pub = (AAISPublisher*)pAISPublisher;
+		p_pub->SendAISData(p_data, data_size);
+	}	
+
+}
+
 double AAISBase::GetCourseOverGround(AActor* Actor)
 {
 	FVector Velocity = Actor->GetVelocity();
@@ -174,8 +193,8 @@ void AAISBase::PublishClassAPositionReport(AActorBase* p_act)
 	*/
 
 
-
-	pCommIF->SendData(&report, sizeof(SClassAPositionReport));
+	
+	SendMessageViaAISPusblisher(&report, sizeof(SClassAPositionReport));
 
 }
 void AAISBase::PublishClassBPositionReport(AActorBase* p_act)
@@ -196,7 +215,7 @@ void AAISBase::PublishClassBPositionReport(AActorBase* p_act)
 	report.SetSpeedOverGround(vel.Length());
 	report.SetCourseOverGround(GetCourseOverGround(p_act));
 	report.SetTrueHeading(rpy_ang.Z);
-	pCommIF->SendData(&report, sizeof(SClassBPositionReport));
+	SendMessageViaAISPusblisher(&report, sizeof(SClassBPositionReport));
 
 }
 /// <summary>
@@ -219,7 +238,7 @@ void AAISBase::PublishATONReport(AActorBase* p_act)
 	report.SetLon(pos.Y);
 	report.SetPositionAccuracy(false);
 	report.SetElectronicFixingPositionDeviceType(EAISPositionFixingDeviceType::CombinedGPSGLONASS);
-	pCommIF->SendData(&report, sizeof(SADISAtonReport));
+	SendMessageViaAISPusblisher(&report, sizeof(SADISAtonReport));
 }
 
 void AAISBase::PublishClassBStaticDataReportPartB(AActorBase* p_act)
@@ -252,7 +271,7 @@ void AAISBase::PublishClassBStaticDataReportPartB(AActorBase* p_act)
 	report.SetReferencePointPositionAftOfBow(ReferencePointPositionAftOfBow);
 	report.SetMotherShipMMSI(AISMMSI);
 
-	pCommIF->SendData(&report, sizeof(SClassBStaticDataReportPartB));
+	SendMessageViaAISPusblisher(&report, sizeof(SClassBStaticDataReportPartB));
 }
 
 
@@ -271,7 +290,7 @@ void AAISBase::PublishClassBStaticDataReportPartA(AActorBase* p_act)
 	report.SetName(temp);
 	
 
-	pCommIF->SendData(&report, sizeof(SClassBStaticDataReportPartA));
+	SendMessageViaAISPusblisher(&report, sizeof(SClassBStaticDataReportPartA));
 }
 
 void AAISBase::PublishAISClassAStaticVoyageRelatedData(AActorBase* p_act)
@@ -314,7 +333,7 @@ void AAISBase::PublishAISClassAStaticVoyageRelatedData(AActorBase* p_act)
 	double draft = 0 - lowest_pt;
 	report.SetDraft(TOW(draft)); //todo fixme
 
-	pCommIF->SendData(&report, sizeof(SAISClassAStaticVoyageRelatedData));
+	SendMessageViaAISPusblisher(&report, sizeof(SAISClassAStaticVoyageRelatedData));
 }
 
 

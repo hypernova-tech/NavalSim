@@ -129,7 +129,7 @@ void AFLS3D::Run(float delta_time_sec)
 
 		OnDataReady();
 
-		NextScanTime = FApp::GetCurrentTime() + 1;
+		NextScanTime = FApp::GetCurrentTime() + 1.0/Frequency;
 
 		IsFullScaned = true;
 

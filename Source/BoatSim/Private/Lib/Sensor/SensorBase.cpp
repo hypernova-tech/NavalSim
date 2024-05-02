@@ -285,6 +285,9 @@ void ASensorBase::Save(ISaveLoader* p_save_loader)
 	Super::Save(p_save_loader);
 	FString line;
 	
+	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
+	p_save_loader->AppendOption(line, CCLICommandManager::SensorFrequency, Frequency);
+	p_save_loader->AddLine(line);
 	
 	line = p_save_loader->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
 	p_save_loader->AppendOption(line, CCLICommandManager::SensorSlotIndex, SensorSlotIndex);
@@ -355,6 +358,7 @@ void ASensorBase::SaveJSON(CJsonDataContainer& data)
 {
 	Super::SaveJSON(data);
 	data.Add(CCLICommandManager::Beam, ShowBeam);
+	data.Add(CCLICommandManager::SensorFrequency, Frequency);
 	data.Add(CCLICommandManager::SensorSlotIndex, SensorSlotIndex);
 	data.Add(CCLICommandManager::VericalFov, FovVerticalDeg);
 	data.Add(CCLICommandManager::HorizontalFov, FovHorizontalDeg);

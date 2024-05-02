@@ -341,7 +341,7 @@ void ARadarBase::Scan()
 			CurrentScanAzimuth = end_azimuth;
 			
 		}
-		NextScanTime = FApp::GetCurrentTime() + 0.95 / ScanResultContainer.GetSectorCount();
+		NextScanTime = FApp::GetCurrentTime() + (/*0.95*/ 1.0/Frequency) / ScanResultContainer.GetSectorCount();
 		if (CurrentScanAzimuth >= 360) {
 			
 			IsFullScaned = true;

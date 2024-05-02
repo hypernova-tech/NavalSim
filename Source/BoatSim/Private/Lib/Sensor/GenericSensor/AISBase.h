@@ -83,6 +83,8 @@ protected:
 	double GetCurrentPusblishPeriod();
 	bool IsStationary = true;
 	bool IsMotionModeChanged = false;
+	AActorBase* pAISPublisher;
+	virtual void SendMessageViaAISPusblisher(void* p_data, INT32S data_size);
 
 public:
 	virtual void BeginPlay() override;

@@ -495,6 +495,16 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
 
     }
 
+    ret = CommandManager.GetValue(CCLICommandManager::SensorFrequency, dbl);
+    if (ret) {
+        if (pSystemAPI->SetSensorFrequency(p_actor, dbl)) {
+            one_success = true;
+        }
+    }
+    else {
+
+    }
+
     ret = CommandManager.GetValue(CCLICommandManager::CamWidthPx, sint);
     if (ret) {
         if (pSystemAPI->SetCamWidthPx(p_actor, sint)) {

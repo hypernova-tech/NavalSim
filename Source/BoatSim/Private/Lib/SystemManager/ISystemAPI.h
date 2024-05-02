@@ -25,6 +25,7 @@ enum EActorQueryArgs
 	AIS,
 	AISEnabledActors,
 	ActorAsPlatform,
+	AISPublishers
 };
 
 
@@ -155,6 +156,8 @@ public:
 	virtual bool GetActorId(AActor* p_actor, INT32S& slot_index) = 0;
 	virtual bool SetSlotIndex(AActor* p_actor, INT32S slot_index) = 0;
 	virtual bool GetSlotIndex(AActor* p_actor, INT32S &slot_index) = 0;
+	virtual bool SetSensorFrequency(AActor* p_actor, FLOAT64 freq) = 0;
+	virtual bool GetSensorFrequency(AActor* p_actor, FLOAT64& freq) = 0;
     virtual bool SetHorizontalFov(AActor* p_actor, FLOAT64 angle_deg) = 0;
 	virtual bool GetHorizontalFov(AActor* p_actor, FLOAT64 &angle_deg) = 0;
 	virtual bool SetRangeMinMeter(AActor* p_actor, FLOAT64 val) = 0;

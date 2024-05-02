@@ -26,13 +26,13 @@ void ACameraBase::InitSensor()
 	//bool ret;
 	//if (ASystemManagerBase::GetInstance()->GetAnnotationModeEnabled(ret)) {
 	//	if (ret) {
-			pSceneCapture->bAlwaysPersistRenderingState = true;
-			pSceneCapture->CaptureSource = ESceneCaptureSource::SCS_FinalColorLDR;
-			pSceneCapturer->SetRenderTarget(pPointVisualizer->pRenderTarget);
-			pSceneCapturer->pMaster = this;
+	pSceneCapture->bAlwaysPersistRenderingState = true;
+	pSceneCapture->CaptureSource = ESceneCaptureSource::SCS_FinalColorLDR;
+	pSceneCapturer->SetRenderTarget(pPointVisualizer->pRenderTarget);
+	pSceneCapturer->pMaster = this;
 
 	//	}
-		
+
 	//}
 
 }
@@ -51,15 +51,19 @@ void ACameraBase::Run(float delta_time_sec)
 	Super::Run(delta_time_sec);
 	auto pSys = ASystemManagerBase::GetInstance();
 	if (pSys->GetIsSimulationMode()) {
-	
-		if(pSys->GetAnnotationModeEnabled()){
-			
+
+		if (pSys->GetAnnotationModeEnabled()) {
+
 			CaptureScreen();
-			
+
 		}
 		else {
-			pSceneCapturer->Capture();
-			OnCaptured();
+			if ((FApp::GetCurrentTime() - LastCaptureTimeSec) >= 1.0 / Frequency){
+				pSceneCapturer->Capture();
+				OnCaptured();
+				LastCaptureTimeSec = FApp::GetCurrentTime();
+			}
+		
 		}
 	}
 

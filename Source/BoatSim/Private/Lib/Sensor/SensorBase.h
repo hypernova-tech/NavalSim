@@ -75,7 +75,7 @@ public:
 		bool ShowBeam = false;
 
 	UPROPERTY(EditAnywhere)
-		double Frequency;
+		double Frequency = 1.0;
 
 	UPROPERTY(EditAnywhere) 
 		double  RangeMinMeter = 5;
