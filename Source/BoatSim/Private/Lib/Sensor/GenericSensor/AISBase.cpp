@@ -29,6 +29,7 @@ void AAISBase::InitSensor()
 		pAISPublisher = nullptr;
 	}
 	
+	actors.Reset();
 
 	//ASystemManagerBase::GetInstance()->QueryActors(EActorQueryArgs::AISEnabledActors, actors);
 	auto owner = CUtil::GetParentActor(this);
