@@ -233,7 +233,7 @@ void AMartiEOSuite::HandleLosCommand(SMartiLosCommandPayload* p_cmd)
 	}
 	else if (is_slave_rate) {
 		pGimbal->SetGimbalControlMode(EGimbalControlMode::OnlyRate);
-		rpy_rate = RateOverride;
+		//rpy_rate = RateOverride;
 		
 	}
 	else if (is_slave_position) {

@@ -16,6 +16,7 @@ void ACameraBase::InitSensor()
 	pSceneCapture = GetComponentByClass<USceneCaptureComponent2D>();
 
 	UTextureRenderTarget2D* p_render_target = pPointVisualizer->CreateRenderTarget(SensorWidth, SensorHeight, ASystemManagerBase::GetInstance()->GetUIController()->GetSensorSlotImage(SensorSlotIndex));
+
 	pSceneCapture->TextureTarget = p_render_target;
 	pSceneCapture->FOVAngle = FovHorizontalDeg;
 	FieldOfViewDeg = pSceneCapture->FOVAngle;
@@ -26,6 +27,8 @@ void ACameraBase::InitSensor()
 	//bool ret;
 	//if (ASystemManagerBase::GetInstance()->GetAnnotationModeEnabled(ret)) {
 	//	if (ret) {
+
+	pSceneCapture->TextureTarget->TargetGamma = SceneCaptureTextureTargetGamma;
 	pSceneCapture->bAlwaysPersistRenderingState = true;
 	pSceneCapture->CaptureSource = ESceneCaptureSource::SCS_FinalColorLDR;
 	pSceneCapturer->SetRenderTarget(pPointVisualizer->pRenderTarget);

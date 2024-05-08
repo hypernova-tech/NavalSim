@@ -1,4 +1,4 @@
-#include "GStreamSender.h"
+﻿#include "GStreamSender.h"
 #include <iostream>
 #include "CMath.h"
 #include <gst/gst.h>
@@ -347,6 +347,75 @@ void GStreamSender::OnReceivedFrame(SSharedMemBufferHdr *p_hdr, const std::uint8
 }
 
 
+
+inline void RGBToYuv(int R, int G, int B, int& Y, int& U, int& V)
+{
+
+
+
+    Y = (0.257 * R) + (0.504 * G) + (0.098 * B) + 16;
+    V = (0.439 * R) - (0.368 * G) - (0.071 * B) + 128;
+    U = -(0.148 * R) - (0.291 * G) + (0.439 * B) + 128;
+
+
+
+   // Y = static_cast<int>(std::round((0.299 * R + 0.587 * G + 0.114 * B)));
+  //  U = static_cast<int>(std::round( - 0.168736 * R - 0.331264 * G + 0.5 * B + 128));
+   // V = static_cast<int>(std::round(0.5 * R -0.418688 * G - 0.081312 * B + 128));
+
+
+  
+}
+
+void rgbToYCbCr422(uint8_t* rgba, uint8_t* yCbCrData, int width, int height) {
+    for (int y = 0; y < height; ++y) {
+        for (int x = 0; x < width; x += 2) {
+            int idx = (y * width + x) * 4;
+
+            // Process the first pixel
+            int R1 = rgba[idx];
+            int G1 = rgba[idx + 1];
+            int B1 = rgba[idx + 2];
+
+            int Y1;
+            int U1;
+            int V1;
+
+            RGBToYuv(R1, G1, B1, Y1, U1, V1);
+
+            // Move to the next pixel in the RGBA buffer
+            idx += 4;
+            int R2 = rgba[idx];
+            int G2 = rgba[idx + 1];
+            int B2 = rgba[idx + 2];
+
+            int Y2 ;
+            int U2 ;
+            int V2 ;
+
+ 
+            RGBToYuv(R2, G2, B2, Y2, U2, V2);
+
+            // Averaging U and V values of the two pixels
+            int U = (U1 + U2) / 2;
+            int V = (V1 + V2) / 2;
+
+            // Clamping the Y, U, and V values to 0-255
+            Y1 = CMath::Clamp(Y1, 0, 255);
+            U = CMath::Clamp(U, 0, 255);
+            Y2 = CMath::Clamp(Y2, 0, 255);
+            V = CMath::Clamp(V, 0, 255);
+
+            int j = (y * width + x) * 2;
+
+            yCbCrData[j] = static_cast<uint8_t>(Y1);
+            yCbCrData[j + 1] = static_cast<uint8_t>(V);
+            yCbCrData[j + 2] = static_cast<uint8_t>(Y2);
+            yCbCrData[j + 3] = static_cast<uint8_t>(U);
+        }
+    }
+}
+
 uint8_t* GStreamSender::ConvertRGBAtoYCbCr(SSharedMemBufferHdr *p_hdr,  std::uint8_t* p_buffer, size_t width, size_t height)
 {
     uint8_t* yCbCrData = (uint8_t*)pOutputBuffer;
@@ -459,16 +528,24 @@ uint8_t* GStreamSender::ConvertRGBAtoYCbCr(SSharedMemBufferHdr *p_hdr,  std::uin
 
     std::uint8_t* rgba = (std::uint8_t *)p_buffer;
 
+#if 0
     for (int y = 0; y < height; ++y) {
         for (int x = 0; x < width; x += 2) {
             int idx = (y * width + x) * 4;
 
+            /*matlab
+                Y = 0.257R´ + 0.504G´ + 0.098B´ + 16 -->Y
+
+                Cb = -0.148R´ - 0.291G´ + 0.439B´ + 128 --> U
+
+                Cr = 0.439R´ - 0.368G´ - 0.071B´ + 128  -->V
+            */
             // Process the first pixel
             int R1 = rgba[idx];
             int G1 = rgba[idx + 1];
             int B1 = rgba[idx + 2];
-            int Y1 = (299 * R1 + 587 * G1 + 114 * B1) / 1000;
-            int U1 = (-169 * R1 - 331 * G1 + 500 * B1) / 1000 + 128;
+            int Y1 = (299 * R1 + 587 * G1 + 114 * B1) / 1000.0; //Y
+            int U1 = (-169 * R1 - 331 * G1 + 500 * B1) / 1000.0 + 128; //Cb
 
 
             // Process the second pixel
@@ -476,12 +553,12 @@ uint8_t* GStreamSender::ConvertRGBAtoYCbCr(SSharedMemBufferHdr *p_hdr,  std::uin
             int R2 = rgba[idx];
             int G2 = rgba[idx + 1];
             int B2 = rgba[idx + 2];
-            int Y2 = (299 * R2 + 587 * G2 + 114 * B2) / 1000;
-            int V1 = (500 * R1 - 419 * G1 - 81 * B1) / 1000 + 128;
+            int Y2 = (299 * R2 + 587 * G2 + 114 * B2) / 1000.0;
+            int V1 = (500 * R1 - 419 * G1 - 81 * B1) / 1000.0 + 128; //cr
 
             // Averaging U and V values of the two pixels
-            int U = (U1 + (-169 * R2 - 331 * G2 + 500 * B2) / 1000 + 128) / 2;
-            int V = (V1 + (500 * R2 - 419 * G2 - 81 * B2) / 1000 + 128) / 2;
+            int U = (U1 + (-169 * R2 - 331 * G2 + 500 * B2) / 1000.0 + 128) / 2;
+            int V = (V1 + (500 * R2 - 419 * G2 - 81 * B2) / 1000.0 + 128) / 2;
 
             // Clamping the Y, U, and V values to 0-255
             Y1 = CMath::Clamp(Y1, 0, 255);
@@ -499,6 +576,10 @@ uint8_t* GStreamSender::ConvertRGBAtoYCbCr(SSharedMemBufferHdr *p_hdr,  std::uin
         
         }
     }
+#endif
+
+    
+    rgbToYCbCr422(rgba, yCbCrData, width, height);
    
     return pOutputBuffer;
 }

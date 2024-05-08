@@ -12,6 +12,7 @@ void AMartiCamera::BeginPlay()
 void AMartiCamera::OnCaptured()
 {
 	Super::OnCaptured();
+	
 	pSceneCapturer->ReadPixels(); //OnCaptureReady is called after read complete
 }
 

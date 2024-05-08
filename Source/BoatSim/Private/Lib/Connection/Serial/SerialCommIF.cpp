@@ -2,11 +2,16 @@
 
 
 #include "Lib/Connection/Serial/SerialCommIF.h"
+#define EN_WIN 0
+
+#if EN_WIN > 0
 #include "Windows.h"
+#endif
 void USerialCommIF::BeginPlay()
 {
-	Super::BeginPlay();
 
+	Super::BeginPlay();
+#if EN_WIN > 0
 	//RegisterConnectionInfo(0, pUDPConnection->GetConnectionInfo(), pUDPConnection);
 
     hSerialHandle = CreateFile(L"COM3",
@@ -42,6 +47,8 @@ void USerialCommIF::BeginPlay()
         CloseHandle(hSerialHandle);
         return;
     }
+
+#endif
 }
 #pragma pack(push, 1)
 struct SCanControllerPacket
@@ -89,6 +96,7 @@ public:
 
 bool USerialCommIF::SendData(const INT8U* p_bytes, INT32U count)
 {
+#if EN_WIN > 0
     DWORD bytesSent = 0;
     char data[] = { '1','2','3' ,'4' ,'5' ,'6' ,'7' ,'8' };
     SCanControllerPacket pack;
@@ -101,6 +109,8 @@ bool USerialCommIF::SendData(const INT8U* p_bytes, INT32U count)
         //CloseHandle(hSerialHandle);
         return false;
     }
+
+#endif
 
     return true;
 }

@@ -45,6 +45,10 @@ public:
 	UPROPERTY(EditAnywhere)
 		int  ContrastLevel = 50;// 0-100
 
+	UPROPERTY(EditAnywhere)
+		float  SceneCaptureTextureTargetGamma = 1.6; // very import when capture scene
+	
+
 	FLOAT64 LastCaptureTimeSec;
 
 protected:
