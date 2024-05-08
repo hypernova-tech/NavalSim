@@ -6,7 +6,7 @@
 void UIDASAISSCommIF::BeginPlay()
 {
 
-	RegisterConnectionInfo(0, pUDPConnection->GetConnectionInfo(), pUDPConnection);
+	RegisterConnectionInfo(0, pConnection->GetConnectionInfo(), pConnection);
 	Super::BeginPlay();
 
 }
@@ -28,6 +28,6 @@ void UIDASAISSCommIF::Stop()
 
 void UIDASAISSCommIF::SendData(void* p_data, uint32 size_in_bytes)
 {
-	pUDPConnection->SendData((const INT8U * )p_data, size_in_bytes);
+	pConnection->SendData((const INT8U * )p_data, size_in_bytes);
 }
 

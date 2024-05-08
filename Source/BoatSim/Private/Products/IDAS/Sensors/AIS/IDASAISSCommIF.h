@@ -18,7 +18,7 @@ protected:
 
 	virtual void BeginPlay() override;
 	UPROPERTY(BlueprintReadWrite)
-		UUdpConnection* pUDPConnection;
+		UConnectionBase* pConnection;
 	bool IsStoped = false;
 	virtual void OnReceivedConnectionData(void* connection, INT8U* p_data, INT32U count) override;
 

@@ -12,6 +12,7 @@
 #include "Lib/Clutter/ClutterDefs.h"
 #include <Lib/ScreenDepth/SceneCapturer.h>
 #include <Lib/Utils/CUtil.h>
+//#include "PointCloudComponent.h"
 #include "SensorBase.generated.h"
 
 
@@ -75,6 +76,9 @@ public:
 		bool ShowBeam = false;
 
 	UPROPERTY(EditAnywhere)
+		bool ShowPointCloud = false;
+
+	UPROPERTY(EditAnywhere)
 		double Frequency = 1.0;
 
 	UPROPERTY(EditAnywhere) 
@@ -134,6 +138,7 @@ public:
 
 protected:
 	// Called when the game starts or when spawned
+	//UPointCloudComponent* pPointCloud;
 	virtual void BeginPlay() override;
 
 	
@@ -193,5 +198,8 @@ public:
 
 	virtual void Save(ISaveLoader *p_save_loader) override;
 	virtual void SaveJSON(CJsonDataContainer& data) override;
+
+
+	void ShowPointCloudData(const TArray<FVector>& cloud);
 
 };

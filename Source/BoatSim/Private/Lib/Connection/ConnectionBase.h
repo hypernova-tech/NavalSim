@@ -35,6 +35,7 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	virtual void InitConnection(void *args = nullptr);
+	virtual SConnectionInfo GetConnectionInfo();
 	void AddConnectionDataReceiver(IConnectionDataReceiver* p_rcv);
 	bool GetIsRunning();
 	virtual void OnModifiedConnection(SConnectionInfo info);

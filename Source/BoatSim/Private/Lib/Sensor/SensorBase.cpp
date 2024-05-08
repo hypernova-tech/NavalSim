@@ -135,6 +135,8 @@ void ASensorBase::BeginPlay()
 
 	}
 
+	//pPointCloud = CreateDefaultSubobject<UPointCloudComponent>(TEXT("PointCloudComponent"));
+
 	
 }
 
@@ -375,5 +377,12 @@ void ASensorBase::SaveJSON(CJsonDataContainer& data)
 	data.Add(CCLICommandManager::RangeMin, RangeMinMeter);
 	data.Add(CCLICommandManager::RangeMax, RangeMaxMeter);
 
+	
+}
+
+void ASensorBase::ShowPointCloudData(const TArray<FVector>& cloud)
+{
+	
+	//pPointCloud->SetPointCloud(cloud);
 	
 }

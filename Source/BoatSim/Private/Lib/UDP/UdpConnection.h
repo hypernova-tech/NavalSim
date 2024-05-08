@@ -119,7 +119,7 @@ public:
 
 	
 	virtual void InitConnection(void* args = nullptr) override;
-	SConnectionInfo GetConnectionInfo();
+	virtual SConnectionInfo GetConnectionInfo() override;
 
 
 };

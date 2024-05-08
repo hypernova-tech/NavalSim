@@ -37,6 +37,11 @@ void UConnectionBase::InitConnection(void* args)
 	IsRunning = true;
 }
 
+SConnectionInfo UConnectionBase::GetConnectionInfo()
+{
+	return SConnectionInfo();
+}
+
 void UConnectionBase::AddConnectionDataReceiver(IConnectionDataReceiver* p_rcv)
 {
 	ConnectionDataReceivers.Add(p_rcv);

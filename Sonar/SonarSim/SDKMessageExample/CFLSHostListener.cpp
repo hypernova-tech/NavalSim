@@ -72,7 +72,8 @@ bool ProtoMessageToZeromqMessage__(
     return true;
 }
 auto ContextOne = zmq::context_t(1);
-void CFLSHostListener::ZeroMQProtoServer() {
+void CFLSHostListener::ZeroMQProtoServer() 
+{
     std::string port;
     vector< string> ports = {"60503", "60502","60504", "60501","60505" };
 
@@ -83,12 +84,21 @@ void CFLSHostListener::ZeroMQProtoServer() {
     
     for (int i = 0; i < ports.size(); i++) {
         port = ports.at(i);
+
         
         zmq::socket_t* p_soc = new zmq::socket_t(ContextOne, ZMQ_REP);
+        //p_soc->set(zmq::sockopt::ZMQ_REQ_CORRELATE);
+        //p_soc->setsockopt(ZMQ_REQ_RELAXED, 1);
         p_soc->bind("tcp://*:" + port);
+        //p_soc->set(zmq::sockopt::req_correlate, "1");
+        //p_soc->set(zmq::sockopt::req_relaxed, "1");
+        
         sockets.push_back(p_soc);
         
     }
+
+    auto send_flg = zmq::send_flags::none;
+    //auto send_flg = zmq::send_flags::dontwait;
 
     while (true) {
 
@@ -105,6 +115,7 @@ void CFLSHostListener::ZeroMQProtoServer() {
                 if (CFlsIF::FovPort == port) {
                     // Deserialize request from message
                     proto::nav_api::SetFieldOfViewRequest request;
+                    
                     auto ret = ZeromqMessageToProtoMessage(request_msg, &request);
                     if (!ret) {
                         std::cerr << "Failed to parse SetFieldOfViewRequest." << std::endl;
@@ -139,7 +150,7 @@ void CFLSHostListener::ZeroMQProtoServer() {
                     zmq::message_t res_msg;
                     // Populate response based on the request
                     ProtoMessageToZeromqMessage__(response, &res_msg);
-                    p_socket->send(res_msg, zmq::send_flags::none);
+                    p_socket->send(res_msg, send_flg);
                 }
                 else if (CFlsIF::BottomDetectionPort == port) {
                     proto::nav_api::SetBottomDetectionRequest request;
@@ -158,7 +169,7 @@ void CFLSHostListener::ZeroMQProtoServer() {
                     zmq::message_t res_msg;
                     // Populate response based on the request
                     ProtoMessageToZeromqMessage__(response, &res_msg);
-                    p_socket->send(res_msg, zmq::send_flags::none);
+                    p_socket->send(res_msg, send_flg);
                 }
                 else if (CFlsIF::GetProcessingSettingPort == port) {
                     
@@ -201,7 +212,7 @@ void CFLSHostListener::ZeroMQProtoServer() {
                     zmq::message_t res_msg;
                     // Populate response based on the request
                     ProtoMessageToZeromqMessage__(response, &res_msg);
-                    p_socket->send(res_msg, zmq::send_flags::none);
+                    p_socket->send(res_msg, send_flg);
                 }
                 else if (CFlsIF::SquelchPort == port) {
                     proto::nav_api::SetInWaterSquelchRequest request;
@@ -220,7 +231,7 @@ void CFLSHostListener::ZeroMQProtoServer() {
                     zmq::message_t res_msg;
                     // Populate response based on the request
                     ProtoMessageToZeromqMessage__(response, &res_msg);
-                    p_socket->send(res_msg, zmq::send_flags::none);
+                    p_socket->send(res_msg, send_flg);
                 }
                 else if (CFlsIF::AutoSquelchPort == port) {
                     proto::nav_api::SetSquelchlessInWaterDetectorRequest request;
@@ -239,7 +250,7 @@ void CFLSHostListener::ZeroMQProtoServer() {
                     zmq::message_t res_msg;
                     // Populate response based on the request
                     ProtoMessageToZeromqMessage__(response, &res_msg);
-                    p_socket->send(res_msg, zmq::send_flags::none);
+                    p_socket->send(res_msg, send_flg);
                 }
                
 

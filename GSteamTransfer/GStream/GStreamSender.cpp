@@ -362,7 +362,8 @@ uint8_t* GStreamSender::ConvertRGBAtoYCbCr(SSharedMemBufferHdr *p_hdr,  std::uin
     hdr_rcv.ImageInfo.EnableDefog = 0;
     hdr_rcv.ImageInfo.DefogLevel = 3;
 #endif
-
+    hdr_rcv.BrightnessLevel = 50;
+    hdr_rcv.ContrastLevel = 50;
 
     float brigtness_level = 0 + hdr_rcv.BrightnessLevel/5.0 / 100.0 * 255;
     if (hdr_rcv.ImageInfo.IsIr) {
