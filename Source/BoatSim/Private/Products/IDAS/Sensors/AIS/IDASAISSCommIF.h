@@ -26,4 +26,5 @@ protected:
 	virtual uint32 Run() override;
 	virtual void Stop() override;
 	virtual void SendData(void* p_data, uint32 size_in_bytes) override;
+	virtual void SendData(void* p_hdr, uint32 hdr_len, void* p_data, uint32 size_in_bytes) override;
 };

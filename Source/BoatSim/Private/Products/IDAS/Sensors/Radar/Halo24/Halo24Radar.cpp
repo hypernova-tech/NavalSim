@@ -45,7 +45,7 @@ void AHalo24Radar::RadarStateMachine()
 		pHalo24CommIF->SendResponseAckNack(ESimSDKDataIDS::UnlockKeys, Serial, true);
 		next_state = EHalo24StateMachineStates::WaitImageStreamConnect;
 		CanUpdateState = true;
-		LastStateSendTimeSec = FApp::GetCurrentTime() + 0.2f;
+		LastStateSendTimeSec = FPlatformTime::Seconds() + 0.2f;
 		break;
 	case EHalo24StateMachineStates::WaitImageStreamConnect:
 		if (IsImageStreamConnected[0] || IsImageStreamConnected[1]) {
@@ -94,10 +94,10 @@ void AHalo24Radar::RadarStateMachine()
 void AHalo24Radar::UpdateState()
 {
 	if (CanUpdateState) {
-		if ((FApp::GetCurrentTime() - LastStateSendTimeSec) > StateUpdatePeriodSec) {
+		if ((FPlatformTime::Seconds() - LastStateSendTimeSec) > StateUpdatePeriodSec) {
 			pHalo24CommIF->SendRadarState(RadarState, Serial);
 			pHalo24CommIF->SendRadarSetup(RadarSetupData, Serial);
-			LastStateSendTimeSec = FApp::GetCurrentTime();
+			LastStateSendTimeSec = FPlatformTime::Seconds();
 		}
 		
 	}

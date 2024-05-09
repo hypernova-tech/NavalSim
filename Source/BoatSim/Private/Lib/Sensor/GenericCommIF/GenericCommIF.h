@@ -33,6 +33,7 @@ public:
 
 
 	virtual void SendData(void* p_data, uint32 size_in_bytes);
+	virtual void SendData(void* p_hdr, uint32 hdr_len, void* p_data, uint32 size_in_bytes);
 	virtual void SendConfig();
 	
 	virtual TArray< SConnectionEntry> GetConnectionsInfo();

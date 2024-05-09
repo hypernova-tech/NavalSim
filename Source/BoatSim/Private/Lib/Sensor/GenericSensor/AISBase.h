@@ -40,6 +40,14 @@ protected:
 		int AISClassType = 0; // 0: none, 1: class A, 2: class B
 
 	UPROPERTY(EditAnywhere)
+		int AISSrcAddr = 0; //
+
+
+	UPROPERTY(EditAnywhere)
+		int AISDefaultMessagePriority = 2; //
+	
+
+	UPROPERTY(EditAnywhere)
 		float AISMessagePublishPeriodSecStationary = 300; 
 
 	UPROPERTY(EditAnywhere)
@@ -84,7 +92,7 @@ protected:
 	bool IsStationary = true;
 	bool IsMotionModeChanged = false;
 	AActorBase* pAISPublisher;
-	virtual void SendMessageViaAISPusblisher(void* p_data, INT32S data_size);
+	virtual void SendMessageViaAISPusblisher(INT32U src_addr, INT32U prio, INT32U png, void* p_data, INT32S data_size);
 
 public:
 	virtual void BeginPlay() override;

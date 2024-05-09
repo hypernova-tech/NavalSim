@@ -24,7 +24,7 @@ int main() {
     args.ShareMemName = "eo1sm";
     
     args.PortNo = 1045;
-    args.IpAddr = "127.0.0.1";//"15.0.91.65"; // // 
+    args.IpAddr = "15.0.91.65"; // FPlatformTime::Seconds()
     args.Width = 720;
     args.Height = 576;
     args.Size = args.Width * args.Height * 4;

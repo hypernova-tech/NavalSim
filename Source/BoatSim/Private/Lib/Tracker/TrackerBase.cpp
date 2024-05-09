@@ -6,6 +6,54 @@
 #include <Lib/Utils/CUtil.h>
 
 
+bool STrackedObjectInfo::IsAcquireTimeout(FLOAT64 timeout_sec)
+{
+    return (FApp::GetCurrentTime() - AcquireStartTimeRefSec) > timeout_sec;
+}
+void STrackedObjectInfo::HandleTemporayTargetLoss(FLOAT64 timeout_sec, bool& is_permanant_loss)
+{
+    if (TargetLossTimeRefSec < 0) {
+        TargetLossTimeRefSec = FApp::GetCurrentTime();
+    }
+    if ((FApp::GetCurrentTime() - TargetLossTimeRefSec) > timeout_sec) {
+        is_permanant_loss = true;
+    }
+    else {
+        is_permanant_loss = false;
+    }
+}
+
+void STrackedObjectInfo::SetState(EObjectTrackState state)
+{
+    if (TrackState != state) {
+        StateEnterTimeSec[state] = FApp::GetCurrentTime();
+        StateStayDurationSec[state] = 0;
+    }
+    else {
+        StateStayDurationSec[state] = FApp::GetCurrentTime() - StateEnterTimeSec[state];
+    }
+    TrackState = state;
+}
+
+FLOAT64 STrackedObjectInfo::GetStateStayDurationSec(EObjectTrackState state)
+{
+    return StateStayDurationSec[state];
+}
+FLOAT64 STrackedObjectInfo::GetCurrentStateStayDuration()
+{
+    return StateStayDurationSec[TrackState];
+}
+
+bool STrackedObjectInfo::IsAcquired()
+{
+    return	TrackState == EObjectTrackState::AcquiredAndSafe ||
+        TrackState == EObjectTrackState::AcquiredAndDangerous ||
+        TrackState == EObjectTrackState::AcquiredSafeAndTemprorayLoss ||
+        TrackState == EObjectTrackState::AcquiredDangerousAndTemprorayLoss;
+
+}
+
+
 CTrackerBase::CTrackerBase()
 {
 }

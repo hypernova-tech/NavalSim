@@ -35,6 +35,10 @@ void UGenericCommIF::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 void UGenericCommIF::SendData(void* p_data, uint32 size_in_bytes)
 {
 }
+void UGenericCommIF::SendData(void* p_hdr, uint32 hdr_len, void* p_data, uint32 size_in_bytes)
+{
+
+}
 
 void UGenericCommIF::SendConfig()
 {

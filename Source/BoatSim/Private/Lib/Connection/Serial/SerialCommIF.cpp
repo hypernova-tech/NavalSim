@@ -2,7 +2,7 @@
 
 
 #include "Lib/Connection/Serial/SerialCommIF.h"
-#define EN_WIN 0
+#define EN_WIN 1
 
 #if EN_WIN > 0
 #include "Windows.h"
@@ -50,47 +50,7 @@ void USerialCommIF::BeginPlay()
 
 #endif
 }
-#pragma pack(push, 1)
-struct SCanControllerPacket
-{
-    INT8U Header1;
-    INT8U Header2;
-    INT8U Type;
-    INT8U FrameType;
-    INT8U FrameFormat;
-    
-    INT32U FrameId;
-       
- 
-    INT8U Length;
-    INT8U Data[8];
-    INT8U Reserved;
-    INT8U Checksum;
 
-public:
-    void SetData(INT8U frame_id, INT8U* p_data, INT8U len) {
-        memset(this, 0, sizeof(SCanControllerPacket));
-        Header1 = 0xaa;
-        Header2 = 0x55;
-        FrameType = 0x1;
-        Type = 0x1;
-        FrameFormat = 0x1;
-        FrameId = frame_id;
-        Length = len;
-        memcpy(Data, p_data, len);
-        Reserved = 0;
-
-
-        Checksum = Type + FrameType + FrameFormat + FrameId + Length;
-
-        for (int i = 0; i < 8; i++) {
-            Checksum += Data[i];
-        }
-        
-
-    }
-};
-#pragma pack(pop)
 
 
 
@@ -98,13 +58,9 @@ bool USerialCommIF::SendData(const INT8U* p_bytes, INT32U count)
 {
 #if EN_WIN > 0
     DWORD bytesSent = 0;
-    char data[] = { '1','2','3' ,'4' ,'5' ,'6' ,'7' ,'8' };
-    SCanControllerPacket pack;
-    pack.SetData(1, (INT8U*)data, sizeof(data));
+     
 
-    
-
-    if (!WriteFile(hSerialHandle, &pack, sizeof(SCanControllerPacket), &bytesSent, NULL)) {
+    if (!WriteFile(hSerialHandle, p_bytes, count, &bytesSent, NULL)) {
         // Error writing
         //CloseHandle(hSerialHandle);
         return false;

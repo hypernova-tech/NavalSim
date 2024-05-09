@@ -134,11 +134,11 @@ void AAISBase::ProcessEntries()
 
 }
 
-void AAISBase::SendMessageViaAISPusblisher(void* p_data, INT32S data_size)
+void AAISBase::SendMessageViaAISPusblisher(INT32U src_addr, INT32U prio, INT32U png, void* p_data, INT32S data_size)
 {
 	if (pAISPublisher != nullptr) {
 		AAISPublisher* p_pub = (AAISPublisher*)pAISPublisher;
-		p_pub->SendAISData(p_data, data_size);
+		p_pub->SendAISData(src_addr, prio, png, p_data, data_size);
 	}	
 
 }
@@ -195,7 +195,7 @@ void AAISBase::PublishClassAPositionReport(AActorBase* p_act)
 
 
 	
-	SendMessageViaAISPusblisher(&report, sizeof(SClassAPositionReport));
+	SendMessageViaAISPusblisher(AISSrcAddr, AISDefaultMessagePriority, 129038, &report, sizeof(SClassAPositionReport));
 
 }
 void AAISBase::PublishClassBPositionReport(AActorBase* p_act)
@@ -216,7 +216,7 @@ void AAISBase::PublishClassBPositionReport(AActorBase* p_act)
 	report.SetSpeedOverGround(vel.Length());
 	report.SetCourseOverGround(GetCourseOverGround(p_act));
 	report.SetTrueHeading(rpy_ang.Z);
-	SendMessageViaAISPusblisher(&report, sizeof(SClassBPositionReport));
+	SendMessageViaAISPusblisher(AISSrcAddr, AISDefaultMessagePriority, 129039, &report, sizeof(SClassBPositionReport));
 
 }
 /// <summary>
@@ -239,7 +239,7 @@ void AAISBase::PublishATONReport(AActorBase* p_act)
 	report.SetLon(pos.Y);
 	report.SetPositionAccuracy(false);
 	report.SetElectronicFixingPositionDeviceType(EAISPositionFixingDeviceType::CombinedGPSGLONASS);
-	SendMessageViaAISPusblisher(&report, sizeof(SADISAtonReport));
+	SendMessageViaAISPusblisher(AISSrcAddr, AISDefaultMessagePriority, 129041, &report, sizeof(SADISAtonReport));
 }
 
 void AAISBase::PublishClassBStaticDataReportPartB(AActorBase* p_act)
@@ -272,7 +272,7 @@ void AAISBase::PublishClassBStaticDataReportPartB(AActorBase* p_act)
 	report.SetReferencePointPositionAftOfBow(ReferencePointPositionAftOfBow);
 	report.SetMotherShipMMSI(AISMMSI);
 
-	SendMessageViaAISPusblisher(&report, sizeof(SClassBStaticDataReportPartB));
+	SendMessageViaAISPusblisher(AISSrcAddr, AISDefaultMessagePriority, 129810, &report, sizeof(SClassBStaticDataReportPartB));
 }
 
 
@@ -291,7 +291,7 @@ void AAISBase::PublishClassBStaticDataReportPartA(AActorBase* p_act)
 	report.SetName(temp);
 	
 
-	SendMessageViaAISPusblisher(&report, sizeof(SClassBStaticDataReportPartA));
+	SendMessageViaAISPusblisher(AISSrcAddr, AISDefaultMessagePriority, 129809, &report, sizeof(SClassBStaticDataReportPartA));
 }
 
 void AAISBase::PublishAISClassAStaticVoyageRelatedData(AActorBase* p_act)
@@ -334,7 +334,7 @@ void AAISBase::PublishAISClassAStaticVoyageRelatedData(AActorBase* p_act)
 	double draft = 0 - lowest_pt;
 	report.SetDraft(TOW(draft)); //todo fixme
 
-	SendMessageViaAISPusblisher(&report, sizeof(SAISClassAStaticVoyageRelatedData));
+	SendMessageViaAISPusblisher(AISSrcAddr, AISDefaultMessagePriority, 129794 ,&report, sizeof(SAISClassAStaticVoyageRelatedData));
 }
 
 

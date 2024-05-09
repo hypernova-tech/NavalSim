@@ -67,53 +67,18 @@ public:
 		TrackState = EObjectTrackState::JustCreated;
 		
 	}
-	bool IsAcquireTimeout(FLOAT64 timeout_sec)
-	{
-		return (FApp::GetCurrentTime() - AcquireStartTimeRefSec) > timeout_sec;
-	}
-	void HandleTemporayTargetLoss(FLOAT64 timeout_sec, bool &is_permanant_loss)
-	{
-		if (TargetLossTimeRefSec < 0) {
-			TargetLossTimeRefSec = FApp::GetCurrentTime();
-		}
-		if ((FApp::GetCurrentTime() - TargetLossTimeRefSec) > timeout_sec) {
-			is_permanant_loss = true;
-		}
-		else {
-			is_permanant_loss = false;
-		}
-	}
+	bool IsAcquireTimeout(FLOAT64 timeout_sec);
+	void HandleTemporayTargetLoss(FLOAT64 timeout_sec, bool& is_permanant_loss);
 
-	void SetState(EObjectTrackState state)
-	{
-		if (TrackState != state) {
-			StateEnterTimeSec[state] = FApp::GetCurrentTime();
-			StateStayDurationSec[state] = 0;
-		}
-		else {
-			StateStayDurationSec[state] = FApp::GetCurrentTime() - StateEnterTimeSec[state];
-		}
-		TrackState = state;
-	}
+	void SetState(EObjectTrackState state);
 
-	FLOAT64 GetStateStayDurationSec(EObjectTrackState state)
-	{
-		return StateStayDurationSec[state];
-	}
-	FLOAT64 GetCurrentStateStayDuration()
-	{
-		return StateStayDurationSec[TrackState];
-	}
+	FLOAT64 GetStateStayDurationSec(EObjectTrackState state);
+	FLOAT64 GetCurrentStateStayDuration();
 
-	bool IsAcquired()
-	{
-		return	TrackState == EObjectTrackState::AcquiredAndSafe ||
-			TrackState == EObjectTrackState::AcquiredAndDangerous ||
-			TrackState == EObjectTrackState::AcquiredSafeAndTemprorayLoss ||
-			TrackState == EObjectTrackState::AcquiredDangerousAndTemprorayLoss;
-
-	}
+	bool IsAcquired();
 };
+
+
 
 
 class CTrackerBase

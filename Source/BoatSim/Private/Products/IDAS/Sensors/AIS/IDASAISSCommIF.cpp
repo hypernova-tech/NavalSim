@@ -31,3 +31,8 @@ void UIDASAISSCommIF::SendData(void* p_data, uint32 size_in_bytes)
 	pConnection->SendData((const INT8U * )p_data, size_in_bytes);
 }
 
+void UIDASAISSCommIF::SendData(void* p_hdr, uint32 hdr_len, void* p_data, uint32 size_in_bytes)
+{
+	pConnection->SendData((INT8U*)p_hdr, hdr_len, (const INT8U*)p_data, size_in_bytes);
+}
+
