@@ -40,7 +40,7 @@ protected:
 		int AISClassType = 0; // 0: none, 1: class A, 2: class B
 
 	UPROPERTY(EditAnywhere)
-		int AISSrcAddr = 0; //
+		int AISSrcAddr = 1; //
 
 
 	UPROPERTY(EditAnywhere)

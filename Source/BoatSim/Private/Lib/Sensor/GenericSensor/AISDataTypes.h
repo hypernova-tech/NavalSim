@@ -37,7 +37,7 @@ enum EAISPositionFixingDeviceType
 };
 
 
-
+#pragma pack(push, 1)
 struct SAISHeader {
 
 public:
@@ -48,7 +48,7 @@ public:
 
 	}ID;
 };
-
+#pragma pack(pop)
 
 #pragma pack(push, 1)
 struct SClassAPositionReport {
@@ -71,15 +71,21 @@ struct SClassAPositionReport {
 	
 	INT16U TrueHeading;
 	INT16U RateOfTurn;
-	struct {
-		INT32U NavStatus : 4;
-		INT32U SpecialManeuverIndicator : 2;
-		INT32U NMEAReserved1 : 2;
-		INT32U AISSpare : 3;
-		INT32U NMEAReserved2 : 5;
-		INT32U SequenceId : 1;
+	/*
+	union {
+		INT16U Val;
+		struct {
+			INT32U NavStatus : 4;
+			INT32U SpecialManeuverIndicator : 2;
+			INT32U NMEAReserved1 : 2;
+			INT32U AISSpare : 3;
+			INT32U NMEAReserved2 : 5;
+		}Reserved;
 	};
+	 */
+	INT8U Reserved[2];
 
+	INT8U SequenceId;
 public:
 
 	void SetMessageID(INT8U id);

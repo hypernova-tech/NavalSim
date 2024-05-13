@@ -158,6 +158,8 @@ double AAISBase::GetCourseOverGround(AActor* Actor)
 
 	return COGInDegrees;
 }
+
+#define offsetof(type, field) ((size_t) &(((type *)0)->field))
 // class A static 5
 // class B part A static 24, PGN: 129809
 // class B part b static 24  PGN: 129810
@@ -170,6 +172,12 @@ void AAISBase::PublishClassAPositionReport(AActorBase* p_act)
 	FVector vel			= p_act->GetActorVelocityMetersPerSec();
 	FVector ang_vel		= p_act->GetActorAngularVelocityRPYDegPerSec();
 
+	auto sz = sizeof(SClassAPositionReport);
+	auto offset1 = offsetof(SClassAPositionReport, AccRaimTimeStamp);
+	auto offset2 = offsetof(SClassAPositionReport, Cog);
+	auto offset3 = offsetof(SClassAPositionReport, Reserved);	
+	auto offset4 = offsetof(SClassAPositionReport, SequenceId);
+
 
 	report.SetMessageID(1);
 	report.SetUserID(AISUserId);
@@ -180,6 +188,8 @@ void AAISBase::PublishClassAPositionReport(AActorBase* p_act)
 	report.SetCourseOverGround(GetCourseOverGround(p_act));
 	report.SetTrueHeading(rpy_ang.Z);
 	report.SetRateOfTurn(ang_vel.Z);
+
+
 
 
 	/*

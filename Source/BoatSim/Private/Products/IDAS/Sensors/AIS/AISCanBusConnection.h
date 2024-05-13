@@ -10,10 +10,11 @@
 union UFrameInfo {
     INT32U FrameId;
     struct  {
-        INT32U Priority : 3;
-        INT32U Png : 18;
         INT32U SrcAddr : 8;
-        INT32U Reserved : 3;
+        INT32U Png : 17;
+        INT32U Reserved1 : 1;
+        INT32U Priority : 3;
+        INT32U Reserved2 : 3;
     }FrameBits;
 };
 #pragma pack(pop)
@@ -42,20 +43,22 @@ public:
     }
 
  
-    void SetData(INT8U frame_id, INT8U* p_data, INT8U len) {
+    void PrepareFrame(INT32U frame_id, INT8U* p_data, INT8U len) {
        
         Header1 = 0xaa;
         Header2 = 0x55;
-        FrameType = 0x1;
         Type = 0x1;
+        FrameType = 0x2;
+        
         FrameFormat = 0x1;
         FrameInfo.FrameId = frame_id;
         Length = len;
         memcpy(Data, p_data, len);
         Reserved = 0;
 
+        INT8U* p_frame_buff = (INT8U*)&FrameInfo.FrameId;
 
-        Checksum = Type + FrameType + FrameFormat + FrameInfo.FrameId + Length;
+        Checksum = Type + FrameType + FrameFormat + p_frame_buff[0] + p_frame_buff[1] + p_frame_buff[2] + p_frame_buff[3] + Length + Reserved;
 
         for (int i = 0; i < 8; i++) {
             Checksum += Data[i];
@@ -72,7 +75,7 @@ public:
         frame.FrameBits.SrcAddr = src_addr;
         frame.FrameBits.Priority = prio;
         frame.FrameBits.Png = png;
-        SetData(frame.FrameId, p_data, len);
+        PrepareFrame(frame.FrameId, p_data, len);
 
     }
 };
@@ -97,7 +100,7 @@ struct SCanMessage {
 /**
  * 
  */
-UCLASS()
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class UAISCanBusConnection : public USerialCommIF
 {
 	GENERATED_BODY()
