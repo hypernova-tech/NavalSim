@@ -101,14 +101,14 @@ protected:
 	FVector2D RadarRangeMeter;
 	FLOAT64 RadarRangeMeanErrorMeter;
 	FLOAT64 RadarRangeErrorStdDevMeter;
-	FLOAT64 TrackerDistanceToleranceMeter = 10.0;
+	FLOAT64 TrackerDistanceToleranceMeter = 100.0;
 	INT32S MaxTrackCount = 10;
 	FLOAT64 TargetAquireTimeOutSec = 5.0;
 	FLOAT64 OutOfRangeToLostTimeoutSec = 1.0f;
 	FLOAT64 TemprorayAcquireToLostTimeoutSec = 1.0f;
 	TArray<INT32S> CancalTrackRequest;
 	bool IsCancelAllTrack = false;
-	INT32S TrackerId = 0;
+	INT32S TrackerId = 1;
 protected:
 	STrackedObjectInfo* FindTrackByClientId(INT32S client_track_id);
 	void AddTrack(STrackedObjectInfo* p_track);
@@ -118,7 +118,9 @@ protected:
 	bool CheckStillAquired(STrackedObjectInfo* p_track, bool& is_safe_target);
 	bool IsTargetOutofRange(STrackedObjectInfo* p_track);
 	void ProcessCancelTrackRequests();
-
+	void FillTrackInfo(STrackedObjectInfo* p_track);
+	FLOAT64 ComputeTrackBearingDeg(STrackedObjectInfo *p_track);
+	FVector GetTrackVelocity(STrackedObjectInfo* p_track);
 public:
 	CTrackerBase();
 	~CTrackerBase();

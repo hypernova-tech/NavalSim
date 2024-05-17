@@ -163,7 +163,7 @@ public:
 	// Called every frame
 
 
-	virtual void Visualize(SScanResult* p_scan_result, FVector origin, FVector current_forward, FVector current_right, float max_range_meter, void *p_tracker = nullptr);
+	virtual void Visualize(SScanResult* p_scan_result, FVector origin, FVector current_forward, FVector current_right, float max_range_meter, void *p_tracker = nullptr, bool is_reset_chart = true);
 	UGenericCommIF* GetCommCommIF();
 	void SensorStateMachine(float delta_time_sec);
 	virtual void OnCaptureReady(void *p_data);

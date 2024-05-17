@@ -38,7 +38,7 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	virtual void Visualize(SScanResult *p_scan_result, FVector origin, FVector current_forward, FVector current_right, float max_range_meter, void *p_tracker = nullptr);
+	virtual void Visualize(SScanResult *p_scan_result, FVector origin, FVector current_forward, FVector current_right, float max_range_meter, void *p_tracker = nullptr, bool reset= true);
 	void SetPixelValue(UTextureRenderTarget2D* RenderTarget, int32 X, int32 Y, FColor Color);
 
 	UTextureRenderTarget2D* CreateRenderTarget(int width, int height, UImage *p_image);

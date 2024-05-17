@@ -1,4 +1,3 @@
-﻿  PPIController.cpp
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\Halo24SDK\include\PPIController.cpp(39,51): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\Halo24SDK\include\PPIController.cpp(46,20): warning C4018: '<': signed/unsigned mismatch
+﻿  RadarSimSDK.cpp
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\Lib\Types\Halo24Types.h(692,1): warning C4267: '=': conversion from 'size_t' to 'INT8U', possible loss of data
   RadarSimSDK.vcxproj -> C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\x64\Debug\RadarSimSDK.exe

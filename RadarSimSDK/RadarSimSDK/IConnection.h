@@ -43,4 +43,3 @@ public:
 	INT32S ReadInd = 0;
 	INT32S BufferCount = 512;
 };
-

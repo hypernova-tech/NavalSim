@@ -47,7 +47,8 @@ class AHalo24Radar : public ARadarBase, public IHalo24HostIF
 
 protected:
 
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		UUdpConnection* pINSConnection;
 
 	virtual void BeginPlay() override;
 	EHalo24StateMachineStates Halo24StateMachine;
@@ -84,6 +85,7 @@ protected:
 	void HandleSectorBlankingData(SSectorBlankingData* p_data);
 	bool VerifySerial(char* p_inp);
 	virtual void UpdateTracker() override;
+	void SendINSData();
 
 
 public :

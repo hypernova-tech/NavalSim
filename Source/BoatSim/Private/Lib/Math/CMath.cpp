@@ -275,7 +275,11 @@ INT16U CMath::EncodeUnsigned16(FLOAT64 val, FLOAT64 lsb)
     INT16U ret = (INT16U)(val / lsb);
     return ret;
 }
-
+INT32U CMath::EncodeUnsigned32(FLOAT64 val, FLOAT64 lsb)
+{
+    INT32U ret = (INT32U)(val / lsb);
+    return ret;
+}
 FVector CMath::GetEulerAnglesRPYDeg(const FVector& dir)
 {
 
@@ -357,6 +361,30 @@ void CMath::SmoothTransformLerp(const FTransform& CurrentTransform, const FTrans
 
 
     new_transform = FTransform(NewRotation, NewLocation, NewScale);
+}
+
+double CMath::FixAngPlusMinus180(double val)
+{
+    double ret = val;
+
+    if (val > 180) {
+        ret = 360 - val;
+    }
+    else if (val <= -180) {
+        ret = 360 + val;
+    }
+
+    return ret;
+}
+
+FVector CMath::FixAngPlusMinus180(FVector ang)
+{
+    FVector ret;
+    ret.X = CMath::FixAngPlusMinus180(ang.X);
+    ret.Y = CMath::FixAngPlusMinus180(ang.Y);
+    ret.Z = CMath::FixAngPlusMinus180(ang.Z);
+
+    return ret;
 }
 
 

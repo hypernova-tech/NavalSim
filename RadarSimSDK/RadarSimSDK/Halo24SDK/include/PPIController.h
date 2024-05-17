@@ -11,7 +11,7 @@
 #include "NavTypes.h"
 #include "ExportSDK.h"
 #include "NavRadarSpoke.h"
-#include <RadarColourLookUpTable.h>
+
 
 namespace Navico {
     class NAVICO_SDK_EXPORT tRadarColourLookUpTable;
@@ -162,7 +162,6 @@ private:
 
     void ResetSpokeLineAtImage(int spoke_number, int spoke_count);
     int Clamp(int val, int min, int max);
-    void FillAround(tColor* p_color, int px, int py, int radius);
 };
 
 //-----------------------------------------------------------------------------

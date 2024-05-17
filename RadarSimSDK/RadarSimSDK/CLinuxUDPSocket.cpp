@@ -30,6 +30,7 @@ CLinuxUDPSocket::CLinuxUDPSocket() {
 
 bool CLinuxUDPSocket::Create(SConnectionArgs* p_args) {
 
+	IConnection::Create(p_args);
 	return true;
 }
 
@@ -51,9 +52,9 @@ bool CLinuxUDPSocket::SendData(INT8U* p_data, INT32U count, INT16U remote_port, 
 
 bool CLinuxUDPSocket::ReceivedData(INT8U* p_dest, INT32U dest_size, INT32U& read_count)
 {
+
 	return ReadPacket(p_dest, dest_size, read_count);
-	return GetPacket()
-	return true;
+
 	bool ret = IsDataReceived;
 
 	if (ret) {
@@ -66,13 +67,15 @@ bool CLinuxUDPSocket::ReceivedData(INT8U* p_dest, INT32U dest_size, INT32U& read
 
 }
 void CLinuxUDPSocket::receivePackage(NetworkComm* networkComm, uint8_t data[], uint16_t len, const portIP& senderPortIP) {
-	//std::cout << "CWinUDPSocket mssg received" << std::endl;
+
 	AddPacket(data, len);
 	return;
+
+	//std::cout << "CWinUDPSocket mssg received" << std::endl;
 	IsDataReceived = true;
 	memcpy((void*)ReceivedDataBuff, (void*)data, len);
 	ReceivedDataLen = len;
-	
+
 }
 
 CLinuxUDPSocket::~CLinuxUDPSocket()

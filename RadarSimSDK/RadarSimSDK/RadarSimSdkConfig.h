@@ -1,8 +1,8 @@
 #pragma once
 #define SIMULATE_HOST 1
-#define USE_PIXEL_SIZE_FROM_HEADER 1 //1: use from spoke header, 0: use from param set by tPPIController::SetRangeResolution(float metersPerPixel)
+
 #if SIMULATE_HOST > 0
-#define SHOW_SPOKE_IMAGE 1
+
 #define SIM_IP "127.0.0.1"
 #define SIM_RCV_PORT 13081
 #define SIM_XMT_PORT 13080

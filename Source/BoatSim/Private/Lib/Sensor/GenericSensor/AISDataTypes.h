@@ -3,6 +3,16 @@
 #include <Lib/Types/Primitives.h>
 
 
+enum EAISPNGIDs :INT32U
+{
+	ClassAPositionReportPNG = 129038,
+	ClassBPositionReportPNG = 129039,
+	ATONReportPNG = 129041,
+	ClassBStaticDataReportPartBPNG = 129810,
+	ClassBStaticDataReportPartAPNG = 129809,
+	AISClassAStaticVoyageRelatedDataPNG = 129794
+};
+
 #define MAX_PAYLOAD_SIZE 256
 
 #define LAT_SF_DEG 1e-7
@@ -167,6 +177,8 @@ struct SADISAtonReport { // aids to navigation reports
 	INT16U AtonStructureBeamOrDiameter;
 	INT16U PositionReferencePointFromStarboard;
 	INT16U PositionReferencePointFromTrueNorth;
+
+	/*
 	struct {
 		INT32U AtonType : 5;
 		INT32U OffPositionIndicator : 1;
@@ -180,12 +192,15 @@ struct SADISAtonReport { // aids to navigation reports
 		INT32U NMEAReserved2 : 3;
 
 	}Descrite;
-	INT8S AtonName[16];
+	*/
+	INT8U Descrite[4];
+	INT8U AtonName[16];
 
 	void SetMessageID(INT8U id);
 	void SetUserID(INT32U val);
 	void SetTimeStamp(INT8U val);
 	void SetPositionAccuracy(bool is_low);
+	void SetAtonType(INT8U val);
 	void SetLat(FLOAT64 lat_deg);
 	void SetLon(FLOAT64 lat_deg);
 	void SetAtonStructureLengthOrDiameter(FLOAT64 len_meter);
@@ -264,31 +279,22 @@ struct SAISClassAStaticVoyageRelatedData {
 	SAISHeader Header;
 	INT32U UserId;
 	INT32U Imo;
-	INT8U CallSign[8]; //null terminated
-	INT8U Name[21]; //null terminated
+	INT8U CallSign[7]; //null terminated
+	INT8U Name[20]; //null terminated
 	INT8U TypeOfShipAndCargo;
 	INT16U ShipLength;
 	INT16U ShipBeam;
 	INT16U ReferencePointFromStarboard;
 	INT16U ReferencePointPositionAftOfBow;
 	INT16U EstimatedDateOfArrival;
-	INT16U EstimatedTimeOfArrival;
+	INT32U EstimatedTimeOfArrival;
 	INT16U Draft;
-	INT8U Destination[21]; //null terminated
+	INT8U Destination[20]; //null terminated
 
-	struct {
-		INT32U AISVersion : 2;
-		INT32U TypeOfElectronicPositioningDevice : 4;
-		INT32U DataTerminalEquipment : 1;
-		INT32U AISSpare:1;
-		INT32U AISTransceiverInformation : 5;
-		INT32U NMEAReserved : 3;
-
-
-	}Descrites;
+	INT8U Descrites[2];
 	INT8U SequenceID;
 
-
+public:
 
 	void SetMessageID(INT8U id);
 	void SetUserID(INT32U val);
@@ -302,7 +308,7 @@ struct SAISClassAStaticVoyageRelatedData {
 	void SetReferencePointPositionAftOfBow(float val);
 
 	void SetEstimatedDateOfArrival(int year, int month, int day);
-	void SetEstimatedTimeOfArrival(float val);
+	void SetEstimatedTimeOfArrival(double val);
 	void SetDraft(float val);
 	void SetDestination(char* name);
 };

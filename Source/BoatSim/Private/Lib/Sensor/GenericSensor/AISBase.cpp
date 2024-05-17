@@ -5,7 +5,8 @@
 #include <Lib/SystemManager/SystemManagerBase.h>
 #include <Lib/Math/CMath.h>
 #include <Lib/Utils/CUtil.h>
-
+#include <Lib/Navigation/CNav.h>
+#include <Lib/Time/CTime.h>
 
 
 void AAISBase::BeginPlay()
@@ -35,6 +36,9 @@ void AAISBase::InitSensor()
 	auto owner = CUtil::GetParentActor(this);
 	if (owner) {
 		actors.Add(owner);
+	}
+	else {
+		actors.Add(this); // potential error
 	}
 	
 	for (auto actor : actors) {
@@ -101,32 +105,32 @@ void AAISBase::ProcessEntries()
 	for (auto &entry : AisEntries) {
 	
 		if (entry.LastTransmitTimeSec < 0) {
-			entry.LastTransmitTimeSec = FApp::GetCurrentTime();
+			entry.LastTransmitTimeSec = CTime::GetTimeSecond();
 			is_first_time = true;
 		}
 
-		auto curr_time = FApp::GetCurrentTime();
+		auto curr_time = CTime::GetTimeSecond();
 		auto next_time = (entry.LastTransmitTimeSec + GetCurrentPusblishPeriod());
 
 		if(curr_time >= next_time || is_first_time) {
 			if (GetAISClassType() == 1) {
-				PublishClassAPositionReport(entry.pActor);
+				///PublishClassAPositionReport(entry.pActor);
 				if (GetShoudPublishATON()) {
 					PublishATONReport(entry.pActor);
 				}
 				PublishAISClassAStaticVoyageRelatedData(entry.pActor);
-				entry.LastTransmitTimeSec = FApp::GetCurrentTime();
+				entry.LastTransmitTimeSec = CTime::GetTimeSecond();
 
 			}else if (GetAISClassType() == 2) {
-				PublishClassBPositionReport(entry.pActor);
+				////PublishClassBPositionReport(entry.pActor);
 				if (GetShoudPublishATON()) {
-					PublishATONReport(entry.pActor);
+					////PublishATONReport(entry.pActor);
 				}
 
-				PublishClassBStaticDataReportPartA(entry.pActor);
-				PublishClassBStaticDataReportPartB(entry.pActor);
+				///PublishClassBStaticDataReportPartA(entry.pActor);
+				///PublishClassBStaticDataReportPartB(entry.pActor);
 				
-				entry.LastTransmitTimeSec = FApp::GetCurrentTime();
+				entry.LastTransmitTimeSec = CTime::GetTimeSecond();
 			}
 		}
 		
@@ -145,17 +149,9 @@ void AAISBase::SendMessageViaAISPusblisher(INT32U src_addr, INT32U prio, INT32U 
 
 double AAISBase::GetCourseOverGround(AActor* Actor)
 {
-	FVector Velocity = Actor->GetVelocity();
-	// Assuming North is along the positive Y-axis. Adjust according to your game's coordinate system.
-	double COG = FMath::Atan2(Velocity.X, Velocity.Y); // Returns radians
-	double COGInDegrees = FMath::RadiansToDegrees(COG);
-
-	// Normalize the angle to [0, 360) range
-	if (COGInDegrees < 0)
-	{
-		COGInDegrees += 360.0f;
-	}
-
+	FVector Velocity = CUtil::GetActorVelocityMetersPerSec(Actor);
+	Velocity.Normalize();
+	double COGInDegrees = CNav::ComputeCourseOverGroundDeg(Velocity);
 	return COGInDegrees;
 }
 
@@ -163,6 +159,8 @@ double AAISBase::GetCourseOverGround(AActor* Actor)
 // class A static 5
 // class B part A static 24, PGN: 129809
 // class B part b static 24  PGN: 129810
+
+
 void AAISBase::PublishClassAPositionReport(AActorBase* p_act)
 {
 	SClassAPositionReport report;
@@ -171,12 +169,6 @@ void AAISBase::PublishClassAPositionReport(AActorBase* p_act)
 	FVector rpy_ang		= CMath::GetActorEulerAnglesRPY(p_act);
 	FVector vel			= p_act->GetActorVelocityMetersPerSec();
 	FVector ang_vel		= p_act->GetActorAngularVelocityRPYDegPerSec();
-
-	auto sz = sizeof(SClassAPositionReport);
-	auto offset1 = offsetof(SClassAPositionReport, AccRaimTimeStamp);
-	auto offset2 = offsetof(SClassAPositionReport, Cog);
-	auto offset3 = offsetof(SClassAPositionReport, Reserved);	
-	auto offset4 = offsetof(SClassAPositionReport, SequenceId);
 
 
 	report.SetMessageID(1);
@@ -205,9 +197,12 @@ void AAISBase::PublishClassAPositionReport(AActorBase* p_act)
 
 
 	
-	SendMessageViaAISPusblisher(AISSrcAddr, AISDefaultMessagePriority, 129038, &report, sizeof(SClassAPositionReport));
+	SendMessageViaAISPusblisher(AISSrcAddr, AISDefaultMessagePriority, EAISPNGIDs::ClassAPositionReportPNG, &report, sizeof(SClassAPositionReport));
 
 }
+
+
+
 void AAISBase::PublishClassBPositionReport(AActorBase* p_act)
 {
 
@@ -226,16 +221,19 @@ void AAISBase::PublishClassBPositionReport(AActorBase* p_act)
 	report.SetSpeedOverGround(vel.Length());
 	report.SetCourseOverGround(GetCourseOverGround(p_act));
 	report.SetTrueHeading(rpy_ang.Z);
-	SendMessageViaAISPusblisher(AISSrcAddr, AISDefaultMessagePriority, 129039, &report, sizeof(SClassBPositionReport));
+	SendMessageViaAISPusblisher(AISSrcAddr, AISDefaultMessagePriority, EAISPNGIDs::ClassBPositionReportPNG, &report, sizeof(SClassBPositionReport));
 
 }
+
+
+
 /// <summary>
 /// todo aton type
 /// </summary>
 /// <param name="p_act"></param>
 void AAISBase::PublishATONReport(AActorBase* p_act)
 {
-
+	char temp[14];
 	SADISAtonReport report;
 	memset(&report, 0, sizeof(SADISAtonReport));
 	FVector pos = p_act->GetPositionLatLongHeightMSL();
@@ -245,12 +243,30 @@ void AAISBase::PublishATONReport(AActorBase* p_act)
 
 	report.SetMessageID(21);
 	report.SetUserID(AISUserId);
+	report.SetAtonType(AISAtonType);
 	report.SetLat(pos.X);
 	report.SetLon(pos.Y);
+	
 	report.SetPositionAccuracy(false);
 	report.SetElectronicFixingPositionDeviceType(EAISPositionFixingDeviceType::CombinedGPSGLONASS);
-	SendMessageViaAISPusblisher(AISSrcAddr, AISDefaultMessagePriority, 129041, &report, sizeof(SADISAtonReport));
+
+	FVector size = p_act->GetActorComputedActorSizeMeter();
+
+
+	report.SetAtonStructureLengthOrDiameter(size.X);
+	report.SetAtonStructureBeamOrDiameter(size.Y);
+	report.SetPositionReferencePointFromStarboard(AISReferencePointFromStarboard);
+	report.SetPositionReferencePointFromTrueNorth(ReferencePointPositionAftOfBow); //todo fixme
+
+	CUtil::FStringToAsciiChar(AisAtonName, temp, 14);
+	report.SetATONName(temp);
+
+
+
+	SendMessageViaAISPusblisher(AISSrcAddr, AISDefaultMessagePriority, EAISPNGIDs::ATONReportPNG, &report, sizeof(SADISAtonReport));
 }
+
+
 
 void AAISBase::PublishClassBStaticDataReportPartB(AActorBase* p_act)
 {
@@ -282,7 +298,7 @@ void AAISBase::PublishClassBStaticDataReportPartB(AActorBase* p_act)
 	report.SetReferencePointPositionAftOfBow(ReferencePointPositionAftOfBow);
 	report.SetMotherShipMMSI(AISMMSI);
 
-	SendMessageViaAISPusblisher(AISSrcAddr, AISDefaultMessagePriority, 129810, &report, sizeof(SClassBStaticDataReportPartB));
+	SendMessageViaAISPusblisher(AISSrcAddr, AISDefaultMessagePriority, EAISPNGIDs::ClassBStaticDataReportPartBPNG, &report, sizeof(SClassBStaticDataReportPartB));
 }
 
 
@@ -301,7 +317,7 @@ void AAISBase::PublishClassBStaticDataReportPartA(AActorBase* p_act)
 	report.SetName(temp);
 	
 
-	SendMessageViaAISPusblisher(AISSrcAddr, AISDefaultMessagePriority, 129809, &report, sizeof(SClassBStaticDataReportPartA));
+	SendMessageViaAISPusblisher(AISSrcAddr, AISDefaultMessagePriority, EAISPNGIDs::ClassBStaticDataReportPartAPNG, &report, sizeof(SClassBStaticDataReportPartA));
 }
 
 void AAISBase::PublishAISClassAStaticVoyageRelatedData(AActorBase* p_act)
@@ -314,16 +330,16 @@ void AAISBase::PublishAISClassAStaticVoyageRelatedData(AActorBase* p_act)
 	FVector rpy_ang = CMath::GetActorEulerAnglesRPY(p_act);
 	FVector vel = p_act->GetActorVelocityMetersPerSec();
 	FVector ang_vel = p_act->GetActorAngularVelocityRPYDegPerSec();
-	char temp[21];
+	char temp[20];
 
 	report.SetMessageID(5);
 	report.SetUserID(AISUserId);
 	report.SetTypeOfShipAndCargo(ShipCargoType);
 
-	CUtil::FStringToAsciiChar(AISName, temp, 21);
+	CUtil::FStringToAsciiChar(AISName, temp, sizeof(report.Name));
 	report.SetName(temp);
 
-	CUtil::FStringToAsciiChar(AISCallSign, temp, 8);
+	CUtil::FStringToAsciiChar(AISCallSign, temp, sizeof(report.CallSign));
 	report.SetCallSign(temp);
 
 	FVector size = p_act->GetActorComputedActorSizeMeter();
@@ -342,9 +358,17 @@ void AAISBase::PublishAISClassAStaticVoyageRelatedData(AActorBase* p_act)
 	p_act->GetActorBounds(true, origin, extend, false);
 	double lowest_pt = origin.Z - extend.Z;
 	double draft = 0 - lowest_pt;
+
+	if (draft < 0) {
+		draft = 0;
+	}
+
 	report.SetDraft(TOW(draft)); //todo fixme
 
-	SendMessageViaAISPusblisher(AISSrcAddr, AISDefaultMessagePriority, 129794 ,&report, sizeof(SAISClassAStaticVoyageRelatedData));
+	CUtil::FStringToAsciiChar(AISDestination, temp, sizeof(report.Destination));
+	report.SetDestination(temp);
+	//CUtil::DebugLog("timex: "+CUtil::FloatToString(CTime::GetTimeSecond()));
+	SendMessageViaAISPusblisher(AISSrcAddr, AISDefaultMessagePriority, EAISPNGIDs::AISClassAStaticVoyageRelatedDataPNG,&report, sizeof(SAISClassAStaticVoyageRelatedData));
 }
 
 

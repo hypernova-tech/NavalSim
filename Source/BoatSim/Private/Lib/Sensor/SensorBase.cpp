@@ -151,12 +151,12 @@ void ASensorBase::OnStep(float DeltaTime)
 }
 
 
-void ASensorBase::Visualize(SScanResult* p_scan_result, FVector origin, FVector current_forward, FVector current_right, float max_range_meter, void* p_tracker)
+void ASensorBase::Visualize(SScanResult* p_scan_result, FVector origin, FVector current_forward, FVector current_right, float max_range_meter, void* p_tracker, bool is_reset_chart)
 {
 	auto vis_stat_sec = CUtil::Tick();
 	if (pPointVisualizer != nullptr) {
 
-		pPointVisualizer->Visualize(p_scan_result, origin, current_forward, current_right, max_range_meter, p_tracker);
+		pPointVisualizer->Visualize(p_scan_result, origin, current_forward, current_right, max_range_meter, p_tracker, is_reset_chart);
 	}
 
 	auto elp_sec = CUtil::Tock(vis_stat_sec);

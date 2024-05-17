@@ -246,6 +246,8 @@ void ARadarBase::OnCaptureReady(void* p_data)
 
 void ARadarBase::Scan()
 {
+	
+
 	if (!IsScanEnabled) {
 		return;
 	}
@@ -256,6 +258,7 @@ void ARadarBase::Scan()
 		CurrentScanAzimuth = 0;
 		IsFullScaned = false;
 		pScanResult = ScanResultContainer.GetCircular();
+	
 	}
 
 
@@ -323,7 +326,7 @@ void ARadarBase::Scan()
 
 			OnDataReady();
 	
-
+			//bool is_reset_chart = CurrentScanAzimuth == 0;
 			CurrentScanAzimuth = end_azimuth + HorizontalScanStepAngleDeg;
 
 			Visualize(pScanResult, GetActorLocation(), GetActorForwardVector(), GetActorRightVector(), RangeMaxMeter, (void*)pTracker);

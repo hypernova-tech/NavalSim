@@ -7,6 +7,223 @@
 #include <Products/IDAS/Sensors/Radar/Halo24/Tracker/Halo24RadarTracker.h>
 #include <Lib/Math/CMath.h>
 
+
+
+#pragma pack(push, 1)
+typedef struct SINSData
+{
+	uint8_t header[3];
+	uint8_t  messageType;
+	uint8_t  version;
+	uint64_t timestampFeedback;
+	uint8_t	 initialized;
+	uint8_t  confidenceLevel;
+	uint8_t  odoMode;
+
+	int32_t  initPoseLattitude;
+	int32_t  initPoseLongitude;
+	int16_t  initPoseAltitude;
+
+	uint32_t vehicleLatPosFeedback;
+	uint32_t vehicleLongPosFeedback;
+	int16_t  vehicleAltFeedback;
+
+	// 0.01 degree +/- 180 degree
+	int16_t  vehicleHeadingFeedback;
+	int16_t  vehicleRollFeedback;
+	int16_t  vehiclePitchFeedback;
+
+	// 1 m resolution
+	int32_t  vehicleNorthPositionFeedback;
+	int32_t  vehicleEastPositionFeedback;
+	int32_t  missionSpeed;
+
+	// 0.01 km/h resolution
+	int16_t  vehicleSpeed;
+	int16_t  vehicleSpeedNorth;
+	int16_t  vehicleSpeedEast;
+	int16_t  vehicleSpeedDown;
+	uint8_t  	checkSum;
+
+	const double VEHICLE_SPEED_METERS_PER_SEC_TO_KM_PER_HR = (0.01 * 1e-3 / 3600);
+	const double VEHICLE_RPY_SF = (0.01);
+	const double VEHICLE_LAT_LON_SF = (1e-7);
+	const double VEHICLE_ALT_SF = (0.1);
+
+public:
+
+	void Init()
+	{
+		header[0] = 0xca;
+		header[1] = 0x68;
+		header[2] = 0x47;
+	}
+
+	void SetMessageType(uint8_t val)
+	{
+
+
+		messageType = val;
+	}
+	void SetVehicleSpeed(FVector ned_speed_meter_per_sec)
+	{
+		vehicleSpeed = (int16_t)(ned_speed_meter_per_sec.Length() * VEHICLE_SPEED_METERS_PER_SEC_TO_KM_PER_HR);
+		vehicleSpeedNorth = (int16_t)(ned_speed_meter_per_sec.X * VEHICLE_SPEED_METERS_PER_SEC_TO_KM_PER_HR);
+		vehicleSpeedEast = (int16_t)(ned_speed_meter_per_sec.Y * VEHICLE_SPEED_METERS_PER_SEC_TO_KM_PER_HR);
+		vehicleSpeedDown = (int16_t)(-ned_speed_meter_per_sec.Z * VEHICLE_SPEED_METERS_PER_SEC_TO_KM_PER_HR);
+	}
+
+	void SetVehicleRPY(FVector rpy_deg)
+	{
+
+		vehicleHeadingFeedback = (int16_t)(rpy_deg.Z * VEHICLE_RPY_SF);
+		vehicleRollFeedback = (int16_t)(rpy_deg.X * VEHICLE_RPY_SF);
+		vehiclePitchFeedback = (int16_t)(rpy_deg.Y * VEHICLE_RPY_SF);
+	}
+
+	void SetVehiclePos(FVector llh)
+	{
+		vehicleLatPosFeedback = (int16_t)(llh.X * VEHICLE_LAT_LON_SF);
+		vehicleLongPosFeedback = (int16_t)(llh.Y * VEHICLE_LAT_LON_SF);
+		vehicleAltFeedback = (int16_t)(llh.Z * VEHICLE_ALT_SF);
+	}
+
+};
+#pragma pack(pop)
+
+#pragma pack(push, 1)
+typedef struct {
+	// ValidType AlignComplete;
+	// ValidType HybridVelocityValid;
+	// ValidType HybridPositionValid;
+	// ValidType HybridAttitudeValid;
+	uint8_t a;
+	uint8_t b;
+}HSSI_OUTPUT_DATA_VALIDITY_WORD_Type;
+#pragma pack(pop)
+
+#define VEHICLE_SPEED_METERS_PER_SEC_TO_KM_PER_HR  (1)
+#define VEHICLE_ANGLE_SF  (DEGTORAD)
+#define VEHICLE_RPY_SF  (0.01)
+#define VEHICLE_LAT_LON_SF  (DEGTORAD)
+#define VEHICLE_ALT_SF  (0.1)
+
+#pragma pack(push, 1)
+typedef struct SANSStabilizationDataMessage
+{
+	uint8_t xca;
+	uint8_t x68;
+	uint8_t x47;
+	uint8_t hcs;//header checksum
+
+	uint64_t SystemTimer;
+
+	HSSI_OUTPUT_DATA_VALIDITY_WORD_Type HSSI_outputDataValidityWord;
+
+	uint32_t HybridHeadingAngle;
+	uint32_t HybridPitchAngle;
+	uint32_t HybridRollAngle;
+	uint32_t HybridYawAngle;
+	uint32_t HybridYawRate;
+	uint32_t HybridPitchRate;
+	uint32_t HybridRollRate;
+
+	uint64_t HybridLatitude;
+	uint64_t HybridLongitude;
+	uint32_t HybridAltitudeMSL;
+
+	uint32_t HybridNorthVelocity;
+	uint32_t HybridEastVelocity;
+	uint32_t HybridVerticalVelocity;
+	//FOM_Type HybridFOM;
+	uint8_t HybridFOM;
+	uint8_t cs;//message checksum
+
+
+	
+
+public:
+
+	void Init()
+	{
+		xca = 0xca;
+		x68 = 0x68;
+		x47 = 0x47;
+	}
+
+	void SetVehicleSpeed(FVector ned_speed_meter_per_sec)
+	{
+
+		float val;
+		uint32_t uval;
+
+		val = ned_speed_meter_per_sec.X * VEHICLE_SPEED_METERS_PER_SEC_TO_KM_PER_HR;
+	    uval  = *(uint32_t*)&(val);
+		CUtil::ReverseCopyBytes((INT8U*) & uval, (INT8U*)&HybridNorthVelocity, 4);
+
+		val = ned_speed_meter_per_sec.Y * VEHICLE_SPEED_METERS_PER_SEC_TO_KM_PER_HR;
+		uval = *(uint32_t*)&(val);
+		CUtil::ReverseCopyBytes((INT8U*)&uval, (INT8U*)&HybridEastVelocity, 4);
+
+
+		val = -ned_speed_meter_per_sec.Z * VEHICLE_SPEED_METERS_PER_SEC_TO_KM_PER_HR;
+		uval = *(uint32_t*)&(val);
+		CUtil::ReverseCopyBytes((INT8U*)&uval, (INT8U*)&HybridVerticalVelocity, 4);
+
+	}
+
+	void SetVehicleRPY(FVector rpy_deg)
+	{
+		float val;
+
+		uint32_t uval;
+
+		val = rpy_deg.Z * VEHICLE_ANGLE_SF;
+		uval = *(uint32_t*)&(val);
+		CUtil::ReverseCopyBytes((INT8U*)&uval, (INT8U*)&HybridYawAngle, 4);
+
+		val = rpy_deg.X * VEHICLE_ANGLE_SF;
+		uval = *(uint32_t*)&(val);
+		CUtil::ReverseCopyBytes((INT8U*)&uval, (INT8U*)&HybridRollAngle, 4);
+
+		val = rpy_deg.Y * VEHICLE_ANGLE_SF;
+		uval = *(uint32_t*)&(val);
+		CUtil::ReverseCopyBytes((INT8U*)&uval, (INT8U*)&HybridPitchAngle, 4);
+
+
+		HybridHeadingAngle = HybridYawAngle;
+
+	}
+
+	void SetVehicleLocation(FVector llh);
+};
+#pragma pack(pop)
+
+void SANSStabilizationDataMessage::SetVehicleLocation(FVector llh)
+{
+	double val;
+	INT64U u64val;
+	INT32U u32val;
+	float fval;
+
+	val = llh.X * VEHICLE_LAT_LON_SF;
+	u64val = *(INT64U*)&(val);
+	CUtil::ReverseCopyBytes((INT8U*)&u64val, (INT8U*)&HybridLatitude, 8);
+
+
+	val = llh.Y * VEHICLE_LAT_LON_SF;
+	u64val = *(INT64U*)&(val);
+	CUtil::ReverseCopyBytes((INT8U*)&u64val, (INT8U*)&HybridLongitude, 8);
+
+	fval = llh.Z * VEHICLE_ALT_SF;
+	u32val = *(uint32_t*)&(fval);
+	CUtil::ReverseCopyBytes((INT8U*)&u32val, (INT8U*)&HybridAltitudeMSL, 4);
+
+
+
+	
+}
+
 void AHalo24Radar::BeginPlay()
 {
 	Super::BeginPlay();
@@ -18,6 +235,7 @@ void AHalo24Radar::BeginPlay()
 void AHalo24Radar::OnDataReady()
 {
 	Super::OnDataReady();
+	SendINSData();
 }
 
 void AHalo24Radar::RadarStateMachine()
@@ -198,6 +416,28 @@ void AHalo24Radar::UpdateTracker()
 	
 }
 
+void AHalo24Radar::SendINSData()
+{
+	SANSStabilizationDataMessage ins_data;
+
+	auto rolloff = offsetof(SANSStabilizationDataMessage, HybridRollAngle);
+
+	memset(&ins_data, 0, sizeof(SANSStabilizationDataMessage));
+	ins_data.Init();
+
+	auto actor_pos = GetPositionLatLongHeightMSL();
+	ins_data.SetVehicleLocation(actor_pos);
+
+	auto rpy_deg = CUtil::GetActorRPY(this);
+	rpy_deg = CMath::FixAngPlusMinus180(rpy_deg);
+	ins_data.SetVehicleRPY(rpy_deg);
+
+	auto vel = GetActorVelocityMetersPerSec();
+	ins_data.SetVehicleSpeed(vel);
+
+	pINSConnection->SendData((const INT8U*) & ins_data, sizeof(SANSStabilizationDataMessage));
+}
+
 
 char* AHalo24Radar::GetSerial()
 {
@@ -341,7 +581,7 @@ void AHalo24Radar::OnRecievedMessage(SRadarSimSDKPacket* p_pack)
 		if (strcmp((char*)p_args->SerialData.SerialKey, Serial) == 0) {
 			FLOAT64 bearing_deg = 0;
 			if (p_args->BearingType == 1) {
-				bearing_deg = 360 - (INT32S)p_args->BearingDeg;
+				bearing_deg = (INT32S)p_args->BearingDeg;
 			}
 			else {
 				auto rpy = CMath::GetActorEulerAnglesRPY(GetOwner());

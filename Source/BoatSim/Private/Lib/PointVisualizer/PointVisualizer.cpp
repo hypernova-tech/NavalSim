@@ -32,7 +32,9 @@ void APointVisualizer::Tick(float DeltaTime)
 
 }
 
-void APointVisualizer::Visualize(SScanResult *p_scan_result, FVector origin, FVector current_forward, FVector current_right, float max_range_meter, void *p_tracker)
+
+
+void APointVisualizer::Visualize(SScanResult *p_scan_result, FVector origin, FVector current_forward, FVector current_right, float max_range_meter, void *p_tracker, bool reset)
 {
     //SetPixelValue(pRenderTarget, 50, 50, FColor::Green);
 
@@ -59,7 +61,10 @@ void APointVisualizer::Visualize(SScanResult *p_scan_result, FVector origin, FVe
         // Clear the canvas with the desired color to avoid artifacts from previous frames
         //Canvas.SetAllowedModes(FCanvas::ECanvasAllowModes::Allow_Flush);
         //Canvas.SetAllowedModes(FCanvas::ECanvasAllowModes::Allow_DeleteOnRender);
-        Canvas.Clear(FColor::Black);
+        if (reset) {
+            Canvas.Clear(FColor::Black);
+        }
+        
         FIntPoint rt_size = RenderTargetResource->GetSizeXY();
 
         SSectorContainer* p_sector_container = p_scan_result->GetSectorContainer();

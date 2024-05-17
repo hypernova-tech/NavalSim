@@ -3,7 +3,7 @@
 
 #include "Products/IDAS/Sensors/AIS/AISCanBusConnection.h"
 #include "Lib/Sensor/AISPublisher/AISPublisher.h"
-
+#include <Lib/Time/CTime.h>
 bool UAISCanBusConnection::SendAISNMEA200Message(const int src_addr, const int prio, const int png, const INT8U* p_bytes, INT32U count)
 {
 	SCanControllerPacket pack;
@@ -23,6 +23,11 @@ bool UAISCanBusConnection::SendAISNMEA200Message(const int src_addr, const int p
 			INT32U current_ind = count - CurrentRemaingDataCount;
 
 			memcpy(&frame[2], &p_bytes[current_ind], 6);
+#if 0
+			for (int i = 0; i < 6; i++) {
+				frame[2 + i] = i;
+			}
+#endif
 			CurrentMessageSequence++;
 			CurrentRemaingDataCount -= 6;
 
@@ -34,6 +39,13 @@ bool UAISCanBusConnection::SendAISNMEA200Message(const int src_addr, const int p
 			cnt = CurrentRemaingDataCount > 7 ? 7 : CurrentRemaingDataCount;
 
 			memcpy(&frame[1], &p_bytes[current_ind], cnt);
+			
+#if 0
+			for (int i = 0; i < 7; i++) {
+				frame[1 + i] = 6 + (CurrentMessageSequence-1) *7 + i;
+			}
+#endif
+			
 			
 			CurrentMessageSequence++;
 			CurrentRemaingDataCount -= cnt;
@@ -84,7 +96,7 @@ void UAISCanBusConnection::FastPacketStateMachine()
 		break;
 	case CanFastPackStateRunning:
 		SendAISNMEA200Message(CurrentMessage.SrcAddr, CurrentMessage.Prio, CurrentMessage.Png, CurrentMessage.Data, CurrentMessage.Length);
-		LastMessageSendTimeSec = FPlatformTime::Seconds();
+		LastMessageSendTimeSec = CTime::GetTimeSecond();
 		if (CurrentRemaingDataCount == 0) {
 			next_state = CanFastPackStateIdle;
 		}
@@ -94,7 +106,7 @@ void UAISCanBusConnection::FastPacketStateMachine()
 		break;
 
 	case CanFastPackStateWait:
-		if (FPlatformTime::Seconds() - LastMessageSendTimeSec > 10e-3) {
+		if (CTime::GetTimeSecond() - LastMessageSendTimeSec > 50e-3) {
 			next_state = CanFastPackStateRunning;
 		}
 		break;

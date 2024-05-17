@@ -8,10 +8,18 @@ void UIDASAISSCommIF::BeginPlay()
 }
 
 
-
---------
 Blueprint hazırlama
-Blueprint isim verme
+--------
+
+Blueprint isimini yaz
 Diğer aktor base ayarlarının yapılması
 MainMesh tag in atanacağı static objecyi belirleme
 Collision response ayarlarını yapma
+
+
+Yeni Parametre Save Load
+------------------------
+İlgili class içine parametreyi tanımla
+ISystemAPI'ye set getter yaz
+ConsoleSetImpl ve ConsoleGetImpl için console arayüzünü yaz
+parametreyi json ve dosya için kayıt et (void AActorBase::SaveJSON(CJsonDataContainer& data); void AActorBase::Save(ISaveLoader* p_save_loader))

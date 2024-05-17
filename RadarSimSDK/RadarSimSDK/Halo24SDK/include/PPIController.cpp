@@ -1,8 +1,10 @@
-#include "PPIController.h"
+
 #include "../../Lib/Types/Primitives.h"
 #include <RadarColourLookUpTable.h>
+#include "PPIController.h"
 #include "math.h"
 #include <iostream>
+#include "../../RadarSimSdkConfig.h"
 using namespace std;
 
 
@@ -36,12 +38,8 @@ void Navico::Image::tPPIController::Process(const Protocol::NRP::Spoke::t9174Spo
 	int spoke_azimuth = pSpoke->header.spokeAzimuth;
 
 	double spoke_ang = spoke_azimuth * 360.0 / 4096;
+
 	MetersPerPixel = pSpoke->header.rangeCellSize_mm * 0.001;
-#if USE_PIXEL_SIZE_FROM_HEADER > 0
-	
-#endif
-
-
 
 	for (int i = 0; i < pSpoke->header.nOfSamples; i++) {
 		int byte_ind = i / 2;
@@ -56,6 +54,8 @@ void Navico::Image::tPPIController::Process(const Protocol::NRP::Spoke::t9174Spo
 		else {
 			data = (merged >> 4) & 0xf;
 		}
+
+
 
 	
 		
@@ -76,37 +76,23 @@ void Navico::Image::tPPIController::Process(const Protocol::NRP::Spoke::t9174Spo
 		int py_cart = (Height/2 - py);
 
 		int addr = (py_cart) * Width + px_cart;
+
 		tColor* p_color = (tColor*)pFrame;
 
-
 		if (data != 0) {
+			if(spoke_ang >315){
+				bool spoke_error = true;
+				spoke_error = false;
+			}
 			
-			p_color[addr] = 0x00FF00FF; // green
-			//FillAround(p_color, px_cart, py_cart, 5);
+			p_color[addr] = 0xFF00FF00; // green
 		}
 		else {
 			p_color[addr] = 0;
 		}
-
-	
-			
 	}
 
 
-}
-
-void Navico::Image::tPPIController::FillAround(tColor* p_color, int px, int py, int radius)
-{
-	int i, j;
-
-	for (i = (px - radius); i <= (px + radius); i++) {
-		for (j = (py - radius); j <= (py + radius); j++) {
-			if (i >= 0 && i < Width && j >= 0 && j < Height) {
-				p_color[j*Width + i] = 0x00FF00FF;
-			}
-		}
-
-	}
 }
 void Navico::Image::tPPIController::ResetSpokeLineAtImage(int spoke_number, int spoke_count)
 {
@@ -142,7 +128,7 @@ Navico::Image::tPPIRangeInterpolation Navico::Image::tPPIController::GetRangeInt
 
 void Navico::Image::tPPIController::SetRangeResolution(float metersPerPixel)
 {
-	MetersPerPixel = metersPerPixel;
+	//MetersPerPixel = metersPerPixel;
 }
 
 float Navico::Image::tPPIController::GetRangeResolution() const

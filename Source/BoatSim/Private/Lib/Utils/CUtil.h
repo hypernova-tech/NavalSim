@@ -220,7 +220,7 @@ public:
 			p_dest[i] = p_src[len - 1 - i];
 		}
 	}
-	
+	static FVector GetActorVelocityMetersPerSec(AActor* p_actor);
 	static FVector GetActorRPY(AActor* p_actor);
 	static AActor* GetParentActor(AActor *p_child);
 	static FString GetActorFullComponentPath(AActor* p_actor);
@@ -255,6 +255,7 @@ public:
 	static TArray<FString> GetAllComponentPaths(AActor* Actor);
 	static void ReattachComponentToActor(UPrimitiveComponent* ChildComponent, AActor* ParentActor, FName SocketName = NAME_None);
 	static FVector GetActorSizeInLocalAxes(AActor* Actor);
+	static INT8U SetBits(INT8U field, INT8U from, INT8U to, INT8U val);
 
 
 };

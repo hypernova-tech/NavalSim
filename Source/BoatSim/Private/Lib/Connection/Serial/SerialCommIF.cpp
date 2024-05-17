@@ -5,6 +5,7 @@
 #define EN_WIN 1
 
 #if EN_WIN > 0
+#include <cstddef> // for std::byte
 #include "windows.h"
 #endif
 void USerialCommIF::BeginPlay()

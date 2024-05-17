@@ -63,6 +63,13 @@ protected:
 		bool ShoudPublishATON = true; 
 
 	UPROPERTY(EditAnywhere)
+		int AISAtonType = 1;
+
+	UPROPERTY(EditAnywhere)
+		FString AisAtonName="atonufo";
+	
+
+	UPROPERTY(EditAnywhere)
 		int AISMMSI = 0;
 
 	UPROPERTY(EditAnywhere)
@@ -70,6 +77,9 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 		FString AISCallSign = ""; 
+
+	UPROPERTY(EditAnywhere)
+		FString AISDestination = "unknown";
 
 	UPROPERTY(EditAnywhere)
 		double AISReferencePointFromStarboard = 0;

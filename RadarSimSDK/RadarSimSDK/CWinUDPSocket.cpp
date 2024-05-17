@@ -38,7 +38,12 @@ bool CWinUDPSocket::Create(SConnectionArgs* p_args) {
 
     // Filling server information
     m_address.sin_family = AF_INET; // IPv4
-    m_address.sin_addr.s_addr = INADDR_ANY;
+
+    if (inet_pton(AF_INET, p_args->ipAddress.c_str(), &m_address.sin_addr) <= 0) {
+        perror("inet_pton failed");
+        exit(EXIT_FAILURE);
+    }
+    //m_address.sin_addr.s_addr = INADDR_ANY;
     m_address.sin_port = htons(p_args->ReceivePort);
    
 
@@ -94,8 +99,6 @@ bool CWinUDPSocket::SendData(INT8U* p_data, INT32U count, INT16U remote_port, bo
 }
 
 bool CWinUDPSocket::ReceivedData(INT8U* p_dest, INT32U dest_size, INT32U& read_count) {
-   
-
     int addrLength = sizeof(m_address);
 
 
@@ -108,9 +111,11 @@ bool CWinUDPSocket::ReceivedData(INT8U* p_dest, INT32U dest_size, INT32U& read_c
         return false;
     }
     else {
-        AddPacket(p_dest, recv_len);
-        ReadPacket(p_dest, dest_size, read_count);
-        return true;
+        if (recv_len == 0xffffffff) {
+            return false;
+        }
+        read_count = recv_len;
+        std::cout << (char*)p_dest;
     }
     return true;
 }

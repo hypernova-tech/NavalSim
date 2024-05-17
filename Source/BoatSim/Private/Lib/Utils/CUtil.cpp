@@ -1112,7 +1112,19 @@ FLOAT64 CUtil::GetTimeSeconds()
     return FApp::GetCurrentTime();
 }
 
+FVector CUtil::GetActorVelocityMetersPerSec(AActor* p_actor)
+{
+    FVector val;
 
+    if (p_actor->IsA<AActorBase>()) {
+        AActorBase* p_actor_base = (AActorBase*)p_actor;
+        val = p_actor_base->GetActorVelocityMetersPerSec();
+    }
+    else {
+        val = TOW(p_actor->GetVelocity());
+    }
+    return val;
+}
 
 FVector CUtil::GetActorRPY(AActor* p_actor)
 {
@@ -1603,4 +1615,21 @@ FVector CUtil::GetActorSizeInLocalAxes(AActor* Actor)
     auto ret = TotalMax - TotalMin;
     auto scale = Actor->GetActorScale3D();
     return FVector(ret.X * scale.X, ret.Y * scale.Y, ret.Z * scale.Z);
+}
+
+INT8U CUtil::SetBits(INT8U field, INT8U from, INT8U to, INT8U val)
+{
+    // Calculate the number of bits to set
+    INT8U numBits = to - from + 1;
+
+    // Create a mask for the specified bit range
+    INT8U mask = ((1 << numBits) - 1) << from;
+
+    // Clear the bits in the specified range in the original field
+    field &= ~mask;
+
+    // Set the bits to the new value
+    field |= (val << from) & mask;
+
+    return field;
 }

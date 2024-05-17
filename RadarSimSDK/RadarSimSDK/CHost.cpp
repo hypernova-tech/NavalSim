@@ -2,66 +2,21 @@
 #include <iostream>
 #include "Halo24SDK/include/ImageClient.h"
 #include "Halo24SDK/include/TargetTrackingClient.h"
+#include "Halo24SDK/include/PPIController.h"
 #include <math.h>
 #include "CUtil.h"
-#if SHOW_SPOKE_IMAGE > 0
+#if SIMULATE_HOST > 0
 #include <opencv2/opencv.hpp>
+extern cv::Mat* pimage;
 #endif
-#include "Halo24SDK/include/PPIController.h"
-using namespace Navico::Image;
-using namespace Navico::Protocol::NRP;
 
+using namespace Navico::Protocol::NRP;
+using namespace Navico::Image;
 #define DEBUG_HOST
 
 CHost* CHost::pInstance = nullptr;
 
-class CImageClientObserver :public iImageClientSpokeObserver {
-	// Inherited via iImageClientSpokeObserver
 
-private:
-	tPPIController* pPPIController;
-#if SHOW_SPOKE_IMAGE > 0
-	cv::Mat* pImage;
-#endif
-	thread *pThreadOpenCV;
-
-public:
-	void Init()
-	{
-		pPPIController = new tPPIController();
-#if SHOW_SPOKE_IMAGE > 0
-		pThreadOpenCV = new std::thread(&CImageClientObserver::OpenCVThread, this);
-#endif
-
-	}
-#if SHOW_SPOKE_IMAGE > 0
-	void OpenCVThread()
-	{
-
-		pImage = new cv::Mat();
-		*pImage = cv::Mat::zeros(1024, 1024, CV_8UC4);
-
-		// Draw a circle
-		//cv::circle(*pImage, cv::Point(320, 240), 50, cv::Scalar(0, 0, 255), -1);
-
-		// Create a window
-		cv::namedWindow("Window", cv::WINDOW_AUTOSIZE);
-
-		// Show our image inside it
-		cv::imshow("Window", *pImage);
-		pPPIController->SetFrameBuffer((intptr_t)pImage->data, 1024, 1024, nullptr, 512, 512);
-		pPPIController->SetRangeResolution(1.5);
-		while (true) {
-			cv::imshow("Window", *pImage);
-			cv::waitKey(20);
-		}
-	}
-#endif
-	virtual void UpdateSpoke(const Spoke::tSpokeV9174* pSpoke) override
-	{
-		pPPIController->Process(pSpoke);
-	}
-};
 
 void CHost::Init()
 {
@@ -89,13 +44,6 @@ void CHost::Init()
 
 	pHalo24SimSDK->AddSDK(pRadarStreamConnection);
 
-
-
-	
-
-
-
-
 }
 
 
@@ -106,8 +54,6 @@ void CHost::ThreadFunction()
 	tMultiRadarClient::GetInstance()->AddUnlockStateObserver(this);
 	char radars[2][MAX_SERIALNUMBER_SIZE];
 	char radars_unlockkey[2][MAX_UNLOCKKEY_SIZE+1];
-	
-	
 
 
 	memset(radars_unlockkey, 0, sizeof(radars_unlockkey));
@@ -115,17 +61,24 @@ void CHost::ThreadFunction()
 	strcpy(radars_unlockkey[0], RADAR1_UNLOCK_KEY);
 	strcpy(radars_unlockkey[1], RADAR2_UNLOCK_KEY);
 
-	CImageClientObserver* pSpokeObserver = new CImageClientObserver();
-	pSpokeObserver->Init();
+
+
 
 #if true
 
 	tImageClient* ImageClients[1];
 	tTargetTrackingClient* TargetTrackingClients[1];
+	
+
+#endif
+#if SIMULATE_HOST > 0
+	tPPIController* pPPIController = new  tPPIController();
+	
+	pPPIController->SetFrameBuffer((intptr_t)pimage->data, pimage->cols, pimage->rows, nullptr, pimage->cols/2, pimage->rows/2);
+	
 
 
 #endif
-
 	
 
 	int RadarCount = 0;
@@ -134,7 +87,7 @@ void CHost::ThreadFunction()
 
 	while (true) {
 
-		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+		std::this_thread::sleep_for(std::chrono::milliseconds(10));
 		tMultiRadarClient::GetInstance()->ExternalUpdate();
 		time += 10e-3;
 
@@ -203,7 +156,7 @@ void CHost::ThreadFunction()
 #endif
 
 					ImageClients[0] = new tImageClient();
-					ImageClients[0]->AddSpokeObserver(pSpokeObserver);
+
 					next_state = EHostState::ConnectRadars;
 				}
 				break;
@@ -228,7 +181,7 @@ void CHost::ThreadFunction()
 
 					for (INT32U i = 0; i < RadarCount; i++) {
 						auto* p_radar = tMultiRadarClient::GetInstance()->FindRadar(radars[i]);
-
+						p_radar->pPPIController = pPPIController;
 						for (int stream = 0; stream < 2; stream++) {
 							if (p_radar) {
 								if (p_radar->GetIsImageStreamConnected(stream)) {
@@ -332,13 +285,10 @@ void CHost::ThreadFunction()
 					p_radar->pImageClient->SetTransmit(true);
 				}
 
-				next_state = EHostState::WaitAfterTransmit; // EHostState::SetGain;
+				next_state = EHostState::SetGain;
 				std::this_thread::sleep_for(std::chrono::milliseconds(10));
 			}
 			break;
-
-			case EHostState::WaitAfterTransmit:
-				break;
 
 			case EHostState::SetGain:
 			{
@@ -383,7 +333,8 @@ void CHost::ThreadFunction()
 					p_radar->pImageClient->SetRain(41);
 				}
 
-				next_state = EHostState::SetSectorBlanking;
+				//next_state = EHostState::SetSectorBlanking;
+				next_state = EHostState::PeriodicUpdate;
 				std::this_thread::sleep_for(std::chrono::milliseconds(10));
 			}
 			break;
@@ -538,6 +489,7 @@ void CHost::ThreadFunction()
 			
 			case EHostState::PeriodicUpdate:
 
+#if 0
 				for (INT32U i = 0; i < RadarCount; i++) {
 					auto* p_radar = tMultiRadarClient::GetInstance()->FindRadar(radars[i]);
 					p_radar->pImageClient->SetRange(500 + 0*sin(2*3.14* 0.2f * time));
@@ -551,6 +503,11 @@ void CHost::ThreadFunction()
 					}
 					std::this_thread::sleep_for(std::chrono::milliseconds(10));
 				}
+
+#else
+
+				std::this_thread::sleep_for(std::chrono::milliseconds(10));
+#endif
 
 
 				break;

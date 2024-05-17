@@ -18,9 +18,10 @@ using namespace std;
 #define MAX_NUMBER_OF_RADARS 2
 #include "ImageClient.h"
 #include <TargetTrackingClient.h>
-
+#include "../../Halo24SDK/include/PPIController.h"
 
 using namespace Navico::Protocol::NRP;
+using namespace Navico::Image;
 enum EMultiRadarState
 {
     Idle,
@@ -123,6 +124,7 @@ public:
  
     tImageClient* pImageClient = nullptr;
     tTargetTrackingClient* pTargetTrackingClient = nullptr;
+    tPPIController* pPPIController = nullptr;
 
     SRadar()
     {
@@ -384,7 +386,7 @@ private:
 
     tMultiRadarClient( const tMultiRadarClient & );
     tMultiRadarClient & operator=( const tMultiRadarClient & );
- 
+
     ////tMultiRadarClientImpl *  m_pImpl;
 
     list<iRadarListObserver*> RadarListObservers;
@@ -409,7 +411,7 @@ public:
     void HandleRadarSetup(IConnection* p_conn, SRadarSetupPayload* p_res);
     void HandleSpoke(IConnection* p_conn, SHalo24SpokePayload* p_res);
     void HandleTrackingStatus(IConnection* p_conn, STrackingTargetStatusPayload* p_res);
- 
+
 };
 
 //-----------------------------------------------------------------------------

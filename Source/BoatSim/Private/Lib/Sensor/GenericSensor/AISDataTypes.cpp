@@ -137,6 +137,10 @@ void SADISAtonReport::SetPositionAccuracy(bool is_low)
 {
 	AccRaimTimeStamp.PositionAccuracy = is_low ? 0 : 1;
 }
+void SADISAtonReport::SetAtonType(INT8U val)
+{
+	Descrite[0] = CUtil::SetBits(Descrite[0], 0, 4, val);
+}
 void SADISAtonReport::SetLat(FLOAT64 lat_deg)
 {
 	LatDeg = CMath::EncodeSigned32(lat_deg, LAT_SF_DEG);
@@ -169,7 +173,7 @@ void SADISAtonReport::SetPositionReferencePointFromTrueNorth(FLOAT64 len_meter)
 
 void SADISAtonReport::SetElectronicFixingPositionDeviceType(EAISPositionFixingDeviceType val)
 {
-	Descrite.ElectronicFixingPositionFixingDeviceType = val;
+	Descrite[1] = CUtil::SetBits(Descrite[1], 1, 4, val);
 }
 
 void SADISAtonReport::SetATONName(char* p_name)
@@ -340,7 +344,7 @@ void SAISClassAStaticVoyageRelatedData::SetEstimatedDateOfArrival(int year, int 
 	int total_day = (year - 1970) * 365 + month * 30 + day;
 	EstimatedDateOfArrival = total_day;
 }
-void SAISClassAStaticVoyageRelatedData::SetEstimatedTimeOfArrival(float val)
+void SAISClassAStaticVoyageRelatedData::SetEstimatedTimeOfArrival(double val)
 {
 	EstimatedTimeOfArrival = CMath::EncodeUnsigned16(val, ESTIMATED_TIME_OF_ARRIVAL_SF_SEC);
 }

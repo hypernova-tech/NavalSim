@@ -345,6 +345,58 @@ void CTrackerBase::UpdateTrackState(STrackedObjectInfo* p_track)
     }
 
     p_track->SetState(next_state);
+    FillTrackInfo(p_track);
+}
+FLOAT64 CTrackerBase::ComputeTrackBearingDeg(STrackedObjectInfo* p_track)
+{
+    FVector target_pos_to_own_ship = p_track->pActor->GetTargetLocation() - OwnShipLocation;
+    auto val = FMath::Atan2(target_pos_to_own_ship.Y, target_pos_to_own_ship.X)* RADTODEG;
+    return val;
+}
+
+FVector CTrackerBase::GetTrackVelocity(STrackedObjectInfo* p_track)
+{
+    FVector val;
+
+    if (p_track->pActor->IsA<AActorBase>()) {
+        AActorBase* p_actor_base = (AActorBase*)p_track->pActor;
+        val = p_actor_base->GetActorVelocityMetersPerSec();
+    }
+    else {
+        val = p_track->pActor->GetVelocity();
+    }
+    return val;
+}
+void CTrackerBase::FillTrackInfo(STrackedObjectInfo* p_track)
+{
+    /*
+
+    FLOAT64 AbsoluteDistanceMeter;
+    FLOAT64 AbsoluteBearingDeg;
+    FLOAT64 AbsoulteTargetSpeedMetersPerSec;
+    FLOAT64 AbsoulteTargetCourseDeg;
+
+    FLOAT64 RelativeDistanceMeter;
+    FLOAT64 RelativeBearingDeg;
+    FLOAT64 RelativeTargetSpeedMetersPerSec;
+    FLOAT64 RelativeTargetCourseDeg;
+
+    */
+    FVector target_pos_to_own_ship = p_track->pActor->GetTargetLocation() - OwnShipLocation;
+    FVector vel = GetTrackVelocity(p_track);
+    FVector owner_vel = CUtil::GetActorVelocityMetersPerSec(pOwnShip);
+
+    p_track->AbsoluteDistanceMeter = target_pos_to_own_ship.Length();
+    p_track->AbsoluteBearingDeg = ComputeTrackBearingDeg(p_track);
+    p_track->AbsoulteTargetSpeedMetersPerSec = vel.Length();
+    p_track->AbsoulteTargetCourseDeg = FMath::Atan2(vel.Y, vel.X) * RADTODEG;
+
+    p_track->RelativeDistanceMeter = p_track->AbsoluteDistanceMeter;    
+    p_track->RelativeBearingDeg = CUtil::GetActorRPY(pOwnShip).Z - CUtil::GetActorRPY(p_track->pActor).Z;
+    p_track->RelativeTargetSpeedMetersPerSec = (vel - owner_vel).Length();
+    auto rel_vel = (vel - owner_vel);
+    p_track->RelativeTargetCourseDeg = FMath::Atan2(rel_vel.Y, rel_vel.X) * RADTODEG;
+
 }
 void CTrackerBase::UpdateCPA()
 {
@@ -360,7 +412,7 @@ void CTrackerBase::UpdateCPA()
             auto dist = (target_vec).Length();
 
             if (dist < closest_track_dist) {
-                dist = closest_track_dist;
+                closest_track_dist = dist;
                 target_vec.Normalize();
                 closest_track_bearing_true_north = FMath::Atan2(target_vec.Y, target_vec.X) * RADTODEG;
                 p_closest_actor = p_track->pActor;

@@ -1,0 +1,21 @@
+﻿  CBoatSimListener.cpp
+  CHalo24SimIF.cpp
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\Halo24SDK\include\MultiRadarClient.h(11,10): fatal  error C1083: Cannot open include file: 'NavTypes.h': No such file or directory
+  CHost.cpp
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\Halo24SDK\include\MultiRadarClient.h(11,10): fatal  error C1083: Cannot open include file: 'NavTypes.h': No such file or directory
+  CLinuxUDPSocket.cpp
+  CUtil.cpp
+  CWinUDPSocket.cpp
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\CWinUDPSocket.cpp(94,17): warning C4305: 'return': truncation from 'int' to 'bool'
+  ImageClient.cpp
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\Halo24SDK\include\NavTypes.h(11,10): fatal  error C1083: Cannot open include file: 'NavDefines.h': No such file or directory
+  MultiRadarClient.cpp
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\Halo24SDK\include\MultiRadarClient.h(11,10): fatal  error C1083: Cannot open include file: 'NavTypes.h': No such file or directory
+  PPIController.cpp
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\Halo24SDK\include\PPIController.cpp(3,10): fatal  error C1083: Cannot open include file: 'RadarColourLookUpTable.h': No such file or directory
+  TargetTrackingClient.cpp
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\Halo24SDK\include\ExportSDK.h(9,10): fatal  error C1083: Cannot open include file: 'NavDefines.h': No such file or directory
+  IConnection.cpp
+  IDataIF.cpp
+  RadarSimSDK.cpp
+C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\Halo24SDK\include\MultiRadarClient.h(11,10): fatal  error C1083: Cannot open include file: 'NavTypes.h': No such file or directory

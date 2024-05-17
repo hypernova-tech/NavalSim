@@ -703,7 +703,7 @@ FVector AActorBase::UpdateActorVelocityMetersPerSec()
 	if (PrimaryPhysComponent && PrimaryPhysComponent->IsSimulatingPhysics())
 	{
 		ActorVelocityMetersPerSec = PrimaryPhysComponent->GetComponentVelocity();
-		return ActorVelocityMetersPerSec;
+		return TOW(ActorVelocityMetersPerSec);
 	}
 
 	// Check for a character movement component
@@ -711,7 +711,7 @@ FVector AActorBase::UpdateActorVelocityMetersPerSec()
 	if (Character && Character->GetCharacterMovement())
 	{
 		ActorVelocityMetersPerSec = Character->GetCharacterMovement()->Velocity;
-		return Velocity;
+		return TOW(ActorVelocityMetersPerSec);
 	}
 
 	

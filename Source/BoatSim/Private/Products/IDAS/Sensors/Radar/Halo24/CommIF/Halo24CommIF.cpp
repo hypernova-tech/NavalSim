@@ -198,8 +198,8 @@ void UHalo24CommIF::SendTrackedObjects(const STargetTrackStatusData& info, char*
 		STrackingTargetStatusPayload payload;
 		SRadarSimSDKPacket pack;
 		
-
-		payload.TargetData.targetID = p_info->ClientId;
+		payload.TargetData.targetValid = 1;
+		payload.TargetData.targetID = p_info->TrackerId; //p_info->ClientId; //todo fixme id karmaşası
 		payload.TargetData.serverTargetID = p_info->TrackerId;
 			 
 		payload.TargetData.infoAbsolute.distance_m = p_info->AbsoluteDistanceMeter;
@@ -213,6 +213,7 @@ void UHalo24CommIF::SendTrackedObjects(const STargetTrackStatusData& info, char*
 		payload.TargetData.infoRelative.course_ddeg = (360 - p_info->RelativeTargetCourseDeg) * 10;
 
 		payload.TargetData.infoAbsoluteValid = 1;
+	
 
 		switch (p_info->TrackState) {
 		case 	EObjectTrackState::Acquiring:

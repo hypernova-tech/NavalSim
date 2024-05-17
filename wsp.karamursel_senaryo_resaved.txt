@@ -23,6 +23,29 @@ set --name env --envsoundfx 1
 set --name env --wind 3.000000
 set --name env --winddir 0.000000
 
+create --name jeoref --bp  --tick 0
+set --name jeoref --actorid 0
+set --name jeoref --instance -1
+set --name jeoref --suppressed 0
+set --name jeoref --standalone 0
+set --name jeoref --position "0.000000 0.000000 0.000000"
+set --name jeoref --rotation "-0.000000 -0.000000 0.000000"
+set --name jeoref --scale "1.000000 1.000000 1.000000"
+set --name jeoref --blocking 1
+set --name jeoref --tempkelvin 300.000000
+set --name jeoref --heatsource 0
+set --name jeoref --annotationid 0
+set --name jeoref --annotatechildren 0
+set --name jeoref --annotatechildren 0
+set --name jeoref --sharedmemname 
+set --name jeoref --gstreamerip 
+set --name jeoref --gstreamerport 0
+set --name jeoref --motionlogen 0
+set --name jeoref --maporiginlat 40.701369
+set --name jeoref --maporiginlon 29.545753
+set --name jeoref --maporiginh 0.000000
+
+
 create --name hostif --bp HOSTIF
 set --name hostif --instance -1
 set --name hostif --suppressed 0
@@ -417,3 +440,8 @@ set --name sidamirpath --segment 50
 set --name sidamirpath --straight 0
 set --name sidamirpath --turnrate 90.000000
 set --name sidamirpath --bake 
+
+
+set --camfollow sidamir
+set --camfollowtrans "-150.171140 4573.674708 663.353811"
+set --camfolloweuler "0.000000 -1.211451 -111.953278"
