@@ -115,22 +115,24 @@ void AAISBase::ProcessEntries()
 		if(curr_time >= next_time || is_first_time) {
 			if (GetAISClassType() == 1) {
 				///PublishClassAPositionReport(entry.pActor);
-				if (GetShoudPublishATON()) {
-					PublishATONReport(entry.pActor);
-				}
-				PublishAISClassAStaticVoyageRelatedData(entry.pActor);
+			
+				////PublishAISClassAStaticVoyageRelatedData(entry.pActor);
 				entry.LastTransmitTimeSec = CTime::GetTimeSecond();
 
 			}else if (GetAISClassType() == 2) {
 				////PublishClassBPositionReport(entry.pActor);
-				if (GetShoudPublishATON()) {
-					////PublishATONReport(entry.pActor);
-				}
+		
 
-				///PublishClassBStaticDataReportPartA(entry.pActor);
-				///PublishClassBStaticDataReportPartB(entry.pActor);
-				
+				////PublishClassBStaticDataReportPartA(entry.pActor);
+				////PublishClassBStaticDataReportPartB(entry.pActor);
+				PublishClassBExtendedPositionReport(entry.pActor);
 				entry.LastTransmitTimeSec = CTime::GetTimeSecond();
+			}
+			else {
+				if (GetShoudPublishATON()) {
+					/////PublishATONReport(entry.pActor);
+					entry.LastTransmitTimeSec = CTime::GetTimeSecond();
+				}
 			}
 		}
 		
@@ -278,16 +280,16 @@ void AAISBase::PublishClassBStaticDataReportPartB(AActorBase* p_act)
 	FVector rpy_ang = CMath::GetActorEulerAnglesRPY(p_act);
 	FVector vel = p_act->GetActorVelocityMetersPerSec();
 	FVector ang_vel = p_act->GetActorAngularVelocityRPYDegPerSec();
-	char temp[8];
+	char temp[7];
 
 	report.SetMessageID(24);
 	report.SetUserID(AISUserId);
 	report.SetTypeOfShipAndCargo(ShipCargoType);
 
-	CUtil::FStringToAsciiChar(AISVendorId, temp, 8);
+	CUtil::FStringToAsciiChar(AISVendorId, temp, sizeof(temp));
 	report.SetVendorId(temp);
 
-	CUtil::FStringToAsciiChar(AISCallSign, temp, 8);
+	CUtil::FStringToAsciiChar(AISCallSign, temp, sizeof(temp));
 	report.SetCallSign(temp);
 
 	FVector size = p_act->GetActorComputedActorSizeMeter();
@@ -344,6 +346,7 @@ void AAISBase::PublishAISClassAStaticVoyageRelatedData(AActorBase* p_act)
 
 	FVector size = p_act->GetActorComputedActorSizeMeter();
 
+
 	report.SetShipLenght(size.X);
 	report.SetShipBeam(size.Y);
 	report.SetReferencePointFromStarboard(AISReferencePointFromStarboard);
@@ -371,6 +374,45 @@ void AAISBase::PublishAISClassAStaticVoyageRelatedData(AActorBase* p_act)
 	SendMessageViaAISPusblisher(AISSrcAddr, AISDefaultMessagePriority, EAISPNGIDs::AISClassAStaticVoyageRelatedDataPNG,&report, sizeof(SAISClassAStaticVoyageRelatedData));
 }
 
+void AAISBase::PublishClassBExtendedPositionReport(AActorBase* p_act)
+{
+
+	SClassBExtendedPositionReport report;
+	memset(&report, 0, sizeof(SClassBExtendedPositionReport));
+
+	FVector pos = p_act->GetPositionLatLongHeightMSL();
+	FVector rpy_ang = CMath::GetActorEulerAnglesRPY(p_act);
+	FVector vel = p_act->GetActorVelocityMetersPerSec();
+	FVector ang_vel = p_act->GetActorAngularVelocityRPYDegPerSec();
+	char temp[20];
+
+	report.SetMessageID(5);
+	report.SetUserID(AISUserId);
+	report.SetTypeOfShipAndCargo(ShipCargoType);
+
+	CUtil::FStringToAsciiChar(AISName, temp, sizeof(report.Name));
+	report.SetName(temp);
+
+
+	report.SetLat(pos.X);
+	report.SetLon(pos.Y);
+	report.SetPositionAccuracy(false);
+	report.SetSpeedOverGround(vel.Length());
+	report.SetCourseOverGround(GetCourseOverGround(p_act));
+	report.SetTrueHeading(rpy_ang.Z);
+	
+	FVector size = p_act->GetActorComputedActorSizeMeter();
+
+	report.SetShipLenght(size.X);
+	report.SetShipBeam(size.Y);
+	report.SetReferencePointFromStarboard(AISReferencePointFromStarboard);
+	report.SetReferencePointPositionAftOfBow(ReferencePointPositionAftOfBow);
+
+	
+
+	//CUtil::DebugLog("timex: "+CUtil::FloatToString(CTime::GetTimeSecond()));
+	SendMessageViaAISPusblisher(AISSrcAddr, AISDefaultMessagePriority, EAISPNGIDs::AISClassBExtendedPositionReport, &report, sizeof(SAISClassAStaticVoyageRelatedData));
+}
 
 int AAISBase::GetAISClassType()
 {

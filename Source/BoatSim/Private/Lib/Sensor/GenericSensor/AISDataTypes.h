@@ -10,7 +10,8 @@ enum EAISPNGIDs :INT32U
 	ATONReportPNG = 129041,
 	ClassBStaticDataReportPartBPNG = 129810,
 	ClassBStaticDataReportPartAPNG = 129809,
-	AISClassAStaticVoyageRelatedDataPNG = 129794
+	AISClassAStaticVoyageRelatedDataPNG = 129794,
+	AISClassBExtendedPositionReport = 129040
 };
 
 #define MAX_PAYLOAD_SIZE 256
@@ -219,7 +220,7 @@ struct SADISAtonReport { // aids to navigation reports
 struct SClassBStaticDataReportPartA {
 	SAISHeader Header;
 	INT32U UserId;
-	INT8U Name[21]; //null terminated
+	INT8U Name[20]; //null terminated
 
 	struct {
 		INT8U AISTransciverInfo : 5;
@@ -241,20 +242,22 @@ struct SClassBStaticDataReportPartB {
 	SAISHeader Header;
 	INT32U UserId;
 	INT8U TypeOfShipAndCargo;
-	INT8U VendorId[8]; //null terminated
-	INT8U CallSign[8]; //null terminated
+	INT8U VendorId[7]; //null terminated
+	INT8U CallSign[7]; //null terminated
 	INT16U ShipLength;
 	INT16U ShipBeam;
 	INT16U ReferencePointFromStarboard;
 	INT16U ReferencePointPositionAftOfBow;
 	INT32U MotherShipMMSI;
+	INT8U Reserved1[2];
+	/*
 	struct {
 		INT8U NMEAReserved : 2;
 		INT8U AllSpare : 6;
 		INT8U AisTrasvicerInfo : 5;
 		INT8U NMEAReserved2 : 3;
 
-	}Reserved1;
+	}Reserved1;*/
 	INT8U SequenceID;
 	void SetMessageID(INT8U id);
 	void SetUserID(INT32U val);
@@ -311,5 +314,62 @@ public:
 	void SetEstimatedTimeOfArrival(double val);
 	void SetDraft(float val);
 	void SetDestination(char* name);
+};
+#pragma pack(pop)
+
+#pragma pack(push, 1)
+struct SClassBExtendedPositionReport {
+	SAISHeader Header;
+	INT32U UserId;
+	INT32U LongDeg;
+	INT32U LatDeg;
+	struct {
+		INT8U PositionAccuracy : 1;
+		INT8U AISRAIMFlag : 1;
+		INT8U TimeStamp : 6;
+
+	}AccRaimTimeStamp;
+	INT16U Cog;
+	INT16U Sog;
+	/*	struct {
+		INT32U AisCommState : 19;
+		INT32U AisTransciverInfo : 5;
+	}CommState;*/
+	INT8U Reserved1[2];
+	INT8U TypeOfShipAndCargo;
+	INT16U TrueHeading;
+	INT8U Reserved2;
+
+	INT16U ShipLength;
+	INT16U ShipBeam;
+	INT16U ReferencePointFromStarboard;
+	INT16U ReferencePointPositionAftOfBow;
+
+	INT8U Name[20];
+	INT8U Reserved3[2];
+
+
+	INT8U SequenceID;
+
+	void SetMessageID(INT8U id);
+	void SetUserID(INT32U val);
+	void SetTimeStamp(INT8U val);
+	void SetTypeOfShipAndCargo(INT8U val);
+	void SetPositionAccuracy(bool is_low);
+	void SetLat(FLOAT64 lat_deg);
+	void SetLon(FLOAT64 lat_deg);
+	void SetCourseOverGround(FLOAT64 val_deg);
+	void SetSpeedOverGround(FLOAT64 val_meters_per_sec);
+	void SetTrueHeading(FLOAT64 val_deg);
+
+
+	void SetName(char* name);
+	void SetShipLenght(float val);
+	void SetShipBeam(float val);
+
+	void SetReferencePointFromStarboard(float val);
+	void SetReferencePointPositionAftOfBow(float val);
+
+
 };
 #pragma pack(pop)

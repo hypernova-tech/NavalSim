@@ -114,6 +114,7 @@ public:
 	void PublishClassBStaticDataReportPartA(AActorBase* p_act);
 	void PublishClassBStaticDataReportPartB(AActorBase* p_act);
 	void PublishAISClassAStaticVoyageRelatedData(AActorBase* p_act);
+	void PublishClassBExtendedPositionReport(AActorBase* p_act);
 	int GetAISClassType();
 	void SetAISClassType(int val);
 

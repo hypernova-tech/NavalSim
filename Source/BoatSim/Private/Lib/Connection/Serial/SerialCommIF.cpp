@@ -15,7 +15,7 @@ void USerialCommIF::BeginPlay()
 #if EN_WIN > 0
 	//RegisterConnectionInfo(0, pUDPConnection->GetConnectionInfo(), pUDPConnection);
 
-    hSerialHandle = CreateFile(L"COM3",
+    hSerialHandle = CreateFile(L"COM4",
         GENERIC_READ | GENERIC_WRITE,
         0,
         0,

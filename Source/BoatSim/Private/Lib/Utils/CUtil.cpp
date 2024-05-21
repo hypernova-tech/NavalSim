@@ -1589,6 +1589,8 @@ FVector CUtil::GetActorSizeInLocalAxes(AActor* Actor)
 
     FVector TotalMin(FLT_MAX, FLT_MAX, FLT_MAX);
     FVector TotalMax(-FLT_MAX, -FLT_MAX, -FLT_MAX);
+    auto fcurr_rot = Actor->GetActorRotation();
+    Actor->SetActorRotation(FRotator::ZeroRotator);
 
     // Transform to get back to local actor space
     FTransform ActorTransformInverse = Actor->GetTransform().Inverse();
@@ -1612,9 +1614,12 @@ FVector CUtil::GetActorSizeInLocalAxes(AActor* Actor)
     }
 
     // Calculate total size in local axes
-    auto ret = TotalMax - TotalMin;
+    auto ret = (TotalMax - TotalMin);
     auto scale = Actor->GetActorScale3D();
+    Actor->SetActorRotation(fcurr_rot);
     return FVector(ret.X * scale.X, ret.Y * scale.Y, ret.Z * scale.Z);
+
+    //return ret;
 }
 
 INT8U CUtil::SetBits(INT8U field, INT8U from, INT8U to, INT8U val)

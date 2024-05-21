@@ -3,8 +3,8 @@ set --name marlin --actorid 0
 set --name marlin --instance -1
 set --name marlin --suppressed 0
 set --name marlin --standalone 0
-set --name marlin --position "0.000000 0.524948 0.000000"
-set --name marlin --rotation "-0.000000 -0.000000 0.000000"
+set --name marlin --position "138.868050 -22.537892 0.000000"
+set --name marlin --rotation "-0.000000 -0.000000 76.500013"
 set --name marlin --scale "2.000000 1.000000 1.000000"
 set --name marlin --blocking 1
 set --name marlin --tempkelvin 300.000000
@@ -77,7 +77,7 @@ set --name env --sharedmemname
 set --name env --gstreamerip 
 set --name env --gstreamerport 0
 set --name env --motionlogen 0
-set --name env --timeofday 12.080134
+set --name env --timeofday 12.096481
 set --name env --envtimeflowscale 1.000000
 set --name env --rain 0.000000
 set --name env --cloud 0.000000
@@ -155,8 +155,8 @@ set --name ais1 --actorid 0
 set --name ais1 --instance -1
 set --name ais1 --suppressed 0
 set --name ais1 --standalone 0
-set --name ais1 --position "0.000000 0.524948 0.000000"
-set --name ais1 --rotation "-0.000000 -0.000000 0.000000"
+set --name ais1 --position "138.868050 -22.537892 0.000000"
+set --name ais1 --rotation "0.000000 -0.000000 76.500013"
 set --name ais1 --scale "2.000000 1.000000 1.000000"
 set --name ais1 --blocking 1
 set --name ais1 --tempkelvin 300.000000
@@ -185,7 +185,7 @@ set --name ais1 --foamen 0
 set --name ais1 --seasurfdetectprob 0.000000
 set --name ais1 --maxsurfpenet 0.000000
 set --name ais1 --aisuserid 10
-set --name ais1 --aisclass 1
+set --name ais1 --aisclass 2
 set --name ais1 --aispublishaton 1
 set --name ais1 --aispublishperiodstatic 5.000000
 set --name ais1 --aispublishperiodmoving 2.000000
@@ -235,7 +235,7 @@ set --name ais2 --foamen 0
 set --name ais2 --seasurfdetectprob 0.000000
 set --name ais2 --maxsurfpenet 0.000000
 set --name ais2 --aisuserid 2
-set --name ais2 --aisclass 2
+set --name ais2 --aisclass 0
 set --name ais2 --aispublishaton 1
 set --name ais2 --aispublishperiodstatic 7.000000
 set --name ais2 --aispublishperiodmoving 5.000000

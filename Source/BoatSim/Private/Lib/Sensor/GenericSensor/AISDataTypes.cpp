@@ -211,11 +211,12 @@ void SClassBStaticDataReportPartB::SetTypeOfShipAndCargo(INT8U val)
 
 void SClassBStaticDataReportPartB::SetVendorId(char* name)
 {
+	int dest_len = sizeof(VendorId);
 	memset(VendorId, 0, sizeof(VendorId));
 	int len = strlen(name);
-	if (len >= 7) {
-		memcpy(VendorId, name, 7);
-		VendorId[7] = 0;
+	if (len >= (dest_len-1)) {
+		memcpy(VendorId, name, (dest_len - 1));
+		VendorId[(dest_len - 1)] = 0;
 	}
 	else {
 		memcpy(VendorId, name, len);
@@ -225,11 +226,13 @@ void SClassBStaticDataReportPartB::SetVendorId(char* name)
 
 void SClassBStaticDataReportPartB::SetCallSign(char* name)
 {
+	int dest_len = sizeof(CallSign);
+
 	memset(CallSign, 0, sizeof(CallSign));
 	int len = strlen(name);
-	if (len >= 7) {
-		memcpy(CallSign, name, 7);
-		CallSign[7] = 0;
+	if (len >= (dest_len-1)) {
+		memcpy(CallSign, name, dest_len-1);
+		CallSign[dest_len-1] = 0;
 	}
 	else {
 		memcpy(CallSign, name, len);
@@ -385,7 +388,51 @@ void SClassBStaticDataReportPartA::SetUserID(INT32U val)
 
 void SClassBStaticDataReportPartA::SetName(char* name)
 {
+	int dest_len = sizeof(Name);
+	memset(Name, 0, sizeof(Name));
+	int len = strlen(name);
+	if (len >= (dest_len - 1)) {
+		memcpy(Name, name, dest_len - 1);
+		Name[dest_len - 1] = 0;
+	}
+	else {
+		memcpy(Name, name, len);
+		Name[len] = 0;
+	}
 	
+
+}
+
+
+
+
+////
+
+void SClassBExtendedPositionReport::SetMessageID(INT8U id)
+{
+	Header.ID.MessageID = (INT8U)id;
+}
+
+void SClassBExtendedPositionReport::SetUserID(INT32U val)
+{
+	UserId = val;
+}
+
+void SClassBExtendedPositionReport::SetTimeStamp(INT8U val)
+{
+	AccRaimTimeStamp.TimeStamp = val;
+}
+void SClassBExtendedPositionReport::SetPositionAccuracy(bool is_low)
+{
+	AccRaimTimeStamp.PositionAccuracy = is_low ? 0 : 1;
+}
+void SClassBExtendedPositionReport::SetTypeOfShipAndCargo(INT8U val)
+{
+	TypeOfShipAndCargo = val;
+}
+
+void SClassBExtendedPositionReport::SetName(char* name)
+{
 	memset(Name, 0, sizeof(Name));
 	int len = strlen(name);
 	if (len >= (sizeof(Name) - 1)) {
@@ -396,6 +443,56 @@ void SClassBStaticDataReportPartA::SetName(char* name)
 		memcpy(Name, name, len);
 		Name[len] = 0;
 	}
-	
-
 }
+
+
+void SClassBExtendedPositionReport::SetShipLenght(float val)
+{
+	ShipLength = CMath::EncodeUnsigned16(val, SHIP_LENGTH_SF_METER);
+}
+
+void SClassBExtendedPositionReport::SetShipBeam(float val)
+{
+	ShipBeam = CMath::EncodeUnsigned16(val, SHIP_BEAM_SF_METER);
+}
+
+void SClassBExtendedPositionReport::SetReferencePointFromStarboard(float val)
+{
+	ReferencePointFromStarboard = CMath::EncodeUnsigned16(val, REFERENCE_POINT_POSITION_FROM_STARTBOARD_SF_METER);
+}
+
+void SClassBExtendedPositionReport::SetReferencePointPositionAftOfBow(float val)
+{
+	ReferencePointPositionAftOfBow = CMath::EncodeUnsigned16(val, REFERENCE_POINT_POSITION_AFTOfBO_SF_METER);
+}
+void SClassBExtendedPositionReport::SetLat(FLOAT64 lat_deg)
+{
+	LatDeg = CMath::EncodeSigned32(lat_deg, LAT_SF_DEG);
+}
+void SClassBExtendedPositionReport::SetLon(FLOAT64 lat_deg)
+{
+	LongDeg = CMath::EncodeSigned32(lat_deg, LON_SF_DEG);
+}
+
+void SClassBExtendedPositionReport::SetCourseOverGround(FLOAT64 val_deg) {
+	FLOAT64 val_rad = val_deg * DEGTORAD;
+	if (val_rad < 0) {
+		val_rad += 2 * PI;
+	}
+	Cog = CMath::EncodeUnsigned16(val_rad, COG_SF_RAD);
+};
+void SClassBExtendedPositionReport::SetSpeedOverGround(FLOAT64 val_meters_per_sec) {
+
+	Sog = CMath::EncodeUnsigned16(val_meters_per_sec, SOG_SF_METER_PER_SEC);
+};
+void SClassBExtendedPositionReport::SetTrueHeading(FLOAT64 val_deg)
+{
+	FLOAT64 val_rad = val_deg * DEGTORAD;
+
+	if (val_rad < 0) {
+		val_rad += 2 * PI;
+	}
+	TrueHeading = CMath::EncodeUnsigned16(val_rad, TRUE_HEADING_SF_RAD);
+};
+
+
