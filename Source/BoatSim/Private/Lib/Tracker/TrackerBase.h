@@ -111,6 +111,7 @@ protected:
 	INT32S TrackerId = 1;
 protected:
 	STrackedObjectInfo* FindTrackByClientId(INT32S client_track_id);
+	bool IsActorInAnyTrack(AActor* p_actor);
 	void AddTrack(STrackedObjectInfo* p_track);
 	void RemoveTrack(STrackedObjectInfo* p_track);
 	void UpdateTrackState(STrackedObjectInfo *p_track);

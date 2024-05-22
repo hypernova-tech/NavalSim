@@ -296,6 +296,17 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
 
     }
 
+    ret = CommandManager.HasA(CCLICommandManager::IPAddr2);
+    if (ret) {
+        if (pSystemAPI->GetConnectionInfo(p_actor, 1, conn_info)) {
+            SendConsoleResponse(name, CCLICommandManager::IPAddr2, conn_info.IpAddr);
+            return true;
+        }
+    }
+    else {
+
+    }
+
     ret = CommandManager.HasA(CCLICommandManager::IsBlockingObject);
     if (ret) {
         if (pSystemAPI->GetIsBlockingObject(p_actor, is_enabled)) {

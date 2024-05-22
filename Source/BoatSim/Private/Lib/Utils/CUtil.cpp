@@ -151,11 +151,31 @@ bool CUtil::Trace(STraceArgs& args, SScanResult* pscan_result)
                     FVector corner_dir = (corner - start_loc);
                     corner_dir.Normalize();
 
-                    FVector corner_rpy = local_rpy;//CMath::GetEulerAnglesRPYDeg(corner_dir);
+                    FVector corner_rpy = CMath::GetEulerAnglesRPYDeg(corner_dir);
+                    FLOAT64 temp = (corner_rpy.Z - args.azimuth_start_deg);
+                    bool is_angle_corrected = false;
+                    if (temp < 0) {
+                        temp += 360;
+                        is_angle_corrected = true;
+                    }
+                    corner_horizantal_ind = (temp) / args.azimuth_angle_step_deg;
 
-                    corner_horizantal_ind = (corner_rpy.Z - args.azimuth_start_deg) / args.azimuth_angle_step_deg;
-                    corner_vertical_ind = (corner_rpy.Y - args.elevation_start_deg) / args.elevation_angle_step_deg;
+                    temp = (corner_rpy.Y - args.elevation_start_deg);
+                    if (temp < 0) {
+                        temp += 360;
+                        is_angle_corrected = true;
+                    }
+                    
+                    if (is_angle_corrected) {
+                        CMath::IsPointInsideVolume(!args.is_world, start_loc, look_dir, corner, args.elevation_start_deg, args.elevation_end_deg, args.azimuth_start_deg, args.azimuth_end_deg, args.min_range_meter, args.range_meter, local_rpy);
 
+                    }
+                    
+                    corner_vertical_ind = (temp) / args.elevation_angle_step_deg;
+
+                    if (corner_horizantal_ind < 0 || corner_vertical_ind < 0) {
+                        corner_horizantal_ind = corner_horizantal_ind;
+                    }
 
                     ScanPie(args, corner_rpy.Z, corner_rpy.Y,
                         look_dir,
@@ -164,7 +184,7 @@ bool CUtil::Trace(STraceArgs& args, SScanResult* pscan_result)
                         ret, result, query_params,
                         pscan_result,
                         corner_horizantal_ind, corner_vertical_ind,
-                        p_current_sektor, success_count, true,false);
+                        p_current_sektor, success_count, false,false);
                 }
 
             }
@@ -189,7 +209,7 @@ bool CUtil::Trace(STraceArgs& args, SScanResult* pscan_result)
                 FVector corner_dir = (corner - start_loc);
                 corner_dir.Normalize();
 
-                FVector corner_rpy = local_rpy;//CMath::GetEulerAnglesRPYDeg(corner_dir);
+                FVector corner_rpy = CMath::GetEulerAnglesRPYDeg(corner_dir);
 
                 corner_horizantal_ind = (corner_rpy.Z - (args.azimuth_start_deg )) / args.azimuth_angle_step_deg;
                 corner_vertical_ind = (corner_rpy.Y - (args.elevation_start_deg )) / args.elevation_angle_step_deg;
@@ -349,6 +369,7 @@ void inline CUtil::ScanPie(const STraceArgs& args, double azimuth, double elevat
         FVector detected_pos_error = result.Location + TOUE(error_meter) * new_dir;
         pscan_result->Point3D[horizantal_ind][vertical_ind] = detected_pos_error;
 
+ 
 
         pscan_result->AddTrackPoint3DList(detected_pos_error, range_errored_meter);
         if (draw_points) {

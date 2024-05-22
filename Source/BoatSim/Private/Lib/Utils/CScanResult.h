@@ -71,12 +71,20 @@ public:
 
 	void Add(FVector& vec, EScanObjectType object_type = EScanObjectType::ScanObjectTypeUnknown, FLOAT32 NormalStrenght = 1)
 	{
+		if (vec.ContainsNaN()) {
+			bool is_nan;
+			is_nan = true;
+		}
 		SectorData.Add(vec);
 		ObjectType.Add(object_type);
 		NormalStrength.Add(NormalStrenght);
 	}
 	void Add(FVector& vec, INT32S azimuth_scan_ind, EScanObjectType object_type = EScanObjectType::ScanObjectTypeUnknown, FLOAT32 NormalStrenght = 1)
 	{
+		if (vec.ContainsNaN()) {
+			bool is_nan;
+			is_nan = true;
+		}
 		SectorData.Add(vec);
 		ObjectType.Add(object_type);
 

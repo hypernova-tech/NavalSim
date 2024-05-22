@@ -397,7 +397,7 @@ bool AHalo24Radar::VerifySerial(char* p_inp)
 void AHalo24Radar::UpdateTracker()
 {
 	if (!UseSimulationDataAsOwnShip) {
-		FRotator rot(0, -(360 - (INT32S)LastOwnshipData.DirectionDeg), 0);
+		FRotator rot(0, (LastOwnshipData.DirectionDeg), 0);
 		FVector vel = rot.RotateVector(FVector::ForwardVector) * LastOwnshipData.SpeedMetersPerSec;
 		pTracker->SetOwnshipData(this, GetActorLocation(), CUtil::GetActorRPY(this), vel, GetRangeMeter(), NoiseMean, NoiseStdDeviation);
 	}

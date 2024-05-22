@@ -88,7 +88,17 @@ STrackedObjectInfo* CTrackerBase::FindTrackByClientId(INT32S client_track_id)
     }
     return *ret;
 }
+bool CTrackerBase::IsActorInAnyTrack(AActor* p_actor)
+{
+    for (auto track : TrackedObjects) {
+        if (track->pActor == p_actor) {
+            return true;
+        }
+    }
 
+    return false;
+
+}
 void CTrackerBase::AddTrack(STrackedObjectInfo* p_track)
 {
     TrackedObjects.Add(p_track);
@@ -118,9 +128,11 @@ void CTrackerBase::SetOwnshipData(AActor *p_owner, FVector own_ship_location, FV
 
 bool CTrackerBase::TryTrack(INT32U client_id, FVector pos, FLOAT64 bearing_true_north_deg, FLOAT64 distance_meter)
 {
+#if false
     if (FindTrackByClientId(client_id) != nullptr) { // first cancel it
         return false;
     }
+#endif
 
     if (TrackedObjects.Num() >= MaxTrackCount) {
         return false;
@@ -195,10 +207,13 @@ bool CTrackerBase::TryAcquire(STrackedObjectInfo* p_track, bool& is_safe_target)
     CUtil::GetOwnAndParents(pOwnShip, ignore_list);
 
     auto actor = ASystemManagerBase::GetInstance()->GetVisibleActorAt(ignore_list, OwnShipLocation + dir * TOUE(RadarRangeMeter.X), target_pos, TrackerDistanceToleranceMeter);
+    
     if (actor != nullptr) {
-        is_safe_target = true;
-        p_track->pActor = actor;
-        return true;
+        if (!IsActorInAnyTrack(actor)) {
+            is_safe_target = true;
+            p_track->pActor = actor;
+            return true;
+        }      
     }
     return false;
 }
@@ -351,6 +366,9 @@ FLOAT64 CTrackerBase::ComputeTrackBearingDeg(STrackedObjectInfo* p_track)
 {
     FVector target_pos_to_own_ship = p_track->pActor->GetTargetLocation() - OwnShipLocation;
     auto val = FMath::Atan2(target_pos_to_own_ship.Y, target_pos_to_own_ship.X)* RADTODEG;
+    if (val < 0) {
+        val += 360;
+    }
     return val;
 }
 
@@ -382,11 +400,23 @@ void CTrackerBase::FillTrackInfo(STrackedObjectInfo* p_track)
     FLOAT64 RelativeTargetCourseDeg;
 
     */
+    if (p_track->pActor == nullptr) {
+        p_track->AbsoluteDistanceMeter = 0;
+        p_track->AbsoluteBearingDeg = 0;
+        p_track->AbsoulteTargetSpeedMetersPerSec = 0;
+        p_track->AbsoulteTargetCourseDeg = 0;
+
+        p_track->RelativeDistanceMeter = 0;
+        p_track->RelativeBearingDeg = 0;
+        p_track->RelativeTargetSpeedMetersPerSec = 0;
+        p_track->RelativeTargetCourseDeg = 0;
+        return;
+    }
     FVector target_pos_to_own_ship = p_track->pActor->GetTargetLocation() - OwnShipLocation;
     FVector vel = GetTrackVelocity(p_track);
     FVector owner_vel = CUtil::GetActorVelocityMetersPerSec(pOwnShip);
 
-    p_track->AbsoluteDistanceMeter = target_pos_to_own_ship.Length();
+    p_track->AbsoluteDistanceMeter = TOW(target_pos_to_own_ship.Length());
     p_track->AbsoluteBearingDeg = ComputeTrackBearingDeg(p_track);
     p_track->AbsoulteTargetSpeedMetersPerSec = vel.Length();
     p_track->AbsoulteTargetCourseDeg = FMath::Atan2(vel.Y, vel.X) * RADTODEG;

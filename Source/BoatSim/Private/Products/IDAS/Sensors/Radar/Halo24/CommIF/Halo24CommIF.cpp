@@ -203,14 +203,14 @@ void UHalo24CommIF::SendTrackedObjects(const STargetTrackStatusData& info, char*
 		payload.TargetData.serverTargetID = p_info->TrackerId;
 			 
 		payload.TargetData.infoAbsolute.distance_m = p_info->AbsoluteDistanceMeter;
-		payload.TargetData.infoAbsolute.bearing_ddeg = (360 - p_info->AbsoluteBearingDeg)*10; // ship coordinate system
+		payload.TargetData.infoAbsolute.bearing_ddeg = (p_info->AbsoluteBearingDeg)*10; // ship coordinate system
 		payload.TargetData.infoAbsolute.speed_dmps = p_info->AbsoulteTargetSpeedMetersPerSec * 10; // ship coordinate system
-		payload.TargetData.infoAbsolute.course_ddeg = (360 - p_info->AbsoulteTargetCourseDeg) * 10;
+		payload.TargetData.infoAbsolute.course_ddeg = (p_info->AbsoulteTargetCourseDeg) * 10;
 			 
 		payload.TargetData.infoRelative.distance_m = p_info->RelativeDistanceMeter;
-		payload.TargetData.infoRelative.bearing_ddeg = (360 - p_info->RelativeBearingDeg) * 10; // ship coordinate system
+		payload.TargetData.infoRelative.bearing_ddeg = (p_info->RelativeBearingDeg) * 10; // ship coordinate system
 		payload.TargetData.infoRelative.speed_dmps = p_info->RelativeTargetSpeedMetersPerSec * 10; // ship coordinate system
-		payload.TargetData.infoRelative.course_ddeg = (360 - p_info->RelativeTargetCourseDeg) * 10;
+		payload.TargetData.infoRelative.course_ddeg = (p_info->RelativeTargetCourseDeg) * 10;
 
 		payload.TargetData.infoAbsoluteValid = 1;
 	

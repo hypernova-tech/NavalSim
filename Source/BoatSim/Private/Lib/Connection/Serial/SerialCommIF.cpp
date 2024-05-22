@@ -5,8 +5,10 @@
 #define EN_WIN 1
 
 #if EN_WIN > 0
+#include "Windows/AllowWindowsPlatformTypes.h"
 #include <cstddef> // for std::byte
 #include "windows.h"
+#include "Windows/HideWindowsPlatformTypes.h"
 #endif
 void USerialCommIF::BeginPlay()
 {

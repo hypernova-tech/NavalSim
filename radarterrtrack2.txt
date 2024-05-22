@@ -127,6 +127,25 @@ set --name box --gstreamerip
 set --name box --gstreamerport 0
 set --name box --motionlogen 0
 
+create --name Track2 --bp CUBE --tick 0
+set --name Track2 --actorid 0
+set --name Track2 --instance -1
+set --name Track2 --suppressed 0
+set --name Track2 --standalone 0
+set --name Track2 --position "36.337238 138.762345 0.000000"
+set --name Track2 --rotation "-0.000000 -0.000000 0.000000"
+set --name Track2 --scale "5.000000 5.000000 5.000000"
+set --name Track2 --blocking 1
+set --name Track2 --tempkelvin 300.000000
+set --name Track2 --heatsource 0
+set --name Track2 --annotationid 0
+set --name Track2 --annotatechildren 0
+set --name Track2 --annotatechildren 0
+set --name Track2 --sharedmemname 
+set --name Track2 --gstreamerip 
+set --name Track2 --gstreamerport 0
+set --name Track2 --motionlogen 0
+
 create --name radar --bp RADARHALO24 --tick 0
 set --name radar --parent marlin
 set --name radar --actorid 0
@@ -177,5 +196,5 @@ set --name radar --radmaxguardzonecount 2
 set --name radar --radmaxsectorblankingzonecount 4
 
 set --camfollow marlin
-set --camfollowtrans "-2659.720947 -997.636719 1181.929810"
-set --camfolloweuler "0.000000 -13.080906 4.470691"
+set --camfollowtrans "-5083.488247 -2351.205031 2290.845137"
+set --camfolloweuler "0.000000 -6.521599 43.129581"
