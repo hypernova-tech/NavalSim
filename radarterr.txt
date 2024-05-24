@@ -152,7 +152,7 @@ set --name radar --heatsource 0
 set --name radar --annotationid 0
 set --name radar --annotatechildren 0
 set --name radar --annotatechildren 0
-set --name radar --ipaddr1 15.0.110.35
+set --name radar --ipaddr1 127.0.0.1
 set --name radar --localport1 13080
 set --name radar --remoteport 13081
 set --name radar --sharedmemname 

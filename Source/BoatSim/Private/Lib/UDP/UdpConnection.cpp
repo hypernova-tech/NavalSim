@@ -42,7 +42,7 @@ void UUdpConnection::InitConnection(void* args)
 		SocketSubsystem = ISocketSubsystem::Get(PLATFORM_SOCKETSUBSYSTEM);
 	}
 
-	SendSize = 2 * 1024 * 1024;
+	SendSize = 1 * 1024 * 1024;
 	BufferSize = 2 * 1024 * 1024;
 
 	LocalEndpoint = FIPv4Endpoint(FIPv4Address::Any, ASystemManagerBase::GetInstance()->GetSystemAPI()->ConvertToInstancedLocalPort(LocalPort));
@@ -60,15 +60,16 @@ void UUdpConnection::InitConnection(void* args)
 				.AsNonBlocking()
 				.AsReusable()
 				.BoundToEndpoint(LocalEndpoint)
-				.WithReceiveBufferSize(SendSize)
-				.WithSendBufferSize(BufferSize)
-				.WithBroadcast();
+				.WithReceiveBufferSize(BufferSize)
+				.WithSendBufferSize(SendSize);
+				//.WithBroadcast();
 		}
 	}
 
 
 	StartUDPThread();
 }
+
 
 SConnectionInfo UUdpConnection::GetConnectionInfo()
 {

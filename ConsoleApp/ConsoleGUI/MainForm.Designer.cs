@@ -303,7 +303,7 @@ namespace ConsoleGUI
             tabPage2.Location = new Point(4, 24);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new Padding(3);
-            tabPage2.Size = new Size(548, 650);
+            tabPage2.Size = new Size(611, 650);
             tabPage2.TabIndex = 1;
             tabPage2.Text = "Actors";
             tabPage2.UseVisualStyleBackColor = true;
@@ -380,7 +380,7 @@ namespace ConsoleGUI
             flowLayoutPanel1.Controls.Add(ModifyableDataGrid);
             flowLayoutPanel1.Location = new Point(265, 11);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
-            flowLayoutPanel1.Size = new Size(277, 633);
+            flowLayoutPanel1.Size = new Size(340, 633);
             flowLayoutPanel1.TabIndex = 17;
             // 
             // label10
@@ -692,7 +692,7 @@ namespace ConsoleGUI
             ModifyableDataGrid.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             ModifyableDataGrid.RowHeadersVisible = false;
             ModifyableDataGrid.RowTemplate.Height = 25;
-            ModifyableDataGrid.Size = new Size(253, 405);
+            ModifyableDataGrid.Size = new Size(314, 405);
             ModifyableDataGrid.TabIndex = 34;
             ModifyableDataGrid.CellContentClick += ModifyableDataGrid_CellContentClick;
             ModifyableDataGrid.CellEndEdit += ModifyableDataGrid_CellEndEdit;
@@ -712,7 +712,7 @@ namespace ConsoleGUI
             tabControl1.Location = new Point(6, 27);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
-            tabControl1.Size = new Size(556, 678);
+            tabControl1.Size = new Size(619, 678);
             tabControl1.TabIndex = 4;
             // 
             // tabPage1
@@ -1381,7 +1381,7 @@ namespace ConsoleGUI
             menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, viewToolStripMenuItem, cameaToolStripMenuItem, simulationToolStripMenuItem, annotationToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(562, 24);
+            menuStrip1.Size = new Size(637, 24);
             menuStrip1.TabIndex = 5;
             menuStrip1.Text = "menuStrip1";
             // 
@@ -1710,7 +1710,7 @@ namespace ConsoleGUI
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(562, 727);
+            ClientSize = new Size(637, 727);
             Controls.Add(menuStrip1);
             Controls.Add(tabControl1);
             Name = "MainForm";

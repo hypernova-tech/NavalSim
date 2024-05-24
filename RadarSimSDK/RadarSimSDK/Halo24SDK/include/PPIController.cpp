@@ -5,6 +5,8 @@
 #include "math.h"
 #include <iostream>
 #include "../../RadarSimSdkConfig.h"
+#include <iostream>
+#include <chrono>
 using namespace std;
 
 
@@ -31,15 +33,54 @@ void Navico::Image::tPPIController::SetColourLookUpTable(tRadarColourLookUpTable
 {
 	pColorLookUpTable = pLookUpTable;
 }
+std::chrono::high_resolution_clock::time_point first_mes_time;
+std::chrono::high_resolution_clock::time_point start_time;
+std::chrono::high_resolution_clock::time_point end_time;
+double elp_time_sec;
+bool is_time_init = false;
+int last_spoke_azimuth;
 
 void Navico::Image::tPPIController::Process(const Protocol::NRP::Spoke::t9174Spoke* pSpoke)
 {
 	// decode spoke azimuth;
 	int spoke_azimuth = pSpoke->header.spokeAzimuth;
+	if (pSpoke->header.spokeAzimuth == 0) {
+
+		if (!is_time_init) {
+			is_time_init = true;
+			first_mes_time = std::chrono::high_resolution_clock::now();
+		}
+
+		start_time = std::chrono::high_resolution_clock::now();
+		end_time = std::chrono::high_resolution_clock::now();
+		std::chrono::duration<double, std::milli> elapsed_from_start_time = end_time - first_mes_time;
+		std::cout << "Message Time: " << elapsed_from_start_time.count() << " ms" << std::endl;
+	}	
+	if (pSpoke->header.spokeAzimuth == 4095) {
+		end_time = std::chrono::high_resolution_clock::now();
+		std::chrono::duration<double, std::milli> elapsed = end_time - start_time;
+
+		// Print the duration in milliseconds
+		std::cout << "Elapsed time: " << elapsed.count() << " ms" << std::endl;
+
+	}
+	if (is_time_init) {
+		if ((pSpoke->header.spokeAzimuth - last_spoke_azimuth) != 1) {
+			std::cout << "curr - last " << pSpoke->header.spokeAzimuth << " and " << last_spoke_azimuth<<std::endl;
+		}
+	}
+	last_spoke_azimuth = pSpoke->header.spokeAzimuth;
+
 
 	double spoke_ang = spoke_azimuth * 360.0 / 4096;
 
 	MetersPerPixel = pSpoke->header.rangeCellSize_mm * 0.001;
+	/*
+	* 	if (spoke_azimuth == 0) {
+		memset(pFrame, 0, sizeof(tColor) * 1024 * 1024);
+	}
+	*/
+
 
 	for (int i = 0; i < pSpoke->header.nOfSamples; i++) {
 		int byte_ind = i / 2;

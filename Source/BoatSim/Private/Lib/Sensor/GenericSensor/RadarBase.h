@@ -58,7 +58,8 @@ public:
 		int  ImageStreamCount = 2;
 
 
-
+	UPROPERTY(EditAnywhere)
+		double  RadarTransmissionDurationSec = 0.3;
 
 	UPROPERTY(EditAnywhere, Category = "Scan")
 		uint8 FastScanLevel;

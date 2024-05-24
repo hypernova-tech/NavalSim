@@ -7,6 +7,7 @@
 #include <Lib/Connection/ConnectionDefs.h>
 #include "Lib/UDP/IConnectionDataReceiver.h"
 #include <Lib/Connection/ConnectionBase.h>
+
 #include "GenericCommIF.generated.h"
 
 
@@ -27,6 +28,7 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void OnReceivedConnectionData(void* connection, INT8U* p_data, INT32U count) override;
 	TArray< SConnectionEntry> Connections;
+
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;

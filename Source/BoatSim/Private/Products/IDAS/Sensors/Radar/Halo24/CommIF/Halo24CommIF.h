@@ -20,9 +20,29 @@ struct STargetTrackStatusData{
 
 };
 
+struct STextureData
+{
+	TArray<FColor> Colors;
+	int32 Width, Height;
+
+public:
+	STextureData() {
+		Width = 0;
+		Height = 0;
+	}
+
+	inline INT8U GetColor(float w, float h) {
+		int ind_w = Width * w;
+		int ind_h = Height * h;
+		auto val = Colors[ind_h * Width + ind_w];
+		return val.R;
+	}
+};
+
 /**
  * 
  */
+#define SpokeImageSize  2048
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class UHalo24CommIF : public UGenericCommIF, public FRunnable
 {
@@ -63,6 +83,7 @@ private:
 
 	IHalo24HostIF* pHostIF;
 	FCriticalSection Mutex;
+	
 
 protected:
 	UPROPERTY(BlueprintReadWrite)
@@ -73,12 +94,20 @@ protected:
 	virtual void OnReceivedConnectionData(void* connection, INT8U* p_data, INT32U count) override;
 
 	TArray<SRadarSimSDKPacket*> Packets;
-
+	STextureData NoiseTexture;
 	
 	void RestorePacket(SRadarSimSDKPacket* p_pack);
 	int SpokeSequanceNumber = 0;
 	int PrevSequenceNumber = -1;
 	char SerialKey[32];
-	
-	
+	float RadarTimeVaryingGain = 0;
+	FVector2D RadarNoiseTextureSpeed;
+
+	INT8U SpokeImage[SpokeImageSize][SpokeImageSize];
+
+	INT8U** CreateImage(int width, int height);
+	void SpokeToImage(FLOAT64 spoke_azimuth_deg, INT8U* p_spoke, INT32U num_samples);
+	bool LoadPNGImageAsFColorArray(const FString& ImagePath, TArray<FColor>& OutColors, int32& OutWidth, int32& OutHeight);
+	void ApplyGain(double gain_level);
+	void ApplyMerge(int size);
 };

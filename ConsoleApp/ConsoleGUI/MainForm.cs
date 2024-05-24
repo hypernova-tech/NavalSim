@@ -2183,7 +2183,7 @@ namespace ConsoleGUI
 
         private void attachToPathToolStripMenuItem_Click(object sender, EventArgs e)
         {
-           
+
         }
     }
 }

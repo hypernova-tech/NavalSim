@@ -33,6 +33,15 @@ bool CWinUDPSocket::Create(SConnectionArgs* p_args) {
         exit(EXIT_FAILURE);
     }
 
+    // Set receive buffer size
+    int recvBufSize = 16 * 1024 * 1024; // 2 MB
+    if (setsockopt(m_socket, SOL_SOCKET, SO_RCVBUF, (char*)&recvBufSize, sizeof(recvBufSize)) == SOCKET_ERROR) {
+        printf("setsockopt failed: %d", WSAGetLastError());
+        closesocket(m_socket);
+        WSACleanup();
+        return false;
+    }
+
  
     memset(&m_address, 0, sizeof(m_address));
 

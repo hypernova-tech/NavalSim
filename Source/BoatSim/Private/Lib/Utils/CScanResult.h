@@ -329,6 +329,10 @@ public:
 		SectorContainer.Init(SectorCount, azimuth_resolution);
 	}
 
+	bool IsFullScanned()
+	{
+		return CurrentSector == (SectorCount - 1);
+	}
 
 	SSectorContainer* GetSectorContainer()
 	{

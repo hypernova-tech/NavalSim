@@ -253,16 +253,19 @@ void ARadarBase::Scan()
 	}
 	bool is_reset = false;
 
-	if (IsFullScaned) {
 
-		CurrentScanAzimuth = 0;
-		IsFullScaned = false;
-		pScanResult = ScanResultContainer.GetCircular();
-	
-	}
 
 
 	if (FApp::GetCurrentTime() >= NextScanTime) {
+
+		if (IsFullScaned) {
+
+			CurrentScanAzimuth = 0;
+			IsFullScaned = false;
+			pScanResult = ScanResultContainer.GetCircular();
+
+		}
+
 		FLOAT64 start_azimuth = CurrentScanAzimuth;
 		FLOAT64 end_azimuth = BeamWidthDeg + start_azimuth - HorizontalScanStepAngleDeg;
 
@@ -284,7 +287,7 @@ void ARadarBase::Scan()
 		args.azimuth_angle_step_deg = HorizontalScanStepAngleDeg;
 		args.elevation_angle_step_deg = VerticalScanStepAngleDeg;
 		args.measurement_error_mean = MeasurementErrorMean;
-		args.measurement_error_std = MeasurementErrorUncertainy;
+		args.measurement_error_std = MeasurementErrorUncertainy * MeasurementErrorUncertainyScale;
 		args.clutter_params = GetClutterParams();
 		args.show_beam = ShowBeam;
 		args.p_ignore_list = &(ASystemManagerBase::GetInstance()->GetSensorGlobalIgnoreList());
@@ -344,10 +347,25 @@ void ARadarBase::Scan()
 			CurrentScanAzimuth = end_azimuth;
 			
 		}
-		NextScanTime = FApp::GetCurrentTime() + (/*0.95*/ 1.0/Frequency) / ScanResultContainer.GetSectorCount();
+		
+		
 		if (CurrentScanAzimuth >= 360) {
 			
 			IsFullScaned = true;
+			if (RadarTransmissionDurationSec != 0) {
+				NextScanTime = FApp::GetCurrentTime() + RadarTransmissionDurationSec;
+			}
+			
+		}
+		else {
+			double total_scan_period_sec = (1.0 / Frequency - RadarTransmissionDurationSec);
+			
+			if (total_scan_period_sec < 0) {
+				CUtil::DebugLog("Adjust Transmittion Duration and Frequency Reasonably");
+				total_scan_period_sec = 10e-3;
+			}
+
+			NextScanTime = FApp::GetCurrentTime() + total_scan_period_sec / ScanResultContainer.GetSectorCount();
 		}
 	
 	}

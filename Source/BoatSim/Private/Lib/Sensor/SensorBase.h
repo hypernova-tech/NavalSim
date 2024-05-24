@@ -117,7 +117,8 @@ public:
 	UPROPERTY(EditAnywhere)
 		double MeasurementErrorUncertainy = 0.0f;
 
-
+	UPROPERTY(EditAnyWhere)
+		double MeasurementErrorUncertainyScale = 1.0;
 
 	// Use the UPROPERTY macro to expose properties to the Unreal Editor
 	UPROPERTY(EditAnywhere, Category = "Clutter Params")

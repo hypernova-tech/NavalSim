@@ -1,3 +1,3 @@
-﻿  RadarSimSDK.cpp
+﻿  CHalo24SimIF.cpp
 C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\Lib\Types\Halo24Types.h(692,1): warning C4267: '=': conversion from 'size_t' to 'INT8U', possible loss of data
   RadarSimSDK.vcxproj -> C:\Users\Pc\Documents\Unreal Projects\BoatSim\RadarSimSDK\RadarSimSDK\x64\Debug\RadarSimSDK.exe

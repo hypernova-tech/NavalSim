@@ -3,7 +3,7 @@ set --name marlin --actorid 0
 set --name marlin --instance -1
 set --name marlin --suppressed 0
 set --name marlin --standalone 0
-set --name marlin --position "-204.766573 -9.362481 0.000000"
+set --name marlin --position "-204.766571 -9.362481 0.000000"
 set --name marlin --rotation "-0.000000 -0.000000 1.350000"
 set --name marlin --scale "1.000000 1.000000 1.000000"
 set --name marlin --blocking 1
@@ -133,8 +133,8 @@ set --name radar --actorid 0
 set --name radar --instance -1
 set --name radar --suppressed 0
 set --name radar --standalone 0
-set --name radar --position "-202.001859 -9.297327 5.504571"
-set --name radar --rotation "0.000000 -0.000000 1.350000"
+set --name radar --position "-202.001862 -9.297327 5.504571"
+set --name radar --rotation "-0.000000 -0.000000 1.350000"
 set --name radar --scale "1.000000 1.000000 1.000000"
 set --name radar --blocking 1
 set --name radar --tempkelvin 300.000000
@@ -142,7 +142,7 @@ set --name radar --heatsource 0
 set --name radar --annotationid 0
 set --name radar --annotatechildren 0
 set --name radar --annotatechildren 0
-set --name radar --ipaddr1 15.0.83.83
+set --name radar --ipaddr1 127.0.0.1
 set --name radar --localport1 13080
 set --name radar --remoteport 13081
 set --name radar --sharedmemname 
@@ -177,5 +177,5 @@ set --name radar --radmaxguardzonecount 2
 set --name radar --radmaxsectorblankingzonecount 4
 
 set --camfollow marlin
-set --camfollowtrans "21766.231929 117.162165 65100.001431"
-set --camfolloweuler "0.000000 -87.684492 -0.637526"
+set --camfollowtrans "-966.908894 126.891037 820.042656"
+set --camfolloweuler "0.000000 -24.311431 -12.162235"

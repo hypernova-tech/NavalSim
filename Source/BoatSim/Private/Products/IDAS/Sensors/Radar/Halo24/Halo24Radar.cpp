@@ -443,6 +443,22 @@ char* AHalo24Radar::GetSerial()
 {
 	return Serial;
 }
+double AHalo24Radar::GetGain()
+{
+	return GainLevel;
+}
+double AHalo24Radar::GetRainClutterLevel()
+{
+	return RainClutterLevel;
+}
+double AHalo24Radar::GetSeaClutterLevel()
+{
+	return SeaClutterLevel;
+}
+AActor* AHalo24Radar::GetOwningActor()
+{
+	return this;
+}
 void AHalo24Radar::Save(ISaveLoader* p_save_load)
 {
 	Super::Save(p_save_load);
