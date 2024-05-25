@@ -408,12 +408,20 @@ void UHalo24CommIF::ApplyGain(double gain_level)
 
 	int rain_clutter_pt = FMath::Lerp(max_rain_pt, 0, pHostIF->GetRainClutterLevel() / 255.0);
 
+	INT64S dist_square;
+	int half_of_spoke_image = SpokeImageSize / 2;
+	double one_over_diagonal_square = 1.0/(SpokeImageSize * SpokeImageSize);
+
+
 	for (int h = 0; h < SpokeImageSize; h++) {
 		for (int w = 0; w < SpokeImageSize; w++) {
+			dist_square = (h - half_of_spoke_image) * (h - half_of_spoke_image) + (w - half_of_spoke_image) * (w - half_of_spoke_image);
+			double tf = dist_square * one_over_diagonal_square;
 			
-			INT8U val = NoiseTexture.GetColor(((w + texture_shift_w) % NoiseTexture.Width) * one_over_size, ((h + texture_shift_h) % NoiseTexture.Height) * one_over_size);
 
-			if (val > gain_threshold) {
+			int val = NoiseTexture.GetColor(((w + texture_shift_w) % NoiseTexture.Width) * one_over_size, ((h + texture_shift_h) % NoiseTexture.Height) * one_over_size);
+
+			if (val > (gain_threshold - tf * 20)) {
 				SpokeImage[h][w] = 0;
 			}
 
