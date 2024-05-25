@@ -64,6 +64,9 @@ public:
 		int SensorSlotIndex;
 
 	UPROPERTY(EditAnywhere)
+		bool GenericSensorOutputEnabled = false;
+
+	UPROPERTY(EditAnywhere)
 		float UpdateFrequency;
 
 	UPROPERTY(EditAnywhere)

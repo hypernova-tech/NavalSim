@@ -30,6 +30,8 @@ protected:
 	TArray< SConnectionEntry> Connections;
 
 public:	
+
+	virtual void Init(void* init_args, int args_size);
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 

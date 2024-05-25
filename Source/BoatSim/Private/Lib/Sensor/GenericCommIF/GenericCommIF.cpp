@@ -24,6 +24,10 @@ void UGenericCommIF::BeginPlay()
 }
 
 
+void UGenericCommIF::Init(void* init_args, int args_size)
+{
+}
+
 // Called every frame
 void UGenericCommIF::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {

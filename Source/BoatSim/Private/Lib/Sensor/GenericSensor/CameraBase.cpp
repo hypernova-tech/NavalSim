@@ -4,6 +4,7 @@
 #include "Lib/Sensor/GenericSensor/CameraBase.h"
 #include <Lib/SystemManager/SystemManagerBase.h>
 #include <Lib/Utils/CUtil.h>
+#include <Lib/Sensor/GenericCamCommProtocolIF/GenericCamProtocolIF.h>
 
 void ACameraBase::BeginPlay()
 {
@@ -33,6 +34,12 @@ void ACameraBase::InitSensor()
 	pSceneCapture->CaptureSource = ESceneCaptureSource::SCS_FinalColorLDR;
 	pSceneCapturer->SetRenderTarget(pPointVisualizer->pRenderTarget);
 	pSceneCapturer->pMaster = this;
+
+	SSharedMemInitArgs args;
+	args.Name = ProtocolConverterSharedMemoryName;
+	args.HeaderSize = sizeof(SGenericCamSharedMemBufferHdr);
+	args.size = SensorWidth * SensorHeight * sizeof(FColor);
+	pCommIF->Init(&args, sizeof(SSharedMemInitArgs));
 
 	//	}
 
@@ -99,11 +106,25 @@ void ACameraBase::PauseSensor()
 
 void ACameraBase::OnCaptured()
 {
+	if (GenericSensorOutputEnabled) {
+		pSceneCapturer->ReadPixels(); //OnCaptureReady is called after read complete
+	}
+	
 }
 
 void ACameraBase::OnCaptureReady(void* p_data)
 {
+	TArray<FColor>* p_color_arr = (TArray<FColor> *)p_data;
 
+	SGenericCamSharedMemBufferHdr hdr;
+	hdr.Width = SensorWidth;
+	hdr.Height = SensorHeight;
+	hdr.DataSize = sizeof(FColor) * p_color_arr->Num();
+	hdr.IsUpdated = true;
+
+	//pSharedMemory->SetDataDimension(SensorWidth, SensorHeight, SensorType == ESensorType::CameraIR, IsWhiteHot, IsDefogEnabled, DefogLevel, IsICREnabled);
+	pCommIF->SendData((INT8U*)&hdr, sizeof(SGenericCamSharedMemBufferHdr), (INT8U*)p_color_arr->GetData(), hdr.DataSize);
+	
 }
 
 void ACameraBase::SetFovDeg(double fov_deg)
