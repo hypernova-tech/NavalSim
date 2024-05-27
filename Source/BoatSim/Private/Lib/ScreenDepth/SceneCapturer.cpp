@@ -23,7 +23,7 @@ ASceneCapturer::ASceneCapturer()
 void ASceneCapturer::BeginPlay()
 {
 	Super::BeginPlay();
-	pSceneCapture = GetComponentByClass< USceneCaptureComponent2D>();
+	pSceneCaptureComp2D = GetComponentByClass< USceneCaptureComponent2D>();
 
 
 }
@@ -43,7 +43,7 @@ void ASceneCapturer::CreateRenderTexture(void *owner, INT32U width_px, INT32U he
     pRenderTarget->OverrideFormat = (pixel_format);
     pRenderTarget->UpdateResource();
 
-    pSceneCapture->TextureTarget = pRenderTarget;
+    pSceneCaptureComp2D->TextureTarget = pRenderTarget;
 
     if (pRenderTarget)
     {
@@ -57,7 +57,7 @@ void ASceneCapturer::CreateRenderTexture(void *owner, INT32U width_px, INT32U he
 
 void ASceneCapturer::Capture()
 {
-	pSceneCapture->CaptureScene();
+	pSceneCaptureComp2D->CaptureScene();
 
     
 }

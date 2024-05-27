@@ -5,6 +5,8 @@
 #include <Lib/SystemManager/SystemManagerBase.h>
 #include <Lib/Utils/CUtil.h>
 #include <Lib/Sensor/GenericCamCommProtocolIF/GenericCamProtocolIF.h>
+#include <Kismet/KismetRenderingLibrary.h>
+#include <Lib/Math/CMath.h>
 
 void ACameraBase::BeginPlay()
 {
@@ -14,25 +16,45 @@ void ACameraBase::BeginPlay()
 void ACameraBase::InitSensor()
 {
 	Super::InitSensor();
-	pSceneCapture = GetComponentByClass<USceneCaptureComponent2D>();
+	pSceneCaptureComp2D = GetComponentByClass<USceneCaptureComponent2D>();
 
 	UTextureRenderTarget2D* p_render_target = pPointVisualizer->CreateRenderTarget(SensorWidth, SensorHeight, ASystemManagerBase::GetInstance()->GetUIController()->GetSensorSlotImage(SensorSlotIndex));
 
-	pSceneCapture->TextureTarget = p_render_target;
-	pSceneCapture->FOVAngle = FovHorizontalDeg;
-	FieldOfViewDeg = pSceneCapture->FOVAngle;
+	pSceneCaptureComp2D->TextureTarget = p_render_target;
+	pSceneCaptureComp2D->FOVAngle = FovHorizontalDeg;
+	FieldOfViewDeg = pSceneCaptureComp2D->FOVAngle;
 
-	auto pppv = ASystemManagerBase::GetInstance()->GetMainPostProcessVolume();
-	pSceneCapture->PostProcessBlendWeight = 1;
-	pSceneCapture->PostProcessSettings = pppv->Settings;
+
+
+	if (PostProcessMaterialBase)
+	{
+		PostProcessMaterialInstance = UMaterialInstanceDynamic::Create(PostProcessMaterialBase, this);
+		FPostProcessSettings& PostProcessSettingsA = pSceneCaptureComp2D->PostProcessSettings;
+		pSceneCaptureComp2D->PostProcessSettings.WeightedBlendables.Array.Empty();
+		if (PostProcessMaterialInstance)
+		{
+			pSceneCaptureComp2D->PostProcessSettings.AddBlendable(PostProcessMaterialInstance, 1.0f);
+		}
+		//PostProcessMaterialInstance->SetTextureParameterValue(FName("RenderTargetTexture"), pSceneCaptureComp2D->TextureTarget);
+	}
+	else {
+		auto pppv = ASystemManagerBase::GetInstance()->GetMainPostProcessVolume();
+		pSceneCaptureComp2D->PostProcessBlendWeight = 1;
+		pSceneCaptureComp2D->PostProcessSettings = pppv->Settings;
+	}
+
+
+
 	//bool ret;
 	//if (ASystemManagerBase::GetInstance()->GetAnnotationModeEnabled(ret)) {
 	//	if (ret) {
 
-	pSceneCapture->TextureTarget->TargetGamma = SceneCaptureTextureTargetGamma;
-	pSceneCapture->bAlwaysPersistRenderingState = true;
-	pSceneCapture->CaptureSource = ESceneCaptureSource::SCS_FinalColorLDR;
+	pSceneCaptureComp2D->TextureTarget->TargetGamma = SceneCaptureTextureTargetGamma;
+	pSceneCaptureComp2D->bAlwaysPersistRenderingState = true;
+	pSceneCaptureComp2D->CaptureSource =  ESceneCaptureSource::SCS_FinalColorLDR;
+	pSceneCaptureComp2D->TextureTarget = pPointVisualizer->pRenderTarget;
 	pSceneCapturer->SetRenderTarget(pPointVisualizer->pRenderTarget);
+	pSceneCapturer->pSceneCaptureComp2D = pSceneCaptureComp2D;
 	pSceneCapturer->pMaster = this;
 
 	SSharedMemInitArgs args;
@@ -41,17 +63,18 @@ void ACameraBase::InitSensor()
 	args.size = SensorWidth * SensorHeight * sizeof(FColor);
 	pCommIF->Init(&args, sizeof(SSharedMemInitArgs));
 
-	//	}
 
-	//}
+
+	
+
 
 }
 
 void ACameraBase::ResumeSensor()
 {
 	Super::ResumeSensor();
-	if (pSceneCapture != nullptr) {
-		pSceneCapture->Activate();
+	if (pSceneCaptureComp2D != nullptr) {
+		pSceneCaptureComp2D->Activate();
 	}
 
 }
@@ -76,7 +99,7 @@ void ACameraBase::Run(float delta_time_sec)
 		
 		}
 	}
-
+	ApplyCamPostProcessEffects();
 
 }
 void ACameraBase::CaptureScreen()
@@ -89,7 +112,7 @@ void ACameraBase::CaptureScreen()
 		auto frame_info = pSys->GetAnnotionFrameInfo();
 		FString name = GetName() + frame_info + ".png";
 		pSceneCapturer->Capture();
-		pSceneCapturer->SaveAsPNG(pSceneCapture->TextureTarget, name);
+		pSceneCapturer->SaveAsPNG(pSceneCaptureComp2D->TextureTarget, name);
 
 	}
 
@@ -99,15 +122,21 @@ void ACameraBase::CaptureScreen()
 void ACameraBase::PauseSensor()
 {
 	Super::PauseSensor();
-	if (pSceneCapture != nullptr) {
-		pSceneCapture->Deactivate();
+	if (pSceneCaptureComp2D != nullptr) {
+		pSceneCaptureComp2D->Deactivate();
 	}
 }
 
 void ACameraBase::OnCaptured()
 {
 	if (GenericSensorOutputEnabled) {
+		if (ApplyMetarialToPostProcess) {
+			UKismetRenderingLibrary::DrawMaterialToRenderTarget(this, pSceneCaptureComp2D->TextureTarget, PostProcessMaterialInstance);
+		}
+		
+
 		pSceneCapturer->ReadPixels(); //OnCaptureReady is called after read complete
+		
 	}
 	
 }
@@ -127,17 +156,31 @@ void ACameraBase::OnCaptureReady(void* p_data)
 	
 }
 
+void ACameraBase::ApplyCamPostProcessEffects()
+{
+
+	FPostProcessSettings& PostProcessSettingsA = pSceneCaptureComp2D->PostProcessSettings;
+	PostProcessSettingsA.FilmGrainIntensity = MeasurementErrorMean;
+	
+
+	PostProcessSettingsA.DepthOfFieldFocalDistance = BlurPercent==0?0:CMath::Remap(BlurPercent, 0, 100, 20, 1);
+
+	if (PostProcessMaterialInstance) {
+		PostProcessMaterialInstance->SetScalarParameterValue("LensDistortionIntensity", LensDistortionPercent * 0.01);
+	}
+}
+
 void ACameraBase::SetFovDeg(double fov_deg)
 {
 	FieldOfViewDeg = fov_deg;
-	if (pSceneCapture != nullptr) {
-		pSceneCapture->FOVAngle = fov_deg;
+	if (pSceneCaptureComp2D != nullptr) {
+		pSceneCaptureComp2D->FOVAngle = fov_deg;
 	}
 }
 void ACameraBase::UpdateFov()
 {
-	if (pSceneCapture != nullptr && FieldOfViewDeg != 0) {
-		pSceneCapture->FOVAngle = FieldOfViewDeg;
+	if (pSceneCaptureComp2D != nullptr && FieldOfViewDeg != 0) {
+		pSceneCaptureComp2D->FOVAngle = FieldOfViewDeg;
 	}
 	
 }

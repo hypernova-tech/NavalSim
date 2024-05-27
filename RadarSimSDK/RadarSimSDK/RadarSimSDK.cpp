@@ -18,10 +18,6 @@ int main()
     tMultiRadarClient::GetInstance()->Connect();
 
     unsigned int * p_data = (unsigned int*) pimage->data;
-
-
-
-
  
 
     // Wait for a key press indefinitely or for a specific amount of time (0 means indefinitely)

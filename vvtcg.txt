@@ -1,0 +1,146 @@
+create --name jeoref --bp  --tick 0
+set --name jeoref --actorid 0
+set --name jeoref --instance -1
+set --name jeoref --suppressed 0
+set --name jeoref --standalone 0
+set --name jeoref --position "0.000000 0.000000 0.000000"
+set --name jeoref --rotation "-0.000000 -0.000000 0.000000"
+set --name jeoref --scale "1.000000 1.000000 1.000000"
+set --name jeoref --blocking 1
+set --name jeoref --tempkelvin 300.000000
+set --name jeoref --heatsource 0
+set --name jeoref --annotationid 0
+set --name jeoref --annotatechildren 0
+set --name jeoref --annotatechildren 0
+set --name jeoref --sharedmemname 
+set --name jeoref --gstreamerip 
+set --name jeoref --gstreamerport 0
+set --name jeoref --motionlogen 0
+set --name jeoref --maporiginlat 0.000000
+set --name jeoref --maporiginlon 0.000000
+set --name jeoref --maporiginh 0.000000
+
+create --name thermal --bp  --tick 0
+set --name thermal --actorid 0
+set --name thermal --instance -1
+set --name thermal --suppressed 0
+set --name thermal --standalone 0
+set --name thermal --position "0.000000 0.000000 0.000000"
+set --name thermal --rotation "-0.000000 -0.000000 0.000000"
+set --name thermal --scale "1.000000 1.000000 1.000000"
+set --name thermal --blocking 1
+set --name thermal --tempkelvin 300.000000
+set --name thermal --heatsource 0
+set --name thermal --annotationid 0
+set --name thermal --annotatechildren 0
+set --name thermal --annotatechildren 0
+set --name thermal --sharedmemname 
+set --name thermal --gstreamerip 
+set --name thermal --gstreamerport 0
+set --name thermal --motionlogen 0
+set --name thermal --thermalmode 0
+
+create --name env --bp  --tick 0
+set --name env --actorid 0
+set --name env --instance -1
+set --name env --suppressed 0
+set --name env --standalone 0
+set --name env --position "324.600000 284.200000 4.600000"
+set --name env --rotation "-0.000000 -0.000000 0.000000"
+set --name env --scale "1.000000 1.000000 1.000000"
+set --name env --blocking 1
+set --name env --tempkelvin 300.000000
+set --name env --heatsource 0
+set --name env --annotationid 0
+set --name env --annotatechildren 0
+set --name env --annotatechildren 0
+set --name env --sharedmemname 
+set --name env --gstreamerip 
+set --name env --gstreamerport 0
+set --name env --motionlogen 0
+set --name env --timeofday 12.008623
+set --name env --envtimeflowscale 1.000000
+set --name env --rain 0.000000
+set --name env --cloud 0.000000
+set --name env --snow 0.000000
+set --name env --dust 0.000000
+set --name env --fog 0.000000
+set --name env --thunder 0.000000
+set --name env --envsoundfx 1
+set --name env --wind 3.000000
+set --name env --winddir 0.000000
+
+create --name annotation --bp  --tick 0
+set --name annotation --actorid 0
+set --name annotation --instance -1
+set --name annotation --suppressed 0
+set --name annotation --standalone 0
+set --name annotation --position "-20.097436 6.361075 10.299538"
+set --name annotation --rotation "-0.000000 -0.000000 0.000000"
+set --name annotation --scale "1.000000 1.000000 1.000000"
+set --name annotation --blocking 1
+set --name annotation --tempkelvin 300.000000
+set --name annotation --heatsource 0
+set --name annotation --annotationid 0
+set --name annotation --annotatechildren 0
+set --name annotation --annotatechildren 0
+set --name annotation --sharedmemname 
+set --name annotation --gstreamerip 
+set --name annotation --gstreamerport 0
+set --name annotation --motionlogen 0
+
+create --name tcg --bp TCGANADOLU --tick 0
+set --name tcg --actorid 0
+set --name tcg --instance -1
+set --name tcg --suppressed 0
+set --name tcg --standalone 0
+set --name tcg --position "100.000000 0.000000 3.000000"
+set --name tcg --rotation "-0.000000 -0.000000 90.000000"
+set --name tcg --scale "1.000000 1.000000 1.000000"
+set --name tcg --blocking 1
+set --name tcg --tempkelvin 300.000000
+set --name tcg --heatsource 0
+set --name tcg --annotationid 0
+set --name tcg --annotatechildren 0
+set --name tcg --annotatechildren 0
+set --name tcg --sharedmemname 
+set --name tcg --gstreamerip 
+set --name tcg --gstreamerport 0
+set --name tcg --motionlogen 0
+
+create --name vis --bp CAMVIS --tick 0
+set --name vis --actorid 0
+set --name vis --instance -1
+set --name vis --suppressed 0
+set --name vis --standalone 0
+set --name vis --position "0.000000 0.000000 3.000000"
+set --name vis --rotation "-0.000000 -0.000000 0.000000"
+set --name vis --scale "1.000000 1.000000 1.000000"
+set --name vis --blocking 1
+set --name vis --tempkelvin 300.000000
+set --name vis --heatsource 0
+set --name vis --annotationid 0
+set --name vis --annotatechildren 0
+set --name vis --annotatechildren 0
+set --name vis --sharedmemname smvis
+set --name vis --gstreamerip 
+set --name vis --gstreamerport 0
+set --name vis --motionlogen 0
+set --name vis --sensorfreq 25.000000
+set --name vis --slotindex 0
+set --name vis --rangemin 5.000000
+set --name vis --rangemax 100.000000
+set --name vis --vfov 10.000000
+set --name vis --hfov 90.000000
+set --name vis --hscanstepang 0.000000
+set --name vis --vscanstepang 36.000000
+set --name vis --isnormaldistribution 0
+set --name vis --merrormean 0.000000
+set --name vis --merrorstd 0.000000
+set --name vis --surfacedetecten 0
+set --name vis --subsurfacedetecten 0
+set --name vis --foamen 0
+set --name vis --seasurfdetectprob 0.000000
+set --name vis --maxsurfpenet 0.000000
+set --name vis --widthpx 1920
+set --name vis --heightpx 1080

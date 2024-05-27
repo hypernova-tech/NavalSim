@@ -25,7 +25,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	USceneCaptureComponent2D* pSceneCapture;
+	
 	UTextureRenderTarget2D* pRenderTarget;
 	FTextureRenderTargetResource* pRenderTargetResource;
 	TArray<FColor> OutBMP;
@@ -35,6 +35,7 @@ protected:
 	void OnReadbackComplete();
 	void ExportAsPNG(UTextureRenderTarget2D* RenderTarget, FString file_name);
 public:	
+	USceneCaptureComponent2D* pSceneCaptureComp2D;
 	void* pMaster;
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

@@ -28,6 +28,12 @@ public:
 		float FieldOfViewDeg;
 
 	UPROPERTY(EditAnywhere)
+		float BlurPercent = 0;
+
+	UPROPERTY(EditAnywhere)
+		float LensDistortionPercent = 0;
+
+	UPROPERTY(EditAnywhere)
 		bool IsWhiteHot = true;
 
 	UPROPERTY(EditAnywhere)
@@ -48,7 +54,14 @@ public:
 	UPROPERTY(EditAnywhere)
 		float  SceneCaptureTextureTargetGamma = 1.6; // very import when capture scene
 	
+	UPROPERTY(EditAnywhere)
+		bool  ApplyMetarialToPostProcess = false; // very import when capture scene
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Capture")
+		UMaterialInterface* PostProcessMaterialBase;
+
+	UPROPERTY()
+		UMaterialInstanceDynamic* PostProcessMaterialInstance;
 	FLOAT64 LastCaptureTimeSec;
 
 protected:
@@ -56,7 +69,7 @@ protected:
 	virtual void InitSensor() override;
 
 
-	USceneCaptureComponent2D* pSceneCapture;
+	USceneCaptureComponent2D* pSceneCaptureComp2D;
 
 	void PauseSensor() override ;
 	void ResumeSensor() override;
@@ -66,6 +79,7 @@ protected:
 	INT64U CaptureIndex = 0;
 	virtual void OnCaptured();
 	virtual void OnCaptureReady(void* p_data) override;
+	virtual void ApplyCamPostProcessEffects();
 public:
 	void SetFovDeg(double fov_deg);
 	void UpdateFov();
