@@ -1,4 +1,4 @@
-using System.Net.Sockets;
+﻿using System.Net.Sockets;
 using System.Net;
 using System.Text;
 using System.Net;
@@ -20,6 +20,9 @@ using Newtonsoft.Json.Linq;
 using TrackBar = System.Windows.Forms.TrackBar;
 using System.Windows.Forms;
 using System.Diagnostics.Eventing.Reader;
+
+
+
 
 namespace ConsoleGUI
 {
@@ -52,6 +55,10 @@ namespace ConsoleGUI
         CSystemAPIImplementor SystemAPIImplementor = new CSystemAPIImplementor();
         CConsoleConfig ConsoleConfig;
         COptionInfo OptionParamMap;
+
+        
+
+
         public MainForm()
         {
             CConsoleConfigReader config_reader = new CConsoleConfigReader();
@@ -69,8 +76,14 @@ namespace ConsoleGUI
             LBTimeValue.Text = SystemAPIImplementor.GetTimeOfDayHour(TBTimeOfDay.Value).ToString();
             ObjectEditor.AllowDrop = true;
             OptionParamMap = CLICommandManager.GetOptionNameContants();
+
+
+   
         }
-        private void PopulateDataGridView()
+
+    
+    
+    private void PopulateDataGridView()
         {
 
             ModifyableDataGrid.Columns.Add("ConstantName", "Name");

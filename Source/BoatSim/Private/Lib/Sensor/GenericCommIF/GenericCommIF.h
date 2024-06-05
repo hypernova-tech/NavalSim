@@ -7,8 +7,9 @@
 #include <Lib/Connection/ConnectionDefs.h>
 #include "Lib/UDP/IConnectionDataReceiver.h"
 #include <Lib/Connection/ConnectionBase.h>
-
+#include <Lib/HostIF/HostIF.h>
 #include "GenericCommIF.generated.h"
+
 
 
 
@@ -28,7 +29,7 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void OnReceivedConnectionData(void* connection, INT8U* p_data, INT32U count) override;
 	TArray< SConnectionEntry> Connections;
-
+	IHostIF* pHostIF;
 public:	
 
 	virtual void Init(void* init_args, int args_size);
@@ -43,6 +44,7 @@ public:
 	virtual TArray< SConnectionEntry> GetConnectionsInfo();
 	virtual bool SetConnectionInfo(INT32S ind, SConnectionInfo info);
 	void RegisterConnectionInfo(INT32S ind, SConnectionInfo info, UConnectionBase *p_owner);
+	virtual void SetHostIF(IHostIF* p_host_if);
 
 		
 };

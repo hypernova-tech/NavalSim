@@ -96,12 +96,13 @@ public:
 			ScanLines[azimuth_scan_ind]->Add(entry);
 		}
 	}
+
 	void DepthSet(INT32S sample_ind, INT32S depth, FLOAT32 cell_size_meter, INT32S total_byte_count, INT8U* p_out)
 	{
 		for (INT32S j = 1; j < depth; j++) {
 
-			INT32S byte_ind ;
-			INT32S order ;
+			INT32S byte_ind;
+			INT32S order;
 			auto depth_ind = (sample_ind + j);
 			byte_ind = depth_ind / 2;
 			order = depth_ind & 0x1;
@@ -119,6 +120,29 @@ public:
 
 		}
 	}
+
+	void DepthSetPointCloud(FVector start_point, FVector dir, INT32S sample_ind, INT32S depth, FLOAT32 cell_size_meter, INT32S total_byte_count, TArray<FVector> &out)
+	{
+		for (INT32S j = 1; j < depth; j++) {
+			FVector pos = start_point + dir * j * cell_size_meter;
+			out.Add(pos);
+		}
+	}
+
+	void DepthSetRangedPointCloud(FVector start_point, FVector end_point, FLOAT64 start, FLOAT64 end, FLOAT32 cell_size_meter, INT32S total_byte_count, TArray<FVector> &out)
+	{
+		INT32S start_ind = start / cell_size_meter;
+		INT32S end_ind = end / cell_size_meter + 0.5;
+		FVector pos;
+		FVector dir = (end_point - start_point);
+		dir.Normalize();
+
+		for (INT32S j = start_ind; j < end_ind; j++) {
+			pos = start_point + dir * (j - start_ind) * cell_size_meter;
+			out.Add(pos);
+		}
+	}
+
 
 	void DepthSetRanged(FLOAT64 start, FLOAT64 end, FLOAT32 cell_size_meter, INT32S total_byte_count, INT8U* p_out)
 	{
@@ -145,6 +169,93 @@ public:
 			}
 
 		}
+	}
+
+	bool MapSpokePointCloud(FVector own_ship_pos, FLOAT32 azimuth_deg, FLOAT32 cell_size_meter, INT32S total_byte_count, TArray<FVector> &out)
+	{
+		if (azimuth_deg >= EndAzimuthDeg) {
+			return false;
+		}
+
+		INT32S ind = (azimuth_deg - StartAzimuthDeg) / AzimuthStepDeg;
+
+		if (ind >= ScanLines.Num()) {
+			return false;
+		}
+
+		TArray<SScanLineEntry>* p_data = ScanLines[ind];
+
+		FLOAT64 max_h = -1;
+		FLOAT64 max_dist_xy = -1;
+		FLOAT64 min_dist_xy_terr = 1e38;
+		FLOAT64 max_dist_xy_terr = -1;
+		bool has_terrain = false;
+		FVector min_dist_pt;
+		FVector max_dist_pt;
+
+		for (INT32S i = 0; i < p_data->Num(); i++) {
+			SScanLineEntry* p_entry = &(*p_data)[i];
+			FVector pos = p_entry->Pos;
+
+			FLOAT64 h = TOW(FMath::Abs((pos - own_ship_pos).Z));
+			FLOAT64 dist_xy = TOW(FVector::DistXY(pos, own_ship_pos));
+			if (max_h < h) {
+				max_h = h;
+			}
+
+			if (max_dist_xy < dist_xy) {
+				max_dist_xy = dist_xy;
+			}
+
+			if (p_entry->ObjectType == EScanObjectType::ScanObjectTypeTerrain) {
+				if (max_dist_xy_terr < dist_xy) {
+					max_dist_xy_terr = dist_xy;
+					max_dist_pt = pos;
+				}
+				if (min_dist_xy_terr > dist_xy) {
+					min_dist_xy_terr = dist_xy;
+					min_dist_pt = pos;
+				}
+				has_terrain = true;
+			}
+
+		}
+
+		max_h *= 1.5;
+		if (max_h > 0 && max_h < 2) {
+			max_h = 2;
+		}
+
+
+		if (has_terrain) {
+			if (max_dist_xy_terr - min_dist_xy_terr < 20) {
+				max_dist_xy_terr = min_dist_xy_terr + 20;
+			}
+
+			DepthSetRangedPointCloud(min_dist_pt, max_dist_pt, min_dist_xy_terr, max_dist_xy_terr, cell_size_meter, total_byte_count, out);
+		}
+
+		FQuat yaw(FVector::UpVector, azimuth_deg * DEGTORAD);
+		FVector dir = yaw.RotateVector(FVector::ForwardVector);
+
+		for (INT32S i = 0; i < p_data->Num(); i++) {
+			FVector pos = (*p_data)[i].Pos;
+
+			out.Add(pos);
+
+
+			FLOAT32 dist = TOW(FVector::DistXY(pos, own_ship_pos));
+			INT32S sample_ind = dist / cell_size_meter;
+
+			INT32S byte_ind = sample_ind / 2;
+			INT32S depth = (INT32S)(max_h / cell_size_meter + 0.5);
+
+			
+
+			DepthSetPointCloud(pos, dir, sample_ind, depth, cell_size_meter, total_byte_count, out);
+		}
+
+		return true;
 	}
 
 	bool MapSpoke4Bits(FVector own_ship_pos, FLOAT32 azimuth_deg, FLOAT32 cell_size_meter, INT32S total_byte_count, INT8U *p_out)
@@ -300,8 +411,16 @@ struct SScanResult
 	INT32S SectorCount;
 	FLOAT32 ScanAzimuthStepDeg;
 	FLOAT32 ScanElevationStepDeg;
-	FVector2D AzimuthRange;
+	/// <summary>
+	/// Current Sector Azimuth Range
+	/// </summary>
+	FVector2D AzimuthRange; 
+	/// <summary>
+	/// Current Sector Elevation Range
+	/// </summary>
 	FVector2D ElevationRange;
+	FLOAT64 HorizontalFovDeg;
+	FLOAT64 VerticalFovDeg;
 		
 	FVector Track3DWorld[HORIZOTAL_SCAN_SIZE * VERTICAL_SCAN_SIZE];
 	FLOAT32 TrackRangeMeter[HORIZOTAL_SCAN_SIZE * VERTICAL_SCAN_SIZE]; 

@@ -40,7 +40,7 @@ enum EHalo24StateMachineStates
  * 
  */
 UCLASS()
-class AHalo24Radar : public ARadarBase, public IHalo24HostIF
+class AHalo24Radar : public ARadarBase
 {
 	GENERATED_BODY()
 	
@@ -90,12 +90,8 @@ protected:
 
 public :
 
-	virtual void OnRecievedMessage(SRadarSimSDKPacket* p_commands) override;
-	virtual char* GetSerial() override;
-	virtual double GetGain() override;
-	virtual double GetRainClutterLevel() override;
-	virtual double GetSeaClutterLevel() override;
-	virtual AActor* GetOwningActor() override;
+	virtual void OnRecievedMessage(void* p_commands) override;
+
 
 	virtual void Save(ISaveLoader* p_save_load) override;
 	virtual void OnDataReady() override;

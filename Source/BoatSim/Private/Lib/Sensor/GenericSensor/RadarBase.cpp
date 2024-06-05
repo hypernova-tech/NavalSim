@@ -71,20 +71,19 @@ bool ARadarBase::GetTrackerEnabled()
 
 void ARadarBase::SetScanEnabled(bool val)
 {
-	IsScanEnabled = val;
+	IsAutoScanEnabled = val;
 }
 bool ARadarBase::GetScanEnabled()
 {
-	return IsScanEnabled;
+	return IsAutoScanEnabled;
 }
 
 
 
 void ARadarBase::BeginPlay()
 {
-	CUtil::DebugLog("ARadarBase Beginplay");
 	Super::BeginPlay();
-	SetScanEnabled(false);
+	//SetScanEnabled(false);
 	CUtil::FStringToAsciiChar(RadarSerial, Serial, sizeof(Serial));
 }
 
@@ -92,24 +91,18 @@ void ARadarBase::InitSensor()
 {
 	Super::InitSensor();
 	pPointVisualizer->CreateRenderTarget(512, 512, ASystemManagerBase::GetInstance()->GetUIController()->GetSensorSlotImage(SensorSlotIndex));
-	BeamWidthDeg = 45;//todo fixme
-	INT32S sector_cnt = (int)(360.0 / BeamWidthDeg);
+	
+	INT32S sector_cnt = (int)(FovHorizontalDeg / EachScanBeamWidthDeg);
 	ScanResultContainer.Init(16, sector_cnt, HorizontalScanStepAngleDeg);
 	pScanResult = ScanResultContainer.GetCircular();
-	
-	GuardZone.Init(MaxGuardZoneCount);
-	BlankingZone.Init(MaxSectorBlankingZoneCount);
-
-	BlankingZone.SetArea(0, 0, 90);
-	BlankingZone.SetArea(1, 90, 180);
-	BlankingZone.SetArea(2, 180, 270);
-	BlankingZone.SetArea(3, 270, 360);
 
 	InitTracker();
 	if (UseRenderTargetForDepthCalculation) {
 		pSceneCapturer->CreateRenderTexture(this, DepthRenderTargetWidthPx, DepthRenderTargetHeightPx, EPixelFormat::PF_B8G8R8A8);
 		
 	}
+
+	pCommIF->SetHostIF(this);
 }
 
 
@@ -124,15 +117,6 @@ void ARadarBase::Run(float delta_time_sec)
 void ARadarBase::RadarStateMachine()
 {
 	UpdateTracker();
-
-	/*
-	if (RaycastTaskComplete.IsValid()) {
-		Visualize(pScanResult, GetActorLocation(), GetActorForwardVector(), GetActorRightVector(), RangeMeter.Y, (void*)pTracker);
-	}
-	*/
-	
-	 //RaycastTaskComplete = TGraphTask<FRaycastSensorTask>::CreateTask().ConstructAndDispatchWhenReady(this, 0);
-	
 	Scan();
 	
 }
@@ -188,13 +172,6 @@ void ARadarBase::Save(ISaveLoader* p_save_load)
 	line = p_save_load->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
 	p_save_load->AppendOption(line, CCLICommandManager::RadarMaxSectorBlankingZoneCount,	MaxSectorBlankingZoneCount);
 	p_save_load->AddLine(line);
-
-
-
-
-
-
-
 }
 void ARadarBase::SaveJSON(CJsonDataContainer& data)
 {
@@ -248,13 +225,10 @@ void ARadarBase::Scan()
 {
 	
 
-	if (!IsScanEnabled) {
+	if (!IsAutoScanEnabled) {
 		return;
 	}
 	bool is_reset = false;
-
-
-
 
 	if (FApp::GetCurrentTime() >= NextScanTime) {
 
@@ -267,8 +241,11 @@ void ARadarBase::Scan()
 		}
 
 		FLOAT64 start_azimuth = CurrentScanAzimuth;
-		FLOAT64 end_azimuth = BeamWidthDeg + start_azimuth - HorizontalScanStepAngleDeg;
-
+		FLOAT64 end_azimuth = EachScanBeamWidthDeg + start_azimuth - HorizontalScanStepAngleDeg;
+		
+		if (end_azimuth >= FovHorizontalDeg) {
+			end_azimuth = FovHorizontalDeg;
+		}
 	
 
 		STraceArgs args;
@@ -286,6 +263,8 @@ void ARadarBase::Scan()
 		args.elevation_end_deg = elev;
 		args.azimuth_angle_step_deg = HorizontalScanStepAngleDeg;
 		args.elevation_angle_step_deg = VerticalScanStepAngleDeg;
+		args.horizontal_fov_deg = FovHorizontalDeg;
+		args.vertical_fov_deg = FovVerticalDeg;
 		args.measurement_error_mean = MeasurementErrorMean;
 		args.measurement_error_std = MeasurementErrorUncertainy * MeasurementErrorUncertainyScale;
 		args.clutter_params = GetClutterParams();
@@ -316,16 +295,10 @@ void ARadarBase::Scan()
 				pSceneCapturer->ReadPixels();
 			}
 	
-
-		
 			
-
 			auto trace_start_sec = CUtil::Tick();
 			bool ret = CUtil::Trace(args, pScanResult);
 			auto trace_elp_sec = CUtil::Tock(trace_start_sec);
-
-			
-			
 
 			OnDataReady();
 	
@@ -334,13 +307,11 @@ void ARadarBase::Scan()
 
 			Visualize(pScanResult, GetActorLocation(), GetActorForwardVector(), GetActorRightVector(), RangeMaxMeter, (void*)pTracker);
 
-			
-
 			CUtil::DebugLog("Scanning");
 		}
 		else {
 
-			int sector_ind = start_azimuth / (360.0 / pScanResult->SectorCount);
+			int sector_ind = start_azimuth / (FovHorizontalDeg / pScanResult->SectorCount);
 			SSectorInfo* p_current_sektor = pScanResult->GetSectorContainer()->GetSector(sector_ind);
 			p_current_sektor->Reset();
 			OnDataReady();
@@ -349,7 +320,7 @@ void ARadarBase::Scan()
 		}
 		
 		
-		if (CurrentScanAzimuth >= 360) {
+		if (CurrentScanAzimuth >= FovHorizontalDeg) {
 			
 			IsFullScaned = true;
 			if (RadarTransmissionDurationSec != 0) {
@@ -370,4 +341,29 @@ void ARadarBase::Scan()
 	
 	}
 
+}
+
+void ARadarBase::OnRecievedMessage(void* p_commands)
+{
+}
+
+char* ARadarBase::GetSerial()
+{
+	return Serial;
+}
+double ARadarBase::GetGain()
+{
+	return GainLevel;
+}
+double ARadarBase::GetRainClutterLevel()
+{
+	return RainClutterLevel;
+}
+double ARadarBase::GetSeaClutterLevel()
+{
+	return SeaClutterLevel;
+}
+AActor* ARadarBase::GetOwningActor()
+{
+	return this;
 }

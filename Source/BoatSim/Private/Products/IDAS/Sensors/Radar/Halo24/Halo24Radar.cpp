@@ -439,33 +439,15 @@ void AHalo24Radar::SendINSData()
 }
 
 
-char* AHalo24Radar::GetSerial()
-{
-	return Serial;
-}
-double AHalo24Radar::GetGain()
-{
-	return GainLevel;
-}
-double AHalo24Radar::GetRainClutterLevel()
-{
-	return RainClutterLevel;
-}
-double AHalo24Radar::GetSeaClutterLevel()
-{
-	return SeaClutterLevel;
-}
-AActor* AHalo24Radar::GetOwningActor()
-{
-	return this;
-}
 void AHalo24Radar::Save(ISaveLoader* p_save_load)
 {
 	Super::Save(p_save_load);
 	//p_save_load->AddLine(line);
 }
-void AHalo24Radar::OnRecievedMessage(SRadarSimSDKPacket* p_pack)
+void AHalo24Radar::OnRecievedMessage(void* raw_pack)
 {
+	SRadarSimSDKPacket* p_pack = (SRadarSimSDKPacket*)raw_pack;
+
 	if (p_pack->Header.PacketType == ESimSDKDataIDS::QueryRadars) {
 		SendSerial();
 	}
@@ -642,7 +624,20 @@ void AHalo24Radar::SendSerial()
 
 void AHalo24Radar::InitSensor()
 {
+	
+	FovHorizontalDeg = 360;
+	EachScanBeamWidthDeg = 45;
 	Super::InitSensor();
+
+	GuardZone.Init(MaxGuardZoneCount);
+	BlankingZone.Init(MaxSectorBlankingZoneCount);
+
+	BlankingZone.SetArea(0, 0, 90);
+	BlankingZone.SetArea(1, 90, 180);
+	BlankingZone.SetArea(2, 180, 270);
+	BlankingZone.SetArea(3, 270, 360);
+
+
 	pHalo24CommIF = (UHalo24CommIF*)pCommIF;
 	pHalo24CommIF->SetHostIF(this);
 

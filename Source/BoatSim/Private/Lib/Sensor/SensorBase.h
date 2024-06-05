@@ -103,6 +103,9 @@ public:
 		double FovHorizontalDeg = 90;
 
 	UPROPERTY(EditAnywhere)
+		double EachScanBeamWidthDeg = 45;
+
+	UPROPERTY(EditAnywhere)
 		float HorizontalScanStepAngleDeg;
 
 	UPROPERTY(EditAnywhere)

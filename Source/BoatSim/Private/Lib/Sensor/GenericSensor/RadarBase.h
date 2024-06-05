@@ -7,13 +7,14 @@
 #include "Lib/Utils/CScanResult.h"
 #include <Lib/Zone/ZoneContainer.h>
 #include <Lib/Tracker/TrackerBase.h>
+#include <Lib/Sensor/GenericRadarCommProtocolF/IRadarHostIF.h>
 #include "RadarBase.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class ARadarBase : public ASensorBase
+class ARadarBase : public ASensorBase, public IRadarHostIF
 {
 	GENERATED_BODY()
 	
@@ -26,7 +27,7 @@ protected:
 	
 	CZoneContainer GuardZone;
 	CZoneContainer BlankingZone;
-	FLOAT64 BeamWidthDeg;
+
 
 
 	CTrackerBase* pTracker = nullptr;
@@ -42,6 +43,13 @@ protected:
 	virtual void UpdateTracker();
 
 	FGraphEventRef RaycastTaskComplete;
+
+	float CurrentScanAzimuth;
+	double NextScanTime;
+	bool IsFullScaned = false;
+
+	bool IsTrackerEnabled = false;
+
 public:
 	UPROPERTY(EditAnywhere)
 		FString RadarSerial = "";
@@ -57,6 +65,9 @@ public:
 	UPROPERTY(EditAnywhere)
 		int  ImageStreamCount = 2;
 
+
+	UPROPERTY(EditAnywhere)
+		bool IsAutoScanEnabled = false;
 
 	UPROPERTY(EditAnywhere)
 		double  RadarTransmissionDurationSec = 0.3;
@@ -107,10 +118,13 @@ public:
 	virtual void SaveJSON(CJsonDataContainer& data) override;
 
 private:
-	float CurrentScanAzimuth;
-	double NextScanTime;
-	bool IsFullScaned = false;
-	bool IsScanEnabled = false;
-	bool IsTrackerEnabled = false;
+
+
+	virtual void OnRecievedMessage(void* p_commands);
+	virtual char* GetSerial() ;
+	virtual double GetGain() ;
+	virtual double GetRainClutterLevel() ;
+	virtual double GetSeaClutterLevel() ;
+	virtual AActor* GetOwningActor() ;
 
 };

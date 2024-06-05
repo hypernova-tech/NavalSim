@@ -34,6 +34,8 @@ public:
 	float elevation_end_deg;
 	float azimuth_angle_step_deg;
 	float elevation_angle_step_deg;
+	double horizontal_fov_deg;
+	double vertical_fov_deg;
 	float measurement_error_mean;
 	float measurement_error_std;
     SClutterParams clutter_params;

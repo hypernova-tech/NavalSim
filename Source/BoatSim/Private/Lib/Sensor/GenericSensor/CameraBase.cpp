@@ -162,12 +162,14 @@ void ACameraBase::ApplyCamPostProcessEffects()
 	FPostProcessSettings& PostProcessSettingsA = pSceneCaptureComp2D->PostProcessSettings;
 	PostProcessSettingsA.FilmGrainIntensity = MeasurementErrorMean;
 	
-
+	
 	PostProcessSettingsA.DepthOfFieldFocalDistance = BlurPercent==0?0:CMath::Remap(BlurPercent, 0, 100, 20, 1);
 
 	if (PostProcessMaterialInstance) {
 		PostProcessMaterialInstance->SetScalarParameterValue("LensDistortionIntensity", LensDistortionPercent * 0.01);
 	}
+
+	
 }
 
 void ACameraBase::SetFovDeg(double fov_deg)

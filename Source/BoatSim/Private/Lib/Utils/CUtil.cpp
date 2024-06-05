@@ -78,10 +78,12 @@ bool CUtil::Trace(STraceArgs& args, SScanResult* pscan_result)
 
     pscan_result->ResetTrackPoint3DList();
 
-    int sector_ind = args.azimuth_start_deg / (360.0 / pscan_result->SectorCount);
+    int sector_ind = args.azimuth_start_deg / (args.horizontal_fov_deg / pscan_result->SectorCount);
     SSectorInfo* p_current_sektor = pscan_result->GetSectorContainer()->GetSector(sector_ind);
     p_current_sektor->Reset();
     pscan_result->CurrentSector = sector_ind;
+    pscan_result->HorizontalFovDeg = args.horizontal_fov_deg;
+    pscan_result->VerticalFovDeg = args.vertical_fov_deg;
 
     FVector start_loc = args.p_actor->GetActorLocation();
 

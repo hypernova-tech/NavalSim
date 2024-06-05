@@ -71,6 +71,11 @@ void UGenericCommIF::RegisterConnectionInfo(INT32S ind, SConnectionInfo info, UC
 	Connections.Add(entry);
 }
 
+void UGenericCommIF::SetHostIF(IHostIF* p_host_if)
+{
+	pHostIF = p_host_if;
+}
+
 
 
 void UGenericCommIF::OnReceivedConnectionData(void* connection, INT8U* p_data, INT32U count)

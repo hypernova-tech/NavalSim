@@ -75,6 +75,8 @@ void AFLS3D::Run(float delta_time_sec)
 		args.elevation_end_deg = FovVerticalDeg / 2;
 		args.azimuth_angle_step_deg = HorizontalScanStepAngleDeg;
 		args.elevation_angle_step_deg = VerticalScanStepAngleDeg;
+		args.horizontal_fov_deg = FovHorizontalDeg;
+		args.vertical_fov_deg = FovVerticalDeg;
 		args.measurement_error_mean = MeasurementErrorMean;
 		args.measurement_error_std = MeasurementErrorUncertainy;
 		args.clutter_params = GetClutterParams();
