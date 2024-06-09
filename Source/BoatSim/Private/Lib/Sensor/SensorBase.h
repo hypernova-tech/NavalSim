@@ -202,6 +202,10 @@ public:
 	float GetVerticalScanStepAngleDeg();
 	void SetVerticalScanStepAngleDeg(float val);
 
+	void SetPoint3DVisualize(bool val);
+	bool GetPoint3DVisualize();
+
+
 
 	virtual void Save(ISaveLoader *p_save_loader) override;
 	virtual void SaveJSON(CJsonDataContainer& data) override;

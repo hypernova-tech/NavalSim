@@ -86,7 +86,7 @@ protected:
 	bool VerifySerial(char* p_inp);
 	virtual void UpdateTracker() override;
 	void SendINSData();
-
+	virtual void Scan() override;
 
 public :
 

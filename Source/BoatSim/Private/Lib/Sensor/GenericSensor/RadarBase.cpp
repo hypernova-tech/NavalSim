@@ -103,6 +103,7 @@ void ARadarBase::InitSensor()
 	}
 
 	pCommIF->SetHostIF(this);
+
 }
 
 
@@ -219,7 +220,11 @@ void ARadarBase::OnCaptureReady(void* p_data)
 	CUtil::DebugLog(FString::Printf(TEXT("radar capture duration(ms): %f"), 1000 * read_pixed_elp_sec));
 }
 
-
+bool ARadarBase::IsFullScan()
+{
+	bool ret = CMath::IsZero(FovHorizontalDeg - 360.0, 1e-5);
+	return ret;
+}
 
 void ARadarBase::Scan()
 {
@@ -342,6 +347,7 @@ void ARadarBase::Scan()
 	}
 
 }
+
 
 void ARadarBase::OnRecievedMessage(void* p_commands)
 {

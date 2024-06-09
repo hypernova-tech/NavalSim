@@ -169,8 +169,8 @@ void UGenericRadarCommProtocolIF::SendRadarTrack()
 
 
 
-	FLOAT32 each_spoke_step = p_current->HorizontalFovDeg / total_spoke;
-	FLOAT32 each_cell_size = p_current->ScanRangeMeter / 1024.0f;
+	FLOAT64 each_spoke_step = p_current->ScanAzimuthStepDeg;
+	FLOAT64 each_cell_size = p_current->ScanRangeMeter / 1024.0f;
 	CurrentRequest.RemoveAt(0);
 
 
@@ -225,7 +225,7 @@ void UGenericRadarCommProtocolIF::SendRadarTrack()
 
 		S3DPointCloudMessage cloud_data_mes;
 		cloud_data_mes.Reset();
-
+		TArray<FVector> PointCloud;
 
 		for (int i = 0; i < total_spoke; i++) {
 			//memset(&packspoke, 0, sizeof(SRadarSimSDKPacket));
@@ -293,6 +293,7 @@ void UGenericRadarCommProtocolIF::SendRadarTrack()
 					cloud_data_mes.SetMessageId(EPointCloudId::PointCloudData);
 					cloud_data_mes.SetDataLength(entry_index_in_payload * sizeof(S3DPointCloudDataPayloadEntry));
 					bool ret = pUDPConnection->SendData((const INT8U*)&cloud_data_mes, cloud_data_mes.GetMessageSize());
+					cloud_data_mes.Visualize(PointCloud);
 					entry_index_in_payload = 0;
 				}
 			}
@@ -303,6 +304,7 @@ void UGenericRadarCommProtocolIF::SendRadarTrack()
 			cloud_data_mes.SetMessageId(EPointCloudId::PointCloudData);
 			cloud_data_mes.SetDataLength(entry_index_in_payload * sizeof(S3DPointCloudDataPayloadEntry));
 			bool ret = pUDPConnection->SendData((const INT8U*)&cloud_data_mes, cloud_data_mes.GetMessageSize());
+			cloud_data_mes.Visualize(PointCloud);
 			entry_index_in_payload = 0;
 		}
 
@@ -310,7 +312,19 @@ void UGenericRadarCommProtocolIF::SendRadarTrack()
 		CUtil::DebugLog("Total Radar Proc Sec: " + CUtil::FloatToString(elp_time * 1000) + "ms");
 		memset(SpokeImage, 0, sizeof(SpokeImage));
 
+		AsyncTask(ENamedThreads::GameThread, [this, PointCloud]()
+			{
+				ASensorBase* p_sensor = (ASensorBase*)pRadarHostIF->GetOwningActor();
+				if (p_sensor->GetPoint3DVisualize()) {
+					RenderPointCloud(PointCloud);
+				}
+				// Create the point cloud mesh
+				
+			});
+
 	}
+
+
 
 	PointCloudCaptureInd++;
 
@@ -329,6 +343,7 @@ void UGenericRadarCommProtocolIF::ApplyGain(double gain_level)
 	int texture_shift_w = FMath::Fmod(CTime::GetTimeSecond() * RadarNoiseTextureSpeed.X, NoiseTexture.Width);
 	int texture_shift_h = FMath::Fmod(CTime::GetTimeSecond() * RadarNoiseTextureSpeed.Y, NoiseTexture.Height);
 
+	
 	double wind_speed;
 	ASystemManagerBase::GetInstance()->GetWindSpeedMeterPerSec(0, wind_speed);
 	int max_sea_clutter_point = 300 * (1 + wind_speed);
@@ -337,6 +352,8 @@ void UGenericRadarCommProtocolIF::ApplyGain(double gain_level)
 
 
 	double rain_percent;
+
+
 
 	ASystemManagerBase::GetInstance()->GetRainPercent(0, rain_percent);
 	int max_rain_pt = FMath::Lerp(0, 5000, rain_percent / 100);
@@ -362,7 +379,7 @@ void UGenericRadarCommProtocolIF::ApplyGain(double gain_level)
 
 		}
 	}
-
+#if false
 	for (int i = 0; i < sea_clutter_pt; i++) {
 		int w = FMath::RandRange(0, SpokeImageSize - 1);
 		int h = FMath::RandRange(0, SpokeImageSize - 1);
@@ -374,6 +391,7 @@ void UGenericRadarCommProtocolIF::ApplyGain(double gain_level)
 		int h = FMath::RandRange(0, SpokeImageSize - 1);
 		SpokeImage[h][w] = 1;// ~SpokeImage[h][w];
 	}
+#endif
 
 	auto end_time = CTime::GetTimeSecond();
 	CUtil::DebugLog("ApplyGain (ms): " + CUtil::FloatToString((end_time - start_time) * 1000));
@@ -411,25 +429,41 @@ void UGenericRadarCommProtocolIF::ApplyMerge(int size)
 
 }
 
+void UGenericRadarCommProtocolIF::RenderPointCloud(const TArray<FVector>& pts)
+{
+	auto loc = pRadarHostIF->GetOwningActor()->GetActorLocation();
+	int cnt = 0;
+	for (auto pt : pts) {
+		if (!pt.IsZero()) {
+			cnt++;
+			//if (cnt < 1000) {
+				CUtil::DebugBox(GetWorld(), loc + TOUE(pt), 10, FColor::Red, 1);
+			//}
+		}
+	
+		
+	}
+}
+
 
 void UGenericRadarCommProtocolIF::SpokePointCloudToImage(FLOAT64 spoke_azimuth_deg, FVector scan_center, FLOAT64 scan_range_meter, FLOAT64 cell_size_meter, TArray<FVector>& point_cloud, INT32U num_samples)
 {
 	auto angle_rad = spoke_azimuth_deg * DEGTORAD;
 
 	double ratio = (0.5 * SpokeImageSize) / num_samples;
-
+	FVector scan_center_world = TOW(scan_center);
 	for (int i = 0; i < point_cloud.Num(); i++) {
 		const FVector& pos = point_cloud[i];
 
 
-		double dist = TOW((pos - scan_center).Length());
+		double dist = ((pos - scan_center_world).Length());
 		int j = dist / scan_range_meter * num_samples;
 
 		double x = FMath::Sin(angle_rad) * j * ratio + SpokeImageSize / 2;
 		double y = FMath::Cos(angle_rad) * j * ratio + SpokeImageSize / 2;
 
 		SpokeImage[(int)y][(int)x] = 1;
-		SpokeImage3D[(int)y][(int)x] = pos- scan_center;
+		SpokeImage3D[(int)y][(int)x] = (pos- scan_center_world);
 	}
 
 }
@@ -543,4 +577,19 @@ void UGenericRadarCommProtocolIF::SendTrackedObjects(const STargetTrackStatusDat
 void UGenericRadarCommProtocolIF::OnReceivedConnectionData(void* connection, INT8U* p_data, INT32U count)
 {
 
+}
+
+void S3DPointCloudMessage::Visualize(TArray<FVector> &cloud)
+{
+
+	auto cnt = GetDataPointCount();
+	S3DPointCloudDataPayload* p_entris = (S3DPointCloudDataPayload*)Data;
+
+	for (int i = 0; i < cnt; i++) {
+		S3DPointCloudDataPayloadEntry* p_entry = &p_entris->Entries[i];
+		FVector pos;
+		p_entry->GetPoint(pos);
+		cloud.Add(pos);
+		
+	}
 }

@@ -13,6 +13,7 @@
 #include "GenericRadarCommProtocolIF.generated.h"
 
 #define POINT_CLOUD_DIST_SF 0.001
+#define ONE_OVER_POINT_CLOUD_DIST_SF 1000
 #pragma pack(push, 1)
 enum EPointCloudId:INT8U
 {
@@ -52,9 +53,16 @@ struct S3DPointCloudDataPayloadEntry
 
 	inline void SetPoint(FLOAT64 x_in, FLOAT64 y_in, FLOAT64 z_in)
 	{
-		X = x_in * POINT_CLOUD_DIST_SF;
-		Y = y_in * POINT_CLOUD_DIST_SF;
-		Z = z_in * POINT_CLOUD_DIST_SF;
+		X = x_in * ONE_OVER_POINT_CLOUD_DIST_SF;
+		Y = y_in * ONE_OVER_POINT_CLOUD_DIST_SF;
+		Z = z_in * ONE_OVER_POINT_CLOUD_DIST_SF;
+	}
+
+	inline void GetPoint(FVector &out)
+	{
+		out.X = X * POINT_CLOUD_DIST_SF;
+		out.Y = Y * POINT_CLOUD_DIST_SF;
+		out.Z = Z * POINT_CLOUD_DIST_SF;
 	}
 };
 #pragma pack(pop)
@@ -78,7 +86,8 @@ public:
 
 	void Reset()
 	{
-		memset(this, 0, sizeof(S3DPointCloudMessage));
+		DataLength = 0;
+		//memset(this, 0, sizeof(S3DPointCloudMessage));
 	}
 
 	void SetMessageId(INT8U id)
@@ -108,6 +117,14 @@ public:
 	{
 		return sizeof(MessageID) + sizeof(DataLength) + DataLength;
 	}
+
+	INT32S GetDataPointCount()
+	{
+		return DataLength / sizeof(S3DPointCloudDataPayloadEntry);
+	}
+
+
+	virtual void Visualize(TArray<FVector>& cloud);
 
 };
 #pragma pack(pop)
@@ -180,6 +197,7 @@ protected:
 	FRunnableThread* SenderThread;
 	bool IsStoped = false;
 	int PointCloudCaptureInd = 0;
+	
 
 	virtual void Stop() override;
 
@@ -211,4 +229,6 @@ protected:
 	bool LoadPNGImageAsFColorArray(const FString& ImagePath, TArray<FColor>& OutColors, int32& OutWidth, int32& OutHeight);
 	virtual void ApplyGain(double gain_level);
 	virtual void ApplyMerge(int size);
+
+	void RenderPointCloud(const TArray<FVector> &pts);
 };

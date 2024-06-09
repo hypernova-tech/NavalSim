@@ -50,6 +50,7 @@ protected:
 
 	bool IsTrackerEnabled = false;
 
+
 public:
 	UPROPERTY(EditAnywhere)
 		FString RadarSerial = "";
@@ -126,5 +127,6 @@ private:
 	virtual double GetRainClutterLevel() ;
 	virtual double GetSeaClutterLevel() ;
 	virtual AActor* GetOwningActor() ;
+	bool IsFullScan();
 
 };

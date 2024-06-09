@@ -282,6 +282,16 @@ void  ASensorBase::SetVerticalScanStepAngleDeg(float val)
 	VerticalScanStepAngleDeg = val;
 }
 
+void ASensorBase::SetPoint3DVisualize(bool val)
+{
+	Point3DVisualize = val;
+}
+
+bool ASensorBase::GetPoint3DVisualize()
+{
+	return Point3DVisualize;
+}
+
 void ASensorBase::Save(ISaveLoader* p_save_loader)
 {
 	Super::Save(p_save_loader);

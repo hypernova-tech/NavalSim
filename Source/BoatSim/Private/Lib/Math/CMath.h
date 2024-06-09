@@ -21,6 +21,8 @@ public:
 	static FLOAT64 Remap(FLOAT64 x, FLOAT64 x1, FLOAT64 x2, FLOAT64 y1, FLOAT64 y2);
 	static FVector ProjectWorldDirectionToScreenSpace(APlayerController* PC, const FVector& world_dir);
 	static FVector ToVec3(const FVector2D& vec2d);
+	static bool IsZero(double  val, FLOAT64 tolerance);
+
 	static bool IsZero(FVector vec, FLOAT64 tolerance);
 	static bool IsPointInsideVolume(bool is_local, const FVector& origin, const FVector dir, const FVector& point, FLOAT64 min_elevation_deg, FLOAT64 max_elevation_deg, FLOAT64 min_azimuth_deg, FLOAT64 max_azimuth_deg, FLOAT64 min_range_meter, FLOAT64 max_range_meter, FVector &local_rpy);
 	static void RotateRelative(AActor* p_actor, USceneComponent* p_comp, const FTransform& p_comp_initial_rel_transform, const FVector& rpy_deg);

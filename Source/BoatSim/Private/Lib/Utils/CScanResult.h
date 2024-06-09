@@ -124,7 +124,7 @@ public:
 	void DepthSetPointCloud(FVector start_point, FVector dir, INT32S sample_ind, INT32S depth, FLOAT32 cell_size_meter, INT32S total_byte_count, TArray<FVector> &out)
 	{
 		for (INT32S j = 1; j < depth; j++) {
-			FVector pos = start_point + dir * j * cell_size_meter;
+			FVector pos = TOW(start_point) + dir * j * cell_size_meter;
 			out.Add(pos);
 		}
 	}
@@ -138,7 +138,7 @@ public:
 		dir.Normalize();
 
 		for (INT32S j = start_ind; j < end_ind; j++) {
-			pos = start_point + dir * (j - start_ind) * cell_size_meter;
+			pos = TOW(start_point) + dir * (j - start_ind) * cell_size_meter;
 			out.Add(pos);
 		}
 	}
@@ -241,7 +241,7 @@ public:
 		for (INT32S i = 0; i < p_data->Num(); i++) {
 			FVector pos = (*p_data)[i].Pos;
 
-			out.Add(pos);
+			out.Add(TOW(pos));
 
 
 			FLOAT32 dist = TOW(FVector::DistXY(pos, own_ship_pos));
@@ -357,7 +357,7 @@ struct SSectorContainer
 public:
 	void Init(int count, FLOAT64 azimuth_resolution_deg)
 	{
-		FLOAT64 each_sector_width_deg = 360.0 / count;
+		FLOAT64 each_sector_width_deg = 360 / count;
 
 		pSectors = new SSectorInfo[count];
 		SectorCount = count;

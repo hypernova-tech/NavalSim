@@ -3,7 +3,7 @@ set --name marlin --actorid 0
 set --name marlin --instance -1
 set --name marlin --suppressed 0
 set --name marlin --standalone 0
-set --name marlin --position "0.000000 181.804520 0.000000"
+set --name marlin --position "48.600006 181.804520 0.000000"
 set --name marlin --rotation "-0.000000 -0.000000 0.000000"
 set --name marlin --scale "1.000000 1.000000 1.000000"
 set --name marlin --blocking 1
@@ -77,7 +77,7 @@ set --name env --sharedmemname
 set --name env --gstreamerip 
 set --name env --gstreamerport 0
 set --name env --motionlogen 0
-set --name env --timeofday 12.006903
+set --name env --timeofday 12.109723
 set --name env --envtimeflowscale 1.000000
 set --name env --rain 0.000000
 set --name env --cloud 0.000000
@@ -137,13 +137,32 @@ set --name terrain1 --terrtopleftllh "40.820965 29.445356 0.000000"
 set --name terrain1 --terrbottomrightllh "40.665562 29.650471 0.000000"
 set --name terrain1 --bake 
 
+create --name cube1 --bp CUBE --tick 0
+set --name cube1 --actorid 0
+set --name cube1 --instance -1
+set --name cube1 --suppressed 0
+set --name cube1 --standalone 0
+set --name cube1 --position "82.547008 249.386310 4.314216"
+set --name cube1 --rotation "-0.000000 -0.000000 0.000000"
+set --name cube1 --scale "2.000000 2.000000 1.000000"
+set --name cube1 --blocking 1
+set --name cube1 --tempkelvin 300.000000
+set --name cube1 --heatsource 0
+set --name cube1 --annotationid 0
+set --name cube1 --annotatechildren 0
+set --name cube1 --annotatechildren 0
+set --name cube1 --sharedmemname 
+set --name cube1 --gstreamerip 
+set --name cube1 --gstreamerport 0
+set --name cube1 --motionlogen 0
+
 create --name radargen --bp RADAR --tick 0
 set --name radargen --parent marlin
 set --name radargen --actorid 0
 set --name radargen --instance -1
 set --name radargen --suppressed 0
-set --name radargen --standalone 0
-set --name radargen --position "9.048171 181.804520 6.085388"
+set --name radargen --standalone 1
+set --name radargen --position "61.399426 181.804520 7.846396"
 set --name radargen --rotation "-0.000000 -0.000000 0.000000"
 set --name radargen --scale "1.000000 1.000000 1.000000"
 set --name radargen --blocking 1
@@ -162,14 +181,14 @@ set --name radargen --motionlogen 0
 set --name radargen --sensorfreq 1.000000
 set --name radargen --slotindex 0
 set --name radargen --rangemin 5.000000
-set --name radargen --rangemax 1000.000000
+set --name radargen --rangemax 200.000000
 set --name radargen --vfov 10.000000
 set --name radargen --hfov 90.000000
 set --name radargen --hscanstepang 1.000000
 set --name radargen --vscanstepang 1.000000
 set --name radargen --isnormaldistribution 0
-set --name radargen --merrormean 10.000000
-set --name radargen --merrorstd 1.000000
+set --name radargen --merrormean 0.000000
+set --name radargen --merrorstd 0.000000
 set --name radargen --surfacedetecten 0
 set --name radargen --subsurfacedetecten 0
 set --name radargen --foamen 1
@@ -178,7 +197,7 @@ set --name radargen --maxsurfpenet 2.000000
 set --name radargen --radscanlevel 0
 set --name radargen --radscanrpm 0
 set --name radargen --radgaintype 2
-set --name radargen --radgainlevel 1
+set --name radargen --radgainlevel 250
 set --name radargen --radseaclutleveltype 0
 set --name radargen --radseaclutlevel 0
 set --name radargen --radseaclutautooffset 0
@@ -187,5 +206,5 @@ set --name radargen --radmaxguardzonecount 2
 set --name radargen --radmaxsectorblankingzonecount 4
 
 set --camfollow marlin
-set --camfollowtrans "552.006701 -1871.116647 1140.378938"
-set --camfolloweuler "0.000000 -11.686636 97.844666"
+set --camfollowtrans "2607.004594 1652.562918 1845.377395"
+set --camfolloweuler "0.000000 -13.888763 62.622724"
