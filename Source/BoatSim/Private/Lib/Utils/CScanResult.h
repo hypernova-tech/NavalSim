@@ -21,6 +21,12 @@ enum EScanObjectType
 
 };
 
+enum EDepthSetClass:INT32U
+{
+	ObjectOrTerrain = 0xF,
+	TerrainBorder = 0xE
+};
+
 struct SScanInfo
 {
 	
@@ -49,298 +55,25 @@ struct SSectorInfo
 
 public:
 
-	void Init(INT32S scan_line_count, FLOAT64 start_azimuth_deg, FLOAT64 end_azimuth_deg)
-	{
-		ScanLineCount = scan_line_count;
-		StartAzimuthDeg = start_azimuth_deg;
-		EndAzimuthDeg = end_azimuth_deg;
-		AzimuthStepDeg = (EndAzimuthDeg - StartAzimuthDeg)/(scan_line_count);
-		for (INT32S i = 0; i < scan_line_count; i++) {
-			ScanLines.Add(new TArray<SScanLineEntry>());
-		}
-	}
-	void Reset() {
-		SectorData.Reset();
-		ObjectType.Reset();
-		NormalStrength.Reset();
-		for (INT32S i = 0; i < ScanLines.Num(); i++) {
-			ScanLines[i]->Reset();
-		}
-	
-	}
+	void Init(INT32S scan_line_count, FLOAT64 start_azimuth_deg, FLOAT64 end_azimuth_deg);
+	void Reset();
 
-	void Add(FVector& vec, EScanObjectType object_type = EScanObjectType::ScanObjectTypeUnknown, FLOAT32 NormalStrenght = 1)
-	{
-		if (vec.ContainsNaN()) {
-			bool is_nan;
-			is_nan = true;
-		}
-		SectorData.Add(vec);
-		ObjectType.Add(object_type);
-		NormalStrength.Add(NormalStrenght);
-	}
-	void Add(FVector& vec, INT32S azimuth_scan_ind, EScanObjectType object_type = EScanObjectType::ScanObjectTypeUnknown, FLOAT32 NormalStrenght = 1)
-	{
-		if (vec.ContainsNaN()) {
-			bool is_nan;
-			is_nan = true;
-		}
-		SectorData.Add(vec);
-		ObjectType.Add(object_type);
+	void Add(FVector& vec, EScanObjectType object_type = EScanObjectType::ScanObjectTypeUnknown, FLOAT32 NormalStrenght = 1);
+	void Add(FVector& vec, INT32S azimuth_scan_ind, EScanObjectType object_type = EScanObjectType::ScanObjectTypeUnknown, FLOAT32 NormalStrenght = 1);
+	void DepthSet(INT32S sample_ind, INT32S depth, FLOAT32 cell_size_meter, INT32S total_byte_count, INT8U* p_out);
 
-		if (azimuth_scan_ind < ScanLines.Num()) {
-			SScanLineEntry entry;
-			entry.Pos = vec;
-			entry.ObjectType = object_type;
-			entry.NormalStrength = NormalStrenght;
-			ScanLines[azimuth_scan_ind]->Add(entry);
-		}
-	}
+	void DepthSetPointCloud(FVector start_point, FVector dir, INT32S sample_ind, INT32S depth, FLOAT32 cell_size_meter, INT32S total_byte_count, TArray<FVector>& out);
 
-	void DepthSet(INT32S sample_ind, INT32S depth, FLOAT32 cell_size_meter, INT32S total_byte_count, INT8U* p_out)
-	{
-		for (INT32S j = 1; j < depth; j++) {
-
-			INT32S byte_ind;
-			INT32S order;
-			auto depth_ind = (sample_ind + j);
-			byte_ind = depth_ind / 2;
-			order = depth_ind & 0x1;
-
-			if (byte_ind >= total_byte_count) {
-				break;
-			}
-
-			if (order) {
-				p_out[byte_ind] |= 0xF;
-			}
-			else {
-				p_out[byte_ind] |= 0xF << 4;
-			}
-
-		}
-	}
-
-	void DepthSetPointCloud(FVector start_point, FVector dir, INT32S sample_ind, INT32S depth, FLOAT32 cell_size_meter, INT32S total_byte_count, TArray<FVector> &out)
-	{
-		for (INT32S j = 1; j < depth; j++) {
-			FVector pos = TOW(start_point) + dir * j * cell_size_meter;
-			out.Add(pos);
-		}
-	}
-
-	void DepthSetRangedPointCloud(FVector start_point, FVector end_point, FLOAT64 start, FLOAT64 end, FLOAT32 cell_size_meter, INT32S total_byte_count, TArray<FVector> &out)
-	{
-		INT32S start_ind = start / cell_size_meter;
-		INT32S end_ind = end / cell_size_meter + 0.5;
-		FVector pos;
-		FVector dir = (end_point - start_point);
-		dir.Normalize();
-
-		for (INT32S j = start_ind; j < end_ind; j++) {
-			pos = TOW(start_point) + dir * (j - start_ind) * cell_size_meter;
-			out.Add(pos);
-		}
-	}
+	void DepthSetRangedPointCloud(FVector start_point, FVector end_point, FLOAT64 start, FLOAT64 end, FLOAT32 cell_size_meter, INT32S total_byte_count, TArray<FVector>& out);
 
 
-	void DepthSetRanged(FLOAT64 start, FLOAT64 end, FLOAT32 cell_size_meter, INT32S total_byte_count, INT8U* p_out)
-	{
-		INT32S start_ind = start / cell_size_meter;
-		INT32S end_ind   = end / cell_size_meter+0.5;
+	void DepthSetRanged(FLOAT64 start, FLOAT64 end, FLOAT32 cell_size_meter, INT32S total_byte_count, INT32U set_value, INT8U* p_out);
+	void DepthSetRangedTerrainAware(FVector start_pos, FVector dir, FLOAT64 start, FLOAT64 end, FLOAT32 cell_size_meter, INT32S total_byte_count, INT32U set_value, INT8U* p_out);
 
-		for (INT32S j = start_ind; j < end_ind; j++) {
+	void DepthClearRanged(FLOAT64 start, FLOAT64 end, FLOAT32 cell_size_meter, INT32S total_byte_count, INT8U* p_out);
+	bool MapSpokePointCloud(FVector own_ship_pos, FLOAT32 azimuth_deg, FLOAT32 cell_size_meter, INT32S total_byte_count, TArray<FVector>& out);
 
-			INT32S byte_ind;
-			INT32S order;
-			INT32S sample_ind = j;
-			byte_ind = sample_ind / 2;
-			order = sample_ind & 0x1;
-
-			if (byte_ind >= total_byte_count) {
-				break;
-			}
-
-			if (order) {
-				p_out[byte_ind] |= 0xF;
-			}
-			else {
-				p_out[byte_ind] |= 0xF << 4;
-			}
-
-		}
-	}
-
-	bool MapSpokePointCloud(FVector own_ship_pos, FLOAT32 azimuth_deg, FLOAT32 cell_size_meter, INT32S total_byte_count, TArray<FVector> &out)
-	{
-		if (azimuth_deg >= EndAzimuthDeg) {
-			return false;
-		}
-
-		INT32S ind = (azimuth_deg - StartAzimuthDeg) / AzimuthStepDeg;
-
-		if (ind >= ScanLines.Num()) {
-			return false;
-		}
-
-		TArray<SScanLineEntry>* p_data = ScanLines[ind];
-
-		FLOAT64 max_h = -1;
-		FLOAT64 max_dist_xy = -1;
-		FLOAT64 min_dist_xy_terr = 1e38;
-		FLOAT64 max_dist_xy_terr = -1;
-		bool has_terrain = false;
-		FVector min_dist_pt;
-		FVector max_dist_pt;
-
-		for (INT32S i = 0; i < p_data->Num(); i++) {
-			SScanLineEntry* p_entry = &(*p_data)[i];
-			FVector pos = p_entry->Pos;
-
-			FLOAT64 h = TOW(FMath::Abs((pos - own_ship_pos).Z));
-			FLOAT64 dist_xy = TOW(FVector::DistXY(pos, own_ship_pos));
-			if (max_h < h) {
-				max_h = h;
-			}
-
-			if (max_dist_xy < dist_xy) {
-				max_dist_xy = dist_xy;
-			}
-
-			if (p_entry->ObjectType == EScanObjectType::ScanObjectTypeTerrain) {
-				if (max_dist_xy_terr < dist_xy) {
-					max_dist_xy_terr = dist_xy;
-					max_dist_pt = pos;
-				}
-				if (min_dist_xy_terr > dist_xy) {
-					min_dist_xy_terr = dist_xy;
-					min_dist_pt = pos;
-				}
-				has_terrain = true;
-			}
-
-		}
-
-		max_h *= 1.5;
-		if (max_h > 0 && max_h < 2) {
-			max_h = 2;
-		}
-
-
-		if (has_terrain) {
-			if (max_dist_xy_terr - min_dist_xy_terr < 20) {
-				max_dist_xy_terr = min_dist_xy_terr + 20;
-			}
-
-			DepthSetRangedPointCloud(min_dist_pt, max_dist_pt, min_dist_xy_terr, max_dist_xy_terr, cell_size_meter, total_byte_count, out);
-		}
-
-		FQuat yaw(FVector::UpVector, azimuth_deg * DEGTORAD);
-		FVector dir = yaw.RotateVector(FVector::ForwardVector);
-
-		for (INT32S i = 0; i < p_data->Num(); i++) {
-			FVector pos = (*p_data)[i].Pos;
-
-			out.Add(TOW(pos));
-
-
-			FLOAT32 dist = TOW(FVector::DistXY(pos, own_ship_pos));
-			INT32S sample_ind = dist / cell_size_meter;
-
-			INT32S byte_ind = sample_ind / 2;
-			INT32S depth = (INT32S)(max_h / cell_size_meter + 0.5);
-
-			
-
-			DepthSetPointCloud(pos, dir, sample_ind, depth, cell_size_meter, total_byte_count, out);
-		}
-
-		return true;
-	}
-
-	bool MapSpoke4Bits(FVector own_ship_pos, FLOAT32 azimuth_deg, FLOAT32 cell_size_meter, INT32S total_byte_count, INT8U *p_out)
-	{
-		if (azimuth_deg >= EndAzimuthDeg) {
-			return false;
-		}
-
-		INT32S ind = (azimuth_deg - StartAzimuthDeg) / AzimuthStepDeg;
-
-		if (ind >= ScanLines.Num()) {
-			return false;
-		}
-
-		TArray<SScanLineEntry>* p_data = ScanLines[ind];
-
-		FLOAT64 max_h = -1;
-		FLOAT64 max_dist_xy = -1;
-		FLOAT64 min_dist_xy_terr = 1e38;
-		FLOAT64 max_dist_xy_terr = -1;
-		bool has_terrain = false;
-
-		for (INT32S i = 0; i < p_data->Num(); i++) {
-			SScanLineEntry* p_entry = &(*p_data)[i];
-			FVector pos = p_entry->Pos;
-
-			FLOAT64 h = TOW(FMath::Abs((pos - own_ship_pos).Z));
-			FLOAT64 dist_xy = TOW(FVector::DistXY(pos,own_ship_pos));
-			if (max_h < h) {
-				max_h = h;
-			}
-
-			if (max_dist_xy < dist_xy) {
-				max_dist_xy = dist_xy;
-			}
-
-			if (p_entry->ObjectType == EScanObjectType::ScanObjectTypeTerrain) {
-				if (max_dist_xy_terr < dist_xy) {
-					max_dist_xy_terr = dist_xy;
-				}
-				if (min_dist_xy_terr > dist_xy) {
-					min_dist_xy_terr = dist_xy;
-				}
-				has_terrain = true;
-			}
-
-		}
-		
-		max_h *= 1.5;
-		if (max_h > 0 && max_h < 2) {
-			max_h = 2;
-		}
-
-		
-
-		if (has_terrain) {
-			if (max_dist_xy_terr - min_dist_xy_terr < 20) {
-				max_dist_xy_terr = min_dist_xy_terr + 20;
-			}
-
-			DepthSetRanged(min_dist_xy_terr, max_dist_xy_terr, cell_size_meter, total_byte_count, p_out);
-		}
-
-		for (INT32S i = 0; i < p_data->Num(); i++) {
-			FVector pos = (*p_data)[i].Pos;
-
-			FLOAT32 dist = TOW( FVector::DistXY(pos, own_ship_pos));
-			INT32S sample_ind = dist / cell_size_meter;
-
-			INT32S byte_ind = sample_ind / 2;
-			INT32S order = sample_ind & 0x1;
-			INT32S depth = (INT32S)(max_h / cell_size_meter+0.5);
-
-			if (order) {
-				p_out[byte_ind] |= 0xF;
-			}
-			else {
-				p_out[byte_ind] |= 0xF<<4;
-			}
-
-			DepthSet(sample_ind, depth, cell_size_meter, total_byte_count, p_out);
-		}
-
-		return true;
-	}
+	bool MapSpoke4Bits(FVector own_ship_pos, FLOAT32 azimuth_deg, FLOAT32 cell_size_meter, INT32S total_byte_count, INT8U* p_out);
 
 };
 

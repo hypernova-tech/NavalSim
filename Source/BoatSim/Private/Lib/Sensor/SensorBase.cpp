@@ -370,6 +370,7 @@ void ASensorBase::SaveJSON(CJsonDataContainer& data)
 {
 	Super::SaveJSON(data);
 	data.Add(CCLICommandManager::Beam, ShowBeam);
+	data.Add(CCLICommandManager::PointCloud3D, Point3DVisualize);
 	data.Add(CCLICommandManager::SensorFrequency, Frequency);
 	data.Add(CCLICommandManager::SensorSlotIndex, SensorSlotIndex);
 	data.Add(CCLICommandManager::VericalFov, FovVerticalDeg);

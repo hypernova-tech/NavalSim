@@ -65,6 +65,8 @@ void ATerrainManager::BuildTerrain(FString png_path, FString depth_map,  FLOAT64
     int32 texture_size_x = HeightmapTexture->GetSizeX();
     int32 texture_size_y = HeightmapTexture->GetSizeY();
 
+    MapWidthPix  = texture_size_x;
+    MapHeightPix = texture_size_y;
 
     GenerateTerrain(data, texture_size_x, texture_size_y, top_left, bottom_right, depth_data);
 
@@ -181,6 +183,10 @@ void ATerrainManager::GenerateTerrain(const TArray<FLOAT64>& HeightMap, int32 Ma
     ProceduralMesh->CreateMeshSection(0, Vertices, Triangles, Normals, UVs, TArray<FColor>(), TArray<FProcMeshTangent>(), true);
     ProceduralMesh->SetMaterial(0, pMaterial);
     ProceduralMesh->ComponentTags.Add("TagTerrain");
+
+    bool ret;
+    auto elev = GetElevation(2553.2, -3354.9, ret);
+
 }
 
 void ATerrainManager::CalculateVertices(const TArray<FLOAT64>& HeightMap, int32 MapWidth, int32 MapHeight, FVector top_left, FVector bottom_right, const TArray<FLOAT64>& depth_map, TArray<FVector>& OutVertices)
@@ -191,6 +197,12 @@ void ATerrainManager::CalculateVertices(const TArray<FLOAT64>& HeightMap, int32 
     FVector bottom_left = FVector(bottom_right.X, top_left.Y, 0);
     FVector top_right =   FVector(top_left.X, bottom_right.Y, 0);
 
+
+    TerrainBottomLeftCornerXYZMeter = TOW(p_origin->ConvertLLHToUEXYZ(bottom_left));
+    TerrainTopRightCornerXYZMeter   = TOW(p_origin->ConvertLLHToUEXYZ(top_right));
+
+    OneOverXStepDistMeter = 1.0/( (TerrainTopRightCornerXYZMeter.X - TerrainBottomLeftCornerXYZMeter.X) / (MapWidth - 1));
+    OneOverYStepDistMeter = 1.0 / ((TerrainTopRightCornerXYZMeter.Y - TerrainBottomLeftCornerXYZMeter.Y) / (MapHeight - 1));
 
     for (int32 x = 0; x < MapHeight  ; ++x)
     {
@@ -217,6 +229,7 @@ void ATerrainManager::CalculateVertices(const TArray<FLOAT64>& HeightMap, int32 
             FVector coord_ue;
             coord_ue = p_origin->ConvertLLHToUEXYZ(coord_llh);
             OutVertices.Add(coord_ue);
+            Elevations.Add(Height);
         }
     }
 }
@@ -548,4 +561,6 @@ void ATerrainManager::UpdateAnnotation(bool is_enabled)
     Super::UpdateAnnotation(is_enabled);
 
 }
+
+
 

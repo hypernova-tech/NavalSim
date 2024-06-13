@@ -210,6 +210,7 @@ private:
 	TArray<APlatformBase*> Platforms;
 	TMap<ESensorType, TArray<ASensorBase*> > SensorsOfType;
 	TSet<AActor*> HeatSources;
+	ATerrainManager* pTerrainManager;
 
 	bool IsStartReceived = false;
 	bool IsResumeReceived = false;
@@ -309,6 +310,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void SetPlatform(APlatformBase* p_platform);
 
+	ATerrainManager* GetTerrainManager();
 
 	virtual void StartSimulation();
 	virtual void ResumeSimulation();
@@ -551,6 +553,9 @@ public:
 
 	virtual bool GetBeamEnabled(AActor* p_actor, bool& val);
 	virtual bool SetBeamEnabled(AActor* p_actor, bool val);
+
+	virtual bool GetPointCloud3DEnabled(AActor* p_actor, bool& val);
+	virtual bool SetPointCloud3DEnabled(AActor* p_actor, bool val);
 
 	virtual bool SetMapOrigin(AActor* p_actor, FVector llh) ;
 	virtual bool GetMapOrigin(AActor* p_actor, FVector& llh);

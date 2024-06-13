@@ -96,6 +96,7 @@ public:
 	static FString Controller;
 	static FString SensorSlotIndex;
 	static FString Beam;
+	static FString PointCloud3D;
 	static FString RangeMin;
 	static FString RangeMax;
 	static FString Selected;

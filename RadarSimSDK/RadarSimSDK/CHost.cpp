@@ -294,7 +294,8 @@ void CHost::ThreadFunction()
 			{
 				for (INT32U i = 0; i < RadarCount; i++) {
 					auto* p_radar = tMultiRadarClient::GetInstance()->FindRadar(radars[i]);
-					p_radar->pImageClient->SetGain(eUserGainManualAuto::eUserGainAuto, 5);
+					p_radar->pImageClient->SetGain(eUserGainManualAuto::eUserGainAuto, 127);
+					
 				}
 
 				next_state = EHostState::SetRange;
@@ -306,7 +307,7 @@ void CHost::ThreadFunction()
 			{
 				for (INT32U i = 0; i < RadarCount; i++) {
 					auto* p_radar = tMultiRadarClient::GetInstance()->FindRadar(radars[i]);
-					p_radar->pImageClient->SetRange(8500);
+					p_radar->pImageClient->SetRange(1500);
 				}
 
 				next_state = EHostState::SetSeaClutter;

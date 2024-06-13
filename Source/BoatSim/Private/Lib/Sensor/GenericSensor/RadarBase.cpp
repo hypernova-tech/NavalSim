@@ -369,7 +369,12 @@ double ARadarBase::GetSeaClutterLevel()
 {
 	return SeaClutterLevel;
 }
-AActor* ARadarBase::GetOwningActor()
+void* ARadarBase::GetOwningActor()
 {
 	return this;
+}
+
+double ARadarBase::GetTerrainBorderThreshold()
+{
+	return TerrainBorderThreshold;
 }

@@ -102,6 +102,9 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = "SectorBlanking")
 		uint8 MaxSectorBlankingZoneCount = 4;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int TerrainBorderThreshold = 50;
 	virtual void Scan();
 	
 
@@ -126,7 +129,8 @@ private:
 	virtual double GetGain() ;
 	virtual double GetRainClutterLevel() ;
 	virtual double GetSeaClutterLevel() ;
-	virtual AActor* GetOwningActor() ;
+	virtual void* GetOwningActor() ;
+	virtual double GetTerrainBorderThreshold();
 	bool IsFullScan();
 
 };

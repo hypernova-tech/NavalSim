@@ -70,6 +70,9 @@ public:
 	virtual AActorBase* ToActorBase(AActor* p_actor) = 0;
 	virtual ASensorBase* ToSensorBase(AActor* p_actor) = 0;
 	virtual bool IsBakable(AActor* p_actor) = 0;
+
+	virtual bool GetPointCloud3DEnabled(AActor* p_actor, bool& val) = 0;
+	virtual bool SetPointCloud3DEnabled(AActor* p_actor, bool val) = 0;
 	
 	virtual bool GetBeamEnabled(AActor* p_actor, bool& val) = 0;
 	virtual bool SetBeamEnabled(AActor* p_actor, bool val) = 0;

@@ -4,6 +4,11 @@
 #include <random>
 
 
+struct SNeighbour {
+	int x;
+	int y;
+};
+
 class CMath
 {
 
@@ -88,5 +93,7 @@ public:
 	};
 	static double FixAngPlusMinus180(double val);
 	static FVector FixAngPlusMinus180(FVector ang);
-
+	static FVector FindWorldLocation(AActor* OwningActor, double AzimuthDeg, double ElevationDeg, double Range);
+	static double CalculateDistance(int x1, int y1, int x2, int y2);
+	static int GetNearestNeighbors(int x, int y, int rows, int cols, int N, SNeighbour* neighbors);
 }; 

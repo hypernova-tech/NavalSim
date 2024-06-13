@@ -283,3 +283,16 @@ UMaterialInstanceDynamic* APointVisualizer::CreateMaterialInstanceWithTexture(UO
     p_image->SetBrush(NewBrush);
     return DynamicMaterial;
 }
+
+void APointVisualizer::RenderPointCloud(FVector loc, const TArray<FVector>& pts)
+{
+    int cnt = 0;
+    for (auto pt : pts) {
+        if (!pt.IsZero()) {
+            cnt++;
+            //if (cnt < 1000) {
+            CUtil::DebugBox(GetWorld(), loc + TOUE(pt), 10, FColor::Red, 0.2);
+            //}
+        }
+    }
+}

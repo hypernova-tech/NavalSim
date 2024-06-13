@@ -390,5 +390,71 @@ FVector CMath::FixAngPlusMinus180(FVector ang)
     return ret;
 }
 
+FVector CMath::FindWorldLocation(AActor* OwningActor, double AzimuthDeg, double ElevationDeg, double Range)
+{
+    // Ensure the OwningActor is valid
+    if (!OwningActor)
+    {
+        return FVector::ZeroVector;
+    }
+
+    // Convert azimuth and elevation from degrees to radians
+    double AzimuthRad = AzimuthDeg * DEGTORAD;
+    double ElevationRad = ElevationDeg * DEGTORAD;
+
+    // Calculate the Cartesian coordinates in local space
+    float X = Range * FMath::Cos(ElevationRad) * FMath::Cos(AzimuthRad);
+    float Y = Range * FMath::Cos(ElevationRad) * FMath::Sin(AzimuthRad);
+    float Z = Range * FMath::Sin(ElevationRad);
+
+    FVector LocalLocation(X, Y, Z);
+
+    FTransform ActorTransform = OwningActor->GetActorTransform();
+
+    // Transform the local coordinates to world coordinates
+    FVector WorldLocation = ActorTransform.TransformPosition(LocalLocation);
+
+    return WorldLocation;
+}
 
 
+
+// Function to calculate the Euclidean distance between two points
+double CMath::CalculateDistance(int x1, int y1, int x2, int y2) 
+{
+    return std::sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+}
+
+// Function to get the list of N nearest neighboring points within the bounds of the grid
+int CMath::GetNearestNeighbors(int x, int y, int rows, int cols, int N, SNeighbour* neighbors) 
+{
+    // List to store all points in the grid except the given point
+    std::vector<SNeighbour> allNeighbors;
+
+    // Iterate through the grid and add all points except the given point
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < cols; ++j) {
+            if (i != x || j != y) {
+                allNeighbors.push_back({ i, j });
+            }
+        }
+    }
+
+    // Sort the neighbors by distance to the given point (x, y)
+    std::sort(allNeighbors.begin(), allNeighbors.end(), [x, y](SNeighbour a, SNeighbour b) {
+        return CalculateDistance(x, y, a.x, a.y) < CalculateDistance(x, y, b.x, b.y);
+        });
+
+    // Resize the neighbors vector if there are more than N neighbors
+    if (allNeighbors.size() > N) {
+        allNeighbors.resize(N);
+    }
+
+    // Populate the neighbors array and return the size
+    int size = std::min(N, static_cast<int>(allNeighbors.size()));
+    for (int i = 0; i < size; ++i) {
+        neighbors[i] = allNeighbors[i];
+    }
+
+    return size;
+}

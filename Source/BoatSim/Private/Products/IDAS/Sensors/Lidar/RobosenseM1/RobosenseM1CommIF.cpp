@@ -142,8 +142,7 @@ void URobosenseM1CommIF::SendMainStreamOutputPacket()
 			FLOAT32 intensity = 0;
 			//FLOAT32 distance_meter = p_current->Interpolate(azimuth_deg, elevation_deg, intensity);
 			FLOAT32 distance_meter = p_current->GetElevIntensityAndReset(i, j, intensity);
-			
-
+		
 			//azimuth_deg = -135;
 			//elevation_deg = 0;
 

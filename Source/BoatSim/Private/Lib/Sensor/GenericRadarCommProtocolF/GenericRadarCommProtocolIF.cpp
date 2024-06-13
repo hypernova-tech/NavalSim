@@ -15,6 +15,7 @@
 #include "Misc/FileHelper.h"
 #include <Lib/SystemManager/SystemManagerBase.h>
 #include "Products/IDAS/Sensors/Radar/Halo24/CommIF/Halo24CommIF.h"
+#include <Lib/PointVisualizer/PointCloudTypes.h>
 
 UGenericRadarCommProtocolIF::~UGenericRadarCommProtocolIF()
 {
@@ -30,10 +31,8 @@ void UGenericRadarCommProtocolIF::SendData(void* p_data, uint32 size_in_bytes)
 	HasNewData = true;
 	SScanResult* p_in = (SScanResult*)p_data;
 	SScanResult* p_new = p_in;
-	//if (p_in->IsFullScanned()) {
-		//p_in->CurrentSector = 0;
+
 	CurrentRequest.Add(p_new);
-	//}
 
 	Mutex.Unlock();
 }
@@ -67,6 +66,9 @@ void UGenericRadarCommProtocolIF::SetHostIF(IHostIF* p_val)
 void UGenericRadarCommProtocolIF::BeginPlay()
 {
 	Super::BeginPlay();
+
+	TotalNeighbours = CMath::GetNearestNeighbors(0, 0, 8, 8, 64, Neighbours);
+
 	pUDPConnection->AddConnectionDataReceiver(this);
 	
 	
@@ -91,6 +93,18 @@ void UGenericRadarCommProtocolIF::BeginPlay()
 	{
 		// Failed to load the image
 	}
+	ImagePath = FPaths::ProjectDir() / TEXT("Textures/Radar/TerrainTexture.png");
+	if (LoadPNGImageAsFColorArray(ImagePath, TerrainTexture.Colors, TerrainTexture.Width, TerrainTexture.Height))
+	{
+		// Successfully loaded the image, Colors array now contains the pixel data
+		// Width and Height contain the dimensions of the image
+	}
+	else
+	{
+		// Failed to load the image
+	}
+
+	
 
 	RadarNoiseTextureSpeed.X = 2;
 	RadarNoiseTextureSpeed.Y = 1.5;
@@ -226,12 +240,13 @@ void UGenericRadarCommProtocolIF::SendRadarTrack()
 		S3DPointCloudMessage cloud_data_mes;
 		cloud_data_mes.Reset();
 		TArray<FVector> PointCloud;
+		ASensorBase* p_sensor = (ASensorBase*)pRadarHostIF->GetOwningActor();
+		bool is_visualize = p_sensor->GetPoint3DVisualize();
 
 		for (int i = 0; i < total_spoke; i++) {
 			//memset(&packspoke, 0, sizeof(SRadarSimSDKPacket));
-
 			//SHalo24SpokePayload* p_spoke_payload = (SHalo24SpokePayload*)packspoke.Payload;
-
+			info.TimeStamp = CTime::GetTimeSecond();
 			info.PointCount = total_spoke;
 			info.CaptureInd = i;
 			auto scan_center_w = TOW(p_current->ScanCenter);
@@ -293,18 +308,21 @@ void UGenericRadarCommProtocolIF::SendRadarTrack()
 					cloud_data_mes.SetMessageId(EPointCloudId::PointCloudData);
 					cloud_data_mes.SetDataLength(entry_index_in_payload * sizeof(S3DPointCloudDataPayloadEntry));
 					bool ret = pUDPConnection->SendData((const INT8U*)&cloud_data_mes, cloud_data_mes.GetMessageSize());
-					cloud_data_mes.Visualize(PointCloud);
+					if (is_visualize) {
+						cloud_data_mes.Visualize(PointCloud);
+					}
 					entry_index_in_payload = 0;
 				}
-			}
-		
+			}		
 		}
 
 		if (entry_index_in_payload != 0) {
 			cloud_data_mes.SetMessageId(EPointCloudId::PointCloudData);
 			cloud_data_mes.SetDataLength(entry_index_in_payload * sizeof(S3DPointCloudDataPayloadEntry));
 			bool ret = pUDPConnection->SendData((const INT8U*)&cloud_data_mes, cloud_data_mes.GetMessageSize());
-			cloud_data_mes.Visualize(PointCloud);
+			if (is_visualize) {
+				cloud_data_mes.Visualize(PointCloud);
+			}
 			entry_index_in_payload = 0;
 		}
 
@@ -312,16 +330,12 @@ void UGenericRadarCommProtocolIF::SendRadarTrack()
 		CUtil::DebugLog("Total Radar Proc Sec: " + CUtil::FloatToString(elp_time * 1000) + "ms");
 		memset(SpokeImage, 0, sizeof(SpokeImage));
 
-		AsyncTask(ENamedThreads::GameThread, [this, PointCloud]()
+		if (is_visualize) {
+			AsyncTask(ENamedThreads::GameThread, [this, PointCloud]()
 			{
-				ASensorBase* p_sensor = (ASensorBase*)pRadarHostIF->GetOwningActor();
-				if (p_sensor->GetPoint3DVisualize()) {
-					RenderPointCloud(PointCloud);
-				}
-				// Create the point cloud mesh
-				
+				RenderPointCloud(PointCloud);
 			});
-
+		}
 	}
 
 
@@ -334,9 +348,12 @@ void UGenericRadarCommProtocolIF::SendRadarTrack()
 
 void UGenericRadarCommProtocolIF::ApplyGain(double gain_level)
 {
+
 	if (gain_level < 0) {
 		gain_level = 0;
 	}
+	int sea_clutter_cnt = FMath::RandRange(10, 16);
+	int rain_clutter_cnt = FMath::RandRange(4, 10);
 	auto start_time = CTime::GetTimeSecond();
 	float one_over_size = 1.0 / SpokeImageSize;
 	INT8U gain_threshold = FMath::Clamp(gain_level, 0, 255);
@@ -346,9 +363,12 @@ void UGenericRadarCommProtocolIF::ApplyGain(double gain_level)
 	
 	double wind_speed;
 	ASystemManagerBase::GetInstance()->GetWindSpeedMeterPerSec(0, wind_speed);
-	int max_sea_clutter_point = 300 * (1 + wind_speed);
+	int max_sea_clutter_point = 15 * (0 + wind_speed);
+	if (wind_speed <= 3.1) {
+		max_sea_clutter_point = 0;
+	}
 
-	int sea_clutter_pt = FMath::Lerp(max_sea_clutter_point, max_sea_clutter_point * 0.001, pRadarHostIF->GetSeaClutterLevel() / 255.0);
+	int sea_clutter_pt = FMath::Lerp(max_sea_clutter_point, max_sea_clutter_point * 0, pRadarHostIF->GetSeaClutterLevel() / 255.0);
 
 
 	double rain_percent;
@@ -356,7 +376,7 @@ void UGenericRadarCommProtocolIF::ApplyGain(double gain_level)
 
 
 	ASystemManagerBase::GetInstance()->GetRainPercent(0, rain_percent);
-	int max_rain_pt = FMath::Lerp(0, 5000, rain_percent / 100);
+	int max_rain_pt = FMath::Lerp(0, 2500, rain_percent / 100);
 
 	int rain_clutter_pt = FMath::Lerp(max_rain_pt, 0, pRadarHostIF->GetRainClutterLevel() / 255.0);
 
@@ -379,22 +399,43 @@ void UGenericRadarCommProtocolIF::ApplyGain(double gain_level)
 
 		}
 	}
-#if false
+#if true
 	for (int i = 0; i < sea_clutter_pt; i++) {
 		int w = FMath::RandRange(0, SpokeImageSize - 1);
 		int h = FMath::RandRange(0, SpokeImageSize - 1);
-		SpokeImage[h][w] = 1; // ~SpokeImage[h][w];
+		SpokeImage[h][w] = 1;
+		for (int n = 0; n < sea_clutter_cnt; n++) {
+			SNeighbour* p_neighbour = &Neighbours[n];
+			
+			if((h + p_neighbour->y) <=(SpokeImageSize - 1) && (w + p_neighbour->x) <= (SpokeImageSize - 1)){
+				SpokeImage[h + p_neighbour->y][w + p_neighbour->x] = 1;
+			}			
+		}		
 	}
 
 	for (int i = 0; i < rain_clutter_pt; i++) {
 		int w = FMath::RandRange(0, SpokeImageSize - 1);
 		int h = FMath::RandRange(0, SpokeImageSize - 1);
-		SpokeImage[h][w] = 1;// ~SpokeImage[h][w];
+		SpokeImage[h][w] = 1;
+		for (int n = 0; n < rain_clutter_cnt; n++) {
+			SNeighbour* p_neighbour = &Neighbours[n];
+			
+			if ((h + p_neighbour->y) <= (SpokeImageSize - 1) && (w + p_neighbour->x) <= (SpokeImageSize - 1)) {
+				SpokeImage[h + p_neighbour->y][w + p_neighbour->x] = 1;
+			}
+
+		}
 	}
 #endif
 
 	auto end_time = CTime::GetTimeSecond();
 	CUtil::DebugLog("ApplyGain (ms): " + CUtil::FloatToString((end_time - start_time) * 1000));
+}
+
+
+void UGenericRadarCommProtocolIF::FillArrond(int x, int y, int cnt)
+{
+
 }
 
 void UGenericRadarCommProtocolIF::ApplyMerge(int size)
@@ -431,13 +472,15 @@ void UGenericRadarCommProtocolIF::ApplyMerge(int size)
 
 void UGenericRadarCommProtocolIF::RenderPointCloud(const TArray<FVector>& pts)
 {
-	auto loc = pRadarHostIF->GetOwningActor()->GetActorLocation();
+	AActor* p_actor = (AActor*)pRadarHostIF->GetOwningActor();
+
+	auto loc = p_actor->GetActorLocation();
 	int cnt = 0;
 	for (auto pt : pts) {
 		if (!pt.IsZero()) {
 			cnt++;
 			//if (cnt < 1000) {
-				CUtil::DebugBox(GetWorld(), loc + TOUE(pt), 10, FColor::Red, 1);
+				CUtil::DebugBox(GetWorld(), loc + TOUE(pt), 10, FColor::Red, 0.2);
 			//}
 		}
 	
@@ -473,7 +516,9 @@ void UGenericRadarCommProtocolIF::SpokeToImage(FLOAT64 spoke_azimuth_deg, INT8U*
 	auto angle_rad = spoke_azimuth_deg * DEGTORAD;
 
 	double ratio = (0.5 * SpokeImageSize) / num_samples;
-
+	float one_over_size = 1.0 / SpokeImageSize;
+	
+	double border_threshold = pRadarHostIF->GetTerrainBorderThreshold();
 	for (int i = 0; i < (int)num_samples; i++) {
 
 		int byte_ind = i >> 1;
@@ -494,7 +539,13 @@ void UGenericRadarCommProtocolIF::SpokeToImage(FLOAT64 spoke_azimuth_deg, INT8U*
 		double x = FMath::Sin(angle_rad) * i * ratio + SpokeImageSize / 2;
 		double y = FMath::Cos(angle_rad) * i * ratio + SpokeImageSize / 2;
 
-		SpokeImage[(int)y][(int)x] = data;
+		if (data == 0xE) { // terrain border
+			SpokeImage[(int)y][(int)x] = (TerrainTexture.GetColor((int)x* one_over_size, (int)y* one_over_size) >= border_threshold)?0xF:0x0;
+		}
+		else {
+			SpokeImage[(int)y][(int)x] = data;
+		}
+		
 
 	}
 

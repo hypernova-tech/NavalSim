@@ -449,7 +449,7 @@ void AHalo24Radar::Scan()
 	}
 	bool is_reset = false;
 
-	if (FApp::GetCurrentTime() >= NextScanTime) {
+	if (CTime::GetTimeSecond() >= NextScanTime) {
 
 		if (IsFullScaned) {
 
@@ -543,7 +543,7 @@ void AHalo24Radar::Scan()
 
 			IsFullScaned = true;
 			if (RadarTransmissionDurationSec != 0) {
-				NextScanTime = FApp::GetCurrentTime() + RadarTransmissionDurationSec;
+				NextScanTime = CTime::GetTimeSecond() + RadarTransmissionDurationSec;
 			}
 
 		}
@@ -555,7 +555,7 @@ void AHalo24Radar::Scan()
 				total_scan_period_sec = 10e-3;
 			}
 
-			NextScanTime = FApp::GetCurrentTime() + total_scan_period_sec / ScanResultContainer.GetSectorCount();
+			NextScanTime = CTime::GetTimeSecond() + total_scan_period_sec / ScanResultContainer.GetSectorCount();
 		}
 
 	}

@@ -57,10 +57,20 @@ protected:
 	virtual void BeginPlay() override;
 	void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 	TArray<FVector> Vertices;
+	TArray<FLOAT64> Elevations;
 	TArray<int32> Triangles;
 	TArray<FVector2D> UVs;
 	TArray<FVector> Normals;
 	ECoordSystem CoordSystem = ECoordSystem::CoordSystemLLH_WGS84;
+	FLOAT64 MapWidthPix;
+	FLOAT64 MapHeightPix;
+	
+	FVector TerrainBottomLeftCornerXYZMeter;
+	FVector TerrainTopRightCornerXYZMeter;
+
+	FLOAT64 OneOverXStepDistMeter;
+	FLOAT64 OneOverYStepDistMeter;
+
 
 	UTexture2D* LoadPNGTextureFromFile(const FString& ImagePath, ERGBFormat format, INT32S bit_depth, EPixelFormat px_format);
 
@@ -114,6 +124,30 @@ public:
 	virtual void Save(ISaveLoader* p_save_loader) override;
 	virtual void SaveJSON(CJsonDataContainer& data) override;
 	virtual void UpdateAnnotation(bool is_enabled) override;
+	inline FLOAT64 GetElevation(FLOAT64 x_meter, FLOAT64 y_meter, bool& ret)
+	{
+		ret = false;
+		if (x_meter < TerrainBottomLeftCornerXYZMeter.X) {
+			return 0;
+		}
+		if (x_meter > TerrainTopRightCornerXYZMeter.X) {
+			return 0;
+		}
+		if (y_meter < TerrainBottomLeftCornerXYZMeter.Y) {
+			return 0;
+		}
+		if (y_meter > TerrainTopRightCornerXYZMeter.Y) {
+			return 0;
+		}
+
+		int ind_x = (int) ((x_meter - TerrainBottomLeftCornerXYZMeter.X) * OneOverXStepDistMeter + 0.5);
+		int ind_y = (int) ((y_meter - TerrainBottomLeftCornerXYZMeter.Y) * OneOverYStepDistMeter + 0.5);
+
+		auto elev = Elevations[ind_x * MapWidthPix + ind_y];
+		ret = true;
+		return elev;
+	}
+
 
 
 	

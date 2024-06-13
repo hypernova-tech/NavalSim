@@ -102,6 +102,10 @@ void ASystemManagerBase::RegisterActor(AActor* p_actor)
 			pVirtualPlatform->SetTarget(p_actor_as_platform);
 		}
 	}
+
+	if (ToTerrain(p_actor)) {
+		pTerrainManager = (ATerrainManager*)p_actor;
+	}
 	
 
 
@@ -964,6 +968,11 @@ void ASystemManagerBase::SetPlatform(APlatformBase* p_platform)
 	pPlatform = p_platform;
 	pPlatform->OnControllerChanged();
 
+}
+
+ATerrainManager* ASystemManagerBase::GetTerrainManager()
+{
+	return pTerrainManager;
 }
 
 bool ASystemManagerBase::GetIsSimulationMode()
@@ -2935,6 +2944,27 @@ bool ASystemManagerBase::GetPathLineColor(AActor* p_actor, FColor& val)
 	 auto plt = GetPlatform();
 	 if (plt != nullptr) {
 		 view = plt->GetCamView();
+		 return true;
+	 }
+	 return false;
+ }
+
+
+ bool ASystemManagerBase::GetPointCloud3DEnabled(AActor* p_actor, bool& val)
+ {
+	 auto obj = ToSensorBase(p_actor);
+	 if (obj != nullptr) {
+		 val = obj->GetPoint3DVisualize();
+		 return true;
+	 }
+	 return false;
+ }
+
+ bool ASystemManagerBase::SetPointCloud3DEnabled(AActor* p_actor, bool val)
+ {
+	 auto obj = ToSensorBase(p_actor);
+	 if (obj != nullptr) {
+		 obj->SetPoint3DVisualize(val);
 		 return true;
 	 }
 	 return false;

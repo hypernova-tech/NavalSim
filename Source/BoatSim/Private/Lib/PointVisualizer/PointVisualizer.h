@@ -28,7 +28,7 @@ public:
 		UMaterialInterface* pBaseMaterial;
 	
 
-
+	void RenderPointCloud(FVector loc, const TArray<FVector>& pts);
 
 protected:
 	// Called when the game starts or when spawned

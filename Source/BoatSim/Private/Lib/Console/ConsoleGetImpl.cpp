@@ -756,6 +756,17 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
 
     }
 
+    ret = CommandManager.HasA(CCLICommandManager::PointCloud3D);
+    if (ret) {
+        if (pSystemAPI->GetPointCloud3DEnabled(p_actor, is_enabled)){
+            SendConsoleResponse(name, CCLICommandManager::PointCloud3D, is_enabled);
+            return true;
+        }
+    }
+    else {
+
+    }
+
 
     ret = CommandManager.HasA(CCLICommandManager::RangeMin);
     if (ret) {

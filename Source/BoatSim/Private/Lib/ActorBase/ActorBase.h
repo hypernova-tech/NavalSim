@@ -10,6 +10,7 @@
 #include <Lib/Sensor/GenericCommIF/GenericCommIF.h>
 #include <Lib/ActorBase/ActorIF.h>
 #include "CMotionLogger.h"
+#include <Lib/Time/CTime.h>
 #include "ActorBase.generated.h"
 
 
