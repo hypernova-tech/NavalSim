@@ -67,7 +67,8 @@ void UGenericRadarCommProtocolIF::BeginPlay()
 {
 	Super::BeginPlay();
 
-	TotalNeighbours = CMath::GetNearestNeighbors(0, 0, 8, 8, 64, Neighbours);
+	SeaClutterContainer.Init(SpokeImageSize);
+	RainClutterContainer.Init(SpokeImageSize);
 
 	pUDPConnection->AddConnectionDataReceiver(this);
 	
@@ -204,8 +205,7 @@ void UGenericRadarCommProtocolIF::SendRadarTrack()
 	for (int i = 0; i < SpokeCountPerSector; i++) {
 
 
-		points.Reset();
-		
+		points.Reset();		
 		bool ret = p_current_sector->MapSpokePointCloud(p_current->ScanCenter, p_current_sector->StartAzimuthDeg + i * each_spoke_step, each_cell_size, 512, points);
 
 		if (ret) {
@@ -357,8 +357,19 @@ void UGenericRadarCommProtocolIF::ApplyGain(double gain_level)
 	auto start_time = CTime::GetTimeSecond();
 	float one_over_size = 1.0 / SpokeImageSize;
 	INT8U gain_threshold = FMath::Clamp(gain_level, 0, 255);
-	int texture_shift_w = FMath::Fmod(CTime::GetTimeSecond() * RadarNoiseTextureSpeed.X, NoiseTexture.Width);
-	int texture_shift_h = FMath::Fmod(CTime::GetTimeSecond() * RadarNoiseTextureSpeed.Y, NoiseTexture.Height);
+
+	RandomWalk += FVector2D(FMath::FRandRange(-RadarNoiseTextureSpeed.X, RadarNoiseTextureSpeed.X), FMath::FRandRange(-RadarNoiseTextureSpeed.Y, RadarNoiseTextureSpeed.Y));
+
+	int texture_shift_w;// = FMath::Fmod(CTime::GetTimeSecond() * RadarNoiseTextureSpeed.X, NoiseTexture.Width);
+	int texture_shift_h;// = FMath::Fmod(CTime::GetTimeSecond() * RadarNoiseTextureSpeed.Y, NoiseTexture.Height);
+
+	RandomWalk.X = FMath::Clamp(RandomWalk.X , -250, 250);
+	RandomWalk.Y = FMath::Clamp(RandomWalk.Y , -250, 250);
+
+	texture_shift_w = (int)(RandomWalk.X + 0.5);
+	texture_shift_h = (int)(RandomWalk.Y + 0.5);
+	CUtil::DebugLog("shift: " + CUtil::IntToString(texture_shift_w) + " " + CUtil::IntToString(texture_shift_h));
+
 
 	
 	double wind_speed;
@@ -380,6 +391,10 @@ void UGenericRadarCommProtocolIF::ApplyGain(double gain_level)
 
 	int rain_clutter_pt = FMath::Lerp(max_rain_pt, 0, pRadarHostIF->GetRainClutterLevel() / 255.0);
 
+
+
+	
+
 	INT64S dist_square;
 	int half_of_spoke_image = SpokeImageSize / 2;
 	double one_over_diagonal_square = 1.0 / (SpokeImageSize * SpokeImageSize);
@@ -399,7 +414,11 @@ void UGenericRadarCommProtocolIF::ApplyGain(double gain_level)
 
 		}
 	}
-#if true
+
+	RainClutterContainer.Update(0.9 * sea_clutter_pt, sea_clutter_pt, sea_clutter_cnt, SpokeImage);
+	SeaClutterContainer.Update(0.9 * rain_clutter_pt, rain_clutter_pt, rain_clutter_cnt, SpokeImage);
+
+#if false
 	for (int i = 0; i < sea_clutter_pt; i++) {
 		int w = FMath::RandRange(0, SpokeImageSize - 1);
 		int h = FMath::RandRange(0, SpokeImageSize - 1);
@@ -427,6 +446,7 @@ void UGenericRadarCommProtocolIF::ApplyGain(double gain_level)
 		}
 	}
 #endif
+
 
 	auto end_time = CTime::GetTimeSecond();
 	CUtil::DebugLog("ApplyGain (ms): " + CUtil::FloatToString((end_time - start_time) * 1000));
@@ -625,6 +645,12 @@ void UGenericRadarCommProtocolIF::SendTrackedObjects(const STargetTrackStatusDat
 	}
 }
 
+void UGenericRadarCommProtocolIF::InitCommIF()
+{
+	Super::InitCommIF();
+
+}
+
 void UGenericRadarCommProtocolIF::OnReceivedConnectionData(void* connection, INT8U* p_data, INT32U count)
 {
 
@@ -643,4 +669,78 @@ void S3DPointCloudMessage::Visualize(TArray<FVector> &cloud)
 		cloud.Add(pos);
 		
 	}
+}
+
+void CClutterContainer::Add(INT32S cnt)
+{
+	for (int i = 0; i < cnt; i++) {
+		CClutterEntry entry;
+
+		entry.X = FMath::RandRange(0, SpokeSize - 1);
+		entry.Y = FMath::RandRange(0, SpokeSize - 1);
+		entry.StartTimeSec = CTime::GetTimeSecond();
+		entry.EndTimeSec = entry.StartTimeSec + FMath::RandRange(1.5, 5.0);
+		Entries.AddTail(entry);
+	}
+}
+
+void CClutterContainer::Init(INT32S spoke_size)
+{
+	SpokeSize = spoke_size;
+	CMath::GetNearestNeighbors(0, 0, 8, 8, 64, Neighbours);
+}
+
+void CClutterContainer::Update(INT32S min_cnt, INT32S max_cnt, INT32S point_density, void *p_spoke_image)
+{
+	INT8U* p_spoke = (INT8U*)p_spoke_image;
+
+	auto curr_time = CTime::GetTimeSecond();
+
+	if (Entries.Num() > max_cnt) {
+		int cnt =  Entries.Num()- max_cnt;
+
+		for (TDoubleLinkedList<CClutterEntry>::TIterator It(Entries.GetHead()); It; ++It)
+		{
+			CClutterEntry& p_entry = *It;
+				
+			Entries.RemoveNode(It.GetNode());
+			cnt--;
+			if (cnt == 0) {
+				break;
+			}
+		
+		}
+	}
+
+
+	for (TDoubleLinkedList<CClutterEntry>::TIterator It(Entries.GetHead()); It; ++It)
+	{
+		CClutterEntry& entry = *It;
+
+		if (curr_time >= entry.EndTimeSec) {
+			Entries.RemoveNode(It.GetNode());
+		
+		}
+	}
+
+
+	if (Entries.Num() < min_cnt) {
+		Add(max_cnt - Entries.Num());
+	}
+
+	for (TDoubleLinkedList<CClutterEntry>::TIterator It(Entries.GetHead()); It; ++It) {
+		CClutterEntry& entry = *It;
+		INT32S h = entry.Y;
+		INT32S w = entry.X;
+		
+		p_spoke[h* SpokeSize + w] = 1;
+		for (int n = 0; n < point_density; n++) {
+			SNeighbour* p_neighbour = &Neighbours[n];
+
+			if ((h + p_neighbour->y) <= (SpokeSize - 1) && (w + p_neighbour->x) <= (SpokeSize - 1)) {
+				p_spoke[(h + p_neighbour->y)*SpokeSize + w + p_neighbour->x] = 1;
+			}
+		}
+	}
+	
 }

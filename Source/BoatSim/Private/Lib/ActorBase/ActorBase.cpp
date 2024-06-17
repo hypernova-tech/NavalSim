@@ -91,6 +91,9 @@ void AActorBase::OnStep(float DeltaTime)
 }
 void AActorBase::OnPreStepScenarioMode(float DeltaTime)
 {
+	if (pCommIF) {
+		pCommIF->InitCommIF();
+	}
 
 }
 void AActorBase::OnStepScenarioMode(float DeltaTime)

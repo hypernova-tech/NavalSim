@@ -134,6 +134,38 @@ void SSectorInfo::DepthSetRanged(FLOAT64 start, FLOAT64 end, FLOAT32 cell_size_m
 
 	}
 }
+
+void SSectorInfo::DepthSetRangedTerrainAwarePointCloud(FVector start_pos, FVector dir, FLOAT64 start, FLOAT64 end, FLOAT32 cell_size_meter, INT32S total_byte_count, TArray<FVector>& out)
+{
+	INT32S start_ind = start / cell_size_meter;
+	INT32S end_ind = end / cell_size_meter + 0.5;
+	ATerrainManager* p_terrain = ASystemManagerBase::GetInstance()->GetTerrainManager();
+	bool ret = false;
+	for (INT32S j = start_ind; j < end_ind; j++) {
+
+		INT32S byte_ind;
+		INT32S order;
+		INT32S sample_ind = j;
+		byte_ind = sample_ind / 2;
+		order = sample_ind & 0x1;
+
+
+
+		if (byte_ind >= total_byte_count) {
+			break;
+		}
+
+		FVector pos = start_pos + dir * (j)*TOUE(cell_size_meter);
+		pos = TOW(pos);
+		auto elev = p_terrain->GetElevation((pos.X), (pos.Y), ret);
+	
+		pos.Z = elev;
+		out.Add(pos);
+
+
+	}
+}
+
 void SSectorInfo::DepthSetRangedTerrainAware(FVector start_pos, FVector dir,FLOAT64 start, FLOAT64 end, FLOAT32 cell_size_meter, INT32S total_byte_count, INT32U set_value, INT8U* p_out)
 {
 	INT32S start_ind = start / cell_size_meter;
@@ -231,6 +263,8 @@ bool SSectorInfo::MapSpokePointCloud(FVector own_ship_pos, FLOAT32 azimuth_deg, 
 	bool has_terrain = false;
 	FVector min_dist_pt;
 	FVector max_dist_pt;
+	FQuat yaw(FVector::UpVector, azimuth_deg * DEGTORAD);
+	FVector dir = yaw.RotateVector(FVector::ForwardVector);
 
 	for (INT32S i = 0; i < p_data->Num(); i++) {
 		SScanLineEntry* p_entry = &(*p_data)[i];
@@ -272,10 +306,20 @@ bool SSectorInfo::MapSpokePointCloud(FVector own_ship_pos, FLOAT32 azimuth_deg, 
 		}
 
 		DepthSetRangedPointCloud(min_dist_pt, max_dist_pt, min_dist_xy_terr, max_dist_xy_terr, cell_size_meter, total_byte_count, out);
+
+		auto total_dist = total_byte_count * 2 * cell_size_meter;
+
+		auto rem_dist = max_dist_xy_terr - total_dist;
+		FLOAT64 curr_max_dist = max_dist_xy_terr;
+
+		while (true) {
+			DepthSetRangedTerrainAwarePointCloud(own_ship_pos, dir, curr_max_dist, total_dist, cell_size_meter, total_byte_count, out);
+			break;
+
+		}
 	}
 
-	FQuat yaw(FVector::UpVector, azimuth_deg * DEGTORAD);
-	FVector dir = yaw.RotateVector(FVector::ForwardVector);
+
 
 	for (INT32S i = 0; i < p_data->Num(); i++) {
 		FVector pos = (*p_data)[i].Pos;

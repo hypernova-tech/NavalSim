@@ -45,6 +45,7 @@ public:
 	virtual bool SetConnectionInfo(INT32S ind, SConnectionInfo info);
 	void RegisterConnectionInfo(INT32S ind, SConnectionInfo info, UConnectionBase *p_owner);
 	virtual void SetHostIF(IHostIF* p_host_if);
+	virtual void InitCommIF();
 
 		
 };

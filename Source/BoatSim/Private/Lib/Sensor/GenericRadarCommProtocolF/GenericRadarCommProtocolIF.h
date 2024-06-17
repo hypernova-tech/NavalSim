@@ -11,6 +11,7 @@
 #include "Lib/Tracker/TrackerBase.h"
 #include "IRadarHostIF.h"
 #include <Lib/Math/CMath.h>
+#include "Containers/List.h"
 #include "GenericRadarCommProtocolIF.generated.h"
 
 
@@ -39,6 +40,8 @@ public:
 	}
 
 	inline INT8U GetColor(float w, float h) {
+		h = h < 0 ? 0 : (h > 1 ? 1 : h);
+		w = w < 0 ? 0 : (w > 1 ? 1 : w);
 		int ind_w = Width * w;
 		int ind_h = Height * h;
 		auto val = Colors[ind_h * Width + ind_w];
@@ -46,6 +49,34 @@ public:
 	}
 
 };
+
+
+
+class CClutterEntry
+{
+public:
+	INT32S X;
+	INT32S Y;
+	FLOAT64 StartTimeSec;
+	FLOAT64 EndTimeSec;
+
+};
+
+class CClutterContainer
+{
+	TDoubleLinkedList<CClutterEntry> Entries;
+	INT32S MaxCnt;
+	INT32S MinCnt;
+	INT32S SpokeSize;
+	SNeighbour Neighbours[128];
+	void Add(INT32S cnt);
+public:
+
+	void Init(INT32S spoke_size);
+	void Update(INT32S min_cnt, INT32S max_cnt, INT32S point_density, void *p_spoke_image);
+};
+
+
 
 /**
  *
@@ -60,7 +91,7 @@ class UGenericRadarCommProtocolIF : public UGenericCommIF, public FRunnable
 protected:
 	virtual void BeginPlay() override;
 	virtual void SendRadarTrack();
-	SNeighbour Neighbours[128];
+	
 	int TotalNeighbours;
 
 
@@ -76,7 +107,7 @@ public:
 	virtual void SetHostIF(IHostIF* p_val) override;
 	
 	void SendTrackedObjects(const STargetTrackStatusData& info, char* p_serial);
-
+	virtual void InitCommIF() override;
 
 protected:
 
@@ -84,8 +115,9 @@ protected:
 	FRunnableThread* SenderThread;
 	bool IsStoped = false;
 	int PointCloudCaptureInd = 0;
-	
-
+	CClutterContainer RainClutterContainer;
+	CClutterContainer SeaClutterContainer;
+	FVector2D RandomWalk;
 	virtual void Stop() override;
 
 	TArray< SScanResult*> CurrentRequest;

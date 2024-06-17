@@ -184,8 +184,7 @@ void ATerrainManager::GenerateTerrain(const TArray<FLOAT64>& HeightMap, int32 Ma
     ProceduralMesh->SetMaterial(0, pMaterial);
     ProceduralMesh->ComponentTags.Add("TagTerrain");
 
-    bool ret;
-    auto elev = GetElevation(2553.2, -3354.9, ret);
+  
 
 }
 

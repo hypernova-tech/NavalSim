@@ -68,6 +68,7 @@ public:
 
 
 	void DepthSetRanged(FLOAT64 start, FLOAT64 end, FLOAT32 cell_size_meter, INT32S total_byte_count, INT32U set_value, INT8U* p_out);
+	void DepthSetRangedTerrainAwarePointCloud(FVector start_pos, FVector dir, FLOAT64 start, FLOAT64 end, FLOAT32 cell_size_meter, INT32S total_byte_count, TArray<FVector>& out);
 	void DepthSetRangedTerrainAware(FVector start_pos, FVector dir, FLOAT64 start, FLOAT64 end, FLOAT32 cell_size_meter, INT32S total_byte_count, INT32U set_value, INT8U* p_out);
 
 	void DepthClearRanged(FLOAT64 start, FLOAT64 end, FLOAT32 cell_size_meter, INT32S total_byte_count, INT8U* p_out);
