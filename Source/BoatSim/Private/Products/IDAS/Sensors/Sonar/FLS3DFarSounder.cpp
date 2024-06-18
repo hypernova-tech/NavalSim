@@ -163,11 +163,7 @@ void AFLS3DFarSounder::Run(float delta_time_sec)
 		AutoSquelchEnabled = p_hdr->FromHostToSim.IsAutoSquelchEnabled > 0 ;
 		SquelchSensitivity = p_hdr->FromHostToSim.SquelchSensitivity;
 
-	}
-
- 
-	   
-	   
+	}	   
 }
 
 void AFLS3DFarSounder::OnPreTrace(STraceArgs& args)

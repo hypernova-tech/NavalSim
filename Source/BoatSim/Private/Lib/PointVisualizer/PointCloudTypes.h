@@ -42,13 +42,20 @@ struct S3DPointCloudDataPayloadEntry
 	INT32S Y;
 	INT32S Z;
 	INT16U Intensitiy; // [0-1.0]
+	union  {
+		struct {
+			INT8U IsGround : 1;
+		}Bits;
+		INT8U Val;
+	}Descrites1;
 
-	inline void SetPoint(FLOAT64 x_in, FLOAT64 y_in, FLOAT64 z_in, FLOAT32 intensity = 0)
+	inline void SetPoint(FLOAT64 x_in, FLOAT64 y_in, FLOAT64 z_in, FLOAT32 intensity = 0, bool is_ground = false)
 	{
 		X = x_in * ONE_OVER_POINT_CLOUD_DIST_SF;
 		Y = y_in * ONE_OVER_POINT_CLOUD_DIST_SF;
 		Z = z_in * ONE_OVER_POINT_CLOUD_DIST_SF;
 		Intensitiy = intensity * ONE_OVER_POINT_CLOUD_DIST_SF;
+		Descrites1.Bits.IsGround = is_ground;
 	}
 
 	inline void GetPoint(FVector& out)

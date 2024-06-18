@@ -4,19 +4,24 @@
 
 #include "CoreMinimal.h"
 #include "Lib/Sensor/SensorBase.h"
+#include <Lib/Sensor/GenericSonarCommIF/ISonarHostIF.h>
 #include "FLS3D.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class AFLS3D : public ASensorBase
+class AFLS3D : public ASensorBase, public ISonarHostIF
 {
 	GENERATED_BODY()
 
 public:
 	AFLS3D();
 protected:
+	bool IsFlsOn = false;
+	bool   BottomDetectEnabled = false;
+	double SquelchSensitivity = 100;
+	bool   AutoSquelchEnabled = true;
 
 	SScanResult* pScanResult;
 	TArray<AActor*> CachedPlatforms;
@@ -32,7 +37,11 @@ public:
 
 	
 	virtual void OnCaptureReady(void* p_data) override;
-
+	virtual void OnRecievedMessage(void* p_commands);
+	virtual void* GetOwningActor();
+	virtual bool   GetBottomDetectEnabled();
+	virtual double GetSquelchSensitivity();
+	virtual bool   GetAutoSquelchEnabled();
 
 
 private:

@@ -41,6 +41,10 @@ void AFLS3D::InitSensor()
 	}
 
 	ASystemManagerBase::GetInstance()->QueryActors(EActorQueryArgs::ActorAsPlatform, CachedPlatforms);
+	if (pCommIF) {
+		pCommIF->SetHostIF(this);
+	}
+	
 	
 }
 void AFLS3D::OnCaptureReady(void* p_data)
@@ -48,6 +52,30 @@ void AFLS3D::OnCaptureReady(void* p_data)
 
 	auto read_pixed_elp_sec = CUtil::Tock(CaptureStartTimeRef);
 	CUtil::DebugLog(FString::Printf(TEXT("fls capture duration(ms): %f"), 1000 * read_pixed_elp_sec));
+}
+
+void AFLS3D::OnRecievedMessage(void* p_commands)
+{
+}
+
+void* AFLS3D::GetOwningActor()
+{
+	return this;
+}
+
+bool AFLS3D::GetBottomDetectEnabled()
+{
+	return BottomDetectEnabled;
+}
+
+double AFLS3D::GetSquelchSensitivity()
+{
+	return SquelchSensitivity;
+}
+
+bool AFLS3D::GetAutoSquelchEnabled()
+{
+	return AutoSquelchEnabled;
 }
 
 
