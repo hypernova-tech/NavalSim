@@ -52,5 +52,7 @@ protected:
 	virtual void Stop() override;
 	int PointCloudCaptureInd = 0;
 
+	void RenderPointCloud(const TArray<FVector>& pts);
+
 };
 

@@ -666,8 +666,7 @@ void S3DPointCloudMessage::Visualize(TArray<FVector> &cloud)
 		S3DPointCloudDataPayloadEntry* p_entry = &p_entris->Entries[i];
 		FVector pos;
 		p_entry->GetPoint(pos);
-		cloud.Add(pos);
-		
+		cloud.Add(pos);		
 	}
 }
 

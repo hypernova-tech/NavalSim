@@ -143,8 +143,8 @@ struct SScanResult
 	FVector Point3D[HORIZOTAL_SCAN_SIZE][VERTICAL_SCAN_SIZE];
 
 	INT32S SectorCount;
-	FLOAT32 ScanAzimuthStepDeg;
-	FLOAT32 ScanElevationStepDeg;
+	FLOAT64 ScanAzimuthStepDeg;
+	FLOAT64 ScanElevationStepDeg;
 	/// <summary>
 	/// Current Sector Azimuth Range
 	/// </summary>
@@ -223,6 +223,20 @@ public:
 		 RangeMeter[azimuth_ind][elevation_ind] = 0;
 
 		 return range;
+
+	 }
+	 FVector GetPointAndReset(INT32S azimuth_ind, INT32S elevation_ind, FLOAT32 &range_meter, FLOAT32& intensity)
+	 {
+
+
+		 intensity = NormalStrength[azimuth_ind][elevation_ind];
+		 range_meter = RangeMeter[azimuth_ind][elevation_ind];
+
+		 NormalStrength[azimuth_ind][elevation_ind] = 0;
+		 RangeMeter[azimuth_ind][elevation_ind] = 0;
+		 auto val = Point3D[azimuth_ind][elevation_ind];
+		 Point3D[azimuth_ind][elevation_ind] = FVector::ZeroVector;
+		 return val;
 
 	 }
      void AddTrackPoint3DList(FVector pos, FLOAT32 range_meter)

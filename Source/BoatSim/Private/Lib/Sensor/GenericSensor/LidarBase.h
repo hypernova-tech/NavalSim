@@ -10,7 +10,7 @@
  * 
  */
 UCLASS()
-class ALidarBase : public ASensorBase
+class ALidarBase : public ASensorBase, public IHostIF
 {
 	GENERATED_BODY()
 
@@ -40,4 +40,8 @@ private:
 	float CurrentScanAzimuth;
 	double NextScanTime;
 	bool IsFullScaned = false;
+
+	// Inherited via IHostIF
+	virtual void OnRecievedMessage(void* p_commands) override;
+	virtual void* GetOwningActor() override;
 };

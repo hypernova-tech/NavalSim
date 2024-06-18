@@ -21,4 +21,7 @@ protected:
 
 public:
 	virtual void Save(ISaveLoader* p_save_load) override;
+
+	// Inherited via IHostIF
+
 };

@@ -67,7 +67,7 @@ public:
 		bool GenericSensorOutputEnabled = false;
 
 	UPROPERTY(EditAnywhere)
-		float UpdateFrequency;
+		double UpdateFrequency;
 
 	UPROPERTY(EditAnywhere)
 		bool Point3DVisualize = false;
@@ -106,13 +106,13 @@ public:
 		double EachScanBeamWidthDeg = 45;
 
 	UPROPERTY(EditAnywhere)
-		float HorizontalScanStepAngleDeg;
+		double HorizontalScanStepAngleDeg;
 
 	UPROPERTY(EditAnywhere)
-		float VerticalScanStepAngleDeg = 36;
+		double VerticalScanStepAngleDeg = 36;
 
 	UPROPERTY(EditAnywhere)
-		float FullScanPeriodSec = 1;
+		double FullScanPeriodSec = 1;
 
 	UPROPERTY(EditAnywhere)
 		bool IsNormalDistribution;

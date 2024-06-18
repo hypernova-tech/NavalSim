@@ -26,18 +26,18 @@ public:
 	bool is_world;
 
 	float min_range_meter;
-	float range_meter;
-	float azimuth_start_deg;
-	float azimuth_end_deg;
+	double range_meter;
+	double azimuth_start_deg;
+	double azimuth_end_deg;
 
-	float elevation_start_deg;
-	float elevation_end_deg;
-	float azimuth_angle_step_deg;
-	float elevation_angle_step_deg;
+	double elevation_start_deg;
+	double elevation_end_deg;
+	double azimuth_angle_step_deg;
+	double elevation_angle_step_deg;
 	double horizontal_fov_deg;
 	double vertical_fov_deg;
-	float measurement_error_mean;
-	float measurement_error_std;
+	double measurement_error_mean;
+	double measurement_error_std;
     SClutterParams clutter_params;
 
 	bool show_beam;

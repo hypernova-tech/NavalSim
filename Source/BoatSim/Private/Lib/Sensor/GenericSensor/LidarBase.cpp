@@ -36,6 +36,7 @@ void ALidarBase::InitSensor()
 	if (UseRenderTargetForDepthCalculation) {
 		pSceneCapturer->CreateRenderTexture(this, DepthRenderTargetWidthPx, DepthRenderTargetHeightPx, EPixelFormat::PF_B8G8R8A8);
 	}
+	pCommIF->SetHostIF(this);
 	
 }
 
@@ -44,6 +45,15 @@ void ALidarBase::OnCaptureReady(void* p_data)
 
 	auto read_pixed_elp_sec = CUtil::Tock(CaptureStartTimeRef);
 	CUtil::DebugLog(FString::Printf(TEXT("lidar capture duration(ms): %f"), 1000 * read_pixed_elp_sec));
+}
+
+void ALidarBase::OnRecievedMessage(void* p_commands)
+{
+}
+
+void* ALidarBase::GetOwningActor()
+{
+	return this;
 }
 
 void ALidarBase::OnScanCompleted(SScanResult* p_scan_result)

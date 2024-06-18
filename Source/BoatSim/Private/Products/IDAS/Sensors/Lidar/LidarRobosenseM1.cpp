@@ -28,3 +28,5 @@ void ALidarRobosenseM1::OnScanCompleted(SScanResult* p_scan_result)
  {
 	 Super::Save(p_save_load);
  }
+
+
