@@ -12,8 +12,10 @@
 #include "Lib/Clutter/ClutterDefs.h"
 #include <Lib/ScreenDepth/SceneCapturer.h>
 #include <Lib/Utils/CUtil.h>
+#include <Lib/PointVisualizer/PointCloudRenderer.h>
 //#include "PointCloudComponent.h"
 #include "SensorBase.generated.h"
+
 
 
 
@@ -150,6 +152,7 @@ protected:
 
 	
 	APointVisualizer* pPointVisualizer;
+	APointCloudRenderer* pPointCloudRenderer;
 	ASceneCapturer* pSceneCapturer;
 	ESensorState SensorState = ESensorState::Init;
 	
@@ -213,4 +216,7 @@ public:
 
 	void ShowPointCloudData(const TArray<FVector>& cloud);
 
+
+	APointCloudRenderer* GetPointCloudRenderer();
+	void RenderPointCloud(FVector loc_ue, const TArray<FVector>& pts_world);
 };

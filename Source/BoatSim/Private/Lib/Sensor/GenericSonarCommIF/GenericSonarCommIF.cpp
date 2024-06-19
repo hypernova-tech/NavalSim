@@ -194,21 +194,8 @@ void UGenericSonarCommIF::SendMainStreamOutputPacket()
 }
 void UGenericSonarCommIF::RenderPointCloud(const TArray<FVector>& pts)
 {
-	AActor* p_actor = (AActor*)pHostIF->GetOwningActor();
-
-	auto loc = p_actor->GetActorLocation();
-	int cnt = 0;
-	for (auto pt : pts) {
-		if (!pt.IsZero()) {
-			cnt++;
-			if (cnt < 2000) {
-				pt.Y *= -1;
-				CUtil::DebugBox(GetWorld(), loc + TOUE(pt), 10, FColor::Red, 0.2);
-			}
-		}
-
-
-	}
+	ASensorBase* p_actor = (ASensorBase*)pHostIF->GetOwningActor();
+	p_actor->RenderPointCloud(p_actor->GetActorLocation(), pts);
 }
 
 

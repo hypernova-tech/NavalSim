@@ -113,9 +113,14 @@ void ASensorBase::BeginPlay()
 		{
 			pPointVisualizer = Cast<APointVisualizer>(ChildActor);
 			// Perform actions with the found child actor
-			break;
+			
 		}
-
+		if (ChildActor->IsA<APointCloudRenderer>())
+		{
+			pPointCloudRenderer = Cast<APointCloudRenderer>(ChildActor);
+			// Perform actions with the found child actor
+		
+		}
 
 
 	}
@@ -396,4 +401,16 @@ void ASensorBase::ShowPointCloudData(const TArray<FVector>& cloud)
 	
 	//pPointCloud->SetPointCloud(cloud);
 	
+}
+
+APointCloudRenderer* ASensorBase::GetPointCloudRenderer()
+{
+	return pPointCloudRenderer;
+}
+
+void ASensorBase::RenderPointCloud(FVector loc_ue, const TArray<FVector>& pts_world)
+{
+	if (pPointCloudRenderer != nullptr) {
+		pPointCloudRenderer->SetPoints(loc_ue, pts_world);
+	}
 }

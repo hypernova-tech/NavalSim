@@ -492,20 +492,12 @@ void UGenericRadarCommProtocolIF::ApplyMerge(int size)
 
 void UGenericRadarCommProtocolIF::RenderPointCloud(const TArray<FVector>& pts)
 {
-	AActor* p_actor = (AActor*)pRadarHostIF->GetOwningActor();
-
-	auto loc = p_actor->GetActorLocation();
-	int cnt = 0;
-	for (auto pt : pts) {
-		if (!pt.IsZero()) {
-			cnt++;
-			//if (cnt < 1000) {
-				CUtil::DebugBox(GetWorld(), loc + TOUE(pt), 10, FColor::Red, 0.2);
-			//}
-		}
+	ASensorBase* p_sensor = (ASensorBase*)pRadarHostIF->GetOwningActor();
+	auto loc = p_sensor->GetActorLocation();
+	p_sensor->RenderPointCloud(loc, pts);
 	
-		
-	}
+
+
 }
 
 
@@ -666,7 +658,10 @@ void S3DPointCloudMessage::Visualize(TArray<FVector> &cloud)
 		S3DPointCloudDataPayloadEntry* p_entry = &p_entris->Entries[i];
 		FVector pos;
 		p_entry->GetPoint(pos);
-		cloud.Add(pos);		
+		if(!pos.IsZero()){
+			cloud.Add(pos);
+		}
+	
 	}
 }
 
