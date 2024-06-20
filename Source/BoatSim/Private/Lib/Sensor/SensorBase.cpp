@@ -289,12 +289,28 @@ void  ASensorBase::SetVerticalScanStepAngleDeg(float val)
 
 void ASensorBase::SetPoint3DVisualize(bool val)
 {
+	if (Point3DVisualize && !val) {
+		if (pPointCloudRenderer) {
+			pPointCloudRenderer->ClearAll();
+		}
+	}
 	Point3DVisualize = val;
+	
 }
 
 bool ASensorBase::GetPoint3DVisualize()
 {
 	return Point3DVisualize;
+}
+
+void ASensorBase::SetPoint3DSize(int val)
+{
+	PointCloudPointSize = FMath::Clamp( val,1,200);
+}
+
+int ASensorBase::GetPoint3DSize()
+{
+	return PointCloudPointSize;
 }
 
 void ASensorBase::Save(ISaveLoader* p_save_loader)
@@ -376,6 +392,7 @@ void ASensorBase::SaveJSON(CJsonDataContainer& data)
 	Super::SaveJSON(data);
 	data.Add(CCLICommandManager::Beam, ShowBeam);
 	data.Add(CCLICommandManager::PointCloud3D, Point3DVisualize);
+	data.Add(CCLICommandManager::PointCloud3DSize, PointCloudPointSize);	
 	data.Add(CCLICommandManager::SensorFrequency, Frequency);
 	data.Add(CCLICommandManager::SensorSlotIndex, SensorSlotIndex);
 	data.Add(CCLICommandManager::VericalFov, FovVerticalDeg);
@@ -408,9 +425,12 @@ APointCloudRenderer* ASensorBase::GetPointCloudRenderer()
 	return pPointCloudRenderer;
 }
 
-void ASensorBase::RenderPointCloud(FVector loc_ue, const TArray<FVector>& pts_world)
+void ASensorBase::RenderPointCloud(FVector loc_ue, const TArray<FVector>& pts_world, EPointCooordSystem coord_sys)
 {
-	if (pPointCloudRenderer != nullptr) {
-		pPointCloudRenderer->SetPoints(loc_ue, pts_world);
+	if (Point3DVisualize) {
+		if (pPointCloudRenderer != nullptr) {
+			pPointCloudRenderer->SetPoints(loc_ue, pts_world, coord_sys, PointCloudPointSize);
+		}
 	}
+
 }

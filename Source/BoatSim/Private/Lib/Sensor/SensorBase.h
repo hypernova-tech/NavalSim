@@ -82,6 +82,8 @@ public:
 
 	UPROPERTY(EditAnywhere)
 		bool ShowPointCloud = false;
+	UPROPERTY(EditAnywhere)
+		int PointCloudPointSize = 10;
 
 	UPROPERTY(EditAnywhere)
 		double Frequency = 1.0;
@@ -208,7 +210,8 @@ public:
 	void SetPoint3DVisualize(bool val);
 	bool GetPoint3DVisualize();
 
-
+	void SetPoint3DSize(int val);
+	int GetPoint3DSize();
 
 	virtual void Save(ISaveLoader *p_save_loader) override;
 	virtual void SaveJSON(CJsonDataContainer& data) override;
@@ -218,5 +221,5 @@ public:
 
 
 	APointCloudRenderer* GetPointCloudRenderer();
-	void RenderPointCloud(FVector loc_ue, const TArray<FVector>& pts_world);
+	void RenderPointCloud(FVector loc_ue, const TArray<FVector>& pts_world, EPointCooordSystem coord_sys);
 };

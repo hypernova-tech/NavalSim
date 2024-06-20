@@ -758,6 +758,17 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
 
     }
 
+
+    ret = CommandManager.GetValue(CCLICommandManager::PointCloud3DSize, sint);
+    if (ret) {
+        if (pSystemAPI->SetPointCloud3DSize(p_actor, sint)) {
+            one_success = true;
+        }
+    }
+    else {
+
+    }
+
     ret = CommandManager.GetValue(CCLICommandManager::RangeMin, dbl);
     if (ret) {
         if (pSystemAPI->SetRangeMinMeter(p_actor, dbl)) {

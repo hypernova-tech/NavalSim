@@ -11,6 +11,12 @@
 #include "Engine/Texture2D.h"
 #include "PointCloudRenderer.generated.h"
 
+enum EPointCooordSystem
+{
+	PointCooordSystemLeftHand,
+	PointCooordSystemRightHand
+};
+
 UCLASS()
 class APointCloudRenderer : public AActor
 {
@@ -52,6 +58,8 @@ private:
 	// Definition of the region which should be updated:
 	FUpdateTextureRegion2D region;
 
+	int LastUpdatedRowCount = -1;
+
 
 protected:
 	// Called when the game starts or when spawned
@@ -60,7 +68,8 @@ protected:
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	void SetPoints(FVector center, const TArray<FVector>& vec);
+	void SetPoints(FVector center, const TArray<FVector>& vec, EPointCooordSystem coord_sys, int sprite_size);
+	void ClearAll();
 
 };
 

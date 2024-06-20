@@ -147,7 +147,7 @@ void UGenericLidarCommIF::SendMainStreamOutputPacket()
 void UGenericLidarCommIF::RenderPointCloud(const TArray<FVector>& pts)
 {
 	ASensorBase* p_actor = (ASensorBase*)pHostIF->GetOwningActor();
-	p_actor->RenderPointCloud(p_actor->GetActorLocation(), pts);
+	p_actor->RenderPointCloud(p_actor->GetActorLocation(), pts, EPointCooordSystem::PointCooordSystemRightHand);
 }
 
 

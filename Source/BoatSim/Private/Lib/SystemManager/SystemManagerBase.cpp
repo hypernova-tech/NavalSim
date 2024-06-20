@@ -2970,6 +2970,29 @@ bool ASystemManagerBase::GetPathLineColor(AActor* p_actor, FColor& val)
 	 return false;
  }
 
+
+ bool ASystemManagerBase::GetPointCloud3DSize(AActor* p_actor, INT32S& val)
+ {
+	 auto obj = ToSensorBase(p_actor);
+	 if (obj != nullptr) {
+		 val = obj->GetPoint3DSize();
+		 return true;
+	 }
+	 return false;
+ }
+
+ bool ASystemManagerBase::SetPointCloud3DSize(AActor* p_actor, INT32S val)
+ {
+	 auto obj = ToSensorBase(p_actor);
+	 if (obj != nullptr) {
+		 obj->SetPoint3DSize(val);
+		 return true;
+	 }
+	 return false;
+ }
+
+
+
  bool ASystemManagerBase::GetBeamEnabled(AActor* p_actor, bool& val)
  {
 	 auto obj = ToSensorBase(p_actor);

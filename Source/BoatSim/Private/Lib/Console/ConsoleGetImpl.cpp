@@ -766,7 +766,16 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
     else {
 
     }
+    ret = CommandManager.HasA(CCLICommandManager::PointCloud3DSize);
+    if (ret) {
+        if (pSystemAPI->GetPointCloud3DSize(p_actor, sint)) {
+            SendConsoleResponse(name, CCLICommandManager::PointCloud3DSize, sint);
+            return true;
+        }
+    }
+    else {
 
+    }
 
     ret = CommandManager.HasA(CCLICommandManager::RangeMin);
     if (ret) {

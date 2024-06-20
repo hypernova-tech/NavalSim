@@ -494,7 +494,7 @@ void UGenericRadarCommProtocolIF::RenderPointCloud(const TArray<FVector>& pts)
 {
 	ASensorBase* p_sensor = (ASensorBase*)pRadarHostIF->GetOwningActor();
 	auto loc = p_sensor->GetActorLocation();
-	p_sensor->RenderPointCloud(loc, pts);
+	p_sensor->RenderPointCloud(loc, pts, EPointCooordSystem::PointCooordSystemLeftHand);
 	
 
 

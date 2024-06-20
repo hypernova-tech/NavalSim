@@ -54,6 +54,7 @@ public static class CLICommandManager
     [Modifiable] public const string SensorSlotIndex = "slotindex";
     [Modifiable] public const string Beam = "beam";
     [Modifiable] public const string PointCloud3D = "pointcloud3d";
+    [Modifiable] public const string PointCloud3DSizze = "pointcloud3dsize";
     [Modifiable] public const string RangeMin = "rangemin";
     [Modifiable] public const string RangeMax = "rangemax";
     public const string UIVisible = "uivisible";

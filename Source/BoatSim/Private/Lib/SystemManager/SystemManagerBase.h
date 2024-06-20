@@ -557,6 +557,9 @@ public:
 	virtual bool GetPointCloud3DEnabled(AActor* p_actor, bool& val);
 	virtual bool SetPointCloud3DEnabled(AActor* p_actor, bool val);
 
+	virtual bool GetPointCloud3DSize(AActor* p_actor, INT32S& val);
+	virtual bool SetPointCloud3DSize(AActor* p_actor, INT32S val);
+
 	virtual bool SetMapOrigin(AActor* p_actor, FVector llh) ;
 	virtual bool GetMapOrigin(AActor* p_actor, FVector& llh);
 

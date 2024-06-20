@@ -44,6 +44,7 @@ FString CCLICommandManager::SensorSlotIndex = "slotindex";
 FString CCLICommandManager::SensorFrequency = "sensorfreq";
 FString CCLICommandManager::Beam = "beam";
 FString CCLICommandManager::PointCloud3D = "pointcloud3d";
+FString CCLICommandManager::PointCloud3DSize = "pointcloud3dsize";
 FString CCLICommandManager::RangeMin = "rangemin";
 FString CCLICommandManager::RangeMax = "rangemax";
 FString CCLICommandManager::Selected = "selected";
