@@ -174,11 +174,14 @@ void UGenericRadarCommProtocolIF::SendRadarTrack()
 {
 
 #if true
+	ARadarBase* p_radar = (ARadarBase*)pRadarHostIF->GetOwningActor();
 	Mutex.Lock();
 
 	SScanResult* p_current = CurrentRequest[0];
 	bool is_full_scanned = p_current->CurrentSector == (p_current->SectorCount - 1);
 	auto azim_range_deg = p_current->HorizontalFovDeg;
+	auto rpy_deg = CMath::GetActorEulerAnglesRPY(p_radar);
+	FLOAT64 start_azim_world_deg = p_current->AzimuthRange.X + rpy_deg.Z;
 
 	INT32S total_spoke = (INT32S)(azim_range_deg / p_current->ScanAzimuthStepDeg + 0.5);
 
@@ -192,24 +195,24 @@ void UGenericRadarCommProtocolIF::SendRadarTrack()
 	auto* p_current_sector = p_current->GetSectorContainer()->GetSector(p_current->CurrentSector);
 
 
-	int SpokeCountPerSector = total_spoke / p_current->SectorCount;
+	unsigned int SpokeCountPerSector = total_spoke / p_current->SectorCount;
 
 	if (p_current->CurrentSector == 0 && SpokeSequanceNumber != 0) {
 		SpokeSequanceNumber = 0;
 	}
 
 	Mutex.Unlock();
-	ARadarBase* p_radar = (ARadarBase*)pRadarHostIF->GetOwningActor();
+
 
 	TArray<FVector> points;
-	for (int i = 0; i < SpokeCountPerSector; i++) {
+	for (unsigned int i = 0; i < SpokeCountPerSector; i++) {
 
 
 		points.Reset();		
-		bool ret = p_current_sector->MapSpokePointCloud(p_current->ScanCenter, p_current_sector->StartAzimuthDeg + i * each_spoke_step, each_cell_size, 512, points);
+		bool ret = p_current_sector->MapSpokePointCloud(p_current->ScanCenter, start_azim_world_deg + i * each_spoke_step, each_cell_size, 512, points);
 
 		if (ret) {
-			SpokePointCloudToImage(p_current_sector->StartAzimuthDeg + i * each_spoke_step, p_current->ScanCenter, p_current->ScanRangeMeter, each_cell_size, points, 1024);
+			SpokePointCloudToImage(start_azim_world_deg + i * each_spoke_step, p_current->ScanCenter, p_current->ScanRangeMeter, each_cell_size, points, 1024);
 		}
 		else {
 			break;
@@ -218,6 +221,10 @@ void UGenericRadarCommProtocolIF::SendRadarTrack()
 	auto start_time = CTime::GetTimeSecond();
 
 	int CaptureInd = 0;
+
+	int max_points = 1048 * 1048;
+	int max_3d_points_per_spoke;
+
 
 	if (is_full_scanned) {
 
@@ -243,6 +250,8 @@ void UGenericRadarCommProtocolIF::SendRadarTrack()
 		ASensorBase* p_sensor = (ASensorBase*)pRadarHostIF->GetOwningActor();
 		bool is_visualize = p_sensor->GetPoint3DVisualize();
 
+		max_3d_points_per_spoke = max_points / (double)total_spoke;
+
 		for (int i = 0; i < total_spoke; i++) {
 			//memset(&packspoke, 0, sizeof(SRadarSimSDKPacket));
 			//SHalo24SpokePayload* p_spoke_payload = (SHalo24SpokePayload*)packspoke.Payload;
@@ -259,7 +268,7 @@ void UGenericRadarCommProtocolIF::SendRadarTrack()
 			pUDPConnection->SendData((const INT8U*)&message, message.GetMessageSize());
 
 			
-			auto azim_deg = i * p_current->HorizontalFovDeg / total_spoke;
+			auto azim_deg = start_azim_world_deg + i * p_current->ScanAzimuthStepDeg;
 			auto angle_rad = azim_deg * DEGTORAD;
 
 			auto cos_of_ang = FMath::Cos(angle_rad);
@@ -281,9 +290,64 @@ void UGenericRadarCommProtocolIF::SendRadarTrack()
 				int order = j & 0x1;
 
 				
-				auto p_entry = &p_point_cloud_data->Entries[entry_index_in_payload];
-				p_entry->CaptureInd = PointCloudCaptureInd;
-				p_entry->DataIndex = cloud_data_ind;
+	
+				TArray<FVector> &spoke_points3d = SpokeImage3D[im_y][im_x];
+
+				if (spoke_points3d.Num() == 0) {
+					auto p_entry = &p_point_cloud_data->Entries[entry_index_in_payload];
+					p_entry->CaptureInd = PointCloudCaptureInd;
+					p_entry->DataIndex = cloud_data_ind;
+
+					p_entry->SetPoint(0, 0, 0);
+					entry_index_in_payload++;
+					cloud_data_ind++;
+
+					if (entry_index_in_payload == POINT_CLOUND_ENTRY_COUNT) {
+						cloud_data_mes.SetMessageId(EPointCloudId::PointCloudData);
+						cloud_data_mes.SetDataLength(entry_index_in_payload * sizeof(S3DPointCloudDataPayloadEntry));
+						bool ret = pUDPConnection->SendData((const INT8U*)&cloud_data_mes, cloud_data_mes.GetMessageSize());
+						if (is_visualize) {
+							cloud_data_mes.Visualize(PointCloud);
+						}
+						entry_index_in_payload = 0;
+					}
+				}
+				else {
+					int cnt = 0;
+					for (auto& p_pos : spoke_points3d) {
+						auto p_entry = &p_point_cloud_data->Entries[entry_index_in_payload];
+						p_entry->CaptureInd = PointCloudCaptureInd;
+						p_entry->DataIndex = cloud_data_ind;
+
+						if (p_pos.X == 0) { // noise ile  eklenmiş bir veri seti olabilir
+
+							p_entry->SetPoint(x * p_current->ScanRangeMeter / 1024, y * p_current->ScanRangeMeter / 1024, 0);
+
+						}
+						else {
+
+							p_entry->SetPoint(p_pos.X, p_pos.Y, p_pos.Z);
+						}
+
+
+						entry_index_in_payload++;
+						cloud_data_ind++;
+
+						if (entry_index_in_payload == POINT_CLOUND_ENTRY_COUNT) {
+							cloud_data_mes.SetMessageId(EPointCloudId::PointCloudData);
+							cloud_data_mes.SetDataLength(entry_index_in_payload * sizeof(S3DPointCloudDataPayloadEntry));
+							bool ret = pUDPConnection->SendData((const INT8U*)&cloud_data_mes, cloud_data_mes.GetMessageSize());
+							if (is_visualize) {
+								cloud_data_mes.Visualize(PointCloud);
+							}
+							entry_index_in_payload = 0;
+						}
+					
+					
+					}
+				}
+				
+#if false
 				FVector *p_pos = &SpokeImage3D[im_y][im_x];
 				INT8U im_val = SpokeImage[im_y][im_x];
 
@@ -294,6 +358,7 @@ void UGenericRadarCommProtocolIF::SendRadarTrack()
 				
 					}
 					else {
+				
 						p_entry->SetPoint(p_pos->X, p_pos->Y, p_pos->Z);
 					}		
 
@@ -313,6 +378,7 @@ void UGenericRadarCommProtocolIF::SendRadarTrack()
 					}
 					entry_index_in_payload = 0;
 				}
+#endif
 			}		
 		}
 
@@ -330,13 +396,25 @@ void UGenericRadarCommProtocolIF::SendRadarTrack()
 		CUtil::DebugLog("Total Radar Proc Sec: " + CUtil::FloatToString(elp_time * 1000) + "ms");
 		memset(SpokeImage, 0, sizeof(SpokeImage));
 
+		for (int i = 0; i < SpokeImageSize;i++) {
+			for (int j = 0; j < SpokeImageSize; j++) {
+				SpokeImage3D[i][j].Empty();
+			}
+		}
+
 		if (is_visualize) {
-			AsyncTask(ENamedThreads::GameThread, [this, PointCloud]()
+			TWeakObjectPtr<UGenericRadarCommProtocolIF> WeakThis(this);
+			AsyncTask(ENamedThreads::GameThread, [this, WeakThis, PointCloud]()
 			{
-				RenderPointCloud(PointCloud);
+				if (WeakThis.IsValid()) {
+					RenderPointCloud(PointCloud);
+				}
+				
 			});
 		}
 	}
+
+	
 
 
 
@@ -507,18 +585,31 @@ void UGenericRadarCommProtocolIF::SpokePointCloudToImage(FLOAT64 spoke_azimuth_d
 
 	double ratio = (0.5 * SpokeImageSize) / num_samples;
 	FVector scan_center_world = TOW(scan_center);
-	for (int i = 0; i < point_cloud.Num(); i++) {
+	int err_cnt = 0;
+	for (unsigned int i = 0; i < (unsigned int)point_cloud.Num(); i++) {
 		const FVector& pos = point_cloud[i];
 
-
-		double dist = ((pos - scan_center_world).Length());
-		int j = dist / scan_range_meter * num_samples;
+		FVector rel_pos = pos - scan_center_world;
+		double dist = FMath::Sqrt(rel_pos.X * rel_pos.X + rel_pos.Y * rel_pos.Y);
+		unsigned int j = dist / scan_range_meter * num_samples;
 
 		double x = FMath::Sin(angle_rad) * j * ratio + SpokeImageSize / 2;
 		double y = FMath::Cos(angle_rad) * j * ratio + SpokeImageSize / 2;
 
-		SpokeImage[(int)y][(int)x] = 1;
-		SpokeImage3D[(int)y][(int)x] = (pos- scan_center_world);
+		if (x < SpokeImageSize && y < SpokeImageSize) {
+				
+			SpokeImage[(int)y][(int)x] = 1;
+			SpokeImage3D[(int)y][(int)x].Add(rel_pos);
+			
+
+
+		}
+		else {
+			///// todo fixme
+			err_cnt++;
+		}
+
+	
 	}
 
 }

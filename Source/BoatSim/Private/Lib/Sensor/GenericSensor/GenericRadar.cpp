@@ -51,6 +51,7 @@ void AGenericRadar::Scan()
 		FLOAT64 end_azimuth = EachScanBeamWidthDeg + start_azimuth - HorizontalScanStepAngleDeg;
 
 		
+		
 		STraceArgs args;
 
 		FLOAT64 elev = CMath::GetActorEulerAnglesRPY(this).Y;

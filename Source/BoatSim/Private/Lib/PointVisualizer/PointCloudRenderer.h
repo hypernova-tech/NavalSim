@@ -17,6 +17,36 @@ enum EPointCooordSystem
 	PointCooordSystemRightHand
 };
 
+
+struct SRendererInfo
+{
+public:
+	UNiagaraComponent* rendererInstance;
+
+	// Textures to transfer the data to the niagara system:
+	UTexture2D* positionTexture;
+	UTexture2D* colorTexture;
+
+	// further data:
+	uint32_t textureWidth;
+	uint32_t textureHeight;
+	uint32_t pointCount;
+
+	// The data which has to be written into the textures:
+	float* positions;
+	uint8_t* colors;
+
+
+
+	// Runtime of the game:
+	float runtime;
+
+	// Definition of the region which should be updated:
+	FUpdateTextureRegion2D region;
+
+	int LastUpdatedRowCount = -1;
+};
+
 UCLASS()
 class APointCloudRenderer : public AActor
 {
@@ -49,8 +79,7 @@ private:
 	float* positions;
 	uint8_t* colors;
 
-	// precalculated part of the sine function:
-	float* precalc;
+
 
 	// Runtime of the game:
 	float runtime;

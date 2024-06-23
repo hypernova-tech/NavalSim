@@ -77,11 +77,24 @@ bool CUtil::Trace(STraceArgs& args, SScanResult* pscan_result)
     query_params.bTraceComplex = false;
 
     pscan_result->ResetTrackPoint3DList();
+    
+    int sector_ind;
+    if (!args.is_world) {
+        sector_ind = args.azimuth_start_deg / (args.horizontal_fov_deg / pscan_result->SectorCount);
+    }
+    else {
+        sector_ind = 0; /// birden fazla sektör olursa undefine behaviour
+    }
 
-    int sector_ind = args.azimuth_start_deg / (args.horizontal_fov_deg / pscan_result->SectorCount);
     SSectorInfo* p_current_sektor = pscan_result->GetSectorContainer()->GetSector(sector_ind);
+ 
     p_current_sektor->Reset();
     pscan_result->CurrentSector = sector_ind;
+
+    if (!args.is_world) {
+        p_current_sektor->SetSectorWorldAngles(args.azimuth_start_deg + actor_rpy_deg.Z, args.azimuth_end_deg + actor_rpy_deg.Z);
+    }
+
     pscan_result->HorizontalFovDeg = args.horizontal_fov_deg;
     pscan_result->VerticalFovDeg = args.vertical_fov_deg;
 
@@ -259,7 +272,7 @@ void inline CUtil::ScanPie(const STraceArgs& args, double azimuth, double elevat
                     bool is_visiblity,
                     bool draw_points)
 {
-    FLOAT64 filtered_range_meter = args.range_meter;
+    FLOAT64 filtered_range_meter = args.range_meter - args.min_range_meter;
     FLOAT32 error_meter = CMath::GetRandomRange(args.is_normal_distribution,
         args.measurement_error_mean,
         args.measurement_error_std,
@@ -348,8 +361,19 @@ void inline CUtil::ScanPie(const STraceArgs& args, double azimuth, double elevat
     else {
         auto raytick = CUtil::Tick();
 
+
+        
+
+
+
         ret = args.p_actor->GetWorld()->LineTraceSingleByChannel(result, start_pos, end, ECollisionChannel::ECC_Visibility, query_params, FCollisionResponseParams());
    
+
+        if (ret) {
+            auto in_len = (end - start_pos).Length();
+            auto out_len = (result.Location - start_pos).Length();
+            double ret_len = out_len;
+        }
 
         auto ray_elp = CUtil::Tock(raytick);
 
@@ -371,7 +395,7 @@ void inline CUtil::ScanPie(const STraceArgs& args, double azimuth, double elevat
         FVector detected_pos_error = result.Location + TOUE(error_meter) * new_dir;
         pscan_result->Point3D[horizantal_ind][vertical_ind] = detected_pos_error;
 
- 
+       
 
         pscan_result->AddTrackPoint3DList(detected_pos_error, range_errored_meter);
         if (draw_points) {

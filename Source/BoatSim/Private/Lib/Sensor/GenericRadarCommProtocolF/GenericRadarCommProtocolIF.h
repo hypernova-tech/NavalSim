@@ -142,7 +142,7 @@ protected:
 	FVector2D RadarNoiseTextureSpeed;
 
 	INT8U SpokeImage[SpokeImageSize][SpokeImageSize];
-	FVector SpokeImage3D[SpokeImageSize][SpokeImageSize];
+	TArray<FVector> SpokeImage3D[SpokeImageSize][SpokeImageSize];
 
 	INT8U** CreateImage(int width, int height);
 	void SpokeToImage(FLOAT64 spoke_azimuth_deg, INT8U* p_spoke, INT32U num_samples);

@@ -13,6 +13,12 @@ CScanResult::~CScanResult()
 {
 }
 
+void SSectorInfo::SetSectorWorldAngles(FLOAT64 start_azim_deg, FLOAT64 end_azim_deg)
+{
+	StartAzimuthDeg = start_azim_deg;
+	EndAzimuthDeg = end_azim_deg;
+}
+
 void SSectorInfo::Init(INT32S scan_line_count, FLOAT64 start_azimuth_deg, FLOAT64 end_azimuth_deg)
 {
 	ScanLineCount = scan_line_count;
@@ -159,8 +165,11 @@ void SSectorInfo::DepthSetRangedTerrainAwarePointCloud(FVector start_pos, FVecto
 		pos = TOW(pos);
 		auto elev = p_terrain->GetElevation((pos.X), (pos.Y), ret);
 	
-		pos.Z = elev;
-		out.Add(pos);
+		if (elev > 0) {
+			pos.Z = elev;
+			out.Add(pos);
+		}
+	
 
 
 	}
@@ -214,37 +223,11 @@ void SSectorInfo::DepthSetRangedTerrainAware(FVector start_pos, FVector dir,FLOA
 
 	}
 }
-void SSectorInfo::DepthClearRanged(FLOAT64 start, FLOAT64 end, FLOAT32 cell_size_meter, INT32S total_byte_count, INT8U* p_out)
-{
-	INT32S start_ind = start / cell_size_meter;
-	INT32S end_ind = end / cell_size_meter + 0.5;
 
-	for (INT32S j = start_ind; j < end_ind; j++) {
-
-		INT32S byte_ind;
-		INT32S order;
-		INT32S sample_ind = j;
-		byte_ind = sample_ind / 2;
-		order = sample_ind & 0x1;
-
-		if (byte_ind >= total_byte_count) {
-			break;
-		}
-
-		if (order) {
-
-			p_out[byte_ind] &= ~0xF;
-		}
-		else {
-			p_out[byte_ind] &= ~(0xF << 4);
-		}
-
-	}
-}
 
 bool SSectorInfo::MapSpokePointCloud(FVector own_ship_pos, FLOAT32 azimuth_deg, FLOAT32 cell_size_meter, INT32S total_byte_count, TArray<FVector>& out)
 {
-	if (azimuth_deg >= EndAzimuthDeg) {
+	if (azimuth_deg > EndAzimuthDeg) {
 		return false;
 	}
 
@@ -319,13 +302,12 @@ bool SSectorInfo::MapSpokePointCloud(FVector own_ship_pos, FLOAT32 azimuth_deg, 
 		}
 	}
 
-
-
 	for (INT32S i = 0; i < p_data->Num(); i++) {
 		FVector pos = (*p_data)[i].Pos;
-
 		out.Add(TOW(pos));
-
+		
+		dir = (pos - own_ship_pos);
+		dir.Normalize();
 
 		FLOAT32 dist = TOW(FVector::DistXY(pos, own_ship_pos));
 		INT32S sample_ind = dist / cell_size_meter;
@@ -337,6 +319,8 @@ bool SSectorInfo::MapSpokePointCloud(FVector own_ship_pos, FLOAT32 azimuth_deg, 
 
 		DepthSetPointCloud(pos, dir, sample_ind, depth, cell_size_meter, total_byte_count, out);
 	}
+
+
 
 	return true;
 }

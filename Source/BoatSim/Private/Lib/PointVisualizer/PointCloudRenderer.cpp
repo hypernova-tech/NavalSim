@@ -12,8 +12,8 @@ APointCloudRenderer::APointCloudRenderer()
 
 	// Just define how many points you want. You can define pointCount arbitrary as long as 
 	// textureWidth * textureHeight is greater or equals pointCount:
-	textureWidth = 512;
-	textureHeight = 512;
+	textureWidth = 1024;
+	textureHeight = 1024;
 	pointCount = textureWidth * textureHeight;
 
 	// Initialize data arrays:
@@ -118,6 +118,8 @@ void APointCloudRenderer::BeginPlay()
 	rendererInstance->SetVariableInt("User.TextureHeight", textureHeight);
 	rendererInstance->SetVariableInt("User.PointCount", pointCount);
 
+	positionTexture->UpdateTextureRegions(0, 1, &region, textureWidth * 16, 16, (uint8*)positions);
+	colorTexture->UpdateTextureRegions(0, 1, &region, textureWidth * 4, 4, (uint8*)colors);
 	runtime = 0;
 }
 
@@ -125,6 +127,8 @@ void APointCloudRenderer::BeginPlay()
 void APointCloudRenderer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+
 
 #if false
 	runtime += DeltaTime;
@@ -155,30 +159,29 @@ void APointCloudRenderer::SetPoints(FVector center, const TArray<FVector>& pts, 
 	if (positions == nullptr) {
 		return;
 	}
-	memset(positions, 0, textureWidth * textureHeight * sizeof(float) * 4);
-	memset(colors, 0, textureWidth * textureHeight * sizeof(uint8_t) * 4);
+	
 
-	int update_row_cnt = FMath::CeilToInt(pts.Num() / (double)textureWidth);
+	int render_point_count = (pts.Num() > (int)pointCount) ? pointCount : pts.Num();
+
+
+	int update_row_cnt = FMath::CeilToInt(render_point_count / (double)textureWidth);
 	if (update_row_cnt == 0) {
 		update_row_cnt = 1;
 	}
 
 	update_row_cnt = FMath::Max(update_row_cnt, LastUpdatedRowCount);
 
-
+	memset(positions, 0, textureWidth * update_row_cnt * sizeof(float) * 4);
+	memset(colors, 0, textureWidth * update_row_cnt * sizeof(uint8_t) * 4);
 
 
 	if (coord_sys == EPointCooordSystem::PointCooordSystemRightHand) {
-		for (int i = 0; i < pts.Num() && i < (int)pointCount; i++) {
+		for (int i = 0; i < render_point_count; i++) {
 			FVector pos = pts[i];
 			pos.Y *= -1;
 
 			pos = TOUE(pos) + center;
 			int offset = 4 * i;
-
-		
-
-
 
 			positions[offset + 0] = pos.X;
 			positions[offset + 1] = pos.Y;
@@ -190,14 +193,12 @@ void APointCloudRenderer::SetPoints(FVector center, const TArray<FVector>& pts, 
 		}
 	}
 	else if (coord_sys == EPointCooordSystem::PointCooordSystemLeftHand) {
-		for (int i = 0; i < pts.Num() && i < (int)pointCount; i++) {
+		for (int  i = 0; i < render_point_count; i++) {
 			FVector pos = pts[i];
 	
 
 			pos = TOUE(pos) + center;
 			int offset = 4 * i;
-
-
 
 			positions[offset + 0] = pos.X;
 			positions[offset + 1] = pos.Y;
@@ -210,6 +211,7 @@ void APointCloudRenderer::SetPoints(FVector center, const TArray<FVector>& pts, 
 	}
 	
 	region =  FUpdateTextureRegion2D(0, 0, 0, 0, textureWidth, update_row_cnt );
+	//region =  FUpdateTextureRegion2D(0, 0, 0, 0, textureWidth, textureHeight );
 	rendererInstance->SetVariableInt("User.SpriteSize", sprite_size);
 	positionTexture->UpdateTextureRegions(0, 1, &region, textureWidth * 16, 16, (uint8*)positions);
 	colorTexture->UpdateTextureRegions(0, 1, &region, textureWidth * 4, 4, (uint8*)colors);

@@ -56,6 +56,7 @@ struct SSectorInfo
 public:
 
 	void Init(INT32S scan_line_count, FLOAT64 start_azimuth_deg, FLOAT64 end_azimuth_deg);
+	void SetSectorWorldAngles(FLOAT64 start_azim_deg, FLOAT64 end_azim_deg);
 	void Reset();
 
 	void Add(FVector& vec, EScanObjectType object_type = EScanObjectType::ScanObjectTypeUnknown, FLOAT32 NormalStrenght = 1);
@@ -71,7 +72,6 @@ public:
 	void DepthSetRangedTerrainAwarePointCloud(FVector start_pos, FVector dir, FLOAT64 start, FLOAT64 end, FLOAT32 cell_size_meter, INT32S total_byte_count, TArray<FVector>& out);
 	void DepthSetRangedTerrainAware(FVector start_pos, FVector dir, FLOAT64 start, FLOAT64 end, FLOAT32 cell_size_meter, INT32S total_byte_count, INT32U set_value, INT8U* p_out);
 
-	void DepthClearRanged(FLOAT64 start, FLOAT64 end, FLOAT32 cell_size_meter, INT32S total_byte_count, INT8U* p_out);
 	bool MapSpokePointCloud(FVector own_ship_pos, FLOAT32 azimuth_deg, FLOAT32 cell_size_meter, INT32S total_byte_count, TArray<FVector>& out);
 
 	bool MapSpoke4Bits(FVector own_ship_pos, FLOAT32 azimuth_deg, FLOAT32 cell_size_meter, INT32S total_byte_count, INT8U* p_out);
