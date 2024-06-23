@@ -62,43 +62,28 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FX")
 		UNiagaraSystem* pointCloudRenderer;
 
+	UPROPERTY(EditAnywhere)
+		int TotalPointSize = 3072 * 3072;
+
+	int EachTextureWidth = 1024;
+	int LastIndex = -1;
+
 private:
-	// The instance of the niagara system:
-	UNiagaraComponent* rendererInstance;
 
-	// Textures to transfer the data to the niagara system:
-	UTexture2D* positionTexture;
-	UTexture2D* colorTexture;
-
-	// further data:
-	uint32_t textureWidth;
-	uint32_t textureHeight;
-	uint32_t pointCount;
-
-	// The data which has to be written into the textures:
-	float* positions;
-	uint8_t* colors;
-
-
-
-	// Runtime of the game:
-	float runtime;
-
-	// Definition of the region which should be updated:
-	FUpdateTextureRegion2D region;
-
-	int LastUpdatedRowCount = -1;
-
+	TArray< SRendererInfo*> RendererInfo;
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
+	SRendererInfo* CreateInstance(int texture_width_px);
+	void CreateTextures();
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	void SetPoints(FVector center, const TArray<FVector>& vec, EPointCooordSystem coord_sys, int sprite_size);
+	void RenderPoints(SRendererInfo *info, int from, int to, FVector center, const TArray<FVector>& vec, EPointCooordSystem coord_sys, int sprite_size);
+	void SetPoints(FVector center, const TArray<FVector>& pts, EPointCooordSystem coord_sys, int sprite_size);
 	void ClearAll();
+	void ClearInfo(SRendererInfo *info);
 
 };
 
