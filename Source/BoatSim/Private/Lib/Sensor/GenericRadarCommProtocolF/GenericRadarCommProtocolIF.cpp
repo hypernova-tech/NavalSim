@@ -224,6 +224,7 @@ void UGenericRadarCommProtocolIF::SendRadarTrack()
 
 	int max_points = 1048 * 1048;
 	int max_3d_points_per_spoke;
+	
 
 
 	if (is_full_scanned) {
@@ -249,8 +250,9 @@ void UGenericRadarCommProtocolIF::SendRadarTrack()
 		TArray<FVector> PointCloud;
 		ASensorBase* p_sensor = (ASensorBase*)pRadarHostIF->GetOwningActor();
 		bool is_visualize = p_sensor->GetPoint3DVisualize();
-
+		TArray<FVector> point_cloud_2d;
 		max_3d_points_per_spoke = max_points / (double)total_spoke;
+		FVector pos_2d;
 
 		for (int i = 0; i < total_spoke; i++) {
 			//memset(&packspoke, 0, sizeof(SRadarSimSDKPacket));
@@ -348,36 +350,18 @@ void UGenericRadarCommProtocolIF::SendRadarTrack()
 				}
 				
 #if false
-				FVector *p_pos = &SpokeImage3D[im_y][im_x];
+				
 				INT8U im_val = SpokeImage[im_y][im_x];
+				
 
 				if (im_val) {
-					if (p_pos->X == 0) { // noise ile  eklenmiş bir veri seti olabilir
+					pos_2d.X = x * p_current->ScanRangeMeter / 1024;
+					pos_2d.Y = y * p_current->ScanRangeMeter / 1024;
+					pos_2d.Z = 0;
+					point_cloud_2d.Add(pos_2d);					
 
-						p_entry->SetPoint(x * p_current->ScanRangeMeter / 1024, y * p_current->ScanRangeMeter / 1024, 0);
+				}
 				
-					}
-					else {
-				
-						p_entry->SetPoint(p_pos->X, p_pos->Y, p_pos->Z);
-					}		
-
-				}
-				else {
-					p_entry->SetPoint(0, 0, 0);
-				}
-				entry_index_in_payload++;
-				cloud_data_ind++;
-
-				if (entry_index_in_payload == POINT_CLOUND_ENTRY_COUNT) {
-					cloud_data_mes.SetMessageId(EPointCloudId::PointCloudData);
-					cloud_data_mes.SetDataLength(entry_index_in_payload * sizeof(S3DPointCloudDataPayloadEntry));
-					bool ret = pUDPConnection->SendData((const INT8U*)&cloud_data_mes, cloud_data_mes.GetMessageSize());
-					if (is_visualize) {
-						cloud_data_mes.Visualize(PointCloud);
-					}
-					entry_index_in_payload = 0;
-				}
 #endif
 			}		
 		}
@@ -404,10 +388,10 @@ void UGenericRadarCommProtocolIF::SendRadarTrack()
 
 		if (is_visualize) {
 			TWeakObjectPtr<UGenericRadarCommProtocolIF> WeakThis(this);
-			AsyncTask(ENamedThreads::GameThread, [this, WeakThis, PointCloud]()
+			AsyncTask(ENamedThreads::GameThread, [this, WeakThis, PointCloud, point_cloud_2d]()
 			{
 				if (WeakThis.IsValid()) {
-					RenderPointCloud(PointCloud);
+					RenderPointCloud(PointCloud, point_cloud_2d);
 				}
 				
 			});
@@ -568,12 +552,14 @@ void UGenericRadarCommProtocolIF::ApplyMerge(int size)
 
 }
 
-void UGenericRadarCommProtocolIF::RenderPointCloud(const TArray<FVector>& pts)
+void UGenericRadarCommProtocolIF::RenderPointCloud(const TArray<FVector>& pts, const TArray<FVector> &pts_2d)
 {
 	ASensorBase* p_sensor = (ASensorBase*)pRadarHostIF->GetOwningActor();
 	auto loc = p_sensor->GetActorLocation();
+
 	p_sensor->RenderPointCloud(loc, pts, EPointCooordSystem::PointCooordSystemLeftHand);
-	
+	//p_sensor->RenderPointCloud2D(loc, pts_2d, EPointCooordSystem::PointCooordSystemLeftHand);
+
 
 
 }

@@ -8,7 +8,9 @@
 #include <Lib/Zone/ZoneContainer.h>
 #include <Lib/Tracker/TrackerBase.h>
 #include <Lib/Sensor/GenericRadarCommProtocolF/IRadarHostIF.h>
+#include <Lib/Detector/ObjectDetectorBase.h>
 #include "RadarBase.generated.h"
+
 
 /**
  * 
@@ -29,7 +31,7 @@ protected:
 	CZoneContainer BlankingZone;
 
 
-
+	CObjectDetectorBase* pObjectDetector;
 	CTrackerBase* pTracker = nullptr;
 
 	virtual void Run(float delta_time_sec) override;
@@ -39,8 +41,10 @@ protected:
 	
 	virtual void RadarStateMachine();
 	virtual void OnDataReady() override;
+	virtual void InitObjectDetector();
 	virtual void InitTracker();
 	virtual void UpdateTracker();
+	virtual void UpdateObjectDetector();
 
 	FGraphEventRef RaycastTaskComplete;
 
@@ -48,6 +52,7 @@ protected:
 	double NextScanTime;
 	bool IsFullScaned = false;
 
+	bool IsObjectDetectorEnabled = false;
 	bool IsTrackerEnabled = false;
 
 
@@ -69,6 +74,9 @@ public:
 
 	UPROPERTY(EditAnywhere)
 		bool IsAutoScanEnabled = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool AutoDetectionTrackingEnabled = false;
 
 	UPROPERTY(EditAnywhere)
 		double  RadarTransmissionDurationSec = 0.3;
@@ -108,6 +116,9 @@ public:
 	virtual void Scan();
 	
 
+	void SetObjectDetectorEnabled(bool val);
+	bool GetObjectDetectorEnabled();
+
 	void SetTrackerEnabled(bool val);
 	bool GetTrackerEnabled();
 
@@ -117,6 +128,9 @@ public:
 	virtual void OnCaptureReady(void* p_data) override;
 
 	void OnAsynTaskComplete();
+
+	void SetAutoDetectionTrackingEnabled(bool val);
+	bool GetAutoDetectionTrackingEnabled();
 
 	virtual void Save(ISaveLoader* p_save_load) override;
 	virtual void SaveJSON(CJsonDataContainer& data) override;

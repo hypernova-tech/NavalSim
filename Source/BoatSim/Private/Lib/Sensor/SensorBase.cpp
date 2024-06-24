@@ -73,6 +73,9 @@ void ASensorBase::InitSensor()
 	}
 
 	ASystemManagerBase::GetInstance()->GetUIController()->SetSensorTitleText(SensorSlotIndex, GetName());
+	if (pPointCloudRenderer) {
+		pPointCloudRenderer->Init(MaxPointCloudCount);
+	}
 
 }
 
@@ -427,10 +430,18 @@ APointCloudRenderer* ASensorBase::GetPointCloudRenderer()
 
 void ASensorBase::RenderPointCloud(FVector loc_ue, const TArray<FVector>& pts_world, EPointCooordSystem coord_sys)
 {
+
+
 	if (Point3DVisualize) {
 		if (pPointCloudRenderer != nullptr) {
 			pPointCloudRenderer->SetPoints(loc_ue, pts_world, coord_sys, PointCloudPointSize);
 		}
 	}
 
+}
+void ASensorBase::RenderPointCloud2D(FVector loc_ue, const TArray<FVector>& pts_world, EPointCooordSystem coord_sys)
+{
+	if (pPointVisualizer) {
+		pPointVisualizer->Visualize(pts_world, coord_sys, loc_ue, GetActorForwardVector(), GetActorRightVector(), RangeMaxMeter, nullptr, true);
+	}
 }

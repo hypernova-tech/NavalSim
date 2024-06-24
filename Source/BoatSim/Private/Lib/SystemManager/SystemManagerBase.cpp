@@ -2106,6 +2106,26 @@ bool ASystemManagerBase::GetSpeedMeterPerSec(AActor* p_actor, FLOAT64& val)
 	}
 }
 
+
+bool ASystemManagerBase::SetRadarAutoDetectTrackEnabled(AActor* p_actor, bool val)
+{
+	auto p_obj = ToRadarBase(p_actor);
+	if (p_obj) {
+		p_obj->SetAutoDetectionTrackingEnabled(val);
+		return true;
+	}
+	return false;
+}
+bool ASystemManagerBase::GetRadarAutoDetectTrackEnabled(AActor* p_actor, bool& val)
+{
+	auto p_obj = ToRadarBase(p_actor);
+	if (p_obj) {
+		val = p_obj->GetAutoDetectionTrackingEnabled();
+		return true;
+	}
+	return false;
+}
+
 bool ASystemManagerBase::SetSpeedMeterPerSec(AActor* p_actor, FLOAT64 val)
 {
 	auto* p_plt = GetPlatform();

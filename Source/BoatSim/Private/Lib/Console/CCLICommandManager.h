@@ -158,7 +158,7 @@ public:
 	static FString GimbalFreeRotateEnabled;
 
 	
-
+	static FString RadarAutoDetectionTrackingEnabled;
 	static FString RadarScanLevel;
 	static FString RadarScannerRPM;
 	static FString RadarGainType;

@@ -67,6 +67,11 @@ TArray<STrackedObjectInfo*>* CTrackerBase::GetTrackedObjects()
     return &TrackedObjects;
 }
 
+INT32S CTrackerBase::GetTrackedObjectCount()
+{
+    return TrackedObjects.Num();
+}
+
 FLOAT64 CTrackerBase::GetCPAMeters()
 {
     return CPAMeters;

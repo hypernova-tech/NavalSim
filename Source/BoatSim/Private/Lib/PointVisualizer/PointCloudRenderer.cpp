@@ -106,15 +106,36 @@ void APointCloudRenderer::CreateTextures()
 
 }
 
+void APointCloudRenderer::EnablePointShow(bool val)
+{
+	for (int ind = 0; ind < RendererInfo.Num(); ind++) {
+		SRendererInfo* info = RendererInfo[ind];
+		
+		if (val) {
+			info->rendererInstance->Activate();
+		}
+		else {
+			info->rendererInstance->Deactivate();
+		}
+		
+	}
+}
+
 
 // Called when the game starts or when spawned
 void APointCloudRenderer::BeginPlay()
 {
 	Super::BeginPlay();
-	CreateTextures();
 
 
 	
+}
+
+void APointCloudRenderer::Init(int total_point_size)
+{
+	TotalPointSize = total_point_size;
+	CreateTextures();
+	EnablePointShow(false);
 }
 
 // Called every frame
@@ -203,6 +224,16 @@ void APointCloudRenderer::SetPoints(FVector center, const TArray<FVector>& pts, 
 
 	for(int  ind = 0; ind< RendererInfo.Num(); ind++){
 		SRendererInfo *info = RendererInfo[ind];
+
+		if (!info->rendererInstance->IsActive()) {
+			info->rendererInstance->SetVisibility(true, true);
+
+			// Method 2: Reactivate the Component
+			info->rendererInstance->SetComponentTickEnabled(true);
+			info->rendererInstance->SetRenderingEnabled(true);
+			info->rendererInstance->Activate(true);
+			info->rendererInstance->ReinitializeSystem();
+		}
 		int cnt = (pts.Num() - from) > each_size ? each_size : (pts.Num() - from);
 
 
@@ -235,6 +266,7 @@ void APointCloudRenderer::ClearInfo(SRendererInfo* info)
 	info->positionTexture->UpdateTextureRegions(0, 1, &info->region, info->textureWidth * 16, 16, (uint8*)info->positions);
 	info->colorTexture->UpdateTextureRegions(0, 1, &info->region, info->textureWidth * 4, 4, (uint8*)info->colors);
 	info->LastUpdatedRowCount = -1;
+	info->rendererInstance->Deactivate();
 }
 
 void APointCloudRenderer::ClearAll()

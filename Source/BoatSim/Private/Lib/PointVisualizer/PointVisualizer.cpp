@@ -36,9 +36,8 @@ void APointVisualizer::Tick(float DeltaTime)
 
 void APointVisualizer::Visualize(SScanResult *p_scan_result, FVector origin, FVector current_forward, FVector current_right, float max_range_meter, void *p_tracker, bool reset)
 {
-    //SetPixelValue(pRenderTarget, 50, 50, FColor::Green);
-
- 
+        //SetPixelValue(pRenderTarget, 50, 50, FColor::Green);
+    
 
 
         if (!pRenderTarget)
@@ -78,7 +77,7 @@ void APointVisualizer::Visualize(SScanResult *p_scan_result, FVector origin, FVe
         for (int sector = 0; sector < p_scan_result->SectorCount; sector++) {
             SSectorInfo* p_sector_info = p_sector_container->GetSector(sector);
 
-            for (FVector pos : p_sector_info->SectorData) {
+            for (FVector &pos : p_sector_info->SectorData) {
                 FVector diff = pos - origin;
                 float local_forward = FVector::DotProduct(diff, current_forward);
                 float local_right = FVector::DotProduct(diff, current_right);
@@ -146,6 +145,109 @@ void APointVisualizer::Visualize(SScanResult *p_scan_result, FVector origin, FVe
 
 }
 
+void APointVisualizer::Visualize(const TArray<FVector> &points, EPointCooordSystem coord_sys, FVector origin, FVector current_forward, FVector current_right, float max_range_meter, void* p_tracker, bool reset)
+{
+    //SetPixelValue(pRenderTarget, 50, 50, FColor::Green);
+
+    if (!pRenderTarget)
+    {
+        UE_LOG(LogTemp, Error, TEXT("Invalid render target."));
+        return;
+    }
+
+
+    FRenderTarget* RenderTargetResource = pRenderTarget->GameThread_GetRenderTargetResource();
+
+    if (RenderTargetResource == nullptr) {
+        return;
+    }
+    RenderCount = 0;
+
+    double one_over_max_range = 1.0 / WORLD_TO_UNREAL(max_range_meter);
+    FCanvas Canvas(RenderTargetResource, nullptr, 0, 0, 0, ERHIFeatureLevel::SM5);
+
+    // Clear the canvas with the desired color to avoid artifacts from previous frames
+    //Canvas.SetAllowedModes(FCanvas::ECanvasAllowModes::Allow_Flush);
+    //Canvas.SetAllowedModes(FCanvas::ECanvasAllowModes::Allow_DeleteOnRender);
+    if (reset) {
+        Canvas.Clear(FColor::Black);
+    }
+
+    FIntPoint rt_size = RenderTargetResource->GetSizeXY();
+
+    current_forward.Z = 0;
+    current_forward.Normalize();
+
+    current_right.Z = 0;
+    current_right.Normalize();
+
+    for (int i = 0; i < points.Num(); i++) {
+            
+        const FVector &pos = points[i];
+
+        FVector diff = pos - origin;
+        float local_forward = FVector::DotProduct(diff, current_forward);
+        float local_right = FVector::DotProduct(diff, current_right);
+
+        local_forward *= one_over_max_range;
+        local_right *= one_over_max_range;
+
+        float X = (1 + local_right) * 0.5;
+        float Y = (1 - local_forward) * 0.5;
+
+        FVector2D size(20, 20);
+        FCanvasTileItem TileItem(FVector2D(X * rt_size.X - size.X * 0.5, Y * rt_size.Y - size.Y * 0.5), size, FLinearColor::Red);
+
+        TileItem.BlendMode = SE_BLEND_Opaque;
+        Canvas.DrawItem(TileItem);
+        RenderCount++;
+    }
+
+
+    if (p_tracker != nullptr) {
+        TArray< STrackedObjectInfo*>* p_track = ((CTrackerBase*)p_tracker)->GetTrackedObjects();
+
+        for (auto p_tracked_object : *(p_track)) {
+            if (p_tracked_object->pActor == nullptr) {
+                continue;
+            }
+
+            if (!p_tracked_object->IsAcquired()) {
+                continue;
+            }
+
+            FVector diff = p_tracked_object->pActor->GetActorLocation() - origin;
+            float local_forward = FVector::DotProduct(diff, current_forward);
+            float local_right = FVector::DotProduct(diff, current_right);
+
+            local_forward *= one_over_max_range;
+            local_right *= one_over_max_range;
+
+            float X = (1 + local_right) * 0.5;
+            float Y = (1 - local_forward) * 0.5;
+
+            FVector2D size(20, 20);
+
+            FCanvasTileItem TileItem(FVector2D(X * rt_size.X - size.X * 0.5, Y * rt_size.Y - size.Y * 0.5), size, FLinearColor::Green);
+
+            TileItem.BlendMode = SE_BLEND_Opaque;
+            Canvas.DrawItem(TileItem);
+            RenderCount++;
+        }
+    }
+    /*
+    FVector2D pos_text = FVector2D(100, 100);
+    FCanvasTextItem TextItem(pos_text, FText::FromString(TEXT("Your Text Here")), GEngine->GetMediumFont(), FLinearColor::Red);
+    Canvas.DrawItem(TextItem);
+    */
+    if (RenderCount > 0) {
+        Canvas.Flush_GameThread();
+    }
+
+
+
+
+}
 
 void APointVisualizer::SetPixelValue(UTextureRenderTarget2D* RenderTarget, int32 X, int32 Y, FColor Color)
 {
@@ -190,53 +292,6 @@ void APointVisualizer::SetPixelValue(UTextureRenderTarget2D* RenderTarget, int32
 
 #endif
 
-#if false
-
-    if (!RenderTarget)
-    {
-        UE_LOG(LogTemp, Error, TEXT("Invalid render target."));
-        return;
-    }
-
-    UCanvasRenderTarget2D* CanvasRenderTarget = UCanvasRenderTarget2D::CreateCanvasRenderTarget2D(this, UCanvasRenderTarget2D::StaticClass(), RenderTarget->SizeX, RenderTarget->SizeY);
-    if (!CanvasRenderTarget)
-    {
-        UE_LOG(LogTemp, Error, TEXT("Failed to create CanvasRenderTarget2D."));
-        return;
-    }
-
-    // Draw on the CanvasRenderTarget2D to set the pixel color
-    UCanvas* Canvas = nullptr;
-    if (!CanvasRenderTarget->GetCanvas(Canvas, 0, 0))
-    {
-        UE_LOG(LogTemp, Error, TEXT("Failed to get canvas."));
-        return;
-    }
-
-    FCanvasTileItem TileItem(FVector2D(X, Y), FVector2D(1, 1), FLinearColor(Color));
-    TileItem.BlendMode = SE_BLEND_Translucent;
-    Canvas->DrawItem(TileItem);
-   
-
-    // Copy the pixel data from the CanvasRenderTarget2D to the TextureRenderTarget2D
-    FTextureRenderTargetResource* CanvasResource = CanvasRenderTarget->GameThread_GetRenderTargetResource();
-    FTextureRenderTargetResource* RenderTargetResource = RenderTarget->GameThread_GetRenderTargetResource();
-    if (!CanvasResource || !RenderTargetResource)
-    {
-        UE_LOG(LogTemp, Error, TEXT("Failed to get render target resources."));
-        return;
-    }
-
-    TArray<FColor> PixelData;
-    PixelData.SetNum(CanvasRenderTarget->SizeX * CanvasRenderTarget->SizeY);
-    CanvasResource->ReadPixels(PixelData);
-
-    RenderTargetResource->UpdateTextureRegions(0, 1, RenderTarget->GetTexture2D(), 0, 4 * CanvasRenderTarget->SizeX, 4, (uint8*)PixelData.GetData(), nullptr);
-
-    // Release the CanvasRenderTarget2D
-    CanvasRenderTarget->ConditionalBeginDestroy();
-
-#endif
 }
 
 UTextureRenderTarget2D* APointVisualizer::CreateRenderTarget(int width, int height, UImage* p_image)

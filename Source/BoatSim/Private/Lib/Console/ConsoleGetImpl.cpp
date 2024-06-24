@@ -1063,6 +1063,17 @@ bool UConsoleBase::ProcessGetCommand(TMap<FString, FString>& options, FString& e
 
     }
 
+    ret = CommandManager.HasA(CCLICommandManager::RadarAutoDetectionTrackingEnabled);
+    if (ret) {
+        if (pSystemAPI->GetRadarAutoDetectTrackEnabled(p_actor, is_enabled)) {
+            SendConsoleResponse(name, CCLICommandManager::RadarAutoDetectionTrackingEnabled, is_enabled);
+            return true;
+        }
+    }
+    else {
+
+    }
+
     ret = CommandManager.HasA(CCLICommandManager::RadarScanLevel);
     if (ret) {
         if (pSystemAPI->GetRadarScanLevel(p_actor, sint)) {

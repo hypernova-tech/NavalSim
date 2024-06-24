@@ -94,6 +94,7 @@ public static class CLICommandManager
     [Modifiable] public const string EnableFoamDetect = "foamen";
     [Modifiable] public const string SeaSurfaceDetectionProb = "seasurfdetectprob";
     [Modifiable] public const string MaxSurfacePenetration = "maxsurfpenet";
+    [Modifiable] public const string RadarAutoDetectionTrackingEnabled = "radautodetecttracken";
     [Modifiable] public const string RadarScanLevel = "radscanlevel";
     [Modifiable] public const string RadarScannerRPM = "radscanrpm";
     [Modifiable] public const string RadarGainType = "radgaintype";

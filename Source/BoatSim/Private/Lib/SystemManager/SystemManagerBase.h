@@ -407,6 +407,8 @@ public:
 	virtual bool SetRadarMaxGuardZoneCount(AActor* p_actor, INT32S val) ;
 	virtual bool SetRadarMaxSectorBlankingZoneCount(AActor* p_actor, INT32S val);
 
+	virtual bool SetRadarAutoDetectTrackEnabled(AActor* p_actor, bool val) ;
+	virtual bool GetRadarAutoDetectTrackEnabled(AActor* p_actor, bool& val);
 
 	virtual bool GetMaxSurfacePenetration(AActor* p_actor, FLOAT64& val);
 	virtual bool GetRadarScanLevel(AActor* p_actor, INT32S& val) ;

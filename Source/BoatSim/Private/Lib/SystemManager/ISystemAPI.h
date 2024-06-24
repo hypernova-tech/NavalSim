@@ -230,6 +230,9 @@ public:
 	virtual bool GetRadarMaxGuardZoneCount(AActor* p_actor, INT32S& val) = 0;
 	virtual bool GetRadarMaxSectorBlankingZoneCount(AActor* p_actor, INT32S& val) = 0;
 
+	virtual bool SetRadarAutoDetectTrackEnabled(AActor* p_actor, bool val) = 0;
+	virtual bool GetRadarAutoDetectTrackEnabled(AActor* p_actor, bool &val) = 0;
+
 
 	virtual bool GetSpeedMeterPerSec(AActor* p_actor, FLOAT64& val) = 0;
 	virtual bool SetSpeedMeterPerSec(AActor* p_actor, FLOAT64 val) = 0;

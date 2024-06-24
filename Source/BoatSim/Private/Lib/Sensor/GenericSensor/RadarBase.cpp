@@ -59,6 +59,15 @@ public:
 };
 
 
+void ARadarBase::SetObjectDetectorEnabled(bool val)
+{
+	IsObjectDetectorEnabled = val;
+}
+bool ARadarBase::GetObjectDetectorEnabled()
+{
+	return IsObjectDetectorEnabled;
+}
+
 void ARadarBase::SetTrackerEnabled(bool val)
 {
 	IsTrackerEnabled = val;
@@ -95,8 +104,9 @@ void ARadarBase::InitSensor()
 	INT32S sector_cnt = (int)(FovHorizontalDeg / EachScanBeamWidthDeg);
 	ScanResultContainer.Init(16, sector_cnt, HorizontalScanStepAngleDeg);
 	pScanResult = ScanResultContainer.GetCircular();
-
+	
 	InitTracker();
+	InitObjectDetector();
 	if (UseRenderTargetForDepthCalculation) {
 		pSceneCapturer->CreateRenderTexture(this, DepthRenderTargetWidthPx, DepthRenderTargetHeightPx, EPixelFormat::PF_B8G8R8A8);
 		
@@ -117,6 +127,7 @@ void ARadarBase::Run(float delta_time_sec)
 
 void ARadarBase::RadarStateMachine()
 {
+	UpdateObjectDetector();
 	UpdateTracker();
 	Scan();
 	
@@ -133,6 +144,9 @@ void ARadarBase::Save(ISaveLoader* p_save_load)
 
 	FString line;
 
+	line = p_save_load->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
+	p_save_load->AppendOption(line, CCLICommandManager::RadarAutoDetectionTrackingEnabled, AutoDetectionTrackingEnabled);
+	p_save_load->AddLine(line);
 
 	line = p_save_load->CreateCommandWithName(CCLICommandManager::SetCommand, GetName());
 	p_save_load->AppendOption(line, CCLICommandManager::RadarScanLevel,						FastScanLevel);
@@ -177,7 +191,8 @@ void ARadarBase::Save(ISaveLoader* p_save_load)
 void ARadarBase::SaveJSON(CJsonDataContainer& data)
 {
 	Super::SaveJSON(data);
-
+	
+	data.Add(CCLICommandManager::RadarAutoDetectionTrackingEnabled, AutoDetectionTrackingEnabled);
 	data.Add(CCLICommandManager::RadarScanLevel, FastScanLevel);
 	data.Add(CCLICommandManager::RadarScannerRPM, ScannerRPMValue);
 	data.Add(CCLICommandManager::RadarGainType, GainType);
@@ -196,17 +211,30 @@ void ARadarBase::OnDataReady()
 		pCommIF->SendData(pScanResult, -1);
 	}
 }
+void ARadarBase::InitObjectDetector()
+{
+	pObjectDetector = new CObjectDetectorBase();
+}
 void ARadarBase::InitTracker()
 {
 	pTracker = new CRadarBasedTracker();
+}
+
+void ARadarBase::UpdateObjectDetector()
+{
+	if (IsObjectDetectorEnabled) {
+		if (UseSimulationDataAsOwnShip) {
+			pObjectDetector->SetOwnshipData(this, pTracker, GetActorLocation(), CUtil::GetActorRPY(this), GetVelocity(), GetRangeMeter(), NoiseMean, NoiseStdDeviation);
+		}
+		pObjectDetector->Update();
+	}
 }
 void ARadarBase::UpdateTracker()
 {
 	if (IsTrackerEnabled) {
 		if (UseSimulationDataAsOwnShip) {
 			pTracker->SetOwnshipData(this, GetActorLocation(), CUtil::GetActorRPY(this), GetVelocity(), GetRangeMeter(), NoiseMean, NoiseStdDeviation);
-		}
-		
+		}		
 		pTracker->Update();
 	}
 	
@@ -374,7 +402,22 @@ void* ARadarBase::GetOwningActor()
 	return this;
 }
 
+void ARadarBase::SetAutoDetectionTrackingEnabled(bool val)
+{
+	AutoDetectionTrackingEnabled = val;
+	if (val) {
+		SetObjectDetectorEnabled(true);
+		SetTrackerEnabled(true);
+	}
+}
+bool ARadarBase::GetAutoDetectionTrackingEnabled()
+{
+	return AutoDetectionTrackingEnabled;
+}
+
 double ARadarBase::GetTerrainBorderThreshold()
 {
 	return TerrainBorderThreshold;
 }
+
+

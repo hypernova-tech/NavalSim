@@ -108,6 +108,7 @@ FString CCLICommandManager::GimbalMaxLimitAng = "gimbalmaxlimitang";
 FString CCLICommandManager::GimbalMinLimitAng = "gimbalminlimitang";
 FString CCLICommandManager::GimbalFreeRotateEnabled = "gimbalfreerotateen";
 
+FString CCLICommandManager::RadarAutoDetectionTrackingEnabled = "radautodetecttracken";
 FString CCLICommandManager::RadarScanLevel = "radscanlevel";
 FString CCLICommandManager::RadarScannerRPM = "radscanrpm";
 FString CCLICommandManager::RadarGainType = "radgaintype";

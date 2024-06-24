@@ -86,6 +86,9 @@ public:
 		int PointCloudPointSize = 10;
 
 	UPROPERTY(EditAnywhere)
+		int MaxPointCloudCount = 1024*1024;
+
+	UPROPERTY(EditAnywhere)
 		double Frequency = 1.0;
 
 	UPROPERTY(EditAnywhere) 
@@ -222,4 +225,5 @@ public:
 
 	APointCloudRenderer* GetPointCloudRenderer();
 	void RenderPointCloud(FVector loc_ue, const TArray<FVector>& pts_world, EPointCooordSystem coord_sys);
+	void RenderPointCloud2D(FVector loc_ue, const TArray<FVector>& pts_world, EPointCooordSystem coord_sys);
 };

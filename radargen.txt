@@ -3,8 +3,8 @@ set --name marlin --actorid 0
 set --name marlin --instance -1
 set --name marlin --suppressed 0
 set --name marlin --standalone 0
-set --name marlin --position "48.600006 181.804520 0.000000"
-set --name marlin --rotation "-0.000000 -0.000000 0.000000"
+set --name marlin --position "70.985641 -44.846048 4.825652"
+set --name marlin --rotation "-0.000000 -0.000000 12.150002"
 set --name marlin --scale "1.000000 1.000000 1.000000"
 set --name marlin --blocking 1
 set --name marlin --tempkelvin 300.000000
@@ -35,8 +35,8 @@ set --name jeoref --sharedmemname
 set --name jeoref --gstreamerip 
 set --name jeoref --gstreamerport 0
 set --name jeoref --motionlogen 0
-set --name jeoref --maporiginlat 40.701369
-set --name jeoref --maporiginlon 29.545753
+set --name jeoref --maporiginlat 0.000000
+set --name jeoref --maporiginlon 0.000000
 set --name jeoref --maporiginh 0.000000
 
 create --name thermal --bp  --tick 0
@@ -77,7 +77,7 @@ set --name env --sharedmemname
 set --name env --gstreamerip 
 set --name env --gstreamerport 0
 set --name env --motionlogen 0
-set --name env --timeofday 12.109723
+set --name env --timeofday 12.009614
 set --name env --envtimeflowscale 1.000000
 set --name env --rain 0.000000
 set --name env --cloud 0.000000
@@ -108,43 +108,14 @@ set --name annotation --gstreamerip
 set --name annotation --gstreamerport 0
 set --name annotation --motionlogen 0
 
-create --name terrain1 --bp TERRAIN --tick 0
-set --name terrain1 --actorid 0
-set --name terrain1 --instance -1
-set --name terrain1 --suppressed 0
-set --name terrain1 --standalone 0
-set --name terrain1 --position "0.000000 0.000000 0.000000"
-set --name terrain1 --rotation "-0.000000 -0.000000 0.000000"
-set --name terrain1 --scale "1.000000 1.000000 1.000000"
-set --name terrain1 --blocking 1
-set --name terrain1 --tempkelvin 300.000000
-set --name terrain1 --heatsource 0
-set --name terrain1 --annotationid 3
-set --name terrain1 --annotatechildren 0
-set --name terrain1 --annotatechildren 0
-set --name terrain1 --sharedmemname 
-set --name terrain1 --gstreamerip 
-set --name terrain1 --gstreamerport 0
-set --name terrain1 --motionlogen 0
-set --name terrain1 --terrhmap hmap.png
-set --name terrain1 --terrdmap dmap.png
-set --name terrain1 --terrbasetexture hmaptexturesat.png
-set --name terrain1 --terrhmapminlvl 0.000000
-set --name terrain1 --terrhmapmaxlvl 500.000000
-set --name terrain1 --terrdmapminlvl -30.000000
-set --name terrain1 --terrdmapmaxlvl -100.000000
-set --name terrain1 --terrtopleftllh "40.820965 29.445356 0.000000"
-set --name terrain1 --terrbottomrightllh "40.665562 29.650471 0.000000"
-set --name terrain1 --bake 
-
 create --name cube1 --bp CUBE --tick 0
 set --name cube1 --actorid 0
 set --name cube1 --instance -1
 set --name cube1 --suppressed 0
 set --name cube1 --standalone 0
-set --name cube1 --position "82.547008 249.386310 4.314216"
+set --name cube1 --position "121.799952 1.000000 5.194132"
 set --name cube1 --rotation "-0.000000 -0.000000 0.000000"
-set --name cube1 --scale "2.000000 2.000000 1.000000"
+set --name cube1 --scale "1.000000 1.000000 1.000000"
 set --name cube1 --blocking 1
 set --name cube1 --tempkelvin 300.000000
 set --name cube1 --heatsource 0
@@ -156,55 +127,55 @@ set --name cube1 --gstreamerip
 set --name cube1 --gstreamerport 0
 set --name cube1 --motionlogen 0
 
-create --name radargen --bp RADAR --tick 0
-set --name radargen --parent marlin
-set --name radargen --actorid 0
-set --name radargen --instance -1
-set --name radargen --suppressed 0
-set --name radargen --standalone 1
-set --name radargen --position "61.399426 181.804520 7.846396"
-set --name radargen --rotation "-0.000000 -0.000000 0.000000"
-set --name radargen --scale "1.000000 1.000000 1.000000"
-set --name radargen --blocking 1
-set --name radargen --tempkelvin 300.000000
-set --name radargen --heatsource 0
-set --name radargen --annotationid 0
-set --name radargen --annotatechildren 0
-set --name radargen --annotatechildren 0
-set --name radargen --ipaddr1 127.0.0.1
-set --name radargen --localport1 13080
-set --name radargen --remoteport 13081
-set --name radargen --sharedmemname 
-set --name radargen --gstreamerip 
-set --name radargen --gstreamerport 0
-set --name radargen --motionlogen 0
-set --name radargen --sensorfreq 1.000000
-set --name radargen --slotindex 0
-set --name radargen --rangemin 5.000000
-set --name radargen --rangemax 200.000000
-set --name radargen --vfov 10.000000
-set --name radargen --hfov 90.000000
-set --name radargen --hscanstepang 1.000000
-set --name radargen --vscanstepang 1.000000
-set --name radargen --isnormaldistribution 0
-set --name radargen --merrormean 0.000000
-set --name radargen --merrorstd 0.000000
-set --name radargen --surfacedetecten 0
-set --name radargen --subsurfacedetecten 0
-set --name radargen --foamen 1
-set --name radargen --seasurfdetectprob 0.010000
-set --name radargen --maxsurfpenet 2.000000
-set --name radargen --radscanlevel 0
-set --name radargen --radscanrpm 0
-set --name radargen --radgaintype 2
-set --name radargen --radgainlevel 250
-set --name radargen --radseaclutleveltype 0
-set --name radargen --radseaclutlevel 0
-set --name radargen --radseaclutautooffset 0
-set --name radargen --radrainclutlevel 0
-set --name radargen --radmaxguardzonecount 2
-set --name radargen --radmaxsectorblankingzonecount 4
+create --name rad --bp RADAR --tick 0
+set --name rad --parent marlin
+set --name rad --actorid 0
+set --name rad --instance -1
+set --name rad --suppressed 0
+set --name rad --standalone 1
+set --name rad --position "83.772352 -42.093140 7.489877"
+set --name rad --rotation "0.000000 -0.000000 12.150002"
+set --name rad --scale "1.000000 1.000000 1.000000"
+set --name rad --blocking 1
+set --name rad --tempkelvin 300.000000
+set --name rad --heatsource 0
+set --name rad --annotationid 0
+set --name rad --annotatechildren 0
+set --name rad --annotatechildren 0
+set --name rad --ipaddr1 127.0.0.1
+set --name rad --localport1 13080
+set --name rad --remoteport 13081
+set --name rad --sharedmemname 
+set --name rad --gstreamerip 
+set --name rad --gstreamerport 0
+set --name rad --motionlogen 0
+set --name rad --sensorfreq 1.000000
+set --name rad --slotindex 0
+set --name rad --rangemin 5.000000
+set --name rad --rangemax 100.000000
+set --name rad --vfov 10.000000
+set --name rad --hfov 90.000000
+set --name rad --hscanstepang 1.000000
+set --name rad --vscanstepang 1.000000
+set --name rad --isnormaldistribution 0
+set --name rad --merrormean 10.000000
+set --name rad --merrorstd 500.000000
+set --name rad --surfacedetecten 1
+set --name rad --subsurfacedetecten 0
+set --name rad --foamen 1
+set --name rad --seasurfdetectprob 0.010000
+set --name rad --maxsurfpenet 2.000000
+set --name rad --radscanlevel 0
+set --name rad --radscanrpm 0
+set --name rad --radgaintype 2
+set --name rad --radgainlevel 1
+set --name rad --radseaclutleveltype 0
+set --name rad --radseaclutlevel 0
+set --name rad --radseaclutautooffset 0
+set --name rad --radrainclutlevel 0
+set --name rad --radmaxguardzonecount 2
+set --name rad --radmaxsectorblankingzonecount 4
 
 set --camfollow marlin
-set --camfollowtrans "2607.004594 1652.562918 1845.377395"
-set --camfolloweuler "0.000000 -13.888763 62.622724"
+set --camfollowtrans "3948.265675 329.557374 1874.486572"
+set --camfolloweuler "0.000000 -3.584548 40.345562"

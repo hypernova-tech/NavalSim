@@ -899,6 +899,16 @@ bool UConsoleBase::ProcessSetCommand(TMap<FString, FString>& options, FString& e
 
     }
 
+    ret = CommandManager.GetValue(CCLICommandManager::RadarAutoDetectionTrackingEnabled, is_enabled);
+    if (ret) {
+        if (pSystemAPI->SetRadarAutoDetectTrackEnabled(p_actor, is_enabled)) {
+            one_success = true;
+        }
+    }
+    else {
+
+    }
+
     ret = CommandManager.GetValue(CCLICommandManager::RadarScanLevel, dbl);
     if (ret) {
         if (pSystemAPI->SetRadarScanLevel(p_actor, dbl)) {

@@ -62,14 +62,14 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FX")
 		UNiagaraSystem* pointCloudRenderer;
 
-	UPROPERTY(EditAnywhere)
-		int TotalPointSize = 3072 * 3072;
+
 
 	int EachTextureWidth = 1024;
 	int LastIndex = -1;
 
 private:
 
+	int TotalPointSize = 1024 * 1024;
 	TArray< SRendererInfo*> RendererInfo;
 
 protected:
@@ -77,6 +77,7 @@ protected:
 	virtual void BeginPlay() override;
 	SRendererInfo* CreateInstance(int texture_width_px);
 	void CreateTextures();
+	void EnablePointShow(bool val);
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -84,6 +85,7 @@ public:
 	void SetPoints(FVector center, const TArray<FVector>& pts, EPointCooordSystem coord_sys, int sprite_size);
 	void ClearAll();
 	void ClearInfo(SRendererInfo *info);
+	void Init(int total_point_size);
 
 };
 

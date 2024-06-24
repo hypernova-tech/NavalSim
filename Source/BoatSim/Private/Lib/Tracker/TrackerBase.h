@@ -111,7 +111,7 @@ protected:
 	INT32S TrackerId = 1;
 protected:
 	STrackedObjectInfo* FindTrackByClientId(INT32S client_track_id);
-	bool IsActorInAnyTrack(AActor* p_actor);
+	
 	void AddTrack(STrackedObjectInfo* p_track);
 	void RemoveTrack(STrackedObjectInfo* p_track);
 	void UpdateTrackState(STrackedObjectInfo *p_track);
@@ -125,6 +125,7 @@ protected:
 public:
 	CTrackerBase();
 	~CTrackerBase();
+	bool IsActorInAnyTrack(AActor* p_actor);
 	virtual void SetOwnshipData(AActor *p_owner, FVector own_ship_location, FVector rpy_deg, FVector own_ship_vel, FVector2D radar_range_meter, FLOAT64 error_mean_meter, FLOAT64 error_mean_std);
 	virtual bool TryTrack(INT32U client_id, FVector pos, FLOAT64 bearing_true_north_deg, FLOAT64 distance_meter);
 	virtual bool CancelAll();
@@ -135,5 +136,6 @@ public:
 	virtual FLOAT64 GetCPAMeters();
 	virtual FLOAT64 GetCPATimeSec();
 	virtual bool GetIsTowardsCPA();
+	INT32S GetTrackedObjectCount();
 
 };

@@ -151,7 +151,7 @@ protected:
 	virtual void ApplyGain(double gain_level);
 	virtual void ApplyMerge(int size);
 
-	void RenderPointCloud(const TArray<FVector> &pts);
+	void RenderPointCloud(const TArray<FVector> &pts, const TArray<FVector>& pts_2d);
 	void FillArrond(int x, int y, int cnt);
 
 };
