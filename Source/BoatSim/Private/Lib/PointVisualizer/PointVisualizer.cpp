@@ -115,7 +115,7 @@ void APointVisualizer::Visualize(SScanResult *p_scan_result, FVector origin, FVe
                 float Y = (1 - local_forward) * 0.5;
 
                 FVector2D size(20, 20);
-                auto color = FLinearColor::Red;
+                auto color = FLinearColor::Green;
                 color.A = 0;
                 FCanvasTileItem TileItem(FVector2D(X * rt_size.X - size.X * 0.5, Y * rt_size.Y - size.Y * 0.5), size, color);
 
@@ -151,7 +151,7 @@ void APointVisualizer::Visualize(SScanResult *p_scan_result, FVector origin, FVe
                 float Y = (1 - local_forward) * 0.5;
 
                 FVector2D size(15, 15);
-                auto color = FCommonColors::SkyBlue;
+                auto color = FCommonColors::Red;
                 color.A = 0;
                 FCanvasTileItem TileItem(FVector2D(X * rt_size.X - size.X * 0.5, Y * rt_size.Y - size.Y * 0.5), size, color);
 
