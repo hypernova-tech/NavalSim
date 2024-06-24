@@ -11,7 +11,34 @@
 #include "PointCloudRenderer.h"
 #include "PointVisualizer.generated.h"
 
+struct FCommonColors
+{
+    static const FLinearColor White;
+    static const FLinearColor Black;
+    static const FLinearColor Red;
+    static const FLinearColor Green;
+    static const FLinearColor Blue;
+    static const FLinearColor Yellow;
+    static const FLinearColor Cyan;
+    static const FLinearColor Magenta;
 
+    static const FLinearColor LightGray;
+    static const FLinearColor Gray;
+    static const FLinearColor DarkGray;
+
+    static const FLinearColor Orange;
+    static const FLinearColor Purple;
+    static const FLinearColor Pink;
+    static const FLinearColor Brown;
+    static const FLinearColor Lime;
+    static const FLinearColor Turquoise;
+    static const FLinearColor SkyBlue;
+    static const FLinearColor NavyBlue;
+    static const FLinearColor Olive;
+    static const FLinearColor Maroon;
+    static const FLinearColor Gold;
+    static const FLinearColor Silver;
+};
 
 
 UCLASS()

@@ -7,6 +7,32 @@
 #include <Lib/Utils/CUtil.h>
 #include <Lib/Tracker/TrackerBase.h>
 
+const FLinearColor FCommonColors::White = FLinearColor(1.0f, 1.0f, 1.0f, 1.0f);
+const FLinearColor FCommonColors::Black = FLinearColor(0.0f, 0.0f, 0.0f, 1.0f);
+const FLinearColor FCommonColors::Red = FLinearColor(1.0f, 0.0f, 0.0f, 1.0f);
+const FLinearColor FCommonColors::Green = FLinearColor(0.0f, 1.0f, 0.0f, 1.0f);
+const FLinearColor FCommonColors::Blue = FLinearColor(0.0f, 0.0f, 1.0f, 1.0f);
+const FLinearColor FCommonColors::Yellow = FLinearColor(1.0f, 1.0f, 0.0f, 1.0f);
+const FLinearColor FCommonColors::Cyan = FLinearColor(0.0f, 1.0f, 1.0f, 1.0f);
+const FLinearColor FCommonColors::Magenta = FLinearColor(1.0f, 0.0f, 1.0f, 1.0f);
+
+const FLinearColor FCommonColors::LightGray = FLinearColor(0.75f, 0.75f, 0.75f, 1.0f);
+const FLinearColor FCommonColors::Gray = FLinearColor(0.5f, 0.5f, 0.5f, 1.0f);
+const FLinearColor FCommonColors::DarkGray = FLinearColor(0.25f, 0.25f, 0.25f, 1.0f);
+
+const FLinearColor FCommonColors::Orange = FLinearColor(1.0f, 0.5f, 0.0f, 1.0f);
+const FLinearColor FCommonColors::Purple = FLinearColor(0.5f, 0.0f, 0.5f, 1.0f);
+const FLinearColor FCommonColors::Pink = FLinearColor(1.0f, 0.75f, 0.8f, 1.0f);
+const FLinearColor FCommonColors::Brown = FLinearColor(0.6f, 0.3f, 0.0f, 1.0f);
+const FLinearColor FCommonColors::Lime = FLinearColor(0.75f, 1.0f, 0.0f, 1.0f);
+const FLinearColor FCommonColors::Turquoise = FLinearColor(0.0f, 0.75f, 0.75f, 1.0f);
+const FLinearColor FCommonColors::SkyBlue = FLinearColor(0.53f, 0.81f, 0.92f, 1.0f);
+const FLinearColor FCommonColors::NavyBlue = FLinearColor(0.0f, 0.0f, 0.5f, 1.0f);
+const FLinearColor FCommonColors::Olive = FLinearColor(0.5f, 0.5f, 0.0f, 1.0f);
+const FLinearColor FCommonColors::Maroon = FLinearColor(0.5f, 0.0f, 0.0f, 1.0f);
+const FLinearColor FCommonColors::Gold = FLinearColor(1.0f, 0.84f, 0.0f, 1.0f);
+const FLinearColor FCommonColors::Silver = FLinearColor(0.75f, 0.75f, 0.75f, 1.0f);
+
 
 // Sets default values
 APointVisualizer::APointVisualizer()
@@ -89,7 +115,9 @@ void APointVisualizer::Visualize(SScanResult *p_scan_result, FVector origin, FVe
                 float Y = (1 - local_forward) * 0.5;
 
                 FVector2D size(20, 20);
-                FCanvasTileItem TileItem(FVector2D(X * rt_size.X - size.X * 0.5, Y * rt_size.Y - size.Y * 0.5), size, FLinearColor::Red);
+                auto color = FLinearColor::Red;
+                color.A = 0;
+                FCanvasTileItem TileItem(FVector2D(X * rt_size.X - size.X * 0.5, Y * rt_size.Y - size.Y * 0.5), size, color);
 
                 TileItem.BlendMode = SE_BLEND_Opaque;
                 Canvas.DrawItem(TileItem);
@@ -122,9 +150,10 @@ void APointVisualizer::Visualize(SScanResult *p_scan_result, FVector origin, FVe
                 float X = (1 + local_right) * 0.5;
                 float Y = (1 - local_forward) * 0.5;
 
-                FVector2D size(20, 20);
-               
-                FCanvasTileItem TileItem(FVector2D(X * rt_size.X - size.X * 0.5, Y * rt_size.Y - size.Y * 0.5), size, FLinearColor::Green);
+                FVector2D size(15, 15);
+                auto color = FCommonColors::SkyBlue;
+                color.A = 0;
+                FCanvasTileItem TileItem(FVector2D(X * rt_size.X - size.X * 0.5, Y * rt_size.Y - size.Y * 0.5), size, color);
 
                 TileItem.BlendMode = SE_BLEND_Opaque;
                 Canvas.DrawItem(TileItem);
@@ -198,7 +227,7 @@ void APointVisualizer::Visualize(const TArray<FVector> &points, EPointCooordSyst
         FVector2D size(20, 20);
         FCanvasTileItem TileItem(FVector2D(X * rt_size.X - size.X * 0.5, Y * rt_size.Y - size.Y * 0.5), size, FLinearColor::Red);
 
-        TileItem.BlendMode = SE_BLEND_Opaque;
+        TileItem.BlendMode = SE_BLEND_Translucent;
         Canvas.DrawItem(TileItem);
         RenderCount++;
     }
@@ -230,7 +259,7 @@ void APointVisualizer::Visualize(const TArray<FVector> &points, EPointCooordSyst
 
             FCanvasTileItem TileItem(FVector2D(X * rt_size.X - size.X * 0.5, Y * rt_size.Y - size.Y * 0.5), size, FLinearColor::Green);
 
-            TileItem.BlendMode = SE_BLEND_Opaque;
+            TileItem.BlendMode = SE_BLEND_Translucent;
             Canvas.DrawItem(TileItem);
             RenderCount++;
         }

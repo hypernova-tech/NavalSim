@@ -5,6 +5,7 @@
 #include <Lib/SystemManager/SystemManagerBase.h>
 #include <Lib/Math/CMath.h>
 #include <Lib/Time/CTime.h>
+#include <Lib/Navigation/CNav.h>
 CObjectDetectorBase::CObjectDetectorBase()
 {
 }
@@ -35,6 +36,7 @@ void CObjectDetectorBase::StateMachine()
 }
 void CObjectDetectorBase::SetOwnshipData(AActor* p_owner, CTrackerBase* p_tracker, FVector own_ship_location, FVector rpy_deg, FVector own_ship_vel, FVector2D radar_range_meter, FLOAT64 error_mean_meter, FLOAT64 error_mean_std)
 {
+	pTracker = p_tracker;
 	pOwnShip = p_owner;
 	OwnShipLocation = own_ship_location;
 	OwnShipRPY = rpy_deg;
@@ -64,12 +66,20 @@ void CObjectDetectorBase::SortActorsByDistance(TArray<AActor*>& Actors, const FV
 
 void CObjectDetectorBase::Detect()
 {
-	TArray<AActor*> actors = ASystemManagerBase::GetInstance()->GetAllActorInWorld();
+	TArray<AActor*> actors;
+	
+	ASystemManagerBase::GetInstance()->QueryActors(EActorQueryArgs::OnlyAgents, actors);
+	ASystemManagerBase::GetInstance()->QueryActors(EActorQueryArgs::ActorAsPlatform, actors);
+
 	CObjectDetectorBase::SortActorsByDistance(actors,pOwnShip->GetActorLocation());
 
+	TArray<AActor*> ignore_list;
+	CUtil::GetOwnAndParents(pOwnShip, ignore_list);
 
 	for (auto p_actor : actors) {
-
+		if (ignore_list.Contains(p_actor)) {
+			continue;
+		}
 		if (pTracker->GetTrackedObjectCount() >= MaxDetectableObject) {
 			break;
 		}
@@ -79,8 +89,7 @@ void CObjectDetectorBase::Detect()
 		}
 
 
-		TArray<AActor*> ignore_list;
-		CUtil::GetOwnAndParents(pOwnShip, ignore_list);
+
 		FVector dir = p_actor->GetActorLocation() - OwnShipLocation;
 		dir.Normalize();
 
@@ -88,9 +97,9 @@ void CObjectDetectorBase::Detect()
 
 		if (actor != nullptr && p_actor == actor) {
 			if (!pTracker->IsActorInAnyTrack(actor)) {
-				FVector rpy_deg = CMath::GetActorEulerAnglesRPY(actor);
+				auto  bearing_deg =  CNav::ComputeBearingDeg(dir);
 				auto dist = (pOwnShip->GetActorLocation() - actor->GetActorLocation()).Length();
-				pTracker->TryTrack(0, actor->GetActorLocation(), rpy_deg.Z, TOW(dist));
+				pTracker->TryTrack(0, actor->GetActorLocation(), bearing_deg, TOW(dist));
 			}
 		}
 

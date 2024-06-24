@@ -23,3 +23,15 @@ FLOAT64 CNav::ComputeCourseOverGroundDeg(FVector dir_ned)
 
     return COG;
 }
+FLOAT64 CNav::ComputeBearingDeg(FVector dir_ned)
+{
+    FLOAT64 AngleRad = FMath::Atan2(dir_ned.Y, dir_ned.X);
+
+    // Convert the angle to degrees
+    FLOAT64 AngleDeg = FMath::RadiansToDegrees(AngleRad);
+
+    // Normalize the angle to the range [0, 360)
+    AngleDeg = FMath::Fmod(AngleDeg + 360.0f, 360.0f);
+
+    return AngleDeg;
+}

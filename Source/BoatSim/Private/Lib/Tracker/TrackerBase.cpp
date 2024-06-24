@@ -53,6 +53,13 @@ bool STrackedObjectInfo::IsAcquired()
 
 }
 
+bool STrackedObjectInfo::IsSafeToDelete()
+{
+    return TrackState == EObjectTrackState::LostOutOfRange ||
+           TrackState == EObjectTrackState::LostTarget ||
+           TrackState == EObjectTrackState::AcquireFailure;
+}
+
 
 CTrackerBase::CTrackerBase()
 {
@@ -203,7 +210,7 @@ bool CTrackerBase::TryAcquire(STrackedObjectInfo* p_track, bool& is_safe_target)
     FVector dir = (target_pos - OwnShipLocation);
     dir.Normalize();
 
-    if (dist <= RadarRangeMeter.X) {
+    if (TOW(dist) <= RadarRangeMeter.X) {
         return false;
     }
 
@@ -497,6 +504,19 @@ void CTrackerBase::Update()
     for (auto p_track : TrackedObjects) {
         UpdateTrackState(p_track);
     }
+    TArray<STrackedObjectInfo*> object_to_remove;
+
+    for (auto p_track : TrackedObjects) {
+        if (p_track->IsSafeToDelete()) {
+            object_to_remove.Add(p_track);
+        }
+    }
+
+    for (auto p_track : object_to_remove)
+    {
+        TrackedObjects.Remove(p_track);
+    }
+
     UpdateCPA();
     
 }

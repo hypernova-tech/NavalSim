@@ -22,7 +22,7 @@ class CObjectDetectorBase
 	FLOAT64 RangeMeanErrorMeter;
 	FLOAT64 RangeErrorStdDevMeter;
 	FLOAT64 DetectorDistanceToleranceMeter = 50;
-	FLOAT64 DetectionUpdateIntervalSec = 0.25;
+	FLOAT64 DetectionUpdateIntervalSec = 1.0;
 
 
 protected:

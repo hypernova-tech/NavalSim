@@ -3,7 +3,7 @@ set --name marlin --actorid 0
 set --name marlin --instance -1
 set --name marlin --suppressed 0
 set --name marlin --standalone 0
-set --name marlin --position "70.985641 -44.846048 4.825652"
+set --name marlin --position "70.985641 -44.846046 4.825652"
 set --name marlin --rotation "-0.000000 -0.000000 12.150002"
 set --name marlin --scale "1.000000 1.000000 1.000000"
 set --name marlin --blocking 1
@@ -113,7 +113,7 @@ set --name cube1 --actorid 0
 set --name cube1 --instance -1
 set --name cube1 --suppressed 0
 set --name cube1 --standalone 0
-set --name cube1 --position "121.799952 1.000000 5.194132"
+set --name cube1 --position "121.799950 1.000000 5.194132"
 set --name cube1 --rotation "-0.000000 -0.000000 0.000000"
 set --name cube1 --scale "1.000000 1.000000 1.000000"
 set --name cube1 --blocking 1
@@ -127,14 +127,33 @@ set --name cube1 --gstreamerip
 set --name cube1 --gstreamerport 0
 set --name cube1 --motionlogen 0
 
+create --name cube2 --bp CUBE --tick 0
+set --name cube2 --actorid 0
+set --name cube2 --instance -1
+set --name cube2 --suppressed 0
+set --name cube2 --standalone 0
+set --name cube2 --position "121.799950 91.106300 5.194132"
+set --name cube2 --rotation "-0.000000 -0.000000 0.000000"
+set --name cube2 --scale "1.000000 1.000000 1.000000"
+set --name cube2 --blocking 1
+set --name cube2 --tempkelvin 300.000000
+set --name cube2 --heatsource 0
+set --name cube2 --annotationid 0
+set --name cube2 --annotatechildren 0
+set --name cube2 --annotatechildren 0
+set --name cube2 --sharedmemname 
+set --name cube2 --gstreamerip 
+set --name cube2 --gstreamerport 0
+set --name cube2 --motionlogen 0
+
 create --name rad --bp RADAR --tick 0
 set --name rad --parent marlin
 set --name rad --actorid 0
 set --name rad --instance -1
 set --name rad --suppressed 0
 set --name rad --standalone 1
-set --name rad --position "83.772352 -42.093140 7.489877"
-set --name rad --rotation "0.000000 -0.000000 12.150002"
+set --name rad --position "83.772354 -42.093140 7.489877"
+set --name rad --rotation "-0.000000 -0.000000 12.150002"
 set --name rad --scale "1.000000 1.000000 1.000000"
 set --name rad --blocking 1
 set --name rad --tempkelvin 300.000000
@@ -159,12 +178,13 @@ set --name rad --hscanstepang 1.000000
 set --name rad --vscanstepang 1.000000
 set --name rad --isnormaldistribution 0
 set --name rad --merrormean 10.000000
-set --name rad --merrorstd 500.000000
-set --name rad --surfacedetecten 1
+set --name rad --merrorstd 0.000000
+set --name rad --surfacedetecten 0
 set --name rad --subsurfacedetecten 0
 set --name rad --foamen 1
 set --name rad --seasurfdetectprob 0.010000
 set --name rad --maxsurfpenet 2.000000
+set --name rad --radautodetecttracken 0
 set --name rad --radscanlevel 0
 set --name rad --radscanrpm 0
 set --name rad --radgaintype 2
@@ -177,5 +197,5 @@ set --name rad --radmaxguardzonecount 2
 set --name rad --radmaxsectorblankingzonecount 4
 
 set --camfollow marlin
-set --camfollowtrans "3948.265675 329.557374 1874.486572"
-set --camfolloweuler "0.000000 -3.584548 40.345562"
+set --camfollowtrans "2702.503714 -1187.841090 1844.489112"
+set --camfolloweuler "0.000000 -21.231423 67.636043"

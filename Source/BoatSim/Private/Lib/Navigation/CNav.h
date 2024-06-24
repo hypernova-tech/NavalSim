@@ -13,6 +13,6 @@ class CNav
 public:
 	CNav();
 	~CNav();
-
+	static FLOAT64 ComputeBearingDeg(FVector dir_ned);
 	static FLOAT64 ComputeCourseOverGroundDeg(FVector dir_ned);
 };

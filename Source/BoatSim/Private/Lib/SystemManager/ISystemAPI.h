@@ -25,7 +25,8 @@ enum EActorQueryArgs
 	AIS,
 	AISEnabledActors,
 	ActorAsPlatform,
-	AISPublishers
+	AISPublishers,
+
 };
 
 
