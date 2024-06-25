@@ -102,7 +102,8 @@ protected:
 	FVector2D RadarRangeMeter;
 	FLOAT64 RadarRangeMeanErrorMeter;
 	FLOAT64 RadarRangeErrorStdDevMeter;
-	FLOAT64 TrackerDistanceToleranceMeter = 100.0;
+	FLOAT64 TryTrackDistanceThresholdMeter = 3.0;
+	FLOAT64 TrackerDistanceToleranceMeter = 25.0;
 	INT32S MaxTrackCount = 10;
 	FLOAT64 TargetAquireTimeOutSec = 5.0;
 	FLOAT64 OutOfRangeToLostTimeoutSec = 1.0f;

@@ -651,7 +651,10 @@ void UGenericRadarCommProtocolIF::SendTrackedObjects(const STargetTrackStatusDat
 {
 	for (auto p_info : *(info.Tracks)) {
 		STrackingTargetStatusPayload payload;
-		SRadarSimSDKPacket pack;
+		//SRadarSimSDKPacket pack;
+
+		S3DPointCloudMessage cloud_data_mes;
+		cloud_data_mes.Reset();
 
 		payload.TargetData.targetValid = 1;
 		payload.TargetData.targetID = p_info->TrackerId; //p_info->ClientId; //todo fixme id karmaşası
@@ -703,12 +706,10 @@ void UGenericRadarCommProtocolIF::SendTrackedObjects(const STargetTrackStatusDat
 		payload.TargetData.TCPA_sec = info.TimeToClosestPointOfApproachSec;
 		payload.TargetData.towardsCPA = info.TowardsCPA;
 
-		payload.SerialData.SetSerial(p_serial, strlen(p_serial));
-		pack.SetID(ESimSDKDataIDS::TrackingStatus);
-		pack.SetPayload((INT8U*)&payload, sizeof(STrackingTargetStatusPayload));
+		cloud_data_mes.SetMessage(EPointCloudId::TrackingData,(INT8U*)&payload, sizeof(STrackingTargetStatusPayload));
 
 
-		pUDPConnection->SendData((const INT8U*)&pack, pack.GetTransmitSize());
+		pUDPConnection->SendData((const INT8U*)&cloud_data_mes, cloud_data_mes.GetMessageSize());
 
 
 	}

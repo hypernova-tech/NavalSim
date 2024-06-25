@@ -146,6 +146,8 @@ bool CTrackerBase::TryTrack(INT32U client_id, FVector pos, FLOAT64 bearing_true_
     }
 #endif
 
+
+
     if (TrackedObjects.Num() >= MaxTrackCount) {
         return false;
     }
@@ -158,8 +160,14 @@ bool CTrackerBase::TryTrack(INT32U client_id, FVector pos, FLOAT64 bearing_true_
 
     FVector dir = quat * FVector::ForwardVector;
     FVector target_pos = pos + dir * TOUE(distance_meter); //// todo fix me on ship or current position
-    p_track->TrackLocationWhenCreated = target_pos;
+   
 
+    for (auto ptrack : TrackedObjects) {
+        if ((target_pos - ptrack->TrackLocationWhenCreated).Length() <= TryTrackDistanceThresholdMeter) {
+            return false;
+        }
+    }
+    p_track->TrackLocationWhenCreated = target_pos;
     AddTrack(p_track);
 
     return false;

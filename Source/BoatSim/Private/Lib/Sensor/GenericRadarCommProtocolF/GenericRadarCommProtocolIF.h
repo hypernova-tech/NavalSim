@@ -106,7 +106,8 @@ public:
 
 	virtual void SetHostIF(IHostIF* p_val) override;
 	
-	void SendTrackedObjects(const STargetTrackStatusData& info, char* p_serial);
+	virtual void SendTrackedObjects(const STargetTrackStatusData& info, char* p_serial);
+
 	virtual void InitCommIF() override;
 
 protected:

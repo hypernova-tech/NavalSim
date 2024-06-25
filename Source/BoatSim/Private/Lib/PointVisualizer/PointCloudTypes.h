@@ -12,6 +12,7 @@ enum EPointCloudId :INT8U
 {
 	PointCloudInfo = 0,
 	PointCloudData,
+	TrackingData,
 };
 #pragma pack(pop)
 

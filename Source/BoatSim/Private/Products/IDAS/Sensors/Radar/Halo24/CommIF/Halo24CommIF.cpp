@@ -231,4 +231,70 @@ void UHalo24CommIF::OnReceivedConnectionData(void* connection, INT8U* p_data, IN
 	}
 }
 
+void UHalo24CommIF::SendTrackedObjects(const STargetTrackStatusData& info, char* p_serial)
+{
+	for (auto p_info : *(info.Tracks)) {
+		STrackingTargetStatusPayload payload;
+		SRadarSimSDKPacket pack;
+
+		payload.TargetData.targetValid = 1;
+		payload.TargetData.targetID = p_info->TrackerId; //p_info->ClientId; //todo fixme id karmaşası
+		payload.TargetData.serverTargetID = p_info->TrackerId;
+
+		payload.TargetData.infoAbsolute.distance_m = p_info->AbsoluteDistanceMeter;
+		payload.TargetData.infoAbsolute.bearing_ddeg = (p_info->AbsoluteBearingDeg) * 10; // ship coordinate system
+		payload.TargetData.infoAbsolute.speed_dmps = p_info->AbsoulteTargetSpeedMetersPerSec * 10; // ship coordinate system
+		payload.TargetData.infoAbsolute.course_ddeg = (p_info->AbsoulteTargetCourseDeg) * 10;
+
+		payload.TargetData.infoRelative.distance_m = p_info->RelativeDistanceMeter;
+		payload.TargetData.infoRelative.bearing_ddeg = (p_info->RelativeBearingDeg) * 10; // ship coordinate system
+		payload.TargetData.infoRelative.speed_dmps = p_info->RelativeTargetSpeedMetersPerSec * 10; // ship coordinate system
+		payload.TargetData.infoRelative.course_ddeg = (p_info->RelativeTargetCourseDeg) * 10;
+
+		payload.TargetData.infoAbsoluteValid = 1;
+
+
+		switch (p_info->TrackState) {
+		case 	EObjectTrackState::Acquiring:
+			payload.TargetData.targetState = eTargetState::eAcquiringTarget;
+			break;
+		case EObjectTrackState::AcquiredAndSafe:
+		case EObjectTrackState::AcquiredSafeAndTemprorayLoss:
+			payload.TargetData.targetState = eTargetState::eSafeTarget;
+			break;
+		case EObjectTrackState::AcquiredAndDangerous:
+		case EObjectTrackState::AcquiredDangerousAndTemprorayLoss:
+			payload.TargetData.targetState = eTargetState::eDangerousTarget;
+			break;
+		case EObjectTrackState::LostTarget:
+			payload.TargetData.targetState = eTargetState::eLostTarget;
+			break;
+		case EObjectTrackState::AcquireFailure:
+			payload.TargetData.targetState = eTargetState::eAcquireFailure;
+			break;
+		case EObjectTrackState::OutOfRange:
+			payload.TargetData.targetState = eTargetState::eOutOfRange;
+			break;
+		case EObjectTrackState::LostOutOfRange:
+			payload.TargetData.targetState = eTargetState::eLostOutOfRange;
+			break;
+		case EObjectTrackState::AquireFailedTargetTrackCapacityFull:
+			break;
+
+		}
+
+		payload.TargetData.CPA_m = info.ClosestPointOfApproachMeters;
+		payload.TargetData.TCPA_sec = info.TimeToClosestPointOfApproachSec;
+		payload.TargetData.towardsCPA = info.TowardsCPA;
+
+		payload.SerialData.SetSerial(p_serial, strlen(p_serial));
+		pack.SetID(ESimSDKDataIDS::TrackingStatus);
+		pack.SetPayload((INT8U*)&payload, sizeof(STrackingTargetStatusPayload));
+
+
+		pUDPConnection->SendData((const INT8U*)&pack, pack.GetTransmitSize());
+
+
+	}
+}
 

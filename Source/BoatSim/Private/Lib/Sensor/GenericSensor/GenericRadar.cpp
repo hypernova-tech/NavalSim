@@ -11,6 +11,7 @@
 #include <Lib/SystemManager/SystemManagerBase.h>
 #include "Lib/Tracker/RadarBasedTracker/RadarBasedTracker.h"
 #include <Lib/Math/CMath.h>
+#include <Lib/Sensor/GenericRadarCommProtocolF/GenericRadarCommProtocolIF.h>
 
 
 void AGenericRadar::BeginPlay()
@@ -141,6 +142,25 @@ void AGenericRadar::Scan()
 			NextScanTime = FApp::GetCurrentTime() + total_scan_period_sec / ScanResultContainer.GetSectorCount();
 		}
 
+	}
+
+}
+
+void AGenericRadar::UpdateTracker()
+{
+	Super::UpdateTracker();
+
+	STargetTrackStatusData track_status = { 0 };
+
+
+	track_status.Tracks = pTracker->GetTrackedObjects();
+
+	if (track_status.Tracks->Num() > 0) {
+		track_status.ClosestPointOfApproachMeters = pTracker->GetCPAMeters();
+		track_status.TimeToClosestPointOfApproachSec = pTracker->GetCPATimeSec();
+		track_status.TowardsCPA = pTracker->GetIsTowardsCPA();
+		UGenericRadarCommProtocolIF* p_gen_commif = (UGenericRadarCommProtocolIF*)pCommIF;
+		p_gen_commif->SendTrackedObjects(track_status, nullptr);
 	}
 
 }

@@ -458,3 +458,8 @@ int CMath::GetNearestNeighbors(int x, int y, int rows, int cols, int N, SNeighbo
 
     return size;
 }
+
+double CMath::GetDistXY(const FVector& vec)
+{
+    return FMath::Sqrt(vec.X* vec.X + vec.Y*vec.Y);
+}

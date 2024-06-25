@@ -19,4 +19,5 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void InitSensor() override;
 	virtual void Scan();
+	virtual void UpdateTracker() override;
 };

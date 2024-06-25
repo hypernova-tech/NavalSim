@@ -33,7 +33,7 @@ public:
 	void SendRadarState(ERadarState radar_state, char* p_serial);
 	void SendRadarSetup(const SRadarSetupData& setup, char* p_serial);
 	virtual void SetHostIF(IHostIF* p_host_if) override;
-	
+	virtual void SendTrackedObjects(const STargetTrackStatusData& info, char* p_serial) override;
 private:
 
 

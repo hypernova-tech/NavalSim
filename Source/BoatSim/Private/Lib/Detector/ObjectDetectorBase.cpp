@@ -98,8 +98,8 @@ void CObjectDetectorBase::Detect()
 		if (actor != nullptr && p_actor == actor) {
 			if (!pTracker->IsActorInAnyTrack(actor)) {
 				auto  bearing_deg =  CNav::ComputeBearingDeg(dir);
-				auto dist = (pOwnShip->GetActorLocation() - actor->GetActorLocation()).Length();
-				pTracker->TryTrack(0, actor->GetActorLocation(), bearing_deg, TOW(dist));
+				auto dist = CMath::GetDistXY(pOwnShip->GetActorLocation() - actor->GetActorLocation());
+				pTracker->TryTrack(0, pOwnShip->GetActorLocation(), bearing_deg, TOW(dist));
 			}
 		}
 

@@ -562,6 +562,8 @@ AActor* ASystemManagerBase::GetVisibleActorAt(const TArray<AActor *> & ignore_li
 #endif
 	query_params.bTraceComplex = false;
 
+	CUtil::DrawDebugRay(GetWorld(), from, to, FColor::Red, 1, 5);
+
 	bool ret = GetWorld()->LineTraceSingleByChannel(result, from, to, ECollisionChannel::ECC_Visibility, query_params, FCollisionResponseParams());
 	if (ret) {
 		FLOAT64 object_dist_meter = TOW((result.Location - to).Length());
